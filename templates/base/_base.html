@@ -1,0 +1,40 @@
+{% extends "base/base.html"%}
+{% block before_css%}
+{{block.super}}
+{%endblock%}
+{% block basepage%} 
+
+
+<div id="header">
+	<h1><a href="./dashboard.html">Unicorn Admin</a></h1>		
+</div>
+
+<div id="user-nav" class="navbar navbar-inverse">
+	{% include "base/_usernav.html" %}
+</div>
+    
+<div id="sidebar">
+	{% include "base/_sidebar.html" %}
+</div>
+
+<div id="content">
+	<div id="content-header">
+		<h1>Dashboard</h1>
+	</div>
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom">Home</a>
+		<a href="#" class="current">Dashboard</a>
+	</div>
+	<div class="container-fluid">
+
+		
+		{% block main_content %} {% endblock %}
+
+
+	</div>
+	{# Footer Section #}
+	{% block home-footer %}
+	{% include "widgets/footer.html" %}
+	{% endblock %}
+</div>
+{% endblock%}

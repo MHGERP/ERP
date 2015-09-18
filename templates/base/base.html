@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load dajaxice_templatetags %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="renderer" content="webkit"/>
+        <title>太重滨海煤化工生产管理系统</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        {% block meta_description %}
+        <meta name="description" content="" />
+        {% endblock %}
+        <meta name="keywords" content="" />
+        <meta name="author" content="" />
+        <!-- CSS Config. -->
+
+        {% include "meta/html_head_stylesheets.html" %}
+        {% block before_css %}{% endblock  %}
+        <!-- JavaScript Config. -->
+        {% block forestyle %}{% endblock %}
+        {% include "meta/html_head_javascript.html" %} 
+        {% block forejs %}{% endblock %}
+        <!--load Dajaxice Javascript -->
+        {% dajaxice_js_import %}
+    </head>
+
+    <body >
+        {% block basepage%}{%endblock%}
+    
+        {# Main-Content Section #}
+        {% block content %}{% endblock %}
+
+        {% block bottom_js %}
+        {% include "meta/bottom_scripts.html" %}
+        {% endblock %}
+        {% block endjs %}{% endblock %}
+        {% block footer-alert-bar %}
+        {% endblock %}
+
+    </body>
+</html>

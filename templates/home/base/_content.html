@@ -1,0 +1,16 @@
+{% extends "base/_base.html"%}
+{% block before_css%}
+{{block.super}}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/student/base.css" >
+<link rel="stylesheet" href="{{ STATIC_URL  }}bootstrap-datepicker/css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/student/comment_button.css"/>
+
+{%endblock%}
+{%block menu_list%}
+{% include "home/widgets/menu_list.html"%} 
+{%endblock%}
+{% block main_content%}
+ <div class="main-content">
+    {% block outter_content%}{%endblock%}
+</div> 
+{% endblock%}
