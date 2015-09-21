@@ -14,6 +14,10 @@ urlpatterns = patterns('',
         r'^',
         include('home.urls')
     ),
+    url(
+        r'^',
+        include('purchasing.urls')
+    ),
 )
 
 urlpatterns += patterns('', url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),)
