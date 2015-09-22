@@ -2,6 +2,18 @@
 {% block before_css%}
 {{block.super}}
 {%endblock%}
+{% block main_title %}
+<div class="main-title"> 
+	<div id="content-header">
+	{% block title %}{% endblock %}
+	</div>
+	<div id="breadcrumb">
+		<a href="#" title="Go to Home" class="tip-bottom">Home</a>
+        <a href="#" class="tip-bottom">采购管理</a>
+		{% block sub_ref %} {% endblock %}
+    </div>
+</div>
+{%endblock%}
 {% block main_content%}
 <div class="main-content">
     
