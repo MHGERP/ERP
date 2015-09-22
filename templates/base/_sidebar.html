@@ -1,7 +1,7 @@
 <a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
 <ul>
-	<li class="active"><a href="index.html"><i class="icon icon-home"></i> <span>首页</span></a></li>
-	<li class="submenu">
+	<li {% block HOME_ACTIVE %}{% endblock %}><a href="/home"><i class="icon icon-home"></i> <span>首页</span></a></li>
+	<li class="submenu {% block PURCHASING_ACTICVE %}{% endblock %}">
 		<a href="#"><i class="icon icon-th-list"></i> <span>采购管理</span></a>
 		{% include "purchasing/widgets/menu_list.html"%}
 	</li>
@@ -10,7 +10,7 @@
 	<li><a href="tables.html"><i class="icon icon-th"></i> <span>Tables</span></a></li>
 	<li><a href="grid.html"><i class="icon icon-th-list"></i> <span>Grid Layout</span></a></li>
 	<li class="submenu">
-		<a href="#"><i class="icon icon-file"></i> <span>Sample pages</span> <span class="label">4</span></a>
+		<a href="#"><i class="icon icon-file"></i> <spa;n>Sample pages</span> <span class="label">4</span></a>
 		<ul>
 			<li><a href="invoice.html">Invoice</a></li>
 			<li><a href="chat.html">Support chat</a></li>
