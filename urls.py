@@ -11,11 +11,11 @@ dajaxice_autodiscover()
 
 urlpatterns = patterns('',
     url(
-        r'^',
+        r'^home/',
         include('home.urls')
     ),
     url(
-        r'^',
+        r'^purchasing/',
         include('purchasing.urls')
     ),
 )

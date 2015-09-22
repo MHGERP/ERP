@@ -6,5 +6,9 @@ urlpatterns=patterns('',
     url(
         r'^purchasingfollowing$',
         purchasing_views.purchasingFollowingViews,
-    )                    
+    ),
+    url(
+        r'^pendingOrder$',
+        purchasing_views.pendingOrderViews,
+    )                 
 )
