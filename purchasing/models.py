@@ -10,4 +10,8 @@ class BidForm(models.Model):
     audit_time=models.DateTimeField(null=True,verbose_name=u"审核日期")
     approved_time=models.DateTimeField(null=True,verbose_name=u"批准日期")
     bid_status=models.ForeignKey(BidFormStatus,null=False,verbose_name=u"标单状态")
-
+    class Meta:
+        verbose_name = u"标单"
+        verbose_name_plural = u"标单"
+    def __unicode__(self):
+        return '%s'% (self.bid_id)
