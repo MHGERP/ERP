@@ -11,7 +11,7 @@ dajaxice_autodiscover()
 
 urlpatterns = patterns('',
     url(
-        r'^home/',
+        r'^',
         include('home.urls')
     ),
     url(

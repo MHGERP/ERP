@@ -12,8 +12,34 @@
 <link rel="stylesheet" href="{{ STATIC_URL   }}style/form-style.css" type="text/css" media="screen" />
 
 <form class="form-search ">
-    <label>标单查询</label>
     <input type="text" class="input-medium search-query">
-    <button type="submit" class="btn">查询</button>
+    <button type="submit" class="btn">工作令查询</button>
 </form>
+<div class="widget-content">
+    <table class="table table-bordered table-striped table-hover" style="width:60%">
+        <thead>
+            <tr>
+                <th>工作令</th>
+                <th>明细表</th>
+                <th>联系单</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>10001010</td>
+                <td>
+                    <form class="form-inline">
+                    <select class="input"><option>1</option><option>2</option></select><button class="btn">open</button>
+                    </form>
+                </td>
+                <td>
+                    <form class="form-inline">
+                    <select class="input"><option>1</option><option>2</option></select><button class="btn">open</button>
+                    </form>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>
 {% endblock%}
