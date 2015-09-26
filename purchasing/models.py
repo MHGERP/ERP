@@ -15,3 +15,16 @@ class BidForm(models.Model):
         verbose_name_plural = u"标单"
     def __unicode__(self):
         return '%s'% (self.bid_id)
+
+
+class ArrivalInspection(models.Model):
+    material_confirm = models.BooleanField(null=False,default=False,verbose_name=u"实物确认")
+    soft_confirm = models.BooleanField(null=False,default=False,verbose_name=u"软件确认")
+    inspect_confirm = models.BooleanField(null=False,default=False,verbose_name=u"检验通过")
+    bidform = models.ForeignKey(BidForm,null=False,verbose_name=u"标单号")
+    class Meta:
+        verbose_name = u"到货检验"
+        verbose_name_plural = u"到货检验"
+
+    def __unicode__(self):
+        return '%s' % self.bidform.bid_id

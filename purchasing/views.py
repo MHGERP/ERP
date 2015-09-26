@@ -20,3 +20,7 @@ def purchasingFollowingViews(request):
 def pendingOrderViews(request):
     context = {}
     return render(request, "purchasing/pending_order.html", context)
+
+def arrivalInspectionViews(request):
+    context = {}
+    return render(request,"purchasing/purchasing_arrival.html",context)

@@ -9,3 +9,4 @@ class BidFormStatus(models.Model):
         verbose_name_plural = u"标单状态"
     def __unicode__(self):
         return self.get_status_display()
+
