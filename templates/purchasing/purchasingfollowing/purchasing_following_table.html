@@ -1,0 +1,62 @@
+<div class="widget-box">
+    <div class="widget-title">
+        <span class="icon">
+            <i class="icon-th"></i>
+        </span>
+        <h5>进行中标单</h5>
+    </div>
+    <div class="widget-content nopadding">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>表单编号</th>
+                    <th>供应商选择</th>
+                    <th>招标</th>
+                    <th>过程跟踪</th>
+                    <th>检验入库</th>
+                    <th>状态</th>
+                    <th>状态更改历史</th>
+                    <th>状态回溯</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for bid in bidform%}
+                <tr>
+                    <td>{{bid.bid_id}}</td>
+                    {% if bid.bid_status.status > BIDFORM_STATUS_SELECT_SUPPLIER%}
+                    <td><button class="btn btn-success">供应商选择</button></td>
+                    {% elif bid.bid_status.status == BIDFORM_STATUS_SELECT_SUPPLIER%}
+                    <td><button class="btn btn-warning">供应商选择</button></td>
+                    {% else%}
+                    <td><button class="btn">供应商选择</button></td>
+                    {%endif%}
+                    {% if bid.bid_status.status > BIDFORM_STATUS_INVITE_BID%}
+                    <td><button class="btn btn-success">招标</button></td>
+                    {% elif bid.bid_status.status == BIDFORM_STATUS_INVITE_BID%}
+                    <td><button class="btn btn-warning">招标</button></td>
+                    {% else%}
+                    <td><button class="btn">招标</button></td>
+                    {%endif%}
+                    {% if bid.bid_status.status > BIDFORM_STATUS_PROCESS_FOLLOW%}
+                    <td><button class="btn btn-success">过程跟踪</button></td>
+                    {% elif bid.bid_status.status == BIDFORM_STATUS_PROCESS_FOLLOW%}
+                    <td><button class="btn btn-warning">过程跟踪</button></td>
+                    {% else%}
+                    <td><button class="btn">过程跟踪</button></td>
+                    {%endif%}
+                    {% if bid.bid_status.status > BIDFORM_STATUS_CHECK_STORE%}
+                    <td><button class="btn btn-success">检验入库</button></td>
+                    {% elif bid.bid_status.status == BIDFORM_STATUS_CHECK_STORE%}
+                    <td><button class="btn btn-warning">检验入库</button></td>
+                    {% else%}
+                    <td><button class="btn">检验入库</button></td>
+                    {%endif%}
+                    <td>bid.bid_status</td>
+                    <td><button class="btn">查看</button></td>
+                    <td><button class="btn">填写</button></td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
