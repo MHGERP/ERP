@@ -23,3 +23,5 @@ BIDFORM_STATUS_CHOICES=(
     (BIDFORM_STATUS_STOP,u"标单终止")
     
 )
+
+IDENTITYERROR = "登录帐号或密码有错误！"

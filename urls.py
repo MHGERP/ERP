@@ -16,6 +16,10 @@ urlpatterns = patterns('',
     ),
     url(
         r'^',
+        include('registration.urls')
+    ),
+    url(
+        r'^home/',
         include('home.urls')
     ),
     url(
