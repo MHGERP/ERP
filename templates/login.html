@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="renderer" content="webkit">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Generator" content="EditPlus®">
+        <meta name="Author" content="">
+        <meta name="Keywords" content="">
+        <meta name="Description" content="">
+				<link rel="stylesheet" href="{{STATIC_URL}}style/bootstrap.min.css" />		
+				<link rel="stylesheet" href="{{STATIC_URL}}style/bootstrap-responsive.min.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}style/loginpage.css"/>
+        <!--Base JS-->
+        <script type='text/javascript' src="{{STATIC_URL}}bootstrap/assets/js/jquery-1.10.2.min.js"></script>
+        <script type='text/javascript' src="{{STATIC_URL}}js/ajax_csrf.js"></script>
+        <title>太重滨海煤化工分公司生产管理系统</title>
+    </head>
+    <body>
+        <div id="bkgrd" >
+            <div id="frame">
+                <div id="title" >
+                </div>
+                <div id="con">
+                    <form name="id" action="/?next=/loginredirect" method="post" id="loginform" role="form">
+                        {% if form.non_field_errors %}
+                        <div class="row alert alert-error">
+                          {{ form.non_field_errors }}
+                        </div>
+                        {% elif identityerror %}
+                        <div class="row alert alert-error">
+                          {{ identityerror }}
+                        </div>
+                        {% else%}
+                        <div class= "row">
+                        </div>
+                        {% endif %}   
+
+                        <div class="form-group" >
+                            <center >
+                                <div class="input-group" >                       
+                                    <i class="icon-user"></i>
+                                    {{form.username}}                             
+                                </div>
+                                    {% for error in form.username.errors %}
+                                    <span class="help-inline"><b>{{ error }}</b></span>
+                                    {% endfor %}
+                                    <br/>
+                                <div class="input-group" >                
+                                    <span class="input-group-addon"><i class="icon-lock"></i></span>
+                                    {{form.password}}     
+                                </div>
+                                    {% for error in form.password.errors %}
+                                        <span class="help-inline"><b>{{ error }}</b></span>
+                                    {% endfor %}
+                        </div>
+                     
+                            </center>
+                        <br/>
+                        <div>
+                            {% csrf_token %}
+                            <button class="btn btn-primary btn-lg" >登录</button>&nbsp;
+                        </div>
+                    </form>
+                </div>
+
+            
+            </div>
+            <div id="version">
+                <br/><br/>
+                <p>*****版权归属---@大连理工大学创新实验学院*****</p>
+            </div>
+        </div>
+        
+        <script type="text/javascript" src="{{STATIC_URL}}js/login.js"></script>
+    </body>
+</html>
+

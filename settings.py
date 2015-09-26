@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     #Add-on
     'dajaxice',
     'dajax',
+    'south',
 )
 
 # A sample logging configuration. The only tangible logging
