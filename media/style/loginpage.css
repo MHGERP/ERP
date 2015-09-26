@@ -1,0 +1,73 @@
+/*login-page*/
+#bkgrd
+{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-image:url(../images/login/login.jpg);
+    background-size: cover;
+}
+#frame
+{
+    position:absolute;
+    top:100px;
+    left:480px;
+    margin:0 auto;
+    width:500px;
+    height:335px;
+    border:black 1px solid;
+    margin-top:150px;
+    background-image:linear-gradient(to bottom,rgb(218,234,251),rgb(172,197,241));
+    background-image:-ms-linear-gradient(to bottom,rgb(218,234,251),rgb(172,197,241));
+    background-image:-moz-linear-gradient(to bottom,rgb(218,234,251),rgb(172,197,241));
+    background-image:-webkit-linear-gradient(to bottom,rgb(218,234,251),rgb(172,197,241));
+    border-radius:10px;
+    -ms-border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    -ms-box-shadow:10px 10px 10px #969696;
+    -moz-box-shadow:10px 10px 10px #969696;
+    -webkit-box-shadow:10px 10px 10px #969696;
+    box-shadow:10px 10px 10px black;
+    overflow:hidden;
+}
+#title
+{
+    position:relative;
+    top:20px;
+    width:100%;
+    height:45px;
+    background:url(../images/login/title.jpg)
+}
+
+#con
+{
+    position:relative;
+    top:30px;
+    width:100%;
+    height:270px;
+    text-align:center;
+}
+#version
+{
+    position:absolute;
+    top:620px;
+    left:40px; 
+    width: 100%;    
+    height: 30px; 
+    font-family:"Microsoft YaHei", Verdana, Geneva, sans-serif;    
+    font-weight: bold;        
+    font-size: 10pt;   
+    text-align: center;       
+    border:none;      
+}
+.form-group{
+    margin-bottom:5px;
+}
+.row{
+    height:30px;
+}
+.btn-lg{
+    width:120px!important;
+}
+
