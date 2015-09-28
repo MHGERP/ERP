@@ -6,7 +6,7 @@ from os.path import join
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 SETTINGS_ROOT = os.path.dirname(__file__)
-
+PROCESS_FILE_PATH="/uploadfile"
 ADMINS = (
     ('JunHU', '369385153@qq.com'),
 )

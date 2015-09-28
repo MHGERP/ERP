@@ -1,0 +1,29 @@
+<div class="widget-box">
+
+    <div class="widget-content nopadding">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>供应商编号</th>
+                    <th>供应商名称</th>
+                    <th>相关文件下载</th>
+                    <th>编辑</th>
+                    <th>删除</th>
+                </tr>
+            </thead>
+        </table>
+        <tbody>
+            {%for supplier in suppliers%}
+            <tr>
+                <td>{{supplier.supplier_id}}</td>
+                <td>{{supplier.supplier_name}}</td>
+                <td>
+                    {%for file in supplier.supplierfile_set.all%}
+                    <a href="#">file</a>
+                   {%endfor%} 
+               </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </div>
+</div>

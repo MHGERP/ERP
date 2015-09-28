@@ -10,5 +10,13 @@ urlpatterns=patterns('',
     url(
         r'^pendingOrder$',
         purchasing_views.pendingOrderViews,
-    )                 
+    ),
+    url(
+        r'^selectsupplier$',
+        purchasing_views.selectSupplierViews,
+    ),
+    url(
+        r'^suppliermanagement$',
+        purchasing_views.supplierManagementViews,
+    )
 )
