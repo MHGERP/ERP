@@ -6,7 +6,7 @@ from os.path import join
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 SETTINGS_ROOT = os.path.dirname(__file__)
-PROCESS_FILE_PATH="/uploadfile"
+PROCESS_FILE_PATH=SETTINGS_ROOT+"/uploadfile/"
 ADMINS = (
     ('JunHU', '369385153@qq.com'),
 )
@@ -167,3 +167,13 @@ LOGGING = {
         },
     }
 }
+
+FILE_UPLOAD_PERMISSIONS = 0644
+FILE_UPLOAD_TEMP_DIR = os.path.join(SETTINGS_ROOT, PROCESS_FILE_PATH).replace("\\",'/')
+FILE_UPLOAD_HANDLERS = ('django.core.files.uploadhandler.MemoryFileUploadHandler',
+        'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+        )
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024

@@ -6,6 +6,9 @@ from purchasing.models  import *
 
 RegisterClass = (
     BidForm,
+    ArrivalInspection,
+    Supplier,
+    SupplierFile,
 )
 
 for item in RegisterClass:

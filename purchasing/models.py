@@ -1,6 +1,7 @@
 # coding: UTF-8
 from django.db import models
 from const.models import BidFormStatus
+import settings
 
 # Create your models here.
 class BidForm(models.Model):
@@ -26,7 +27,6 @@ class Supplier(models.Model):
     def __unicode__(self):
         return '%s'% (self.supplier_name)
 
-import settings
 class SupplierFile(models.Model):
 
     project = models.ForeignKey(Supplier)
@@ -43,3 +43,14 @@ class SupplierFile(models.Model):
     def __unicode__(self):
         return self.name 
 
+class ArrivalInspection(models.Model):
+    material_confirm = models.BooleanField(null=False,default=False,verbose_name=u"实物确认")
+    soft_confirm = models.BooleanField(null=False,default=False,verbose_name=u"软件确认")
+    inspect_confirm = models.BooleanField(null=False,default=False,verbose_name=u"检验通过")
+    bidform = models.ForeignKey(BidForm,null=False,verbose_name=u"标单号")
+    class Meta:
+        verbose_name = u"到货检验"
+        verbose_name_plural = u"到货检验"
+
+    def __unicode__(self):
+        return '%s' % self.bidform.bid_id
