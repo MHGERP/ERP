@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from purchasing.models import BidForm,Supplier
 from const import *
+from const.forms import InventoryTypeForm
+from const.models import WorkOrder
+
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -18,7 +21,16 @@ def purchasingFollowingViews(request):
 
 
 def pendingOrderViews(request):
-    context = {}
+    """
+    JunHU
+    summary: view function of pendingorder page
+    params: NULL
+    return: NULL
+    """
+    inventoryTypeForm = InventoryTypeForm
+    orders = WorkOrder.objects.all()
+    context = {"inventoryTypeForm": inventoryTypeForm,
+               "orders": orders,}
     return render(request, "purchasing/pending_order.html", context)
 
 def selectSupplierViews(request):
@@ -31,6 +43,9 @@ def supplierManagementViews(request):
         "suppliers":suppliers,
     }
     return render(request,"purchasing/supplier/supplier_management.html",context)
+def bidTrackingViews(request):
+    context = {}
+    return render(request, "purchasing/bid_track.html", context)
 def arrivalInspectionViews(request):
     bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
     

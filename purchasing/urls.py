@@ -20,6 +20,9 @@ urlpatterns=patterns('',
         purchasing_views.supplierManagementViews,
     ),
     url(
+        r'^bidTracking$',
+        purchasing_views.bidTrackingViews,
+   url( 
         r'^arrivalInspection$',
         purchasing_views.arrivalInspectionViews,
     )

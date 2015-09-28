@@ -16,7 +16,7 @@
     <button type="submit" class="btn">工作令查询</button>
 </form>
 <div class="widget-content">
-    <table class="table table-bordered table-striped table-hover" style="width:60%">
+    <table class="table table-bordered table-striped table-hover" style="width:70%">
         <thead>
             <tr>
                 <th>工作令</th>
@@ -25,20 +25,23 @@
             </tr>
         </thead>
         <tbody>
+            {% for order in orders %}
             <tr>
-                <td>10001010</td>
+                <td>{{order.order_index}}</td>
                 <td>
                     <form class="form-inline">
-                    <select class="input"><option>1</option><option>2</option></select><button class="btn">open</button>
+                    {{inventoryTypeForm.inventoryType}}
+                    <button class="btn">查看</button>
                     </form>
                 </td>
                 <td>
                     <form class="form-inline">
-                    <select class="input"><option>1</option><option>2</option></select><button class="btn">open</button>
+                    <select class="input"><option>1</option><option>2</option></select><button class="btn">下载</button>
                     </form>
                 </td>
 
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
