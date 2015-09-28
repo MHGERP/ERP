@@ -8,3 +8,7 @@ $("#following_search").click(function(){
 function search_purchasing_callback(data){
     $("#following_table").html(data.html);
 }
+
+function check_arrival(){
+    $('#myModal').modal('show');   
+} 

@@ -13,6 +13,9 @@ urlpatterns=patterns('',
     ),
     url(
         r'^bidTracking$',
-        purchasing_views.bidTrackingViews, 
+        purchasing_views.bidTrackingViews,
+   url( 
+        r'^arrivalInspection$',
+        purchasing_views.arrivalInspectionViews,
     )
 )
