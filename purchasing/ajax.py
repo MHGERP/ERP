@@ -24,14 +24,33 @@ def searchPurchasingFollowing(request,bidid):
     return simplejson.dumps(data)
 
 @dajaxice_register
-def checkArrival(request,bid):
-    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
-    print cargo_set
-    context = {
-        "cargo_set":cargo_set,
-    }
-    arrival_table_html = render_to_string("purchasing/widgets/arrivalinspection_table.html",context)
+def checkArrival(request,aid,cid):
+    arrivalfield = ARRIVAL_CHECK_FIELDS[cid]
+    cargo_obj = ArrivalInspection.objects.get(id = aid)
+    val = not getattr(cargo_obj,arrivalfield)
+    setattr(cargo_obj,arrivalfield,val)
+    cargo_obj.save()
+    val = getattr(cargo_obj,arrivalfield)
     data = {
-        "arrival_table_html":arrival_table_html,
+        "flag":val, 
     }
     return simplejson.dumps(data)
+
+@dajaxice_register
+def genEntry(request,bid):
+    flag = isAllChecked(bid)
+    data = {
+        'flag':flag,
+    }
+    print flag
+    return simplejson.dumps(data)
+
+def isAllChecked(bid):
+    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
+    for cargo_obj in cargo_set:
+        for key,field in ARRIVAL_CHECK_FIELDS.items():
+            val = getattr(cargo_obj,field)
+            if not val:
+                return False
+    return True
+                

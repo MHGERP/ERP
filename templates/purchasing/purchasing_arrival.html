@@ -31,7 +31,7 @@
             <tbody>
                 {%for bid in bidFormSet %}
                 <tr>
-                    <td><a  href="{% url 'checkArrival'  bid.bid_id %}" >{{bid.bid_id}}</a></td>
+                    <td><a  href="{% url arrivalCheck  bid.bid_id %}" >{{bid.bid_id}}</a></td>
                     <td>{{bid.bid_status}}</td>
                 </tr>
                 {%endfor%}
@@ -39,21 +39,6 @@
         </table>
     </div>
 </div>
-<div class="modal hide fade" style="display: none;width:50%;" id="bidformcheck">
-  <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
-    <h3 id="modal_tile_h3">到货检验表:</h3>
-    <small id="change_info_student_id"></small>
-  </div>
-  <div class="modal-body" id="arrival_table_div">
-        {% include "purchasing/widgets/arrivalinspection_table.html" %}
-  </div>
-  <div class="modal-footer">
-    <a class="btn" data-dismiss="modal">关闭</a>
-    <a class="btn btn-primary" data-dismiss="modal" onclick="change_member_info();">生成入库单</a>
-  </div>
-</div>
-
 
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasingfollowing/purchasing_following.js"></script>
 {% endblock%}

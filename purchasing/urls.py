@@ -32,6 +32,6 @@ urlpatterns=patterns('',
         purchasing_views.arrivalInspectionViews,
     ),
     url(
-        r'arrivalCheck/(?P<bid>\d+)/$',purchasing_views.arrivalCheckViews,name='arrivalCheck',                    
+        r'arrivalCheck/(?P<bid>\w+)/$',purchasing_views.arrivalCheckViews,name='arrivalCheck',                    
     )
 )
