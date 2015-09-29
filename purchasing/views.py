@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from purchasing.models import BidForm
 from const import *
+from const.forms import InventoryTypeForm
+
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -18,5 +20,12 @@ def purchasingFollowingViews(request):
 
 
 def pendingOrderViews(request):
-    context = {}
+    """
+    JunHU
+    summary: view function of pendingorder page
+    params: NULL
+    return: NULL
+    """
+    inventoryTypeForm = InventoryTypeForm
+    context = {"inventoryTypeForm": inventoryTypeForm,}
     return render(request, "purchasing/pending_order.html", context)
