@@ -89,3 +89,10 @@ class ArrivalInspection(models.Model):
 
     def __unicode__(self):
         return '%s' % self.bidform.bid_id
+
+class PurchasingEntry(models.Model):
+    entry_time = models.DateTimeField(blank=True, null=True,verbose_name="入库时间")
+    receipts_code = models.CharField(max_length=100,blank=False,verbose_name="单据编号")
+    purchaser =  models.CharField(max_length=100,blank=False,verbose_name="采购员")
+    inspector = models.CharField(max_length=100,blank=False,verbose_name="检验员")
+    keeper = models.CharField(max_length=100,blank=False,verbose_name="库管员")

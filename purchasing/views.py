@@ -1,11 +1,16 @@
 from django.shortcuts import render
-from purchasing.models import BidForm,ArrivalInspection
+from purchasing.models import BidForm,ArrivalInspection,Supplier
 from const import *
+from const.forms import InventoryTypeForm
+from const.models import WorkOrder
+from purchasing.forms import SupplierForm
+
 def purchasingFollowingViews(request):
     """
     chousan1989
     """
-    bidform_processing=BidForm.objects.filter(bid_status__status__gte=BIDFORM_STATUS_SELECT_SUPPLIER,bid_status__status__lte=BIDFORM_STATUS_CHECK_STORE)
+    bidform_processing=BidForm.objects.filter(bid_status__main_status__gte=BIDFORM_STATUS_SELECT_SUPPLIER,bid_status__main_status__lte=BIDFORM_STATUS_CHECK_STORE)
+
     context={
         "bidform":bidform_processing,
         "BIDFORM_STATUS_SELECT_SUPPLIER":BIDFORM_STATUS_SELECT_SUPPLIER,
@@ -18,7 +23,17 @@ def purchasingFollowingViews(request):
 
 
 def pendingOrderViews(request):
-    context = {}
+    
+    """
+    JunHU
+    summary: view function of pendingorder page
+    params: NULL
+    return: NULL
+    """
+    inventoryTypeForm = InventoryTypeForm()
+    orders = WorkOrder.objects.all()
+    context = {"inventoryTypeForm": inventoryTypeForm,
+               "orders": orders,}
     return render(request, "purchasing/pending_order.html", context)
 
 def materialSummarizeViews(request):
@@ -38,8 +53,10 @@ def selectSupplierViews(request):
 
 def supplierManagementViews(request):
     suppliers=Supplier.objects.all()
+    supplier_form=SupplierForm()
     context={
         "suppliers":suppliers,
+        "supplier_form":supplier_form
     }
     return render(request,"purchasing/supplier/supplier_management.html",context)
 def bidTrackingViews(request):

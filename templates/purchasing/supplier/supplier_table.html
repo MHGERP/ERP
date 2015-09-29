@@ -8,12 +8,13 @@
                     <th>供应商名称</th>
                     <th>相关文件下载</th>
                     <th>编辑</th>
+                    <th>上传</th>
                     <th>删除</th>
                 </tr>
             </thead>
             <tbody>
                 {% for supplier in suppliers%}
-                <tr>
+                <tr id="{{supplier.supplier_id}}">
                     <td>{{supplier.supplier_id}}</td>
                     <td>{{supplier.supplier_name}}</td>
                     <td>
@@ -22,10 +23,13 @@
                         {% endfor%}
                     </td> 
                     <td>
-                        <a class='btn btn-primary'>编辑</a>
+                        <a class='btn btn-primary' id="edit_supplier" data-toggle="modal" href="#supplier_info" >编辑</a>
                     </td>
                     <td>
-                        <a class="btn btn-danger">删除</a>
+                        <a class='btn btn-primary' href="#supplier_upload" data-toggle="modal" id="upload_supplier">上传</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" id="delete_supplier">删除</a>
                     </td>
 
                 </tr>

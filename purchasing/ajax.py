@@ -2,7 +2,7 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection 
+from purchasing.models import BidForm,ArrivalInspection,Supplier
 from const import *
 from django.template.loader import render_to_string
 from django.utils import simplejson
@@ -45,6 +45,12 @@ def genEntry(request,bid):
     print flag
     return simplejson.dumps(data)
 
+@dajaxice_register
+def SupplierUpdate(request,supplier_id):
+    supplier=Supplier.objects.get(supplier_id=supplier_id)
+
+    supplier_html=render_to_string("purchasing/supplier/supplier_file_table.html",{"supplier":supplier})
+    return simplejson.dumps({'supplier_html':supplier_html})
 def isAllChecked(bid):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
     for cargo_obj in cargo_set:
@@ -53,4 +59,3 @@ def isAllChecked(bid):
             if not val:
                 return False
     return True
-                
