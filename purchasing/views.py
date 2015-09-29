@@ -33,6 +33,17 @@ def pendingOrderViews(request):
                "orders": orders,}
     return render(request, "purchasing/pending_order.html", context)
 
+def materialSummarizeViews(request):
+    """
+    JunHU
+    summary: view function of meterialSummarize page
+    params: NULL
+    return: NULL
+    """
+    inventoryTypeForm = InventoryTypeForm()
+    context = {"inventoryTypeForm": inventoryTypeForm}
+    return render(request, "purchasing/material_summarize.html", context)
+
 def selectSupplierViews(request):
     context={}
     return render(request,"purchasing/select_supplier.html",context)

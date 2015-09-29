@@ -12,6 +12,10 @@ urlpatterns=patterns('',
         purchasing_views.pendingOrderViews,
     ),
     url(
+        r'^materialSummarize$',
+        purchasing_views.materialSummarizeViews,
+    ),
+    url(
         r'^selectsupplier$',
         purchasing_views.selectSupplierViews,
     ),
