@@ -1,0 +1,14 @@
+{% extends "purchasing/base/none_nav_base.html"%}
+{% block title %}
+<h1>供应商管理</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">供应商管理</a>
+{% endblock %}
+{% block inner_content%}
+<button class="btn btn-primary">添加供应商</button>
+<div id="supplier_table">
+{% include "purchasing/supplier/supplier_table.html"%}
+</div>
+{% endblock%}

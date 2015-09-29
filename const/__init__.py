@@ -54,3 +54,24 @@ BIDFORM_PART_STATUS_CHOICES=(
     (BIDFORM_PART_STATUS_STOP,u"标单终止")
 )
 IDENTITYERROR = "登录帐号或密码有错误！"
+
+
+INVENTORY_TYPE = (
+    (0, u"主材定额"),
+    (1, u"辅料定额"),
+    (2, u"先投件明细"),
+    (3, u"外购件明细"),
+    (4, u"铸锻件明细"),
+)
+
+SELL_TYPE = (
+    (0, u"内销"),
+    (1, u"外销"),
+)
+
+
+
+INDEX_LIST = tuple(
+    (i, str(i)) for i in xrange(1, 11)
+)
+
