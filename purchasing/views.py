@@ -27,7 +27,7 @@ def pendingOrderViews(request):
     params: NULL
     return: NULL
     """
-    inventoryTypeForm = InventoryTypeForm
+    inventoryTypeForm = InventoryTypeForm()
     orders = WorkOrder.objects.all()
     context = {"inventoryTypeForm": inventoryTypeForm,
                "orders": orders,}
