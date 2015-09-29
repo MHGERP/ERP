@@ -53,4 +53,3 @@ def isAllChecked(bid):
             if not val:
                 return False
     return True
-                
