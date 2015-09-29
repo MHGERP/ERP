@@ -1,4 +1,4 @@
-<table class="table table-bordered table-hover">
+<table name="confirm" class="table table-bordered table-hover table-striped">
     <thead>
         <tr>
             <th>序号</th>
@@ -14,16 +14,16 @@
     </thead>
     <tbody>
         {% for cargo in cargo_set %}
-        <tr>
+        <tr aid="{{cargo.id}}">
             <td>{{forloop.counter}}</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>           
-            <td cid="mat"><button class="btn {% if cargo.material_confirm %} btn-success {%endif%}">实物</button></td>
-            <td cid="sof"><button class="btn {% if cargo.soft_confirm %} btn-success {%endif%}">软件</button></td>
-            <td cid="ins"><button class="btn {% if cargo.inspect_confirm %} btn-success {%endif%}">检验</button></td>
+            <td><button cid="mat" class="btn {% if cargo.material_confirm %} btn-success {%endif%}">实&nbsp&nbsp物</button></td>
+            <td><button cid="sof" class="btn {% if cargo.soft_confirm %} btn-success {%endif%}">软&nbsp&nbsp件</button></td>
+            <td><button cid="ins" class="btn {% if cargo.inspect_confirm %} btn-success {%endif%}">检&nbsp&nbsp验</button></td>
         </tr>
         {% endfor %}
     </tbody>

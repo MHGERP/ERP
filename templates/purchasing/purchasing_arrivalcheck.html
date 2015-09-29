@@ -4,6 +4,12 @@
 {% endblock %}
 
 {% block sub_ref %}
+<a href="#" class="current">到货检验</a>
+{% endblock %}
+{% block inner_content%}
 {% include "purchasing/widgets/arrivalinspection_table.html" %}
-<script type='text/javascript' src="{{STATIC_URL}}js/purchasingfollowing/purchasing_following.js"></script>
+<div>
+    <button class="btn btn-primary" onclick="gen_entry({{bid}});">生成入库单</button>
+</div>
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/purchasing_following.js"></script>
 {% endblock%}
