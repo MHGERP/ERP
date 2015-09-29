@@ -18,11 +18,15 @@
                     <td>{{supplier.supplier_name}}</td>
                     <td>
                         {% for file in supplier.supplierfile_set.all%}
-                        file
+                        <a href="{{file.file_obj.url}}">{{file}}</a>
                         {% endfor%}
                     </td> 
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <a class='btn btn-primary'>编辑</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger">删除</a>
+                    </td>
 
                 </tr>
                 {% endfor%}
