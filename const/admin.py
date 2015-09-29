@@ -7,6 +7,10 @@ from const.models  import *
 RegisterClass = (
     BidFormStatus,
     WorkOrder,
+    Materiel,
+    Material,
+    CirculationRoute,
+    CirculationName,
 )
 
 for item in RegisterClass:
