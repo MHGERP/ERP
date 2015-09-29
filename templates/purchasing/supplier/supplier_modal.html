@@ -1,0 +1,44 @@
+<div class="modal hide fade"  id="supplier_info">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>编辑供应商信息</h3>
+    </div>
+    <div class="modal-body">
+        <form class="well form" id="template_notice_info_form" method="POST" action="">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="add-on">供应商编号</label>
+                {{supplier_form.supplier_id}}    
+            </div>
+            <div class="form-group">
+                <label class="add-on">供应商名称</label>
+                {{ supplier_form.supplier_name }}
+            </div>
+        </form><!--end school_email_send_form-->
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal" onclick="cancel_change();">关闭</a>
+        <a class="btn btn-primary" data-dismiss="modal" 
+            id="add_or_update_notice">保存更新</a>
+    </div>
+</div>
+
+<div class="modal hide fade"  id="supplier_upload">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>供应商文件上传</h3>
+    </div>
+    <div class="modal-body">
+        <div id="file_table">
+            {%include "purchasing/supplier/supplier_file_table.html"%}
+        </div>
+        <button id="upload_file" class="btn btn-primary">上传文件</button>
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal" onclick="cancel_change();">关闭</a>
+        <a class="btn btn-primary" data-dismiss="modal" 
+            id="add_or_update_notice">保存更新</a>
+    </div>
+</div>
+
+

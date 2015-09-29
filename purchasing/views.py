@@ -3,6 +3,8 @@ from purchasing.models import BidForm,ArrivalInspection,Supplier
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder
+from purchasing.forms import SupplierForm
+
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -40,15 +42,15 @@ def selectSupplierViews(request):
 
 def supplierManagementViews(request):
     suppliers=Supplier.objects.all()
+    supplier_form=SupplierForm()
     context={
         "suppliers":suppliers,
+        "supplier_form":supplier_form
     }
     return render(request,"purchasing/supplier/supplier_management.html",context)
-
 def bidTrackingViews(request):
     context = {}
     return render(request, "purchasing/bid_track.html", context)
-
 def arrivalInspectionViews(request):
     bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
     
