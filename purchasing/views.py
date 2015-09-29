@@ -53,3 +53,10 @@ def arrivalInspectionViews(request):
         "bidFormSet":bidFormSet,
     }
     return render(request,"purchasing/purchasing_arrival.html",context)
+
+def arrivalCheckViews(request,bid):
+    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
+    context = {
+        "cargo_set":cargo_set,
+    }
+    return render(request,"purchasing/widgets/purchasing_arrivalcheck.html",context)
