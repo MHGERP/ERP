@@ -14,5 +14,8 @@ urlpatterns=patterns('',
     url(
         r'^arrivalInspection$',
         purchasing_views.arrivalInspectionViews,
+    ),
+    url(
+        r'arrivalCheck/(?P<bid>\d+)/$',purchasing_views.arrivalCheckViews,name='arrivalCheck',                    
     )
 )

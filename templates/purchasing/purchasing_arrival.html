@@ -8,8 +8,6 @@
 {% endblock %}
 {% block inner_content%}
 <link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
-<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-<script src="http://cdn.bootcss.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <form class="form-search ">
     <label>标单查询</label>
     <input type="text" class="input-medium search-query">
@@ -33,7 +31,7 @@
             <tbody>
                 {%for bid in bidFormSet %}
                 <tr>
-                    <td><button data-toggle="model" data-target="#myModal" type="button">{{bid.bid_id}}</button></td>
+                    <td><a  href="{% url 'checkArrival'  bid.bid_id %}" >{{bid.bid_id}}</a></td>
                     <td>{{bid.bid_status}}</td>
                 </tr>
                 {%endfor%}
@@ -41,42 +39,21 @@
         </table>
     </div>
 </div>
-<a class="btn btn-success" data-toggle="modal" href="#student_profile_info">修改个人信息</a>
-<div class="modal hide fade" style="display: none;" id="student_profile_info">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3>修改个人信息:</h3>
-        <small id="change_info_student_id"></small>
-    </div>
-    <div class="modal-body">
-        <form class="well form" id="member_change_info_form" method="POST" action="">
-            {% csrf_token %}
-            <!-- <div class="input-prepend"> -->
-            <!--   <span class="add-on"><i class="icon-envelope"></i></span>{{student_group_form.student_id}} -->
-            <!-- </div> -->
-            <!-- <div class="input-prepend"> -->
-            <!--   <span class="add-on"><i class="icon-th-large"></i></span>{{student_group_form.student_name}} -->
-            <!-- </div> -->
-            <div class="input-prepend">
-                <span class="add-on"><i class="icon-user"></i></span>{{student_group_info_form.student_id}}
-            </div>
-            <div class="input-prepend">
-                <span class="add-on"><i class="icon-envelope"></i></span>{{student_group_info_form.email}}
-            </div>
-            <div class="input-prepend memberchange">
-                <span class="add-on"><i class="icon-volume-up"></i></span>{{student_group_info_form.telephone}}
-            </div>
-            <div class="input-prepend">
-                <span class="add-on"><i class="icon-home"></i></span>{{student_group_info_form.classInfo}}
-            </div>
-
-        </form><!--end school_email_send_form-->
-    </div>
-    <div class="modal-footer">
-        <a class="btn" data-dismiss="modal" onclick="cancel_change();">关闭</a>
-        <a class="btn btn-primary" data-dismiss="modal" onclick="change_member_info();">保存更新</a>
-    </div>
+<div class="modal hide fade" style="display: none;width:50%;" id="bidformcheck">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3 id="modal_tile_h3">到货检验表:</h3>
+    <small id="change_info_student_id"></small>
+  </div>
+  <div class="modal-body" id="arrival_table_div">
+        {% include "purchasing/widgets/arrivalinspection_table.html" %}
+  </div>
+  <div class="modal-footer">
+    <a class="btn" data-dismiss="modal">关闭</a>
+    <a class="btn btn-primary" data-dismiss="modal" onclick="change_member_info();">生成入库单</a>
+  </div>
 </div>
+
 
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasingfollowing/purchasing_following.js"></script>
 {% endblock%}

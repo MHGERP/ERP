@@ -1,0 +1,9 @@
+{% extends "purchasing/base/none_nav_base.html"%}
+{% block title %}
+<h1>到货检验</h1>
+{% endblock %}
+
+{% block sub_ref %}
+{% include "purchasing/widgets/arrivalinspection_table.html" %}
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasingfollowing/purchasing_following.js"></script>
+{% endblock%}
