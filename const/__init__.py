@@ -68,3 +68,10 @@ SELL_TYPE = (
     (0, u"内销"),
     (1, u"外销"),
 )
+
+
+
+INDEX_LIST = tuple(
+    (i, str(i)) for i in xrange(1, 11)
+)
+
