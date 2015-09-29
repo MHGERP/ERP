@@ -7,9 +7,10 @@
 <a href="#" class="current">供应商管理</a>
 {% endblock %}
 {% block inner_content%}
-<a class="btn btn-primary" href="#supplier_info" data-toggle="modal">添加供应商</a>
+<a class="btn btn-primary" id="add_new_supplier" href="#supplier_info" data-toggle="modal">添加供应商</a>
 <div id="supplier_table">
 {% include "purchasing/supplier/supplier_table.html"%}
 </div>
 {% include "purchasing/supplier/supplier_modal.html"%}
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/supplier_management.js"></script>
 {% endblock%}
