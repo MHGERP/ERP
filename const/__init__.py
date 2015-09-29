@@ -75,3 +75,4 @@ INDEX_LIST = tuple(
     (i, str(i)) for i in xrange(1, 11)
 )
 
+ARRIVAL_CHECK_FIELDS = {"mat":"material_confirm","sof":"soft_confirm","ins":"inspect_confirm"}

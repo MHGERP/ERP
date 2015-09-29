@@ -12,22 +12,10 @@ urlpatterns=patterns('',
         purchasing_views.pendingOrderViews,
     ),
     url(
-        r'^selectsupplier$',
-        purchasing_views.selectSupplierViews,
-    ),
-    url(
-        r'^suppliermanagement$',
-        purchasing_views.supplierManagementViews,
-    ),
-    url(
-        r'^bidTracking$',
-        purchasing_views.bidTrackingViews,
-    ),
-   url( 
         r'^arrivalInspection$',
         purchasing_views.arrivalInspectionViews,
     ),
     url(
-        r'arrivalCheck/(?P<bid>\d+)/$',purchasing_views.arrivalCheckViews,name='arrivalCheck',                    
+        r'arrivalCheck/(?P<bid>\w+)/$',purchasing_views.arrivalCheckViews,name='arrivalCheck',                    
     )
 )
