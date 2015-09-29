@@ -29,3 +29,11 @@ def pendingOrderViews(request):
     inventoryTypeForm = InventoryTypeForm
     context = {"inventoryTypeForm": inventoryTypeForm,}
     return render(request, "purchasing/pending_order.html", context)
+
+def arrivalInspectionViews(request):
+    bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
+    
+    context = {
+        "bidFormSet":bidFormSet,
+    }
+    return render(request,"purchasing/purchasing_arrival.html",context)

@@ -1,7 +1,11 @@
 .container-full {
 	min-height: 500px;
 	padding-top: 10px;
-};
+}
+
+div#arrivalIns{
+    width:60%;
+}
 
 
 
