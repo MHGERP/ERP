@@ -1,6 +1,7 @@
 # coding: UTF-8
 from django.db import models
 from const.models import BidFormStatus
+import settings
 
 # Create your models here.
 class BidForm(models.Model):
@@ -16,6 +17,66 @@ class BidForm(models.Model):
     def __unicode__(self):
         return '%s'% (self.bid_id)
 
+class bidApply(models.Model):
+    apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
+    apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
+    demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
+    work_order = models.ForeignKey(BidFormStatus,null=False,verbose_name=u"工作令")
+    amount = models.IntegerField(verbose_name=u"数量")
+    bid_project = models.CharField(null=True, max_length=40, verbose_name=u"拟招(议)项目")
+    bid_date = models.DateTimeField(null=True, verbose_name=u"拟招(议)标时间")
+    special_model = models.CharField(null=True, max_length=40, verbose_name=u"规格、型号")
+    core_part = models.BooleanField(verbose_name="是否为核心件")
+
+    class Meta:
+        verbose_name = u"标单申请表"
+
+    def __unicode__(self):
+        return '%s'% (self.apply_id)
+
+class qualityPriceCard(models.Model):
+    apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
+    apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
+    demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
+    work_order = models.ForeignKey(BidFormStatus,null=False,verbose_name=u"工作令")
+    amount = models.IntegerField(verbose_name=u"数量")
+    unit = models.CharField(null=True, max_length=40, verbose_name=u"单位")
+    content = models.CharField(null=True, max_length=40, verbose_name=u"内容")
+    material = models.CharField(null=True, max_length=40, verbose_name=u"材质")
+    delivery_period = models.CharField(null=True, max_length=40, verbose_name=u"交货期")
+    price = models.CharField(null=True, max_length=40, verbose_name=u"价格")
+    ability = models.CharField(null=True, max_length=40, verbose_name=u"厂家协作能力质量情况及业绩")
+    delivery_condition = models.CharField(null=True, max_length=40, verbose_name=u"交货及支付条件")
+    class Meta:
+        verbose_name = u"标单申请表"
+
+    def __unicode__(self):
+        return '%s'% (self.apply_id)
+
+class Supplier(models.Model):
+    supplier_id=models.CharField(unique=True,max_length=20,blank=False,verbose_name=u"供应商编号")
+    supplier_name=models.CharField(max_length=50,blank=False,verbose_name=u"供应商名称")
+    class Meta:
+        verbose_name = u"供应商"
+        verbose_name_plural = u"供应商"
+    def __unicode__(self):
+        return '%s'% (self.supplier_name)
+
+class SupplierFile(models.Model):
+
+    project = models.ForeignKey(Supplier)
+    name = models.CharField(max_length=100, blank=False, verbose_name="文件名称")
+    file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d",verbose_name="文件对象")
+    upload_time = models.DateTimeField(blank=True, null=True,verbose_name="上传时间")
+    file_size = models.CharField(max_length=50, blank=True, null=True,default=None, verbose_name="文件大小")
+    file_type = models.CharField(max_length=50, blank=True, null=True,default=None, verbose_name="文件类型")
+
+    class Meta:
+        verbose_name = "文件上传"
+        verbose_name_plural = "文件上传"
+
+    def __unicode__(self):
+        return self.name
 
 class ArrivalInspection(models.Model):
     material_confirm = models.BooleanField(null=False,default=False,verbose_name=u"实物确认")
