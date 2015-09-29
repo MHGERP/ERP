@@ -6,6 +6,7 @@ from const.models  import *
 
 RegisterClass = (
     BidFormStatus,
+    WorkOrder,
 )
 
 for item in RegisterClass:

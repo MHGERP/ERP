@@ -25,8 +25,9 @@
             </tr>
         </thead>
         <tbody>
+            {% for order in orders %}
             <tr>
-                <td>10001010</td>
+                <td>{{order.order_index}}</td>
                 <td>
                     <form class="form-inline">
                     {{inventoryTypeForm.inventoryType}}
@@ -40,6 +41,7 @@
                 </td>
 
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

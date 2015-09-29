@@ -2,6 +2,7 @@ from django.shortcuts import render
 from purchasing.models import BidForm
 from const import *
 from const.forms import InventoryTypeForm
+from const.models import WorkOrder
 
 def purchasingFollowingViews(request):
     """
@@ -27,7 +28,9 @@ def pendingOrderViews(request):
     return: NULL
     """
     inventoryTypeForm = InventoryTypeForm
-    context = {"inventoryTypeForm": inventoryTypeForm,}
+    orders = WorkOrder.objects.all()
+    context = {"inventoryTypeForm": inventoryTypeForm,
+               "orders": orders,}
     return render(request, "purchasing/pending_order.html", context)
 
 def arrivalInspectionViews(request):
