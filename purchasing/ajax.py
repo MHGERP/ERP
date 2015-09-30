@@ -51,6 +51,7 @@ def SupplierUpdate(request,supplier_id):
 
     supplier_html=render_to_string("purchasing/supplier/supplier_file_table.html",{"supplier":supplier})
     return simplejson.dumps({'supplier_html':supplier_html})
+
 def isAllChecked(bid):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
     for cargo_obj in cargo_set:

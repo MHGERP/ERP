@@ -15,11 +15,11 @@ urlpatterns=patterns('',
             r'^selectsupplier$',
             purchasing_views.selectSupplierViews,
         ),
-        url(
+    url(
             r'^suppliermanagement$',
             purchasing_views.supplierManagementViews,
         ),
-        url(
+    url(
             r'^bidTracking$',
             purchasing_views.bidTrackingViews,
         ),
