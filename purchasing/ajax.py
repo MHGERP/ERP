@@ -2,7 +2,7 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm 
+from purchasing.models import BidForm,ArrivalInspection 
 from const import *
 from django.template.loader import render_to_string
 from django.utils import simplejson
@@ -22,4 +22,35 @@ def searchPurchasingFollowing(request,bidid):
         'html':purchasing_html
     }
     return simplejson.dumps(data)
-    
+
+@dajaxice_register
+def checkArrival(request,aid,cid):
+    arrivalfield = ARRIVAL_CHECK_FIELDS[cid]
+    cargo_obj = ArrivalInspection.objects.get(id = aid)
+    val = not getattr(cargo_obj,arrivalfield)
+    setattr(cargo_obj,arrivalfield,val)
+    cargo_obj.save()
+    val = getattr(cargo_obj,arrivalfield)
+    data = {
+        "flag":val, 
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def genEntry(request,bid):
+    flag = isAllChecked(bid)
+    data = {
+        'flag':flag,
+    }
+    print flag
+    return simplejson.dumps(data)
+
+def isAllChecked(bid):
+    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
+    for cargo_obj in cargo_set:
+        for key,field in ARRIVAL_CHECK_FIELDS.items():
+            val = getattr(cargo_obj,field)
+            if not val:
+                return False
+    return True
+                

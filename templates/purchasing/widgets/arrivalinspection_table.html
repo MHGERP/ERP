@@ -1,0 +1,30 @@
+<table name="confirm" class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>名称及规格</th>
+            <th>标准号/图号</th>
+            <th>材料牌号</th>
+            <th>单位</th>
+            <th>数量</th>
+            <th>实物确认</th>
+            <th>软件确认</th>
+            <th>检验通过</th>
+        </tr> 
+    </thead>
+    <tbody>
+        {% for cargo in cargo_set %}
+        <tr aid="{{cargo.id}}">
+            <td>{{forloop.counter}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>           
+            <td><button cid="mat" class="btn {% if cargo.material_confirm %} btn-success {%endif%}">实&nbsp&nbsp物</button></td>
+            <td><button cid="sof" class="btn {% if cargo.soft_confirm %} btn-success {%endif%}">软&nbsp&nbsp件</button></td>
+            <td><button cid="ins" class="btn {% if cargo.inspect_confirm %} btn-success {%endif%}">检&nbsp&nbsp验</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
