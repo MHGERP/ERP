@@ -21,6 +21,14 @@ class Material(models.Model):
     def __unicode__(self):
         return self.name
 
+class InventoryType(models.Model):
+    name = models.CharField(blank = False, max_length = 50, verbose_name = u"明细表名称")
+    class Meta:
+        verbose_name = u"明细表类别"
+        verbose_name_plural = u"明细表类别"
+    def __unicode__(self):
+        return self.name
+
 class Materiel(models.Model):
     order = models.ForeignKey(WorkOrder, blank = False, verbose_name = u"所属工作号")
     index = models.CharField(blank = True, max_length = 20, verbose_name = u"编号")
@@ -31,6 +39,8 @@ class Materiel(models.Model):
     count = models.CharField(blank = True, max_length = 20, null = True, verbose_name = u"数量")
     net_weight = models.FloatField(blank = True, null = True, verbose_name = u"净重")
     total_weight = models.FloatField(blank = True, null = True, verbose_name = u"总重")
+
+    inventory_type = models.ForeignKey(InventoryType, blank = True, null = True, verbose_name = u"明细表归属")
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"
