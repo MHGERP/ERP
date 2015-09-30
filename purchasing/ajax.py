@@ -6,6 +6,7 @@ from purchasing.models import BidForm,ArrivalInspection,Supplier
 from const import *
 from django.template.loader import render_to_string
 from django.utils import simplejson
+from purchasing.forms import SupplierForm
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -47,7 +48,7 @@ def genEntry(request,bid):
 
 @dajaxice_register
 def SupplierUpdate(request,supplier_id):
-    supplier=Supplier.objects.get(supplier_id=supplier_id)
+    supplier=Supplier.objects.get(pk=supplier_id)
 
     supplier_html=render_to_string("purchasing/supplier/supplier_file_table.html",{"supplier":supplier})
     return simplejson.dumps({'supplier_html':supplier_html})
@@ -59,3 +60,26 @@ def isAllChecked(bid):
             if not val:
                 return False
     return True
+
+
+
+@dajaxice_register
+def SupplierAddorChange(request,mod,supplier_form):
+    if mod==-1:
+        supplier_form=SupplierForm(deserialize_form(supplier_form))
+        supplier_form.save()
+    else:
+        supplier=Supplier.objects.get(pk=mod)
+        supplier_form=SupplierForm(deserialize_form(supplier_form),instance=supplier)
+        supplier_form.save()
+    table=refresh_supplier_table(request)
+    print table
+    ret={"status":'0',"message":u"供应商添加成功","table":table}
+    return simplejson.dumps(ret)
+
+def refresh_supplier_table(request):
+    suppliers=Supplier.objects.all()
+    context={
+        "suppliers":suppliers,
+    }
+    return render_to_string("purchasing/supplier/supplier_table.html",context)
