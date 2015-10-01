@@ -8,6 +8,9 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from django.db import transaction 
+from const.models import WorkOrder
+from const.forms import InventoryTypeForm
+from purchasing.forms import SupplierForm
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -61,7 +64,7 @@ def genEntry(request,bid):
 
 @dajaxice_register
 def SupplierUpdate(request,supplier_id):
-    supplier=Supplier.objects.get(supplier_id=supplier_id)
+    supplier=Supplier.objects.get(pk=supplier_id)
 
     supplier_html=render_to_string("purchasing/supplier/supplier_file_table.html",{"supplier":supplier})
     return simplejson.dumps({'supplier_html':supplier_html})
@@ -77,3 +80,47 @@ def isAllChecked(bid,purchasingentry):
                 return False
         entryitem.save()
     return True
+
+@dajaxice_register
+def pendingOrderSearch(request, order_index):
+    """
+    JunHU
+    summary: ajax function to search the order set by order index
+    params: order_index: the index of the work order
+    return: table html string
+    """
+    inventoryTypeForm = InventoryTypeForm()
+    orders = WorkOrder.objects.filter(order_index__startswith = order_index)
+    context = {"inventoryTypeForm": inventoryTypeForm,
+               "orders": orders
+              }
+    html = render_to_string("purchasing/pending_order/pending_order_table.html", context)
+    return html
+
+@dajaxice_register
+def getInventoryTable(request, table_id, order_index):
+    context = {}
+    html = render_to_string("purchasing/inventory_table/main_materiel.html", context)
+    return html
+
+
+@dajaxice_register
+def SupplierAddorChange(request,mod,supplier_form):
+    if mod==-1:
+        supplier_form=SupplierForm(deserialize_form(supplier_form))
+        supplier_form.save()
+    else:
+        supplier=Supplier.objects.get(pk=mod)
+        supplier_form=SupplierForm(deserialize_form(supplier_form),instance=supplier)
+        supplier_form.save()
+    table=refresh_supplier_table(request)
+    print table
+    ret={"status":'0',"message":u"供应商添加成功","table":table}
+    return simplejson.dumps(ret)
+
+def refresh_supplier_table(request):
+    suppliers=Supplier.objects.all()
+    context={
+        "suppliers":suppliers,
+    }
+    return render_to_string("purchasing/supplier/supplier_table.html",context)

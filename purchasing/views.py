@@ -2,7 +2,7 @@ from django.shortcuts import render
 from purchasing.models import BidForm,ArrivalInspection,Supplier
 from const import *
 from const.forms import InventoryTypeForm
-from const.models import WorkOrder
+from const.models import WorkOrder, InventoryType
 from purchasing.forms import SupplierForm
 
 def purchasingFollowingViews(request):
@@ -30,11 +30,7 @@ def pendingOrderViews(request):
     params: NULL
     return: NULL
     """
-    inventoryTypeForm = InventoryTypeForm()
-    orders = WorkOrder.objects.all()
-    context = {"inventoryTypeForm": inventoryTypeForm,
-               "orders": orders,}
-    return render(request, "purchasing/pending_order.html", context)
+    return render(request, "purchasing/pending_order.html")
 
 def selectSupplierViews(request):
     context={}
@@ -66,3 +62,13 @@ def arrivalCheckViews(request,bid):
         "bid":bid,
     }
     return render(request,"purchasing/purchasing_arrivalcheck.html",context)
+
+def inventoryTableViews(request):
+    order_index = request.GET.get("order_index")
+    tableid = request.GET.get("tableid")
+    order = WorkOrder.objects.get(order_index = order_index)
+    inventoryType = InventoryType.objects.get(id = tableid)
+    context = {"order": order,
+               "inventoryType": inventoryType,
+    }
+    return render(request, "purchasing/inventory_table_base.html", context)
