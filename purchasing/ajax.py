@@ -6,6 +6,8 @@ from purchasing.models import BidForm,ArrivalInspection,Supplier
 from const import *
 from django.template.loader import render_to_string
 from django.utils import simplejson
+from const.models import WorkOrder
+from const.forms import InventoryTypeForm
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -59,3 +61,25 @@ def isAllChecked(bid):
             if not val:
                 return False
     return True
+
+@dajaxice_register
+def pendingOrderSearch(request, order_index):
+    """
+    JunHU
+    summary: ajax function to search the order set by order index
+    params: order_index: the index of the work order
+    return: table html string
+    """
+    inventoryTypeForm = InventoryTypeForm()
+    orders = WorkOrder.objects.filter(order_index__startswith = order_index)
+    context = {"inventoryTypeForm": inventoryTypeForm,
+               "orders": orders
+              }
+    html = render_to_string("purchasing/pending_order/pending_order_table.html", context)
+    return html
+
+@dajaxice_register
+def getInventoryTable(request, table_id, order_index):
+    context = {}
+    html = render_to_string("purchasing/inventory_table/main_materiel.html", context)
+    return html

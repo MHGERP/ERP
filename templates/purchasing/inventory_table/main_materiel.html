@@ -1,0 +1,32 @@
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+						<th>序号</th>
+            <th>名称</th>
+            <th>图号</th>
+            <th>票号</th>
+						<th>数量</th>
+						<th>材质</th>
+						<th>外形尺寸</th>
+						<th>毛重（kg）</th>
+						<th>备注</th>
+						<th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+						<td>{{item.index}}</td>
+            <td>{{item.name}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="btn">加入物料汇总</span></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

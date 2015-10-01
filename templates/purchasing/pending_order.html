@@ -9,41 +9,12 @@
 {% endblock %}
 
 {% block inner_content%}
-<link rel="stylesheet" href="{{ STATIC_URL }}style/form-style.css" type="text/css" media="screen" />
-
 <form class="form-search ">
-    <input type="text" class="input-medium search-query">
-    <button type="submit" class="btn">工作令查询</button>
+    <input type="text" id="search_key" class="input-medium search-query">
+    <span class="btn" id="order_search">工作令查询</span>
 </form>
 <div class="widget-content">
-    <table class="table table-bordered table-striped table-hover" style="width:70%">
-        <thead>
-            <tr>
-                <th>工作令</th>
-                <th>明细表</th>
-                <th>联系单</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for order in orders %}
-            <tr>
-                <td>{{order.order_index}}</td>
-                <td>
-                    <form class="form-inline">
-                    {{inventoryTypeForm.inventory_type}}
-                    <span class="btn inventory_open" args="{{order.order_index}}">查看</span>
-                    </form>
-                </td>
-                <td>
-                    <form class="form-inline">
-                    <select class="input"><option>1</option><option>2</option></select><button class="btn">下载</button>
-                    </form>
-                </td>
 
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 </div>
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/pending_order.js"></script>
 {% endblock%}
