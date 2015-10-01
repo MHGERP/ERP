@@ -2,10 +2,12 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier
+from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems
 from const import *
 from django.template.loader import render_to_string
 from django.utils import simplejson
+from django.contrib.auth.models import User
+from django.db import transaction 
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -37,12 +39,24 @@ def checkArrival(request,aid,cid):
     return simplejson.dumps(data)
 
 @dajaxice_register
+@transaction.commit_manually
 def genEntry(request,bid):
-    flag = isAllChecked(bid)
+    try:
+        bidform = BidForm.objects.get(bid_id = bid)
+        user = request.user
+        purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
+        purchasingentry.save()
+    except Exception, e:
+        transaction.rollback()
+        print e
+    flag = isAllChecked(bid,purchasingentry)
+    if flag:
+        transaction.commit()
+    else:
+        transaction.rollback()
     data = {
         'flag':flag,
     }
-    print flag
     return simplejson.dumps(data)
 
 @dajaxice_register
@@ -52,11 +66,14 @@ def SupplierUpdate(request,supplier_id):
     supplier_html=render_to_string("purchasing/supplier/supplier_file_table.html",{"supplier":supplier})
     return simplejson.dumps({'supplier_html':supplier_html})
 
-def isAllChecked(bid):
+def isAllChecked(bid,purchasingentry):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
+    bidform = BidForm.objects.get(bid_id = bid)
     for cargo_obj in cargo_set:
+        entryitem = PurchasingEntryItems(material = cargo_obj.material,bidform = bidform)
         for key,field in ARRIVAL_CHECK_FIELDS.items():
             val = getattr(cargo_obj,field)
             if not val:
                 return False
+        entryitem.save()
     return True
