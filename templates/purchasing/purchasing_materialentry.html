@@ -1,0 +1,82 @@
+{% extends "purchasing/base/none_nav_base.html"%}
+{% block title %}
+<h1>材料入库</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">材料入库</a>
+{% endblock %}
+{% block inner_content%}
+<link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{STATIC_URL}}/bootstrap-datepicker/css/datepicker.css" type="text/css" media="screen" />
+<div class="widget-box">
+    <div class="widget-title">
+        <span class="icon">
+            <i class="icon-th"></i>
+        </span>
+        <h5>入库单确认</h5>
+    </div>
+    <div class="widget-content nopadding">
+        <div class="control-group" style="margin-top:20px;">
+            <label class="hz-align">入库时间</label>
+            {{entry_form.entry_time}}
+        </div>
+        <div class="control-group">
+            <label class="hz-align">单据编号</label>
+            {{entry_form.receipts_code}}
+        </div>
+        <table id="items_table" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>名称及规格</th>
+                    <th>标准号/图号</th>
+                    <th>材料牌号</th>
+                    <th>单位</th>
+                    <th>数量</th>
+                    <th>标准</th>
+                    <th>状态</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for item in entry_set %}
+                <tr eid="{{item.id}}">
+                    <td>{{forloop.counter}}</td>
+                    <td>{{item.material}}</td>
+                    <td>{{item.schematic_index}}</td>
+                    <td></td>
+                    <td></td>
+                    <td>{{item.material.count}}</td>
+                    <td><input value="{{item.standard}}"></input></td>
+                    <td><input value="{{item.status}}"></input></td>
+                    <td><input value="{{item.remark}}"></input></td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <div class="control-group span12" style="margin-top:50px;">
+            <div class="span4 purcher">
+            {{entry_form.purchaser}}
+            </div>
+            <div class="span4 purcher">
+            {{entry_form.inspector}}
+            </div>
+            <div class="span4 purcher">
+            {{entry_form.keeper}}
+            </div>
+        </div>
+        <center style="margin:30px;">
+            <button style="width:30%;height:40px;" class="btn btn-primary" onclick="entry_confirm({{pur_entry.id}});">入库单确认</button>
+        </center>
+    </div>
+</div>
+<script>
+    $(function(){
+            $('#entry_time').datepicker({
+                });
+            });
+</script>
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/purchasing_following.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+{% endblock%}

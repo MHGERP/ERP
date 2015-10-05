@@ -71,14 +71,16 @@ def SupplierUpdate(request,supplier_id):
 
 def isAllChecked(bid,purchasingentry):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
-    bidform = BidForm.objects.get(bid_id = bid)
-    for cargo_obj in cargo_set:
-        entryitem = PurchasingEntryItems(material = cargo_obj.material,bidform = bidform)
-        for key,field in ARRIVAL_CHECK_FIELDS.items():
-            val = getattr(cargo_obj,field)
-            if not val:
-                return False
-        entryitem.save()
+    try:
+        for cargo_obj in cargo_set:
+            entryitem = PurchasingEntryItems(material = cargo_obj.material,purchasingentry = purchasingentry)
+            for key,field in ARRIVAL_CHECK_FIELDS.items():
+                val = getattr(cargo_obj,field)
+                if not val:
+                    return False
+            entryitem.save()
+    except Exception,e:
+        print e
     return True
 
 @dajaxice_register
@@ -124,3 +126,38 @@ def refresh_supplier_table(request):
         "suppliers":suppliers,
     }
     return render_to_string("purchasing/supplier/supplier_table.html",context)
+
+@dajaxice_register
+@transaction.commit_manually
+def entryConfirm(request,e_items,pur_entry):
+    try:
+        if pur_entry["entry_time"] == "" or pur_entry["receipts_code"] == "":
+            return simplejson.dumps({"flag":False,"message":u"入库单确认失败，入库时间或单据标号为空"})
+        for item in e_items:
+            pur_item = PurchasingEntryItems.objects.get(id = item["eid"])
+            pur_item.standard = item["standard"]
+            pur_item.status = item["status"]
+            pur_item.remark = item["remark"]
+            pur_item.save()
+        pid = pur_entry["pid"]
+        entry_time = pur_entry["entry_time"]
+        receipts_code = pur_entry["receipts_code"]
+        pur_entry = PurchasingEntry.objects.get(id = pid)
+        pur_entry.entry_time = entry_time
+        pur_entry.receipts_code = receipts_code
+        pur_entry.save()
+        transaction.commit()
+        flag = True
+        message = u"入库单确认成功"
+    except Exception,e:
+        transaction.rollback()
+        flag = False
+        message = u"入库单确认失败，数据库导入失败"
+        print "----error-----"
+        print e
+        print "--------------"
+    data = {
+        "flag":flag,
+        "message":message,
+    }
+    return simplejson.dumps(data)

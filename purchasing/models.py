@@ -93,7 +93,7 @@ class ArrivalInspection(models.Model):
         return '%s(%s)' % (self.bidform.bid_id,self.material.name)
 
 class PurchasingEntry(models.Model):
-    entry_time = models.DateTimeField(blank=True, null=True,verbose_name=u"入库时间")
+    entry_time = models.DateField(blank=True, null=True,verbose_name=u"入库时间")
     receipts_code = models.CharField(max_length=100,blank=False,verbose_name=u"单据编号")
     purchaser =  models.ForeignKey(User,blank=False,verbose_name=u"采购员",related_name = "purchaser")
     inspector = models.ForeignKey(User,blank=False,verbose_name=u"检验员",related_name = "inspector")
@@ -113,9 +113,9 @@ class PurchasingEntryItems(models.Model):
     standard = models.CharField(max_length = 100 , blank = True,null = True,verbose_name = u"标准")
     status = models.CharField(max_length = 100,blank = True, null = True , verbose_name = u"状态")
     remark = models.CharField(max_length = 100, blank = True , null = True , verbose_name = u"备注")
-    bidform = models.ForeignKey(BidForm,verbose_name = u"标单号")
+    purchasingentry = models.ForeignKey(PurchasingEntry,verbose_name = u"入库单")
     class Meta:
         verbose_name = u"入库材料"
         verbose_name_plural = u"入库材料"
     def __unicode__(self):
-        return '%s(%s)' % (self.bidform.bid_id, self.materiel.name)
+        return '%s(%s)' % (self.material.name, self.purchasingentry)

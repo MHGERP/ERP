@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from purchasing.models import BidForm,ArrivalInspection,Supplier
+from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
+    PurchasingEntryItems
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
-from purchasing.forms import SupplierForm
+from purchasing.forms import SupplierForm,EntryForm
 
 def purchasingFollowingViews(request):
     """
@@ -72,3 +73,18 @@ def inventoryTableViews(request):
                "inventoryType": inventoryType,
     }
     return render(request, "purchasing/inventory_table_base.html", context)
+
+def materialEntryViews(request):
+    try:
+        purchasingentry = PurchasingEntry.objects.get(bidform = 8)
+        entry_set = PurchasingEntryItems.objects.filter(purchasingentry = purchasingentry)
+        entry_form = EntryForm(instance = purchasingentry)
+        print purchasingentry.entry_time
+    except Exception,e:
+        print e
+    context = {
+        "pur_entry":purchasingentry,
+        "entry_set":entry_set,
+        "entry_form":entry_form,
+    }
+    return render(request,"purchasing/purchasing_materialentry.html",context)
