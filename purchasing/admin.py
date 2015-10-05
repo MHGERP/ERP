@@ -9,6 +9,9 @@ RegisterClass = (
     ArrivalInspection,
     Supplier,
     SupplierFile,
+    PurchasingEntry,
+    PurchasingEntryItems,
+    MaterielPurchasingStatus,
 )
 
 for item in RegisterClass:

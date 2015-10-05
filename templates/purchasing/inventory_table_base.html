@@ -1,0 +1,25 @@
+{% extends "purchasing/base/none_nav_base.html"%}
+
+{% block title %}
+<h1>{{inventoryType.name}}</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="/purchasing/pendingOrder" class="tip-bottom" data-original-title="待处理工作令">待处理工作令</a>
+<a href="#" class="current">{{inventoryType.name}}</a>
+{% endblock %}
+
+{% block inner_content%}
+<div class="widget-box">
+	<div class="widget-title">
+		<span class="icon"><i class="icon-th"></i></span>
+		<h5>工作令：{{order.order_index}}</h5>
+		<h5>产品名称：{{order.product_name}}</h5>
+
+	</div>
+	<div class="widget-content nopadding" tableid="{{inventoryType.id}}" order_index="{{order.order_index}}">
+
+	</div>
+</div>
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/inventory_table.js"></script>
+{% endblock%}

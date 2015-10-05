@@ -2,10 +2,18 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
+<<<<<<< HEAD
 from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile
+=======
+from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems
+>>>>>>> fc7373fc2387e87575c96af9d0ecbb7b8c992be4
 from const import *
 from django.template.loader import render_to_string
 from django.utils import simplejson
+from django.contrib.auth.models import User
+from django.db import transaction 
+from const.models import WorkOrder, Materiel
+from const.forms import InventoryTypeForm
 from purchasing.forms import SupplierForm
 
 @dajaxice_register
@@ -38,12 +46,24 @@ def checkArrival(request,aid,cid):
     return simplejson.dumps(data)
 
 @dajaxice_register
+@transaction.commit_manually
 def genEntry(request,bid):
-    flag = isAllChecked(bid)
+    try:
+        bidform = BidForm.objects.get(bid_id = bid)
+        user = request.user
+        purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
+        purchasingentry.save()
+    except Exception, e:
+        transaction.rollback()
+        print e
+    flag = isAllChecked(bid,purchasingentry)
+    if flag:
+        transaction.commit()
+    else:
+        transaction.rollback()
     data = {
         'flag':flag,
     }
-    print flag
     return simplejson.dumps(data)
 
 @dajaxice_register
@@ -53,16 +73,86 @@ def SupplierUpdate(request,supplier_id):
     supplier_html=render_to_string("purchasing/supplier/supplier_file_table.html",{"supplier":supplier})
     return simplejson.dumps({'supplier_html':supplier_html})
 
-def isAllChecked(bid):
+def isAllChecked(bid,purchasingentry):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
+    bidform = BidForm.objects.get(bid_id = bid)
     for cargo_obj in cargo_set:
+        entryitem = PurchasingEntryItems(material = cargo_obj.material,bidform = bidform)
         for key,field in ARRIVAL_CHECK_FIELDS.items():
             val = getattr(cargo_obj,field)
             if not val:
                 return False
+        entryitem.save()
     return True
 
+@dajaxice_register
+def pendingOrderSearch(request, order_index):
+    """
+    JunHU
+    summary: ajax function to search the order set by order index
+    params: order_index: the index of the work order
+    return: table html string
+    """
+    inventoryTypeForm = InventoryTypeForm()
+    orders = WorkOrder.objects.filter(order_index__startswith = order_index)
+    context = {"inventoryTypeForm": inventoryTypeForm,
+               "orders": orders
+              }
+    html = render_to_string("purchasing/pending_order/pending_order_table.html", context)
+    return html
 
+@dajaxice_register
+def getInventoryTable(request, table_id, order_index):
+    """
+    JunHU
+    summary: ajax function to load 5 kinds of inventory table
+    params: table_id: the id of table; order_index: the index of work_order
+    return: table html string
+    """
+
+    #dict of table_id to fact table
+    #it should be optimized when database scale expand
+    id2table = {
+        "1": "main_materiel",
+        "2": "auxiliary_materiel",
+        "3": "first_feeding",
+        "4": "purchased",
+        "5": "forging",
+    }
+    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
+    context = {
+        "items": items,
+    }
+    html = render_to_string("purchasing/inventory_table/%s.html" % id2table[table_id], context)
+    
+    return html
+
+@dajaxice_register
+def addToDetail(request, table_id, order_index):
+    """
+    JunHU
+    summary: ajax function to change all materiels' purchasing status
+    params: table_id: the id of table; order_index: the index of work_order
+    return: NULL
+    """
+    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
+    for item in items:
+        item.materielpurchasingstatus.add_to_detail = True
+        item.materielpurchasingstatus.save()
+    return ""
+
+@dajaxice_register
+def addToDetailSingle(request, index):
+    """
+    JunHU
+    summary: ajax function to change single materiel's purchasing status
+    params: index: database index of materiel
+    return: NULL
+    """
+    item = Materiel.objects.get(id = index)
+    item.materielpurchasingstatus.add_to_detail = True
+    item.materielpurchasingstatus.save()
+    return ""
 
 @dajaxice_register
 def SupplierAddorChange(request,mod,supplier_form):
