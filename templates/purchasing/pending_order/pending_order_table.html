@@ -1,0 +1,28 @@
+<table class="table table-bordered table-striped table-hover" style="width:70%">
+    <thead>
+        <tr>
+            <th>工作令</th>
+            <th>明细表</th>
+            <th>联系单</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{order.order_index}}</td>
+            <td>
+                <form class="form-inline">
+                {{inventoryTypeForm.inventory_type}}
+                <span class="btn inventory_open" args="{{order.order_index}}">查看</span>
+                </form>
+            </td>
+            <td>
+                <form class="form-inline">
+                <select class="input"><option>1</option><option>2</option></select><button class="btn">下载</button>
+                </form>
+            </td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

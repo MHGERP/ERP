@@ -2,18 +2,15 @@
 # coding=utf-8
 
 from django import forms
-from const.models import Materiel
+from const.models import InventoryType
 
-class InventoryTypeForm(forms.ModelForm):
+class InventoryTypeForm(forms.Form):
     """
     JunHU
     summary: store all type of source inventory list
     """
-    class Meta:
-        model = Materiel
-        include = ("inventory_type", )
-        widgets = {
-            "inventory_type": forms.Select(attrs = {'class': 'input form-control',})
-        }
+    TYPE_CHOICES = tuple((item.id, item) for item in InventoryType.objects.all())
+
+    inventory_type = forms.ChoiceField(choices = TYPE_CHOICES, widget = forms.Select(attrs = {'class': 'form-control input'}))
 
 

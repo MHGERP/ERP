@@ -2,11 +2,16 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier
+from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems
 from const import *
 from const.models import Materiel
 from django.template.loader import render_to_string
 from django.utils import simplejson
+from django.contrib.auth.models import User
+from django.db import transaction 
+from const.models import WorkOrder
+from const.forms import InventoryTypeForm
+from purchasing.forms import SupplierForm
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -38,27 +43,43 @@ def checkArrival(request,aid,cid):
     return simplejson.dumps(data)
 
 @dajaxice_register
+@transaction.commit_manually
 def genEntry(request,bid):
-    flag = isAllChecked(bid)
+    try:
+        bidform = BidForm.objects.get(bid_id = bid)
+        user = request.user
+        purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
+        purchasingentry.save()
+    except Exception, e:
+        transaction.rollback()
+        print e
+    flag = isAllChecked(bid,purchasingentry)
+    if flag:
+        transaction.commit()
+    else:
+        transaction.rollback()
     data = {
         'flag':flag,
     }
-    print flag
     return simplejson.dumps(data)
 
 @dajaxice_register
 def SupplierUpdate(request,supplier_id):
-    supplier=Supplier.objects.get(supplier_id=supplier_id)
+    supplier=Supplier.objects.get(pk=supplier_id)
 
     supplier_html=render_to_string("purchasing/supplier/supplier_file_table.html",{"supplier":supplier})
     return simplejson.dumps({'supplier_html':supplier_html})
-def isAllChecked(bid):
+
+def isAllChecked(bid,purchasingentry):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
+    bidform = BidForm.objects.get(bid_id = bid)
     for cargo_obj in cargo_set:
+        entryitem = PurchasingEntryItems(material = cargo_obj.material,bidform = bidform)
         for key,field in ARRIVAL_CHECK_FIELDS.items():
             val = getattr(cargo_obj,field)
             if not val:
                 return False
+        entryitem.save()
     return True
 
 @dajaxice_register
@@ -71,3 +92,45 @@ def chooseInventorytype(request,pid):
     
     inventory_detail_html=render_to_string("widgets/inventory_detail_table.html",context)
     return simplejson.dumps({"inventory_detail_html":inventory_detail_html})
+def pendingOrderSearch(request, order_index):
+    """
+    JunHU
+    summary: ajax function to search the order set by order index
+    params: order_index: the index of the work order
+    return: table html string
+    """
+    inventoryTypeForm = InventoryTypeForm()
+    orders = WorkOrder.objects.filter(order_index__startswith = order_index)
+    context = {"inventoryTypeForm": inventoryTypeForm,
+               "orders": orders
+              }
+    html = render_to_string("purchasing/pending_order/pending_order_table.html", context)
+    return html
+
+@dajaxice_register
+def getInventoryTable(request, table_id, order_index):
+    context = {}
+    html = render_to_string("purchasing/inventory_table/main_materiel.html", context)
+    return html
+
+
+@dajaxice_register
+def SupplierAddorChange(request,mod,supplier_form):
+    if mod==-1:
+        supplier_form=SupplierForm(deserialize_form(supplier_form))
+        supplier_form.save()
+    else:
+        supplier=Supplier.objects.get(pk=mod)
+        supplier_form=SupplierForm(deserialize_form(supplier_form),instance=supplier)
+        supplier_form.save()
+    table=refresh_supplier_table(request)
+    print table
+    ret={"status":'0',"message":u"供应商添加成功","table":table}
+    return simplejson.dumps(ret)
+
+def refresh_supplier_table(request):
+    suppliers=Supplier.objects.all()
+    context={
+        "suppliers":suppliers,
+    }
+    return render_to_string("purchasing/supplier/supplier_table.html",context)
