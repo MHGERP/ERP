@@ -89,9 +89,27 @@ def chooseInventorytype(request,pid):
     context={
         "inventory_detail_list":temp,
     }
+    new_order_form_html = render_to_string("widgets/new_order_form.html",context)
+    new_purchasing_form_html = render_to_string("widgets/new_purchasing_form.html",context)
+    inventory_detail_html = render_to_string("widgets/inventory_detail_table.html",context)
+    main_material_quota_html = render_to_string("widgets/main_material_quota.html",context)
+    accessory_quota_html = render_to_string("widgets/accessory_quota.html",context)
+    first_send_detail_html = render_to_string("widgets/first_send_detail.html",context)
+    out_purchasing_detail_html = render_to_string("widgets/out_purchasing_detail.html",context)
+    cast_detail_html = render_to_string("widgets/cast_detail.html",context)
     
-    inventory_detail_html=render_to_string("widgets/inventory_detail_table.html",context)
-    return simplejson.dumps({"inventory_detail_html":inventory_detail_html})
+    return simplejson.dumps({
+        "new_order_form_html":new_order_form_html,
+        "new_purchasing_form_html":new_purchasing_form_html,
+        "inventory_detail_html":inventory_detail_html,
+        "main_material_quota_html":main_material_quota_html,
+        "accessory_quota_html":accessory_quota_html,
+        "first_send_detail_html":first_send_detail_html,
+        "out_purchasing_detail_html":out_purchasing_detail_html,
+        "cast_detail_html":cast_detail_html
+        })
+
+@dajaxice_register
 def pendingOrderSearch(request, order_index):
     """
     JunHU
