@@ -9,28 +9,18 @@
 {% endblock %}
 
 {% block inner_content%}
-<button class="btn" style="margin:0 0 12px 0">添加</button>
-<!-- <button class="btn">新建采购单</button> -->
-<form class="form-search " >
-    {{inventoryTypeForm.inventory_type}}
-    <input type="text" class="input-medium search-query">
-    <button type="submit" class="btn">查询</button>
-</form>
-<div id="outsourcing_detail" class="display:none">
-	{% include "widgets/outsourcing_detail_table.html" %}
+<link rel="stylesheet" href="{{ STATIC_URL }}style/material_summarize.css" type="text/css" media="screen" />
+
+<div id="search_div">
+    <button class="btn add">添加</button>
+    <form class="form-search " >
+        {{inventoryTypeForm.inventory_type}}
+        <input type="text" class="input-medium search-query">
+        <button type="submit" class="btn search">查询</button>
+    </form>
 </div>
-<div id="mainmaterial_quota" class="display:none">
-	{% include "widgets/mainmaterial_quota_table.html" %}
-</div>
-<div id="casting_detail_table" class="display:none">
-	{% include "widgets/catsing_detail_table.html" %}
-</div>
-<div id="outsourcing_detail" class="display:none">
-	{% include "widgets/outsourcing_detail_table.html" %}
-</div>
+
+{%include "widgets/inventory_detail.html"%}   
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/material_summarize.js"></script>
 {% endblock%}
 
-<script>
-	$("#")
-
-</script>

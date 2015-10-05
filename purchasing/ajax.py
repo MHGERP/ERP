@@ -4,6 +4,7 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from purchasing.models import BidForm,ArrivalInspection,Supplier
 from const import *
+from const.models import Materiel
 from django.template.loader import render_to_string
 from django.utils import simplejson
 
@@ -59,3 +60,14 @@ def isAllChecked(bid):
             if not val:
                 return False
     return True
+
+@dajaxice_register
+def chooseInventorytype(request,pid):
+    #pid=int(pid)
+    temp=Materiel.objects.filter(inventory_type__id=pid)
+    context={
+        "inventory_detail_list":temp,
+    }
+    
+    inventory_detail_html=render_to_string("widgets/inventory_detail_table.html",context)
+    return simplejson.dumps({"inventory_detail_html":inventory_detail_html})
