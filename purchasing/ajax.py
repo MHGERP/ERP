@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from django.db import transaction 
-from const.models import WorkOrder
+from const.models import WorkOrder, Materiel
 from const.forms import InventoryTypeForm
 from purchasing.forms import SupplierForm
 
@@ -127,10 +127,56 @@ def pendingOrderSearch(request, order_index):
 
 @dajaxice_register
 def getInventoryTable(request, table_id, order_index):
-    context = {}
-    html = render_to_string("purchasing/inventory_table/main_materiel.html", context)
+    """
+    JunHU
+    summary: ajax function to load 5 kinds of inventory table
+    params: table_id: the id of table; order_index: the index of work_order
+    return: table html string
+    """
+
+    #dict of table_id to fact table
+    #it should be optimized when database scale expand
+    id2table = {
+        "1": "main_materiel",
+        "2": "auxiliary_materiel",
+        "3": "first_feeding",
+        "4": "purchased",
+        "5": "forging",
+    }
+    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
+    context = {
+        "items": items,
+    }
+    html = render_to_string("purchasing/inventory_table/%s.html" % id2table[table_id], context)
+    
     return html
 
+@dajaxice_register
+def addToDetail(request, table_id, order_index):
+    """
+    JunHU
+    summary: ajax function to change all materiels' purchasing status
+    params: table_id: the id of table; order_index: the index of work_order
+    return: NULL
+    """
+    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
+    for item in items:
+        item.materielpurchasingstatus.add_to_detail = True
+        item.materielpurchasingstatus.save()
+    return ""
+
+@dajaxice_register
+def addToDetailSingle(request, index):
+    """
+    JunHU
+    summary: ajax function to change single materiel's purchasing status
+    params: index: database index of materiel
+    return: NULL
+    """
+    item = Materiel.objects.get(id = index)
+    item.materielpurchasingstatus.add_to_detail = True
+    item.materielpurchasingstatus.save()
+    return ""
 
 @dajaxice_register
 def SupplierAddorChange(request,mod,supplier_form):
