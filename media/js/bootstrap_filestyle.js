@@ -241,7 +241,7 @@
 
             html = this.options.buttonBefore ? btn+this.htmlInput() : this.htmlInput()+btn;
             
-            var uphtml='<button id="upload_file" class="btn btn-primary">上传文件</button>';
+            var uphtml='<button type="submit" id="upload_file" class="btn btn-primary">上传文件</button>';
             this.$elementFilestyle = $('<div class="bootstrap-filestyle input-group form-inline">'+html+uphtml+'</div>');
 
             $label = this.$elementFilestyle.find('label');

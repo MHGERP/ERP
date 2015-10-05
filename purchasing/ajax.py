@@ -2,7 +2,7 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier
+from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile
 from const import *
 from django.template.loader import render_to_string
 from django.utils import simplejson
@@ -74,7 +74,6 @@ def SupplierAddorChange(request,mod,supplier_form):
         supplier_form=SupplierForm(deserialize_form(supplier_form),instance=supplier)
         supplier_form.save()
     table=refresh_supplier_table(request)
-    print table
     ret={"status":'0',"message":u"供应商添加成功","table":table}
     return simplejson.dumps(ret)
 
@@ -84,3 +83,17 @@ def refresh_supplier_table(request):
         "suppliers":suppliers,
     }
     return render_to_string("purchasing/supplier/supplier_table.html",context)
+
+@dajaxice_register
+def FileDelete(requset,mod,file_id):
+    file=SupplierFile.objects.get(pk=file_id)
+    file.delete()
+    supplier=Supplier.objects.get(pk=mod)
+    supplier_html=render_to_string("purchasing/supplier/supplier_file_table.html",{"supplier":supplier})
+    return simplejson.dumps({"supplier_html":supplier_html})
+
+@dajaxice_register
+def SupplierDelete(request,supplier_id):
+    supplier=Supplier.objects.get(pk=supplier_id)
+    supplier.delete()
+    return simplejson.dumps({})

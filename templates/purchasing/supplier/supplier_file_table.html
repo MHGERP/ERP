@@ -17,7 +17,7 @@
                 </tr>
             </thead>
             {% for file in supplier.supplierfile_set.all%}
-            <tr>
+            <tr id={{file.id}}>
                 <td>{{file.name}}</td>
                 <td>{{file.file_size}}</td>
                 <td>{{file.upload_time|date:"Y-m-d h:m:s"}}</td>
