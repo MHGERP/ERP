@@ -1,6 +1,6 @@
 # coding: UTF-8
 from django.db import models
-from const.models import BidFormStatus,Materiel
+from const.models import BidFormStatus,Materiel,WorkOrder
 from django.contrib.auth.models import User
 import settings
 
@@ -129,3 +129,30 @@ class MaterielPurchasingStatus(models.Model):
     def __unicode__(self):
        return self.materiel.name
 
+class MaterialSubApply(models.Model):
+    receipts_code = models.CharField(max_length = 100, blank = False , verbose_name = u"单据编号")
+    pic_code =  models.CharField(max_length = 100, blank = False , verbose_name = u"图号")
+    work_order = models.ForeignKey(WorkOrder,verbose_name = u"工作令")
+    bidform = models.ForeignKey(BidForm,blank = True , null = True, verbose_name = u"对应标单")
+    reasons = models.CharField(max_length = 1000,blank = True , null = True, verbose_name = u"代用原因和理由")
+    class Meta:
+        verbose_name = u"材料代用申请单"
+        verbose_name_plural = u"材料代用申请单"
+    def __unicode__(self):
+        return self.receipts_code
+
+class MaterialSubApplyItems(models.Model):
+    mat_pic_code = models.CharField(max_length = 100, blank = False , verbose_name = u"部件图号")
+    pic_ticket_code = models.CharField(max_length = 100, blank = False , verbose_name = u"零件图号或票号")
+    old_name = models.CharField(max_length = 100, blank = False , verbose_name = u"原材料名称")
+    old_standard = models.CharField(max_length = 100, blank = False , verbose_name = u"原材料标准")
+    old_size = models.CharField(max_length = 100, blank = False , verbose_name = u"原材料规格和尺寸")
+    new_name = models.CharField(max_length = 100, blank = False , verbose_name = u"拟用材料名称")
+    new_standard = models.CharField(max_length = 100, blank = False , verbose_name = u"拟用材料标准")
+    new_size = models.CharField(max_length = 100, blank = False , verbose_name = u"拟用材料规格和尺寸")
+    sub_apply = models.ForeignKey(MaterialSubApply,verbose_name = u"材料代用申请单")
+    class Meta:
+        verbose_name = u"材料代用申请条目"
+        verbose_name_plural = u"材料代用申请条目"
+    def __unicode__(self):
+        return "%s(%s)" % (self.sub_apply,self.mat_pic_code) 
