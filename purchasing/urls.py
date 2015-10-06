@@ -12,9 +12,13 @@ urlpatterns=patterns('',
         purchasing_views.pendingOrderViews,
     ),
     url(
-            r'^selectsupplier$',
-            purchasing_views.selectSupplierViews,
-        ),
+        r'^materialSummarize$',
+        purchasing_views.materialSummarizeViews,
+    ),
+    url(
+        r'^selectsupplier$',
+        purchasing_views.selectSupplierViews,
+    ),
     url(
             r'^suppliermanagement$',
             purchasing_views.supplierManagementViews,
@@ -24,6 +28,14 @@ urlpatterns=patterns('',
             purchasing_views.bidTrackingViews,
         ),
     url(
+        r'^suppliermanagement$',
+        purchasing_views.supplierManagementViews,
+    ),
+    url(
+        r'^bidTracking$',
+        purchasing_views.bidTrackingViews,
+    ),
+   url( 
         r'^arrivalInspection$',
         purchasing_views.arrivalInspectionViews,
     ),

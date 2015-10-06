@@ -4,6 +4,7 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems
 from const import *
+from const.models import Materiel
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
@@ -82,6 +83,37 @@ def isAllChecked(bid,purchasingentry):
     except Exception,e:
         print e
     return True
+
+@dajaxice_register
+def chooseInventorytype(request,pid):
+    #pid=int(pid)
+    items = Materiel.objects.filter(inventory_type__id=pid)
+    inventory_list = []
+    for item in items:
+        if(item.materielpurchasingstatus.add_to_detail == True):
+            inventory_list.append(item)
+    context={
+        "inventory_detail_list":inventory_list,
+    }
+    new_order_form_html = render_to_string("widgets/new_order_form.html",context)
+    new_purchasing_form_html = render_to_string("widgets/new_purchasing_form.html",context)
+    inventory_detail_html = render_to_string("widgets/inventory_detail_table.html",context)
+    main_material_quota_html = render_to_string("widgets/main_material_quota.html",context)
+    accessory_quota_html = render_to_string("widgets/accessory_quota.html",context)
+    first_send_detail_html = render_to_string("widgets/first_send_detail.html",context)
+    out_purchasing_detail_html = render_to_string("widgets/out_purchasing_detail.html",context)
+    cast_detail_html = render_to_string("widgets/cast_detail.html",context)
+    
+    return simplejson.dumps({
+        "new_order_form_html":new_order_form_html,
+        "new_purchasing_form_html":new_purchasing_form_html,
+        "inventory_detail_html":inventory_detail_html,
+        "main_material_quota_html":main_material_quota_html,
+        "accessory_quota_html":accessory_quota_html,
+        "first_send_detail_html":first_send_detail_html,
+        "out_purchasing_detail_html":out_purchasing_detail_html,
+        "cast_detail_html":cast_detail_html
+        })
 
 @dajaxice_register
 def pendingOrderSearch(request, order_index):

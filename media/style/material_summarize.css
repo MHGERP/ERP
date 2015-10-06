@@ -1,0 +1,21 @@
+#search_div{
+	width: 70%;
+	float:left;
+}
+#new_purchasing_order{
+	width:30%;
+	float:left;
+	text-align: center;
+}
+.new_purchase_btn{
+	margin:0 0 12px 0;
+	width:240px;
+	height:30px;
+	text-align: center;
+}
+.add{
+	margin:0 0 12px 0;
+}
+#inventory_detail_table{
+	clear: both;
+}
