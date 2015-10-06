@@ -2,7 +2,7 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems
+from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems
 from const import *
 from const.models import Materiel
 from django.template.loader import render_to_string
@@ -72,14 +72,16 @@ def SupplierUpdate(request,supplier_id):
 
 def isAllChecked(bid,purchasingentry):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
-    bidform = BidForm.objects.get(bid_id = bid)
-    for cargo_obj in cargo_set:
-        entryitem = PurchasingEntryItems(material = cargo_obj.material,bidform = bidform)
-        for key,field in ARRIVAL_CHECK_FIELDS.items():
-            val = getattr(cargo_obj,field)
-            if not val:
-                return False
-        entryitem.save()
+    try:
+        for cargo_obj in cargo_set:
+            entryitem = PurchasingEntryItems(material = cargo_obj.material,purchasingentry = purchasingentry)
+            for key,field in ARRIVAL_CHECK_FIELDS.items():
+                val = getattr(cargo_obj,field)
+                if not val:
+                    return False
+            entryitem.save()
+    except Exception,e:
+        print e
     return True
 
 @dajaxice_register
@@ -192,7 +194,6 @@ def SupplierAddorChange(request,mod,supplier_form):
         supplier_form=SupplierForm(deserialize_form(supplier_form),instance=supplier)
         supplier_form.save()
     table=refresh_supplier_table(request)
-    print table
     ret={"status":'0',"message":u"供应商添加成功","table":table}
     return simplejson.dumps(ret)
 
@@ -202,3 +203,51 @@ def refresh_supplier_table(request):
         "suppliers":suppliers,
     }
     return render_to_string("purchasing/supplier/supplier_table.html",context)
+
+@dajaxice_register
+@transaction.commit_manually
+def entryConfirm(request,e_items,pur_entry):
+    try:
+        if pur_entry["entry_time"] == "" or pur_entry["receipts_code"] == "":
+            return simplejson.dumps({"flag":False,"message":u"入库单确认失败，入库时间或单据标号为空"})
+        for item in e_items:
+            pur_item = PurchasingEntryItems.objects.get(id = item["eid"])
+            pur_item.standard = item["standard"]
+            pur_item.status = item["status"]
+            pur_item.remark = item["remark"]
+            pur_item.save()
+        pid = pur_entry["pid"]
+        entry_time = pur_entry["entry_time"]
+        receipts_code = pur_entry["receipts_code"]
+        pur_entry = PurchasingEntry.objects.get(id = pid)
+        pur_entry.entry_time = entry_time
+        pur_entry.receipts_code = receipts_code
+        pur_entry.save()
+        transaction.commit()
+        flag = True
+        message = u"入库单确认成功"
+    except Exception,e:
+        transaction.rollback()
+        flag = False
+        message = u"入库单确认失败，数据库导入失败"
+        print "----error-----"
+        print e
+        print "--------------"
+    data = {
+        "flag":flag,
+        "message":message,
+    }
+    return simplejson.dumps(data)
+
+def FileDelete(requset,mod,file_id):
+    file=SupplierFile.objects.get(pk=file_id)
+    file.delete()
+    supplier=Supplier.objects.get(pk=mod)
+    supplier_html=render_to_string("purchasing/supplier/supplier_file_table.html",{"supplier":supplier})
+    return simplejson.dumps({"supplier_html":supplier_html})
+
+@dajaxice_register
+def SupplierDelete(request,supplier_id):
+    supplier=Supplier.objects.get(pk=supplier_id)
+    supplier.delete()
+    return simplejson.dumps({})

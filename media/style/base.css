@@ -7,6 +7,15 @@ div#arrivalIns{
     width:60%;
 }
 
+label.hz-align{
+    display: inline-block;
+    padding:0 10px;
+}
 
+div.purcher{
+    margin-left:20px!important;
+}
 
-
+.entry_input{
+    width:150px!important;
+}
