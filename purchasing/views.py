@@ -1,11 +1,16 @@
 # coding: UTF-8
 from django.shortcuts import render
-from purchasing.models import BidForm,ArrivalInspection,Supplier
+from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
+    PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm
 
+from purchasing.forms import SupplierForm,EntryForm
+from datetime import datetime
+from django.template import RequestContext
+from django.views.decorators import csrf
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -32,16 +37,43 @@ def pendingOrderViews(request):
     """
     return render(request, "purchasing/pending_order.html")
 
+def materialSummarizeViews(request):
+    """
+    JunHU
+    summary: view function of meterialSummarize page
+    params: NULL
+    return: NULL
+    """
+    inventoryTypeForm = InventoryTypeForm()
+    context = {"inventoryTypeForm": inventoryTypeForm}
+    return render(request, "purchasing/material_summarize.html", context)
+
 def selectSupplierViews(request):
     context={}
     return render(request,"purchasing/select_supplier.html",context)
 
 def supplierManagementViews(request):
+    file_upload_error=0
+    if request.method=="POST":
+        if request.FILES['supplier_file'].size>10*1024*1024:
+            file_upload_error=2
+        else:
+            supplier_id=request.POST['supplier_id']
+            supplier=Supplier.objects.get(pk=supplier_id)
+            file=SupplierFile()
+            file.project=supplier
+            file.file_obj=request.FILES['supplier_file']
+            file.file_size=str(int(request.FILES['supplier_file'].size)/1000)+"kb"
+            file.name=request.FILES['supplier_file'].name
+            file.upload_time= datetime.now()
+            file.save()
+            file_upload_error=1
     suppliers=Supplier.objects.all()
     supplier_form=SupplierForm()
     context={
         "suppliers":suppliers,
-        "supplier_form":supplier_form
+        "supplier_form":supplier_form,
+        "file_upload_error":file_upload_error
     }
     return render(request,"purchasing/supplier/supplier_management.html",context)
 
@@ -64,8 +96,15 @@ def bidTrackingViews(request):
                "bidApplyForm": bidApplyForm,
              }
     return render(request, "purchasing/bid_track.html", context)
+
+@csrf.csrf_protect
 def arrivalInspectionViews(request):
-    bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
+    if request.method == "POST":
+        bid_id = request.POST["bidform_search"]
+        print bid_id
+        bidFormSet = BidForm.objects.filter(bid_id = bid_id)
+    else:
+        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
     
     context = {
         "bidFormSet":bidFormSet,
@@ -89,3 +128,28 @@ def inventoryTableViews(request):
                "inventoryType": inventoryType,
     }
     return render(request, "purchasing/inventory_table_base.html", context)
+
+def materialEntryViews(request):
+    try:
+        purchasingentry = PurchasingEntry.objects.get(bidform = 8)
+        entry_set = PurchasingEntryItems.objects.filter(purchasingentry = purchasingentry)
+        entry_form = EntryForm(instance = purchasingentry)
+        print purchasingentry.entry_time
+    except Exception,e:
+        print e
+    context = {
+        "pur_entry":purchasingentry,
+        "entry_set":entry_set,
+        "entry_form":entry_form,
+    }
+    return render(request,"purchasing/purchasing_materialentry.html",context)
+
+def subApplyViews(request):
+    if request.method == "POST":
+        sub_id = request.POST["subapply_search"]
+        subapply_set = MaterialSubApply.objects.filter(id = sub_id)
+    subapply_set = MaterialSubApply.objects.all() 
+    context = {
+        "subapply_set":subapply_set,
+    }
+    return render(request,"purchasing/subapply_home.html",context)

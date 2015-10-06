@@ -12,9 +12,21 @@ urlpatterns=patterns('',
         purchasing_views.pendingOrderViews,
     ),
     url(
+        r'^materialSummarize$',
+        purchasing_views.materialSummarizeViews,
+    ),
+    url(
         r'^selectsupplier$',
         purchasing_views.selectSupplierViews,
     ),
+    url(
+            r'^suppliermanagement$',
+            purchasing_views.supplierManagementViews,
+        ),
+    url(
+            r'^bidTracking$',
+            purchasing_views.bidTrackingViews,
+        ),
     url(
         r'^suppliermanagement$',
         purchasing_views.supplierManagementViews,
@@ -23,15 +35,21 @@ urlpatterns=patterns('',
         r'^bidTracking$',
         purchasing_views.bidTrackingViews,
     ),
-    url(
+   url( 
         r'^arrivalInspection$',
         purchasing_views.arrivalInspectionViews,
     ),
     url(
-        r'arrivalCheck/(?P<bid>\w+)/$',purchasing_views.arrivalCheckViews,name='arrivalCheck',                    
+        r'^arrivalCheck/(?P<bid>\w+)/$',purchasing_views.arrivalCheckViews,name='arrivalCheck',                    
     ),
     url(
         r'^inventoryTable/', 
-        purchasing_views.inventoryTableViews,
+        purchasing_views.inventoryTableViews,  
+    ),
+    url(
+        r'^materialEntry$',purchasing_views.materialEntryViews,                     
+    ),
+    url(
+        r'^subApply$',purchasing_views.subApplyViews,                     
     ),
 )
