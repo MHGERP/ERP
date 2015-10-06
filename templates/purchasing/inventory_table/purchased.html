@@ -26,7 +26,11 @@
             <td>{{item.net_weight}}</td>
             <td>{{item.total_weight}}</td>
             <td></td>
+            {% if not item.materielpurchaingstatus.add_to_detail %}
             <td><span class="btn btn-small btn-primary">加入物料汇总</span></td>
+            {% else %}
+            <td><span class="btn btn-small btn-warning">已加入汇总</span></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

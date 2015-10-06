@@ -127,4 +127,5 @@ class MaterielPurchasingStatus(models.Model):
         verbose_name = u"物料采购状态"
         verbose_name_plural = u"物料采购状态"
     def __unicode__(self):
-        return "%s -- %s" % (materiel, str(add_to_detail))
+       return self.materiel.name
+
