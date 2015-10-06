@@ -85,9 +85,13 @@ def isAllChecked(bid,purchasingentry):
 @dajaxice_register
 def chooseInventorytype(request,pid):
     #pid=int(pid)
-    temp=Materiel.objects.filter(inventory_type__id=pid)
+    items = Materiel.objects.filter(inventory_type__id=pid)
+    inventory_list = []
+    for item in items:
+        if(item.materielpurchasingstatus.add_to_detail == True):
+            inventory_list.append(item)
     context={
-        "inventory_detail_list":temp,
+        "inventory_detail_list":inventory_list,
     }
     new_order_form_html = render_to_string("widgets/new_order_form.html",context)
     new_purchasing_form_html = render_to_string("widgets/new_purchasing_form.html",context)

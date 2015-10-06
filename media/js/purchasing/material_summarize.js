@@ -13,7 +13,7 @@ function refresh(){
 }
 function choose_Inventorytype_callback(data){
     val = $("#id_inventory_type").val();
-    alert(val);
+    // alert(val);
     if(val==1){
     	$("#new_purchasing_order").html(data.new_order_form_html);
     	$("#inventory_detail_table").html(data.main_material_quota_html);
