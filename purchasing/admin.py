@@ -5,6 +5,7 @@ from django.contrib import admin
 from purchasing.models  import *
 
 RegisterClass = (
+    OrderForm,
     BidForm,
     ArrivalInspection,
     Supplier,
