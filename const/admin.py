@@ -5,6 +5,7 @@ from django.contrib import admin
 from const.models  import *
 
 RegisterClass = (
+    OrderFormStatus,
     BidFormStatus,
     WorkOrder,
     InventoryType,
