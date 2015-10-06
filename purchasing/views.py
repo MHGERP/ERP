@@ -1,9 +1,12 @@
+# coding: UTF-8
 from django.shortcuts import render
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
     PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm
+
 from purchasing.forms import SupplierForm,EntryForm
 from datetime import datetime
 from django.template import RequestContext
@@ -26,7 +29,6 @@ def purchasingFollowingViews(request):
 
 
 def pendingOrderViews(request):
-    
     """
     JunHU
     summary: view function of pendingorder page
@@ -74,8 +76,25 @@ def supplierManagementViews(request):
         "file_upload_error":file_upload_error
     }
     return render(request,"purchasing/supplier/supplier_management.html",context)
+
+
 def bidTrackingViews(request):
-    context = {}
+    """
+    Liu Ye
+    """
+    qualityPriceCardForm = QualityPriceCardForm()
+    bidApplyForm = BidApplyForm()
+
+    bid_status = []
+    bid_status.append({"name":u"招标申请表",         "class":"btn-success"})
+    bid_status.append({"name":u"分公司领导批准",     "class":"btn-success"})
+    bid_status.append({"name":u"滨海公司领导批准",   "class":""})
+    bid_status.append({"name":u"滨海招标办领导批准", "class":"btn-danger"})
+    bid_status.append({"name":u"中标通知书",         "class":""})
+    context = {"bid_status": bid_status,
+               "qualityPriceCardForm": qualityPriceCardForm,
+               "bidApplyForm": bidApplyForm,
+             }
     return render(request, "purchasing/bid_track.html", context)
 
 @csrf.csrf_protect
