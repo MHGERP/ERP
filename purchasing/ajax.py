@@ -99,6 +99,15 @@ def pendingOrderSearch(request, order_index):
 
 @dajaxice_register
 def getInventoryTable(request, table_id, order_index):
+    """
+    JunHU
+    summary: ajax function to load 5 kinds of inventory table
+    params: table_id: the id of table; order_index: the index of work_order
+    return: table html string
+    """
+
+    #dict of table_id to fact table
+    #it should be optimized when database scale expand
     id2table = {
         "1": "main_materiel",
         "2": "auxiliary_materiel",
@@ -106,12 +115,7 @@ def getInventoryTable(request, table_id, order_index):
         "4": "purchased",
         "5": "forging",
     }
-    print order_index
-    try:
-        items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
-    except Exception, e:
-        print e
-    
+    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
     context = {
         "items": items,
     }
@@ -119,6 +123,32 @@ def getInventoryTable(request, table_id, order_index):
     
     return html
 
+@dajaxice_register
+def addToDetail(request, table_id, order_index):
+    """
+    JunHU
+    summary: ajax function to change all materiels' purchasing status
+    params: table_id: the id of table; order_index: the index of work_order
+    return: NULL
+    """
+    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
+    for item in items:
+        item.materielpurchasingstatus.add_to_detail = True
+        item.materielpurchasingstatus.save()
+    return ""
+
+@dajaxice_register
+def addToDetailSingle(request, index):
+    """
+    JunHU
+    summary: ajax function to change single materiel's purchasing status
+    params: index: database index of materiel
+    return: NULL
+    """
+    item = Materiel.objects.get(id = index)
+    item.materielpurchasingstatus.add_to_detail = True
+    item.materielpurchasingstatus.save()
+    return ""
 
 @dajaxice_register
 def SupplierAddorChange(request,mod,supplier_form):
