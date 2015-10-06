@@ -135,6 +135,7 @@ class MaterialSubApply(models.Model):
     work_order = models.ForeignKey(WorkOrder,verbose_name = u"工作令")
     bidform = models.ForeignKey(BidForm,blank = True , null = True, verbose_name = u"对应标单")
     reasons = models.CharField(max_length = 1000,blank = True , null = True, verbose_name = u"代用原因和理由")
+    proposer = models.ForeignKey(User,verbose_name = u"申请人")
     class Meta:
         verbose_name = u"材料代用申请单"
         verbose_name_plural = u"材料代用申请单"

@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
-    PurchasingEntryItems,SupplierFile
+    PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
 from purchasing.forms import SupplierForm,EntryForm
 from datetime import datetime
-
+from django.template import RequestContext
+from django.views.decorators import csrf
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -65,8 +66,15 @@ def supplierManagementViews(request):
 def bidTrackingViews(request):
     context = {}
     return render(request, "purchasing/bid_track.html", context)
+
+@csrf.csrf_protect
 def arrivalInspectionViews(request):
-    bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
+    if request.method == "POST":
+        bid_id = request.POST["bidform_search"]
+        print bid_id
+        bidFormSet = BidForm.objects.filter(bid_id = bid_id)
+    else:
+        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
     
     context = {
         "bidFormSet":bidFormSet,
@@ -105,3 +113,13 @@ def materialEntryViews(request):
         "entry_form":entry_form,
     }
     return render(request,"purchasing/purchasing_materialentry.html",context)
+
+def subApplyViews(request):
+    if request.method == "POST":
+        sub_id = request.POST["subapply_search"]
+        subapply_set = MaterialSubApply.objects.filter(id = sub_id)
+    subapply_set = MaterialSubApply.objects.all() 
+    context = {
+        "subapply_set":subapply_set,
+    }
+    return render(request,"purchasing/subapply_home.html",context)
