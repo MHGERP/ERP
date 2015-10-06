@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from django.db import transaction 
-from const.models import WorkOrder
+from const.models import WorkOrder, Materiel
 from const.forms import InventoryTypeForm
 from purchasing.forms import SupplierForm
 
@@ -99,8 +99,24 @@ def pendingOrderSearch(request, order_index):
 
 @dajaxice_register
 def getInventoryTable(request, table_id, order_index):
-    context = {}
-    html = render_to_string("purchasing/inventory_table/main_materiel.html", context)
+    id2table = {
+        "1": "main_materiel",
+        "2": "auxiliary_materiel",
+        "3": "first_feeding",
+        "4": "purchased",
+        "5": "forging",
+    }
+    print order_index
+    try:
+        items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
+    except Exception, e:
+        print e
+    
+    context = {
+        "items": items,
+    }
+    html = render_to_string("purchasing/inventory_table/%s.html" % id2table[table_id], context)
+    
     return html
 
 

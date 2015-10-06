@@ -119,3 +119,12 @@ class PurchasingEntryItems(models.Model):
         verbose_name_plural = u"入库材料"
     def __unicode__(self):
         return '%s(%s)' % (self.bidform.bid_id, self.materiel.name)
+
+class MaterielPurchasingStatus(models.Model):
+    materiel = models.OneToOneField(Materiel)
+    add_to_detail = models.BooleanField(default = False)
+    class Meta:
+        verbose_name = u"物料采购状态"
+        verbose_name_plural = u"物料采购状态"
+    def __unicode__(self):
+        return "%s -- %s" % (materiel, str(add_to_detail))
