@@ -155,4 +155,26 @@ class MaterialSubApplyItems(models.Model):
         verbose_name = u"材料代用申请条目"
         verbose_name_plural = u"材料代用申请条目"
     def __unicode__(self):
-        return "%s(%s)" % (self.sub_apply,self.mat_pic_code) 
+        return "%s(%s)" % (self.sub_apply,self.mat_pic_code)
+
+class MaterielExecute(models.Model):
+    document_number = models.CharField(max_length = 100, blank = False, verbose_name = u"单据编号")
+    document_lister = models.ForeignKey(User, verbose_name = u "制表人")
+    date_date = models.DateField(blank = False, null = False, verbose_name = u"制表日期")
+    materiel_choice = models.CharField(blank=False, chices=MATERIEL_CHOICE, verbose_name=u"材料选择")
+    class Meta:
+        verbose_name = u"材料执行表"
+        verbose_name_plural = u"材料执行表"
+    def __unicode__(self):
+        return self.document_number
+
+class MainMaterialExecuteDetail(models.Model):
+    materiel_execute = models.OneToOneField(MaterielExecute)
+    materiel_texture = models.ForeignKey(Materiel, verbose_name=u"材质")
+    class Meta:
+        verbose_name = u"材料执行表详细"
+        verbose_name_plural = u"材料执行表详细"
+    def __unicode__(self):
+        return self.materiel_execute
+
+
