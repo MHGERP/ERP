@@ -5,6 +5,17 @@ from django.contrib.auth.models import User
 import settings
 
 # Create your models here.
+class OrderForm(models.Model):
+    order_id = models.CharField(unique = True, max_length = 20, blank = False, verbose_name = u"订购单编号")
+    create_time = models.DateTimeField(null = True, verbose_name = u"创建日期")
+    establishment_time = models.DateTimeField(null = True, verbose_name = u"编制日期")
+    order_status = models.ForeignKey(OrderFormStatus, null = False, verbose_name = u"订购单状态")
+    class Meta:
+        verbose_name = u"订购单"
+        verbose_name_plural = u"订购单"
+    def __unicode__(self):
+        return self.order_id
+
 class BidForm(models.Model):
     bid_id=models.CharField(unique=True,max_length=20,blank=False,verbose_name=u"标单编号")
     create_time=models.DateTimeField(null=True,verbose_name=u"创建日期")
