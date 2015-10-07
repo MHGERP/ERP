@@ -6,8 +6,6 @@ from django.contrib.auth.models import User
 import settings
 
 
-# Create your models here.
-
 class OrderForm(models.Model):
     order_id = models.CharField(unique = True, max_length = 20, blank = False, verbose_name = u"订购单编号")
     create_time = models.DateTimeField(null = True, verbose_name = u"创建日期")
@@ -19,6 +17,7 @@ class OrderForm(models.Model):
     def __unicode__(self):
         return self.order_id
 
+
 class MaterielOrderFormConnction(models.Model):
     materiel = models.OneToOneField(Materiel, blank = False)
     order_form = models.ForeignKey(OrderForm, blank = False)
@@ -27,6 +26,7 @@ class MaterielOrderFormConnction(models.Model):
         verbose_name_plural = u"物料——订购单——关联表"
     def __unicode__(self):
         return "connection between %s and %s" % (self.materiel.name, self.order_form.order_id)
+
 
 class BidForm(models.Model):
     bid_id=models.CharField(unique=True,max_length=20,blank=False,verbose_name=u"标单编号")
@@ -40,6 +40,7 @@ class BidForm(models.Model):
         verbose_name_plural = u"标单"
     def __unicode__(self):
         return '%s'% (self.bid_id)
+
 
 class bidApply(models.Model):
     apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
@@ -107,7 +108,7 @@ class ArrivalInspection(models.Model):
     soft_confirm = models.BooleanField(null=False,default=False,verbose_name=u"软件确认")
     inspect_confirm = models.BooleanField(null=False,default=False,verbose_name=u"检验通过")
     bidform = models.ForeignKey(BidForm,null=False,verbose_name=u"标单号")
-    material = models.ForeignKey(Materiel,verbose_name=u"材料") 
+    material = models.ForeignKey(Materiel,verbose_name=u"材料")
     class Meta:
         verbose_name = u"到货检验"
         verbose_name_plural = u"到货检验"
@@ -123,7 +124,7 @@ class PurchasingEntry(models.Model):
     keeper = models.ForeignKey(User,blank=False,verbose_name=u"库管员" , related_name = "keeper")
     entry_confirm = models.BooleanField(null=False,default=False,verbose_name=u"入库单确认")
     bidform = models.ForeignKey(BidForm,verbose_name=u"标单号")
-    
+
     class Meta:
         verbose_name = u"入库单"
         verbose_name_plural = u"入库单"
@@ -200,5 +201,3 @@ class MainMaterialExecuteDetail(models.Model):
         verbose_name_plural = u"材料执行表详细"
     def __unicode__(self):
         return self.materiel_execute
-
-
