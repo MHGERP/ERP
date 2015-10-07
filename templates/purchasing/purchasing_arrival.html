@@ -8,9 +8,10 @@
 {% endblock %}
 {% block inner_content%}
 <link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
-<form class="form-search ">
+<form class="form-search " method="POST" action="">
+    {% csrf_token %}
     <label>标单查询</label>
-    <input type="text" class="input-medium search-query">
+    <input type="text"  name="bidform_search" class="input-medium search-query">
     <button type="submit" class="btn">查询</button>
 </form>
 <div  id="arrivalIns" class="widget-box">
@@ -21,6 +22,7 @@
         <h5>未检验标单</h5>
     </div>
     <div class="widget-content nopadding">
+        {% if bidFormSet  %}
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -37,6 +39,11 @@
                 {%endfor%}
             </tbody>
         </table>
+        {% else %}
+        <center>
+            <p>没有待检标单</p>
+        </center>
+        {% endif %}
     </div>
 </div>
 

@@ -11,22 +11,31 @@
 {% block inner_content%}
 <link rel="stylesheet" href="{{ STATIC_URL   }}style/form-style.css" type="text/css" media="screen" />
 
-<form class="form-search ">
-    <input type="text" class="input-medium search-query">
-    <button type="submit" class="btn">工作令查询</button>
-</form>
-<div class="widget-content">
-    <table class="table table-bordered table-striped table-hover" style="width:60%">
-        <thead>
-            <tr>
-                <th>工作令</th>
-                <th>明细表</th>
-                <th>联系单</th>
-            </tr>
-        </thead>
-        <tbody>
 
-        </tbody>
-    </table>
+<div class="widget-content">
+  <table class="table table-bordered table-striped table-hover" style="width:60%">
+    <thead>
+      <tr>
+        <th>工作令</th>
+        <th>明细表</th>
+        <th>联系单</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+  <div class="row">
+    {%for item in bid_status%}
+      <button class="btn {{item.class}}" type="button"> {{item.name}}</button>
+    {%endfor%}
+  </div>
+  <br>
+  <div class="row">
+    <button class="btn" type="button"> 合同确认 </button>
+  </div>
 </div>
+
+{% include "purchasing/widgets/bid_apply_table.html"%}
+
 {% endblock%}
