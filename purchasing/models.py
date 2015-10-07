@@ -1,6 +1,6 @@
 # coding: UTF-8
 from django.db import models
-from const.models import BidFormStatus,Materiel,WorkOrder
+from const.models import BidFormStatus,Materiel,WorkOrder, OrderFormStatus
 from django.contrib.auth.models import User
 import settings
 
