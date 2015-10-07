@@ -1,5 +1,28 @@
-<button type="button" class="btn new_purchase_btn">新建订购单</button>
+<span class="btn add" id="new_purchase_btn" data-toggle="modal" data-target="#new_order_modal">新建订购单</span>
 <form class="form-search">
     <input type="text" class="input-medium search-query">
-    <button type="submit" class="btn search">进入</button>
+    <span class="btn search">进入</span>
 </form>
+
+
+<div class="modal fade" id="new_order_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">订购单</h4>
+        <label>订购单编号:</label>
+        <input type="text" class="input-medium">
+      </div>
+      <div class="modal-body" id="new_order_body">
+        <h4 class="modal-title" id="myModalLabel">订购单</h4>
+        <label>订购单编号:</label>
+        <input type="text" class="input-medium">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+

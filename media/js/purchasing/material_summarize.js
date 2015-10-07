@@ -42,3 +42,9 @@ function delete_detail_callback(data){
     $(cell).parent().parent().remove();
 }
 
+// $(document).on("click","#new_purchase_btn",function(){
+//     newOrder();
+// })
+
+// function newOrder(){
+// }
