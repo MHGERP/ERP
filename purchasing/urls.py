@@ -48,5 +48,8 @@ urlpatterns=patterns('',
     ),
     url(
         r'^materialEntry$',purchasing_views.materialEntryViews,                     
-    )
+    ),
+    url(
+        r'^subApply$',purchasing_views.subApplyViews,                     
+    ),
 )

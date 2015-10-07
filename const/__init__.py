@@ -81,3 +81,8 @@ INDEX_LIST = tuple(
 )
 
 ARRIVAL_CHECK_FIELDS = {"mat":"material_confirm","sof":"soft_confirm","ins":"inspect_confirm"}
+
+MATERIEL_CHOICE = (
+    ("主材", u"主材"),
+    ("辅材", u"辅材"),
+)

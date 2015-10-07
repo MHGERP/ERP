@@ -1,12 +1,16 @@
+# coding: UTF-8
 from django.shortcuts import render
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
-    PurchasingEntryItems,SupplierFile
+    PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm
+
 from purchasing.forms import SupplierForm,EntryForm
 from datetime import datetime
-
+from django.template import RequestContext
+from django.views.decorators import csrf
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -25,7 +29,6 @@ def purchasingFollowingViews(request):
 
 
 def pendingOrderViews(request):
-    
     """
     JunHU
     summary: view function of pendingorder page
@@ -73,11 +76,35 @@ def supplierManagementViews(request):
         "file_upload_error":file_upload_error
     }
     return render(request,"purchasing/supplier/supplier_management.html",context)
+
+
 def bidTrackingViews(request):
-    context = {}
+    """
+    Liu Ye
+    """
+    qualityPriceCardForm = QualityPriceCardForm()
+    bidApplyForm = BidApplyForm()
+
+    bid_status = []
+    bid_status.append({"name":u"招标申请表",         "class":"btn-success"})
+    bid_status.append({"name":u"分公司领导批准",     "class":"btn-success"})
+    bid_status.append({"name":u"滨海公司领导批准",   "class":""})
+    bid_status.append({"name":u"滨海招标办领导批准", "class":"btn-danger"})
+    bid_status.append({"name":u"中标通知书",         "class":""})
+    context = {"bid_status": bid_status,
+               "qualityPriceCardForm": qualityPriceCardForm,
+               "bidApplyForm": bidApplyForm,
+             }
     return render(request, "purchasing/bid_track.html", context)
+
+@csrf.csrf_protect
 def arrivalInspectionViews(request):
-    bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
+    if request.method == "POST":
+        bid_id = request.POST["bidform_search"]
+        print bid_id
+        bidFormSet = BidForm.objects.filter(bid_id = bid_id)
+    else:
+        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
     
     context = {
         "bidFormSet":bidFormSet,
@@ -116,3 +143,13 @@ def materialEntryViews(request):
         "entry_form":entry_form,
     }
     return render(request,"purchasing/purchasing_materialentry.html",context)
+
+def subApplyViews(request):
+    if request.method == "POST":
+        sub_id = request.POST["subapply_search"]
+        subapply_set = MaterialSubApply.objects.filter(id = sub_id)
+    subapply_set = MaterialSubApply.objects.all() 
+    context = {
+        "subapply_set":subapply_set,
+    }
+    return render(request,"purchasing/subapply_home.html",context)
