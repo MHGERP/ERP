@@ -1,5 +1,5 @@
 # coding: UTF-8
-from const import *
+from const import MATERIEL_CHOICE
 from django.db import models
 from const.models import BidFormStatus,Materiel,WorkOrder, OrderFormStatus
 from django.contrib.auth.models import User
