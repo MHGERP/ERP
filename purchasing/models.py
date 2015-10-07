@@ -19,15 +19,6 @@ class OrderForm(models.Model):
     def __unicode__(self):
         return self.order_id
 
-class MaterielOrderFormConnction(models.Model):
-    materiel = models.OneToOneField(Materiel, blank = False)
-    order_form = models.ForeignKey(OrderForm, blank = False)
-    class Meta:
-        verbose_name = u"物料——订购单——关联表"
-        verbose_name_plural = u"物料——订购单——关联表"
-    def __unicode__(self):
-        return "connection between %s and %s" % (self.materiel.name, self.order_form.order_id)
-
 class BidForm(models.Model):
     bid_id=models.CharField(unique=True,max_length=20,blank=False,verbose_name=u"标单编号")
     create_time=models.DateTimeField(null=True,verbose_name=u"创建日期")
@@ -40,6 +31,18 @@ class BidForm(models.Model):
         verbose_name_plural = u"标单"
     def __unicode__(self):
         return '%s'% (self.bid_id)
+
+class MaterielFormConnection(models.Model):
+    materiel = models.OneToOneField(Materiel, blank = False, verbose_name = u"物料")
+    order_form = models.ForeignKey(OrderForm, blank = True, null = True, verbose_name = u"订购单")
+    bid_form = models.ForeignKey(BidForm, blank = True, null = True, verbose_name = u"标单")
+    count = models.CharField(blank = True, null = True, max_length = 20, verbose_name = u"需求数量")
+    class Meta:
+        verbose_name = u"物料——采购——关联表"
+        verbose_name_plural = u"物料——采购——关联表"
+    def __unicode__(self):
+        return self.materiel.name
+
 
 class bidApply(models.Model):
     apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
@@ -152,6 +155,15 @@ class MaterielPurchasingStatus(models.Model):
     def __unicode__(self):
        return self.materiel.name
 
+class SupplierSelect(models.Model):
+    bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
+    supplier=models.ForeignKey(Supplier,blank=False,verbose_name=u"供应商")
+    class Meta:
+        verbose_name = u"供应商选择"
+        verbose_name_plural = u"供应商选择"
+        unique_together = (("bidform", "supplier", ), )
+    def __unicode__(self):
+        return "%s select %s" % (self.bidform.bid_id, self.supplier.supplier_name)
 class MaterialSubApply(models.Model):
     receipts_code = models.CharField(max_length = 100, blank = False , verbose_name = u"单据编号")
     pic_code =  models.CharField(max_length = 100, blank = False , verbose_name = u"图号")

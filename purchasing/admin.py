@@ -6,7 +6,7 @@ from purchasing.models  import *
 
 RegisterClass = (
     OrderForm,
-    MaterielOrderFormConnction,
+    MaterielFormConnection,
     BidForm,
     ArrivalInspection,
     Supplier,
@@ -14,6 +14,7 @@ RegisterClass = (
     PurchasingEntry,
     PurchasingEntryItems,
     MaterielPurchasingStatus,
+    SupplierSelect,
     MaterialSubApply,
     MaterialSubApplyItems,
 )
