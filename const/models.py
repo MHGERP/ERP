@@ -88,3 +88,11 @@ class BidFormStatus(models.Model):
     #remark = models.CharField(blank = True, max_length = 100, null = True, verbose_name = u"备注")
 
 
+class OrderFormStatus(models.Model):
+    status = models.IntegerField(blank = False, choices = ORDERFORM_STATUS_CHOICES, verbose_name = u"订购单状态")
+    next_status = models.ForeignKey('self', null = True, blank = True)
+    class Meta:
+        verbose_name = u"订购单状态"
+        verbose_name_plural = u"订购单状态"
+    def __unicode__(self):
+        return self.get_status_display()

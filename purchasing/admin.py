@@ -5,6 +5,8 @@ from django.contrib import admin
 from purchasing.models  import *
 
 RegisterClass = (
+    OrderForm,
+    MaterielOrderFormConnction,
     BidForm,
     ArrivalInspection,
     Supplier,
@@ -13,6 +15,8 @@ RegisterClass = (
     PurchasingEntryItems,
     MaterielPurchasingStatus,
     SupplierSelect,
+    MaterialSubApply,
+    MaterialSubApplyItems,
 )
 
 for item in RegisterClass:

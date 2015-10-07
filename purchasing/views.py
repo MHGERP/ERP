@@ -1,11 +1,20 @@
+# coding: UTF-8
 from django.shortcuts import render
+<<<<<<< HEAD
 from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,SupplierSelect
+=======
+from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
+    PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems
+>>>>>>> 68adb717cde754caaa50908f464e7d28a857b128
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
-from purchasing.forms import SupplierForm
-from datetime import datetime
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm
 
+from purchasing.forms import SupplierForm,EntryForm
+from datetime import datetime
+from django.template import RequestContext
+from django.views.decorators import csrf
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -24,7 +33,6 @@ def purchasingFollowingViews(request):
 
 
 def pendingOrderViews(request):
-    
     """
     JunHU
     summary: view function of pendingorder page
@@ -46,6 +54,18 @@ def selectSupplierViews(request,bid):
         "bidform":bidform
     }
     return render(request,"purchasing/select_supplier.html",context)
+
+def materialSummarizeViews(request):
+    """
+    wanglei-0707
+    summary: view function of meterialSummarize page
+    params: NULL
+    return: NULL
+    """
+    inventoryTypeForm = InventoryTypeForm()
+    context = {"inventoryTypeForm": inventoryTypeForm}
+    return render(request, "purchasing/material_summarize.html", context)
+
 
 def supplierManagementViews(request):
     file_upload_error=0
@@ -71,11 +91,35 @@ def supplierManagementViews(request):
         "file_upload_error":file_upload_error
     }
     return render(request,"purchasing/supplier/supplier_management.html",context)
+
+
 def bidTrackingViews(request):
-    context = {}
+    """
+    Liu Ye
+    """
+    qualityPriceCardForm = QualityPriceCardForm()
+    bidApplyForm = BidApplyForm()
+
+    bid_status = []
+    bid_status.append({"name":u"招标申请表",         "class":"btn-success"})
+    bid_status.append({"name":u"分公司领导批准",     "class":"btn-success"})
+    bid_status.append({"name":u"滨海公司领导批准",   "class":""})
+    bid_status.append({"name":u"滨海招标办领导批准", "class":"btn-danger"})
+    bid_status.append({"name":u"中标通知书",         "class":""})
+    context = {"bid_status": bid_status,
+               "qualityPriceCardForm": qualityPriceCardForm,
+               "bidApplyForm": bidApplyForm,
+             }
     return render(request, "purchasing/bid_track.html", context)
+
+@csrf.csrf_protect
 def arrivalInspectionViews(request):
-    bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
+    if request.method == "POST":
+        bid_id = request.POST["bidform_search"]
+        print bid_id
+        bidFormSet = BidForm.objects.filter(bid_id = bid_id)
+    else:
+        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
     
     context = {
         "bidFormSet":bidFormSet,
@@ -99,3 +143,28 @@ def inventoryTableViews(request):
                "inventoryType": inventoryType,
     }
     return render(request, "purchasing/inventory_table_base.html", context)
+
+def materialEntryViews(request):
+    try:
+        purchasingentry = PurchasingEntry.objects.get(bidform = 8)
+        entry_set = PurchasingEntryItems.objects.filter(purchasingentry = purchasingentry)
+        entry_form = EntryForm(instance = purchasingentry)
+        print purchasingentry.entry_time
+    except Exception,e:
+        print e
+    context = {
+        "pur_entry":purchasingentry,
+        "entry_set":entry_set,
+        "entry_form":entry_form,
+    }
+    return render(request,"purchasing/purchasing_materialentry.html",context)
+
+def subApplyViews(request):
+    if request.method == "POST":
+        sub_id = request.POST["subapply_search"]
+        subapply_set = MaterialSubApply.objects.filter(id = sub_id)
+    subapply_set = MaterialSubApply.objects.all() 
+    context = {
+        "subapply_set":subapply_set,
+    }
+    return render(request,"purchasing/subapply_home.html",context)

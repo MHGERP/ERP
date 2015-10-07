@@ -2,8 +2,13 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
+<<<<<<< HEAD
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems,SupplierFile,SupplierSelect
+=======
+from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems
+>>>>>>> 68adb717cde754caaa50908f464e7d28a857b128
 from const import *
+from const.models import Materiel
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
@@ -72,15 +77,41 @@ def SupplierUpdate(request,supplier_id):
 
 def isAllChecked(bid,purchasingentry):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
-    bidform = BidForm.objects.get(bid_id = bid)
-    for cargo_obj in cargo_set:
-        entryitem = PurchasingEntryItems(material = cargo_obj.material,bidform = bidform)
-        for key,field in ARRIVAL_CHECK_FIELDS.items():
-            val = getattr(cargo_obj,field)
-            if not val:
-                return False
-        entryitem.save()
+    try:
+        for cargo_obj in cargo_set:
+            entryitem = PurchasingEntryItems(material = cargo_obj.material,purchasingentry = purchasingentry)
+            for key,field in ARRIVAL_CHECK_FIELDS.items():
+                val = getattr(cargo_obj,field)
+                if not val:
+                    return False
+            entryitem.save()
+    except Exception,e:
+        print e
     return True
+
+@dajaxice_register
+def chooseInventorytype(request,pid,key):
+    idtable = {
+        "1": "main_materiel",
+        "2": "auxiliary_materiel",
+        "3": "first_feeding",
+        "4": "purchased",
+        "5": "forging",
+    }
+    items = Materiel.objects.filter(inventory_type__id=pid, materielpurchasingstatus__add_to_detail = True)
+    if key:
+        items = items.filter(name=key)
+    context={
+        "inventory_detail_list":items,
+    }
+    inventory_detail_html = render_to_string("purchasing/inventory_detail_table/%s.html" % idtable[pid], context)
+    new_order_form_html = render_to_string("widgets/new_order_form.html",context)
+    new_purchasing_form_html = render_to_string("widgets/new_purchasing_form.html",context)
+    return simplejson.dumps({
+        "new_order_form_html":new_order_form_html,
+        "new_purchasing_form_html":new_purchasing_form_html,
+        "inventory_detail_html":inventory_detail_html
+        })
 
 @dajaxice_register
 def pendingOrderSearch(request, order_index):
@@ -172,6 +203,40 @@ def refresh_supplier_table(request):
     return render_to_string("purchasing/supplier/supplier_table.html",context)
 
 @dajaxice_register
+@transaction.commit_manually
+def entryConfirm(request,e_items,pur_entry):
+    try:
+        if pur_entry["entry_time"] == "" or pur_entry["receipts_code"] == "":
+            return simplejson.dumps({"flag":False,"message":u"入库单确认失败，入库时间或单据标号为空"})
+        for item in e_items:
+            pur_item = PurchasingEntryItems.objects.get(id = item["eid"])
+            pur_item.standard = item["standard"]
+            pur_item.status = item["status"]
+            pur_item.remark = item["remark"]
+            pur_item.save()
+        pid = pur_entry["pid"]
+        entry_time = pur_entry["entry_time"]
+        receipts_code = pur_entry["receipts_code"]
+        pur_entry = PurchasingEntry.objects.get(id = pid)
+        pur_entry.entry_time = entry_time
+        pur_entry.receipts_code = receipts_code
+        pur_entry.save()
+        transaction.commit()
+        flag = True
+        message = u"入库单确认成功"
+    except Exception,e:
+        transaction.rollback()
+        flag = False
+        message = u"入库单确认失败，数据库导入失败"
+        print "----error-----"
+        print e
+        print "--------------"
+    data = {
+        "flag":flag,
+        "message":message,
+    }
+    return simplejson.dumps(data)
+
 def FileDelete(requset,mod,file_id):
     file=SupplierFile.objects.get(pk=file_id)
     file.delete()
@@ -221,3 +286,9 @@ def searchSupplier(request,sid,bid):
         'html':supplier_select_html
     }
     return simplejson.dumps(data)
+def deleteDetail(request,uid):
+    item = Materiel.objects.get(id = uid)
+    item.materielpurchasingstatus.add_to_detail = False
+    item.materielpurchasingstatus.save()
+    param = {"uid":uid}
+    return simplejson.dumps(param)
