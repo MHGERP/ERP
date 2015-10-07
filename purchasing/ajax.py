@@ -85,34 +85,27 @@ def isAllChecked(bid,purchasingentry):
     return True
 
 @dajaxice_register
-def chooseInventorytype(request,pid):
-    #pid=int(pid)
-    items = Materiel.objects.filter(inventory_type__id=pid)
-    inventory_list = []
-    for item in items:
-        if(item.materielpurchasingstatus.add_to_detail == True):
-            inventory_list.append(item)
-    context={
-        "inventory_detail_list":inventory_list,
+def chooseInventorytype(request,pid,key):
+    idtable = {
+        "1": "main_materiel",
+        "2": "auxiliary_materiel",
+        "3": "first_feeding",
+        "4": "purchased",
+        "5": "forging",
     }
+    items = Materiel.objects.filter(inventory_type__id=pid, materielpurchasingstatus__add_to_detail = True)
+    if key:
+        items = items.filter(name=key)
+    context={
+        "inventory_detail_list":items,
+    }
+    inventory_detail_html = render_to_string("purchasing/inventory_detail_table/%s.html" % idtable[pid], context)
     new_order_form_html = render_to_string("widgets/new_order_form.html",context)
     new_purchasing_form_html = render_to_string("widgets/new_purchasing_form.html",context)
-    inventory_detail_html = render_to_string("widgets/inventory_detail_table.html",context)
-    main_material_quota_html = render_to_string("widgets/main_material_quota.html",context)
-    accessory_quota_html = render_to_string("widgets/accessory_quota.html",context)
-    first_send_detail_html = render_to_string("widgets/first_send_detail.html",context)
-    out_purchasing_detail_html = render_to_string("widgets/out_purchasing_detail.html",context)
-    cast_detail_html = render_to_string("widgets/cast_detail.html",context)
-    
     return simplejson.dumps({
         "new_order_form_html":new_order_form_html,
         "new_purchasing_form_html":new_purchasing_form_html,
-        "inventory_detail_html":inventory_detail_html,
-        "main_material_quota_html":main_material_quota_html,
-        "accessory_quota_html":accessory_quota_html,
-        "first_send_detail_html":first_send_detail_html,
-        "out_purchasing_detail_html":out_purchasing_detail_html,
-        "cast_detail_html":cast_detail_html
+        "inventory_detail_html":inventory_detail_html
         })
 
 @dajaxice_register
@@ -251,3 +244,11 @@ def SupplierDelete(request,supplier_id):
     supplier=Supplier.objects.get(pk=supplier_id)
     supplier.delete()
     return simplejson.dumps({})
+
+@dajaxice_register
+def deleteDetail(request,uid):
+    item = Materiel.objects.get(id = uid)
+    item.materielpurchasingstatus.add_to_detail = False
+    item.materielpurchasingstatus.save()
+    param = {"uid":uid}
+    return simplejson.dumps(param)

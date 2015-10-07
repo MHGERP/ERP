@@ -36,7 +36,7 @@ def pendingOrderViews(request):
 
 def materialSummarizeViews(request):
     """
-    JunHU
+    wanglei-0707
     summary: view function of meterialSummarize page
     params: NULL
     return: NULL
