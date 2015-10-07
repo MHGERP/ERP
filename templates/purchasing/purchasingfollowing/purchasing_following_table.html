@@ -9,7 +9,7 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>表单编号</th>
+                    <th>标单编号</th>
                     <th>供应商选择</th>
                     <th>招标</th>
                     <th>过程跟踪</th>
@@ -26,7 +26,7 @@
                     {% if bid.bid_status.main_status > BIDFORM_STATUS_SELECT_SUPPLIER%}
                     <td><button class="btn btn-success">供应商选择</button></td>
                     {% elif bid.bid_status.main_status == BIDFORM_STATUS_SELECT_SUPPLIER%}
-                    <td><button class="btn btn-warning">供应商选择</button></td>
+                    <td><a href="/purchasing/selectsupplier/{{bid.id}}" class="btn btn-warning">供应商选择</a></td>
                     {% else%}
                     <td><button class="btn">供应商选择</button></td>
                     {%endif%}

@@ -12,7 +12,7 @@ urlpatterns=patterns('',
         purchasing_views.pendingOrderViews,
     ),
     url(
-        r'^selectsupplier$',
+        r'^selectsupplier/(?P<bid>\w+)$',
         purchasing_views.selectSupplierViews,
     ),
     url(

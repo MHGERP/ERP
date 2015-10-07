@@ -76,3 +76,15 @@ class BidFormStatus(models.Model):
         verbose_name_plural = u"标单状态"
     def __unicode__(self):
         return self.get_part_status_display()
+
+
+
+#class BidFormItem(models.Model):
+    #name = models.CharField(blank = True, max_length = 20, verbose_name = u"名称")
+    #spec = models.CharField(blank = True, max_length = 20, verbose_name = u"规格")
+    #schematic_index = models.CharField(blank = False, max_length = 50, verbose_name = u"零件图号")
+    #materiel_index = models.CharField(blank = False, max_length = 50, verbose_name = u"材料牌号")
+    #count = models.CharField(blank = True, max_length = 20, null = True, verbose_name = u"数量")
+    #remark = models.CharField(blank = True, max_length = 100, null = True, verbose_name = u"备注")
+
+

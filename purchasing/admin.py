@@ -12,6 +12,7 @@ RegisterClass = (
     PurchasingEntry,
     PurchasingEntryItems,
     MaterielPurchasingStatus,
+    SupplierSelect,
 )
 
 for item in RegisterClass:

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile
+from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,SupplierSelect
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
@@ -33,8 +33,18 @@ def pendingOrderViews(request):
     """
     return render(request, "purchasing/pending_order.html")
 
-def selectSupplierViews(request):
-    context={}
+def selectSupplierViews(request,bid):
+    suppliers=Supplier.objects.all()
+    bidform=BidForm.objects.get(pk=bid)
+    for item in suppliers:
+        if SupplierSelect.objects.filter(supplier=item,bidform=bidform).count()>0:
+            item.selected=1
+        else:
+            item.selected=0
+    context={
+        "suppliers":suppliers,
+        "bidform":bidform
+    }
     return render(request,"purchasing/select_supplier.html",context)
 
 def supplierManagementViews(request):

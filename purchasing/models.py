@@ -129,3 +129,12 @@ class MaterielPurchasingStatus(models.Model):
     def __unicode__(self):
        return self.materiel.name
 
+class SupplierSelect(models.Model):
+    bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
+    supplier=models.ForeignKey(Supplier,blank=False,verbose_name=u"供应商")
+    class Meta:
+        verbose_name = u"供应商选择"
+        verbose_name_plural = u"供应商选择"
+        unique_together = (("bidform", "supplier", ), )
+    def __unicode__(self):
+        return "%s select %s" % (self.bidform.bid_id, self.supplier.supplier_name)
