@@ -1,0 +1,30 @@
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>名称及规格</th>
+            <th>标准号/图号</th>
+            <th>材料牌号</th>
+            <!-- <th>单位</th> -->
+            <th>数量</th>
+            <th>总量</th>
+            <!-- <th>库存</th> -->
+            <th>相关库存</th>
+            <th>删除</th>
+        </tr>
+    </thead>
+    {% for item in inventory_detail_list%}
+    <tr iid="{{item.id}}">
+        <td>{{forloop.counter}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.schematic_index}}</td>
+        <td>{{item.material.name}}</td>
+        <!-- <td>{{item.}}</td> -->
+        <td>{{item.count}}</td>
+        <td>{{item.total_weight}}</td>
+        <!-- <td></td> -->
+        <td><button class="btn btn-primary">查看相关库存</button></td>
+        <td><button class="btn btn-danger">删除</button></td>
+    </tr>
+    {% endfor%}
+</table>
