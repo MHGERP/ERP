@@ -2,7 +2,7 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems
+from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterielExecute
 from const import *
 from const.models import Materiel
 from django.template.loader import render_to_string
@@ -251,3 +251,9 @@ def SupplierDelete(request,supplier_id):
     supplier=Supplier.objects.get(pk=supplier_id)
     supplier.delete()
     return simplejson.dumps({})
+
+@dajaxice_register
+def MaterielExecuteQuery(request,number):
+    materielexecute = MaterielExecute.objects.filter(document_number=number)
+    materielexecute_html = render_to_string("purchasing/materielexecute/materielexecute_table.html", {"materielexecute_set":materielexecute})
+    return simplejson.dumps({"materielexecute_html":materielexecute_html})

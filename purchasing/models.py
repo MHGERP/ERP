@@ -192,13 +192,41 @@ class MaterielExecute(models.Model):
     def __unicode__(self):
         return self.document_number
 
-class MainMaterialExecuteDetail(models.Model):
+class MainMaterielExecuteDetail(models.Model):
     materiel_execute = models.OneToOneField(MaterielExecute)
-    materiel_texture = models.ForeignKey(Materiel, verbose_name=u"材质")
+    materiel_name = models.CharField(max_length=50, blank=False, verbose_name = u"")
+    materiel_texture = models.ForeignKey(Materiel, verbose_name = u"材质")
+    quality_class = models.CharField(max_length=20, blank=False, verbose_name = u"")
+    specification = models.CharField(max_length=100, blank=False, verbose_name= u"")
+    quantity = models.IntegerField(verbose_name = u"")
+    purchase_weight = models.FloatField(verbose_name = u"")
+    recheck = models.BooleanField(default = False, verbose_name = u"")
+    crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"")
+    delivery_status = models.CharField(max_length = 50, blank = False, verbose_name = u"")
+    execute_standard = models.CharField(max_length = 100, blank = False, verbose_name = u"")
+    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"") 
     class Meta:
         verbose_name = u"材料执行表详细"
         verbose_name_plural = u"材料执行表详细"
     def __unicode__(self):
         return self.materiel_execute
 
-
+class SupportMaterielExecuteDetail(models.Model):
+    materiel_execute = models.OneToOneField(MaterielExecute)
+    materiel_texure = models.ForeignKey(Materiel, blank = False, verbose_name = u"")
+    texture_number = models.CharField(max_length = 100, blank = False, verbose_name = u"")
+    specification = models.CharField(max_length = 100, blank = False, verbose_name = u"")
+    quantity = models.IntegerField(verbose_name = u"")
+    delivery_status = models.CharField(max_length = 50, blank = False, verbose_name = u"")
+    press = models.CharField(max_length = 50, blank = False, verbose_name = u"")
+    crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"")
+    recheck = models.BooleanField(default = False, verbose_name = u"")
+    quota = models.CharField(max_length = 50, blank = True, verbose_name = u"")
+    part = models.CharField(max_length = 50, blank = True, verbose_name = u"")
+    oddments = models.CharField(max_length = 50, blank = True, verbose_name = u"")
+    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"")
+    class Meta:
+        verbose_name = u""
+        verbose_name_plural = u""
+    def __unicode__(self):
+        return self.materiel_execute
