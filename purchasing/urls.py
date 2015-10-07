@@ -16,7 +16,7 @@ urlpatterns=patterns('',
         purchasing_views.materialSummarizeViews,
     ),
     url(
-        r'^selectsupplier$',
+        r'^selectsupplier/(?P<bid>\w+)$',
         purchasing_views.selectSupplierViews,
     ),
     url(
