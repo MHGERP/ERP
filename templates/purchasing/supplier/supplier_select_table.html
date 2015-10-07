@@ -1,0 +1,37 @@
+
+<div class="widget-box">
+
+    <div class="widget-content nopadding">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>供应商编号</th>
+                    <th>供应商名称</th>
+                    <th>相关文件下载</th>
+                    <th>选择</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for supplier in suppliers%}
+                <tr id="{{supplier.id}}">
+                    <td>{{supplier.supplier_id}}</td>
+                    <td>{{supplier.supplier_name}}</td>
+                    <td>
+                        {% for file in supplier.supplierfile_set.all%}
+                        <a href="{{file.file_obj.url}}">{{file}}</a>
+                        {% endfor%}
+                    </td> 
+                    <td>
+                        {% if supplier.selected%}
+                        <span class="label label-success">已选择</span>
+                        {% else%}
+                        <input type="checkbox" class="supplier_checkbox">
+                        {% endif%}
+                    </td>
+
+                </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
