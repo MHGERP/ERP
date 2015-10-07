@@ -1,8 +1,10 @@
 # coding: UTF-8
+from const import *
 from django.db import models
 from const.models import BidFormStatus,Materiel,WorkOrder, OrderFormStatus
 from django.contrib.auth.models import User
 import settings
+
 
 # Create your models here.
 
@@ -181,9 +183,9 @@ class MaterialSubApplyItems(models.Model):
 
 class MaterielExecute(models.Model):
     document_number = models.CharField(max_length = 100, blank = False, verbose_name = u"单据编号")
-    document_lister = models.ForeignKey(User, verbose_name = u "制表人")
+    document_lister = models.ForeignKey(User, verbose_name = u"制表人")
     date_date = models.DateField(blank = False, null = False, verbose_name = u"制表日期")
-    materiel_choice = models.CharField(blank=False, chices=MATERIEL_CHOICE, verbose_name=u"材料选择")
+    materiel_choice = models.CharField(blank=False, max_length = 20, choices=MATERIEL_CHOICE, verbose_name=u"材料选择")
     class Meta:
         verbose_name = u"材料执行表"
         verbose_name_plural = u"材料执行表"
