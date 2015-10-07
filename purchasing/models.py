@@ -76,12 +76,12 @@ class bidApply(models.Model):
     special_model = models.CharField(null=True, max_length=40, verbose_name=u"规格、型号")
     core_part = models.BooleanField(verbose_name="是否为核心件")
 
-    #bid = models.ForeignKey(BidForm, blank = False)
-    #project_category = models.CharField(null=True, max_length=40, verbose_name=u"项目类别")
-    #bid_datetime = models.DateTimeField(null=True, verbose_name=u"招(议)标时间")
-    #bid_delivery_date = models.DateTimeField(null=True, verbose_name=u"标书递送时间")
-    #place = models.CharField(null=True, max_length=40, verbose_name=u"地点")
-    #implement_class = models.ForeignKey(ImplementClassChoices, null=False,verbose_name=u"实施类别")
+    bid = models.ForeignKey(BidForm, blank = False)
+    project_category = models.CharField(null=True, max_length=40, verbose_name=u"项目类别")
+    bid_datetime = models.DateTimeField(null=True, verbose_name=u"招(议)标时间")
+    bid_delivery_date = models.DateTimeField(null=True, verbose_name=u"标书递送时间")
+    place = models.CharField(null=True, max_length=40, verbose_name=u"地点")
+    implement_class = models.ForeignKey(ImplementClassChoices, null=False,verbose_name=u"实施类别")
 
     class Meta:
         verbose_name = u"标单申请表"
@@ -90,7 +90,7 @@ class bidApply(models.Model):
         return '%s'% (self.apply_id)
 
 class qualityPriceCard(models.Model):
-    #bid = models.ForeignKey(BidForm, blank = False)
+    bid = models.ForeignKey(BidForm, blank = False)
     apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
