@@ -52,4 +52,8 @@ urlpatterns=patterns('',
     url(
         r'^subApply$',purchasing_views.subApplyViews,                     
     ),
+    url(
+        r'^processfollowing/(?P<bid>\w+)$',
+        purchasing_views.processFollowingViews,
+    ),
 )

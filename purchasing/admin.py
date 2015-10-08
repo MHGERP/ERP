@@ -17,6 +17,7 @@ RegisterClass = (
     SupplierSelect,
     MaterialSubApply,
     MaterialSubApplyItems,
+    ProcessFollowingInfo,
 )
 
 for item in RegisterClass:

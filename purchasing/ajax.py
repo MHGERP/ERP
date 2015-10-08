@@ -11,8 +11,9 @@ from django.contrib.auth.models import User
 from django.db import transaction 
 from const.models import WorkOrder, Materiel
 from const.forms import InventoryTypeForm
-from purchasing.forms import SupplierForm
+from purchasing.forms import SupplierForm,ProcessFollowingForm
 from django.db.models import Q
+from datetime import datetime
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -180,15 +181,22 @@ def addToDetailSingle(request, index):
 
 @dajaxice_register
 def SupplierAddorChange(request,mod,supplier_form):
+    message=u"供应商添加成功！"
     if mod==-1:
         supplier_form=SupplierForm(deserialize_form(supplier_form))
-        supplier_form.save()
+        if supplier_form.is_valid():
+            supplier_form.save()
+        else:
+            message=u"添加失败,供应商编号和供应商名称不能为空！"
     else:
         supplier=Supplier.objects.get(pk=mod)
         supplier_form=SupplierForm(deserialize_form(supplier_form),instance=supplier)
-        supplier_form.save()
+        if supplier_form.is_valid():
+            supplier_form.save()
+        else:
+            message=u"修改失败,供应商编号和供应商名称不能为空！"
     table=refresh_supplier_table(request)
-    ret={"status":'0',"message":u"供应商添加成功","table":table}
+    ret={"status":'0',"message":message,"table":table}
     return simplejson.dumps(ret)
 
 def refresh_supplier_table(request):
@@ -288,3 +296,12 @@ def deleteDetail(request,uid):
     item.materielpurchasingstatus.save()
     param = {"uid":uid}
     return simplejson.dumps(param)
+
+@dajaxice_register
+def AddProcessFollowing(request,bid,process_form):
+    process_form=ProcessFollowingForm(deserialize_form(process_form))
+    if process_form.is_valid():
+        process_form.save()
+    else:
+        print process_form.errors
+    return simplejson.dumps({})
