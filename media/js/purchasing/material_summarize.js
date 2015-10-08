@@ -27,6 +27,7 @@ function choose_Inventorytype_callback(data){
     }
 }
 
+//五个表的详细记录删除
 var cell;
 $(document).on("click",".btn-danger",function(){
     cell = this;
@@ -42,9 +43,43 @@ function delete_detail_callback(data){
     $(cell).parent().parent().remove();
 }
 
-// $(document).on("click","#new_purchase_btn",function(){
-//     newOrder();
-// })
+//新建订购单确认保存按钮
+$(document).on("click","#save",function(){
+    var num = $("#order_number").val();
+    var cDate = $("#create_date").val();
+    var eDate = $("#establishment_date").val();
+    Dajaxice.purchasing.newOrderSave(save_callback,{
+        "num":num,
+        "cDate":cDate,
+        "eDate":eDate
+    });
+})
 
-// function newOrder(){
-// }
+function save_callback(){
+    alert("该订购单已保存")
+}
+
+//新建订购单完成按钮
+$(document).on("click","#finish",function(){
+    var num = $("#order_number").val();
+    var cDate = $("#create_date").val();
+    var eDate = $("#establishment_date").val();
+    if(confirm("确定后将不能再修改")){
+        Dajaxice.purchasing.newOrderFinish(save_callback,{
+            "num":num,
+            "cDate":cDate,
+            "eDate":eDate
+        });
+    }
+})
+
+$(document).on("click","#order_delete",function(){
+    var num = $("#order_number").val();
+    Dajaxice.purchasing.newOrderDelete(delete_callback,{
+        "num":num,
+    });
+})
+
+function delete_callback(){
+    alert("该订购单已删除");
+}

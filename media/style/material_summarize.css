@@ -5,7 +5,6 @@
 #new_purchasing_order{
 	width:30%;
 	float:left;
-	text-align: center;
 }
 #new_purchase_btn{
 	width:210px;
@@ -15,4 +14,32 @@
 }
 #inventory_detail_table{
 	clear: both;
+}
+.form-div{
+	width:80%;
+	float:left;
+}
+.delete-div{
+	width:20%;
+	float:left;
+}
+.save{
+	width:205px;
+}
+.save-div{
+	width:55%;
+	float:left;
+}
+.finish-div{
+	width: 45%;
+	float:left;
+}
+.date{
+	width:150px;
+}
+.date-input{
+	margin-left:20px!important;
+}
+.control-label{
+	width:70px!important;
 }
