@@ -1,7 +1,11 @@
 # coding: UTF-8
 from django.shortcuts import render
+<<<<<<< HEAD
+from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,SupplierSelect
+=======
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
     PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems
+>>>>>>> 68adb717cde754caaa50908f464e7d28a857b128
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
@@ -37,6 +41,20 @@ def pendingOrderViews(request):
     """
     return render(request, "purchasing/pending_order.html")
 
+def selectSupplierViews(request,bid):
+    suppliers=Supplier.objects.all()
+    bidform=BidForm.objects.get(pk=bid)
+    for item in suppliers:
+        if SupplierSelect.objects.filter(supplier=item,bidform=bidform).count()>0:
+            item.selected=1
+        else:
+            item.selected=0
+    context={
+        "suppliers":suppliers,
+        "bidform":bidform
+    }
+    return render(request,"purchasing/select_supplier.html",context)
+
 def materialSummarizeViews(request):
     """
     wanglei-0707
@@ -48,9 +66,6 @@ def materialSummarizeViews(request):
     context = {"inventoryTypeForm": inventoryTypeForm}
     return render(request, "purchasing/material_summarize.html", context)
 
-def selectSupplierViews(request):
-    context={}
-    return render(request,"purchasing/select_supplier.html",context)
 
 def supplierManagementViews(request):
     file_upload_error=0

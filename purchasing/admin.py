@@ -14,6 +14,7 @@ RegisterClass = (
     PurchasingEntry,
     PurchasingEntryItems,
     MaterielPurchasingStatus,
+    SupplierSelect,
     MaterialSubApply,
     MaterialSubApplyItems,
 )
