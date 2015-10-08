@@ -74,6 +74,10 @@ SELL_TYPE = (
     (1, u"外销"),
 )
 
+IMPLEMENT_CLASS_CHOICES = (
+    (0, u"招标"),
+    (1, u"议标"),
+)
 
 
 INDEX_LIST = tuple(

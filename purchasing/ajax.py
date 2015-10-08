@@ -3,8 +3,10 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems,SupplierFile,SupplierSelect
+from purchasing.models import OrderForm
+from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterielExecute, SupplierSelect
 from const import *
-from const.models import Materiel
+from const.models import Materiel,OrderFormStatus
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
@@ -14,6 +16,7 @@ from const.forms import InventoryTypeForm
 from purchasing.forms import SupplierForm,ProcessFollowingForm
 from django.db.models import Q
 from datetime import datetime
+
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -255,6 +258,10 @@ def SupplierDelete(request,supplier_id):
     return simplejson.dumps({})
 
 @dajaxice_register
+def MaterielExecuteQuery(request,number):
+    materielexecute = MaterielExecute.objects.filter(document_number=number)
+    materielexecute_html = render_to_string("purchasing/materielexecute/materielexecute_table.html", {"materielexecute_set":materielexecute})
+    return simplejson.dumps({"materielexecute_html":materielexecute_html})
 def SelectSupplierOperation(request,selected,bid):
     bidform=BidForm.objects.get(pk=bid)
     for item in selected:
@@ -290,6 +297,8 @@ def searchSupplier(request,sid,bid):
         'html':supplier_select_html
     }
     return simplejson.dumps(data)
+
+@dajaxice_register
 def deleteDetail(request,uid):
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
@@ -305,3 +314,34 @@ def AddProcessFollowing(request,bid,process_form):
     else:
         print process_form.errors
     return simplejson.dumps({})
+def newOrderSave(request,num,cDate,eDate):
+    cDate_datetime = datetime.datetime.strptime(cDate,"%Y-%m-%d")
+    eDate_datetime = datetime.datetime.strptime(eDate,"%Y-%m-%d")
+    order_status = OrderFormStatus.objects.get(status=0)
+    order_obj = OrderForm(
+        order_id = str(num),
+        create_time = cDate_datetime,
+        establishment_time = eDate_datetime,
+        order_status = order_status
+    )
+    order_obj.save()
+
+@dajaxice_register
+def newOrderFinish(request,num,cDate,eDate):
+    cDate_datetime = datetime.datetime.strptime(cDate,"%Y-%m-%d")
+    eDate_datetime = datetime.datetime.strptime(eDate,"%Y-%m-%d")
+    order_status = OrderFormStatus.objects.get(status=1)
+    order_obj = OrderForm(
+        order_id = str(num),
+        create_time = cDate_datetime,
+        establishment_time = eDate_datetime,
+        order_status = order_status
+    )
+    order_obj.save()
+    print "ddddddd"
+
+@dajaxice_register
+def newOrderDelete(request,num):
+    order = OrderForm.objects.get(order_id = num)
+    order.delete()
+    print order
