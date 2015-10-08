@@ -17,6 +17,9 @@ RegisterClass = (
     SupplierSelect,
     MaterialSubApply,
     MaterialSubApplyItems,
+    MaterielExecute,
+    MainMaterielExecuteDetail,
+    SupportMaterielExecuteDetail,
 )
 
 for item in RegisterClass:

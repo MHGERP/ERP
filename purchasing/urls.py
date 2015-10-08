@@ -55,4 +55,8 @@ urlpatterns=patterns('',
     url(
         r'^materielExecute$', purchasing_views.materielExecuteViews,
     ),
+    url(
+        r'^materielExecuteDetail/(\d+)/(\d+)?$',
+        purchasing_views.materielExecuteDetailViews,
+    ),
 )

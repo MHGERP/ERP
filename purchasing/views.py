@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
     PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems,\
-    MaterielExecute
+    MaterielExecute, MainMaterielExecuteDetail, SupportMaterielExecuteDetail
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
@@ -172,3 +172,35 @@ def materielExecuteViews(request):
         "materielexecute_set":materielexecute_set,
     }
     return render(request, "purchasing/materielexecute/materielexecute_management.html", context)
+
+    """
+    mode: 0 view, 1 add
+    mid : materielexecute id
+    """
+def materielExecuteDetailViews(request, choice, *mid):
+    if choice == "0":
+        print "view"
+        materielexecute_id = mid[0]
+        print materielexecute_id
+        materielexecute = MaterielExecute.objects.get(pk = materielexecute_id)
+        materiel_choice = materielexecute.materiel_choice
+        if materiel_choice == MAIN_MATERIEL:
+            materielexecute_detail = MainMaterielExecuteexecute.objects.get(materiel_execute__id = materielexecute_id)
+        else:
+            materielexecute_detail = SupportMaterielExecuteDetail.objects.get(materiel_execute__id = materielexecute_id)
+        materielexecute_detail_set = [materielexecute_detail]
+        context = {
+            "materielexecute_detail_set" : materielexecute_detail_set,
+            "choice" : materiel_choice
+        }
+        return render(request, "purchasing/materielexecute/materielexecute_detail_view.html", context)
+    else:
+        print "add"
+        #default MAIN_MATERIEL
+        materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
+        context = {
+            "materielexecute_detail_set" : materielexecute_detail_set,
+            "choice" : MAIN_MATERIEL
+        }
+        return render(request, "purchasing/materielexecute/materielexecute_detail_add.html", context)
+
