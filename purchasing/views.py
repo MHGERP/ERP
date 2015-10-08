@@ -2,13 +2,13 @@
 from django.shortcuts import render
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
     PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems,\
-    MaterielExecute, MainMaterielExecuteDetail, SupportMaterielExecuteDetail
+    MaterielExecute, MainMaterielExecuteDetail, SupportMaterielExecuteDetail,ProcessFollowingInfo,SupplierSelect,\
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm
 
-from purchasing.forms import SupplierForm,EntryForm
+from purchasing.forms import SupplierForm,EntryForm,ProcessFollowingForm
 from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
@@ -166,6 +166,20 @@ def subApplyViews(request):
     }
     return render(request,"purchasing/subapply_home.html",context)
 
+def processFollowingViews(request,bid):
+    bidform=BidForm.objects.get(pk=bid)
+    process_following_info=ProcessFollowingInfo.objects.filter(bidform=bidform)
+    process_following_form=ProcessFollowingForm(initial={
+        'bidform':bidform,
+        'following_date':datetime.today(),
+        'executor':request.user
+    })
+    context={
+        "bidform":bidform,
+        "process_following_info":process_following_info,
+        "process_following_form":process_following_form
+    }
+    return render(request,"purchasing/process_following.html",context)
 def materielExecuteViews(request):
     materielexecute_set = MaterielExecute.objects.all()
     context = {

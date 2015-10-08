@@ -252,6 +252,19 @@ class MainMaterielExecuteDetail(models.Model):
     def __unicode__(self):
         return self.materiel_execute
 
+class ProcessFollowingInfo(models.Model):
+    bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
+    following_date=models.DateField(blank=False,null=False,verbose_name=u"跟踪日期")
+    following_method=models.CharField(blank=False,null=False,max_length=20,verbose_name=u"跟踪方式")
+    following_feedback=models.CharField(blank=False,null=False,max_length=500,verbose_name=u"跟踪反馈")
+    file_obj = models.FileField(blank=True,upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d",verbose_name="文件对象")
+    executor=models.ForeignKey(User,verbose_name=u"执行人")
+    inform_tech=models.BooleanField(default=False,verbose_name=u"是否通知工艺")
+    class Meta:
+        verbose_name = u"过程跟踪记录"
+        verbose_name_plural = u"过程跟踪记录"
+    def __unicode__(self):
+        return self.bidform.bid_id
 class SupportMaterielExecuteDetail(models.Model):
     materiel_execute = models.OneToOneField(MaterielExecute)
     materiel_texure = models.ForeignKey(Materiel, blank = False, verbose_name = u"材质")

@@ -53,6 +53,10 @@ urlpatterns=patterns('',
         r'^subApply$',purchasing_views.subApplyViews,                     
     ),
     url(
+        r'^processfollowing/(?P<bid>\w+)$',
+        purchasing_views.processFollowingViews,
+       ),
+    url(
         r'^materielExecute$', purchasing_views.materielExecuteViews,
     ),
     url(

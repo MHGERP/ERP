@@ -20,6 +20,7 @@ RegisterClass = (
     MaterielExecute,
     MainMaterielExecuteDetail,
     SupportMaterielExecuteDetail,
+    ProcessFollowingInfo,
 )
 
 for item in RegisterClass:

@@ -1,0 +1,37 @@
+
+<div class="widget-box">
+    <div class="widget-content nopadding">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>跟踪日期</th>
+                    <th>跟踪方式</th>
+                    <th>跟踪反馈</th>
+                    <th>文件</th>
+                    <th>执行人</th>
+                    <th>是否联系工艺部门</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in process_following_info%}
+                <tr>
+                    <td>{{item.following_date|date:"Y-m-d"}}</td>
+                    <td>{{item.following_method}}</td>
+                    <td>{{item.following_feedback}}</td>
+                    {% if item.file_obj%}
+                    <td><a href="{{item.file_obj.url}}">下载</a></td>
+                    {%else%}
+                    <td></td>
+                    {% endif%}
+                    <td>{{item.executor}}</td>
+                    {% if item.inform_tech%} 
+                    <td>是</td>
+                    {% else%}
+                    <td>否</td>
+                    {% endif%}
+                </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
