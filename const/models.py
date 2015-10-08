@@ -96,3 +96,11 @@ class OrderFormStatus(models.Model):
         verbose_name_plural = u"订购单状态"
     def __unicode__(self):
         return self.get_status_display()
+
+class ImplementClassChoices(models.Model):
+    category = models.IntegerField(blank = False, choices = IMPLEMENT_CLASS_CHOICES, verbose_name = u"实施类别")
+    class Meta:
+        verbose_name = u"实施类别"
+        verbose_name_plural = u"实施类别"
+    def __unicode__(self):
+        return self.get_category_display()
