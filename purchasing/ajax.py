@@ -2,11 +2,7 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-<<<<<<< HEAD
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems,SupplierFile,SupplierSelect
-=======
-from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems
->>>>>>> 68adb717cde754caaa50908f464e7d28a857b128
 from const import *
 from const.models import Materiel
 from django.template.loader import render_to_string

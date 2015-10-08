@@ -1,11 +1,7 @@
 # coding: UTF-8
 from django.shortcuts import render
-<<<<<<< HEAD
-from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,SupplierSelect
-=======
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
     PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems
->>>>>>> 68adb717cde754caaa50908f464e7d28a857b128
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
