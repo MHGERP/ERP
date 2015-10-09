@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block sub_ref %}
-<a href="#" class="current">材料入库</a>
+<a href="/purchasing/arrivalInspection" class="current">材料入库</a>
 {% endblock %}
 {% block inner_content%}
 <link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
@@ -48,7 +48,7 @@
                     <td></td>
                     <td></td>
                     <td>{{item.material.count}}</td>
-                    <td><input value="{{item.standard}}"></input></td>
+                    <td style="width:200px;"><input value="{{item.standard}}"></input></td>
                     <td><input value="{{item.status}}"></input></td>
                     <td><input value="{{item.remark}}"></input></td>
                 </tr>
