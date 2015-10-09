@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
      PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems,\
-     MaterielExecute, MainMaterielExecuteDetail, SupportMaterielExecuteDetail,ProcessFollowingInfo,SupplierSelect
+     MaterielExecute, MainMaterielExecuteDetail, SupportMaterielExecuteDetail,ProcessFollowingInfo,SupplierSelect, BidComment
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType, BidFormStatus
@@ -99,9 +99,12 @@ def bidTrackingViews(request):
     """
     Liu Ye
     """
+    bid_id = 444
+    bid = BidForm.objects.get(bid_id = bid_id)
     qualityPriceCardForm = QualityPriceCardForm()
     bidApplyForm = BidApplyForm()
     bidCommentForm = BidCommentForm()
+    bidComments = BidComment.objects.filter(Q(bid = bid))
     bidForm = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
     bid_status = []
     for status in bidForm:
@@ -114,6 +117,7 @@ def bidTrackingViews(request):
                "qualityPriceCardForm": qualityPriceCardForm,
                "bidApplyForm": bidApplyForm,
                "bidCommentForm": bidCommentForm,
+               "bidComments": bidComments,
              }
     return render(request, "purchasing/bid_track.html", context)
 

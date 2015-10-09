@@ -310,7 +310,6 @@ def saveComment(request, form, bid_id):
     bidCommentForm = BidCommentForm(deserialize_form(form))
     if bidCommentForm.is_valid():
         bid = BidForm.objects.get(bid_id = bid_id)
-        print bid
         if bid != None:
             bid_comment = BidComment()
             bid_comment.user = request.user
