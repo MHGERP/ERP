@@ -12,6 +12,9 @@ from purchasing.forms import SupplierForm,EntryForm,ProcessFollowingForm
 from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
+from django.template.loader import render_to_string
+from django.http import HttpResponseRedirect,HttpResponse
+import json
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -186,3 +189,17 @@ def materielExecuteViews(request):
         "materielexecute_set":materielexecute_set,
     }
     return render(request, "purchasing/materielexecute/materielexecute_management.html", context)
+
+def processFollowAdd(request):
+    if request.is_ajax():
+        status=0
+        form_html=""
+        form=ProcessFollowingForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+        else:
+            form_html=render_to_string("purchasing/process_following/process_following_form.html",{"process_following_form":form})
+            status=1
+        return HttpResponse(json.dumps({'status':status,"form_html":form_html}),content_type="application/json")
+
+

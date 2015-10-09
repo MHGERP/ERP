@@ -9,7 +9,7 @@
 {% block inner_content%}
 <div class="bidform-info">
 </div>
-<a class="btn btn-primary" href="#process_form" data-toggle="modal">添加跟踪记录</a>
+<a class="btn btn-primary" href="#process_form" data-toggle="modal" id="add">添加跟踪记录</a>
 <div id="process_following_table" bid={{bidform.id}}>
     {% include "purchasing/process_following/process_following_table.html"%}
 </div>
@@ -22,32 +22,17 @@
         <form class="well form" id="process_info_form" method="POST" action="">
             {% csrf_token %}
 
-            {{process_following_form.bidform}}    
-            {{process_following_form.following_date}}    
-            {{process_following_form.executor}}    
-            <div class="form-group">
-                <label class="add-on">跟踪方式</label>
-                {{process_following_form.following_method}}    
-            </div>
-            <div class="form-group">
-                <label class="add-on">跟踪反馈</label>
-                {{process_following_form.following_feedback}}    
-            </div>
-            <div class="form-group">
-                <label class="add-on">相关文件</label>
-                {{process_following_form.file_obj}}    
-            </div>
-            <div class="form-group">
-                <label class="add-on">是否通知工艺部门</label>
-                {{process_following_form.inform_tech}}    
+            <div id="add_form">
+                {% include "purchasing/process_following/process_following_form.html"%}
             </div>
         </form><!--end school_email_send_form-->
     </div>
     <div class="modal-footer">
         <a class="btn" data-dismiss="modal" >关闭</a>
-        <a class="btn btn-primary" data-dismiss="modal" 
+        <a class="btn btn-primary" 
             id="add_process_following">保存更新</a>
     </div>
 </div>
+<script type='text/javascript' src="{{ STATIC_URL  }}jquery/jquery.form.js"></script>
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/process_following.js"></script>
 {%endblock%}
