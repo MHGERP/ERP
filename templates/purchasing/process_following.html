@@ -1,6 +1,6 @@
 {% extends "purchasing/base/none_nav_base.html"%}
 {% block title %}
-<h1>供应商选择</h1>
+<h1>过程跟踪</h1>
 {% endblock %}
 
 {% block sub_ref %}
@@ -8,6 +8,7 @@
 {% endblock %}
 {% block inner_content%}
 <div class="bidform-info">
+    {%include "purchasing/bidform_div.html"%}
 </div>
 <a class="btn btn-primary" href="#process_form" data-toggle="modal" id="add">添加跟踪记录</a>
 <div id="process_following_table" bid={{bidform.id}}>
