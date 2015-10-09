@@ -1,0 +1,28 @@
+<table class="table table-bordered btm_bd">
+    <thead>
+        <th>部件图号</th>
+        <th>零件图号或票号</th>
+        <th>原材料名称</th>
+        <th>原材料标准</th>
+        <th>原材料规格和尺寸</th>
+        <th>拟用材料名称</th>
+        <th>拟用材料标准</th>
+        <th>拟用材料规格和尺寸</th>
+        <th>操作</th>
+    </thead>
+    <tbody>
+        {% for sub in sub_set %}
+        <tr id="{{sub.id}}">
+            <td>{{sub.mat_pic_code}}</td>
+            <td>{{sub.pic_ticket_code}}</td>
+            <td>{{sub.old_name}}</td>
+            <td>{{sub.old_standard}}</td>
+            <td>{{sub.old_size}}</td>
+            <td>{{sub.new_name}}</td>
+            <td>{{sub.new_standard}}</td>
+            <td>{{sub.new_size}}</td>
+            <td><a type="button" class="btn btn-success" onclick="change_item({{sub.id}});" href="#myModal" data-toggle="modal" >修改</a><button style="margin-left:10px;" type="button" class="btn btn-danger" onclick="delete_item({{sub.id}})">删除</button></td>
+        </tr>
+        {% endfor  %}
+    </tbody>
+</table>

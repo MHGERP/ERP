@@ -2,7 +2,7 @@
 from datetime import *
 from django import  forms
 from django.forms import ModelForm
-from purchasing.models import Supplier,PurchasingEntry
+from purchasing.models import Supplier,PurchasingEntry,MaterialSubApply,MaterialSubApplyItems
 class SupplierForm(ModelForm):
     class Meta:
         model=Supplier
@@ -23,3 +23,24 @@ class EntryForm(ModelForm):
             'inspector':forms.TextInput(attrs={"readonly":"true",'class':'span3'}),
             'keeper':forms.TextInput(attrs={"readonly":"true",'class':'span3'}),
         }
+
+class SubApplyForm(ModelForm):
+    class Meta:
+        model = MaterialSubApply
+        exclude = ('id','is_submit','proposer','comments','is_approval')
+        widgets = {
+            "reasons":forms.Textarea(attrs={'cols':'80','rows':'5'}),
+        }
+
+class SubApplyInspectForm(ModelForm):
+    class Meta:
+        model = MaterialSubApply
+        exclude = ('id','is_submit','proposer')
+        widgets = {
+            "reasons":forms.Textarea(attrs={'cols':'80','rows':'5'}),
+            "comments":forms.Textarea(attrs={'cols':'80','rows':'5'})
+        }
+class SubApplyItemForm(ModelForm):
+    class Meta:
+        model = MaterialSubApplyItems
+        exclude = ('id','sub_apply')

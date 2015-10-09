@@ -1,3 +1,16 @@
 .half-form{
     width:30%;
 }
+
+form#subapply label{
+    width:100px;
+}
+div.subapply{
+    margin-left:150px!important;
+    width:250px;
+}
+
+div.subbtn{
+    margin-left:100px!important;
+    width:200px;   
+}

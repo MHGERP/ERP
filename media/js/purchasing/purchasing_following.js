@@ -69,3 +69,64 @@ function entry_confirm_callback(data){
         alert(data.message);
     }
 }
+var item_id;
+var is_add;
+function add_item(){
+    is_add = true;
+    document.getElementById("item_form").reset();
+}
+
+function subitem_save(){
+    var sid = $("#subapply").attr("sid");
+    data = {'subform':$("#item_form").serialize(),"sid":sid}
+    if(!is_add){
+        data["item_id"] = item_id;
+    }
+    Dajaxice.purchasing.addChangeItem(subitem_save_callback,data);
+}
+
+function subitem_save_callback(data){
+    if(data.flag){
+        $('#subtable').html(data.html);      
+        $('#myModal').modal('hide');
+        location.reload();
+        alert("添加成功");
+    }
+    else{
+        alert("添加失败，有未填写的内容");
+    }
+}
+
+function add_subapply(){
+    Dajaxice.purchasing.addSubApply(add_subapply_callback);
+}
+
+function add_subapply_callback(data){
+    window.location.href=data.url;
+}
+
+function change_item(id){
+    item_id = id;
+    a = $("tr#"+item_id).find("td");
+    for(var i = 0 ; i < 8 ; i++){
+        var did = 'div#div'+(i+1);
+        var in_obj = $(did).find("input");  
+        in_obj.val(a.eq(i).text());
+    } 
+}
+
+function delete_item(id){
+    item_id = id;
+    var sid = $("#subapply").attr("sid");
+    Dajaxice.purchasing.deleteItem(delete_item_callback,{"item_id":item_id,"sid":sid});
+}
+
+function delete_item_callback(data){
+    if(data.flag){
+        alert("删除成功");
+        $("tr#"+item_id).remove();
+    }
+    else{
+        alert("删除失败");
+    }
+}

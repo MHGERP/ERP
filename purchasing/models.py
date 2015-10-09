@@ -1,9 +1,9 @@
 # coding: UTF-8
+from const import *
 from django.db import models
 from const.models import BidFormStatus,Materiel,WorkOrder, OrderFormStatus
 from django.contrib.auth.models import User
 import settings
-
 # Create your models here.
 
 class OrderForm(models.Model):
@@ -151,12 +151,15 @@ class MaterielPurchasingStatus(models.Model):
        return self.materiel.name
 
 class MaterialSubApply(models.Model):
-    receipts_code = models.CharField(max_length = 100, blank = False , verbose_name = u"单据编号")
-    pic_code =  models.CharField(max_length = 100, blank = False , verbose_name = u"图号")
-    work_order = models.ForeignKey(WorkOrder,verbose_name = u"工作令")
+    receipts_code = models.CharField(max_length = 100, unique = True, blank = True ,null = True, verbose_name = u"单据编号")
+    pic_code =  models.CharField(max_length = 100, blank = True , null = True, verbose_name = u"图号")
+    work_order = models.ForeignKey(WorkOrder,verbose_name = u"工作令" , blank = True , null = True)
     bidform = models.ForeignKey(BidForm,blank = True , null = True, verbose_name = u"对应标单")
     reasons = models.CharField(max_length = 1000,blank = True , null = True, verbose_name = u"代用原因和理由")
-    proposer = models.ForeignKey(User,verbose_name = u"申请人")
+    proposer = models.ForeignKey(User,verbose_name = u"申请人",blank = True)
+    is_submit = models.BooleanField(default = False,verbose_name = u"是否提交")
+    comments = models.CharField(max_length=1000,blank = True , null = True, verbose_name = u"评审意见")
+    is_approval = models.IntegerField(choices = REVIEW_COMMENTS_CHOICES,default = -1 ,verbose_name = u"评审结果",blank = True)
     class Meta:
         verbose_name = u"材料代用申请单"
         verbose_name_plural = u"材料代用申请单"
