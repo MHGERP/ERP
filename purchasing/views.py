@@ -1,8 +1,8 @@
 # coding: UTF-8
 from django.shortcuts import render
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
-    PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems,\
-    MaterielExecute, MainMaterielExecuteDetail, SupportMaterielExecuteDetail,ProcessFollowingInfo,SupplierSelect,\
+     PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems,\
+     MaterielExecute, MainMaterielExecuteDetail, SupportMaterielExecuteDetail,ProcessFollowingInfo,SupplierSelect
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
