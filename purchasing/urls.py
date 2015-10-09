@@ -52,4 +52,8 @@ urlpatterns=patterns('',
     url(
         r'^subApply$',purchasing_views.subApplyViews,                     
     ),
+    url(
+        r'^orderFormManage$',
+        purchasing_views.orderFormManageViews,
+    ),
 )

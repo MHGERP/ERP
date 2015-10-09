@@ -11,6 +11,7 @@ from purchasing.forms import SupplierForm,EntryForm
 from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
+
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -164,3 +165,7 @@ def subApplyViews(request):
         "subapply_set":subapply_set,
     }
     return render(request,"purchasing/subapply_home.html",context)
+
+def orderFormManageViews(request):
+    context = {}
+    return render(request, "purchasing/order_form_manage.html", context)
