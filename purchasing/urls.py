@@ -20,12 +20,12 @@ urlpatterns=patterns('',
         purchasing_views.selectSupplierViews,
     ),
     url(
-            r'^suppliermanagement$',
-            purchasing_views.supplierManagementViews,
+        r'^suppliermanagement$',
+        purchasing_views.supplierManagementViews,
         ),
     url(
-            r'^bidTracking$',
-            purchasing_views.bidTrackingViews,
+        r'^bidTracking$',
+        purchasing_views.bidTrackingViews,
         ),
     url(
         r'^suppliermanagement$',
@@ -50,7 +50,24 @@ urlpatterns=patterns('',
         r'^materialEntry$',purchasing_views.materialEntryViews,                     
     ),
     url(
-        r'^subApply$',purchasing_views.subApplyViews,                     
+        r'^subApplyHome/$',purchasing_views.subApplyHomeViews,                     
+    ),
+    url(
+        r'^subApply/$',purchasing_views.subApplyViews                     
+    ),
+    url(
+        r'^subApply/(?P<sid>\w+)/$',purchasing_views.subApplyViews                     
+    ),
+    url(
+        r'^subApplyReview/(?P<sid>\w+)/$',purchasing_views.subApplyReviewViews                     
+    ),
+    url(
+        r'^orderFormManage$',
+        purchasing_views.orderFormManageViews,
+    ),
+    url(
+        r'^orderForm/',
+        purchasing_views.orderFormViews,
     ),
     url(
         r'^processfollowing/(?P<bid>\w+)$',

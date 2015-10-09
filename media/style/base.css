@@ -19,3 +19,12 @@ div.purcher{
 .entry_input{
     width:150px!important;
 }
+
+.btm_bd{
+    border: 1px solid #ddd !important;
+    margin-bottom:20px !important;
+}
+
+div#subtable{
+    margin-top:20px;
+}

@@ -2,9 +2,9 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems,SupplierFile,SupplierSelect
-from purchasing.models import OrderForm
-from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterielExecute, SupplierSelect
+from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterialSubApplyItems,MaterialSubApply
+from purchasing.models import OrderForm, MaterielExecute, SupplierSelect, BidForm
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
 from const import *
 from const.models import Materiel,OrderFormStatus
 from django.template.loader import render_to_string
@@ -13,7 +13,8 @@ from django.contrib.auth.models import User
 from django.db import transaction 
 from const.models import WorkOrder, Materiel
 from const.forms import InventoryTypeForm
-from purchasing.forms import SupplierForm,ProcessFollowingForm
+from django.http import HttpResponseRedirect
+from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm
 from django.db.models import Q
 from datetime import datetime
 
@@ -183,6 +184,26 @@ def addToDetailSingle(request, index):
     return ""
 
 @dajaxice_register
+def getOrderFormList(request, statu, key):
+    """
+    JunHU
+    summary: ajax function to get the order form list by statu & keyword
+    params: statu: the statu of request; key: keyword string(empty or NULL should be ignore)
+    return: table html string
+    """
+    try:
+        statu = int(statu) # unicode to integer
+    
+        items = OrderForm.objects.filter(order_status__status = statu)
+        if key:
+            items = items.filter(order_id = key)
+    except Exception, e:
+        print e
+    context = {"items": items, }
+    html = render_to_string("purchasing/orderform/orderform_list.html", context)
+    return html
+
+@dajaxice_register
 def SupplierAddorChange(request,mod,supplier_form):
     message=u"供应商添加成功！"
     if mod==-1:
@@ -257,6 +278,36 @@ def SupplierDelete(request,supplier_id):
     supplier.delete()
     return simplejson.dumps({})
 
+
+@dajaxice_register
+def addChangeItem(request,subform,sid,item_id = None):
+    subapply = MaterialSubApply.objects.get(id = sid)
+    flag = True
+    try:
+        if item_id == None:
+            subform = SubApplyItemForm(deserialize_form(subform))
+            if subform.is_valid():
+                subitem = subform.save(commit = False)
+                subitem.sub_apply = subapply
+                subitem.save()
+            else:
+                flag = False
+        else:
+            item = MaterialSubApplyItems.objects.get(id = item_id)
+            subform = SubApplyItemForm(deserialize_form(subform),instance = item)
+            if subform.is_valid():
+                subform.save()
+            else:
+                flag = False
+    except Exception,e:
+        print e
+    sub_item_set = MaterialSubApplyItems.objects.filter(sub_apply = subapply)
+    sub_table_html = render_to_string("purchasing/widgets/sub_table.html",{"sub_set":sub_item_set})
+    data = {
+        "flag":flag,
+        "html":sub_table_html,
+    }
+    return simplejson.dumps(data)
 @dajaxice_register
 def MaterielExecuteQuery(request,number):
     materielexecute = MaterielExecute.objects.filter(document_number=number)
@@ -299,6 +350,26 @@ def searchSupplier(request,sid,bid):
     return simplejson.dumps(data)
 
 @dajaxice_register
+def addSubApply(request):
+    subapply = MaterialSubApply( proposer = request.user)
+    subapply.save()
+    url = "/purchasing/subApply/"+str(subapply.id)
+    return simplejson.dumps({"url":url})
+
+@dajaxice_register
+def deleteItem(request,item_id,sid):
+    item_obj = MaterialSubApplyItems.objects.get(id = item_id)
+    subapply = MaterialSubApply.objects.get(id = sid)
+    if item_obj.sub_apply.id == subapply.id:
+        try:
+            item_obj.delete()
+            flag = True
+        except Exception,e:
+            print e
+    else:
+        flag = False
+    return simplejson.dumps({"item_id":item_obj.id,"flag":flag})
+
 def deleteDetail(request,uid):
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
@@ -307,6 +378,22 @@ def deleteDetail(request,uid):
     return simplejson.dumps(param)
 
 @dajaxice_register
+def saveComment(request, form, bid_id):
+    bidCommentForm = BidCommentForm(deserialize_form(form))
+    if bidCommentForm.is_valid():
+        bid = BidForm.objects.get(bid_id = bid_id)
+        if bid != None:
+            bid_comment = BidComment()
+            bid_comment.user = request.user
+            bid_comment.comment = bidCommentForm.cleaned_data["judgeresult"]
+            bid_comment.bid = bid
+            bid_comment.save()
+            ret = {'status': '0', 'message': u"添加成功"}
+        else:
+            ret = {'status': '1', 'message': u"该成员不存在，请刷新页面"}
+    else:
+        ret = {'status': '1', 'message': u"该成员不存在，请刷新页面"}
+    return simplejson.dumps(ret)
 def AddProcessFollowing(request,bid,process_form):
     process_form=ProcessFollowingForm(deserialize_form(process_form))
     if process_form.is_valid():
@@ -338,10 +425,17 @@ def newOrderFinish(request,num,cDate,eDate):
         order_status = order_status
     )
     order_obj.save()
-    print "ddddddd"
 
 @dajaxice_register
 def newOrderDelete(request,num):
     order = OrderForm.objects.get(order_id = num)
     order.delete()
-    print order
+
+@dajaxice_register
+def getOrderFormItems(request, index):
+    items = Materiel.objects.filter(materielformconnection__order_form__order_id = index)
+    context = {
+        "items": items,
+    }
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", context)
+    return html
