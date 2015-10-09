@@ -1,6 +1,7 @@
 # coding: UTF-8
 from django.db import models
 from const import *
+from django.contrib.auth.models import User
 
 class WorkOrder(models.Model):
     order_index = models.CharField(blank = False, unique = True, max_length = 20, verbose_name = u"工作令编号")
@@ -94,3 +95,17 @@ class ImplementClassChoices(models.Model):
         verbose_name_plural = u"实施类别"
     def __unicode__(self):
         return self.get_category_display()
+
+
+class StatusChange(models.Model):
+    original_status=models.ForeignKey(BidFormStatus,related_name="original",null=False,verbose_name=u"原状态")
+    new_status=models.ForeignKey(BidFormStatus,null=False,related_name="new",verbose_name=u"新状态")
+    change_user=models.ForeignKey(User,null=False,verbose_name=u"更改用户")
+    change_time=models.DateTimeField(null=False,verbose_name=u"更改时间")
+    normal_change=models.BooleanField(default=True,verbose_name=u"是否正常更改")
+    class Meta:
+        verbose_name = u"状态更改"
+        verbose_name_plural = u"状态更改"
+    def __unicode__(self):
+        return "from %s to %s"%(self.original_status,self.new_status)
+
