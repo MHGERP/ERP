@@ -1,7 +1,8 @@
 # coding: UTF-8
 from django.shortcuts import render
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
-    PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems
+    PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems,\
+    MaterielExecute
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
@@ -169,3 +170,9 @@ def subApplyViews(request):
 def orderFormManageViews(request):
     context = {}
     return render(request, "purchasing/order_form_manage.html", context)
+def materielExecuteViews(request):
+    materielexecute_set = MaterielExecute.objects.all()
+    context = {
+        "materielexecute_set":materielexecute_set,
+    }
+    return render(request, "purchasing/materielexecute/materielexecute_management.html", context)

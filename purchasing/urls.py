@@ -56,4 +56,7 @@ urlpatterns=patterns('',
         r'^orderFormManage$',
         purchasing_views.orderFormManageViews,
     ),
+    url(
+        r'^materielExecute$', purchasing_views.materielExecuteViews,
+    ),
 )
