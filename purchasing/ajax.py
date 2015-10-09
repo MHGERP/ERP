@@ -2,7 +2,7 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterielExecute, SupplierSelect
+from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterielExecute, SupplierSelect, OrderForm
 from const import *
 from const.models import Materiel
 from django.template.loader import render_to_string
@@ -177,6 +177,26 @@ def addToDetailSingle(request, index):
     item.materielpurchasingstatus.add_to_detail = True
     item.materielpurchasingstatus.save()
     return ""
+
+@dajaxice_register
+def getOrderFormList(request, statu, key):
+    """
+    JunHU
+    summary: ajax function to get the order form list by statu & keyword
+    params: statu: the statu of request; key: keyword string(empty or NULL should be ignore)
+    return: table html string
+    """
+    try:
+        statu = int(statu) # unicode to integer
+    
+        items = OrderForm.objects.filter(order_status__status = statu)
+        if key:
+            items = items.filter(order_id = key)
+    except Exception, e:
+        print e
+    context = {"items": items, }
+    html = render_to_string("purchasing/orderform/orderform_list.html", context)
+    return html
 
 @dajaxice_register
 def SupplierAddorChange(request,mod,supplier_form):

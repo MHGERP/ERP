@@ -1,0 +1,21 @@
+<table class="table table-bordered table-striped table-hover" style="width:70%">
+    <thead>
+        <tr>
+            <th>订购单号</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{item.order_id}}</td>
+            <td>{{item.create_time}}</td>
+            <td>
+                <span class="btn btn-small btn-open" args="{{item.order_id}}">查看</span>
+            </td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -2,13 +2,12 @@
 from django.shortcuts import render
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
     PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems,\
-    MaterielExecute
+    MaterielExecute, OrderForm
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType
-from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm
-
-from purchasing.forms import SupplierForm,EntryForm
+from purchasing.forms import BidApplyForm, QualityPriceCardForm
+from purchasing.forms import SupplierForm,EntryForm, OrderFormStatusForm
 from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
@@ -168,8 +167,26 @@ def subApplyViews(request):
     return render(request,"purchasing/subapply_home.html",context)
 
 def orderFormManageViews(request):
-    context = {}
+    """
+    JunHU
+    """
+    form = OrderFormStatusForm()
+    context = {
+        "form": form,
+        }
     return render(request, "purchasing/order_form_manage.html", context)
+
+def orderFormViews(request):
+    """
+    JunHu
+    """
+    index = request.GET.get("index")
+    order_form = OrderForm.objects.get(order_id = index)
+    context = {
+        "order_form": order_form,
+    }
+    return render(request, "purchasing/order_form.html", context)
+
 def materielExecuteViews(request):
     materielexecute_set = MaterielExecute.objects.all()
     context = {

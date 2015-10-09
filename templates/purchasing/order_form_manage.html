@@ -9,13 +9,13 @@
 {% endblock %}
 
 {% block inner_content%}
-<link rel="stylesheet" href="{{ STATIC_URL }}style/material_summarize.css" type="text/css" media="screen" />
-
-<div id="search_div">
-    <button class="btn add">添加</button>
-    <form class="form-search " >
-        <label>历史订购单</label> <input type="text" class="input-medium search-query" id="search_key"> <span class="btn" id="btn_search">查看</span>
-    </form>
+<form class="form-search">
+	{{form.status}}
+	<input type="text" class="input-medium search-query" id="search_key" placeholder = "订购单单号">
+	<span class="btn search" id="btn_search">查询</span>
+</form>
+<br/>
+<div id="widget-content">
 </div>
-
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/orderform_manage.js"></script>
 {% endblock%}

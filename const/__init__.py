@@ -56,9 +56,9 @@ BIDFORM_PART_STATUS_CHOICES=(
 IDENTITYERROR = "登录帐号或密码有错误！"
 
 ORDERFORM_STATUS_CHOICES = (
-    (0, u"订购单创建"),
-    (1, u"订购单完成"),
-    (2, u"订购单终止"),
+    (0, u"创建中订购单"),
+    (1, u"创建完成订购单"),
+    (2, u"已终止历史订购单"),
 )
 
 INVENTORY_TYPE = (

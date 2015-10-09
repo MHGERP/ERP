@@ -20,12 +20,12 @@ urlpatterns=patterns('',
         purchasing_views.selectSupplierViews,
     ),
     url(
-            r'^suppliermanagement$',
-            purchasing_views.supplierManagementViews,
+        r'^suppliermanagement$',
+        purchasing_views.supplierManagementViews,
         ),
     url(
-            r'^bidTracking$',
-            purchasing_views.bidTrackingViews,
+        r'^bidTracking$',
+        purchasing_views.bidTrackingViews,
         ),
     url(
         r'^suppliermanagement$',
@@ -55,6 +55,10 @@ urlpatterns=patterns('',
     url(
         r'^orderFormManage$',
         purchasing_views.orderFormManageViews,
+    ),
+    url(
+        r'^orderForm/',
+        purchasing_views.orderFormViews,
     ),
     url(
         r'^materielExecute$', purchasing_views.materielExecuteViews,
