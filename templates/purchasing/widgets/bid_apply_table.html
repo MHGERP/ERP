@@ -1,0 +1,66 @@
+<form class="well form" method="POST" action="" id="bid_apply_form">
+  {% csrf_token %}
+  <table class="table table-bordered" style="width:60%">
+    <thead>
+      <tr>
+        <th>{{bidApplyForm.apply_company.label}}</th>
+        <th>{{bidApplyForm.apply_company}}</th>
+        <th>{{bidApplyForm.demand_company.label}}</th>
+        <th>{{bidApplyForm.demand_company}}</th>
+      </tr>
+      <tr>
+        <th>{{bidApplyForm.bid_project.label}}</th>
+        <th>{{bidApplyForm.bid_project}}</th>
+        <th>{{bidApplyForm.bid_date.label}}</th>
+        <th>{{bidApplyForm.bid_date}}</th>
+      </tr>
+      <tr>
+        <th>{{bidApplyForm.bid_project.label}}</th>
+        <th>{{bidApplyForm.bid_project}}</th>
+        <th>{{bidApplyForm.work_order.label}}</th>
+        <th>{{bidApplyForm.work_order}}</th>
+      </tr>
+      <tr>
+        <th>{{bidApplyForm.special_model.label}}</th>
+        <th>{{bidApplyForm.special_model}}</th>
+        <th>{{bidApplyForm.amount.label}}</th>
+        <th>{{bidApplyForm.amount}}</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>拟投标单位</td>
+        <td>供方代码</td>
+        <td>认定业务范围</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      {% for item in bidComments%}
+      <tr>
+        <td></td>
+        <td colspan="2"> {{item.comment}}</td>
+      </tr>
+      {% endfor%}
+    </tbody>
+  </table>
+  <button type="button" class="btn"> 提交 </button>
+</form>
+
+<form class="well form" method="POST" action="" id="bid_form">
+  {% csrf_token %}
+  <div class="control-group">
+    <label class="control-label" for="inputEmail">{{bidCommentForm.judgeresult.label}}</label>
+    <div class="controls">
+      {{bidCommentForm.judgeresult}}
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputPassword">{{bidCommentForm.reason.label}}</label>
+    <div class="controls">
+      {{bidCommentForm.reason}}
+    </div>
+  </div>
+  <button type="button" class="btn"> 提交 </button>
+<form>

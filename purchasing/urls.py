@@ -16,16 +16,16 @@ urlpatterns=patterns('',
         purchasing_views.materialSummarizeViews,
     ),
     url(
-        r'^selectsupplier$',
+        r'^selectsupplier/(?P<bid>\w+)$',
         purchasing_views.selectSupplierViews,
     ),
     url(
-            r'^suppliermanagement$',
-            purchasing_views.supplierManagementViews,
+        r'^suppliermanagement$',
+        purchasing_views.supplierManagementViews,
         ),
     url(
-            r'^bidTracking$',
-            purchasing_views.bidTrackingViews,
+        r'^bidTracking$',
+        purchasing_views.bidTrackingViews,
         ),
     url(
         r'^suppliermanagement$',
@@ -60,5 +60,28 @@ urlpatterns=patterns('',
     ),
     url(
         r'^subApplyReview/(?P<sid>\w+)/$',purchasing_views.subApplyReviewViews                     
+    ),
+    url(
+        r'^orderFormManage$',
+        purchasing_views.orderFormManageViews,
+    ),
+    url(
+        r'^orderForm/',
+        purchasing_views.orderFormViews,
+    ),
+    url(
+        r'^processfollowing/(?P<bid>\w+)$',
+        purchasing_views.processFollowingViews,
+       ),
+    url(
+        r'^materielExecute$', purchasing_views.materielExecuteViews,
+    ),
+    url(
+        r'^processfollowingadd$',
+        purchasing_views.processFollowAdd,
+     ),
+    url(
+        r'^materielExecuteDetail/(\d+)/(\d+)?$',
+        purchasing_views.materielExecuteDetailViews,
     ),
 )

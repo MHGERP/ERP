@@ -1,0 +1,38 @@
+{% extends "purchasing/base/none_nav_base.html"%}
+{% block title %}
+<h1>供应商选择</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">过程跟踪</a>
+{% endblock %}
+{% block inner_content%}
+<div class="bidform-info">
+</div>
+<a class="btn btn-primary" href="#process_form" data-toggle="modal" id="add">添加跟踪记录</a>
+<div id="process_following_table" bid={{bidform.id}}>
+    {% include "purchasing/process_following/process_following_table.html"%}
+</div>
+<div class="modal hide fade"  id="process_form">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>添加跟踪记录</h3>
+    </div>
+    <div class="modal-body">
+        <form class="well form" id="process_info_form" method="POST" action="">
+            {% csrf_token %}
+
+            <div id="add_form">
+                {% include "purchasing/process_following/process_following_form.html"%}
+            </div>
+        </form><!--end school_email_send_form-->
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal" >关闭</a>
+        <a class="btn btn-primary" 
+            id="add_process_following">保存更新</a>
+    </div>
+</div>
+<script type='text/javascript' src="{{ STATIC_URL  }}jquery/jquery.form.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/process_following.js"></script>
+{%endblock%}

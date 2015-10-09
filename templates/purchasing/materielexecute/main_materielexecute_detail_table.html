@@ -11,16 +11,16 @@
                 </tr>
             </thead>
             <tbody>
-                
-                <tr id="{{supplier.id}}">
-                    <td></td>
-                    <td></td>
-                    <td></td> 
+                {% for materielexecute in  materielexecute_set %}
+                <tr id="{{materielexecute.id}}">
+                    <td>{{materielexecute.document_number}}</td>
+                    <td>{{materielexecute.document_lister}}</td>
+                    <td>{{materielexecute.date_date}}</td> 
                     <td>
-                        <a class='btn btn-primary' id="edit_supplier" data-toggle="modal" href="#supplier_info" >查看</a>
+                        <a class='btn btn-primary' id="edit_supplier" href="#supplier_info" >查看</a>
                     </td>
                 </tr>
-                
+                {% endfor %}
             </tbody>
         </table>
     </div>

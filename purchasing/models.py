@@ -1,10 +1,13 @@
 # coding: UTF-8
 from const import *
+import datetime
+from const import MATERIEL_CHOICE
 from django.db import models
-from const.models import BidFormStatus,Materiel,WorkOrder, OrderFormStatus
+from const.models import BidFormStatus,Materiel, WorkOrder, OrderFormStatus, ImplementClassChoices
 from django.contrib.auth.models import User
 import settings
 # Create your models here.
+
 
 class OrderForm(models.Model):
     order_id = models.CharField(unique = True, max_length = 20, blank = False, verbose_name = u"订购单编号")
@@ -17,27 +20,42 @@ class OrderForm(models.Model):
     def __unicode__(self):
         return self.order_id
 
-class MaterielOrderFormConnction(models.Model):
-    materiel = models.OneToOneField(Materiel, blank = False)
-    order_form = models.ForeignKey(OrderForm, blank = False)
-    class Meta:
-        verbose_name = u"物料——订购单——关联表"
-        verbose_name_plural = u"物料——订购单——关联表"
-    def __unicode__(self):
-        return "connection between %s and %s" % (self.materiel.name, self.order_form.order_id)
-
 class BidForm(models.Model):
     bid_id=models.CharField(unique=True,max_length=20,blank=False,verbose_name=u"标单编号")
-    create_time=models.DateTimeField(null=True,verbose_name=u"创建日期")
-    establishment_time=models.DateTimeField(null=True,verbose_name=u"编制日期")
-    audit_time=models.DateTimeField(null=True,verbose_name=u"审核日期")
-    approved_time=models.DateTimeField(null=True,verbose_name=u"批准日期")
+    create_time=models.DateTimeField(blank=True,null=True,verbose_name=u"创建日期")
+    establishment_time=models.DateTimeField(blank=True,null=True,verbose_name=u"编制日期")
+    audit_time=models.DateTimeField(blank=True,null=True,verbose_name=u"审核日期")
+    approved_time=models.DateTimeField(blank=True,null=True,verbose_name=u"批准日期")
     bid_status=models.ForeignKey(BidFormStatus,null=False,verbose_name=u"标单状态")
+
     class Meta:
         verbose_name = u"标单"
         verbose_name_plural = u"标单"
     def __unicode__(self):
         return '%s'% (self.bid_id)
+
+class BidComment(models.Model):
+    user = models.ForeignKey(User, blank = False)
+    comment = models.CharField(max_length=400,blank=False,verbose_name=u"审批意见")
+    bid = models.ForeignKey(BidForm, blank = False)
+    submit_date=models.DateField(blank=True,null=True,default=lambda: datetime.datetime.today(),verbose_name=u"提交日期")
+    class Meta:
+        verbose_name = u"标单评审意见"
+        verbose_name_plural = u"标单评审意见"
+    def __unicode__(self):
+        return '%s'% (self.id)
+
+class MaterielFormConnection(models.Model):
+    materiel = models.OneToOneField(Materiel, blank = False, verbose_name = u"物料")
+    order_form = models.ForeignKey(OrderForm, blank = True, null = True, verbose_name = u"订购单")
+    bid_form = models.ForeignKey(BidForm, blank = True, null = True, verbose_name = u"标单")
+    count = models.CharField(blank = True, null = True, max_length = 20, verbose_name = u"需求数量")
+    class Meta:
+        verbose_name = u"物料——采购——关联表"
+        verbose_name_plural = u"物料——采购——关联表"
+    def __unicode__(self):
+        return self.materiel.name
+
 
 class bidApply(models.Model):
     apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
@@ -50,6 +68,13 @@ class bidApply(models.Model):
     special_model = models.CharField(null=True, max_length=40, verbose_name=u"规格、型号")
     core_part = models.BooleanField(verbose_name="是否为核心件")
 
+    bid = models.ForeignKey(BidForm, blank = False)
+    project_category = models.CharField(null=True, max_length=40, verbose_name=u"项目类别")
+    bid_datetime = models.DateTimeField(null=True, verbose_name=u"招(议)标时间")
+    bid_delivery_date = models.DateTimeField(null=True, verbose_name=u"标书递送时间")
+    place = models.CharField(null=True, max_length=40, verbose_name=u"地点")
+    implement_class = models.ForeignKey(ImplementClassChoices, null=False,verbose_name=u"实施类别")
+
     class Meta:
         verbose_name = u"标单申请表"
 
@@ -57,6 +82,7 @@ class bidApply(models.Model):
         return '%s'% (self.apply_id)
 
 class qualityPriceCard(models.Model):
+    bid = models.ForeignKey(BidForm, blank = False)
     apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
@@ -70,7 +96,7 @@ class qualityPriceCard(models.Model):
     ability = models.CharField(null=True, max_length=40, verbose_name=u"厂家协作能力质量情况及业绩")
     delivery_condition = models.CharField(null=True, max_length=40, verbose_name=u"交货及支付条件")
     class Meta:
-        verbose_name = u"标单申请表"
+        verbose_name = u"比质比价卡"
 
     def __unicode__(self):
         return '%s'% (self.apply_id)
@@ -85,7 +111,6 @@ class Supplier(models.Model):
         return '%s'% (self.supplier_name)
 
 class SupplierFile(models.Model):
-
     project = models.ForeignKey(Supplier)
     name = models.CharField(max_length=100, blank=False, verbose_name="文件名称")
     file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d",verbose_name="文件对象")
@@ -105,7 +130,7 @@ class ArrivalInspection(models.Model):
     soft_confirm = models.BooleanField(null=False,default=False,verbose_name=u"软件确认")
     inspect_confirm = models.BooleanField(null=False,default=False,verbose_name=u"检验通过")
     bidform = models.ForeignKey(BidForm,null=False,verbose_name=u"标单号")
-    material = models.ForeignKey(Materiel,verbose_name=u"材料") 
+    material = models.ForeignKey(Materiel,verbose_name=u"材料")
     class Meta:
         verbose_name = u"到货检验"
         verbose_name_plural = u"到货检验"
@@ -121,7 +146,7 @@ class PurchasingEntry(models.Model):
     keeper = models.ForeignKey(User,blank=False,verbose_name=u"库管员" , related_name = "keeper")
     entry_confirm = models.BooleanField(null=False,default=False,verbose_name=u"入库单确认")
     bidform = models.ForeignKey(BidForm,verbose_name=u"标单号")
-    
+
     class Meta:
         verbose_name = u"入库单"
         verbose_name_plural = u"入库单"
@@ -150,6 +175,15 @@ class MaterielPurchasingStatus(models.Model):
     def __unicode__(self):
        return self.materiel.name
 
+class SupplierSelect(models.Model):
+    bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
+    supplier=models.ForeignKey(Supplier,blank=False,verbose_name=u"供应商")
+    class Meta:
+        verbose_name = u"供应商选择"
+        verbose_name_plural = u"供应商选择"
+        unique_together = (("bidform", "supplier", ), )
+    def __unicode__(self):
+        return "%s select %s" % (self.bidform.bid_id, self.supplier.supplier_name)
 class MaterialSubApply(models.Model):
     receipts_code = models.CharField(max_length = 100, unique = True, blank = True ,null = True, verbose_name = u"单据编号")
     pic_code =  models.CharField(max_length = 100, blank = True , null = True, verbose_name = u"图号")
@@ -180,4 +214,67 @@ class MaterialSubApplyItems(models.Model):
         verbose_name = u"材料代用申请条目"
         verbose_name_plural = u"材料代用申请条目"
     def __unicode__(self):
-        return "%s(%s)" % (self.sub_apply,self.mat_pic_code) 
+        return "%s(%s)" % (self.sub_apply,self.mat_pic_code)
+
+class MaterielExecute(models.Model):
+    document_number = models.CharField(max_length = 100, blank = False, verbose_name = u"单据编号")
+    document_lister = models.ForeignKey(User, verbose_name = u"制表人")
+    date_date = models.DateField(blank = False, null = False, verbose_name = u"制表日期")
+    materiel_choice = models.CharField(blank=False, max_length = 20, choices=MATERIEL_CHOICE, verbose_name=u"材料选择")
+    class Meta:
+        verbose_name = u"材料执行表"
+        verbose_name_plural = u"材料执行表"
+    def __unicode__(self):
+        return '%s' % self.document_number
+
+class MainMaterielExecuteDetail(models.Model):
+    materiel_execute = models.OneToOneField(MaterielExecute)
+    materiel_name = models.CharField(max_length=50, blank=False, verbose_name = u"名称")
+    materiel_texture = models.ForeignKey(Materiel, verbose_name = u"材质")
+    quality_class = models.CharField(max_length=20, blank=False, verbose_name = u"质量分类")
+    specification = models.CharField(max_length=100, blank=False, verbose_name= u"规格")
+    quantity = models.IntegerField(verbose_name = u"数量")
+    purchase_weight = models.FloatField(verbose_name = u"采购")
+    recheck = models.BooleanField(default = False, verbose_name = u"复验")
+    crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"探伤级别")
+    delivery_status = models.CharField(max_length = 50, blank = False, verbose_name = u"交货状态")
+    execute_standard = models.CharField(max_length = 100, blank = False, verbose_name = u"执行标准")
+    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"备注") 
+    class Meta:
+        verbose_name = u"主材材料执行表详细"
+        verbose_name_plural = u"主材材料执行表详细"
+    def __unicode__(self):
+        return "%s(%s)" % (self.materiel_execute.document_number, self.materiel_texture.index)
+
+class ProcessFollowingInfo(models.Model):
+    bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
+    following_date=models.DateField(blank=False,null=False,verbose_name=u"跟踪日期")
+    following_method=models.CharField(blank=False,null=False,max_length=20,verbose_name=u"跟踪方式")
+    following_feedback=models.CharField(blank=False,null=False,max_length=500,verbose_name=u"跟踪反馈")
+    file_obj = models.FileField(blank=True,upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d",verbose_name="文件对象")
+    executor=models.ForeignKey(User,verbose_name=u"执行人")
+    inform_tech=models.BooleanField(default=False,verbose_name=u"是否通知工艺")
+    class Meta:
+        verbose_name = u"过程跟踪记录"
+        verbose_name_plural = u"过程跟踪记录"
+    def __unicode__(self):
+        return self.bidform.bid_id
+class SupportMaterielExecuteDetail(models.Model):
+    materiel_execute = models.OneToOneField(MaterielExecute)
+    materiel_texture = models.ForeignKey(Materiel, blank = False, verbose_name = u"材质")
+    texture_number = models.CharField(max_length = 100, blank = False, verbose_name = u"材质编号")
+    specification = models.CharField(max_length = 100, blank = False, verbose_name = u"规格")
+    quantity = models.IntegerField(verbose_name = u"数量")
+    delivery_status = models.CharField(max_length = 50, blank = False, verbose_name = u"交货状态")
+    press = models.CharField(max_length = 50, blank = False, verbose_name = u"受压")
+    crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"探伤级别")
+    recheck = models.BooleanField(default = False, verbose_name = u"复验")
+    quota = models.CharField(max_length = 50, blank = True, verbose_name = u"定额")
+    part = models.CharField(max_length = 50, blank = True, verbose_name = u"零件")
+    oddments = models.CharField(max_length = 50, blank = True, verbose_name = u"余料")
+    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"备注")
+    class Meta:
+        verbose_name = u"辅材材料执行表详细"
+        verbose_name_plural = u"辅材材料执行表详细"
+    def __unicode__(self):
+        return "%s(%s)" % (self.materiel_execute.document_number, self.materiel_texture.index)

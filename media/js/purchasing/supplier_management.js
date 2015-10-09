@@ -47,6 +47,7 @@ $("#add_or_update_supplier").click(function(){
 });
 
 function add_or_change_supplier_callback(data){
+    alert(data.message);
     $("#supplier_table").html(data.table);
 }
 function supplier_delete_callback(data){

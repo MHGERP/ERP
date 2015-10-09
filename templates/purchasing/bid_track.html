@@ -9,24 +9,46 @@
 {% endblock %}
 
 {% block inner_content%}
-<link rel="stylesheet" href="{{ STATIC_URL   }}style/form-style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/index.css" >
+<script type="text/javascript" src="{{STATIC_URL}}js/purchasing/bid_track.js"></script>
 
-<form class="form-search ">
-    <input type="text" class="input-medium search-query">
-    <button type="submit" class="btn">工作令查询</button>
-</form>
 <div class="widget-content">
-    <table class="table table-bordered table-striped table-hover" style="width:60%">
-        <thead>
-            <tr>
-                <th>工作令</th>
-                <th>明细表</th>
-                <th>联系单</th>
-            </tr>
-        </thead>
-        <tbody>
+  <table class="table table-bordered table-striped table-hover" style="width:60%">
+    <thead>
+      <tr>
+        <th>工作令</th>
+        <th>明细表</th>
+        <th>联系单</th>
+      </tr>
+    </thead>
+    <tbody>
 
-        </tbody>
-    </table>
+    </tbody>
+  </table>
+  <div class="row">
+    {%for item in bid_status%}
+      <a href="#BidComment" role="button" class="btn {{item.class}}" data-toggle="modal">{{item.name}}</a>
+    {%endfor%}
+  </div>
+  <br>
+  <div class="row">
+    <button class="btn" type="button"> 合同确认 </button>
+  </div>
 </div>
+
+
+<div id="BidComment" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">招(议)标申请书</h3>
+  </div>
+  <div class="modal-body">
+    {% include "purchasing/widgets/bid_apply_table.html"%}
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-primary">Save changes</button>
+  </div>
+</div>
+
 {% endblock%}

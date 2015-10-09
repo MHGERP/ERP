@@ -14,3 +14,4 @@ class InventoryTypeForm(forms.Form):
     inventory_type = forms.ChoiceField(choices = TYPE_CHOICES, widget = forms.Select(attrs = {'class': 'form-control input'}))
 
 
+

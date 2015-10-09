@@ -56,9 +56,9 @@ BIDFORM_PART_STATUS_CHOICES=(
 IDENTITYERROR = "登录帐号或密码有错误！"
 
 ORDERFORM_STATUS_CHOICES = (
-    (0, u"订购单创建"),
-    (1, u"订购单完成"),
-    (2, u"订购单终止"),
+    (0, u"创建中订购单"),
+    (1, u"创建完成订购单"),
+    (2, u"已终止历史订购单"),
 )
 
 INVENTORY_TYPE = (
@@ -74,6 +74,10 @@ SELL_TYPE = (
     (1, u"外销"),
 )
 
+IMPLEMENT_CLASS_CHOICES = (
+    (0, u"招标"),
+    (1, u"议标"),
+)
 
 
 INDEX_LIST = tuple(
@@ -86,4 +90,10 @@ REVIEW_COMMENTS_CHOICES = (
     (-1,u"未审核"),
     (0,u"通过"),
     (1,u"不通过"),
+
+MAIN_MATERIEL = "main_materiel"
+SUPPORT_MATERIEL = "support_materiel"
+MATERIEL_CHOICE = (
+    (MAIN_MATERIEL, u"主材"),
+    (SUPPORT_MATERIEL, u"辅材"),
 )
