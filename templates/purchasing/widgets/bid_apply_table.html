@@ -1,4 +1,5 @@
 <form class="well form" method="POST" action="">
+  {% csrf_token %}
   <table class="table table-bordered" style="width:60%">
     <thead>
       <tr>
@@ -39,3 +40,20 @@
     </tbody>
   </table>
 </form>
+
+<form class="well form" method="POST" action="" id="bid_form">
+  {% csrf_token %}
+  <div class="control-group">
+    <label class="control-label" for="inputEmail">{{bidCommentForm.judgeresult.label}}</label>
+    <div class="controls">
+      {{bidCommentForm.judgeresult}}
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputPassword">{{bidCommentForm.reason.label}}</label>
+    <div class="controls">
+      {{bidCommentForm.reason}}
+    </div>
+  </div>
+  <button type="button" class="btn"> 提交 </button>
+<form>

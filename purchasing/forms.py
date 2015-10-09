@@ -2,7 +2,9 @@
 from datetime import *
 from django import  forms
 from django.forms import ModelForm
-from purchasing.models import Supplier, bidApply, qualityPriceCard, PurchasingEntry
+from purchasing.models import Supplier, bidApply, qualityPriceCard, PurchasingEntry, BidComment
+
+
 class SupplierForm(ModelForm):
     class Meta:
         model=Supplier
@@ -17,9 +19,22 @@ class BidApplyForm(ModelForm):
     class Meta:
         model = bidApply
 
+
 class QualityPriceCardForm(ModelForm):
     class Meta:
         model = qualityPriceCard
+
+
+class BidCommentForm(forms.Form):
+    result_choices=(("-1","请审核"),("1","通过"),("0","不通过"))
+    judgeresult =forms.ChoiceField(choices=result_choices,required=True, label=u"审核结果",
+        widget=forms.Select(attrs={
+            'class':'form-control',
+            }),
+        )
+    reason=forms.CharField(required=False, label=u"审核意见",  widget=forms.Textarea(attrs={'class':'form-control','row':10}))
+
+
 class EntryForm(ModelForm):
     class Meta:
         model = PurchasingEntry

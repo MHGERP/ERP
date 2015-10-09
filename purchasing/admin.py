@@ -17,6 +17,7 @@ RegisterClass = (
     SupplierSelect,
     MaterialSubApply,
     MaterialSubApplyItems,
+    BidComment,
 )
 
 for item in RegisterClass:
