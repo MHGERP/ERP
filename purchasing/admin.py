@@ -17,6 +17,9 @@ RegisterClass = (
     SupplierSelect,
     MaterialSubApply,
     MaterialSubApplyItems,
+    MaterielExecute,
+    MainMaterielExecuteDetail,
+    SupportMaterielExecuteDetail,
     ProcessFollowingInfo,
 )
 
