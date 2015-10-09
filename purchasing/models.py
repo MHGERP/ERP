@@ -231,7 +231,7 @@ class MaterielExecute(models.Model):
         verbose_name = u"材料执行表"
         verbose_name_plural = u"材料执行表"
     def __unicode__(self):
-        return self.document_number
+        return '%s' % self.document_number
 
 class MainMaterielExecuteDetail(models.Model):
     materiel_execute = models.OneToOneField(MaterielExecute)
@@ -250,7 +250,7 @@ class MainMaterielExecuteDetail(models.Model):
         verbose_name = u"主材材料执行表详细"
         verbose_name_plural = u"主材材料执行表详细"
     def __unicode__(self):
-        return self.materiel_execute
+        return "%s(%s)" % (self.materiel_execute.document_number, self.materiel_texture.index)
 
 class ProcessFollowingInfo(models.Model):
     bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
@@ -267,7 +267,7 @@ class ProcessFollowingInfo(models.Model):
         return self.bidform.bid_id
 class SupportMaterielExecuteDetail(models.Model):
     materiel_execute = models.OneToOneField(MaterielExecute)
-    materiel_texure = models.ForeignKey(Materiel, blank = False, verbose_name = u"材质")
+    materiel_texture = models.ForeignKey(Materiel, blank = False, verbose_name = u"材质")
     texture_number = models.CharField(max_length = 100, blank = False, verbose_name = u"材质编号")
     specification = models.CharField(max_length = 100, blank = False, verbose_name = u"规格")
     quantity = models.IntegerField(verbose_name = u"数量")
@@ -283,4 +283,4 @@ class SupportMaterielExecuteDetail(models.Model):
         verbose_name = u"辅材材料执行表详细"
         verbose_name_plural = u"辅材材料执行表详细"
     def __unicode__(self):
-        return self.materiel_execute
+        return "%s(%s)" % (self.materiel_execute.document_number, self.materiel_texture.index)

@@ -193,13 +193,16 @@ def materielExecuteViews(request):
     """
 def materielExecuteDetailViews(request, choice, *mid):
     if choice == "0":
-        print "view"
+        #print "view"
         materielexecute_id = mid[0]
-        print materielexecute_id
+        #print materielexecute_id
         materielexecute = MaterielExecute.objects.get(pk = materielexecute_id)
         materiel_choice = materielexecute.materiel_choice
+        print materiel_choice
+        print MAIN_MATERIEL
+        print MATERIEL_CHOICE[1][1]
         if materiel_choice == MAIN_MATERIEL:
-            materielexecute_detail = MainMaterielExecuteexecute.objects.get(materiel_execute__id = materielexecute_id)
+            materielexecute_detail = MainMaterielExecuteDetail.objects.get(materiel_execute__id = materielexecute_id)
         else:
             materielexecute_detail = SupportMaterielExecuteDetail.objects.get(materiel_execute__id = materielexecute_id)
         materielexecute_detail_set = [materielexecute_detail]
