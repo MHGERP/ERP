@@ -119,7 +119,6 @@ class Supplier(models.Model):
         return '%s'% (self.supplier_name)
 
 class SupplierFile(models.Model):
-
     project = models.ForeignKey(Supplier)
     name = models.CharField(max_length=100, blank=False, verbose_name="文件名称")
     file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d",verbose_name="文件对象")

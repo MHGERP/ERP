@@ -5,13 +5,18 @@ from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry
      MaterielExecute, MainMaterielExecuteDetail, SupportMaterielExecuteDetail,ProcessFollowingInfo,SupplierSelect
 from const import *
 from const.forms import InventoryTypeForm
-from const.models import WorkOrder, InventoryType
-from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm
+from const.models import WorkOrder, InventoryType, BidFormStatus
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
 
 from purchasing.forms import SupplierForm,EntryForm,ProcessFollowingForm
 from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
+from django.db.models import Q
+
+from django.template.loader import render_to_string
+from django.http import HttpResponseRedirect,HttpResponse
+import json
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -89,23 +94,26 @@ def supplierManagementViews(request):
     }
     return render(request,"purchasing/supplier/supplier_management.html",context)
 
-
+@csrf.csrf_protect
 def bidTrackingViews(request):
     """
     Liu Ye
     """
     qualityPriceCardForm = QualityPriceCardForm()
     bidApplyForm = BidApplyForm()
-
+    bidCommentForm = BidCommentForm()
+    bidForm = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
     bid_status = []
-    bid_status.append({"name":u"招标申请表",         "class":"btn-success"})
-    bid_status.append({"name":u"分公司领导批准",     "class":"btn-success"})
-    bid_status.append({"name":u"滨海公司领导批准",   "class":""})
-    bid_status.append({"name":u"滨海招标办领导批准", "class":"btn-danger"})
-    bid_status.append({"name":u"中标通知书",         "class":""})
+    for status in bidForm:
+        bid_dict = {}
+        bid_dict["name"] = status
+        bid_dict["class"] = "btn-success"
+        bid_status.append(bid_dict)
+
     context = {"bid_status": bid_status,
                "qualityPriceCardForm": qualityPriceCardForm,
                "bidApplyForm": bidApplyForm,
+               "bidCommentForm": bidCommentForm,
              }
     return render(request, "purchasing/bid_track.html", context)
 
@@ -186,6 +194,18 @@ def materielExecuteViews(request):
         "materielexecute_set":materielexecute_set,
     }
     return render(request, "purchasing/materielexecute/materielexecute_management.html", context)
+
+def processFollowAdd(request):
+    if request.is_ajax():
+        status=0
+        form_html=""
+        form=ProcessFollowingForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+        else:
+            form_html=render_to_string("purchasing/process_following/process_following_form.html",{"process_following_form":form})
+            status=1
+        return HttpResponse(json.dumps({'status':status,"form_html":form_html}),content_type="application/json")
 
     """
     mode: 0 view, 1 add

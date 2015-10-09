@@ -60,6 +60,10 @@ urlpatterns=patterns('',
         r'^materielExecute$', purchasing_views.materielExecuteViews,
     ),
     url(
+        r'^processfollowingadd$',
+        purchasing_views.processFollowAdd,
+     ),
+    url(
         r'^materielExecuteDetail/(\d+)/(\d+)?$',
         purchasing_views.materielExecuteDetailViews,
     ),

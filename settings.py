@@ -138,6 +138,7 @@ INSTALLED_APPS = (
     'south',
 )
 
+LOGGING_OUTPUT_ENABLED = True
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
@@ -184,6 +185,7 @@ LOGGING = {
 		},
 	}
 }
+
 PROCESS_FILE_PATH = join("tmp", "process_file")
 FILE_UPLOAD_PERMISSIONS = 0644
 FILE_UPLOAD_TEMP_DIR = os.path.join(SETTINGS_ROOT, PROCESS_FILE_PATH).replace("\\",'/')

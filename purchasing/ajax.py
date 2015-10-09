@@ -2,9 +2,8 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems,SupplierFile,SupplierSelect
-from purchasing.models import OrderForm
-from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterielExecute, SupplierSelect
+from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems,SupplierFile,SupplierSelect, BidComment, OrderForm, MaterielExecute 
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
 from const import *
 from const.models import Materiel,OrderFormStatus
 from django.template.loader import render_to_string
@@ -307,6 +306,23 @@ def deleteDetail(request,uid):
     return simplejson.dumps(param)
 
 @dajaxice_register
+def saveComment(request, form, bid_id):
+    bidCommentForm = BidCommentForm(deserialize_form(form))
+    if bidCommentForm.is_valid():
+        bid = BidForm.objects.get(bid_id = bid_id)
+        print bid
+        if bid != None:
+            bid_comment = BidComment()
+            bid_comment.user = request.user
+            bid_comment.comment = bidCommentForm.cleaned_data["judgeresult"]
+            bid_comment.bid = bid
+            bid_comment.save()
+            ret = {'status': '0', 'message': u"添加成功"}
+        else:
+            ret = {'status': '1', 'message': u"该成员不存在，请刷新页面"}
+    else:
+        ret = {'status': '1', 'message': u"该成员不存在，请刷新页面"}
+    return simplejson.dumps(ret)
 def AddProcessFollowing(request,bid,process_form):
     process_form=ProcessFollowingForm(deserialize_form(process_form))
     if process_form.is_valid():
