@@ -78,16 +78,6 @@ class BidFormStatus(models.Model):
         return self.get_part_status_display()
 
 
-
-#class BidFormItem(models.Model):
-    #name = models.CharField(blank = True, max_length = 20, verbose_name = u"名称")
-    #spec = models.CharField(blank = True, max_length = 20, verbose_name = u"规格")
-    #schematic_index = models.CharField(blank = False, max_length = 50, verbose_name = u"零件图号")
-    #materiel_index = models.CharField(blank = False, max_length = 50, verbose_name = u"材料牌号")
-    #count = models.CharField(blank = True, max_length = 20, null = True, verbose_name = u"数量")
-    #remark = models.CharField(blank = True, max_length = 100, null = True, verbose_name = u"备注")
-
-
 class OrderFormStatus(models.Model):
     status = models.IntegerField(blank = False, choices = ORDERFORM_STATUS_CHOICES, verbose_name = u"订购单状态")
     next_status = models.ForeignKey('self', null = True, blank = True)
