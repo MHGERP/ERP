@@ -8,13 +8,18 @@
 {% endblock %}
 {% block inner_content%}
 <form class="form-search">
-	<input type="text" class="input-medium search-query" placeholder="input">
-	<a class="btn btn-primary" id="search_materialexecute_detail">搜索</a>
+    <div class="control-group">
+    	<input type="text"id="input_materielexecute_search"  class="input-medium search-query" placeholder="请输入单据编号">
+	    <a class="btn btn-primary" id="search_materielexecute">搜索</a>
+    </div>
+    <div class="control-group">
+        <a class="btn btn-primary" href="materielExecuteDetail/1">新建材料执行表</a>
+    </div>
 </form>
-<a class="btn btn-primary" href="#">新建材料执行表</a>
-<div id="materialexecute_table">
-{% include "purchasing/materialexecute/materialexecute_table.html"%}
+
+<div id="materielexecute_table">
+{% include "purchasing/materielexecute/table/materielexecute_table.html"%}
 </div>
-<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/materialexecute_management.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/materielexecute_management.js"></script>
 <script type='text/javascript' src="{{STATIC_URL}}js/bootstrap_filestyle.js"></script>
 {% endblock%}

@@ -145,45 +145,45 @@ LOGGING_OUTPUT_ENABLED = True
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-        },
-    },
-    'handlers': {
-        'null': {
-            'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
-        },
-        'console': {
-            'level': 'INFO',  #here can change the debug info!
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'propagate': True,
-            'level': 'INFO',
-        },
-        'django.request': {
-            'handlers': ['console'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-    }
+	'version': 1,
+	'disable_existing_loggers': False,
+	'formatters': {
+		'verbose': {
+			'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+		},
+	},
+	'handlers': {
+		'null': {
+			'level': 'DEBUG',
+			'class': 'django.utils.log.NullHandler',
+		},
+		'console': {
+			'level': 'INFO', #here can change the debug info!
+			'class': 'logging.StreamHandler',
+			'formatter': 'verbose'
+		},
+		'mail_admins': {
+			'level': 'ERROR',
+			'class': 'django.utils.log.AdminEmailHandler'
+		}
+	},
+	'loggers': {
+		'django': {
+		'handlers': ['console'],
+		'propagate': True,
+		'level': 'INFO',
+		},
+		'django.request': {
+			'handlers': ['console'],
+			'level': 'ERROR',
+			'propagate': False,
+		},
+		'django.db.backends': {
+			'handlers': ['console'],
+			'level': 'DEBUG',
+			'propagate': False,
+		},
+	}
 }
 
 PROCESS_FILE_PATH = join("tmp", "process_file")

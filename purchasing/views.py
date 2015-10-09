@@ -1,18 +1,22 @@
 # coding: UTF-8
 from django.shortcuts import render
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
-    PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems
+     PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems,\
+     MaterielExecute, MainMaterielExecuteDetail, SupportMaterielExecuteDetail,ProcessFollowingInfo,SupplierSelect
 from const import *
 from const.forms import InventoryTypeForm
 from const.models import WorkOrder, InventoryType, BidFormStatus
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
 
-from purchasing.forms import SupplierForm,EntryForm
+from purchasing.forms import SupplierForm,EntryForm,ProcessFollowingForm
 from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
 from django.db.models import Q
 
+from django.template.loader import render_to_string
+from django.http import HttpResponseRedirect,HttpResponse
+import json
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -169,3 +173,68 @@ def subApplyViews(request):
         "subapply_set":subapply_set,
     }
     return render(request,"purchasing/subapply_home.html",context)
+
+def processFollowingViews(request,bid):
+    bidform=BidForm.objects.get(pk=bid)
+    process_following_info=ProcessFollowingInfo.objects.filter(bidform=bidform)
+    process_following_form=ProcessFollowingForm(initial={
+        'bidform':bidform,
+        'following_date':datetime.today(),
+        'executor':request.user
+    })
+    context={
+        "bidform":bidform,
+        "process_following_info":process_following_info,
+        "process_following_form":process_following_form
+    }
+    return render(request,"purchasing/process_following.html",context)
+def materielExecuteViews(request):
+    materielexecute_set = MaterielExecute.objects.all()
+    context = {
+        "materielexecute_set":materielexecute_set,
+    }
+    return render(request, "purchasing/materielexecute/materielexecute_management.html", context)
+
+def processFollowAdd(request):
+    if request.is_ajax():
+        status=0
+        form_html=""
+        form=ProcessFollowingForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+        else:
+            form_html=render_to_string("purchasing/process_following/process_following_form.html",{"process_following_form":form})
+            status=1
+        return HttpResponse(json.dumps({'status':status,"form_html":form_html}),content_type="application/json")
+
+    """
+    mode: 0 view, 1 add
+    mid : materielexecute id
+    """
+def materielExecuteDetailViews(request, choice, *mid):
+    if choice == "0":
+        print "view"
+        materielexecute_id = mid[0]
+        print materielexecute_id
+        materielexecute = MaterielExecute.objects.get(pk = materielexecute_id)
+        materiel_choice = materielexecute.materiel_choice
+        if materiel_choice == MAIN_MATERIEL:
+            materielexecute_detail = MainMaterielExecuteexecute.objects.get(materiel_execute__id = materielexecute_id)
+        else:
+            materielexecute_detail = SupportMaterielExecuteDetail.objects.get(materiel_execute__id = materielexecute_id)
+        materielexecute_detail_set = [materielexecute_detail]
+        context = {
+            "materielexecute_detail_set" : materielexecute_detail_set,
+            "choice" : materiel_choice
+        }
+        return render(request, "purchasing/materielexecute/materielexecute_detail_view.html", context)
+    else:
+        print "add"
+        #default MAIN_MATERIEL
+        materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
+        context = {
+            "materielexecute_detail_set" : materielexecute_detail_set,
+            "choice" : MAIN_MATERIEL
+        }
+        return render(request, "purchasing/materielexecute/materielexecute_detail_add.html", context)
+

@@ -2,18 +2,20 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems,SupplierFile,SupplierSelect, BidComment
+from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems,SupplierFile,SupplierSelect, BidComment, OrderForm, MaterielExecute 
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
 from const import *
-from const.models import Materiel
+from const.models import Materiel,OrderFormStatus
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from django.db import transaction 
 from const.models import WorkOrder, Materiel
 from const.forms import InventoryTypeForm
-from purchasing.forms import SupplierForm
+from purchasing.forms import SupplierForm,ProcessFollowingForm
 from django.db.models import Q
+from datetime import datetime
+
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -181,15 +183,22 @@ def addToDetailSingle(request, index):
 
 @dajaxice_register
 def SupplierAddorChange(request,mod,supplier_form):
+    message=u"供应商添加成功！"
     if mod==-1:
         supplier_form=SupplierForm(deserialize_form(supplier_form))
-        supplier_form.save()
+        if supplier_form.is_valid():
+            supplier_form.save()
+        else:
+            message=u"添加失败,供应商编号和供应商名称不能为空！"
     else:
         supplier=Supplier.objects.get(pk=mod)
         supplier_form=SupplierForm(deserialize_form(supplier_form),instance=supplier)
-        supplier_form.save()
+        if supplier_form.is_valid():
+            supplier_form.save()
+        else:
+            message=u"修改失败,供应商编号和供应商名称不能为空！"
     table=refresh_supplier_table(request)
-    ret={"status":'0',"message":u"供应商添加成功","table":table}
+    ret={"status":'0',"message":message,"table":table}
     return simplejson.dumps(ret)
 
 def refresh_supplier_table(request):
@@ -248,6 +257,10 @@ def SupplierDelete(request,supplier_id):
     return simplejson.dumps({})
 
 @dajaxice_register
+def MaterielExecuteQuery(request,number):
+    materielexecute = MaterielExecute.objects.filter(document_number=number)
+    materielexecute_html = render_to_string("purchasing/materielexecute/materielexecute_table.html", {"materielexecute_set":materielexecute})
+    return simplejson.dumps({"materielexecute_html":materielexecute_html})
 def SelectSupplierOperation(request,selected,bid):
     bidform=BidForm.objects.get(pk=bid)
     for item in selected:
@@ -283,6 +296,8 @@ def searchSupplier(request,sid,bid):
         'html':supplier_select_html
     }
     return simplejson.dumps(data)
+
+@dajaxice_register
 def deleteDetail(request,uid):
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
@@ -308,3 +323,41 @@ def saveComment(request, form, bid_id):
     else:
         ret = {'status': '1', 'message': u"该成员不存在，请刷新页面"}
     return simplejson.dumps(ret)
+def AddProcessFollowing(request,bid,process_form):
+    process_form=ProcessFollowingForm(deserialize_form(process_form))
+    if process_form.is_valid():
+        process_form.save()
+    else:
+        print process_form.errors
+    return simplejson.dumps({})
+def newOrderSave(request,num,cDate,eDate):
+    cDate_datetime = datetime.datetime.strptime(cDate,"%Y-%m-%d")
+    eDate_datetime = datetime.datetime.strptime(eDate,"%Y-%m-%d")
+    order_status = OrderFormStatus.objects.get(status=0)
+    order_obj = OrderForm(
+        order_id = str(num),
+        create_time = cDate_datetime,
+        establishment_time = eDate_datetime,
+        order_status = order_status
+    )
+    order_obj.save()
+
+@dajaxice_register
+def newOrderFinish(request,num,cDate,eDate):
+    cDate_datetime = datetime.datetime.strptime(cDate,"%Y-%m-%d")
+    eDate_datetime = datetime.datetime.strptime(eDate,"%Y-%m-%d")
+    order_status = OrderFormStatus.objects.get(status=1)
+    order_obj = OrderForm(
+        order_id = str(num),
+        create_time = cDate_datetime,
+        establishment_time = eDate_datetime,
+        order_status = order_status
+    )
+    order_obj.save()
+    print "ddddddd"
+
+@dajaxice_register
+def newOrderDelete(request,num):
+    order = OrderForm.objects.get(order_id = num)
+    order.delete()
+    print order

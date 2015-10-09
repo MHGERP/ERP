@@ -3,8 +3,7 @@ from datetime import *
 from django import  forms
 from django.forms import ModelForm
 from purchasing.models import Supplier, bidApply, qualityPriceCard, PurchasingEntry, BidComment
-
-
+from purchasing.models import Supplier, bidApply, qualityPriceCard, PurchasingEntry,ProcessFollowingInfo
 class SupplierForm(ModelForm):
     class Meta:
         model=Supplier
@@ -45,4 +44,15 @@ class EntryForm(ModelForm):
             'purchaser':forms.TextInput(attrs={"readonly":"true",'class':'span3'}),
             'inspector':forms.TextInput(attrs={"readonly":"true",'class':'span3'}),
             'keeper':forms.TextInput(attrs={"readonly":"true",'class':'span3'}),
+
+            
         }
+
+
+class ProcessFollowingForm(ModelForm):
+    class Meta:
+        model=ProcessFollowingInfo
+        widgets={
+            "following_feedback":forms.Textarea(attrs={"rows":5})
+        }
+

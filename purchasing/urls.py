@@ -52,4 +52,19 @@ urlpatterns=patterns('',
     url(
         r'^subApply$',purchasing_views.subApplyViews,                     
     ),
+    url(
+        r'^processfollowing/(?P<bid>\w+)$',
+        purchasing_views.processFollowingViews,
+       ),
+    url(
+        r'^materielExecute$', purchasing_views.materielExecuteViews,
+    ),
+    url(
+        r'^processfollowingadd$',
+        purchasing_views.processFollowAdd,
+     ),
+    url(
+        r'^materielExecuteDetail/(\d+)/(\d+)?$',
+        purchasing_views.materielExecuteDetailViews,
+    ),
 )
