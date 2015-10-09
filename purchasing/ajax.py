@@ -2,9 +2,10 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterielExecute, SupplierSelect, OrderForm
+from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems,SupplierFile,SupplierSelect
+from purchasing.models import OrderForm, MaterielExecute, SupplierSelect
 from const import *
-from const.models import Materiel
+from const.models import Materiel,OrderFormStatus
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
@@ -13,6 +14,8 @@ from const.models import WorkOrder, Materiel
 from const.forms import InventoryTypeForm
 from purchasing.forms import SupplierForm
 from django.db.models import Q
+import datetime
+
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -306,9 +309,51 @@ def searchSupplier(request,sid,bid):
         'html':supplier_select_html
     }
     return simplejson.dumps(data)
+
+@dajaxice_register
 def deleteDetail(request,uid):
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
     item.materielpurchasingstatus.save()
     param = {"uid":uid}
     return simplejson.dumps(param)
+
+@dajaxice_register
+def newOrderSave(request,num,cDate,eDate):
+    cDate_datetime = datetime.datetime.strptime(cDate,"%Y-%m-%d")
+    eDate_datetime = datetime.datetime.strptime(eDate,"%Y-%m-%d")
+    order_status = OrderFormStatus.objects.get(status=0)
+    order_obj = OrderForm(
+        order_id = str(num),
+        create_time = cDate_datetime,
+        establishment_time = eDate_datetime,
+        order_status = order_status
+    )
+    order_obj.save()
+
+@dajaxice_register
+def newOrderFinish(request,num,cDate,eDate):
+    cDate_datetime = datetime.datetime.strptime(cDate,"%Y-%m-%d")
+    eDate_datetime = datetime.datetime.strptime(eDate,"%Y-%m-%d")
+    order_status = OrderFormStatus.objects.get(status=1)
+    order_obj = OrderForm(
+        order_id = str(num),
+        create_time = cDate_datetime,
+        establishment_time = eDate_datetime,
+        order_status = order_status
+    )
+    order_obj.save()
+
+@dajaxice_register
+def newOrderDelete(request,num):
+    order = OrderForm.objects.get(order_id = num)
+    order.delete()
+
+@dajaxice_register
+def getOrderFormItems(request, index):
+    items = Materiel.objects.filter(materielformconnection__order_form__order_id = index)
+    context = {
+        "items": items,
+    }
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", context)
+    return html

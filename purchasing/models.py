@@ -18,16 +18,6 @@ class OrderForm(models.Model):
     def __unicode__(self):
         return self.order_id
 
-
-class MaterielOrderFormConnction(models.Model):
-    materiel = models.OneToOneField(Materiel, blank = False)
-    order_form = models.ForeignKey(OrderForm, blank = False)
-    class Meta:
-        verbose_name = u"物料——订购单——关联表"
-        verbose_name_plural = u"物料——订购单——关联表"
-    def __unicode__(self):
-        return "connection between %s and %s" % (self.materiel.name, self.order_form.order_id)
-
 class BidForm(models.Model):
     bid_id=models.CharField(unique=True,max_length=20,blank=False,verbose_name=u"标单编号")
     create_time=models.DateTimeField(null=True,verbose_name=u"创建日期")
