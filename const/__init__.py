@@ -56,9 +56,9 @@ BIDFORM_PART_STATUS_CHOICES=(
 IDENTITYERROR = "登录帐号或密码有错误！"
 
 ORDERFORM_STATUS_CHOICES = (
-    (0, u"订购单创建"),
-    (1, u"订购单完成"),
-    (2, u"订购单终止"),
+    (0, u"创建中订购单"),
+    (1, u"创建完成订购单"),
+    (2, u"已终止历史订购单"),
 )
 
 INVENTORY_TYPE = (
@@ -86,7 +86,14 @@ INDEX_LIST = tuple(
 
 ARRIVAL_CHECK_FIELDS = {"mat":"material_confirm","sof":"soft_confirm","ins":"inspect_confirm"}
 
+REVIEW_COMMENTS_CHOICES = (
+    (-1,u"未审核"),
+    (0,u"通过"),
+    (1,u"不通过"),
+)
+MAIN_MATERIEL = "main_materiel"
+SUPPORT_MATERIEL = "support_materiel"
 MATERIEL_CHOICE = (
-    ("主材", u"主材"),
-    ("辅材", u"辅材"),
+    (MAIN_MATERIEL, u"主材"),
+    (SUPPORT_MATERIEL, u"辅材"),
 )

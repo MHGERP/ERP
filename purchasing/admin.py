@@ -17,6 +17,11 @@ RegisterClass = (
     SupplierSelect,
     MaterialSubApply,
     MaterialSubApplyItems,
+    BidComment,
+    MaterielExecute,
+    MainMaterielExecuteDetail,
+    SupportMaterielExecuteDetail,
+    ProcessFollowingInfo,
 )
 
 for item in RegisterClass:
