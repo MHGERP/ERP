@@ -1,18 +1,19 @@
 # coding: UTF-8
 from django.shortcuts import render
 from django.db.models import Q
-from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
-    PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems,\
-    MaterielExecute, OrderForm
+from purchasing.models import *
 from const import *
 from const.forms import InventoryTypeForm
-from const.models import WorkOrder, InventoryType
-from purchasing.forms import BidApplyForm, QualityPriceCardForm
-from purchasing.forms import SupplierForm,EntryForm, OrderFormStatusForm
+from const.models import WorkOrder, InventoryType, BidFormStatus
+from purchasing.forms import *
 from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
+from django.db.models import Q
 
+from django.template.loader import render_to_string
+from django.http import HttpResponseRedirect,HttpResponse
+import json
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -90,23 +91,30 @@ def supplierManagementViews(request):
     }
     return render(request,"purchasing/supplier/supplier_management.html",context)
 
-
+@csrf.csrf_protect
 def bidTrackingViews(request):
     """
     Liu Ye
     """
+    bid_id = 444
+    bid = BidForm.objects.get(bid_id = bid_id)
     qualityPriceCardForm = QualityPriceCardForm()
     bidApplyForm = BidApplyForm()
-
+    bidCommentForm = BidCommentForm()
+    bidComments = BidComment.objects.filter(Q(bid = bid))
+    bidForm = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
     bid_status = []
-    bid_status.append({"name":u"招标申请表",         "class":"btn-success"})
-    bid_status.append({"name":u"分公司领导批准",     "class":"btn-success"})
-    bid_status.append({"name":u"滨海公司领导批准",   "class":""})
-    bid_status.append({"name":u"滨海招标办领导批准", "class":"btn-danger"})
-    bid_status.append({"name":u"中标通知书",         "class":""})
+    for status in bidForm:
+        bid_dict = {}
+        bid_dict["name"] = status
+        bid_dict["class"] = "btn-success"
+        bid_status.append(bid_dict)
+
     context = {"bid_status": bid_status,
                "qualityPriceCardForm": qualityPriceCardForm,
                "bidApplyForm": bidApplyForm,
+               "bidCommentForm": bidCommentForm,
+               "bidComments": bidComments,
              }
     return render(request, "purchasing/bid_track.html", context)
 
@@ -190,9 +198,71 @@ def orderFormViews(request):
     }
     return render(request, "purchasing/order_form.html", context)
 
+def processFollowingViews(request,bid):
+    bidform=BidForm.objects.get(pk=bid)
+    process_following_info=ProcessFollowingInfo.objects.filter(bidform=bidform)
+    process_following_form=ProcessFollowingForm(initial={
+        'bidform':bidform,
+        'following_date':datetime.today(),
+        'executor':request.user
+    })
+    context={
+        "bidform":bidform,
+        "process_following_info":process_following_info,
+        "process_following_form":process_following_form
+    }
+    return render(request,"purchasing/process_following.html",context)
+
 def materielExecuteViews(request):
     materielexecute_set = MaterielExecute.objects.all()
     context = {
         "materielexecute_set":materielexecute_set,
     }
     return render(request, "purchasing/materielexecute/materielexecute_management.html", context)
+
+def processFollowAdd(request):
+    if request.is_ajax():
+        status=0
+        form_html=""
+        form=ProcessFollowingForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+        else:
+            form_html=render_to_string("purchasing/process_following/process_following_form.html",{"process_following_form":form})
+            status=1
+        return HttpResponse(json.dumps({'status':status,"form_html":form_html}),content_type="application/json")
+
+    """
+    mode: 0 view, 1 add
+    mid : materielexecute id
+    """
+def materielExecuteDetailViews(request, choice, *mid):
+    if choice == "0":
+        #print "view"
+        materielexecute_id = mid[0]
+        #print materielexecute_id
+        materielexecute = MaterielExecute.objects.get(pk = materielexecute_id)
+        materiel_choice = materielexecute.materiel_choice
+        print materiel_choice
+        print MAIN_MATERIEL
+        print MATERIEL_CHOICE[1][1]
+        if materiel_choice == MAIN_MATERIEL:
+            materielexecute_detail = MainMaterielExecuteDetail.objects.get(materiel_execute__id = materielexecute_id)
+        else:
+            materielexecute_detail = SupportMaterielExecuteDetail.objects.get(materiel_execute__id = materielexecute_id)
+        materielexecute_detail_set = [materielexecute_detail]
+        context = {
+            "materielexecute_detail_set" : materielexecute_detail_set,
+            "choice" : materiel_choice
+        }
+        return render(request, "purchasing/materielexecute/materielexecute_detail_view.html", context)
+    else:
+        print "add"
+        #default MAIN_MATERIEL
+        materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
+        context = {
+            "materielexecute_detail_set" : materielexecute_detail_set,
+            "choice" : MAIN_MATERIEL
+        }
+        return render(request, "purchasing/materielexecute/materielexecute_detail_add.html", context)
+

@@ -109,7 +109,6 @@ class Supplier(models.Model):
         return '%s'% (self.supplier_name)
 
 class SupplierFile(models.Model):
-
     project = models.ForeignKey(Supplier)
     name = models.CharField(max_length=100, blank=False, verbose_name="文件名称")
     file_obj = models.FileField(upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d",verbose_name="文件对象")
@@ -221,43 +220,56 @@ class MaterielExecute(models.Model):
         verbose_name = u"材料执行表"
         verbose_name_plural = u"材料执行表"
     def __unicode__(self):
-        return self.document_number
+        return '%s' % self.document_number
 
 class MainMaterielExecuteDetail(models.Model):
     materiel_execute = models.OneToOneField(MaterielExecute)
-    materiel_name = models.CharField(max_length=50, blank=False, verbose_name = u"")
+    materiel_name = models.CharField(max_length=50, blank=False, verbose_name = u"名称")
     materiel_texture = models.ForeignKey(Materiel, verbose_name = u"材质")
-    quality_class = models.CharField(max_length=20, blank=False, verbose_name = u"")
-    specification = models.CharField(max_length=100, blank=False, verbose_name= u"")
-    quantity = models.IntegerField(verbose_name = u"")
-    purchase_weight = models.FloatField(verbose_name = u"")
-    recheck = models.BooleanField(default = False, verbose_name = u"")
-    crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"")
-    delivery_status = models.CharField(max_length = 50, blank = False, verbose_name = u"")
-    execute_standard = models.CharField(max_length = 100, blank = False, verbose_name = u"")
-    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"") 
+    quality_class = models.CharField(max_length=20, blank=False, verbose_name = u"质量分类")
+    specification = models.CharField(max_length=100, blank=False, verbose_name= u"规格")
+    quantity = models.IntegerField(verbose_name = u"数量")
+    purchase_weight = models.FloatField(verbose_name = u"采购")
+    recheck = models.BooleanField(default = False, verbose_name = u"复验")
+    crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"探伤级别")
+    delivery_status = models.CharField(max_length = 50, blank = False, verbose_name = u"交货状态")
+    execute_standard = models.CharField(max_length = 100, blank = False, verbose_name = u"执行标准")
+    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"备注") 
     class Meta:
-        verbose_name = u"材料执行表详细"
-        verbose_name_plural = u"材料执行表详细"
+        verbose_name = u"主材材料执行表详细"
+        verbose_name_plural = u"主材材料执行表详细"
     def __unicode__(self):
-        return self.materiel_execute
+        return "%s(%s)" % (self.materiel_execute.document_number, self.materiel_texture.index)
 
+class ProcessFollowingInfo(models.Model):
+    bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
+    following_date=models.DateField(blank=False,null=False,verbose_name=u"跟踪日期")
+    following_method=models.CharField(blank=False,null=False,max_length=20,verbose_name=u"跟踪方式")
+    following_feedback=models.CharField(blank=False,null=False,max_length=500,verbose_name=u"跟踪反馈")
+    file_obj = models.FileField(blank=True,upload_to=settings.PROCESS_FILE_PATH +"/%Y/%m/%d",verbose_name="文件对象")
+    executor=models.ForeignKey(User,verbose_name=u"执行人")
+    inform_tech=models.BooleanField(default=False,verbose_name=u"是否通知工艺")
+    class Meta:
+        verbose_name = u"过程跟踪记录"
+        verbose_name_plural = u"过程跟踪记录"
+    def __unicode__(self):
+        return self.bidform.bid_id
 class SupportMaterielExecuteDetail(models.Model):
     materiel_execute = models.OneToOneField(MaterielExecute)
-    materiel_texure = models.ForeignKey(Materiel, blank = False, verbose_name = u"")
-    texture_number = models.CharField(max_length = 100, blank = False, verbose_name = u"")
-    specification = models.CharField(max_length = 100, blank = False, verbose_name = u"")
-    quantity = models.IntegerField(verbose_name = u"")
-    delivery_status = models.CharField(max_length = 50, blank = False, verbose_name = u"")
-    press = models.CharField(max_length = 50, blank = False, verbose_name = u"")
-    crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"")
-    recheck = models.BooleanField(default = False, verbose_name = u"")
-    quota = models.CharField(max_length = 50, blank = True, verbose_name = u"")
-    part = models.CharField(max_length = 50, blank = True, verbose_name = u"")
-    oddments = models.CharField(max_length = 50, blank = True, verbose_name = u"")
-    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"")
+    materiel_texture = models.ForeignKey(Materiel, blank = False, verbose_name = u"材质")
+    texture_number = models.CharField(max_length = 100, blank = False, verbose_name = u"材质编号")
+    specification = models.CharField(max_length = 100, blank = False, verbose_name = u"规格")
+    quantity = models.IntegerField(verbose_name = u"数量")
+    delivery_status = models.CharField(max_length = 50, blank = False, verbose_name = u"交货状态")
+    press = models.CharField(max_length = 50, blank = False, verbose_name = u"受压")
+    crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"探伤级别")
+    recheck = models.BooleanField(default = False, verbose_name = u"复验")
+    quota = models.CharField(max_length = 50, blank = True, verbose_name = u"定额")
+    part = models.CharField(max_length = 50, blank = True, verbose_name = u"零件")
+    oddments = models.CharField(max_length = 50, blank = True, verbose_name = u"余料")
+    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"备注")
     class Meta:
-        verbose_name = u""
-        verbose_name_plural = u""
+        verbose_name = u"辅材材料执行表详细"
+        verbose_name_plural = u"辅材材料执行表详细"
     def __unicode__(self):
-        return self.materiel_execute
+        return "%s(%s)" % (self.materiel_execute.document_number, self.materiel_texture.index)
