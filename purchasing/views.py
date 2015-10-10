@@ -1,5 +1,6 @@
 # coding: UTF-8
 from django.shortcuts import render
+from django.db.models import Q
 from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
     PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems,\
     MaterielExecute, OrderForm
@@ -182,8 +183,10 @@ def orderFormViews(request):
     """
     index = request.GET.get("index")
     order_form = OrderForm.objects.get(order_id = index)
+    bid_form_list = BidForm.objects.filter(Q(bid_status__part_status = BIDFORM_PART_STATUS_CREATE) | Q(bid_status__part_status = BIDFORM_PART_STATUS_ESTABLISHMENT))
     context = {
         "order_form": order_form,
+        "bid_form_list": bid_form_list,
     }
     return render(request, "purchasing/order_form.html", context)
 
