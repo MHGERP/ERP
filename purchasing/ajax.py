@@ -444,24 +444,36 @@ def newOrderDelete(request,num):
     order.delete()
 
 @dajaxice_register
-def getOrderFormItems(request, index):
+def getOrderFormItems(request, index, can_choose = False):
     """
     JunHU
     """
     items = Materiel.objects.filter(materielformconnection__order_form__order_id = index)
     context = {
         "items": items,
+        "can_choose": can_choose,
     }
     html = render_to_string("purchasing/orderform/orderform_item_list.html", context)
     return html
 
 @dajaxice_register
+def getOngoingBidList(request):
+    """
+    JunHU
+    """
+    bid_form_list = BidForm.objects.filter(Q(bid_status__part_status = BIDFORM_PART_STATUS_CREATE) | Q(bid_status__part_status = BIDFORM_PART_STATUS_ESTABLISHMENT))
+    html = ''.join("<option value='%s'>%s</option>" % (bid.id, bid) for bid in bid_form_list)
+    return html
+
+@dajaxice_register
 def newBidCreate(request):
+    """
+    JunHU
+    """
     cDate_datetime = datetime.now()
-    print datetime.now()
     bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_CREATE)
     bid_form = BidForm(
-        bid_id = "2015000%d" % (BidForm.objects.count()),
+        bid_id = "2015%04d" % (BidForm.objects.count()),
         create_time = cDate_datetime,
         bid_status = bid_status,
     )
@@ -474,6 +486,14 @@ def newBidCreate(request):
     return simplejson.dumps(context)
 
 @dajaxice_register
+def newBidFinish(request, id):
+    """
+    JunHu
+    """
+    bid_form = BidForm.objects.get(id = id)
+    bid_form.bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_APPROVED) # change the part-status into approved
+
+@dajaxice_register
 def getBidForm(request, bid_id):
     """
     JunHU
@@ -483,6 +503,7 @@ def getBidForm(request, bid_id):
     html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items})
     context = {
             "bid_id": bid_form.bid_id,
+            "id": bid_form.id,
             "html": html,
         }
 
