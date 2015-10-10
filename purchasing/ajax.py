@@ -6,7 +6,7 @@ from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry
 from purchasing.models import OrderForm, MaterielExecute, SupplierSelect, BidForm
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
 from const import *
-from const.models import Materiel,OrderFormStatus
+from const.models import Materiel,OrderFormStatus, BidFormStatus
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
@@ -382,9 +382,45 @@ def newOrderDelete(request,num):
 
 @dajaxice_register
 def getOrderFormItems(request, index):
+    """
+    JunHU
+    """
     items = Materiel.objects.filter(materielformconnection__order_form__order_id = index)
     context = {
         "items": items,
     }
     html = render_to_string("purchasing/orderform/orderform_item_list.html", context)
     return html
+
+@dajaxice_register
+def newBidCreate(request):
+    cDate_datetime = datetime.now()
+    print datetime.now()
+    bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_CREATE)
+    bid_form = BidForm(
+        bid_id = "2015000%d" % (BidForm.objects.count()),
+        create_time = cDate_datetime,
+        bid_status = bid_status,
+    )
+    bid_form.save()
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
+    context = {
+        "bid_id": bid_form.bid_id,
+        "html": html,
+    }
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def getBidForm(request, bid_id):
+    """
+    JunHU
+    """
+    bid_form = BidForm.objects.get(id = bid_id)
+    items = Materiel.objects.filter(materielformconnection__bid_form = bid_form)
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items})
+    context = {
+            "bid_id": bid_form.bid_id,
+            "html": html,
+        }
+
+    return simplejson.dumps(context)
