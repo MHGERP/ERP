@@ -1,6 +1,7 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
+            <th>是否加入订购单</th>
             <th>序号</th>
             <th>工作令编号</th>
             <th>名称及规格</th>
@@ -16,6 +17,7 @@
     </thead>
     {% for item in inventory_detail_list%}
     <tr iid="{{item.id}}">
+        <td><input type="checkbox"></td>
         <td>{{forloop.counter}}</td>
         <td>{{item.order.order_index}}</td>
         <td>{{item.name}}</td>
