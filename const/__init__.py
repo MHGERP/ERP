@@ -86,7 +86,11 @@ INDEX_LIST = tuple(
 
 ARRIVAL_CHECK_FIELDS = {"mat":"material_confirm","sof":"soft_confirm","ins":"inspect_confirm"}
 
-
+REVIEW_COMMENTS_CHOICES = (
+    (-1,u"未审核"),
+    (0,u"通过"),
+    (1,u"不通过"),
+)
 MAIN_MATERIEL = "main_materiel"
 SUPPORT_MATERIEL = "support_materiel"
 MATERIEL_CHOICE = (

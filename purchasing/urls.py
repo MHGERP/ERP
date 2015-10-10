@@ -50,7 +50,16 @@ urlpatterns=patterns('',
         r'^materialEntry$',purchasing_views.materialEntryViews,                     
     ),
     url(
-        r'^subApply$',purchasing_views.subApplyViews,                     
+        r'^subApplyHome/$',purchasing_views.subApplyHomeViews,                     
+    ),
+    url(
+        r'^subApply/$',purchasing_views.subApplyViews                     
+    ),
+    url(
+        r'^subApply/(?P<sid>\w+)/$',purchasing_views.subApplyViews                     
+    ),
+    url(
+        r'^subApplyReview/(?P<sid>\w+)/$',purchasing_views.subApplyReviewViews                     
     ),
     url(
         r'^orderFormManage$',

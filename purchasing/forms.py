@@ -2,7 +2,8 @@
 from datetime import *
 from django import  forms
 from django.forms import ModelForm
-from purchasing.models import Supplier, bidApply, qualityPriceCard, PurchasingEntry, BidComment, ProcessFollowingInfo
+from purchasing.models import Supplier,PurchasingEntry,MaterialSubApply,MaterialSubApplyItems,\
+        bidApply, qualityPriceCard,BidComment, ProcessFollowingInfo
 from const import ORDERFORM_STATUS_CHOICES
 
 class SupplierForm(ModelForm):
@@ -66,3 +67,23 @@ class ProcessFollowingForm(ModelForm):
             "following_feedback":forms.Textarea(attrs={"rows":5})
         }
 
+class SubApplyForm(ModelForm):
+    class Meta:
+        model = MaterialSubApply
+        exclude = ('id','is_submit','proposer','comments','is_approval')
+        widgets = {
+            "reasons":forms.Textarea(attrs={'cols':'80','rows':'5'}),
+        }
+
+class SubApplyInspectForm(ModelForm):
+    class Meta:
+        model = MaterialSubApply
+        exclude = ('id','is_submit','proposer')
+        widgets = {
+            "reasons":forms.Textarea(attrs={'cols':'80','rows':'5'}),
+            "comments":forms.Textarea(attrs={'cols':'80','rows':'5'})
+        }
+class SubApplyItemForm(ModelForm):
+    class Meta:
+        model = MaterialSubApplyItems
+        exclude = ('id','sub_apply')

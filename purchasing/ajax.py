@@ -2,7 +2,7 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems,SupplierFile,SupplierSelect
+from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterialSubApplyItems,MaterialSubApply
 from purchasing.models import OrderForm, MaterielExecute, SupplierSelect, BidForm
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
 from const import *
@@ -13,7 +13,8 @@ from django.contrib.auth.models import User
 from django.db import transaction 
 from const.models import WorkOrder, Materiel
 from const.forms import InventoryTypeForm
-from purchasing.forms import SupplierForm,ProcessFollowingForm
+from django.http import HttpResponseRedirect
+from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm
 from django.db.models import Q
 from datetime import datetime
 
@@ -277,6 +278,36 @@ def SupplierDelete(request,supplier_id):
     supplier.delete()
     return simplejson.dumps({})
 
+
+@dajaxice_register
+def addChangeItem(request,subform,sid,item_id = None):
+    subapply = MaterialSubApply.objects.get(id = sid)
+    flag = True
+    try:
+        if item_id == None:
+            subform = SubApplyItemForm(deserialize_form(subform))
+            if subform.is_valid():
+                subitem = subform.save(commit = False)
+                subitem.sub_apply = subapply
+                subitem.save()
+            else:
+                flag = False
+        else:
+            item = MaterialSubApplyItems.objects.get(id = item_id)
+            subform = SubApplyItemForm(deserialize_form(subform),instance = item)
+            if subform.is_valid():
+                subform.save()
+            else:
+                flag = False
+    except Exception,e:
+        print e
+    sub_item_set = MaterialSubApplyItems.objects.filter(sub_apply = subapply)
+    sub_table_html = render_to_string("purchasing/widgets/sub_table.html",{"sub_set":sub_item_set})
+    data = {
+        "flag":flag,
+        "html":sub_table_html,
+    }
+    return simplejson.dumps(data)
 @dajaxice_register
 def MaterielExecuteQuery(request,number):
     materielexecute = MaterielExecute.objects.filter(document_number=number)
@@ -319,6 +350,26 @@ def searchSupplier(request,sid,bid):
     return simplejson.dumps(data)
 
 @dajaxice_register
+def addSubApply(request):
+    subapply = MaterialSubApply( proposer = request.user)
+    subapply.save()
+    url = "/purchasing/subApply/"+str(subapply.id)
+    return simplejson.dumps({"url":url})
+
+@dajaxice_register
+def deleteItem(request,item_id,sid):
+    item_obj = MaterialSubApplyItems.objects.get(id = item_id)
+    subapply = MaterialSubApply.objects.get(id = sid)
+    if item_obj.sub_apply.id == subapply.id:
+        try:
+            item_obj.delete()
+            flag = True
+        except Exception,e:
+            print e
+    else:
+        flag = False
+    return simplejson.dumps({"item_id":item_obj.id,"flag":flag})
+
 def deleteDetail(request,uid):
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False

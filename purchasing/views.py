@@ -4,6 +4,7 @@ from django.db.models import Q
 from purchasing.models import *
 from const import *
 from const.forms import InventoryTypeForm
+from django.http import HttpResponseRedirect
 from const.models import WorkOrder, InventoryType, BidFormStatus
 from purchasing.forms import *
 from datetime import datetime
@@ -165,15 +166,64 @@ def materialEntryViews(request):
     }
     return render(request,"purchasing/purchasing_materialentry.html",context)
 
-def subApplyViews(request):
+def subApplyHomeViews(request):
     if request.method == "POST":
-        sub_id = request.POST["subapply_search"]
-        subapply_set = MaterialSubApply.objects.filter(id = sub_id)
-    subapply_set = MaterialSubApply.objects.all() 
+        receipts_code = request.POST["subapply_search"]
+        subapply_set = MaterialSubApply.objects.filter(receipts_code = receipts_code)
+    else:
+        subapply_set = MaterialSubApply.objects.filter(is_submit = True) 
     context = {
         "subapply_set":subapply_set,
     }
     return render(request,"purchasing/subapply_home.html",context)
+
+@csrf.csrf_protect
+def subApplyViews(request,sid = None):
+    is_show = False
+    subapply_obj = MaterialSubApply.objects.get(id = sid)
+    if request.method == "POST":
+        subapply_form = SubApplyForm(request.POST,instance = subapply_obj)
+        if subapply_form.is_valid():
+            subapply_form.save()
+            subapply_obj.is_submit = True
+            subapply_obj.save()
+            return HttpResponseRedirect("/purchasing/subApplyHome/")
+    else:
+        subapply_form = SubApplyForm(instance = subapply_obj)
+    sub_set = MaterialSubApplyItems.objects.filter(sub_apply__id = sid)
+    subitem_form = SubApplyItemForm()
+    context = {
+        "subapply_form":subapply_form,
+        "is_show":is_show,
+        "sub_set":sub_set,
+        "subitem_form":subitem_form,
+        "subapply":subapply_obj,
+    }
+    return render(request,"purchasing/subapplication.html",context)
+
+@csrf.csrf_protect
+def subApplyReviewViews(request,sid = None):
+    is_show = True
+    subapply_obj = MaterialSubApply.objects.get(id = sid)
+    if request.method == "POST":
+        subapply_form = SubApplyInspectForm(request.POST,instance = subapply_obj)
+        if subapply_form.is_valid():
+            subapply_form.save()
+            subapply_obj.is_submit = True
+            subapply_obj.save()
+            return HttpResponseRedirect("/purchasing/subApplyHome/")
+    else:
+        subapply_form = SubApplyInspectForm(instance = subapply_obj)
+    sub_set = MaterialSubApplyItems.objects.filter(sub_apply__id = sid)
+    subitem_form = SubApplyItemForm()
+    context = {
+        "subapply_form":subapply_form,
+        "is_show":is_show,
+        "sub_set":sub_set,
+        "subitem_form":subitem_form,
+        "subapply":subapply_obj,
+    }
+    return render(request,"purchasing/subapplication.html",context)
 
 def orderFormManageViews(request):
     """
