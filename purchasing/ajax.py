@@ -330,4 +330,3 @@ def newOrderFinish(request,num,cDate,eDate):
 def newOrderDelete(request,num):
     order = OrderForm.objects.get(order_id = num)
     order.delete()
-    print order
