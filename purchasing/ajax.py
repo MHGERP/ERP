@@ -6,7 +6,7 @@ from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,Pu
 from purchasing.models import OrderForm, MaterielExecute, SupplierSelect, BidForm
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
 from const import *
-from const.models import Materiel,OrderFormStatus
+from const.models import Materiel,OrderFormStatus, BidFormStatus
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
@@ -51,21 +51,32 @@ def checkArrival(request,aid,cid):
 @dajaxice_register
 @transaction.commit_manually
 def genEntry(request,bid):
+    flag = False
+    message = ""
     try:
         bidform = BidForm.objects.get(bid_id = bid)
         user = request.user
-        purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
-        purchasingentry.save()
+        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
+            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
+            purchasingentry.save()
+            flag = True
+        else:
+            message = u"入库单已经存在，请勿重复提交"
     except Exception, e:
         transaction.rollback()
         print e
-    flag = isAllChecked(bid,purchasingentry)
+
+    flag = flag and isAllChecked(bid,purchasingentry)
     if flag:
         transaction.commit()
+        message = u"入库单生成成功"
     else:
         transaction.rollback()
+        if message =="":
+            message = u"入库单生成失败，有未确认的项，请仔细检查"
     data = {
         'flag':flag,
+        'message':message,
     }
     return simplejson.dumps(data)
 
@@ -372,6 +383,7 @@ def deleteItem(request,item_id,sid):
         flag = False
     return simplejson.dumps({"item_id":item_obj.id,"flag":flag})
 
+@dajaxice_register
 def deleteDetail(request,uid):
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
@@ -434,10 +446,14 @@ def newOrderDelete(request,num):
     order.delete()
 
 @dajaxice_register
-def getOrderFormItems(request, index):
+def getOrderFormItems(request, index, can_choose = False):
+    """
+    JunHU
+    """
     items = Materiel.objects.filter(materielformconnection__order_form__order_id = index)
     context = {
         "items": items,
+        "can_choose": can_choose,
     }
     html = render_to_string("purchasing/orderform/orderform_item_list.html", context)
     return html
@@ -460,3 +476,54 @@ def ProcessFollowingSubmit(request,bid):
     status=0
     return simplejson.dumps({"status":status})
     
+def getOngoingBidList(request):
+    """
+    JunHU
+    """
+    bid_form_list = BidForm.objects.filter(Q(bid_status__part_status = BIDFORM_PART_STATUS_CREATE) | Q(bid_status__part_status = BIDFORM_PART_STATUS_ESTABLISHMENT))
+    html = ''.join("<option value='%s'>%s</option>" % (bid.id, bid) for bid in bid_form_list)
+    return html
+
+@dajaxice_register
+def newBidCreate(request):
+    """
+    JunHU
+    """
+    cDate_datetime = datetime.now()
+    bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_CREATE)
+    bid_form = BidForm(
+        bid_id = "2015%04d" % (BidForm.objects.count()),
+        create_time = cDate_datetime,
+        bid_status = bid_status,
+    )
+    bid_form.save()
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
+    context = {
+        "bid_id": bid_form.bid_id,
+        "html": html,
+    }
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def newBidFinish(request, id):
+    """
+    JunHu
+    """
+    bid_form = BidForm.objects.get(id = id)
+    bid_form.bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_APPROVED) # change the part-status into approved
+
+@dajaxice_register
+def getBidForm(request, bid_id):
+    """
+    JunHU
+    """
+    bid_form = BidForm.objects.get(id = bid_id)
+    items = Materiel.objects.filter(materielformconnection__bid_form = bid_form)
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items})
+    context = {
+            "bid_id": bid_form.bid_id,
+            "id": bid_form.id,
+            "html": html,
+        }
+
+    return simplejson.dumps(context)

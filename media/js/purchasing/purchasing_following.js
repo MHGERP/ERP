@@ -33,10 +33,10 @@ function gen_entry(bid){
 
 function gen_entry_callback(data){
     if(data.flag){
-        alert("入库单生成成功");
+        alert(data.message);
     }
     else{
-        alert("入库单生成失败，有未确认的项,请仔细检查");
+        alert(data.message);
     }
 }
 
