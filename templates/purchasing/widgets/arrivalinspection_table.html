@@ -17,10 +17,10 @@
         <tr aid="{{cargo.id}}">
             <td>{{forloop.counter}}</td>
             <td>{{cargo.material.name}}</td>
+            <td>{{cargo.material.schematic_index}}</td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>           
+            <td>{{cargo.material.count}}</td>           
             <td><button cid="mat" class="btn {% if cargo.material_confirm %} btn-success {%endif%}">实&nbsp&nbsp物</button></td>
             <td><button cid="sof" class="btn {% if cargo.soft_confirm %} btn-success {%endif%}">软&nbsp&nbsp件</button></td>
             <td><button cid="ins" class="btn {% if cargo.inspect_confirm %} btn-success {%endif%}">检&nbsp&nbsp验</button></td>

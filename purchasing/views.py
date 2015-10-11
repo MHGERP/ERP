@@ -135,9 +135,11 @@ def arrivalInspectionViews(request):
 
 def arrivalCheckViews(request,bid):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
+    is_exist = PurchasingEntry.objects.filter(bidform__bid_id = bid).count() > 0
     context = {
         "cargo_set":cargo_set,
         "bid":bid,
+        "is_exist":is_exist,
     }
     return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 
@@ -151,12 +153,11 @@ def inventoryTableViews(request):
     }
     return render(request, "purchasing/inventory_table_base.html", context)
 
-def materialEntryViews(request):
+def materialEntryViews(request,bid):
     try:
-        purchasingentry = PurchasingEntry.objects.get(bidform = 8)
+        purchasingentry = PurchasingEntry.objects.get(bidform__bid_id = bid)
         entry_set = PurchasingEntryItems.objects.filter(purchasingentry = purchasingentry)
         entry_form = EntryForm(instance = purchasingentry)
-        print purchasingentry.entry_time
     except Exception,e:
         print e
     context = {

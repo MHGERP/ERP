@@ -47,13 +47,10 @@ urlpatterns=patterns('',
         purchasing_views.inventoryTableViews,  
     ),
     url(
-        r'^materialEntry$',purchasing_views.materialEntryViews,                     
+        r'^materialEntry/(?P<bid>\w+)/$',purchasing_views.materialEntryViews, name="mat_entry",                   
     ),
     url(
         r'^subApplyHome/$',purchasing_views.subApplyHomeViews,                     
-    ),
-    url(
-        r'^subApply/$',purchasing_views.subApplyViews                     
     ),
     url(
         r'^subApply/(?P<sid>\w+)/$',purchasing_views.subApplyViews                     

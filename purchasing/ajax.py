@@ -51,21 +51,32 @@ def checkArrival(request,aid,cid):
 @dajaxice_register
 @transaction.commit_manually
 def genEntry(request,bid):
+    flag = False
+    message = ""
     try:
         bidform = BidForm.objects.get(bid_id = bid)
         user = request.user
-        purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
-        purchasingentry.save()
+        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
+            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
+            purchasingentry.save()
+            flag = True
+        else:
+            message = u"入库单已经存在，请勿重复提交"
     except Exception, e:
         transaction.rollback()
         print e
-    flag = isAllChecked(bid,purchasingentry)
+
+    flag = flag and isAllChecked(bid,purchasingentry)
     if flag:
         transaction.commit()
+        message = u"入库单生成成功"
     else:
         transaction.rollback()
+        if message =="":
+            message = u"入库单生成失败，有未确认的项，请仔细检查"
     data = {
         'flag':flag,
+        'message':message,
     }
     return simplejson.dumps(data)
 

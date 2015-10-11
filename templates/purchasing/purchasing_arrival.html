@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block sub_ref %}
-<a href="#" class="current">到货检验</a>
+<a href="/purchasing/arrivalInspection" class="current">到货检验</a>
 {% endblock %}
 {% block inner_content%}
 <link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
@@ -28,13 +28,17 @@
                 <tr>
                     <th>标单编号</th>
                     <th>标单状态</th>
+                    <th>到货检验</th>
+                    <th>入库确认</th>
                 </tr>
             </thead>
             <tbody>
                 {%for bid in bidFormSet %}
                 <tr>
-                    <td><a  href="{% url arrivalCheck  bid.bid_id %}" >{{bid.bid_id}}</a></td>
+                    <td>{{bid.bid_id}}</td>
                     <td>{{bid.bid_status}}</td>
+                    <td><a type="btn" class="btn" href="{% url arrivalCheck  bid.bid_id %}" >到货检验</a></td>
+                    <td><a type="btn" class="btn" href="{% url mat_entry  bid.bid_id %}" >入库确认</a></td>
                 </tr>
                 {%endfor%}
             </tbody>

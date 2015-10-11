@@ -1,6 +1,7 @@
 # coding: UTF-8
 from django.db import models
 from const import *
+from django.contrib.auth.models import User
 
 class WorkOrder(models.Model):
     order_index = models.CharField(blank = False, unique = True, max_length = 20, verbose_name = u"工作令编号")
@@ -78,16 +79,6 @@ class BidFormStatus(models.Model):
         return self.get_part_status_display()
 
 
-
-#class BidFormItem(models.Model):
-    #name = models.CharField(blank = True, max_length = 20, verbose_name = u"名称")
-    #spec = models.CharField(blank = True, max_length = 20, verbose_name = u"规格")
-    #schematic_index = models.CharField(blank = False, max_length = 50, verbose_name = u"零件图号")
-    #materiel_index = models.CharField(blank = False, max_length = 50, verbose_name = u"材料牌号")
-    #count = models.CharField(blank = True, max_length = 20, null = True, verbose_name = u"数量")
-    #remark = models.CharField(blank = True, max_length = 100, null = True, verbose_name = u"备注")
-
-
 class OrderFormStatus(models.Model):
     status = models.IntegerField(blank = False, choices = ORDERFORM_STATUS_CHOICES, verbose_name = u"订购单状态")
     next_status = models.ForeignKey('self', null = True, blank = True)
@@ -104,3 +95,17 @@ class ImplementClassChoices(models.Model):
         verbose_name_plural = u"实施类别"
     def __unicode__(self):
         return self.get_category_display()
+
+
+class StatusChange(models.Model):
+    original_status=models.ForeignKey(BidFormStatus,related_name="original",null=False,verbose_name=u"原状态")
+    new_status=models.ForeignKey(BidFormStatus,null=False,related_name="new",verbose_name=u"新状态")
+    change_user=models.ForeignKey(User,null=False,verbose_name=u"更改用户")
+    change_time=models.DateTimeField(null=False,verbose_name=u"更改时间")
+    normal_change=models.BooleanField(default=True,verbose_name=u"是否正常更改")
+    class Meta:
+        verbose_name = u"状态更改"
+        verbose_name_plural = u"状态更改"
+    def __unicode__(self):
+        return "from %s to %s"%(self.original_status,self.new_status)
+
