@@ -370,6 +370,7 @@ def deleteItem(request,item_id,sid):
         flag = False
     return simplejson.dumps({"item_id":item_obj.id,"flag":flag})
 
+@dajaxice_register
 def deleteDetail(request,uid):
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
