@@ -14,6 +14,8 @@
 <div id="process_following_table" bid={{bidform.id}}>
     {% include "purchasing/process_following/process_following_table.html"%}
 </div>
+
+
 <div class="modal hide fade"  id="process_form">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">×</a>
@@ -33,6 +35,10 @@
         <a class="btn btn-primary" 
             id="add_process_following">保存更新</a>
     </div>
+</div>
+<div>
+    <br>
+        <button class="btn btn-success btn-large" id="processfollowing_submit" style="float:right">跟踪完成</button>
 </div>
 <script type='text/javascript' src="{{ STATIC_URL  }}jquery/jquery.form.js"></script>
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/process_following.js"></script>

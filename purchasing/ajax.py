@@ -17,7 +17,7 @@ from django.http import HttpResponseRedirect
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm
 from django.db.models import Q
 from datetime import datetime
-
+from purchasing.utility import goNextStatus
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -313,6 +313,8 @@ def MaterielExecuteQuery(request,number):
     materielexecute = MaterielExecute.objects.filter(document_number=number)
     materielexecute_html = render_to_string("purchasing/materielexecute/materielexecute_table.html", {"materielexecute_set":materielexecute})
     return simplejson.dumps({"materielexecute_html":materielexecute_html})
+
+@dajaxice_register
 def SelectSupplierOperation(request,selected,bid):
     bidform=BidForm.objects.get(pk=bid)
     for item in selected:
@@ -439,3 +441,22 @@ def getOrderFormItems(request, index):
     }
     html = render_to_string("purchasing/orderform/orderform_item_list.html", context)
     return html
+
+@dajaxice_register
+def SelectSubmit(request,bid):
+    bidform=BidForm.objects.get(pk=bid)
+    if SupplierSelect.objects.filter(bidform=bidform).count() > 0:
+        goNextStatus(bidform,request.user)
+        status=0
+    else:
+        status=1
+    return simplejson.dumps({"status":status})
+    
+
+@dajaxice_register
+def ProcessFollowingSubmit(request,bid):
+    bidform=BidForm.objects.get(pk=bid)
+    goNextStatus(bidform,request.user)
+    status=0
+    return simplejson.dumps({"status":status})
+    
