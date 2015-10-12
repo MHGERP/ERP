@@ -113,6 +113,9 @@ def chooseInventorytype(request,pid,key):
     items = Materiel.objects.filter(inventory_type__id=pid, materielpurchasingstatus__add_to_detail = True)
     if key:
         items = items.filter(name=key)
+    for item in items:
+        item.can_choose, item.status = (False, u"已加入订购单") if (item.materielformconnection.order_form != None) else (True, u"未加入订购单")
+
     context={
         "inventory_detail_list":items,
     }

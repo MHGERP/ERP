@@ -104,6 +104,17 @@ $(document).on("click", "input#selectall", function(){
     });
 });
 
-$(document).on("click","#add_to_order",function(){
-    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{});
-})
+//add_to_order button
+// $(document).on("click","#add_to_order",function(){
+//     Dajaxice.purchasing.getOngoingOrderList(addToOrderCallBack,{});
+// })
+
+function addToOrderCallBack(data){
+    $("#order_select").html(data);
+    items = $("#subcheck:checked").parent().parent().children();
+    item = $(items[2]).text();
+    alert(item);
+    $("#order_select").change(function(){
+        Dajaxice.purchasing.addToOrder(add_to_order_callback,{});
+    })
+}
