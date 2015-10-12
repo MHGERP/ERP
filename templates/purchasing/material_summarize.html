@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}style/material_summarize.css" type="text/css" media="screen" />
 
 <div id="search_div">
-    <span class="btn add">添加</span>
     <form class="form-search " >
         {{inventoryTypeForm.inventory_type}}
         <input type="text" class="input-medium search-query" id="search_key">
@@ -21,8 +20,20 @@
 </div>
 
 {%include "widgets/inventory_detail.html"%}  
-全选：<input type="sheckbox">
-<span class="btn" id="add_to_order">加入订购单</span> 
+<span class="btn" id="add_to_order" data-toggle="modal" data-target="#order_list">加入订购单</span> 
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/material_summarize.js"></script>
+
+<div id="order_list" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="myModalLabel">创建中订购单</h2>
+  </div>
+
+  <div class="modal-body">
+    
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
 {% endblock%}
 

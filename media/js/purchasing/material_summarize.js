@@ -13,6 +13,8 @@ function refresh(){
         "pid":val,  
         "key":key
     });
+
+    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{});
 }
 
 function choose_Inventorytype_callback(data){
@@ -27,7 +29,7 @@ function choose_Inventorytype_callback(data){
     }
 }
 
-//五个表的详细记录删除
+//delete five tables detail item
 var cell;
 $(document).on("click",".btn-danger",function(){
     cell = this;
@@ -43,36 +45,47 @@ function delete_detail_callback(data){
     $(cell).parent().parent().remove();
 }
 
-//新建订购单确认保存按钮
-$(document).on("click","#save",function(){
-    var num = $("#order_number").val();
-    var cDate = $("#create_date").val();
-    var eDate = $("#establishment_date").val();
-    Dajaxice.purchasing.newOrderSave(save_callback,{
-        "num":num,
-        "cDate":cDate,
-        "eDate":eDate
-    });
+//new_purchase_btn
+$(document).on("click","#new_purchase_btn",function(){
+    Dajaxice.purchasing.newOrderCreate(newOrderCreateCallBack, {});
 })
 
-function save_callback(){
-    alert("该订购单已保存")
+//open button
+$(document).on("click","#btn-open",function(){
+    var id = $(".search-query").val();
+    Dajaxice.purchasing.getOrderForm(newOrderCreateCallBack,{"order_id":id,})
+})
+
+function newOrderCreateCallBack(data){
+    $("input#order_number").val(data.order_id);
+    $("div.table-div").html(data.html);
+    $("#new_order_modal").attr("args", data.id);
+    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{});
 }
 
-//新建订购单完成按钮
+function getOrderListCallBack(data) {
+    $("#order-select").html(data);
+}
+
+//new puchase order save button
+$("#btn-save").click(function() {
+    var id = $("#bid_modal").attr("args");
+    alert(id);
+})
+
+//new puchase order finish button
 $(document).on("click","#finish",function(){
-    var num = $("#order_number").val();
-    var cDate = $("#create_date").val();
-    var eDate = $("#establishment_date").val();
+    var id = $("#bid_modal").attr("args");
     if(confirm("确定后将不能再修改")){
-        Dajaxice.purchasing.newOrderFinish(save_callback,{
-            "num":num,
-            "cDate":cDate,
-            "eDate":eDate
-        });
+        Dajaxice.purchasing.newOrderFinish(finish_callback,{"id":id});
     }
 })
 
+function finish_callback(){
+    alert("该订购单已创建完成，不能再修改");
+}
+
+//new puchase order delete button
 $(document).on("click","#order_delete",function(){
     var num = $("#order_number").val();
     Dajaxice.purchasing.newOrderDelete(delete_callback,{
@@ -83,3 +96,14 @@ $(document).on("click","#order_delete",function(){
 function delete_callback(){
     alert("该订购单已删除");
 }
+
+$(document).on("click", "input#selectall", function(){
+    var target = this.checked;
+    $("input[type='checkbox']").each(function(){
+        this.checked = target; 
+    });
+});
+
+$(document).on("click","#add_to_order",function(){
+    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{});
+})

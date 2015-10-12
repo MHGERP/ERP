@@ -413,35 +413,70 @@ def AddProcessFollowing(request,bid,process_form):
     else:
         print process_form.errors
     return simplejson.dumps({})
-def newOrderSave(request,num,cDate,eDate):
-    cDate_datetime = datetime.datetime.strptime(cDate,"%Y-%m-%d")
-    eDate_datetime = datetime.datetime.strptime(eDate,"%Y-%m-%d")
-    order_status = OrderFormStatus.objects.get(status=0)
-    order_obj = OrderForm(
-        order_id = str(num),
-        create_time = cDate_datetime,
-        establishment_time = eDate_datetime,
-        order_status = order_status
-    )
-    order_obj.save()
 
 @dajaxice_register
-def newOrderFinish(request,num,cDate,eDate):
-    cDate_datetime = datetime.datetime.strptime(cDate,"%Y-%m-%d")
-    eDate_datetime = datetime.datetime.strptime(eDate,"%Y-%m-%d")
-    order_status = OrderFormStatus.objects.get(status=1)
-    order_obj = OrderForm(
-        order_id = str(num),
+def newOrderFinish(request,id):
+    """
+    Lei
+    """
+    order_form = OrderForm.objects.get(id = id)
+    order_form.order_status = OrderFormStatus.objects.get(status = 1)
+
+
+@dajaxice_register
+def newOrderCreate(request):
+    """
+    Lei
+    """
+    cDate_datetime = datetime.now()
+    order_status = OrderFormStatus.objects.get(status = 0)
+    new_order_form = OrderForm(
+        order_id = "2015%04d" % (OrderForm.objects.count()),
         create_time = cDate_datetime,
-        establishment_time = eDate_datetime,
-        order_status = order_status
+        order_status = order_status,
     )
-    order_obj.save()
+    new_order_form.save()
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
+    context = {
+        "order_id":new_order_form.order_id,
+        "html":html,
+    }
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def getOngoingOrderList(request):
+    """
+    Lei
+    """
+    order_form_list = OrderForm.objects.filter(Q(order_status__status = 0))
+    html = ''.join("<option value='%s'>%s</option>" % (order.id, order) for order in order_form_list)
+    return html
+
+
 
 @dajaxice_register
 def newOrderDelete(request,num):
+    """
+    Lei
+    """
     order = OrderForm.objects.get(order_id = num)
     order.delete()
+
+def getOrderForm(request, order_id):
+    """
+    Lei
+    """
+    order_form = OrderForm.objects,get(id = order_id)
+    items = Materiel.objects.filter(materielformconnection__order_form = order_form)
+    html = render_to_string("purchasing/orderform/orderform_item_list.html",{"items":items})
+    context = {
+            "order_id": order_form.order_id,
+            "id":order_form.id,
+            "html":html,
+    }
+
+    return simplejson.dumps(context)
+
 
 @dajaxice_register
 def getOrderFormItems(request, index, can_choose = False):
@@ -485,6 +520,8 @@ def newBidCreate(request):
     }
     return simplejson.dumps(context)
 
+
+
 @dajaxice_register
 def newBidFinish(request, id):
     """
@@ -508,4 +545,5 @@ def getBidForm(request, bid_id):
         }
 
     return simplejson.dumps(context)
+
 

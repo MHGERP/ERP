@@ -28,6 +28,7 @@ $("#btn-finish").click(function() {
 function finishCallBack() {
 
 }
+
 $("#btn-open").click(function() {
    var id = $(".search-query").val(); // datatable index not bid_id
    Dajaxice.purchasing.getBidForm(getBidCallBack, {"bid_id": id,})
