@@ -2,21 +2,22 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,PurchasingEntryItems,SupplierFile,SupplierSelect, BidComment, OrderForm, MaterielExecute,\
-    MainMaterielExecuteDetail, SupportMaterielExecuteDetail
+from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterialSubApplyItems,MaterialSubApply
+from purchasing.models import OrderForm, MaterielExecute, SupplierSelect, BidForm, MainMaterielExecuteDetail, SupportMaterielExecuteDetail
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
 from const import *
-from const.models import Materiel,OrderFormStatus
+from const.models import Materiel,OrderFormStatus, BidFormStatus
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from django.db import transaction 
 from const.models import WorkOrder, Materiel
 from const.forms import InventoryTypeForm
-from purchasing.forms import SupplierForm,ProcessFollowingForm, MaterielChoiceForm, MainMaterielExecuteDetailForm, SupportMaterielExecuteDetailForm
+from django.http import HttpResponseRedirect
+from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielChoiceForm, MainMaterielExecuteDetailForm, SupportMaterielExecuteDetailForm
 from django.db.models import Q
 from datetime import datetime
-
+from purchasing.utility import goNextStatus
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -50,21 +51,32 @@ def checkArrival(request,aid,cid):
 @dajaxice_register
 @transaction.commit_manually
 def genEntry(request,bid):
+    flag = False
+    message = ""
     try:
         bidform = BidForm.objects.get(bid_id = bid)
         user = request.user
-        purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
-        purchasingentry.save()
+        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
+            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
+            purchasingentry.save()
+            flag = True
+        else:
+            message = u"入库单已经存在，请勿重复提交"
     except Exception, e:
         transaction.rollback()
         print e
-    flag = isAllChecked(bid,purchasingentry)
+
+    flag = flag and isAllChecked(bid,purchasingentry)
     if flag:
         transaction.commit()
+        message = u"入库单生成成功"
     else:
         transaction.rollback()
+        if message =="":
+            message = u"入库单生成失败，有未确认的项，请仔细检查"
     data = {
         'flag':flag,
+        'message':message,
     }
     return simplejson.dumps(data)
 
@@ -183,6 +195,26 @@ def addToDetailSingle(request, index):
     return ""
 
 @dajaxice_register
+def getOrderFormList(request, statu, key):
+    """
+    JunHU
+    summary: ajax function to get the order form list by statu & keyword
+    params: statu: the statu of request; key: keyword string(empty or NULL should be ignore)
+    return: table html string
+    """
+    try:
+        statu = int(statu) # unicode to integer
+    
+        items = OrderForm.objects.filter(order_status__status = statu)
+        if key:
+            items = items.filter(order_id = key)
+    except Exception, e:
+        print e
+    context = {"items": items, }
+    html = render_to_string("purchasing/orderform/orderform_list.html", context)
+    return html
+
+@dajaxice_register
 def SupplierAddorChange(request,mod,supplier_form):
     message=u"供应商添加成功！"
     if mod==-1:
@@ -257,6 +289,36 @@ def SupplierDelete(request,supplier_id):
     supplier.delete()
     return simplejson.dumps({})
 
+
+@dajaxice_register
+def addChangeItem(request,subform,sid,item_id = None):
+    subapply = MaterialSubApply.objects.get(id = sid)
+    flag = True
+    try:
+        if item_id == None:
+            subform = SubApplyItemForm(deserialize_form(subform))
+            if subform.is_valid():
+                subitem = subform.save(commit = False)
+                subitem.sub_apply = subapply
+                subitem.save()
+            else:
+                flag = False
+        else:
+            item = MaterialSubApplyItems.objects.get(id = item_id)
+            subform = SubApplyItemForm(deserialize_form(subform),instance = item)
+            if subform.is_valid():
+                subform.save()
+            else:
+                flag = False
+    except Exception,e:
+        print e
+    sub_item_set = MaterialSubApplyItems.objects.filter(sub_apply = subapply)
+    sub_table_html = render_to_string("purchasing/widgets/sub_table.html",{"sub_set":sub_item_set})
+    data = {
+        "flag":flag,
+        "html":sub_table_html,
+    }
+    return simplejson.dumps(data)
 @dajaxice_register
 def MaterielExecuteQuery(request,number):
     materielexecute = MaterielExecute.objects.filter(document_number=number)
@@ -388,6 +450,27 @@ def searchSupplier(request,sid,bid):
     return simplejson.dumps(data)
 
 @dajaxice_register
+def addSubApply(request):
+    subapply = MaterialSubApply( proposer = request.user)
+    subapply.save()
+    url = "/purchasing/subApply/"+str(subapply.id)
+    return simplejson.dumps({"url":url})
+
+@dajaxice_register
+def deleteItem(request,item_id,sid):
+    item_obj = MaterialSubApplyItems.objects.get(id = item_id)
+    subapply = MaterialSubApply.objects.get(id = sid)
+    if item_obj.sub_apply.id == subapply.id:
+        try:
+            item_obj.delete()
+            flag = True
+        except Exception,e:
+            print e
+    else:
+        flag = False
+    return simplejson.dumps({"item_id":item_obj.id,"flag":flag})
+
+@dajaxice_register
 def deleteDetail(request,uid):
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
@@ -400,7 +483,6 @@ def saveComment(request, form, bid_id):
     bidCommentForm = BidCommentForm(deserialize_form(form))
     if bidCommentForm.is_valid():
         bid = BidForm.objects.get(bid_id = bid_id)
-        print bid
         if bid != None:
             bid_comment = BidComment()
             bid_comment.user = request.user
@@ -444,10 +526,91 @@ def newOrderFinish(request,num,cDate,eDate):
         order_status = order_status
     )
     order_obj.save()
-    print "ddddddd"
 
 @dajaxice_register
 def newOrderDelete(request,num):
     order = OrderForm.objects.get(order_id = num)
     order.delete()
-    print order
+
+@dajaxice_register
+def getOrderFormItems(request, index, can_choose = False):
+    """
+    JunHU
+    """
+    items = Materiel.objects.filter(materielformconnection__order_form__order_id = index)
+    context = {
+        "items": items,
+        "can_choose": can_choose,
+    }
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", context)
+    return html
+
+@dajaxice_register
+def SelectSubmit(request,bid):
+    bidform=BidForm.objects.get(pk=bid)
+    if SupplierSelect.objects.filter(bidform=bidform).count() > 0:
+        goNextStatus(bidform,request.user)
+        status=0
+    else:
+        status=1
+    return simplejson.dumps({"status":status})
+    
+
+@dajaxice_register
+def ProcessFollowingSubmit(request,bid):
+    bidform=BidForm.objects.get(pk=bid)
+    goNextStatus(bidform,request.user)
+    status=0
+    return simplejson.dumps({"status":status})
+    
+def getOngoingBidList(request):
+    """
+    JunHU
+    """
+    bid_form_list = BidForm.objects.filter(Q(bid_status__part_status = BIDFORM_PART_STATUS_CREATE) | Q(bid_status__part_status = BIDFORM_PART_STATUS_ESTABLISHMENT))
+    html = ''.join("<option value='%s'>%s</option>" % (bid.id, bid) for bid in bid_form_list)
+    return html
+
+@dajaxice_register
+def newBidCreate(request):
+    """
+    JunHU
+    """
+    cDate_datetime = datetime.now()
+    bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_CREATE)
+    bid_form = BidForm(
+        bid_id = "2015%04d" % (BidForm.objects.count()),
+        create_time = cDate_datetime,
+        bid_status = bid_status,
+    )
+    bid_form.save()
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
+    context = {
+        "bid_id": bid_form.bid_id,
+        "html": html,
+    }
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def newBidFinish(request, id):
+    """
+    JunHu
+    """
+    bid_form = BidForm.objects.get(id = id)
+    bid_form.bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_APPROVED) # change the part-status into approved
+
+@dajaxice_register
+def getBidForm(request, bid_id):
+    """
+    JunHU
+    """
+    bid_form = BidForm.objects.get(id = bid_id)
+    items = Materiel.objects.filter(materielformconnection__bid_form = bid_form)
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items})
+    context = {
+            "bid_id": bid_form.bid_id,
+            "id": bid_form.id,
+            "html": html,
+        }
+
+    return simplejson.dumps(context)

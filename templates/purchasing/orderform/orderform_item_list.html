@@ -1,0 +1,30 @@
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+		<tr>
+			{% if can_choose %}
+			<th><input type="checkbox" id="select_all"/></th>
+			{% endif %}
+			<th>序号</td>
+			<th>名称及规格</td>
+			<th>标准号/图号</td>
+			<th>材料牌号</td>
+			<th>单位</td>
+			<th>数量</td>
+			<th>备注</td>
+		</tr>
+  </thead>
+	<tbody>
+		{% for item in items %}
+		<tr>
+			<td><th><input type="checkbox"/></th></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>

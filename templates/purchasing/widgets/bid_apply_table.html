@@ -1,4 +1,4 @@
-<form class="well form" method="POST" action="">
+<form class="well form" method="POST" action="" id="bid_apply_form">
   {% csrf_token %}
   <table class="table table-bordered" style="width:60%">
     <thead>
@@ -37,8 +37,15 @@
         <td></td>
         <td></td>
       </tr>
+      {% for item in bidComments%}
+      <tr>
+        <td></td>
+        <td colspan="2"> {{item.comment}}</td>
+      </tr>
+      {% endfor%}
     </tbody>
   </table>
+  <button type="button" class="btn"> 提交 </button>
 </form>
 
 <form class="well form" method="POST" action="" id="bid_form">

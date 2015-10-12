@@ -1,0 +1,65 @@
+{% extends "purchasing/base/none_nav_base.html"%}
+
+{% block title %}
+<h1>订购单</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="/purchasing/orderFormManage" class="tip-bottom" data-original-title="订购单管理">订购单管理</a>
+<a href="#" class="current">订购单</a>
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" href="{{ STATIC_URL }}style/orderform.css" type="text/css" media="screen" />
+
+<div id="search_div">
+	订购单编号: <input type="text" class="input-midium" value="{{order_form.order_id}}" id="index"/> 
+	订购单状态: <input type="text" class="input-midium" value="{{order_form.order_status}}" id="status" args="{{order_form.order_status.status}}"/> 
+</div>
+
+{% if order_form.order_status.status == 1 %}
+<div id="new_purchasing_order">
+    <button type="button" class="btn add" id="new_purchase_btn" data-toggle="modal" data-target="#bid_modal">新建标单</button>
+    <form class="form-search">
+        <select class="input-medium search-query" id="bid-select">
+
+        </select>
+        <span class="btn search" id="btn-open" data-toggle="modal" data-target="#bid_modal">进入</span>
+    </form>
+</div>
+{% endif %}
+
+<div class="widget-content" id="item_table">
+    
+</div>
+
+<div id="bid_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="myModalLabel">标单</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+    <div class="form-div add">
+      <form class="form-search">
+        <label>标单编号：</label>
+        <input type="text" class="input-medium" id="bid_id">
+      </form>
+    </div>
+    <div class="delete-div">
+      <span class="btn" id="order_delete">删除</span>
+    </div>
+    <div class="table-div">
+    </div>
+    <div class="save-div">
+      <span class="btn add save" id="btn-save">确认保存</span>
+    </div>
+    <div class="finish-div">
+      <span class="btn add save" id="btn-finish">完成</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/orderform.js"></script>
+{% endblock%}

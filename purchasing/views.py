@@ -1,14 +1,12 @@
 # coding: UTF-8
 from django.shortcuts import render
-from purchasing.models import BidForm,ArrivalInspection,Supplier,PurchasingEntry,\
-     PurchasingEntryItems,SupplierFile,MaterialSubApply,MaterialSubApplyItems,\
-     MaterielExecute, MainMaterielExecuteDetail, SupportMaterielExecuteDetail,ProcessFollowingInfo,SupplierSelect
+from django.db.models import Q
+from purchasing.models import *
 from const import *
 from const.forms import InventoryTypeForm
+from django.http import HttpResponseRedirect
 from const.models import WorkOrder, InventoryType, BidFormStatus
-from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
-
-from purchasing.forms import SupplierForm,EntryForm,ProcessFollowingForm, MaterielChoiceForm, MainMaterielExecuteDetailForm, SupportMaterielExecuteDetailForm
+from purchasing.forms import *
 from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
@@ -99,9 +97,12 @@ def bidTrackingViews(request):
     """
     Liu Ye
     """
+    bid_id = 444
+    bid = BidForm.objects.get(bid_id = bid_id)
     qualityPriceCardForm = QualityPriceCardForm()
     bidApplyForm = BidApplyForm()
     bidCommentForm = BidCommentForm()
+    bidComments = BidComment.objects.filter(Q(bid = bid))
     bidForm = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
     bid_status = []
     for status in bidForm:
@@ -114,6 +115,7 @@ def bidTrackingViews(request):
                "qualityPriceCardForm": qualityPriceCardForm,
                "bidApplyForm": bidApplyForm,
                "bidCommentForm": bidCommentForm,
+               "bidComments": bidComments,
              }
     return render(request, "purchasing/bid_track.html", context)
 
@@ -133,9 +135,11 @@ def arrivalInspectionViews(request):
 
 def arrivalCheckViews(request,bid):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
+    is_exist = PurchasingEntry.objects.filter(bidform__bid_id = bid).count() > 0
     context = {
         "cargo_set":cargo_set,
         "bid":bid,
+        "is_exist":is_exist,
     }
     return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 
@@ -149,12 +153,11 @@ def inventoryTableViews(request):
     }
     return render(request, "purchasing/inventory_table_base.html", context)
 
-def materialEntryViews(request):
+def materialEntryViews(request,bid):
     try:
-        purchasingentry = PurchasingEntry.objects.get(bidform = 8)
+        purchasingentry = PurchasingEntry.objects.get(bidform__bid_id = bid)
         entry_set = PurchasingEntryItems.objects.filter(purchasingentry = purchasingentry)
         entry_form = EntryForm(instance = purchasingentry)
-        print purchasingentry.entry_time
     except Exception,e:
         print e
     context = {
@@ -164,15 +167,85 @@ def materialEntryViews(request):
     }
     return render(request,"purchasing/purchasing_materialentry.html",context)
 
-def subApplyViews(request):
+def subApplyHomeViews(request):
     if request.method == "POST":
-        sub_id = request.POST["subapply_search"]
-        subapply_set = MaterialSubApply.objects.filter(id = sub_id)
-    subapply_set = MaterialSubApply.objects.all() 
+        receipts_code = request.POST["subapply_search"]
+        subapply_set = MaterialSubApply.objects.filter(receipts_code = receipts_code)
+    else:
+        subapply_set = MaterialSubApply.objects.filter(is_submit = True) 
     context = {
         "subapply_set":subapply_set,
     }
     return render(request,"purchasing/subapply_home.html",context)
+
+@csrf.csrf_protect
+def subApplyViews(request,sid = None):
+    is_show = False
+    subapply_obj = MaterialSubApply.objects.get(id = sid)
+    if request.method == "POST":
+        subapply_form = SubApplyForm(request.POST,instance = subapply_obj)
+        if subapply_form.is_valid():
+            subapply_form.save()
+            subapply_obj.is_submit = True
+            subapply_obj.save()
+            return HttpResponseRedirect("/purchasing/subApplyHome/")
+    else:
+        subapply_form = SubApplyForm(instance = subapply_obj)
+    sub_set = MaterialSubApplyItems.objects.filter(sub_apply__id = sid)
+    subitem_form = SubApplyItemForm()
+    context = {
+        "subapply_form":subapply_form,
+        "is_show":is_show,
+        "sub_set":sub_set,
+        "subitem_form":subitem_form,
+        "subapply":subapply_obj,
+    }
+    return render(request,"purchasing/subapplication.html",context)
+
+@csrf.csrf_protect
+def subApplyReviewViews(request,sid = None):
+    is_show = True
+    subapply_obj = MaterialSubApply.objects.get(id = sid)
+    if request.method == "POST":
+        subapply_form = SubApplyInspectForm(request.POST,instance = subapply_obj)
+        if subapply_form.is_valid():
+            subapply_form.save()
+            subapply_obj.is_submit = True
+            subapply_obj.save()
+            return HttpResponseRedirect("/purchasing/subApplyHome/")
+    else:
+        subapply_form = SubApplyInspectForm(instance = subapply_obj)
+    sub_set = MaterialSubApplyItems.objects.filter(sub_apply__id = sid)
+    subitem_form = SubApplyItemForm()
+    context = {
+        "subapply_form":subapply_form,
+        "is_show":is_show,
+        "sub_set":sub_set,
+        "subitem_form":subitem_form,
+        "subapply":subapply_obj,
+    }
+    return render(request,"purchasing/subapplication.html",context)
+
+def orderFormManageViews(request):
+    """
+    JunHU
+    """
+    form = OrderFormStatusForm()
+    context = {
+        "form": form,
+        }
+    return render(request, "purchasing/order_form_manage.html", context)
+
+def orderFormViews(request):
+    """
+    JunHu
+    """
+    index = request.GET.get("index")
+    order_form = OrderForm.objects.get(order_id = index)
+    context = {
+        "order_form": order_form,
+    }
+    return render(request, "purchasing/order_form.html", context)
 
 def processFollowingViews(request,bid):
     bidform=BidForm.objects.get(pk=bid)
@@ -188,6 +261,7 @@ def processFollowingViews(request,bid):
         "process_following_form":process_following_form
     }
     return render(request,"purchasing/process_following.html",context)
+
 def materielExecuteViews(request):
     materielexecute_set = MaterielExecute.objects.all()
     context = {

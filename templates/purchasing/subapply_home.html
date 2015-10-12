@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block sub_ref %}
-<a href="#" class="current">材料代用</a>
+<a href="/purchasing/subApplyHome/" class="current">材料代用</a>
 {% endblock %}
 {% block inner_content%}
 <link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
@@ -15,7 +15,7 @@
     <button type="submit" class="btn">查询</button>
 </form>
 <div style="margin-top:10px;margin-bottom:10px;">
-    <a type="btn" class="btn" href="">新建材料待用</button>
+    <a type="btn" class="btn" onclick="add_subapply();">新建材料待用</a>
 </div>
 <div   class="widget-box">
     <div class="widget-title">
@@ -36,25 +36,33 @@
                     <th>申请人</th>
                     <th>备注</th>
                     <th>对应标单</th>
+                    <th>查看</th>
+                    {% if is_show %}
+                    <th>评审</th>
+                    {% endif  %}
                 </tr>
             </thead>
             <tbody>
                 {%for sub_obj in subapply_set %}
                 <tr>
-                    <td>sub_obj.receipts_code</td>
+                    <td>{{sub_obj.receipts_code}}</td>
                     <td>{{sub_obj.work_order}}</td>
                     <td>{{sub_obj.work_order.product_name}}</td>
                     <td>{{sub_obj.pic_code}}</td>
                     <td>{{sub_obj.proposer}}</td>
-                    <td>{{sub_obj.reasons}}</td>
+                    <td style="width:200px;">{{sub_obj.reasons}}</td>
                     <td>{{sub_obj.bidform}}</td>
+                    <td><a type="button" href="/purchasing/subApply/{{sub_obj.id}}" class="btn">查看</a></td>
+                    {% if is_show %}
+                    <td><a type="button" href="/purchasing/subApplyReview/{{sub_obj.id}}" class="btn">评审</a></td>
+                    {% endif %}
                 </tr>
                 {%endfor%}
             </tbody>
         </table>
         {% else %}
         <center>
-            <p>没有待检标单</p>
+            <p>没有检索到材料代用申请单</p>
         </center>
         {% endif %}
     </div>
