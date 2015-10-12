@@ -34,3 +34,16 @@ function add_process_callback(data){
 $("#add").click(function(){
    hide_extra_form(); 
 });
+
+$("#processfollowing_submit").click(function(){
+    Dajaxice.purchasing.ProcessFollowingSubmit(status_submit_callback,{
+        "bid":$("#process_following_table").attr("bid")
+    });
+    
+});
+
+function status_submit_callback(data){
+    alert("过程跟踪完成!");
+     window.location.href="/purchasing/purchasingfollowing" ;
+    
+}

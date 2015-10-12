@@ -42,3 +42,16 @@ $("#supplier_search").click(function(){
 function search_supplier_callback(data){
     $("#supplier_select_table").html(data.html);
 }
+
+$("#select_submit").click(function(){
+    Dajaxice.purchasing.SelectSubmit(select_submit_callback,{
+        "bid":$("#supplier_select_table").attr("bid")
+    });
+});
+function select_submit_callback(data){
+    if(data.status==0){
+    alert("供应商提交成功!");
+     window.location.href="/purchasing/purchasingfollowing" ;
+    }
+    else alert("没有选择供应商，提交失败");
+}

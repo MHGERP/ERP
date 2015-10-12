@@ -40,7 +40,7 @@
                     {% if bid.bid_status.main_status > BIDFORM_STATUS_PROCESS_FOLLOW%}
                     <td><button class="btn btn-success">过程跟踪</button></td>
                     {% elif bid.bid_status.main_status == BIDFORM_STATUS_PROCESS_FOLLOW%}
-                    <td><button class="btn btn-warning">过程跟踪</button></td>
+                    <td><a href="/purchasing/processfollowing/{{bid.id}}" class="btn btn-warning">过程跟踪</a></td>
                     {% else%}
                     <td><button class="btn">过程跟踪</button></td>
                     {%endif%}
