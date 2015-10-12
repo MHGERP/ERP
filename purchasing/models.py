@@ -223,7 +223,7 @@ class MaterialSubApplyItems(models.Model):
 
 class MaterielExecute(models.Model):
     document_number = models.CharField(max_length = 100, blank = False, verbose_name = u"单据编号")
-    document_lister = models.ForeignKey(User, verbose_name = u"制表人")
+    document_lister = models.ForeignKey(User, blank = False, verbose_name = u"制表人")
     date_date = models.DateField(blank = False, null = False, verbose_name = u"制表日期")
     materiel_choice = models.CharField(blank=False, max_length = 20, choices=MATERIEL_CHOICE, verbose_name=u"材料选择")
     class Meta:
