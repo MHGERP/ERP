@@ -53,5 +53,8 @@ function select_submit_callback(data){
     alert("供应商提交成功!");
      window.location.href="/purchasing/purchasingfollowing" ;
     }
-    else alert("没有选择供应商，提交失败");
+    else if (data.status==1){
+        alert("没有选择供应商，提交失败");
+    }
+    else alert("状态更改有误！")
 }

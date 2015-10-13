@@ -461,7 +461,9 @@ def getOrderFormItems(request, index, can_choose = False):
 @dajaxice_register
 def SelectSubmit(request,bid):
     bidform=BidForm.objects.get(pk=bid)
-    if SupplierSelect.objects.filter(bidform=bidform).count() > 0:
+    if bidform.bid_status.part_status != BIDFORM_PART_STATUS_SELECT_SUPPLLER_APPROVED:
+        status=2
+    elif SupplierSelect.objects.filter(bidform=bidform).count() > 0:
         goNextStatus(bidform,request.user)
         status=0
     else:
@@ -472,8 +474,11 @@ def SelectSubmit(request,bid):
 @dajaxice_register
 def ProcessFollowingSubmit(request,bid):
     bidform=BidForm.objects.get(pk=bid)
-    goNextStatus(bidform,request.user)
-    status=0
+    if bidform.bid_status.part_status == BIDFORM_PART_STATUS_PROCESS_FOLLOW:
+        goNextStatus(bidform,request.user)
+        status=0
+    else :
+        status=1
     return simplejson.dumps({"status":status})
     
 def getOngoingBidList(request):

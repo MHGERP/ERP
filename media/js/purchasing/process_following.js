@@ -43,7 +43,11 @@ $("#processfollowing_submit").click(function(){
 });
 
 function status_submit_callback(data){
-    alert("过程跟踪完成!");
-     window.location.href="/purchasing/purchasingfollowing" ;
-    
+    if(data.status==0){
+        alert("过程跟踪完成!");
+        window.location.href="/purchasing/purchasingfollowing" ;
+    }
+    else{
+        alert("状态更改有误！");
+    }
 }
