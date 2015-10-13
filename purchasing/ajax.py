@@ -449,6 +449,9 @@ def getOrderFormItems(request, index, can_choose = False):
     JunHU
     """
     items = Materiel.objects.filter(materielformconnection__order_form__order_id = index)
+    for item in items:
+        item.can_choose, item.status = (False, u"已加入标单") if (item.materielformconnection.bid_form != None) else (True, u"未加入表单")
+
     context = {
         "items": items,
         "can_choose": can_choose,

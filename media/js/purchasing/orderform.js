@@ -19,7 +19,6 @@ function getItemsCallBack(data) {
 
 $("#btn-save").click(function() {
     var id = $("#bid_modal").attr("args");
-    alert(id);
 })
 $("#btn-finish").click(function() {
     var id = $("#bid_modal").attr("args");

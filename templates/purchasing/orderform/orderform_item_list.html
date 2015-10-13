@@ -11,20 +11,24 @@
 			<th>单位</td>
 			<th>数量</td>
 			<th>备注</td>
+			<th>状态</th>
 		</tr>
   </thead>
 	<tbody>
 		{% for item in items %}
 		<tr>
-			<td><th><input type="checkbox"/></th></td>
+			<td>{% if can_choose and item.can_choose %}
+			<input type="checkbox"/>
+			{% endif %}</td>
+			<td>{{item.index}}</td>
+			<td>{{item.name}}</td>
+			<td>{{item.schematic_index}}</td>
+			<td>{{item.material}}</td>
 			<td></td>
+			<td>{{item.materielformconnection.count}}</td>
 			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
+			<td>{{item.status}}</td>
 		</tr>
 		{% endfor %}
-	</tbody>
+	</tbody>7=/2aclnopv
 </table>
