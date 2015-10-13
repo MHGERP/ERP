@@ -2,8 +2,7 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterialSubApplyItems,MaterialSubApply
-from purchasing.models import OrderForm, MaterielExecute, SupplierSelect, BidForm, MainMaterielExecuteDetail, SupportMaterielExecuteDetail
+from purchasing.models import *
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
 from const import *
 from const.models import Materiel,OrderFormStatus, BidFormStatus
@@ -196,6 +195,11 @@ def addToDetailSingle(request, index):
     item.materielpurchasingstatus.add_to_detail = True
     item.materielpurchasingstatus.save()
     return ""
+
+@dajaxice_register
+def deleteOrderForm(request, index):
+    order_form = OrderForm.objects.get(order_id = index)
+    order_form.delete()
 
 @dajaxice_register
 def getOrderFormList(request, statu, key):
@@ -577,7 +581,7 @@ def getOrderFormItems(request, index, can_choose = False):
     """
     items = Materiel.objects.filter(materielformconnection__order_form__order_id = index)
     for item in items:
-        item.can_choose, item.status = (False, u"已加入标单") if (item.materielformconnection.bid_form != None) else (True, u"未加入表单")
+        item.can_choose, item.status = (False, u"已加入标单") if (item.materielformconnection.bid_form != None) else (True, u"未加入标单")
 
     context = {
         "items": items,
@@ -589,7 +593,9 @@ def getOrderFormItems(request, index, can_choose = False):
 @dajaxice_register
 def SelectSubmit(request,bid):
     bidform=BidForm.objects.get(pk=bid)
-    if SupplierSelect.objects.filter(bidform=bidform).count() > 0:
+    if bidform.bid_status.part_status != BIDFORM_PART_STATUS_SELECT_SUPPLLER_APPROVED:
+        status=2
+    elif SupplierSelect.objects.filter(bidform=bidform).count() > 0:
         goNextStatus(bidform,request.user)
         status=0
     else:
@@ -600,10 +606,14 @@ def SelectSubmit(request,bid):
 @dajaxice_register
 def ProcessFollowingSubmit(request,bid):
     bidform=BidForm.objects.get(pk=bid)
-    goNextStatus(bidform,request.user)
-    status=0
+    if bidform.bid_status.part_status == BIDFORM_PART_STATUS_PROCESS_FOLLOW:
+        goNextStatus(bidform,request.user)
+        status=0
+    else :
+        status=1
     return simplejson.dumps({"status":status})
-    
+ 
+@dajaxice_register
 def getOngoingBidList(request):
     """
     JunHU
@@ -632,24 +642,59 @@ def newBidCreate(request):
     }
     return simplejson.dumps(context)
 
-
+@dajaxice_register
+def newBidSave(request, id, pendingArray):
+    """
+    JunHU
+    """
+    cDate_datetime = datetime.now()
+    bid_form = BidForm.objects.get(id = id)
+    for id in pendingArray:
+        materiel = Materiel.objects.get(id = id)
+        try:
+            conn = MaterielFormConnection.objects.get(materiel = materiel)
+        except:
+            conn = MaterielFormConnection(materiel = materiel)
+        conn.bid_form = bid_form
+        conn.save()
+    bid_form.establishment_time = cDate_datetime
+    bid_form.save()
 
 @dajaxice_register
 def newBidFinish(request, id):
     """
     JunHu
     """
+    cDate_datetime = datetime.now()
     bid_form = BidForm.objects.get(id = id)
     bid_form.bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_APPROVED) # change the part-status into approved
+    bid_form.establishment_time = cDate_datetime
+    bid_form.save()
+
 
 @dajaxice_register
-def getBidForm(request, bid_id):
+def newBidDelete(request, id):
+    """
+    JunHU
+    """
+    bid_form = BidForm.objects.get(id = id)
+    bid_form.delete();
+
+@dajaxice_register
+def getBidForm(request, bid_id, pendingArray):
     """
     JunHU
     """
     bid_form = BidForm.objects.get(id = bid_id)
     items = Materiel.objects.filter(materielformconnection__bid_form = bid_form)
-    html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items})
+    for item in items:
+        item.status = u"已加入"
+
+    items_pending = [Materiel.objects.get(id = id) for id in pendingArray]
+    for item in items_pending:
+        item.status = u"待加入"
+
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items, "can_choose": False, "items_pending": items_pending, })
     context = {
             "bid_id": bid_form.bid_id,
             "id": bid_form.id,
