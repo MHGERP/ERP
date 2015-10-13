@@ -218,7 +218,7 @@ class MaterialSubApplyItems(models.Model):
 
 class MaterielExecute(models.Model):
     document_number = models.CharField(max_length = 100, blank = False, verbose_name = u"单据编号")
-    document_lister = models.ForeignKey(User, verbose_name = u"制表人")
+    document_lister = models.ForeignKey(User, blank = False, verbose_name = u"制表人")
     date_date = models.DateField(blank = False, null = False, verbose_name = u"制表日期")
     materiel_choice = models.CharField(blank=False, max_length = 20, choices=MATERIEL_CHOICE, verbose_name=u"材料选择")
     class Meta:
@@ -278,3 +278,18 @@ class SupportMaterielExecuteDetail(models.Model):
         verbose_name_plural = u"辅材材料执行表详细"
     def __unicode__(self):
         return "%s(%s)" % (self.materiel_execute.document_number, self.materiel_texture.index)
+
+
+class StatusChange(models.Model):
+    bidform=models.ForeignKey(BidForm,verbose_name=u"标单")
+    original_status=models.ForeignKey(BidFormStatus,related_name="original",null=False,verbose_name=u"原状态")
+    new_status=models.ForeignKey(BidFormStatus,null=False,related_name="new",verbose_name=u"新状态")
+    change_user=models.ForeignKey(User,null=False,verbose_name=u"更改用户")
+    change_time=models.DateTimeField(null=False,verbose_name=u"更改时间")
+    normal_change=models.BooleanField(default=True,verbose_name=u"是否正常更改")
+    class Meta:
+        verbose_name = u"状态更改"
+        verbose_name_plural = u"状态更改"
+    def __unicode__(self):
+        return "from %s to %s"%(self.original_status,self.new_status)
+
