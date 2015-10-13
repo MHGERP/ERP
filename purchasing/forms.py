@@ -114,7 +114,7 @@ class SubApplyItemForm(ModelForm):
 class StatusChangeApplyForm(ModelForm):
     class Meta:
         model = StatusChange 
-        exclude = ('id','bidform','change_user','change_time','normal_change')
+        exclude = ('id','bidform','original_status','change_user','change_time','normal_change')
     def __init__(self,*args,**kwargs):
         bidform = kwargs.pop("bidform",None)
         super(StatusChangeApplyForm,self).__init__(*args,**kwargs)
