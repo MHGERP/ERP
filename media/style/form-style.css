@@ -14,3 +14,7 @@ div.subbtn{
     margin-left:100px!important;
     width:200px;   
 }
+
+div.nomargin-left{
+    margin-left:0px!important;
+}

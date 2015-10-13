@@ -11,19 +11,40 @@
 			<th>单位</td>
 			<th>数量</td>
 			<th>备注</td>
+			<th>状态</th>
 		</tr>
   </thead>
 	<tbody>
+		{% for item in items_pending %}
+		<tr class="pendding" args="{{item.id}}">	
+			{% if can_choose %}
+			<td>{% if item.can_choose %}
+			<input type="checkbox" class="checkbox" args="{{item.id}}">
+			{% endif %}</td> {% endif %}
+			<td>{{item.index}}</td>
+			<td>{{item.name}}</td>
+			<td>{{item.schematic_index}}</td>
+			<td>{{item.material}}</td>
+			<td></td>
+			<td>{{item.materielformconnection.count}}</td>
+			<td></td>
+			<td>{{item.status}}</td>
+		</tr>
+		{% endfor %}
 		{% for item in items %}
-		<tr>
-			<td><th><input type="checkbox"/></th></td>
+		<tr>	
+			{% if can_choose %}
+			<td>{% if item.can_choose %}
+			<input type="checkbox" class="checkbox" args="{{item.id}}">
+			{% endif %}</td> {% endif %}
+			<td>{{item.index}}</td>
+			<td>{{item.name}}</td>
+			<td>{{item.schematic_index}}</td>
+			<td>{{item.material}}</td>
 			<td></td>
+			<td>{{item.materielformconnection.count}}</td>
 			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
+			<td>{{item.status}}</td>
 		</tr>
 		{% endfor %}
 	</tbody>

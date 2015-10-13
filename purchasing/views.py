@@ -287,31 +287,70 @@ def processFollowAdd(request):
     """
 def materielExecuteDetailViews(request, choice, *mid):
     if choice == "0":
-        #print "view"
         materielexecute_id = mid[0]
-        #print materielexecute_id
         materielexecute = MaterielExecute.objects.get(pk = materielexecute_id)
         materiel_choice = materielexecute.materiel_choice
-        print materiel_choice
-        print MAIN_MATERIEL
-        print MATERIEL_CHOICE[1][1]
+        
         if materiel_choice == MAIN_MATERIEL:
+            current_materiel_choice = MATERIEL_CHOICE[0][1]
             materielexecute_detail = MainMaterielExecuteDetail.objects.get(materiel_execute__id = materielexecute_id)
         else:
+            current_materiel_choice = MATERIEL_CHOICE[1][1]
             materielexecute_detail = SupportMaterielExecuteDetail.objects.get(materiel_execute__id = materielexecute_id)
         materielexecute_detail_set = [materielexecute_detail]
         context = {
             "materielexecute_detail_set" : materielexecute_detail_set,
-            "choice" : materiel_choice
+            "choice" : materiel_choice,
+            "MAIN_MATERIEL" : MAIN_MATERIEL,
+            "current_materiel_choice" : current_materiel_choice,
+            "current_document_number" : materielexecute.document_number
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_view.html", context)
     else:
-        print "add"
         #default MAIN_MATERIEL
+        choice_form = MaterielChoiceForm()
+        detailForm = MainMaterielExecuteDetailForm()
         materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
         context = {
             "materielexecute_detail_set" : materielexecute_detail_set,
-            "choice" : MAIN_MATERIEL
+            "choice" : MAIN_MATERIEL,
+            "MAIN_MATERIEL" : MAIN_MATERIEL,
+            "current_materiel_choice" : MATERIEL_CHOICE[0][1],
+            "materielChoice_form" : choice_form,
+            "MainMaterielExecuteDetailForm" : detailForm
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_add.html", context)
 
+def statusChangeViews(request):
+    bid_set = BidForm.objects.all()
+    if request.method == "POST":
+        bid_id = request.POST["bidform_search"]
+        bid_set = BidForm.objects.filter(bid_id = bid_id)
+    context = {
+        "bid_set":bid_set,
+    }
+    return render(request,"purchasing/status_change/home.html",context)
+
+def statusChangeHistoryViews(request,bid):
+    statuschange_set = StatusChange.objects.filter(bidform__bid_id = bid).order_by("change_time")
+    
+    for obj in statuschange_set:
+        try: 
+            obj.reason = obj.statuschangereason
+            print obj.change_time
+            print obj.reason
+        except Exception,e:
+            pass
+    context = {
+        "his_set":statuschange_set,
+        "bid":bid,
+    }
+    return render(request,"purchasing/status_change/statushistory.html",context)
+
+def statusChangeApplyViews(request,bid):
+    bidform = BidForm.objects.get(bid_id = bid)
+    statuschangeform = StatusChangeApplyForm(bidform=bidform)
+    context = {
+        'chform':statuschangeform,
+    }
+    return render(request,"purchasing/status_change/statuschangeapply.html",context)

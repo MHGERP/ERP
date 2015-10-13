@@ -1,7 +1,9 @@
 <span class="btn add" id="new_purchase_btn" data-toggle="modal" data-target="#new_order_modal">新建订购单</span>
 <form class="form-search">
-    <input type="text" class="input-medium search-query">
-    <span class="btn search">进入</span>
+        <select class="input-medium search-query" id="order-select">
+
+        </select>
+        <span class="btn search" id="btn-open" data-toggle="modal" data-target="#new_order_modal">进入</span>
 </form>
 
 
@@ -10,7 +12,7 @@
     <h2 id="myModalLabel">订购单</h2>
   </div>
 
-  <div class="modal-body" style="clear:both;">
+  <div class="modal-body">
     <div class="form-div">
       <form class="form-search">
         <label>订购单编号：</label>
@@ -20,50 +22,12 @@
     <div class="delete-div">
       <span class="btn" id="order_delete">删除</span>
     </div>
-    <button type="button" class="btn add btn-primary">添加</button>
-    <table class="table table-bordered table-striped">
-      <thead>
-    	<tr>
-    		<td>序号</td>
-    		<td>名称及规格</td>
-    		<td>标准号/图号</td>
-    		<td>材料牌号</td>
-    		<td>单位</td>
-    		<td>数量</td>
-    		<td>备注</td>
-    	</tr>
-      </thead>
-      <tr>
-      	<td></td>
-      	<td></td>
-      	<td></td>
-      	<td></td>
-      	<td></td>
-      	<td></td>
-      	<td></td>
-      </tr>
-    </table>
-    
+    <div class="table-div">
+    </div>
     <div class="save-div">
-      <form class="form-horizontal">
-        <div class="control-group">
-      	  <label class="control-label">创建日期：</label>
-      	  <div class="controls date-input">
-      	    <input type="date" class="date" id="create_date"/>
-      	  </div>
-        </div>
-      </form>
       <span class="btn add save" id="save">确认保存</span>
     </div>
     <div class="finish-div">
-      <form class="form-horizontal">
-        <div class="control-group">
-          <label class="control-label" >编制日期：</label>
-      	  <div class="controls date-input">
-      	    <input type="date" class="date" id="establishment_date"/>
-      	  </div>
-        </div>
-      </form>
       <span class="btn add save" id="finish">完成</span>
     </div>
   </div>

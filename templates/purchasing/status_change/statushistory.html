@@ -1,0 +1,34 @@
+{% extends "purchasing/status_change/base.html"  %}
+{% block status_content  %}
+<legend>状态更改历史</legend>
+<h4>标单标号：{{bid}}</h4>
+<div class = "rows">
+    <div class="span10 nomargin-left">
+        <table class="table table-boardered">
+            <thead>
+                <tr>
+                    <th>更改前状态</th>
+                    <th>更改后状态</th>
+                    <th>更改日期</th>
+                    <th>执行人</th>
+                    <th>更改类型</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for his_obj in his_set %}
+                <tr>
+                    <td>{{his_obj.original_status}}</td>
+                    <td>{{his_obj.new_status}}</td>
+                    <td>{{his_obj.change_time|date:"Y-m-d"}}</td>
+                    <td>{{his_obj.change_user}}</td>
+                    <td><span class=" label {% if his_obj.normal_change %} label-success {% else %} label-important {% endif %}">{%if his_obj.normal_change %}正常更改{% else%}强制更改{% endif %}</span></td>
+                    <td>{{his_obj.reason}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
