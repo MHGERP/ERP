@@ -4,6 +4,9 @@ from django import  forms
 from django.forms import ModelForm
 from purchasing.models import *
 from const import ORDERFORM_STATUS_CHOICES
+        bidApply, qualityPriceCard,BidComment, ProcessFollowingInfo, MainMaterielExecuteDetail, SupportMaterielExecuteDetail
+from const.models import Materiel
+from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE
 
 class SupplierForm(ModelForm):
     class Meta:
@@ -67,6 +70,26 @@ class ProcessFollowingForm(ModelForm):
         widgets={
             "following_feedback":forms.Textarea(attrs={"rows":5})
         }
+
+class MaterielChoiceForm(forms.Form):
+    materiel_chice_select = forms.ChoiceField(choices=MATERIEL_CHOICE, required=True, label=u"材料选择", widget = forms.Select(attrs={"id" : "materiel_choice_select"}))
+
+class MainMaterielExecuteDetailForm(ModelForm):
+    class Meta:
+        model = MainMaterielExecuteDetail
+        exclude = ('id', 'materiel_execute')
+        widgets = {
+            'recheck' : forms.RadioSelect(choices = (('0', '未复验'), ('1', '已复验')))
+        }
+
+class SupportMaterielExecuteDetailForm(ModelForm):
+    class Meta:
+        model = SupportMaterielExecuteDetail
+        exclude = ('id', 'materiel_execute')
+        widgets = {
+            'recheck' : forms.RadioSelect(choices = (('0', '未复验'), ('1', '已复验')))
+        }
+
 
 class SubApplyForm(ModelForm):
     class Meta:

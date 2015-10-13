@@ -1,4 +1,31 @@
 {% extends "purchasing/materielexecute/base/materielexecute_detail_base.html" %}
 {% block materiel_execute_detail_form %}
-{% include "purchasing/materielexecute/materielexecute_add_form.html" %}
+	{% include "purchasing/materielexecute/widget/materielexecute_add_form.html" %}
+{% endblock %}
+
+{% block add_button %}
+	<a href="#add-detail-modal" style="margin-left:20px" class="btn btn-primary" role="button" id="add-detail-btn" data-toggle="modal">增加</a>
+{% endblock %}
+
+{% block add_modal %}
+	<div id="add-detail-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    	<h3 id="myModalLabel">
+	    		{{current_materiel_choice}}
+	    	</h3>
+	  	</div>
+	  	<div class="modal-body" id="modal-body">
+	  		{% csrf_token %}
+	    	{% if choice == MAIN_MATERIEL %}
+				{% include "purchasing/materielexecute/widget/add_main_detail_form.html" %}
+			{% else %}
+				{% include "purchasing/materielexecute/widget/add_support_detail_form.html" %}
+			{% endif %}
+	  	</div>
+	  	<div class="modal-footer">
+	    	<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	    	<button class="btn btn-primary" id="submit-btn">Save changes</button>
+	  	</div>
+	</div>
 {% endblock %}
