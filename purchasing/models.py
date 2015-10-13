@@ -285,11 +285,19 @@ class StatusChange(models.Model):
     original_status=models.ForeignKey(BidFormStatus,related_name="original",null=False,verbose_name=u"原状态")
     new_status=models.ForeignKey(BidFormStatus,null=False,related_name="new",verbose_name=u"新状态")
     change_user=models.ForeignKey(User,null=False,verbose_name=u"更改用户")
-    change_time=models.DateTimeField(null=False,verbose_name=u"更改时间")
+    change_time=models.DateTimeField(null=False,default = datetime.datetime.now(),verbose_name=u"更改时间")
     normal_change=models.BooleanField(default=True,verbose_name=u"是否正常更改")
     class Meta:
         verbose_name = u"状态更改"
         verbose_name_plural = u"状态更改"
     def __unicode__(self):
-        return "from %s to %s"%(self.original_status,self.new_status)
+        return "from %s to %s"%(self.original_status.__unicode__(),self.new_status.__unicode__())
 
+class StatusChangeReason(models.Model):
+    status_change = models.OneToOneField(StatusChange,verbose_name=u"状态改变")
+    reason = models.CharField(max_length = 1000, blank = True,null = True , verbose_name = u"回溯原因")
+    class Meta:
+        verbose_name = u"状态回溯原因"
+        verbose_name_plural = u"状态回溯原因"
+    def __unicode__(self):
+        return "from %s to  %s" % (self.status_change.original_status.__unicode__() , self.status_change.new_status.__unicode__())

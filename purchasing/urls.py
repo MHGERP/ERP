@@ -81,4 +81,16 @@ urlpatterns=patterns('',
         r'^materielExecuteDetail/(\d+)/(\d+)?$',
         purchasing_views.materielExecuteDetailViews,
     ),
+    url(
+        r'^statusChangeHome$',
+        purchasing_views.statusChangeViews,
+    ),
+    url(
+        r'^statusChangeHistory/(?P<bid>\w+)/$',
+        purchasing_views.statusChangeHistoryViews,name="statuschange_history",
+    ),
+    url(
+        r'^statusChange/(?P<bid>\w+)/$',
+        purchasing_views.statusChangeApplyViews,name="statuschange",
+    ),
 )

@@ -1,0 +1,13 @@
+{% extends "purchasing/status_change/base.html"  %}
+{% block status_content  %}
+<legend>状态更改</legend>
+<form class="form-search form-horizontal " method="POST" action="">
+    {% csrf_token %}
+    {% for field in chform %}
+    <div class="control-group">
+        <label class="control-label">{{field.label}}</label>
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn">查询</button>
+</form>
+{% endblock %}
