@@ -4,7 +4,6 @@ from django import  forms
 from django.forms import ModelForm
 from purchasing.models import *
 from const import ORDERFORM_STATUS_CHOICES
-        bidApply, qualityPriceCard,BidComment, ProcessFollowingInfo, MainMaterielExecuteDetail, SupportMaterielExecuteDetail
 from const.models import Materiel
 from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE
 
