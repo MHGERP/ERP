@@ -64,7 +64,9 @@ function newOrderCreateCallBack(data){
 }
 
 function getOrderListCallBack(data) {
-    $("#order-select").html(data);
+    $(".order-select").each(function(){
+        $(this).html(data);
+    })
 }
 
 //new puchase order save button
