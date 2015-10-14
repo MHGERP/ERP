@@ -1,0 +1,33 @@
+{% extends "purchasing/status_change/base.html"  %}
+{% block status_content  %}
+<legend>状态更改</legend>
+<form class="form-search " method="POST" action="">
+    {% csrf_token %}
+    <label>标单查询</label>
+    <input type="text"  name="bidform_search" class="input-medium search-query">
+    <button type="submit" class="btn">查询</button>
+</form>
+<br/>
+<div class = "rows">
+    <div class="span6 nomargin-left">
+        <table class="table table-boardered">
+            <thead>
+                <th>标单</th>
+                <th>当前状态</th>
+                <th>查看历史</th>
+                <th>查看历史</th>
+            </thead>
+            <tbody>
+                {% for bid in bid_set %}
+                <tr>
+                    <td>{{bid.bid_id}}</td>
+                    <td>{{bid.bid_status}}</td>
+                    <td><a type="btn" class="btn" href="{% url statuschange_history bid.bid_id  %}">查看</a></td>
+                    <td><a type="btn" class="btn" href="{% url statuschange bid.bid_id  %}">更改状态</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

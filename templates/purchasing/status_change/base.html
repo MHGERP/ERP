@@ -1,0 +1,16 @@
+{% extends "purchasing/base/none_nav_base.html"%}
+{% block title %}
+<h1>状态回溯</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="/purchasing/statusChangeHome" class="current">状态回溯</a>
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
+{% block status_content %}
+{% endblock %}
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasingfollowing/purchasing_statuschange.js"></script>
+{% endblock%}
+

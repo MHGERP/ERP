@@ -2,7 +2,8 @@
 from datetime import *
 from django import  forms
 from django.forms import ModelForm
-from purchasing.models import Supplier,PurchasingEntry,MaterialSubApply,MaterialSubApplyItems,\
+from purchasing.models import *
+from const import ORDERFORM_STATUS_CHOICES
         bidApply, qualityPriceCard,BidComment, ProcessFollowingInfo, MainMaterielExecuteDetail, SupportMaterielExecuteDetail
 from const.models import Materiel
 from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE
@@ -58,8 +59,8 @@ class EntryForm(ModelForm):
         super(EntryForm,self).__init__(*args,**kwargs)
         pur_entry = kwargs["instance"]
         self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.username
-        self.fields['keeper'].widget.attrs["value"] = pur_entry.purchaser.username
-        self.fields['inspector'].widget.attrs["value"] = pur_entry.purchaser.username
+        self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.username
+        self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.username
     purchaser = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
     inspector = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
     keeper = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
@@ -110,3 +111,17 @@ class SubApplyItemForm(ModelForm):
     class Meta:
         model = MaterialSubApplyItems
         exclude = ('id','sub_apply')
+
+class StatusChangeApplyForm(ModelForm):
+    class Meta:
+        model = StatusChange 
+        exclude = ('id','bidform','change_user','change_time','normal_change')
+    def __init__(self,*args,**kwargs):
+        bidform = kwargs.pop("bidform",None)
+        super(StatusChangeApplyForm,self).__init__(*args,**kwargs)
+        self.fields["bidform"].widget.attrs["value"] = bidform.bid_id
+        self.fields["origin_status"].widget.attrs["value"] = bidform.bid_status
+
+    bidform = forms.CharField(label=u"标单编号",widget = forms.TextInput(attrs={'readonly':'readonly','id':'bidform'}))
+    origin_status = forms.CharField(label=u"当前状态",widget=forms.TextInput(attrs={'readonly':'readonly','id':'origin_status'}))
+    reason = forms.CharField(label=u"回溯原因",widget=forms.Textarea(attrs={'id':'reason','cols':'80','rows':'5'}))

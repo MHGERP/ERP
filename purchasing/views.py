@@ -321,3 +321,36 @@ def materielExecuteDetailViews(request, choice, *mid):
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_add.html", context)
 
+def statusChangeViews(request):
+    bid_set = BidForm.objects.all()
+    if request.method == "POST":
+        bid_id = request.POST["bidform_search"]
+        bid_set = BidForm.objects.filter(bid_id = bid_id)
+    context = {
+        "bid_set":bid_set,
+    }
+    return render(request,"purchasing/status_change/home.html",context)
+
+def statusChangeHistoryViews(request,bid):
+    statuschange_set = StatusChange.objects.filter(bidform__bid_id = bid).order_by("change_time")
+    
+    for obj in statuschange_set:
+        try: 
+            obj.reason = obj.statuschangereason
+            print obj.change_time
+            print obj.reason
+        except Exception,e:
+            pass
+    context = {
+        "his_set":statuschange_set,
+        "bid":bid,
+    }
+    return render(request,"purchasing/status_change/statushistory.html",context)
+
+def statusChangeApplyViews(request,bid):
+    bidform = BidForm.objects.get(bid_id = bid)
+    statuschangeform = StatusChangeApplyForm(bidform=bidform)
+    context = {
+        'chform':statuschangeform,
+    }
+    return render(request,"purchasing/status_change/statuschangeapply.html",context)
