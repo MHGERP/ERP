@@ -1,3 +1,5 @@
+var pendingArray = Array();
+
 $(document).ready(refresh);
 
 function refresh() {
@@ -11,7 +13,9 @@ function refresh() {
     Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
 }
 function getBidListCallBack(data) {
-    $("#bid-select").html(data);
+    $(".bid-select").each(function() { 
+        $(this).html(data);   
+    });
 }
 function getItemsCallBack(data) {
     $("#item_table").html(data);
@@ -28,9 +32,12 @@ function finishCallBack() {
 
 }
 
-$("#btn-open").click(function() {
-   var id = $(".search-query").val(); // datatable index not bid_id
-   Dajaxice.purchasing.getBidForm(getBidCallBack, {"bid_id": id,})
+$(".btn-open").click(function() {
+    if($(this).hasClass("clear")) {
+        pendingArray = Array();
+    }
+    var id = $($(this).attr("data-source")).val(); // datatable index not bid_id
+    Dajaxice.purchasing.getBidForm(getBidCallBack, {"bid_id": id, "pendingArray": pendingArray, })
 });
 
 $("#new_purchase_btn").click(function() {
@@ -41,5 +48,30 @@ function getBidCallBack(data) {
     $("input#bid_id").val(data.bid_id);
     $("div.table-div").html(data.html);
     $("#bid_modal").attr("args", data.id);
+    Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
+}
+$(document).on("click", "input#select_all", function(){
+    var target = this.checked;
+    $("input[type='checkbox']").each(function(){
+        this.checked = target; 
+    });
+});
+
+
+$("#add_to_bid").click(function() {
+    pendingArray = Array();
+    $("input.checkbox").each(function() {
+        pendingArray.push($(this).attr("args"));
+    });
+});
+
+
+$(document).on("click", "#order_delete", function() {
+    var id = $("#bid_modal").attr("args");
+    if(confirm("是否确定删除？")) {
+        Dajaxice.purchasing.newBidDelete(deleteCallBack, {"id": id});
+    }
+});
+function deleteCallBack(data) {
     Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
 }

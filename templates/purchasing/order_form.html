@@ -21,16 +21,37 @@
 <div id="new_purchasing_order">
     <button type="button" class="btn add" id="new_purchase_btn" data-toggle="modal" data-target="#bid_modal">新建标单</button>
     <form class="form-search">
-        <select class="input-medium search-query" id="bid-select">
+        <select class="input-medium search-query bid-select" id="search-query-1">
 
         </select>
-        <span class="btn search" id="btn-open" data-toggle="modal" data-target="#bid_modal">进入</span>
+        <span class="btn search btn-open clear" id="btn-open" data-toggle="modal" data-target="#bid_modal" data-source="#search-query-1">进入</span>
     </form>
 </div>
 {% endif %}
 
 <div class="widget-content" id="item_table">
     
+</div>
+
+<span class="btn" id="add_to_bid" data-toggle="modal" data-target="#bid_list">加入标单</span>
+
+
+<div id="bid_list" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="myModalLabel">创建中标单</h2>
+  </div>
+
+  <div class="modal-body">
+    选择要加入的标单：
+    <select class="input-medium search-query bid-select" id="search-query-2">
+    
+    </select>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-success btn-open" data-dismiss="modal" aria-hidden="true" data-source="#search-query-2" data-toggle="modal" data-target="#bid_modal">确认</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
 </div>
 
 <div id="bid_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -46,15 +67,15 @@
       </form>
     </div>
     <div class="delete-div">
-      <span class="btn" id="order_delete">删除</span>
+      <span class="btn" id="order_delete" data-dismiss="modal" aria-hidden="true">删除</span>
     </div>
     <div class="table-div">
     </div>
     <div class="save-div">
-      <span class="btn add save" id="btn-save">确认保存</span>
+      <span class="btn add save" id="btn-save" data-dismiss="modal" aria-hidden="true">确认保存</span>
     </div>
     <div class="finish-div">
-      <span class="btn add save" id="btn-finish">完成</span>
+      <span class="btn add save" id="btn-finish" data-dismiss="modal" aria-hidden="true">完成</span>
     </div>
   </div>
   <div class="modal-footer">

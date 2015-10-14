@@ -15,11 +15,12 @@
 		</tr>
   </thead>
 	<tbody>
-		{% for item in items %}
-		<tr>
-			<td>{% if can_choose and item.can_choose %}
-			<input type="checkbox"/>
-			{% endif %}</td>
+		{% for item in items_pending %}
+		<tr class="pendding" args="{{item.id}}">	
+			{% if can_choose %}
+			<td>{% if item.can_choose %}
+			<input type="checkbox" class="checkbox" args="{{item.id}}">
+			{% endif %}</td> {% endif %}
 			<td>{{item.index}}</td>
 			<td>{{item.name}}</td>
 			<td>{{item.schematic_index}}</td>
@@ -30,5 +31,21 @@
 			<td>{{item.status}}</td>
 		</tr>
 		{% endfor %}
-	</tbody>7=/2aclnopv
+		{% for item in items %}
+		<tr>	
+			{% if can_choose %}
+			<td>{% if item.can_choose %}
+			<input type="checkbox" class="checkbox" args="{{item.id}}">
+			{% endif %}</td> {% endif %}
+			<td>{{item.index}}</td>
+			<td>{{item.name}}</td>
+			<td>{{item.schematic_index}}</td>
+			<td>{{item.material}}</td>
+			<td></td>
+			<td>{{item.materielformconnection.count}}</td>
+			<td></td>
+			<td>{{item.status}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
 </table>
