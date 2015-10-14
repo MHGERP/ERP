@@ -519,6 +519,9 @@ def newOrderFinish(request,id):
     order_form.order_status = OrderFormStatus.objects.get(status = 1)
 
 
+def getMaxId(table):
+    return max(int(item.id) for item in table.objects.all())
+
 @dajaxice_register
 def newOrderCreate(request):
     """
@@ -527,7 +530,7 @@ def newOrderCreate(request):
     cDate_datetime = datetime.now()
     order_status = OrderFormStatus.objects.get(status = 0)
     new_order_form = OrderForm(
-        order_id = "2015%04d" % (OrderForm.objects.count()),
+        order_id = "2015%05d" % (getMaxId(OrderForm) + 1),
         create_time = cDate_datetime,
         order_status = order_status,
     )
@@ -630,7 +633,7 @@ def newBidCreate(request):
     cDate_datetime = datetime.now()
     bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_CREATE)
     bid_form = BidForm(
-        bid_id = "2015%04d" % (BidForm.objects.count()),
+        bid_id = "2015%05d" % (getMaxId(BidForm) + 1),
         create_time = cDate_datetime,
         bid_status = bid_status,
     )
