@@ -548,6 +548,8 @@ def getOngoingOrderList(request):
     html = ''.join("<option value='%s'>%s</option>" % (order.id, order) for order in order_form_list)
     return html
 
+
+
 @dajaxice_register
 def newOrderDelete(request,num):
     """
