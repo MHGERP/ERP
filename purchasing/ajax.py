@@ -328,12 +328,22 @@ def addChangeItem(request,subform,sid,item_id = None):
     return simplejson.dumps(data)
 @dajaxice_register
 def MaterielExecuteQuery(request,number):
+    """
+    mxl
+    summary : query a materielexecute by document_number
+    params : number : the document_number to query database
+    """
     materielexecute = MaterielExecute.objects.filter(document_number=number)
     materielexecute_html = render_to_string("purchasing/materielexecute/table/materielexecute_table.html", {"materielexecute_set":materielexecute})
     return simplejson.dumps({"materielexecute_html":materielexecute_html})
 
 @dajaxice_register
 def materielchoiceChange(request, materielChoice):
+    """
+    mxl
+    summary : when the select widget change between main and support, the table style and data woule be changed
+    params : materielChoice : the selected materiel_choice
+    """
     print materielChoice
     if materielChoice == MAIN_MATERIEL:
         materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
@@ -362,6 +372,13 @@ def materielchoiceChange(request, materielChoice):
 
 @dajaxice_register
 def saveMaterielExecuteDetail(request, form, documentNumberInput, materielChoice):
+    """
+    mxl
+    summary : save the materielExecute and MainMaterielExecuteDetail(SupportMaterielExecuteDetail) models
+    params : form : the submit form(detail)
+             documentNumberInput : document_number of MaterielExecute model
+             materielChoice : materielChoice of  MaterielExecute model
+    """
     materielexecute = MaterielExecute();
     materielexecute.document_number = documentNumberInput
     materielexecute.document_lister = request.user
