@@ -197,6 +197,11 @@ def addToDetailSingle(request, index):
     return ""
 
 @dajaxice_register
+def deleteOrderForm(request, index):
+    order_form = OrderForm.objects.get(order_id = index)
+    order_form.delete()
+
+@dajaxice_register
 def getOrderFormList(request, statu, key):
     """
     JunHU
