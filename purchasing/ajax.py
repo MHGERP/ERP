@@ -2,8 +2,7 @@
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
-from purchasing.models import BidForm,ArrivalInspection,Supplier,SupplierFile,PurchasingEntry,PurchasingEntryItems,MaterialSubApplyItems,MaterialSubApply
-from purchasing.models import OrderForm, MaterielExecute, SupplierSelect, BidForm, MainMaterielExecuteDetail, SupportMaterielExecuteDetail
+from purchasing.models import *
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
 from const import *
 from const.models import Materiel,OrderFormStatus, BidFormStatus
@@ -633,15 +632,35 @@ def newBidCreate(request):
     }
     return simplejson.dumps(context)
 
-
+@dajaxice_register
+def newBidSave(request, id, pendingArray):
+    """
+    JunHU
+    """
+    cDate_datetime = datetime.now()
+    bid_form = BidForm.objects.get(id = id)
+    for id in pendingArray:
+        materiel = Materiel.objects.get(id = id)
+        try:
+            conn = MaterielFormConnection.objects.get(materiel = materiel)
+        except:
+            conn = MaterielFormConnection(materiel = materiel)
+        conn.bid_form = bid_form
+        conn.save()
+    bid_form.establishment_time = cDate_datetime
+    bid_form.save()
 
 @dajaxice_register
 def newBidFinish(request, id):
     """
     JunHu
     """
+    cDate_datetime = datetime.now()
     bid_form = BidForm.objects.get(id = id)
     bid_form.bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_APPROVED) # change the part-status into approved
+    bid_form.establishment_time = cDate_datetime
+    bid_form.save()
+
 
 @dajaxice_register
 def newBidDelete(request, id):
