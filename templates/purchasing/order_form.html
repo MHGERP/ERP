@@ -29,12 +29,14 @@
 </div>
 {% endif %}
 
+
 <div class="widget-content" id="item_table">
     
 </div>
 
+{% if order_form.order_status.status == 1 %}
 <span class="btn" id="add_to_bid" data-toggle="modal" data-target="#bid_list">加入标单</span>
-
+{% endif %}
 
 <div id="bid_list" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
