@@ -405,7 +405,7 @@ def saveMaterielExecuteDetail(request, form, documentNumberInput, materielChoice
                 materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
             else:
                 print detail_Form.errors
-                ret = {'status' : '1', 'message' : u'ou no!'}
+                ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
                 return simplejson.dumps(ret)
         else:
             materielexecute.materiel_choice = MATERIEL_CHOICE[1][1]
@@ -425,7 +425,7 @@ def saveMaterielExecuteDetail(request, form, documentNumberInput, materielChoice
                 materielexecute_detail.oddments = detail_Form.cleaned_data["oddments"]
                 materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
             else:
-                ret = {'status' : '1', 'message' : u'ou no!'}
+                ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
                 return simplejson.dumps(ret)
 
         materielexecute.save()
@@ -437,10 +437,10 @@ def saveMaterielExecuteDetail(request, form, documentNumberInput, materielChoice
         print e
     if(flag):
         transaction.commit()
-        ret = {'status' : '0', 'message' : u'ok!'}
+        ret = {'status' : '0', 'message' : u'保存成功'}
     else:
         transaction.rollback()
-        ret = {'status' : '1', 'message' : u'ou no!'}
+        ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
     return simplejson.dumps(ret)
 
 def SelectSupplierOperation(request,selected,bid):
