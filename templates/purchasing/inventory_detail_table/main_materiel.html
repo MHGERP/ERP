@@ -19,7 +19,7 @@
     </thead>
     {% for item in inventory_detail_list%}
     <tr iid="{{item.id}}">
-        <td>{%if item.can_choose %}<input type="checkbox" name="item" id="subcheck">{% endif %}</td>
+        <td>{%if item.can_choose %}<input type="checkbox" class="checkbox" args="{{item.id}}">{% endif %}</td>
         <td>{{forloop.counter}}</td>
         <td>{{item.name}}</td>
         <td></td>

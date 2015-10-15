@@ -112,8 +112,8 @@ $(document).on("click", "input#selectall", function(){
 
 $(document).on("click","#add_to_order",function(){
     pendingArray = Array();
-    $("input[type='checkbox']:checked").each(function(){
-        pendingArray.push($(this).attr("args"));
+    $("input.checkbox").each(function(){
+        if(this.checked) pendingArray.push($(this).attr("args"));
     });
 });
 
@@ -156,8 +156,8 @@ $(document).on("click",".bid-btn-open",function(){
 });
 $(document).on("click","#add_to_bid",function(){
     pendingArray = Array();
-    $("input.checkbox:checked").each(function() {
-        pendingArray.push($(this).attr("args"));
+    $("input.checkbox").each(function() {
+        if(this.checked) pendingArray.push($(this).attr("args"));
     });
 });
 $(document).on("click","#bid-btn-delete",function() {
