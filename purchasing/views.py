@@ -15,6 +15,7 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect,HttpResponse
 import json
+from django.db import transaction
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -347,9 +348,30 @@ def statusChangeHistoryViews(request,bid):
     }
     return render(request,"purchasing/status_change/statushistory.html",context)
 
+@transaction.commit_on_success
 def statusChangeApplyViews(request,bid):
     bidform = BidForm.objects.get(bid_id = bid)
-    statuschangeform = StatusChangeApplyForm(bidform=bidform)
+    if request.method == "POST":
+        statuschangeform = StatusChangeApplyForm(request.POST,bidform = bidform)
+        if statuschangeform.is_valid():
+            statuschange_obj = statuschangeform.save(commit = False)
+            statuschange_obj.bidform = bidform
+            statuschange_obj.change_user = request.user
+            statuschange_obj.normal_change = False
+            statuschange_obj.original_status = bidform.bid_status
+            return HttpResponseRedirect('/purchasing/statusChangeHome')
+            try:
+                statuschange_obj.save()
+                reason = statuschangeform.cleaned_data["reason"]
+                changereason = StatusChangeReason(status_change = statuschange_obj ,reason = reason)
+                changereason.save()
+            except Exception,e:
+                print e
+        else:
+            print statuschangeform.errors
+    else:
+        statuschangeform = StatusChangeApplyForm(bidform=bidform)   
+
     context = {
         'chform':statuschangeform,
     }
