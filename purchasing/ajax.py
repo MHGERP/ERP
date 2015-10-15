@@ -36,7 +36,7 @@ def searchPurchasingFollowing(request,bidid):
 
 @dajaxice_register
 def checkArrival(request,aid,cid):
-    arrivalfield = ARRIVAL_CHECK_FIELDS[cid]
+    arrivalfield = ARRIAL_CHECK_FIELDS[cid]
     cargo_obj = ArrivalInspection.objects.get(id = aid)
     val = not getattr(cargo_obj,arrivalfield)
     setattr(cargo_obj,arrivalfield,val)
@@ -102,6 +102,9 @@ def isAllChecked(bid,purchasingentry):
 
 @dajaxice_register
 def chooseInventorytype(request,pid,key):
+    """
+    Lei
+    """
     idtable = {
         "1": "main_materiel",
         "2": "auxiliary_materiel",
@@ -479,6 +482,9 @@ def deleteItem(request,item_id,sid):
 
 @dajaxice_register
 def deleteDetail(request,uid):
+    """
+    Lei
+    """
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
     item.materielpurchasingstatus.save()
@@ -502,6 +508,7 @@ def saveComment(request, form, bid_id):
     else:
         ret = {'status': '1', 'message': u"该成员不存在，请刷新页面"}
     return simplejson.dumps(ret)
+
 def AddProcessFollowing(request,bid,process_form):
     process_form=ProcessFollowingForm(deserialize_form(process_form))
     if process_form.is_valid():
@@ -510,72 +517,8 @@ def AddProcessFollowing(request,bid,process_form):
         print process_form.errors
     return simplejson.dumps({})
 
-@dajaxice_register
-def newOrderFinish(request,id):
-    """
-    Lei
-    """
-    order_form = OrderForm.objects.get(id = id)
-    order_form.order_status = OrderFormStatus.objects.get(status = 1)
-
-
 def getMaxId(table):
     return max(int(item.id) for item in table.objects.all())
-
-@dajaxice_register
-def newOrderCreate(request):
-    """
-    Lei
-    """
-    cDate_datetime = datetime.now()
-    order_status = OrderFormStatus.objects.get(status = 0)
-    new_order_form = OrderForm(
-        order_id = "2015%05d" % (getMaxId(OrderForm) + 1),
-        create_time = cDate_datetime,
-        order_status = order_status,
-    )
-    new_order_form.save()
-    html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
-    context = {
-        "order_id":new_order_form.order_id,
-        "html":html,
-    }
-    return simplejson.dumps(context)
-
-@dajaxice_register
-def getOngoingOrderList(request):
-    """
-    Lei
-    """
-    order_form_list = OrderForm.objects.filter(Q(order_status__status = 0))
-    html = ''.join("<option value='%s'>%s</option>" % (order.id, order) for order in order_form_list)
-    return html
-
-
-
-@dajaxice_register
-def newOrderDelete(request,num):
-    """
-    Lei
-    """
-    order = OrderForm.objects.get(order_id = num)
-    order.delete()
-
-def getOrderForm(request, order_id):
-    """
-    Lei
-    """
-    order_form = OrderForm.objects,get(id = order_id)
-    items = Materiel.objects.filter(materielformconnection__order_form = order_form)
-    html = render_to_string("purchasing/orderform/orderform_item_list.html",{"items":items})
-    context = {
-            "order_id": order_form.order_id,
-            "id":order_form.id,
-            "html":html,
-    }
-
-    return simplejson.dumps(context)
-
 
 @dajaxice_register
 def getOrderFormItems(request, index, can_choose = False):
@@ -626,6 +569,15 @@ def getOngoingBidList(request):
     return html
 
 @dajaxice_register
+def getOngoingOrderList(request):
+    """
+    Lei
+    """
+    order_form_list = OrderForm.objects.filter(Q(order_status__status = 0))
+    html = ''.join("<option value='%s'>%s</option>" % (order.id, order) for order in order_form_list)
+    return html
+
+@dajaxice_register
 def newBidCreate(request):
     """
     JunHU
@@ -641,7 +593,29 @@ def newBidCreate(request):
     html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
     context = {
         "bid_id": bid_form.bid_id,
+        "id": bid_form.id,      
         "html": html,
+    }
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def newOrderCreate(request):
+    """
+    Lei
+    """
+    cDate_datetime = datetime.now()
+    order_status = OrderFormStatus.objects.get(status = 0)
+    order_form = OrderForm(
+        order_id = "2015%05d" % (getMaxId(OrderForm) + 1),
+        create_time = cDate_datetime,
+        order_status = order_status,
+    )
+    order_form.save()
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
+    context = {
+        "order_id":order_form.order_id,
+        "id": order_form.id,
+        "html":html,
     }
     return simplejson.dumps(context)
 
@@ -664,6 +638,24 @@ def newBidSave(request, id, pendingArray):
     bid_form.save()
 
 @dajaxice_register
+def newOrderSave(request, id, pendingArray):
+    """
+    Lei
+    """
+    cDate_datetime = datetime.now()
+    order_form = OrderForm.objects.get(id = id)
+    for id in pendingArray:
+        materiel = Materiel.objects.get(id = id)
+        try:
+            conn = MaterielFormConnection.objects.get(materiel = materiel)
+        except:
+            conn = MaterielFormConnection(materiel = materiel)
+        conn.order_form = order_form
+        conn.save()
+    order_form.establishment_time = cDate_datetime
+    order_form.save()
+
+@dajaxice_register
 def newBidFinish(request, id):
     """
     JunHu
@@ -674,6 +666,16 @@ def newBidFinish(request, id):
     bid_form.establishment_time = cDate_datetime
     bid_form.save()
 
+@dajaxice_register
+def newOrderFinish(request,id):
+    """
+    Lei
+    """
+    cDate_datetime = datetime.now()
+    order_form = OrderForm.objects.get(id = id)
+    order_form.order_status = OrderFormStatus.objects.get(status = 1)
+    order_form.establishment_time = cDate_datetime
+    order_form.save()
 
 @dajaxice_register
 def newBidDelete(request, id):
@@ -682,6 +684,14 @@ def newBidDelete(request, id):
     """
     bid_form = BidForm.objects.get(id = id)
     bid_form.delete();
+
+@dajaxice_register
+def newOrderDelete(request,id):
+    """
+    Lei
+    """
+    order_form = OrderForm.objects.get(id = id)
+    order_form.delete()
 
 @dajaxice_register
 def getBidForm(request, bid_id, pendingArray):
@@ -706,4 +716,25 @@ def getBidForm(request, bid_id, pendingArray):
 
     return simplejson.dumps(context)
 
+@dajaxice_register
+def getOrderForm(request, order_id, pendingArray):
+    """
+    Lei
+    """
+    order_form = OrderForm.objects.get(id = order_id)
+    items = Materiel.objects.filter(materielformconnection__order_form = order_form)
+    for item in items:
+        item.status = u"已加入"
 
+    items_pending = [Materiel.objects.get(id = id) for id in pendingArray]
+    for item in items_pending:
+        item.status = u"待加入"
+
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items, "can_choose": False, "items_pending": items_pending, })
+    context = {
+            "order_id": order_form.order_id,
+            "id": order_form.id,
+            "html": html,
+        }
+
+    return simplejson.dumps(context)

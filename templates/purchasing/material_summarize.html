@@ -20,8 +20,10 @@
 </div>
 
 {%include "widgets/inventory_detail.html"%}  
-<span class="btn" id="add_to_order" data-toggle="modal" data-target="#order_list">加入订购单</span> 
-<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/material_summarize.js"></script>
+<!-- <span class="btn" id="add_to_order" data-toggle="modal" data-target="#order_list">加入订购单</span>  -->
+<span class="btn" id="add_to_order" data-toggle="modal" data-target="#order_list">加入订购单</span>
+<span class="btn" id="add_to_bid" data-toggle="modal" data-target="#bid_list">加入标单</span>
+
 
 <div id="order_list" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
@@ -30,14 +32,35 @@
 
   <div class="modal-body">
     选择要加入的订购单：
-    <select class="input-medium search-query" id="order-select">
+    <select class="input-medium search-query order-select" id="order-select-2">
     
     </select>
   </div>
 
   <div class="modal-footer">
+    <button class="btn btn-success btn-open" data-dismiss="modal" aria-hidden="true" data-source="#order-select-2" data-toggle="modal" data-target="#new_order_modal">确认</button>
     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
   </div>
 </div>
-{% endblock%}
 
+
+<div id="bid_list" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="myModalLabel">创建中标单</h2>
+  </div>
+
+  <div class="modal-body">
+    选择要加入的标单：
+    <select class="input-medium search-query bid-select" id="search-query-2">
+    
+    </select>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-success bid-btn-open" data-dismiss="modal" aria-hidden="true" data-source="#search-query-2" data-toggle="modal" data-target="#bid_modal">确认</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/material_summarize.js"></script>
+{% endblock%}
