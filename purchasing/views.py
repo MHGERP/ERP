@@ -282,11 +282,14 @@ def processFollowAdd(request):
             status=1
         return HttpResponse(json.dumps({'status':status,"form_html":form_html}),content_type="application/json")
 
-    """
-    mode: 0 view, 1 add
-    mid : materielexecute id
-    """
+    
 def materielExecuteDetailViews(request, choice, *mid):
+    """
+    mxl
+    summary : click into add or view html
+    params : choice : main or support detail
+             mid : option param, the materielexecute id
+    """
     if choice == "0":
         materielexecute_id = mid[0]
         materielexecute = MaterielExecute.objects.get(pk = materielexecute_id)

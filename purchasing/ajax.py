@@ -331,12 +331,22 @@ def addChangeItem(request,subform,sid,item_id = None):
     return simplejson.dumps(data)
 @dajaxice_register
 def MaterielExecuteQuery(request,number):
+    """
+    mxl
+    summary : query a materielexecute by document_number
+    params : number : the document_number to query database
+    """
     materielexecute = MaterielExecute.objects.filter(document_number=number)
     materielexecute_html = render_to_string("purchasing/materielexecute/table/materielexecute_table.html", {"materielexecute_set":materielexecute})
     return simplejson.dumps({"materielexecute_html":materielexecute_html})
 
 @dajaxice_register
 def materielchoiceChange(request, materielChoice):
+    """
+    mxl
+    summary : when the select widget change between main and support, the table style and data woule be changed
+    params : materielChoice : the selected materiel_choice
+    """
     print materielChoice
     if materielChoice == MAIN_MATERIEL:
         materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
@@ -364,63 +374,76 @@ def materielchoiceChange(request, materielChoice):
     return simplejson.dumps({'materielexecute_detail_html' : rendered_materielexecute_detail_html, 'add_form' : add_form})
 
 @dajaxice_register
+@transaction.commit_manually
 def saveMaterielExecuteDetail(request, form, documentNumberInput, materielChoice):
-    materielexecute = MaterielExecute();
-    materielexecute.document_number = documentNumberInput
-    materielexecute.document_lister = request.user
-    materielexecute.date_date = datetime.today()
+    """
+    mxl
+    summary : save the materielExecute and MainMaterielExecuteDetail(SupportMaterielExecuteDetail) models
+    params : form : the submit form(detail)
+             documentNumberInput : document_number of MaterielExecute model
+             materielChoice : materielChoice of  MaterielExecute model
+    """
+    flag = False;
+    try:
+        materielexecute = MaterielExecute();
+        materielexecute.document_number = documentNumberInput
+        materielexecute.document_lister = request.user
+        materielexecute.date_date = datetime.today()
 
-    if materielChoice == MAIN_MATERIEL:
-        materielexecute.materiel_choice = MATERIEL_CHOICE[0][1]
-        detail_Form = MainMaterielExecuteDetailForm(deserialize_form(form))
-        if detail_Form.is_valid():
-            materielexecute_detail = MainMaterielExecuteDetail()
-            materielexecute_detail.materiel_texture = detail_Form.cleaned_data["materiel_texture"]
-            materielexecute_detail.materiel_name = detail_Form.cleaned_data["materiel_name"]
-            materielexecute_detail.quality_class = detail_Form.cleaned_data["quality_class"]
-            materielexecute_detail.specification = detail_Form.cleaned_data["specification"]
-            materielexecute_detail.quantity = detail_Form.cleaned_data["quantity"]
-            materielexecute_detail.purchase_weight = detail_Form.cleaned_data["purchase_weight"]
-            materielexecute_detail.recheck = detail_Form.cleaned_data["recheck"]
-            materielexecute_detail.crack_rank = detail_Form.cleaned_data["crack_rank"]
-            materielexecute_detail.delivery_status = detail_Form.cleaned_data["delivery_status"]
-            materielexecute_detail.execute_standard = detail_Form.cleaned_data["execute_standard"]
-            materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
-            ret = {'status' : '0', 'message' : u'ok!'}
+        if materielChoice == MAIN_MATERIEL:
+            materielexecute.materiel_choice = MATERIEL_CHOICE[0][1]
+            detail_Form = MainMaterielExecuteDetailForm(deserialize_form(form))
+            if detail_Form.is_valid():
+                materielexecute_detail = MainMaterielExecuteDetail()
+                materielexecute_detail.materiel_texture = detail_Form.cleaned_data["materiel_texture"]
+                materielexecute_detail.materiel_name = detail_Form.cleaned_data["materiel_name"]
+                materielexecute_detail.quality_class = detail_Form.cleaned_data["quality_class"]
+                materielexecute_detail.specification = detail_Form.cleaned_data["specification"]
+                materielexecute_detail.quantity = detail_Form.cleaned_data["quantity"]
+                materielexecute_detail.purchase_weight = detail_Form.cleaned_data["purchase_weight"]
+                materielexecute_detail.recheck = detail_Form.cleaned_data["recheck"]
+                materielexecute_detail.crack_rank = detail_Form.cleaned_data["crack_rank"]
+                materielexecute_detail.delivery_status = detail_Form.cleaned_data["delivery_status"]
+                materielexecute_detail.execute_standard = detail_Form.cleaned_data["execute_standard"]
+                materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
+            else:
+                print detail_Form.errors
+                ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
+                return simplejson.dumps(ret)
         else:
-            print detail_Form.errors
-            ret = {'status' : '1', 'message' : u'ou no!'}
-            return simplejson.dumps(ret)
+            materielexecute.materiel_choice = MATERIEL_CHOICE[1][1]
+            detail_Form = SupportMaterielExecuteDetailForm(deserialize_form(form))
+            if detail_Form.is_valid():
+                materielexecute_detail = SupportMaterielExecuteDetail()
+                materielexecute_detail.materiel_texture = detail_Form.cleaned_data["materiel_texture"]
+                materielexecute_detail.texture_number = detail_Form.cleaned_data["texture_number"]
+                materielexecute_detail.specification = detail_Form.cleaned_data["specification"]
+                materielexecute_detail.quantity = detail_Form.cleaned_data["quantity"]
+                materielexecute_detail.delivery_status = detail_Form.cleaned_data["delivery_status"]
+                materielexecute_detail.press = detail_Form.cleaned_data["press"]
+                materielexecute_detail.crack_rank = detail_Form.cleaned_data["crack_rank"]
+                materielexecute_detail.recheck = detail_Form.cleaned_data["recheck"]
+                materielexecute_detail.quota = detail_Form.cleaned_data["quota"]
+                materielexecute_detail.part = detail_Form.cleaned_data["part"]
+                materielexecute_detail.oddments = detail_Form.cleaned_data["oddments"]
+                materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
+            else:
+                ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
+                return simplejson.dumps(ret)
+
+        materielexecute.save()
+        materielexecute_detail.materiel_execute = materielexecute
+        materielexecute_detail.save()
+        flag = True;
+    except Exception, e:
+        transaction.rollback()
+        print e
+    if(flag):
+        transaction.commit()
+        ret = {'status' : '0', 'message' : u'保存成功'}
     else:
-        materielexecute.materiel_choice = MATERIEL_CHOICE[1][1]
-        detail_Form = SupportMaterielExecuteDetailForm(deserialize_form(form))
-        if detail_Form.is_valid():
-            materielexecute_detail = SupportMaterielExecuteDetail()
-            materielexecute_detail.materiel_texture = detail_Form.cleaned_data["materiel_texture"]
-            materielexecute_detail.texture_number = detail_Form.cleaned_data["texture_number"]
-            materielexecute_detail.specification = detail_Form.cleaned_data["specification"]
-            materielexecute_detail.quantity = detail_Form.cleaned_data["quantity"]
-            materielexecute_detail.delivery_status = detail_Form.cleaned_data["delivery_status"]
-            materielexecute_detail.press = detail_Form.cleaned_data["press"]
-            materielexecute_detail.crack_rank = detail_Form.cleaned_data["crack_rank"]
-            materielexecute_detail.recheck = detail_Form.cleaned_data["recheck"]
-            materielexecute_detail.quota = detail_Form.cleaned_data["quota"]
-            materielexecute_detail.part = detail_Form.cleaned_data["part"]
-            materielexecute_detail.oddments = detail_Form.cleaned_data["oddments"]
-            materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
-            ret = {'status' : '0', 'message' : u'ok!'}
-        else:
-            ret = {'status' : '1', 'message' : u'ou no!'}
-            return simplejson.dumps(ret)
-
-    
-
-    materielexecute.save()
-
-    materielexecute_detail.materiel_execute = materielexecute
-
-    materielexecute_detail.save()
-
+        transaction.rollback()
+        ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
     return simplejson.dumps(ret)
 
 def SelectSupplierOperation(request,selected,bid):
