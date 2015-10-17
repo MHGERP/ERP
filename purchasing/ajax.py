@@ -761,3 +761,10 @@ def getOrderForm(request, order_id, pendingArray):
         }
 
     return simplejson.dumps(context)
+
+@dajaxice_register
+def ProcessFollowingReset(request,bid):
+    bidform=BidForm.objects.get(pk=bid)
+    process_follows=ProcessFollowingInfo.objects.filter(bidform=bidform)
+    process_follows.delete()
+    return simplejson.dumps({})

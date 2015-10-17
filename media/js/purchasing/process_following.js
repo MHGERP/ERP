@@ -51,3 +51,15 @@ function status_submit_callback(data){
         alert("状态更改有误！");
     }
 }
+
+$("#reset").click(function(){
+    Dajaxice.purchasing.ProcessFollowingReset(status_reset_callback,{
+        "bid":$("#process_following_table").attr("bid")
+    });
+
+});
+function status_reset_callback(data){
+    alert("过程跟踪已经重置！");
+    window.location.reload();
+
+}
