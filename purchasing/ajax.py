@@ -36,14 +36,25 @@ def searchPurchasingFollowing(request,bidid):
 
 @dajaxice_register
 def checkArrival(request,aid,cid):
+
     arrivalfield = ARRIVAL_CHECK_FIELDS[cid]
     cargo_obj = ArrivalInspection.objects.get(id = aid)
-    val = not getattr(cargo_obj,arrivalfield)
-    setattr(cargo_obj,arrivalfield,val)
-    cargo_obj.save()
     val = getattr(cargo_obj,arrivalfield)
+    bidform = cargo_obj.bidform
+    if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
+        val = not val
+        setattr(cargo_obj,arrivalfield,val)
+        cargo_obj.save()
+        val = getattr(cargo_obj,arrivalfield)
+        message = u"状态修改成功"
+        isOk = True
+    else:
+        message = u"状态修改失败，入库单已经存在"
+        isOk = False
     data = {
         "flag":val, 
+        "message":message,
+        'isOk':isOk,
     }
     return simplejson.dumps(data)
 
@@ -58,6 +69,7 @@ def genEntry(request,bid):
         if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
             purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
             purchasingentry.save()
+            goNextStatus(bidform,request.user)
             flag = True
         else:
             message = u"入库单已经存在，请勿重复提交"
@@ -73,6 +85,7 @@ def genEntry(request,bid):
         transaction.rollback()
         if message =="":
             message = u"入库单生成失败，有未确认的项，请仔细检查"
+    
     data = {
         'flag':flag,
         'message':message,
@@ -252,35 +265,44 @@ def refresh_supplier_table(request):
 @transaction.commit_manually
 def entryConfirm(request,e_items,pur_entry):
     try:
-        if pur_entry["entry_time"] == "" or pur_entry["receipts_code"] == "":
-            return simplejson.dumps({"flag":False,"message":u"入库单确认失败，入库时间或单据标号为空"})
+
+        pid = pur_entry["pid"]
+        pur_obj = PurchasingEntry.objects.get(id = pid)
+        bidform = pur_obj.bidform
+        flag = True
+        if bidform.bid_status.part_status != BIDFORM_PART_STATUS_STORE:
+            flag = False 
+            message=u"入库单已经确认过，请勿重复确认"
+        if pur_entry["entry_time"] == "":
+            flag=False
+            message=u"入库单确认失败，入库时间为空"
         for item in e_items:
             pur_item = PurchasingEntryItems.objects.get(id = item["eid"])
             pur_item.standard = item["standard"]
             pur_item.status = item["status"]
             pur_item.remark = item["remark"]
             pur_item.save()
-        pid = pur_entry["pid"]
-        entry_time = pur_entry["entry_time"]
-        receipts_code = pur_entry["receipts_code"]
-        pur_entry = PurchasingEntry.objects.get(id = pid)
-        pur_entry.entry_time = entry_time
-        pur_entry.receipts_code = receipts_code
-        pur_entry.save()
-        transaction.commit()
-        flag = True
-        message = u"入库单确认成功"
+        pur_obj.entry_time = pur_entry["entry_time"]
+        pur_obj.save()
+        if flag:
+            goNextStatus(bidform,request.user)
+            message = u"入库单确认成功"
     except Exception,e:
-        transaction.rollback()
         flag = False
         message = u"入库单确认失败，数据库导入失败"
         print "----error-----"
         print e
         print "--------------"
-    data = {
-        "flag":flag,
-        "message":message,
-    }
+    finally:
+        if flag:
+            transaction.commit()
+        else:
+            transaction.rollback()
+        data ={
+            "flag":flag,
+            "message":message,
+        }
+
     return simplejson.dumps(data)
 
 def FileDelete(requset,mod,file_id):

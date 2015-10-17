@@ -124,23 +124,22 @@ def bidTrackingViews(request):
 def arrivalInspectionViews(request):
     if request.method == "POST":
         bid_id = request.POST["bidform_search"]
-        print bid_id
         bidFormSet = BidForm.objects.filter(bid_id = bid_id)
     else:
-        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
-    
+        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_STORE)    
     context = {
         "bidFormSet":bidFormSet,
+        "BIDFORM_PART_STATUS_STORE":BIDFORM_PART_STATUS_STORE,
     }
     return render(request,"purchasing/purchasing_arrival.html",context)
 
 def arrivalCheckViews(request,bid):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
-    is_exist = PurchasingEntry.objects.filter(bidform__bid_id = bid).count() > 0
+    is_show = BidForm.objects.filter(bid_id = bid , bid_status__part_status = BIDFORM_PART_STATUS_CHECK).count() > 0
     context = {
         "cargo_set":cargo_set,
         "bid":bid,
-        "is_exist":is_exist,
+        "is_show":is_show,
     }
     return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 
@@ -190,6 +189,8 @@ def subApplyViews(request,sid = None):
             subapply_obj.is_submit = True
             subapply_obj.save()
             return HttpResponseRedirect("/purchasing/subApplyHome/")
+        else:
+            print subapply_form.errors
     else:
         subapply_form = SubApplyForm(instance = subapply_obj)
     sub_set = MaterialSubApplyItems.objects.filter(sub_apply__id = sid)
