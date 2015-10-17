@@ -61,5 +61,4 @@ $("#reset").click(function(){
 function status_reset_callback(data){
     alert("过程跟踪已经重置！");
     window.location.reload();
-
 }
