@@ -115,6 +115,9 @@ def isAllChecked(bid,purchasingentry):
 
 @dajaxice_register
 def chooseInventorytype(request,pid,key):
+    """
+    Lei
+    """
     idtable = {
         "1": "main_materiel",
         "2": "auxiliary_materiel",
@@ -350,12 +353,22 @@ def addChangeItem(request,subform,sid,item_id = None):
     return simplejson.dumps(data)
 @dajaxice_register
 def MaterielExecuteQuery(request,number):
+    """
+    mxl
+    summary : query a materielexecute by document_number
+    params : number : the document_number to query database
+    """
     materielexecute = MaterielExecute.objects.filter(document_number=number)
     materielexecute_html = render_to_string("purchasing/materielexecute/table/materielexecute_table.html", {"materielexecute_set":materielexecute})
     return simplejson.dumps({"materielexecute_html":materielexecute_html})
 
 @dajaxice_register
 def materielchoiceChange(request, materielChoice):
+    """
+    mxl
+    summary : when the select widget change between main and support, the table style and data woule be changed
+    params : materielChoice : the selected materiel_choice
+    """
     print materielChoice
     if materielChoice == MAIN_MATERIEL:
         materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
@@ -383,63 +396,76 @@ def materielchoiceChange(request, materielChoice):
     return simplejson.dumps({'materielexecute_detail_html' : rendered_materielexecute_detail_html, 'add_form' : add_form})
 
 @dajaxice_register
+@transaction.commit_manually
 def saveMaterielExecuteDetail(request, form, documentNumberInput, materielChoice):
-    materielexecute = MaterielExecute();
-    materielexecute.document_number = documentNumberInput
-    materielexecute.document_lister = request.user
-    materielexecute.date_date = datetime.today()
+    """
+    mxl
+    summary : save the materielExecute and MainMaterielExecuteDetail(SupportMaterielExecuteDetail) models
+    params : form : the submit form(detail)
+             documentNumberInput : document_number of MaterielExecute model
+             materielChoice : materielChoice of  MaterielExecute model
+    """
+    flag = False;
+    try:
+        materielexecute = MaterielExecute();
+        materielexecute.document_number = documentNumberInput
+        materielexecute.document_lister = request.user
+        materielexecute.date_date = datetime.today()
 
-    if materielChoice == MAIN_MATERIEL:
-        materielexecute.materiel_choice = MATERIEL_CHOICE[0][1]
-        detail_Form = MainMaterielExecuteDetailForm(deserialize_form(form))
-        if detail_Form.is_valid():
-            materielexecute_detail = MainMaterielExecuteDetail()
-            materielexecute_detail.materiel_texture = detail_Form.cleaned_data["materiel_texture"]
-            materielexecute_detail.materiel_name = detail_Form.cleaned_data["materiel_name"]
-            materielexecute_detail.quality_class = detail_Form.cleaned_data["quality_class"]
-            materielexecute_detail.specification = detail_Form.cleaned_data["specification"]
-            materielexecute_detail.quantity = detail_Form.cleaned_data["quantity"]
-            materielexecute_detail.purchase_weight = detail_Form.cleaned_data["purchase_weight"]
-            materielexecute_detail.recheck = detail_Form.cleaned_data["recheck"]
-            materielexecute_detail.crack_rank = detail_Form.cleaned_data["crack_rank"]
-            materielexecute_detail.delivery_status = detail_Form.cleaned_data["delivery_status"]
-            materielexecute_detail.execute_standard = detail_Form.cleaned_data["execute_standard"]
-            materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
-            ret = {'status' : '0', 'message' : u'ok!'}
+        if materielChoice == MAIN_MATERIEL:
+            materielexecute.materiel_choice = MATERIEL_CHOICE[0][1]
+            detail_Form = MainMaterielExecuteDetailForm(deserialize_form(form))
+            if detail_Form.is_valid():
+                materielexecute_detail = MainMaterielExecuteDetail()
+                materielexecute_detail.materiel_texture = detail_Form.cleaned_data["materiel_texture"]
+                materielexecute_detail.materiel_name = detail_Form.cleaned_data["materiel_name"]
+                materielexecute_detail.quality_class = detail_Form.cleaned_data["quality_class"]
+                materielexecute_detail.specification = detail_Form.cleaned_data["specification"]
+                materielexecute_detail.quantity = detail_Form.cleaned_data["quantity"]
+                materielexecute_detail.purchase_weight = detail_Form.cleaned_data["purchase_weight"]
+                materielexecute_detail.recheck = detail_Form.cleaned_data["recheck"]
+                materielexecute_detail.crack_rank = detail_Form.cleaned_data["crack_rank"]
+                materielexecute_detail.delivery_status = detail_Form.cleaned_data["delivery_status"]
+                materielexecute_detail.execute_standard = detail_Form.cleaned_data["execute_standard"]
+                materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
+            else:
+                print detail_Form.errors
+                ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
+                return simplejson.dumps(ret)
         else:
-            print detail_Form.errors
-            ret = {'status' : '1', 'message' : u'ou no!'}
-            return simplejson.dumps(ret)
+            materielexecute.materiel_choice = MATERIEL_CHOICE[1][1]
+            detail_Form = SupportMaterielExecuteDetailForm(deserialize_form(form))
+            if detail_Form.is_valid():
+                materielexecute_detail = SupportMaterielExecuteDetail()
+                materielexecute_detail.materiel_texture = detail_Form.cleaned_data["materiel_texture"]
+                materielexecute_detail.texture_number = detail_Form.cleaned_data["texture_number"]
+                materielexecute_detail.specification = detail_Form.cleaned_data["specification"]
+                materielexecute_detail.quantity = detail_Form.cleaned_data["quantity"]
+                materielexecute_detail.delivery_status = detail_Form.cleaned_data["delivery_status"]
+                materielexecute_detail.press = detail_Form.cleaned_data["press"]
+                materielexecute_detail.crack_rank = detail_Form.cleaned_data["crack_rank"]
+                materielexecute_detail.recheck = detail_Form.cleaned_data["recheck"]
+                materielexecute_detail.quota = detail_Form.cleaned_data["quota"]
+                materielexecute_detail.part = detail_Form.cleaned_data["part"]
+                materielexecute_detail.oddments = detail_Form.cleaned_data["oddments"]
+                materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
+            else:
+                ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
+                return simplejson.dumps(ret)
+
+        materielexecute.save()
+        materielexecute_detail.materiel_execute = materielexecute
+        materielexecute_detail.save()
+        flag = True;
+    except Exception, e:
+        transaction.rollback()
+        print e
+    if(flag):
+        transaction.commit()
+        ret = {'status' : '0', 'message' : u'保存成功'}
     else:
-        materielexecute.materiel_choice = MATERIEL_CHOICE[1][1]
-        detail_Form = SupportMaterielExecuteDetailForm(deserialize_form(form))
-        if detail_Form.is_valid():
-            materielexecute_detail = SupportMaterielExecuteDetail()
-            materielexecute_detail.materiel_texture = detail_Form.cleaned_data["materiel_texture"]
-            materielexecute_detail.texture_number = detail_Form.cleaned_data["texture_number"]
-            materielexecute_detail.specification = detail_Form.cleaned_data["specification"]
-            materielexecute_detail.quantity = detail_Form.cleaned_data["quantity"]
-            materielexecute_detail.delivery_status = detail_Form.cleaned_data["delivery_status"]
-            materielexecute_detail.press = detail_Form.cleaned_data["press"]
-            materielexecute_detail.crack_rank = detail_Form.cleaned_data["crack_rank"]
-            materielexecute_detail.recheck = detail_Form.cleaned_data["recheck"]
-            materielexecute_detail.quota = detail_Form.cleaned_data["quota"]
-            materielexecute_detail.part = detail_Form.cleaned_data["part"]
-            materielexecute_detail.oddments = detail_Form.cleaned_data["oddments"]
-            materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
-            ret = {'status' : '0', 'message' : u'ok!'}
-        else:
-            ret = {'status' : '1', 'message' : u'ou no!'}
-            return simplejson.dumps(ret)
-
-    
-
-    materielexecute.save()
-
-    materielexecute_detail.materiel_execute = materielexecute
-
-    materielexecute_detail.save()
-
+        transaction.rollback()
+        ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
     return simplejson.dumps(ret)
 
 def SelectSupplierOperation(request,selected,bid):
@@ -501,6 +527,9 @@ def deleteItem(request,item_id,sid):
 
 @dajaxice_register
 def deleteDetail(request,uid):
+    """
+    Lei
+    """
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
     item.materielpurchasingstatus.save()
@@ -524,6 +553,7 @@ def saveComment(request, form, bid_id):
     else:
         ret = {'status': '1', 'message': u"该成员不存在，请刷新页面"}
     return simplejson.dumps(ret)
+
 def AddProcessFollowing(request,bid,process_form):
     process_form=ProcessFollowingForm(deserialize_form(process_form))
     if process_form.is_valid():
@@ -532,69 +562,8 @@ def AddProcessFollowing(request,bid,process_form):
         print process_form.errors
     return simplejson.dumps({})
 
-@dajaxice_register
-def newOrderFinish(request,id):
-    """
-    Lei
-    """
-    order_form = OrderForm.objects.get(id = id)
-    order_form.order_status = OrderFormStatus.objects.get(status = 1)
-
-
-@dajaxice_register
-def newOrderCreate(request):
-    """
-    Lei
-    """
-    cDate_datetime = datetime.now()
-    order_status = OrderFormStatus.objects.get(status = 0)
-    new_order_form = OrderForm(
-        order_id = "2015%04d" % (OrderForm.objects.count()),
-        create_time = cDate_datetime,
-        order_status = order_status,
-    )
-    new_order_form.save()
-    html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
-    context = {
-        "order_id":new_order_form.order_id,
-        "html":html,
-    }
-    return simplejson.dumps(context)
-
-@dajaxice_register
-def getOngoingOrderList(request):
-    """
-    Lei
-    """
-    order_form_list = OrderForm.objects.filter(Q(order_status__status = 0))
-    html = ''.join("<option value='%s'>%s</option>" % (order.id, order) for order in order_form_list)
-    return html
-
-
-
-@dajaxice_register
-def newOrderDelete(request,num):
-    """
-    Lei
-    """
-    order = OrderForm.objects.get(order_id = num)
-    order.delete()
-
-def getOrderForm(request, order_id):
-    """
-    Lei
-    """
-    order_form = OrderForm.objects,get(id = order_id)
-    items = Materiel.objects.filter(materielformconnection__order_form = order_form)
-    html = render_to_string("purchasing/orderform/orderform_item_list.html",{"items":items})
-    context = {
-            "order_id": order_form.order_id,
-            "id":order_form.id,
-            "html":html,
-    }
-
-    return simplejson.dumps(context)
-
+def getMaxId(table):
+    return max(int(item.id) for item in table.objects.all())
 
 @dajaxice_register
 def getOrderFormItems(request, index, can_choose = False):
@@ -645,6 +614,15 @@ def getOngoingBidList(request):
     return html
 
 @dajaxice_register
+def getOngoingOrderList(request):
+    """
+    Lei
+    """
+    order_form_list = OrderForm.objects.filter(Q(order_status__status = 0))
+    html = ''.join("<option value='%s'>%s</option>" % (order.id, order) for order in order_form_list)
+    return html
+
+@dajaxice_register
 def newBidCreate(request):
     """
     JunHU
@@ -652,7 +630,7 @@ def newBidCreate(request):
     cDate_datetime = datetime.now()
     bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_CREATE)
     bid_form = BidForm(
-        bid_id = "2015%04d" % (BidForm.objects.count()),
+        bid_id = "2015%05d" % (getMaxId(BidForm) + 1),
         create_time = cDate_datetime,
         bid_status = bid_status,
     )
@@ -660,7 +638,29 @@ def newBidCreate(request):
     html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
     context = {
         "bid_id": bid_form.bid_id,
+        "id": bid_form.id,      
         "html": html,
+    }
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def newOrderCreate(request):
+    """
+    Lei
+    """
+    cDate_datetime = datetime.now()
+    order_status = OrderFormStatus.objects.get(status = 0)
+    order_form = OrderForm(
+        order_id = "2015%05d" % (getMaxId(OrderForm) + 1),
+        create_time = cDate_datetime,
+        order_status = order_status,
+    )
+    order_form.save()
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
+    context = {
+        "order_id":order_form.order_id,
+        "id": order_form.id,
+        "html":html,
     }
     return simplejson.dumps(context)
 
@@ -683,6 +683,24 @@ def newBidSave(request, id, pendingArray):
     bid_form.save()
 
 @dajaxice_register
+def newOrderSave(request, id, pendingArray):
+    """
+    Lei
+    """
+    cDate_datetime = datetime.now()
+    order_form = OrderForm.objects.get(id = id)
+    for id in pendingArray:
+        materiel = Materiel.objects.get(id = id)
+        try:
+            conn = MaterielFormConnection.objects.get(materiel = materiel)
+        except:
+            conn = MaterielFormConnection(materiel = materiel)
+        conn.order_form = order_form
+        conn.save()
+    order_form.establishment_time = cDate_datetime
+    order_form.save()
+
+@dajaxice_register
 def newBidFinish(request, id):
     """
     JunHu
@@ -693,6 +711,16 @@ def newBidFinish(request, id):
     bid_form.establishment_time = cDate_datetime
     bid_form.save()
 
+@dajaxice_register
+def newOrderFinish(request,id):
+    """
+    Lei
+    """
+    cDate_datetime = datetime.now()
+    order_form = OrderForm.objects.get(id = id)
+    order_form.order_status = OrderFormStatus.objects.get(status = 1)
+    order_form.establishment_time = cDate_datetime
+    order_form.save()
 
 @dajaxice_register
 def newBidDelete(request, id):
@@ -701,6 +729,14 @@ def newBidDelete(request, id):
     """
     bid_form = BidForm.objects.get(id = id)
     bid_form.delete();
+
+@dajaxice_register
+def newOrderDelete(request,id):
+    """
+    Lei
+    """
+    order_form = OrderForm.objects.get(id = id)
+    order_form.delete()
 
 @dajaxice_register
 def getBidForm(request, bid_id, pendingArray):
@@ -725,4 +761,32 @@ def getBidForm(request, bid_id, pendingArray):
 
     return simplejson.dumps(context)
 
+@dajaxice_register
+def getOrderForm(request, order_id, pendingArray):
+    """
+    Lei
+    """
+    order_form = OrderForm.objects.get(id = order_id)
+    items = Materiel.objects.filter(materielformconnection__order_form = order_form)
+    for item in items:
+        item.status = u"已加入"
 
+    items_pending = [Materiel.objects.get(id = id) for id in pendingArray]
+    for item in items_pending:
+        item.status = u"待加入"
+
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items, "can_choose": False, "items_pending": items_pending, })
+    context = {
+            "order_id": order_form.order_id,
+            "id": order_form.id,
+            "html": html,
+        }
+
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def ProcessFollowingReset(request,bid):
+    bidform=BidForm.objects.get(pk=bid)
+    process_follows=ProcessFollowingInfo.objects.filter(bidform=bidform)
+    process_follows.delete()
+    return simplejson.dumps({})
