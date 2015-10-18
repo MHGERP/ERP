@@ -1,6 +1,6 @@
 # coding: UTF-8
 from datetime import datetime
-from purchasing.models import StatusChange
+from purchasing.models import *
 
 def goNextStatus(bidform,user):
     original_status=bidform.bid_status
@@ -10,4 +10,11 @@ def goNextStatus(bidform,user):
     status_change.save()
     bidform.bid_status=new_status
     bidform.save()
+
+
+def buildArrivalItems(bidform):
+    mat_connection = MaterielFormConnection.objects.filter(bid_form = bidform)
+    for mat in mat_connection:
+        arrivalIns = ArrivalInspection(bidform = bidform , material = mat.materiel)
+        arrivalIns.save()
 
