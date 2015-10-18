@@ -8,20 +8,14 @@
 {% endblock %}
 {% block inner_content%}
 <link rel="stylesheet" href="{{ STATIC_URL    }}style/form-style.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="{{ STATIC_URL    }}bootstrap-datepicker/css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
 <form class="form-search ">
     <label>标单查询</label>
     <input type="text" class="input-medium search-query" id="search_input">
     <button type="button" class="btn" id="following_search">查询</button>
-    <input id="id_news_date" type="text">
 </form>
 <div id="following_table">
     {% include "purchasing/purchasingfollowing/purchasing_following_table.html"%}
 </div>
-<script type='text/javascript' src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/purchasing_following.js"></script>
-<script type="text/javascript">
-    $("#id_news_date").datetimepicker({
-});
 </script>
 {% endblock%}
