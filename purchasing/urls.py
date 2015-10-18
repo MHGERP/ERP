@@ -24,15 +24,11 @@ urlpatterns=patterns('',
         purchasing_views.supplierManagementViews,
         ),
     url(
-        r'^bidTracking$',
-        purchasing_views.bidTrackingViews,
-        ),
-    url(
         r'^suppliermanagement$',
         purchasing_views.supplierManagementViews,
     ),
     url(
-        r'^bidTracking$',
+        r'^bidTracking/(?P<bid_id>\w+)/$',
         purchasing_views.bidTrackingViews,
     ),
    url( 
@@ -92,5 +88,13 @@ urlpatterns=patterns('',
     url(
         r'^statusChange/(?P<bid>\w+)/$',
         purchasing_views.statusChangeApplyViews,name="statuschange",
+       ),
+    url(
+        r'^bidformapprove$',
+        purchasing_views.bidformApproveViews,
+    ),
+    url(
+        r'^bidformapproveid/(?P<bid>\w+)/$',
+        purchasing_views.bidformApproveIDViews,
     ),
 )

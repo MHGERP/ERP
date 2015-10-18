@@ -1,9 +1,9 @@
 <span class="btn add" id="new_purchase_btn" data-toggle="modal" data-target="#new_order_modal">新建订购单</span>
 <form class="form-search">
-        <select class="input-medium search-query" id="order-select">
+        <select class="input-medium search-query order-select" id="search-query-1">
 
         </select>
-        <span class="btn search" id="btn-open" data-toggle="modal" data-target="#new_order_modal">进入</span>
+        <span class="btn search btn-open clear" id="btn-open" data-toggle="modal" data-target="#new_order_modal" data-source="#search-query-1">进入</span>
 </form>
 
 
@@ -12,23 +12,23 @@
     <h2 id="myModalLabel">订购单</h2>
   </div>
 
-  <div class="modal-body">
-    <div class="form-div">
+  <div class="modal-body" style="clear:both;">
+    <div class="form-div add">
       <form class="form-search">
         <label>订购单编号：</label>
         <input type="text" class="input-medium" id="order_number">
       </form>
     </div>
     <div class="delete-div">
-      <span class="btn" id="order_delete">删除</span>
+      <span class="btn" data-dismiss="modal" aria-hidden="true" id="btn-delete">删除</span>
     </div>
     <div class="table-div">
     </div>
     <div class="save-div">
-      <span class="btn add save" id="save">确认保存</span>
+      <span class="btn add save" data-dismiss="modal" aria-hidden="true" id="btn-save">确认保存</span>
     </div>
     <div class="finish-div">
-      <span class="btn add save" id="finish">完成</span>
+      <span class="btn add save" data-dismiss="modal" aria-hidden="true" id="btn-finish">完成</span>
     </div>
   </div>
   <div class="modal-footer">

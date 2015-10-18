@@ -1,0 +1,38 @@
+{% extends "purchasing/base/none_nav_base.html"%}
+{% block title %}
+<h1>标单审批</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">标单审批</a>
+{% endblock %}
+{% block inner_content%}
+<link rel="stylesheet" href="{{ STATIC_URL    }}style/form-style.css" type="text/css" media="screen" />
+<div id="bidform_approve_table">
+    
+<div class="widget-box">
+    <div class="widget-content nopadding">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>标单编号</th>
+                    <th>创建日期</th>
+                    <th>编制日期</th>
+                    <th>审核</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in bidform%}
+                <tr>
+                    <td>{{item.bid_id}}</td>
+                    <td>{{item.create_time|date:"Y-m-d"}}</td>
+                    <td>{{item.establishment_time|date:"Y-m-d"}}</td>
+                    <td><a class="btn btn-primary" href="/purchasing/bidformapproveid/{{item.id}}" data-toggle="modal">审核</a></td>
+                </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+{% endblock%}

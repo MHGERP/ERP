@@ -1,0 +1,21 @@
+{% extends "purchasing/base/none_nav_base.html"%}
+{% block title %}
+<h1>标单审核</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">标单审核</a>
+{% endblock %}
+{% block inner_content%}
+<div class="bidform-info">
+    {%include "purchasing/bidform_div.html"%}
+</div>
+<div bid={{bidform.id}} id="approve_form">
+    <label>{{bidcommentform.reason.label}}</label>
+    {{bidcommentform.reason}}
+    <label>{{bidcommentform.judgeresult.label}}</label>
+    {{bidcommentform.judgeresult}}
+</div>
+<button class="btn btn-primary" id="approve_confirm">审核确认</button>
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/bidformapproved.js"></script>
+{%endblock%}

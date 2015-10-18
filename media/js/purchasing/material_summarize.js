@@ -1,20 +1,28 @@
+var pendingArray = Array();
+
 $(document).ready(function(){
  	refresh();
-})
+});
 
 $(document).on("click","#btn_search",function(){
     refresh();
-})
+});
 
 function refresh(){
+    $("#add_to_bid").hide();
+    $("#add_to_order").hide();
     val = $("#id_inventory_type").val();
     key = $("#search_key").val();
     Dajaxice.purchasing.chooseInventorytype(choose_Inventorytype_callback,{
         "pid":val,  
         "key":key
     });
+}
 
-    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{});
+function getOrderListCallBack(data) {
+    $(".order-select").each(function(){
+        $(this).html(data);
+    })
 }
 
 function choose_Inventorytype_callback(data){
@@ -23,9 +31,15 @@ function choose_Inventorytype_callback(data){
     $("#inventory_detail_table").html(data.inventory_detail_html);
     if(val==5){
         item.html(data.new_purchasing_form_html);
+        $("#add_to_bid").show();
+        $("#add_to_order").hide();
+        Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
     }
     else{
         item.html(data.new_order_form_html);
+        $("#add_to_order").show();
+        $("#add_to_bid").hide();
+        Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{});
     }
 }
 
@@ -40,63 +54,55 @@ $(document).on("click",".btn-danger",function(){
             );
     }
  
-})
+});
 function delete_detail_callback(data){
     $(cell).parent().parent().remove();
 }
 
-//new_purchase_btn
-$(document).on("click","#new_purchase_btn",function(){
-    Dajaxice.purchasing.newOrderCreate(newOrderCreateCallBack, {});
-})
+//new purchase order save button
+$(document).on("click","#btn-save",function(){
+    var id = $("#new_order_modal").attr("args");
+    if(confirm("是否确认保存？")) {
+        Dajaxice.purchasing.newOrderSave(saveCallBack, {"id": id, "pendingArray": pendingArray, });
+    }
+});
+function saveCallBack() {
+    refresh();
+}
+
+//new puchase order finish button
+$(document).on("click","#btn-finish",function(){
+    var id = $("#new_order_modal").attr("args");
+    if(confirm("是否确认完成编制？")){
+        Dajaxice.purchasing.newOrderFinish(finishCallBack,{"id":id});
+    }
+});
+function finishCallBack() {
+    refresh();    
+}
 
 //open button
-$(document).on("click","#btn-open",function(){
-    var id = $(".search-query").val();
-    Dajaxice.purchasing.getOrderForm(newOrderCreateCallBack,{"order_id":id,})
-})
+$(document).on("click",".btn-open",function(){
+    if($(this).hasClass("clear")) {
+        pendingArray = Array();
+    }
+    var id = $($(this).attr("data-source")).val();
+    Dajaxice.purchasing.getOrderForm(getOrderCallBack,{"order_id":id,"pendingArray":pendingArray,})
+});
 
-function newOrderCreateCallBack(data){
+//new purchase button
+$(document).on("click","#new_purchase_btn",function(){
+    Dajaxice.purchasing.newOrderCreate(getOrderCallBack, {});
+});
+
+function getOrderCallBack(data){
     $("input#order_number").val(data.order_id);
     $("div.table-div").html(data.html);
     $("#new_order_modal").attr("args", data.id);
     Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{});
 }
 
-function getOrderListCallBack(data) {
-    $("#order-select").html(data);
-}
-
-//new puchase order save button
-$("#btn-save").click(function() {
-    var id = $("#bid_modal").attr("args");
-    alert(id);
-})
-
-//new puchase order finish button
-$(document).on("click","#finish",function(){
-    var id = $("#bid_modal").attr("args");
-    if(confirm("确定后将不能再修改")){
-        Dajaxice.purchasing.newOrderFinish(finish_callback,{"id":id});
-    }
-})
-
-function finish_callback(){
-    alert("该订购单已创建完成，不能再修改");
-}
-
-//new puchase order delete button
-$(document).on("click","#order_delete",function(){
-    var num = $("#order_number").val();
-    Dajaxice.purchasing.newOrderDelete(delete_callback,{
-        "num":num,
-    });
-})
-
-function delete_callback(){
-    alert("该订购单已删除");
-}
-
+//selectall
 $(document).on("click", "input#selectall", function(){
     var target = this.checked;
     $("input[type='checkbox']").each(function(){
@@ -104,17 +110,84 @@ $(document).on("click", "input#selectall", function(){
     });
 });
 
-//add_to_order button
-// $(document).on("click","#add_to_order",function(){
-//     Dajaxice.purchasing.getOngoingOrderList(addToOrderCallBack,{});
-// })
+$(document).on("click","#add_to_order",function(){
+    pendingArray = Array();
+    $("input.checkbox").each(function(){
+        if(this.checked) pendingArray.push($(this).attr("args"));
+    });
+});
 
-function addToOrderCallBack(data){
-    $("#order_select").html(data);
-    items = $("#subcheck:checked").parent().parent().children();
-    item = $(items[2]).text();
-    alert(item);
-    $("#order_select").change(function(){
-        Dajaxice.purchasing.addToOrder(add_to_order_callback,{});
-    })
+//new puchase order delete button
+$(document).on("click","#btn-delete",function(){
+    var id = $("#new_order_modal").attr("args");
+    if(confirm("是否确定删除？")){
+        Dajaxice.purchasing.newOrderDelete(deleteCallBack,{"id":id,});
+    }
+    
+});
+function deleteCallBack(){
+    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack, {});
 }
+
+
+
+$(document).on("click","#new_bid_btn",function(){
+    Dajaxice.purchasing.newBidCreate(getBidCallBack, {});
+})
+
+function getBidCallBack(data) {
+    $("input#bid_id").val(data.bid_id);
+    $("div.table-div").html(data.html);
+    $("#bid_modal").attr("args", data.id);
+    Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
+}
+function getBidListCallBack(data) {
+    $(".bid-select").each(function() { 
+        $(this).html(data);   
+    });
+}
+$(document).on("click",".bid-btn-open",function(){
+    if($(this).hasClass("clear")) {
+        pendingArray = Array();
+    }
+    var id = $($(this).attr("data-source")).val(); // datatable index not bid_id
+    Dajaxice.purchasing.getBidForm(getBidCallBack, {"bid_id": id, "pendingArray": pendingArray, })
+});
+$(document).on("click","#add_to_bid",function(){
+    pendingArray = Array();
+    $("input.checkbox").each(function() {
+        if(this.checked) pendingArray.push($(this).attr("args"));
+    });
+});
+$(document).on("click","#bid-btn-delete",function() {
+    var id = $("#bid_modal").attr("args");
+    if(confirm("是否确定删除？")) {
+        Dajaxice.purchasing.newBidDelete(bidDeleteCallBack, {"id": id});
+    }
+});
+function bidDeleteCallBack(data) {
+    Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
+}
+$(document).on("click","#bid-btn-save",function() {
+    var id = $("#bid_modal").attr("args");
+    if(confirm("是否确认保存？")) {
+        Dajaxice.purchasing.newBidSave(saveCallBack, {"id": id, "pendingArray": pendingArray, });
+    }
+});
+$(document).on("click","#bid-btn-finish",function() {
+    var id = $("#bid_modal").attr("args");
+    if(confirm("是否确认完成编制？")) {
+        Dajaxice.purchasing.newBidFinish(finishCallBack, {"id": id});
+    }
+});
+
+
+
+
+
+
+
+
+
+
+

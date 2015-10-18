@@ -69,7 +69,7 @@ $(document).on("click", "input#select_all", function(){
 $("#add_to_bid").click(function() {
     pendingArray = Array();
     $("input.checkbox").each(function() {
-        pendingArray.push($(this).attr("args"));
+        if(this.checked) pendingArray.push($(this).attr("args"));
     });
 });
 
