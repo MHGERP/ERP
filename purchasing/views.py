@@ -112,13 +112,13 @@ def bidTrackingViews(request, bid_id):
     """
     bidform = BidForm.objects.get(id = bid_id)
     qualityPriceCardForm = QualityPriceCardForm()
-    bid_apply = bidApply.objects.filter(bid = bidform)
-    quality_price_card = qualityPriceCard.objects.filter(bid = bidform)
-
-    if bid_apply:
-        bidApplyForm = BidApplyForm(instance = bid_app)
-    else:
+    try:
+        bid_apply = bidApply.objects.get(bid = bidform)
+        bidApplyForm = BidApplyForm(instance = bid_apply)
+    except:
         bidApplyForm = BidApplyForm()
+    #quality_price_card = qualityPriceCard.objects.filter(bid = bidform)
+
     print bidApplyForm
     bidCommentForm = BidCommentForm()
     bidComments = BidComment.objects.filter(Q(bid = bidform))

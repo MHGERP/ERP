@@ -13,6 +13,7 @@ RegisterClass = (
     Material,
     CirculationRoute,
     CirculationName,
+    ImplementClassChoices,
 )
 
 for item in RegisterClass:

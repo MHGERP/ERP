@@ -29,7 +29,7 @@ class BidApplyForm(ModelForm):
         model = bidApply
         fields = ('apply_company', 'demand_company', 'bid_project', 'bid_date', 'project_category', 'work_order', 'special_model', 'amount', 'core_part')
         widgets = {
-                   "bid_date": forms.DateInput(attrs={'class':'form-control', "data-date-format":"yyyy-mm-dd"}),
+                   "bid_date": forms.DateInput(attrs={'class':'form-control'}),
                   }
 
 class QualityPriceCardForm(ModelForm):
