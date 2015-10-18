@@ -14,4 +14,12 @@ class InventoryTypeForm(forms.Form):
     inventory_type = forms.ChoiceField(choices = TYPE_CHOICES, widget = forms.Select(attrs = {'class': 'form-control input'}))
 
 
+    def __init__(self, *args, **kwargs):
+        super(InventoryTypeForm, self).__init__(*args, **kwargs)
+        TYPE_CHOICES = tuple((item.id, item) for item in InventoryType.objects.all())
+        self.fields["inventory_type"].choices = TYPE_CHOICES
+
+
+
+
 
