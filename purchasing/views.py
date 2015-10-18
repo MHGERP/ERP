@@ -168,6 +168,7 @@ def materialEntryViews(request,bid):
     return render(request,"purchasing/purchasing_materialentry.html",context)
 
 def subApplyHomeViews(request):
+    is_show = True
     if request.method == "POST":
         receipts_code = request.POST["subapply_search"]
         subapply_set = MaterialSubApply.objects.filter(receipts_code = receipts_code)
@@ -175,6 +176,7 @@ def subApplyHomeViews(request):
         subapply_set = MaterialSubApply.objects.filter(is_submit = True) 
     context = {
         "subapply_set":subapply_set,
+        "is_show":is_show,
     }
     return render(request,"purchasing/subapply_home.html",context)
 
@@ -352,7 +354,7 @@ def statusChangeHistoryViews(request,bid):
     }
     return render(request,"purchasing/status_change/statushistory.html",context)
 
-@transaction.commit_on_success
+@transaction.commit_manually
 def statusChangeApplyViews(request,bid):
     bidform = BidForm.objects.get(bid_id = bid)
     if request.method == "POST":
@@ -363,20 +365,26 @@ def statusChangeApplyViews(request,bid):
             statuschange_obj.change_user = request.user
             statuschange_obj.normal_change = False
             statuschange_obj.original_status = bidform.bid_status
-            return HttpResponseRedirect('/purchasing/statusChangeHome')
             try:
+                bidform.bid_status = statuschange_obj.new_status
+                bidform.save()
                 statuschange_obj.save()
                 reason = statuschangeform.cleaned_data["reason"]
                 changereason = StatusChangeReason(status_change = statuschange_obj ,reason = reason)
                 changereason.save()
+                transaction.commit()
+                return HttpResponseRedirect('/purchasing/statusChangeHome')
             except Exception,e:
+                transaction.rollback()
                 print e
         else:
             print statuschangeform.errors
     else:
         statuschangeform = StatusChangeApplyForm(bidform=bidform)   
-
+    
     context = {
         'chform':statuschangeform,
     }
-    return render(request,"purchasing/status_change/statuschangeapply.html",context)
+    revl = render(request,"purchasing/status_change/statuschangeapply.html",context)
+    transaction.commit()
+    return revl
