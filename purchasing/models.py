@@ -56,9 +56,15 @@ class MaterielFormConnection(models.Model):
     def __unicode__(self):
         return self.materiel.name
 
+import uuid
+def make_uuid():
+    """
+    make uuid
+    """
+    return str(uuid.uuid4())
 
 class bidApply(models.Model):
-    apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
+    apply_id = models.CharField(unique=True, max_length=20, default=make_uuid, verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
     work_order = models.ForeignKey(BidFormStatus,null=False,verbose_name=u"工作令")
@@ -72,8 +78,8 @@ class bidApply(models.Model):
     project_category = models.CharField(null=True, max_length=40, verbose_name=u"项目类别")
     bid_datetime = models.DateTimeField(null=True, verbose_name=u"招(议)标时间")
     bid_delivery_date = models.DateTimeField(null=True, verbose_name=u"标书递送时间")
-    place = models.CharField(null=True, max_length=40, verbose_name=u"地点")
-    implement_class = models.ForeignKey(ImplementClassChoices, null=False,verbose_name=u"实施类别")
+    place = models.CharField(null=True, blank=True, max_length=40, verbose_name=u"地点")
+    implement_class = models.ForeignKey(ImplementClassChoices, null=True,verbose_name=u"实施类别")
 
     class Meta:
         verbose_name = u"标单申请表"
@@ -238,7 +244,7 @@ class MainMaterielExecuteDetail(models.Model):
     crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"探伤级别")
     delivery_status = models.CharField(max_length = 50, blank = False, verbose_name = u"交货状态")
     execute_standard = models.CharField(max_length = 100, blank = False, verbose_name = u"执行标准")
-    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"备注") 
+    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"备注")
     class Meta:
         verbose_name = u"主材材料执行表详细"
         verbose_name_plural = u"主材材料执行表详细"

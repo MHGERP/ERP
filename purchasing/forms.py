@@ -21,20 +21,20 @@ class OrderFormStatusForm(forms.Form):
     JunHU
     summary: store all step of order form status
     """
-
     status = forms.ChoiceField(choices = ORDERFORM_STATUS_CHOICES, widget = forms.Select(attrs = {'class': 'form-control input'}))
-
 
 
 class BidApplyForm(ModelForm):
     class Meta:
         model = bidApply
-
+        fields = ('apply_company', 'demand_company', 'bid_project', 'bid_date', 'project_category', 'work_order', 'special_model', 'amount', 'core_part')
+        widgets = {
+                   "bid_date": forms.DateInput(attrs={'class':'form-control', "data-date-format":"yyyy-mm-dd"}),
+                  }
 
 class QualityPriceCardForm(ModelForm):
     class Meta:
         model = qualityPriceCard
-
 
 class BidCommentForm(forms.Form):
     result_choices=(("-1","请审核"),("1","通过"),("0","不通过"))
@@ -116,7 +116,7 @@ class SubApplyItemForm(ModelForm):
 
 class StatusChangeApplyForm(ModelForm):
     class Meta:
-        model = StatusChange 
+        model = StatusChange
         exclude = ('id','bidform','original_status','change_user','change_time','normal_change')
     def __init__(self,*args,**kwargs):
         bidform = kwargs.pop("bidform",None)
