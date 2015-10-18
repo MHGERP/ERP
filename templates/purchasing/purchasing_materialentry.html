@@ -23,7 +23,7 @@
         </div>
         <div class="control-group">
             <label class="hz-align">单据编号</label>
-            {{entry_form.receipts_code}}
+            {{entry_form.bidform}}
         </div>
         <table id="items_table" class="table table-bordered table-striped">
             <thead>
@@ -56,18 +56,20 @@
             </tbody>
         </table>
         <div class="control-group span12" style="margin-top:50px;">
-            <div class="span4 purcher">
-            {{entry_form.purchaser}}
+            <div class="rows span4 purcher">
+                {{entry_form.purchaser.label_tag}}{{entry_form.purchaser}}
             </div>
             <div class="span4 purcher">
+            {{entry_form.inspector.label_tag}}
             {{entry_form.inspector}}
             </div>
             <div class="span4 purcher">
+            {{entry_form.keeper.label_tag}}
             {{entry_form.keeper}}
             </div>
         </div>
         <center style="margin:30px;">
-            <button style="width:30%;height:40px;" class="btn btn-primary" onclick="entry_confirm({{pur_entry.id}});">入库单确认</button>
+            <button  id="entry_confirm" style="width:30%;height:40px;" class="btn btn-primary" onclick="entry_confirm({{pur_entry.id}});">入库单确认</button>
         </center>
     </div>
 </div>

@@ -146,7 +146,6 @@ class ArrivalInspection(models.Model):
 
 class PurchasingEntry(models.Model):
     entry_time = models.DateField(blank=True, null=True,verbose_name=u"入库时间")
-    receipts_code = models.CharField(max_length=100,blank=False,verbose_name=u"单据编号")
     purchaser =  models.ForeignKey(User,blank=False,verbose_name=u"采购员",related_name = "purchaser")
     inspector = models.ForeignKey(User,blank=False,verbose_name=u"检验员",related_name = "inspector")
     keeper = models.ForeignKey(User,blank=False,verbose_name=u"库管员" , related_name = "keeper")
@@ -162,9 +161,9 @@ class PurchasingEntry(models.Model):
 
 class PurchasingEntryItems(models.Model):
     material = models.ForeignKey(Materiel,blank = True , null = True , verbose_name = u"材料")
-    standard = models.CharField(max_length = 100 , blank = True,null = True,verbose_name = u"标准")
-    status = models.CharField(max_length = 100,blank = True, null = True , verbose_name = u"状态")
-    remark = models.CharField(max_length = 100, blank = True , null = True , verbose_name = u"备注")
+    standard = models.CharField(max_length = 100 , blank = True,default="", verbose_name = u"标准")
+    status = models.CharField(max_length = 100,blank = True,default="", verbose_name = u"状态")
+    remark = models.CharField(max_length = 100, blank = True , default="" , verbose_name = u"备注")
     purchasingentry = models.ForeignKey(PurchasingEntry,verbose_name = u"入库单")
     class Meta:
         verbose_name = u"入库材料"
@@ -191,8 +190,8 @@ class SupplierSelect(models.Model):
     def __unicode__(self):
         return "%s select %s" % (self.bidform.bid_id, self.supplier.supplier_name)
 class MaterialSubApply(models.Model):
-    receipts_code = models.CharField(max_length = 100, unique = True, blank = True ,null = True, verbose_name = u"单据编号")
-    pic_code =  models.CharField(max_length = 100, blank = True , null = True, verbose_name = u"图号")
+    receipts_code = models.CharField(max_length = 100, unique = True, blank = False ,null = True, verbose_name = u"单据编号")
+    pic_code =  models.CharField(max_length = 100, blank = False , null = True, verbose_name = u"图号")
     work_order = models.ForeignKey(WorkOrder,verbose_name = u"工作令" , blank = True , null = True)
     bidform = models.ForeignKey(BidForm,blank = True , null = True, verbose_name = u"对应标单")
     reasons = models.CharField(max_length = 1000,blank = True , null = True, verbose_name = u"代用原因和理由")
