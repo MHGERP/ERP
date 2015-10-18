@@ -37,7 +37,7 @@ class QualityPriceCardForm(ModelForm):
         model = qualityPriceCard
 
 class BidCommentForm(forms.Form):
-    result_choices=(("-1","请审核"),("1","通过"),("0","不通过"))
+    result_choices=(("-1","请审核"),("0","通过"),("1","不通过"))
     judgeresult =forms.ChoiceField(choices=result_choices,required=True, label=u"审核结果",
         widget=forms.Select(attrs={
             'class':'form-control',

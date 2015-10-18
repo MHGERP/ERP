@@ -16,7 +16,7 @@ from django.http import HttpResponseRedirect
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielChoiceForm, MainMaterielExecuteDetailForm, SupportMaterielExecuteDetailForm
 from django.db.models import Q
 from datetime import datetime
-from purchasing.utility import goNextStatus
+from purchasing.utility import goNextStatus,goStopStatus
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -824,3 +824,28 @@ def ProcessFollowingReset(request,bid):
     process_follows=ProcessFollowingInfo.objects.filter(bidform=bidform)
     process_follows.delete()
     return simplejson.dumps({})
+
+@dajaxice_register
+def BidformApprove(request,bid,value,comment):
+    bidform=BidForm.objects.get(id=bid)
+    if bidform.bid_status.part_status == BIDFORM_PART_STATUS_APPROVED:
+        bidcomment=BidComment()
+        bidcomment.user=request.user
+        bidcomment.comment=comment
+        bidcomment.bid=bidform
+        bidcomment.submit_date=datetime.today()
+        bidcomment.result=value
+        bidcomment.status=BIDFORM_STATUS_CREATE
+        bidcomment.save()
+        if int(value) == APPROVED_PASS:
+            status=0
+            goNextStatus(bidform,request.user)
+        else:
+            status=1
+            goStopStatus(bidform,request.user)
+
+    else:
+        status=-1
+    return simplejson.dumps({"status":status})   
+
+
