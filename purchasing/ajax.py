@@ -16,7 +16,7 @@ from django.http import HttpResponseRedirect
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielChoiceForm, MainMaterielExecuteDetailForm, SupportMaterielExecuteDetailForm
 from django.db.models import Q
 from datetime import datetime
-from purchasing.utility import goNextStatus
+from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -238,6 +238,7 @@ def getOrderFormList(request, statu, key):
     """
     try:
         statu = int(statu) # unicode to integer
+    
         items = OrderForm.objects.filter(order_status__status = statu)
         if key:
             items = items.filter(order_id = key)
@@ -386,24 +387,25 @@ def materielchoiceChange(request, materielChoice):
         materielexecute_detail_html = "purchasing/materielexecute/table/main_materielexecute_detail_table.html"
         #formname = "MainMaterielExecuteDetailForm"
         add_form = render_to_string("purchasing/materielexecute/widget/add_main_detail_form.html", {"MainMaterielExecuteDetailForm":detailForm})
+        current_materiel_choice = MATERIEL_CHOICE[1][0]
     else:
         materielexecute_detail_set = SupportMaterielExecuteDetail.objects.all()
         detailForm = SupportMaterielExecuteDetailForm()
         materielexecute_detail_html = "purchasing/materielexecute/table/support_materielexecute_detail_table.html"
         #formname = "SupportMaterielExecuteDetailForm"
         add_form = render_to_string("purchasing/materielexecute/widget/add_support_detail_form.html", {"SupportMaterielExecuteDetailForm":detailForm})
+        current_materiel_choice = MATERIEL_CHOICE[1][1]
     choice_form = MaterielChoiceForm()
     context = {
         "materielexecute_detail_set" : materielexecute_detail_set,
         "choice" : SUPPORT_MATERIEL,
         "MAIN_MATERIEL" : MAIN_MATERIEL,
-        "current_materiel_choice" : MATERIEL_CHOICE[1][1],
         "materielChoice_form" : choice_form,
         #formname : detailForm
     }
 
     rendered_materielexecute_detail_html = render_to_string(materielexecute_detail_html, context)
-    return simplejson.dumps({'materielexecute_detail_html' : rendered_materielexecute_detail_html, 'add_form' : add_form})
+    return simplejson.dumps({'materielexecute_detail_html' : rendered_materielexecute_detail_html, 'add_form' : add_form, 'current_materiel_choice' : current_materiel_choice})
 
 @dajaxice_register
 @transaction.commit_manually
@@ -438,10 +440,11 @@ def saveMaterielExecuteDetail(request, form, documentNumberInput, materielChoice
                 materielexecute_detail.delivery_status = detail_Form.cleaned_data["delivery_status"]
                 materielexecute_detail.execute_standard = detail_Form.cleaned_data["execute_standard"]
                 materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
-            else:
-                print detail_Form.errors
-                ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
-                return simplejson.dumps(ret)
+                flag = True
+            #else:
+                #print detail_Form.errors
+                #ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
+                #return simplejson.dumps(ret)
         else:
             materielexecute.materiel_choice = MATERIEL_CHOICE[1][1]
             detail_Form = SupportMaterielExecuteDetailForm(deserialize_form(form))
@@ -459,25 +462,33 @@ def saveMaterielExecuteDetail(request, form, documentNumberInput, materielChoice
                 materielexecute_detail.part = detail_Form.cleaned_data["part"]
                 materielexecute_detail.oddments = detail_Form.cleaned_data["oddments"]
                 materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
-            else:
-                ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
-                return simplejson.dumps(ret)
+                flag = True
+            #else:
+                #ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
+                #return simplejson.dumps(ret)
 
-        materielexecute.save()
-        materielexecute_detail.materiel_execute = materielexecute
-        materielexecute_detail.save()
-        flag = True;
+        if flag:
+            materielexecute.save()
+            materielexecute_detail.materiel_execute = materielexecute
+            materielexecute_detail.save()
     except Exception, e:
         transaction.rollback()
         print e
-    if(flag):
+    if flag:
         transaction.commit()
-        ret = {'status' : '0', 'message' : u'保存成功'}
+        ret = {'status' : '1', 'message' : u'保存成功'}
     else:
+        # errorsFiled = render_to_string("purchasing/materielexecute/widget/errorsField.html", {"errorsFiled" : detail_Form})
+        if materielChoice == MAIN_MATERIEL:
+            add_form = render_to_string("purchasing/materielexecute/widget/add_main_detail_form.html", {"MainMaterielExecuteDetailForm":detail_Form})
+            ret = {'status' : '0', 'message' : u'请检查输入是否正确', 'add_form' : add_form}
+        else:
+            add_form = render_to_string("purchasing/materielexecute/widget/add_support_detail_form.html", {"SupportMaterielExecuteDetailForm":detail_Form})
+            ret = {'status' : '0', 'message' : u'请检查输入是否正确', 'add_form' : add_form}
         transaction.rollback()
-        ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
     return simplejson.dumps(ret)
 
+@dajaxice_register
 def SelectSupplierOperation(request,selected,bid):
     bidform=BidForm.objects.get(pk=bid)
     for item in selected:
@@ -578,23 +589,13 @@ def saveComment(request, form, bid_id):
 
 @dajaxice_register
 def saveBidApply(request, form, bid_id):
-    bidform = BidForm.objects.get(id = bid_id)
-    try:
-        bidapply = bidApply.objects.get(bid = bidform)
-        bidApplyForm = BidApplyForm(deserialize_form(form), instance=bidapply)
-    except:
-        bidapply = None
-        bidApplyForm = BidApplyForm(deserialize_form(form))
+    bidApplyForm = BidApplyForm(deserialize_form(form))
     if bidApplyForm.is_valid():
-        if bidapply:
-            bidApplyForm.save()
-        else:
-            bidapply = bidApplyForm.save(commit = False)
-            bidapply.bid = bidform
-            bidapply.save()
-        ret = {'status': '2', 'message': u"申请书保存成功"}
+        bidApplyForm.save()
+        ret = {'status': '1', 'message': u"申请书意见提交成功"}
     else:
-        ret = {'status': '0', 'field':bidApplyForm.data.keys(), 'error_id':bidApplyForm.errors.keys(), 'message': u"申请书保存不成功"}
+        ret = {'status': '0', 'message': u"申请书提交不成功"}
+    print bidApplyForm
     return simplejson.dumps(ret)
 
 @dajaxice_register
@@ -618,6 +619,7 @@ def submitStatus(request, bid_id):
         ret = {'status': '2', 'message': u"申请书不存在"}
     return simplejson.dumps(ret)
     
+
 def AddProcessFollowing(request,bid,process_form):
     process_form=ProcessFollowingForm(deserialize_form(process_form))
     if process_form.is_valid():
@@ -666,6 +668,7 @@ def ProcessFollowingSubmit(request,bid):
     bidform=BidForm.objects.get(pk=bid)
     if bidform.bid_status.part_status == BIDFORM_PART_STATUS_PROCESS_FOLLOW:
         goNextStatus(bidform,request.user)
+        buildArrivalItems(bidform)
         status=0
     else :
         status=1
@@ -857,3 +860,28 @@ def ProcessFollowingReset(request,bid):
     process_follows=ProcessFollowingInfo.objects.filter(bidform=bidform)
     process_follows.delete()
     return simplejson.dumps({})
+
+@dajaxice_register
+def BidformApprove(request,bid,value,comment):
+    bidform=BidForm.objects.get(id=bid)
+    if bidform.bid_status.part_status == BIDFORM_PART_STATUS_APPROVED:
+        bidcomment=BidComment()
+        bidcomment.user=request.user
+        bidcomment.comment=comment
+        bidcomment.bid=bidform
+        bidcomment.submit_date=datetime.today()
+        bidcomment.result=value
+        bidcomment.status=BIDFORM_STATUS_CREATE
+        bidcomment.save()
+        if int(value) == APPROVED_PASS:
+            status=0
+            goNextStatus(bidform,request.user)
+        else:
+            status=1
+            goStopStatus(bidform,request.user)
+
+    else:
+        status=-1
+    return simplejson.dumps({"status":status})   
+
+

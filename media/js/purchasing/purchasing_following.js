@@ -96,7 +96,6 @@ function subitem_save(){
 function subitem_save_callback(data){
     if(data.flag){
         $('#subtable').html(data.html);      
-        $('#myModal').modal('hide');
         alert("添加成功");
     }
     else{
