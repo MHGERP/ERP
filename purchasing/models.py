@@ -85,7 +85,7 @@ class bidApply(models.Model):
         default_status = ImplementClassChoices.objects.get(category = 0)
     except:
         default_status = 1
-    implement_class = models.ForeignKey(ImplementClassChoices, blank=False, default=default_status.id, verbose_name=u"实施类别")
+    implement_class = models.ForeignKey(ImplementClassChoices, blank=False, default=default_status, verbose_name=u"实施类别")
 
     class Meta:
         verbose_name = u"标单申请表"

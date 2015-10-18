@@ -1,6 +1,6 @@
 # coding: UTF-8
 from datetime import datetime
-from purchasing.models import *
+from purchasing.models import StatusChange,ArrivalInspection,MaterielFormConnection
 from const.models import BidFormStatus
 from const import *
 

@@ -13,7 +13,8 @@ $("#approve_confirm").click(function(){
 function bidform_approve_callback(data){
     if(data.status==-1){
         alert("状态更改有误!");
-    status);
+    }
+    else{
         if(data.status==0){
             alert("审核通过！");
         }

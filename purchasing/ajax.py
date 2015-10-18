@@ -16,7 +16,7 @@ from django.http import HttpResponseRedirect
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielChoiceForm, MainMaterielExecuteDetailForm, SupportMaterielExecuteDetailForm
 from django.db.models import Q
 from datetime import datetime
-from purchasing.utility import goNextStatus,goStopStatus
+from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -238,6 +238,7 @@ def getOrderFormList(request, statu, key):
     """
     try:
         statu = int(statu) # unicode to integer
+    
         items = OrderForm.objects.filter(order_status__status = statu)
         if key:
             items = items.filter(order_id = key)
@@ -478,6 +479,7 @@ def saveMaterielExecuteDetail(request, form, documentNumberInput, materielChoice
         ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
     return simplejson.dumps(ret)
 
+@dajaxice_register
 def SelectSupplierOperation(request,selected,bid):
     bidform=BidForm.objects.get(pk=bid)
     for item in selected:
@@ -574,46 +576,16 @@ def saveComment(request, form, bid_id):
 
 @dajaxice_register
 def saveBidApply(request, form, bid_id):
-    bidform = BidForm.objects.get(id = bid_id)
-    try:
-        bidapply = bidApply.objects.get(bid = bidform)
-        bidApplyForm = BidApplyForm(deserialize_form(form), instance=bidapply)
-    except:
-        bidapply = None
-        bidApplyForm = BidApplyForm(deserialize_form(form))
+    bidApplyForm = BidApplyForm(deserialize_form(form))
     if bidApplyForm.is_valid():
-        if bidapply:
-            bidApplyForm.save()
-        else:
-            bidapply = bidApplyForm.save(commit = False)
-            bidapply.bid = bidform
-            bidapply.save()
-        ret = {'status': '2', 'message': u"申请书保存成功"}
+        bidApplyForm.save()
+        ret = {'status': '1', 'message': u"申请书意见提交成功"}
     else:
-        ret = {'status': '0', 'field':bidApplyForm.data.keys(), 'error_id':bidApplyForm.errors.keys(), 'message': u"申请书保存不成功"}
+        ret = {'status': '0', 'message': u"申请书提交不成功"}
+    print bidApplyForm
     return simplejson.dumps(ret)
 
-@dajaxice_register
-def resetBidApply(request, bid_id):
-    try:
-        bidform = BidForm.objects.get(id = bid_id)
-        bidapply = bidApply.objects.get(bid = bidform)
-        bidapply.delete()
-        ret = {'status': '1', 'message': u"申请书重置成功"}
-    except:
-        ret = {'status': '0', 'message': u"申请书信息不存在"}
-    return simplejson.dumps(ret)
 
-@dajaxice_register
-def submitStatus(request, bid_id):
-    try:
-        bidform = BidForm.objects.get(id = bid_id)
-        goNextStatus(bidform, request.user)
-        ret = {'status': '1', 'message': u"申请书提交成功"}
-    except:
-        ret = {'status': '0', 'message': u"申请书不存在"}
-    return simplejson.dumps(ret)
-    
 def AddProcessFollowing(request,bid,process_form):
     process_form=ProcessFollowingForm(deserialize_form(process_form))
     if process_form.is_valid():
@@ -662,6 +634,7 @@ def ProcessFollowingSubmit(request,bid):
     bidform=BidForm.objects.get(pk=bid)
     if bidform.bid_status.part_status == BIDFORM_PART_STATUS_PROCESS_FOLLOW:
         goNextStatus(bidform,request.user)
+        buildArrivalItems(bidform)
         status=0
     else :
         status=1
