@@ -82,10 +82,10 @@ class bidApply(models.Model):
     bid_delivery_date = models.DateTimeField(null=True, blank=True, default=lambda: datetime.datetime.today(), verbose_name=u"标书递送时间")
     place = models.CharField(null=True, blank=True, max_length=40, verbose_name=u"地点")
     try:
-        default_status = ImplementClassChoices.objects.get(category = 0)
+        default_status = ImplementClassChoices.objects.get(category = 0).id
     except:
         default_status = 1
-    implement_class = models.ForeignKey(ImplementClassChoices, blank=False, default=default_status.id, verbose_name=u"实施类别")
+    implement_class = models.ForeignKey(ImplementClassChoices, blank=False, default=default_status, verbose_name=u"实施类别")
 
     class Meta:
         verbose_name = u"标单申请表"

@@ -22,7 +22,7 @@ function saveMaterielExecuteDetail_callback(data){
     window.reload();
   }else{
     // alert(data.errors.Html());
-    alert(data.add_form);
+    // alert(data.add_form);
     $("#detail_form").html(data.add_form);
     // $("#errorsFieldDiv").html(data.errors);
   }

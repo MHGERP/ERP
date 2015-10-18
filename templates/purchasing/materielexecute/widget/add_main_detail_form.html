@@ -27,13 +27,13 @@
             </div>
 		</div>
 		<div class="control-group {% if MainMaterielExecuteDetailForm.quantity.errors %} error {% endif %}">
-			<label class="control-label" for="">{{MainMaterielExecuteDetailForm.quantity.label}}<span style="color:red">*</span></label>
+			<label class="control-label" for="">{{MainMaterielExecuteDetailForm.quantity.label}}<span style="color:red">（请输入整数）*</span></label>
             <div class="controls">
                 {{MainMaterielExecuteDetailForm.quantity}}
             </div>
 		</div>
 		<div class="control-group {% if MainMaterielExecuteDetailForm.purchase_weight.errors %} error {% endif %}">
-			<label class="control-label" for="">{{MainMaterielExecuteDetailForm.purchase_weight.label}}<span style="color:red">*</span></label>
+			<label class="control-label" for="">{{MainMaterielExecuteDetailForm.purchase_weight.label}}<span style="color:red">（请输入数字）*</span></label>
             <div class="controls">
                 {{MainMaterielExecuteDetailForm.purchase_weight}}
             </div>
