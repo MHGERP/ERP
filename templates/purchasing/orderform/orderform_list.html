@@ -14,7 +14,7 @@
             <td>
                 <span class="btn btn-small btn-open" args="{{item.order_id}}">查看</span>
 				{% if item.order_status.status == 0 %}
-				<span class="btn btn-small btn-del btn-danger">删除</span>	
+				<span class="btn btn-small btn-del btn-danger" args="{{item.order_id}}">删除</span>	
 				{% endif %}
             </td>
 

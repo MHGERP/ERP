@@ -1,13 +1,24 @@
 {% extends "purchasing/status_change/base.html"  %}
 {% block status_content  %}
 <legend>状态更改</legend>
-<form class="form-search form-horizontal " method="POST" action="">
+<form class="form-horizontal span8" method="POST" action="">
     {% csrf_token %}
     {% for field in chform %}
-    <div class="control-group">
+    <div class="control-group {% if field.errors %}error{% endif %}">
         <label class="control-label">{{field.label}}</label>
+        <div class="controls">{{field}}</div>
+        {% if field.errors %}
+        <div class="alert alert-error span2 status-error">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            {{field.errors}}
+        </div>
+        {% endif %}
     </div>
     {% endfor %}
-    <button type="submit" class="btn">查询</button>
+    <div class="control-group">
+        <div class="span3">
+            <button type="submit" class="btn span2 pull-right">提交</button>
+        </div>
+    </div>
 </form>
 {% endblock %}

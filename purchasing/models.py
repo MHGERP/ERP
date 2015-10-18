@@ -56,9 +56,15 @@ class MaterielFormConnection(models.Model):
     def __unicode__(self):
         return self.materiel.name
 
+import uuid
+def make_uuid():
+    """
+    make uuid
+    """
+    return str(uuid.uuid4())
 
 class bidApply(models.Model):
-    apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
+    apply_id = models.CharField(unique=True, max_length=20, default=make_uuid, verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
     work_order = models.ForeignKey(BidFormStatus,null=False,verbose_name=u"工作令")
@@ -72,8 +78,8 @@ class bidApply(models.Model):
     project_category = models.CharField(null=True, max_length=40, verbose_name=u"项目类别")
     bid_datetime = models.DateTimeField(null=True, verbose_name=u"招(议)标时间")
     bid_delivery_date = models.DateTimeField(null=True, verbose_name=u"标书递送时间")
-    place = models.CharField(null=True, max_length=40, verbose_name=u"地点")
-    implement_class = models.ForeignKey(ImplementClassChoices, null=False,verbose_name=u"实施类别")
+    place = models.CharField(null=True, blank=True, max_length=40, verbose_name=u"地点")
+    implement_class = models.ForeignKey(ImplementClassChoices, null=True,verbose_name=u"实施类别")
 
     class Meta:
         verbose_name = u"标单申请表"
@@ -140,7 +146,6 @@ class ArrivalInspection(models.Model):
 
 class PurchasingEntry(models.Model):
     entry_time = models.DateField(blank=True, null=True,verbose_name=u"入库时间")
-    receipts_code = models.CharField(max_length=100,blank=False,verbose_name=u"单据编号")
     purchaser =  models.ForeignKey(User,blank=False,verbose_name=u"采购员",related_name = "purchaser")
     inspector = models.ForeignKey(User,blank=False,verbose_name=u"检验员",related_name = "inspector")
     keeper = models.ForeignKey(User,blank=False,verbose_name=u"库管员" , related_name = "keeper")
@@ -156,9 +161,9 @@ class PurchasingEntry(models.Model):
 
 class PurchasingEntryItems(models.Model):
     material = models.ForeignKey(Materiel,blank = True , null = True , verbose_name = u"材料")
-    standard = models.CharField(max_length = 100 , blank = True,null = True,verbose_name = u"标准")
-    status = models.CharField(max_length = 100,blank = True, null = True , verbose_name = u"状态")
-    remark = models.CharField(max_length = 100, blank = True , null = True , verbose_name = u"备注")
+    standard = models.CharField(max_length = 100 , blank = True,default="", verbose_name = u"标准")
+    status = models.CharField(max_length = 100,blank = True,default="", verbose_name = u"状态")
+    remark = models.CharField(max_length = 100, blank = True , default="" , verbose_name = u"备注")
     purchasingentry = models.ForeignKey(PurchasingEntry,verbose_name = u"入库单")
     class Meta:
         verbose_name = u"入库材料"
@@ -185,8 +190,8 @@ class SupplierSelect(models.Model):
     def __unicode__(self):
         return "%s select %s" % (self.bidform.bid_id, self.supplier.supplier_name)
 class MaterialSubApply(models.Model):
-    receipts_code = models.CharField(max_length = 100, unique = True, blank = True ,null = True, verbose_name = u"单据编号")
-    pic_code =  models.CharField(max_length = 100, blank = True , null = True, verbose_name = u"图号")
+    receipts_code = models.CharField(max_length = 100, unique = True, blank = False ,null = True, verbose_name = u"单据编号")
+    pic_code =  models.CharField(max_length = 100, blank = False , null = True, verbose_name = u"图号")
     work_order = models.ForeignKey(WorkOrder,verbose_name = u"工作令" , blank = True , null = True)
     bidform = models.ForeignKey(BidForm,blank = True , null = True, verbose_name = u"对应标单")
     reasons = models.CharField(max_length = 1000,blank = True , null = True, verbose_name = u"代用原因和理由")
@@ -239,7 +244,7 @@ class MainMaterielExecuteDetail(models.Model):
     crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"探伤级别")
     delivery_status = models.CharField(max_length = 50, blank = False, verbose_name = u"交货状态")
     execute_standard = models.CharField(max_length = 100, blank = False, verbose_name = u"执行标准")
-    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"备注") 
+    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"备注")
     class Meta:
         verbose_name = u"主材材料执行表详细"
         verbose_name_plural = u"主材材料执行表详细"

@@ -1,0 +1,10 @@
+div#error_list li{
+    line-height:20px;
+}
+div#error_list{
+    padding:0px!important;
+}
+
+div#error_div1 label{
+    padding-top:0px;
+}

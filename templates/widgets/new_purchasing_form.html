@@ -1,5 +1,36 @@
-    <button type="button" class="btn new_purchase_btn">新建采购单</button>
-    <form class="form-search">
-        <input type="text" class="input-medium search-query">
-        <button type="submit" class="btn search">进入</button>
-    </form>
+<span class="btn add" id="new_bid_btn" data-toggle="modal" data-target="#bid_modal" style="width:180px;">新建标单</span>
+<form class="form-search">
+        <select class="input-medium search-query bid-select" id="search-query-2">
+
+        </select>
+        <span class="btn search bid-btn-open clear" id="bid-btn-open" data-toggle="modal" data-target="#bid_modal" data-source="#search-query-2">进入</span>
+</form>
+
+<div id="bid_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="myModalLabel">标单</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+    <div class="form-div add">
+      <form class="form-search">
+        <label>标单编号：</label>
+        <input type="text" class="input-medium" id="bid_id">
+      </form>
+    </div>
+    <div class="delete-div">
+      <span class="btn" id="bid-btn-delete" data-dismiss="modal" aria-hidden="true">删除</span>
+    </div>
+    <div class="table-div">
+    </div>
+    <div class="save-div">
+      <span class="btn add save" id="bid-btn-save" data-dismiss="modal" aria-hidden="true">确认保存</span>
+    </div>
+    <div class="finish-div">
+      <span class="btn add save" id="bid-btn-finish" data-dismiss="modal" aria-hidden="true">完成</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>

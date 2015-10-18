@@ -15,6 +15,7 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect,HttpResponse
 import json
+from django.db import transaction
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -93,29 +94,41 @@ def supplierManagementViews(request):
     return render(request,"purchasing/supplier/supplier_management.html",context)
 
 @csrf.csrf_protect
-def bidTrackingViews(request):
+def bidTrackingViews(request, bid_id):
     """
     Liu Ye
     """
-    bid_id = 444
-    bid = BidForm.objects.get(bid_id = bid_id)
+    bidform = BidForm.objects.get(id = bid_id)
     qualityPriceCardForm = QualityPriceCardForm()
-    bidApplyForm = BidApplyForm()
+    bid_apply = bidApply.objects.filter(bid = bidform)
+    quality_price_card = qualityPriceCard.objects.filter(bid = bidform)
+
+    if bid_apply:
+        bidApplyForm = BidApplyForm(instance = bid_app)
+    else:
+        bidApplyForm = BidApplyForm()
+    print bidApplyForm
     bidCommentForm = BidCommentForm()
-    bidComments = BidComment.objects.filter(Q(bid = bid))
-    bidForm = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
+    bidComments = BidComment.objects.filter(Q(bid = bidform))
+    bidFormStatuss = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
+
+    btn_cnt = 2 if bidform.bid_status.part_status < BIDFORM_PART_STATUS_INVITE_BID_APPLY else 0
+    btn_color = ["btn-success", "btn-warning", ""]
     bid_status = []
-    for status in bidForm:
+    for status in bidFormStatuss:
+        btn_cnt += 1 if status == bidform.bid_status else 0
         bid_dict = {}
         bid_dict["name"] = status
-        bid_dict["class"] = "btn-success"
+        bid_dict["class"] = btn_color[btn_cnt]
         bid_status.append(bid_dict)
+        btn_cnt += 1 if status == bidform.bid_status else 0
 
     context = {"bid_status": bid_status,
                "qualityPriceCardForm": qualityPriceCardForm,
                "bidApplyForm": bidApplyForm,
                "bidCommentForm": bidCommentForm,
                "bidComments": bidComments,
+               "bidform": bidform,
              }
     return render(request, "purchasing/bid_track.html", context)
 
@@ -123,23 +136,22 @@ def bidTrackingViews(request):
 def arrivalInspectionViews(request):
     if request.method == "POST":
         bid_id = request.POST["bidform_search"]
-        print bid_id
         bidFormSet = BidForm.objects.filter(bid_id = bid_id)
     else:
-        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_CHECK) 
-    
+        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_STORE)    
     context = {
         "bidFormSet":bidFormSet,
+        "BIDFORM_PART_STATUS_STORE":BIDFORM_PART_STATUS_STORE,
     }
     return render(request,"purchasing/purchasing_arrival.html",context)
 
 def arrivalCheckViews(request,bid):
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
-    is_exist = PurchasingEntry.objects.filter(bidform__bid_id = bid).count() > 0
+    is_show = BidForm.objects.filter(bid_id = bid , bid_status__part_status = BIDFORM_PART_STATUS_CHECK).count() > 0
     context = {
         "cargo_set":cargo_set,
         "bid":bid,
-        "is_exist":is_exist,
+        "is_show":is_show,
     }
     return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 
@@ -189,6 +201,8 @@ def subApplyViews(request,sid = None):
             subapply_obj.is_submit = True
             subapply_obj.save()
             return HttpResponseRedirect("/purchasing/subApplyHome/")
+        else:
+            print subapply_form.errors
     else:
         subapply_form = SubApplyForm(instance = subapply_obj)
     sub_set = MaterialSubApplyItems.objects.filter(sub_apply__id = sid)
@@ -281,11 +295,14 @@ def processFollowAdd(request):
             status=1
         return HttpResponse(json.dumps({'status':status,"form_html":form_html}),content_type="application/json")
 
-    """
-    mode: 0 view, 1 add
-    mid : materielexecute id
-    """
+    
 def materielExecuteDetailViews(request, choice, *mid):
+    """
+    mxl
+    summary : click into add or view html
+    params : choice : main or support detail
+             mid : option param, the materielexecute id
+    """
     if choice == "0":
         materielexecute_id = mid[0]
         materielexecute = MaterielExecute.objects.get(pk = materielexecute_id)
@@ -347,9 +364,30 @@ def statusChangeHistoryViews(request,bid):
     }
     return render(request,"purchasing/status_change/statushistory.html",context)
 
+@transaction.commit_on_success
 def statusChangeApplyViews(request,bid):
     bidform = BidForm.objects.get(bid_id = bid)
-    statuschangeform = StatusChangeApplyForm(bidform=bidform)
+    if request.method == "POST":
+        statuschangeform = StatusChangeApplyForm(request.POST,bidform = bidform)
+        if statuschangeform.is_valid():
+            statuschange_obj = statuschangeform.save(commit = False)
+            statuschange_obj.bidform = bidform
+            statuschange_obj.change_user = request.user
+            statuschange_obj.normal_change = False
+            statuschange_obj.original_status = bidform.bid_status
+            return HttpResponseRedirect('/purchasing/statusChangeHome')
+            try:
+                statuschange_obj.save()
+                reason = statuschangeform.cleaned_data["reason"]
+                changereason = StatusChangeReason(status_change = statuschange_obj ,reason = reason)
+                changereason.save()
+            except Exception,e:
+                print e
+        else:
+            print statuschangeform.errors
+    else:
+        statuschangeform = StatusChangeApplyForm(bidform=bidform)   
+
     context = {
         'chform':statuschangeform,
     }

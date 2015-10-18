@@ -21,20 +21,20 @@ class OrderFormStatusForm(forms.Form):
     JunHU
     summary: store all step of order form status
     """
-
     status = forms.ChoiceField(choices = ORDERFORM_STATUS_CHOICES, widget = forms.Select(attrs = {'class': 'form-control input'}))
-
 
 
 class BidApplyForm(ModelForm):
     class Meta:
         model = bidApply
-
+        fields = ('apply_company', 'demand_company', 'bid_project', 'bid_date', 'project_category', 'work_order', 'special_model', 'amount', 'core_part')
+        widgets = {
+                   "bid_date": forms.DateInput(attrs={'class':'form-control', "data-date-format":"yyyy-mm-dd"}),
+                  }
 
 class QualityPriceCardForm(ModelForm):
     class Meta:
         model = qualityPriceCard
-
 
 class BidCommentForm(forms.Form):
     result_choices=(("-1","请审核"),("1","通过"),("0","不通过"))
@@ -49,10 +49,9 @@ class BidCommentForm(forms.Form):
 class EntryForm(ModelForm):
     class Meta:
         model = PurchasingEntry
-        fields = ('entry_time','receipts_code')
+        fields = ('entry_time',)
         widgets = {
             'entry_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entry_time"}),
-            'receipts_code':forms.TextInput(attrs={"id":"receipts_code"}),
         }
     def __init__(self,*args,**kwargs):
         super(EntryForm,self).__init__(*args,**kwargs)
@@ -60,9 +59,13 @@ class EntryForm(ModelForm):
         self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.username
         self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.username
         self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.username
+        self.fields['bidform'].widget.attrs["value"] = pur_entry.bidform
+        print self
+        print pur_entry.bidform.bid_id
     purchaser = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
-    inspector = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
-    keeper = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
+    inspector = forms.CharField(label=u"检验员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
+    keeper = forms.CharField(label=u"库管员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
+    bidform = forms.CharField(label=u"单据编号",widget = forms.TextInput(attrs={'readonly':'readonly','id':'bidform'}))
 class ProcessFollowingForm(ModelForm):
     class Meta:
         model=ProcessFollowingInfo
@@ -113,8 +116,8 @@ class SubApplyItemForm(ModelForm):
 
 class StatusChangeApplyForm(ModelForm):
     class Meta:
-        model = StatusChange 
-        exclude = ('id','bidform','change_user','change_time','normal_change')
+        model = StatusChange
+        exclude = ('id','bidform','original_status','change_user','change_time','normal_change')
     def __init__(self,*args,**kwargs):
         bidform = kwargs.pop("bidform",None)
         super(StatusChangeApplyForm,self).__init__(*args,**kwargs)

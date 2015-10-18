@@ -24,15 +24,11 @@ urlpatterns=patterns('',
         purchasing_views.supplierManagementViews,
         ),
     url(
-        r'^bidTracking$',
-        purchasing_views.bidTrackingViews,
-        ),
-    url(
         r'^suppliermanagement$',
         purchasing_views.supplierManagementViews,
     ),
     url(
-        r'^bidTracking$',
+        r'^bidTracking/(?P<bid_id>\w+)/$',
         purchasing_views.bidTrackingViews,
     ),
    url( 

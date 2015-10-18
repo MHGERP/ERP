@@ -18,3 +18,7 @@ div.subbtn{
 div.nomargin-left{
     margin-left:0px!important;
 }
+div.status-error{
+    padding: 0px 35px 0px 14px!important;
+    margin-left:130px;
+}

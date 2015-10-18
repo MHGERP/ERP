@@ -1,6 +1,7 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
+            <th><input type="checkbox" name="all" id="selectall"></th>
             <th>序号</th>
             <th>名称</th>
             <th>规格</th>
@@ -13,10 +14,12 @@
             <th>库存</th>
             <th>相关库存</th>
             <th>删除</th>
+            <th>是否已加入订购单</th>
         </tr>
     </thead>
     {% for item in inventory_detail_list%}
     <tr iid="{{item.id}}">
+        <td>{%if item.can_choose %}<input type="checkbox" class="checkbox" args="{{item.id}}">{% endif %}</td>
         <td>{{forloop.counter}}</td>
         <td>{{item.name}}</td>
         <td></td>
@@ -28,7 +31,8 @@
         <td></td>
         <td></td>
         <td><button class="btn btn-primary">查看相关库存</button></td>
-        <td><button class="btn btn-danger">删除</button></td>
+        <td><button class="btn btn-danger" uid={{item.id}}>删除</button></td>
+        <td>{{item.status}}</td>
     </tr>
     {% endfor%}
 </table>

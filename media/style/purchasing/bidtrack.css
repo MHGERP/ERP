@@ -1,0 +1,19 @@
+#BidCommentModal{
+ width: 800px;
+ height: 600px;
+}
+
+#BidCommentModal .modal-body{
+    max-height:800px !important;
+}
+
+#bid_apply_form_table th{
+    vertical-align:middle !important;
+}
+#bid_apply_form_table input{
+    width:150px;
+}
+
+#bid_apply_form_table input[name="amount"]{
+    width:75px;
+}

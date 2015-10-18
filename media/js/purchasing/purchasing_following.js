@@ -19,21 +19,28 @@ $("table[name='confirm']").find("button").bind("click",function(){
 })
 
 function check_arrival_callback(data){
-    if(data.flag){
-       btn.removeClass().addClass("btn btn-success");
+    if(data.isOk){
+        if(data.flag){
+        btn.removeClass().addClass("btn btn-success");
+        }
+        else{
+            btn.removeClass().addClass("btn");
+        }
+        alert(data.message);
     }
-    else{
-        btn.removeClass().addClass("btn");
-    }
+    else
+        alert(data.message);
 }
 
 function gen_entry(bid){
+    btn = $(this);
     Dajaxice.purchasing.genEntry(gen_entry_callback,{'bid':bid});
 }
 
 function gen_entry_callback(data){
     if(data.flag){
         alert(data.message);
+        $("#genbtn").remove();
     }
     else{
         alert(data.message);
@@ -64,6 +71,7 @@ function entry_confirm(pid){
 function entry_confirm_callback(data){
     if(data.flag){
         alert(data.message);
+        $("#entry_confirm").remove();
     }
     else{
         alert(data.message);
@@ -89,7 +97,6 @@ function subitem_save_callback(data){
     if(data.flag){
         $('#subtable').html(data.html);      
         $('#myModal').modal('hide');
-        location.reload();
         alert("添加成功");
     }
     else{
