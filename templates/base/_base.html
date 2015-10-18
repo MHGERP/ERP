@@ -16,7 +16,7 @@
 <div id="sidebar">
 	<a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
 	<ul>
-		<li {% block HOME_ACTIVE %}{% endblock %}><a href="/"><i class="icon icon-home"></i> <span>首页</span></a></li>
+		<li {% block HOME_ACTIVE %}{% endblock %}><a href="/home"><i class="icon icon-home"></i> <span>首页</span></a></li>
 		<li class="submenu {% block PURCHASING_ACTICVE %}{% endblock %}">
 			<a href="#"><i class="icon icon-th-list"></i> <span>采购管理</span></a>
 			{% include "purchasing/widgets/menu_list.html"%}

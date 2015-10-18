@@ -129,6 +129,9 @@ def chooseInventorytype(request,pid,key):
     if key:
         items = items.filter(name=key)
     for item in items:
+        if MaterielFormConnection.objects.filter(materiel = item).count() == 0:
+            MaterielFormConnection(materiel = item, count = item.count).save()
+
         item.can_choose, item.status = (False, u"已加入订购单") if (item.materielformconnection.order_form != None) else (True, u"未加入订购单")
 
     context={
@@ -195,8 +198,12 @@ def addToDetail(request, table_id, order_index):
     """
     items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
     for item in items:
-        item.materielpurchasingstatus.add_to_detail = True
-        item.materielpurchasingstatus.save()
+        try:
+            item.materielpurchasingstatus.add_to_detail = True
+            item.materielpurchasingstatus.save()
+        except:
+            status = MaterielPurchasingStatus(materiel = item, add_to_detail = True)
+            status.save()
     return ""
 
 @dajaxice_register
@@ -208,8 +215,12 @@ def addToDetailSingle(request, index):
     return: NULL
     """
     item = Materiel.objects.get(id = index)
-    item.materielpurchasingstatus.add_to_detail = True
-    item.materielpurchasingstatus.save()
+    try:
+        item.materielpurchasingstatus.add_to_detail = True
+        item.materielpurchasingstatus.save()
+    except:
+        status = MaterielPurchasingStatus(materiel = item, add_to_detail = True)
+        status.save()
     return ""
 
 @dajaxice_register
@@ -533,6 +544,9 @@ def deleteDetail(request,uid):
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
     item.materielpurchasingstatus.save()
+
+    item.materielformconnection.delete()  # by JunHU
+
     param = {"uid":uid}
     return simplejson.dumps(param)
 
@@ -580,7 +594,10 @@ def AddProcessFollowing(request,bid,process_form):
     return simplejson.dumps({})
 
 def getMaxId(table):
-    return max(int(item.id) for item in table.objects.all())
+    try:
+        return max(int(item.id) for item in table.objects.all())
+    except:
+        return -1
 
 @dajaxice_register
 def getOrderFormItems(request, index, can_choose = False):
