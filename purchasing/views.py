@@ -32,6 +32,18 @@ def purchasingFollowingViews(request):
 
     return render(request,"purchasing/purchasing_following.html",context)
 
+def bidformApproveViews(request):
+    bidform=BidForm.objects.filter(bid_status__part_status=BIDFORM_PART_STATUS_APPROVED)
+    return render(request,"purchasing/bidform_approve.html",{"bidform":bidform})
+
+def bidformApproveIDViews(request,bid):
+    bidform=BidForm.objects.get(pk=bid)
+    bidcommentform=BidCommentForm()
+    context={
+        "bidform":bidform,
+        "bidcommentform":bidcommentform
+    }
+    return render(request,"purchasing/bidform_approve_id.html",context)
 
 def pendingOrderViews(request):
     """
@@ -400,3 +412,5 @@ def statusChangeApplyViews(request,bid):
     revl = render(request,"purchasing/status_change/statuschangeapply.html",context)
     transaction.commit()
     return revl
+
+    

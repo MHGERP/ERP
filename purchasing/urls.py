@@ -88,5 +88,13 @@ urlpatterns=patterns('',
     url(
         r'^statusChange/(?P<bid>\w+)/$',
         purchasing_views.statusChangeApplyViews,name="statuschange",
+       ),
+    url(
+        r'^bidformapprove$',
+        purchasing_views.bidformApproveViews,
+    ),
+    url(
+        r'^bidformapproveid/(?P<bid>\w+)/$',
+        purchasing_views.bidformApproveIDViews,
     ),
 )
