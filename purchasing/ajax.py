@@ -560,8 +560,12 @@ def saveComment(request, form, bid_id):
             bid_comment.user = request.user
             bid_comment.comment = bidCommentForm.cleaned_data["reason"]
             bid_comment.bid = bid
+            bid_comment.result = int(judge)
+            bid_comment.status = BIDFORM_STATUS_INVITE_BID
             bid_comment.save()
-            if judge == "1":
+            print judge
+            if judge == "0":
+                print "ok"
                 goNextStatus(bid, request.user)
             else:
                 pass
@@ -601,7 +605,7 @@ def resetBidApply(request, bid_id):
         bidapply.delete()
         ret = {'status': '1', 'message': u"申请书重置成功"}
     except:
-        ret = {'status': '0', 'message': u"申请书信息不存在"}
+        ret = {'status': '2', 'message': u"申请书信息不存在"}
     return simplejson.dumps(ret)
 
 @dajaxice_register
@@ -611,7 +615,7 @@ def submitStatus(request, bid_id):
         goNextStatus(bidform, request.user)
         ret = {'status': '1', 'message': u"申请书提交成功"}
     except:
-        ret = {'status': '0', 'message': u"申请书不存在"}
+        ret = {'status': '2', 'message': u"申请书不存在"}
     return simplejson.dumps(ret)
     
 def AddProcessFollowing(request,bid,process_form):

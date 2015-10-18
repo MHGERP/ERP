@@ -69,7 +69,7 @@ class bidApply(models.Model):
     apply_id = models.CharField(unique=True, max_length=50, default=make_uuid, verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
-    amount = models.IntegerField(verbose_name=u"数量", default = 0)
+    amount = models.IntegerField(verbose_name=u"数量")
     work_order = models.ForeignKey(WorkOrder,null=False,verbose_name=u"工作令")
     bid_project = models.CharField(null=True, max_length=40, verbose_name=u"拟招(议)项目")
     bid_date = models.DateTimeField(null=True, verbose_name=u"拟招(议)标时间")

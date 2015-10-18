@@ -119,7 +119,6 @@ def bidTrackingViews(request, bid_id):
         bidApplyForm = BidApplyForm()
     #quality_price_card = qualityPriceCard.objects.filter(bid = bidform)
 
-    print bidApplyForm
     bidCommentForm = BidCommentForm()
     bidComments = BidComment.objects.filter(Q(bid = bidform))
     bidFormStatuss = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")

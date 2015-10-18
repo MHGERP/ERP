@@ -9,6 +9,7 @@ $("#id_bid_date").datetimepicker({
     minView:2
 });
 
+bidapplyform = "";
 $(function(){
   urls = window.location.href.split("/");
   bid_id = urls[urls.length-2]
@@ -22,6 +23,7 @@ $(function(){
   $('#bid_apply_form #apply_confirm').each(function(){
     $(this).click(function(){
       form = $(this).parents("form");
+      bidapplyform = form;
       Dajaxice.purchasing.saveBidApply(saveComment_callback,{'form':$(form).serialize(true),'bid_id':bid_id});
     })
   })
@@ -48,12 +50,12 @@ function saveComment_callback(data){
     alert(data.message);
   }else{
     $.each(data.field,function(i,item){
-       object = $(dispatch_form).find('#'+item);
+       object = $(bidapplyform).find('#id_'+item);
        object.css("background","white");
     });
     //error field background turn into red
     $.each(data.error_id,function(i,item){
-       object = $(dispatch_form).find('#'+item);
+       object = $(bidapplyform).find('#id_'+item);
        object.css("background","red");
     });
 
