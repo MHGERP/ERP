@@ -512,19 +512,37 @@ def deleteDetail(request,uid):
 def saveComment(request, form, bid_id):
     bidCommentForm = BidCommentForm(deserialize_form(form))
     if bidCommentForm.is_valid():
-        bid = BidForm.objects.get(bid_id = bid_id)
-        if bid != None:
+        bid = BidForm.objects.get(id = bid_id)
+        judge = bidCommentForm.cleaned_data["judgeresult"]
+        if judge in ("1", "0") and bid != None:
             bid_comment = BidComment()
             bid_comment.user = request.user
-            bid_comment.comment = bidCommentForm.cleaned_data["judgeresult"]
+            bid_comment.comment = bidCommentForm.cleaned_data["reason"]
             bid_comment.bid = bid
             bid_comment.save()
-            ret = {'status': '0', 'message': u"添加成功"}
+            if judge == "1":
+                goNextStatus(bid, request.user)
+            else:
+                pass
+            ret = {'status': '1', 'message': u"评审意见提交成功"}
         else:
-            ret = {'status': '1', 'message': u"该成员不存在，请刷新页面"}
+            ret = {'status': '0', 'message': u"评审意见提交不成功"}
     else:
-        ret = {'status': '1', 'message': u"该成员不存在，请刷新页面"}
+        ret = {'status': '0', 'message': u"评审意见提交不成功"}
     return simplejson.dumps(ret)
+
+@dajaxice_register
+def saveBidApply(request, form, bid_id):
+    bidApplyForm = BidApplyForm(deserialize_form(form))
+    if bidApplyForm.is_valid():
+        bidApplyForm.save()
+        ret = {'status': '1', 'message': u"申请书意见提交成功"}
+    else:
+        ret = {'status': '0', 'message': u"申请书提交不成功"}
+    print bidApplyForm
+    return simplejson.dumps(ret)
+
+
 def AddProcessFollowing(request,bid,process_form):
     process_form=ProcessFollowingForm(deserialize_form(process_form))
     if process_form.is_valid():

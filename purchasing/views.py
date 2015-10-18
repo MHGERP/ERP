@@ -94,29 +94,41 @@ def supplierManagementViews(request):
     return render(request,"purchasing/supplier/supplier_management.html",context)
 
 @csrf.csrf_protect
-def bidTrackingViews(request):
+def bidTrackingViews(request, bid_id):
     """
     Liu Ye
     """
-    bid_id = 444
-    bid = BidForm.objects.get(bid_id = bid_id)
+    bidform = BidForm.objects.get(id = bid_id)
     qualityPriceCardForm = QualityPriceCardForm()
-    bidApplyForm = BidApplyForm()
+    bid_apply = bidApply.objects.filter(bid = bidform)
+    quality_price_card = qualityPriceCard.objects.filter(bid = bidform)
+
+    if bid_apply:
+        bidApplyForm = BidApplyForm(instance = bid_app)
+    else:
+        bidApplyForm = BidApplyForm()
+    print bidApplyForm
     bidCommentForm = BidCommentForm()
-    bidComments = BidComment.objects.filter(Q(bid = bid))
-    bidForm = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
+    bidComments = BidComment.objects.filter(Q(bid = bidform))
+    bidFormStatuss = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
+
+    btn_cnt = 2 if bidform.bid_status.part_status < BIDFORM_PART_STATUS_INVITE_BID_APPLY else 0
+    btn_color = ["btn-success", "btn-warning", ""]
     bid_status = []
-    for status in bidForm:
+    for status in bidFormStatuss:
+        btn_cnt += 1 if status == bidform.bid_status else 0
         bid_dict = {}
         bid_dict["name"] = status
-        bid_dict["class"] = "btn-success"
+        bid_dict["class"] = btn_color[btn_cnt]
         bid_status.append(bid_dict)
+        btn_cnt += 1 if status == bidform.bid_status else 0
 
     context = {"bid_status": bid_status,
                "qualityPriceCardForm": qualityPriceCardForm,
                "bidApplyForm": bidApplyForm,
                "bidCommentForm": bidCommentForm,
                "bidComments": bidComments,
+               "bidform": bidform,
              }
     return render(request, "purchasing/bid_track.html", context)
 

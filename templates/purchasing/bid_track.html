@@ -9,36 +9,29 @@
 {% endblock %}
 
 {% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}bootstrap-datepicker/css/bootstrap-datetimepicker.css" >
+<script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
 <link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
-<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/index.css" >
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/purchasing/bidtrack.css" >
 <script type="text/javascript" src="{{STATIC_URL}}js/purchasing/bid_track.js"></script>
-
+<input id="id_bid_date" type="text">
 <div class="widget-content">
-  <table class="table table-bordered table-striped table-hover" style="width:60%">
-    <thead>
-      <tr>
-        <th>工作令</th>
-        <th>明细表</th>
-        <th>联系单</th>
-      </tr>
-    </thead>
-    <tbody>
-
-    </tbody>
-  </table>
+  <div>
+    {% include "purchasing/bidform_div.html"%}
+  </div>
   <div class="row">
     {%for item in bid_status%}
-      <a href="#BidComment" role="button" class="btn {{item.class}}" data-toggle="modal">{{item.name}}</a>
+    <a {%if item.class == "btn-warning" %}href="#BidCommentModal" {%endif%} role="button" class="btn {{item.class}}" data-toggle="modal">{{item.name}}</a>
     {%endfor%}
   </div>
   <br>
   <div class="row">
-    <button class="btn" type="button"> 合同确认 </button>
+    <button class="btn" type="button">合同确认</button>
   </div>
 </div>
 
 
-<div id="BidComment" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="BidCommentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">招(议)标申请书</h3>
