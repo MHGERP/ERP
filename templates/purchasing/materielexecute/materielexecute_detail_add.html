@@ -16,12 +16,18 @@
 	    	</h3>
 	  	</div>
 	  	<div class="modal-body" id="modal-body">
+	  		<!-- <div id="errorsFieldDiv">
+	  			{% include "purchasing/materielexecute/widget/errorsField.html" %}
+	  		</div> -->
+
 	  		{% csrf_token %}
-	    	{% if choice == MAIN_MATERIEL %}
-				{% include "purchasing/materielexecute/widget/add_main_detail_form.html" %}
-			{% else %}
-				{% include "purchasing/materielexecute/widget/add_support_detail_form.html" %}
-			{% endif %}
+	  		<form class="form-inline well" id="detail_form" method="post">
+		    	{% if choice == MAIN_MATERIEL %}
+					{% include "purchasing/materielexecute/widget/add_main_detail_form.html" %}
+				{% else %}
+					{% include "purchasing/materielexecute/widget/add_support_detail_form.html" %}
+				{% endif %}
+			</form>
 	  	</div>
 	  	<div class="modal-footer">
 	    	<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
