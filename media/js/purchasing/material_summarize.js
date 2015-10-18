@@ -67,7 +67,7 @@ $(document).on("click","#btn-save",function(){
     }
 });
 function saveCallBack() {
-    alert("保存成功");
+    refresh();
 }
 
 //new puchase order finish button
@@ -78,7 +78,7 @@ $(document).on("click","#btn-finish",function(){
     }
 });
 function finishCallBack() {
-    alert("编制成功");
+    refresh();    
 }
 
 //open button
@@ -126,7 +126,6 @@ $(document).on("click","#btn-delete",function(){
     
 });
 function deleteCallBack(){
-    alert("删除成功");
     Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack, {});
 }
 

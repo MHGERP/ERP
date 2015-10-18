@@ -21,12 +21,12 @@
         <tr>
 			<td>{{item.index}}</td>
             <td>{{item.name}}</td>
+            <td>{{item.schematic_index}}</td>
             <td></td>
+            <td>{{item.count}}</td>
+            <td>{{item.material}}</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{item.total_weight}}</td>
             <td></td>
             {% if not item.materielpurchasingstatus.add_to_detail %}
             <td><span class="btn btn-small btn-primary btn-add_to_detail" args="{{item.id}}">加入物料汇总</span></td>

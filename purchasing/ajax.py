@@ -16,7 +16,7 @@ from django.http import HttpResponseRedirect
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielChoiceForm, MainMaterielExecuteDetailForm, SupportMaterielExecuteDetailForm
 from django.db.models import Q
 from datetime import datetime
-from purchasing.utility import goNextStatus
+from purchasing.utility import goNextStatus,goStopStatus
 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
@@ -129,6 +129,9 @@ def chooseInventorytype(request,pid,key):
     if key:
         items = items.filter(name=key)
     for item in items:
+        if MaterielFormConnection.objects.filter(materiel = item).count() == 0:
+            MaterielFormConnection(materiel = item, count = item.count).save()
+
         item.can_choose, item.status = (False, u"已加入订购单") if (item.materielformconnection.order_form != None) else (True, u"未加入订购单")
 
     context={
@@ -195,8 +198,12 @@ def addToDetail(request, table_id, order_index):
     """
     items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
     for item in items:
-        item.materielpurchasingstatus.add_to_detail = True
-        item.materielpurchasingstatus.save()
+        try:
+            item.materielpurchasingstatus.add_to_detail = True
+            item.materielpurchasingstatus.save()
+        except:
+            status = MaterielPurchasingStatus(materiel = item, add_to_detail = True)
+            status.save()
     return ""
 
 @dajaxice_register
@@ -208,8 +215,12 @@ def addToDetailSingle(request, index):
     return: NULL
     """
     item = Materiel.objects.get(id = index)
-    item.materielpurchasingstatus.add_to_detail = True
-    item.materielpurchasingstatus.save()
+    try:
+        item.materielpurchasingstatus.add_to_detail = True
+        item.materielpurchasingstatus.save()
+    except:
+        status = MaterielPurchasingStatus(materiel = item, add_to_detail = True)
+        status.save()
     return ""
 
 @dajaxice_register
@@ -227,7 +238,6 @@ def getOrderFormList(request, statu, key):
     """
     try:
         statu = int(statu) # unicode to integer
-    
         items = OrderForm.objects.filter(order_status__status = statu)
         if key:
             items = items.filter(order_id = key)
@@ -533,6 +543,9 @@ def deleteDetail(request,uid):
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
     item.materielpurchasingstatus.save()
+
+    item.materielformconnection.delete()  # by JunHU
+
     param = {"uid":uid}
     return simplejson.dumps(param)
 
@@ -561,16 +574,46 @@ def saveComment(request, form, bid_id):
 
 @dajaxice_register
 def saveBidApply(request, form, bid_id):
-    bidApplyForm = BidApplyForm(deserialize_form(form))
+    bidform = BidForm.objects.get(id = bid_id)
+    try:
+        bidapply = bidApply.objects.get(bid = bidform)
+        bidApplyForm = BidApplyForm(deserialize_form(form), instance=bidapply)
+    except:
+        bidapply = None
+        bidApplyForm = BidApplyForm(deserialize_form(form))
     if bidApplyForm.is_valid():
-        bidApplyForm.save()
-        ret = {'status': '1', 'message': u"申请书意见提交成功"}
+        if bidapply:
+            bidApplyForm.save()
+        else:
+            bidapply = bidApplyForm.save(commit = False)
+            bidapply.bid = bidform
+            bidapply.save()
+        ret = {'status': '2', 'message': u"申请书保存成功"}
     else:
-        ret = {'status': '0', 'message': u"申请书提交不成功"}
-    print bidApplyForm
+        ret = {'status': '0', 'field':bidApplyForm.data.keys(), 'error_id':bidApplyForm.errors.keys(), 'message': u"申请书保存不成功"}
     return simplejson.dumps(ret)
 
+@dajaxice_register
+def resetBidApply(request, bid_id):
+    try:
+        bidform = BidForm.objects.get(id = bid_id)
+        bidapply = bidApply.objects.get(bid = bidform)
+        bidapply.delete()
+        ret = {'status': '1', 'message': u"申请书重置成功"}
+    except:
+        ret = {'status': '0', 'message': u"申请书信息不存在"}
+    return simplejson.dumps(ret)
 
+@dajaxice_register
+def submitStatus(request, bid_id):
+    try:
+        bidform = BidForm.objects.get(id = bid_id)
+        goNextStatus(bidform, request.user)
+        ret = {'status': '1', 'message': u"申请书提交成功"}
+    except:
+        ret = {'status': '0', 'message': u"申请书不存在"}
+    return simplejson.dumps(ret)
+    
 def AddProcessFollowing(request,bid,process_form):
     process_form=ProcessFollowingForm(deserialize_form(process_form))
     if process_form.is_valid():
@@ -580,7 +623,10 @@ def AddProcessFollowing(request,bid,process_form):
     return simplejson.dumps({})
 
 def getMaxId(table):
-    return max(int(item.id) for item in table.objects.all())
+    try:
+        return max(int(item.id) for item in table.objects.all())
+    except:
+        return -1
 
 @dajaxice_register
 def getOrderFormItems(request, index, can_choose = False):
@@ -807,3 +853,28 @@ def ProcessFollowingReset(request,bid):
     process_follows=ProcessFollowingInfo.objects.filter(bidform=bidform)
     process_follows.delete()
     return simplejson.dumps({})
+
+@dajaxice_register
+def BidformApprove(request,bid,value,comment):
+    bidform=BidForm.objects.get(id=bid)
+    if bidform.bid_status.part_status == BIDFORM_PART_STATUS_APPROVED:
+        bidcomment=BidComment()
+        bidcomment.user=request.user
+        bidcomment.comment=comment
+        bidcomment.bid=bidform
+        bidcomment.submit_date=datetime.today()
+        bidcomment.result=value
+        bidcomment.status=BIDFORM_STATUS_CREATE
+        bidcomment.save()
+        if int(value) == APPROVED_PASS:
+            status=0
+            goNextStatus(bidform,request.user)
+        else:
+            status=1
+            goStopStatus(bidform,request.user)
+
+    else:
+        status=-1
+    return simplejson.dumps({"status":status})   
+
+

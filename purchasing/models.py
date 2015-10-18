@@ -39,6 +39,8 @@ class BidComment(models.Model):
     comment = models.CharField(max_length=400,blank=False,verbose_name=u"审批意见")
     bid = models.ForeignKey(BidForm, blank = False)
     submit_date=models.DateField(blank=True,null=True,default=lambda: datetime.datetime.today(),verbose_name=u"提交日期")
+    result=models.IntegerField(choices=APPROVED_RESULT_CHOICES,verbose_name=u"审批结果")
+    status=models.IntegerField(choices=BIDFORM_STATUS_CHOICES,verbose_name=u"状态")
     class Meta:
         verbose_name = u"标单评审意见"
         verbose_name_plural = u"标单评审意见"
@@ -64,22 +66,26 @@ def make_uuid():
     return str(uuid.uuid4())
 
 class bidApply(models.Model):
-    apply_id = models.CharField(unique=True, max_length=20, default=make_uuid, verbose_name=u"标单申请编号")
+    apply_id = models.CharField(unique=True, max_length=50, default=make_uuid, verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
-    work_order = models.ForeignKey(BidFormStatus,null=False,verbose_name=u"工作令")
-    amount = models.IntegerField(verbose_name=u"数量")
+    amount = models.IntegerField(verbose_name=u"数量", default = 0)
+    work_order = models.ForeignKey(WorkOrder,null=False,verbose_name=u"工作令")
     bid_project = models.CharField(null=True, max_length=40, verbose_name=u"拟招(议)项目")
     bid_date = models.DateTimeField(null=True, verbose_name=u"拟招(议)标时间")
     special_model = models.CharField(null=True, max_length=40, verbose_name=u"规格、型号")
-    core_part = models.BooleanField(verbose_name="是否为核心件")
+    core_part = models.BooleanField(verbose_name="是否为核心件", default = False)
 
-    bid = models.ForeignKey(BidForm, blank = False)
-    project_category = models.CharField(null=True, max_length=40, verbose_name=u"项目类别")
-    bid_datetime = models.DateTimeField(null=True, verbose_name=u"招(议)标时间")
-    bid_delivery_date = models.DateTimeField(null=True, verbose_name=u"标书递送时间")
+    bid = models.ForeignKey(BidForm)
+    project_category = models.CharField(null=True, blank=True, max_length=40, verbose_name=u"项目类别")
+    bid_datetime = models.DateTimeField(null=True, blank=True, default=lambda: datetime.datetime.today(), verbose_name=u"招(议)标时间")
+    bid_delivery_date = models.DateTimeField(null=True, blank=True, default=lambda: datetime.datetime.today(), verbose_name=u"标书递送时间")
     place = models.CharField(null=True, blank=True, max_length=40, verbose_name=u"地点")
-    implement_class = models.ForeignKey(ImplementClassChoices, null=True,verbose_name=u"实施类别")
+    try:
+        default_status = ImplementClassChoices.objects.get(category = 0)
+    except:
+        default_status = 1
+    implement_class = models.ForeignKey(ImplementClassChoices, blank=False, default=default_status.id, verbose_name=u"实施类别")
 
     class Meta:
         verbose_name = u"标单申请表"
@@ -92,7 +98,7 @@ class qualityPriceCard(models.Model):
     apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
-    work_order = models.ForeignKey(BidFormStatus,null=False,verbose_name=u"工作令")
+    work_order = models.ForeignKey(WorkOrder,null=False,verbose_name=u"工作令")
     amount = models.IntegerField(verbose_name=u"数量")
     unit = models.CharField(null=True, max_length=40, verbose_name=u"单位")
     content = models.CharField(null=True, max_length=40, verbose_name=u"内容")
