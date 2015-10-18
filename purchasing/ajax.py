@@ -351,24 +351,25 @@ def materielchoiceChange(request, materielChoice):
         materielexecute_detail_html = "purchasing/materielexecute/table/main_materielexecute_detail_table.html"
         #formname = "MainMaterielExecuteDetailForm"
         add_form = render_to_string("purchasing/materielexecute/widget/add_main_detail_form.html", {"MainMaterielExecuteDetailForm":detailForm})
+        current_materiel_choice = MATERIEL_CHOICE[1][0]
     else:
         materielexecute_detail_set = SupportMaterielExecuteDetail.objects.all()
         detailForm = SupportMaterielExecuteDetailForm()
         materielexecute_detail_html = "purchasing/materielexecute/table/support_materielexecute_detail_table.html"
         #formname = "SupportMaterielExecuteDetailForm"
         add_form = render_to_string("purchasing/materielexecute/widget/add_support_detail_form.html", {"SupportMaterielExecuteDetailForm":detailForm})
+        current_materiel_choice = MATERIEL_CHOICE[1][1]
     choice_form = MaterielChoiceForm()
     context = {
         "materielexecute_detail_set" : materielexecute_detail_set,
         "choice" : SUPPORT_MATERIEL,
         "MAIN_MATERIEL" : MAIN_MATERIEL,
-        "current_materiel_choice" : MATERIEL_CHOICE[1][1],
         "materielChoice_form" : choice_form,
         #formname : detailForm
     }
 
     rendered_materielexecute_detail_html = render_to_string(materielexecute_detail_html, context)
-    return simplejson.dumps({'materielexecute_detail_html' : rendered_materielexecute_detail_html, 'add_form' : add_form})
+    return simplejson.dumps({'materielexecute_detail_html' : rendered_materielexecute_detail_html, 'add_form' : add_form, 'current_materiel_choice' : current_materiel_choice})
 
 @dajaxice_register
 @transaction.commit_manually
@@ -403,10 +404,11 @@ def saveMaterielExecuteDetail(request, form, documentNumberInput, materielChoice
                 materielexecute_detail.delivery_status = detail_Form.cleaned_data["delivery_status"]
                 materielexecute_detail.execute_standard = detail_Form.cleaned_data["execute_standard"]
                 materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
-            else:
-                print detail_Form.errors
-                ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
-                return simplejson.dumps(ret)
+                flag = True
+            #else:
+                #print detail_Form.errors
+                #ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
+                #return simplejson.dumps(ret)
         else:
             materielexecute.materiel_choice = MATERIEL_CHOICE[1][1]
             detail_Form = SupportMaterielExecuteDetailForm(deserialize_form(form))
@@ -424,23 +426,30 @@ def saveMaterielExecuteDetail(request, form, documentNumberInput, materielChoice
                 materielexecute_detail.part = detail_Form.cleaned_data["part"]
                 materielexecute_detail.oddments = detail_Form.cleaned_data["oddments"]
                 materielexecute_detail.remark = detail_Form.cleaned_data["remark"]
-            else:
-                ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
-                return simplejson.dumps(ret)
+                flag = True
+            #else:
+                #ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
+                #return simplejson.dumps(ret)
 
-        materielexecute.save()
-        materielexecute_detail.materiel_execute = materielexecute
-        materielexecute_detail.save()
-        flag = True;
+        if flag:
+            materielexecute.save()
+            materielexecute_detail.materiel_execute = materielexecute
+            materielexecute_detail.save()
     except Exception, e:
         transaction.rollback()
         print e
-    if(flag):
+    if flag:
         transaction.commit()
-        ret = {'status' : '0', 'message' : u'保存成功'}
+        ret = {'status' : '1', 'message' : u'保存成功'}
     else:
+        # errorsFiled = render_to_string("purchasing/materielexecute/widget/errorsField.html", {"errorsFiled" : detail_Form})
+        if materielChoice == MAIN_MATERIEL:
+            add_form = render_to_string("purchasing/materielexecute/widget/add_main_detail_form.html", {"MainMaterielExecuteDetailForm":detail_Form})
+            ret = {'status' : '0', 'message' : u'请检查输入是否正确', 'add_form' : add_form}
+        else:
+            add_form = render_to_string("purchasing/materielexecute/widget/add_support_detail_form.html", {"SupportMaterielExecuteDetailForm":detail_Form})
+            ret = {'status' : '0', 'message' : u'请检查输入是否正确', 'add_form' : add_form}
         transaction.rollback()
-        ret = {'status' : '1', 'message' : u'请检查输入是否正确'}
     return simplejson.dumps(ret)
 
 def SelectSupplierOperation(request,selected,bid):

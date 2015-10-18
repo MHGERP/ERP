@@ -1,0 +1,10 @@
+<div>
+<form class="form-search form-horizontal">
+{% for field in errorsFiled %}
+	<div class="control-group">
+		<label class="control-label">{{ field.label_tag }}</label>
+		<div class="controls">{{ field.errors }}</div>
+	</div>
+{% endfor %}
+</form>
+</div>
