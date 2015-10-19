@@ -130,7 +130,7 @@ def chooseInventorytype(request,pid,key):
         items = items.filter(name=key)
     for item in items:
         if MaterielFormConnection.objects.filter(materiel = item).count() == 0:
-            MaterielFormConnection(materiel = item).save()
+            MaterielFormConnection(materiel = item, count = item.count).save()
 
         item.can_choose, item.status = (False, u"已加入订购单") if (item.materielformconnection.order_form != None) else (True, u"未加入订购单")
 
