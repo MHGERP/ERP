@@ -544,6 +544,9 @@ def deleteDetail(request,uid):
     item = Materiel.objects.get(id = uid)
     item.materielpurchasingstatus.add_to_detail = False
     item.materielpurchasingstatus.save()
+
+    item.materielformconnection.delete()  # by JunHU
+
     param = {"uid":uid}
     return simplejson.dumps(param)
 
