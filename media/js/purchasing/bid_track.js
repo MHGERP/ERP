@@ -41,6 +41,12 @@ $(function(){
     })
   })
 
+  $('#contract_confirm').each(function(){
+    $(this).click(function(){
+      Dajaxice.purchasing.submitStatus(saveComment_callback,{'bid_id':bid_id});
+    })
+  })
+
 })
 function saveComment_callback(data){
   if (data.status == "1"){
