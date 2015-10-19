@@ -96,10 +96,10 @@ function subitem_save(){
 function subitem_save_callback(data){
     if(data.flag){
         $('#subtable').html(data.html);      
-        alert("添加成功");
+        alert(data.message);
     }
     else{
-        alert("添加失败，有未填写的内容");
+        alert(data.message);
     }
 }
 
@@ -118,7 +118,8 @@ function change_item(id){
         var did = 'div#div'+(i+1);
         var in_obj = $(did).find("input");  
         in_obj.val(a.eq(i).text());
-    } 
+    }
+    is_add = false;
 }
 
 function delete_item(id){
@@ -129,8 +130,8 @@ function delete_item(id){
 
 function delete_item_callback(data){
     if(data.flag){
-        alert("删除成功");
         $("tr#"+item_id).remove();
+        alert("删除成功");
     }
     else{
         alert("删除失败");

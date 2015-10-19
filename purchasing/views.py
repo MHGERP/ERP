@@ -140,6 +140,8 @@ def bidTrackingViews(request, bid_id):
                "bidCommentForm": bidCommentForm,
                "bidComments": bidComments,
                "bidform": bidform,
+               "BIDFORM_PART_STATUS_INVITE_BID_APPLY": BIDFORM_PART_STATUS_INVITE_BID_APPLY,
+               "BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED": BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED,
              }
     return render(request, "purchasing/bid_track.html", context)
 
@@ -205,14 +207,15 @@ def subApplyHomeViews(request):
 
 @csrf.csrf_protect
 def subApplyViews(request,sid = None):
-    is_show = False
     subapply_obj = MaterialSubApply.objects.get(id = sid)
+    is_show = not subapply_obj.is_submit
     if request.method == "POST":
         subapply_form = SubApplyForm(request.POST,instance = subapply_obj)
         if subapply_form.is_valid():
-            subapply_form.save()
-            subapply_obj.is_submit = True
-            subapply_obj.save()
+            if is_show:
+                subapply_form.save()
+                subapply_obj.is_submit = True
+                subapply_obj.save()
             return HttpResponseRedirect("/purchasing/subApplyHome/")
         else:
             print subapply_form.errors
@@ -231,14 +234,15 @@ def subApplyViews(request,sid = None):
 
 @csrf.csrf_protect
 def subApplyReviewViews(request,sid = None):
-    is_show = True
     subapply_obj = MaterialSubApply.objects.get(id = sid)
+    is_show = subapply_obj.is_submit and subapply_obj.is_approval == REVIEW_COMMENTS_CHOICE_WAIT 
     if request.method == "POST":
         subapply_form = SubApplyInspectForm(request.POST,instance = subapply_obj)
         if subapply_form.is_valid():
-            subapply_form.save()
-            subapply_obj.is_submit = True
-            subapply_obj.save()
+            if is_show:
+                subapply_form.save()
+                subapply_obj.is_submit = True
+                subapply_obj.save()
             return HttpResponseRedirect("/purchasing/subApplyHome/")
     else:
         subapply_form = SubApplyInspectForm(instance = subapply_obj)
