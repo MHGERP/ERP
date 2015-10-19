@@ -140,6 +140,8 @@ def bidTrackingViews(request, bid_id):
                "bidCommentForm": bidCommentForm,
                "bidComments": bidComments,
                "bidform": bidform,
+               "BIDFORM_PART_STATUS_INVITE_BID_APPLY": BIDFORM_PART_STATUS_INVITE_BID_APPLY,
+               "BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED": BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED,
              }
     return render(request, "purchasing/bid_track.html", context)
 
