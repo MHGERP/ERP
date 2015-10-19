@@ -290,7 +290,7 @@ def processFollowingViews(request,bid):
     return render(request,"purchasing/process_following.html",context)
 
 def materielExecuteViews(request):
-    materielexecute_set = MaterielExecute.objects.all()
+    materielexecute_set = MaterielExecute.objects.filter(is_save=True)
     context = {
         "materielexecute_set":materielexecute_set,
     }
@@ -340,9 +340,8 @@ def materielExecuteDetailViews(request, choice, *mid):
         #default MAIN_MATERIEL
         choice_form = MaterielChoiceForm()
         detailForm = MainMaterielExecuteDetailForm()
-        materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
+        # materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
         context = {
-            "materielexecute_detail_set" : materielexecute_detail_set,
             "choice" : MAIN_MATERIEL,
             "MAIN_MATERIEL" : MAIN_MATERIEL,
             "current_materiel_choice" : MATERIEL_CHOICE[0][1],

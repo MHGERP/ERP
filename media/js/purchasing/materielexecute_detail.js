@@ -18,8 +18,8 @@ function saveMaterielExecuteDetail_callback(data){
   if (data.status == "1"){
     alert(data.message);
     // $("#errorsFieldDiv").html("");
-    $("#add-detail-modal").modal('hide');
-    window.reload();
+    // $("#add-detail-modal").modal('hide');
+    location.reload();
   }else{
     // alert(data.errors.Html());
     // alert(data.add_form);
