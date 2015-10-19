@@ -352,6 +352,7 @@ def SupplierDelete(request,supplier_id):
 @dajaxice_register
 def addChangeItem(request,subform,sid,item_id = None):
     subapply = MaterialSubApply.objects.get(id = sid)
+    is_pass = subapply.is_submit
     flag = True
     try:
         if item_id == None:
@@ -359,23 +360,32 @@ def addChangeItem(request,subform,sid,item_id = None):
             if subform.is_valid():
                 subitem = subform.save(commit = False)
                 subitem.sub_apply = subapply
-                subitem.save()
+                if not is_pass:
+                    subitem.save()
+                    message = u"添加成功"
             else:
                 flag = False
         else:
             item = MaterialSubApplyItems.objects.get(id = item_id)
             subform = SubApplyItemForm(deserialize_form(subform),instance = item)
             if subform.is_valid():
-                subform.save()
+                if not is_pass:
+                    subform.save()
+                    message = u"修改成功"
             else:
                 flag = False
     except Exception,e:
         print e
+    if not flag:
+        message = u"添加失败，请确认所有内容填写完整"
+    if is_pass:
+        message = u"添加失败，申请表已经提交不能再修改"
     sub_item_set = MaterialSubApplyItems.objects.filter(sub_apply = subapply)
     sub_table_html = render_to_string("purchasing/widgets/sub_table.html",{"sub_set":sub_item_set})
     data = {
         "flag":flag,
         "html":sub_table_html,
+        "message":message,
     }
     return simplejson.dumps(data)
 @dajaxice_register
