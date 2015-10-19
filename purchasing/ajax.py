@@ -225,8 +225,20 @@ def addToDetailSingle(request, index):
 
 @dajaxice_register
 def deleteOrderForm(request, index):
+    """
+    JunHU
+    """
     order_form = OrderForm.objects.get(order_id = index)
     order_form.delete()
+
+@dajaxice_register
+def finishOrderForm(request, index):
+    """
+    JunHU
+    """
+    order_form = OrderForm.objects.get(order_id = index)
+    order_form.order_status = OrderFormStatus.objects.get(status = ORDERFORN_STATUS_FINISH)
+    order_form.save()
 
 @dajaxice_register
 def getOrderFormList(request, statu, key):
@@ -244,7 +256,11 @@ def getOrderFormList(request, statu, key):
             items = items.filter(order_id = key)
     except Exception, e:
         print e
-    context = {"items": items, }
+    context = {
+        "items": items, 
+        "ORDERFORN_STATUS_BEGIN": ORDERFORN_STATUS_BEGIN,
+        "ORDERFORN_STATUS_ESTABLISHMENT": ORDERFORN_STATUS_ESTABLISHMENT,
+    }
     html = render_to_string("purchasing/orderform/orderform_list.html", context)
     return html
 
