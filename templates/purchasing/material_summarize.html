@@ -24,6 +24,65 @@
 <span class="btn" id="add_to_bid" data-toggle="modal" data-target="#bid_list">加入标单</span>
 
 
+<div id="new_order_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="myModalLabel">订购单</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+    <div class="form-div add">
+      <form class="form-search">
+        <label>订购单编号：</label>
+        <input type="text" class="input-medium" id="order_number">
+      </form>
+    </div>
+    <div class="delete-div">
+      <span class="btn" data-dismiss="modal" aria-hidden="true" id="btn-delete">删除</span>
+    </div>
+    <div class="table-div">
+    </div>
+    <div class="save-div">
+      <span class="btn add save" data-dismiss="modal" aria-hidden="true" id="btn-save">确认保存</span>
+    </div>
+    <div class="finish-div">
+      <span class="btn add save" data-dismiss="modal" aria-hidden="true" id="btn-finish">完成</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+<div id="bid_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="myModalLabel">标单</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+    <div class="form-div add">
+      <form class="form-search">
+        <label>标单编号：</label>
+        <input type="text" class="input-medium" id="bid_id">
+      </form>
+    </div>
+    <div class="delete-div">
+      <span class="btn" id="bid-btn-delete" data-dismiss="modal" aria-hidden="true">删除</span>
+    </div>
+    <div class="table-div">
+    </div>
+    <div class="save-div">
+      <span class="btn add save" id="bid-btn-save" data-dismiss="modal" aria-hidden="true">确认保存</span>
+    </div>
+    <div class="finish-div">
+      <span class="btn add save" id="bid-btn-finish" data-dismiss="modal" aria-hidden="true">完成</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+
 <div id="order_list" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <h2 id="myModalLabel">创建中订购单</h2>

@@ -60,22 +60,26 @@ function delete_detail_callback(data){
 }
 
 //new purchase order save button
-$(document).on("click","#btn-save",function(){
+$("#btn-save").click(function(){
     var id = $("#new_order_modal").attr("args");
     if(confirm("是否确认保存？")) {
         Dajaxice.purchasing.newOrderSave(saveCallBack, {"id": id, "pendingArray": pendingArray, });
+        return true;
     }
+    return false;
 });
 function saveCallBack() {
     refresh();
 }
 
 //new puchase order finish button
-$(document).on("click","#btn-finish",function(){
+$("#btn-finish").click(function(){
     var id = $("#new_order_modal").attr("args");
     if(confirm("是否确认完成编制？")){
         Dajaxice.purchasing.newOrderFinish(finishCallBack,{"id":id});
+        return true;
     }
+    return false;
 });
 function finishCallBack() {
     refresh();    
@@ -118,11 +122,13 @@ $(document).on("click","#add_to_order",function(){
 });
 
 //new puchase order delete button
-$(document).on("click","#btn-delete",function(){
+$("#btn-delete").click(function(){
     var id = $("#new_order_modal").attr("args");
     if(confirm("是否确定删除？")){
         Dajaxice.purchasing.newOrderDelete(deleteCallBack,{"id":id,});
+        return true;
     }
+    return false;
     
 });
 function deleteCallBack(){
@@ -159,26 +165,32 @@ $(document).on("click","#add_to_bid",function(){
         if(this.checked) pendingArray.push($(this).attr("args"));
     });
 });
-$(document).on("click","#bid-btn-delete",function() {
+$("#bid-btn-delete").click(function() {
     var id = $("#bid_modal").attr("args");
     if(confirm("是否确定删除？")) {
         Dajaxice.purchasing.newBidDelete(bidDeleteCallBack, {"id": id});
+        return true;
     }
+    return false;
 });
 function bidDeleteCallBack(data) {
     Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
 }
-$(document).on("click","#bid-btn-save",function() {
+$("#bid-btn-save").click(function() {
     var id = $("#bid_modal").attr("args");
     if(confirm("是否确认保存？")) {
         Dajaxice.purchasing.newBidSave(saveCallBack, {"id": id, "pendingArray": pendingArray, });
+        return true;
     }
+    return false;
 });
-$(document).on("click","#bid-btn-finish",function() {
+$("#bid-btn-finish").click(function() {
     var id = $("#bid_modal").attr("args");
     if(confirm("是否确认完成编制？")) {
         Dajaxice.purchasing.newBidFinish(finishCallBack, {"id": id});
+        return true;
     }
+    return false;
 });
 
 
