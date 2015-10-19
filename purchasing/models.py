@@ -200,16 +200,20 @@ class MaterialSubApply(models.Model):
     pic_code =  models.CharField(max_length = 100, blank = False , null = True, verbose_name = u"图号")
     work_order = models.ForeignKey(WorkOrder,verbose_name = u"工作令" , blank = True , null = True)
     bidform = models.ForeignKey(BidForm,blank = True , null = True, verbose_name = u"对应标单")
-    reasons = models.CharField(max_length = 1000,blank = True , null = True, verbose_name = u"代用原因和理由")
+    reasons = models.CharField(max_length = 1000,blank = False , null = True, verbose_name = u"代用原因和理由")
     proposer = models.ForeignKey(User,verbose_name = u"申请人",blank = True)
     is_submit = models.BooleanField(default = False,verbose_name = u"是否提交")
     comments = models.CharField(max_length=1000,blank = True , null = True, verbose_name = u"评审意见")
-    is_approval = models.IntegerField(choices = REVIEW_COMMENTS_CHOICES,default = -1 ,verbose_name = u"评审结果",blank = True)
+    is_approval = models.IntegerField(choices = REVIEW_COMMENTS_CHOICES,default = -1 ,verbose_name = u"评审结果",blank = False)
     class Meta:
         verbose_name = u"材料代用申请单"
         verbose_name_plural = u"材料代用申请单"
     def __unicode__(self):
-        return self.receipts_code
+        if self.bidform == None:
+            bid_show = self.bidform
+        else:
+            bid_show = self.bidform.bid_id
+        return "%s(%s)" % (bid_show,self.receipts_code)
 
 class MaterialSubApplyItems(models.Model):
     mat_pic_code = models.CharField(max_length = 100, blank = False , verbose_name = u"部件图号")
@@ -225,7 +229,7 @@ class MaterialSubApplyItems(models.Model):
         verbose_name = u"材料代用申请条目"
         verbose_name_plural = u"材料代用申请条目"
     def __unicode__(self):
-        return "%s(%s)" % (self.sub_apply,self.mat_pic_code)
+        return "%s(%s)" % (self.sub_apply.receipts_code,self.mat_pic_code)
 
 class MaterielExecute(models.Model):
     document_number = models.CharField(max_length = 100, blank = False, verbose_name = u"单据编号")
