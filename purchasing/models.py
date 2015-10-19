@@ -228,9 +228,9 @@ class MaterialSubApplyItems(models.Model):
         return "%s(%s)" % (self.sub_apply,self.mat_pic_code)
 
 class MaterielExecute(models.Model):
-    document_number = models.CharField(max_length = 100, blank = False, verbose_name = u"单据编号")
+    document_number = models.CharField(max_length = 100, null = True, blank = False, unique = True, verbose_name = u"单据编号")
     document_lister = models.ForeignKey(User, blank = False, verbose_name = u"制表人")
-    date_date = models.DateField(blank = False, null = False, verbose_name = u"制表日期")
+    date = models.DateField(blank = False, null = False, verbose_name = u"制表日期")
     materiel_choice = models.CharField(blank=False, max_length = 20, choices=MATERIEL_CHOICE, verbose_name=u"材料选择")
     is_save = models.BooleanField(blank=False, verbose_name=u"是否已保存")
     class Meta:
@@ -240,7 +240,7 @@ class MaterielExecute(models.Model):
         return '%s' % self.document_number
 
 class MainMaterielExecuteDetail(models.Model):
-    materiel_execute = models.OneToOneField(MaterielExecute)
+    materiel_execute = models.ForeignKey(MaterielExecute, null = True, blank = True, verbose_name = u"材料执行")
     materiel_name = models.CharField(max_length=50, blank=False, verbose_name = u"名称")
     materiel_texture = models.ForeignKey(Materiel, verbose_name = u"材质")
     quality_class = models.CharField(max_length=20, blank=False, verbose_name = u"质量分类")
@@ -251,12 +251,12 @@ class MainMaterielExecuteDetail(models.Model):
     crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"探伤级别")
     delivery_status = models.CharField(max_length = 50, blank = False, verbose_name = u"交货状态")
     execute_standard = models.CharField(max_length = 100, blank = False, verbose_name = u"执行标准")
-    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"备注")
+    remark = models.CharField(max_length = 200, null = True, blank = True, verbose_name = u"备注")
     class Meta:
         verbose_name = u"主材材料执行表详细"
         verbose_name_plural = u"主材材料执行表详细"
     def __unicode__(self):
-        return "%s(%s)" % (self.materiel_execute.document_number, self.materiel_texture.index)
+        return '%s' % (self.materiel_texture.index)
 
 class ProcessFollowingInfo(models.Model):
     bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
@@ -272,7 +272,7 @@ class ProcessFollowingInfo(models.Model):
     def __unicode__(self):
         return self.bidform.bid_id
 class SupportMaterielExecuteDetail(models.Model):
-    materiel_execute = models.OneToOneField(MaterielExecute)
+    materiel_execute = models.ForeignKey(MaterielExecute, null = True, blank = True, verbose_name = u"材料执行")
     materiel_texture = models.ForeignKey(Materiel, blank = False, verbose_name = u"材质")
     texture_number = models.CharField(max_length = 100, blank = False, verbose_name = u"材质编号")
     specification = models.CharField(max_length = 100, blank = False, verbose_name = u"规格")
@@ -281,15 +281,15 @@ class SupportMaterielExecuteDetail(models.Model):
     press = models.CharField(max_length = 50, blank = False, verbose_name = u"受压")
     crack_rank = models.CharField(max_length = 20, blank = False, verbose_name = u"探伤级别")
     recheck = models.BooleanField(default = False, verbose_name = u"复验")
-    quota = models.CharField(max_length = 50, blank = True, verbose_name = u"定额")
-    part = models.CharField(max_length = 50, blank = True, verbose_name = u"零件")
-    oddments = models.CharField(max_length = 50, blank = True, verbose_name = u"余料")
-    remark = models.CharField(max_length = 200, blank = True, verbose_name = u"备注")
+    quota = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"定额")
+    part = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"零件")
+    oddments = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"余料")
+    remark = models.CharField(max_length = 200, null = True, blank = True, verbose_name = u"备注")
     class Meta:
         verbose_name = u"辅材材料执行表详细"
         verbose_name_plural = u"辅材材料执行表详细"
     def __unicode__(self):
-        return "%s(%s)" % (self.materiel_execute.document_number, self.materiel_texture.index)
+        return '%s' % (self.materiel_texture.index)
 
 
 class StatusChange(models.Model):

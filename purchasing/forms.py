@@ -73,8 +73,16 @@ class ProcessFollowingForm(ModelForm):
             "following_feedback":forms.Textarea(attrs={"rows":5})
         }
 
-class MaterielChoiceForm(forms.Form):
-    materiel_chice_select = forms.ChoiceField(choices=MATERIEL_CHOICE, required=True, label=u"材料选择", widget = forms.Select(attrs={"id" : "materiel_choice_select"}))
+# class MaterielChoiceForm(forms.Form):
+#     materiel_chice_select = forms.ChoiceField(choices=MATERIEL_CHOICE, required=True, label=u"材料选择", widget = forms.Select(attrs={"id" : "materiel_choice_select"}))
+
+class MaterielExecuteForm(ModelForm):
+    class Meta:
+        model = MaterielExecute
+        exclude = {'id', 'document_lister', 'date', 'is_save'}
+        widgets = {
+            'materiel_choice' : forms.Select(attrs={"id" : "materiel_choice_select"})
+        }
 
 class MainMaterielExecuteDetailForm(ModelForm):
     class Meta:

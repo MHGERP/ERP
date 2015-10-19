@@ -15,7 +15,7 @@
 		{% endblock %}
 	</div>
 
-	{% block add_button %}{% endblock %}
+	{% block form_button %}{% endblock %}
 	{% block add_modal %}{% endblock %}
 
 	<div id="materielexecute_detail_table">
@@ -25,6 +25,8 @@
 			{% include "purchasing/materielexecute/table/support_materielexecute_detail_table.html" %}
 		{% endif %}
 	</div>
+
+	{% block commit_button %}{% endblock %}
 	<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/materielexecute_detail.js"></script>
 	<script type='text/javascript' src="{{STATIC_URL}}js/bootstrap_filestyle.js"></script>
 {% endblock%}
