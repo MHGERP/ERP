@@ -64,7 +64,9 @@ $("#btn-save").click(function(){
     var id = $("#new_order_modal").attr("args");
     if(confirm("是否确认保存？")) {
         Dajaxice.purchasing.newOrderSave(saveCallBack, {"id": id, "pendingArray": pendingArray, });
+        return true;
     }
+    return false;
 });
 function saveCallBack() {
     refresh();
@@ -75,7 +77,9 @@ $("#btn-finish").click(function(){
     var id = $("#new_order_modal").attr("args");
     if(confirm("是否确认完成编制？")){
         Dajaxice.purchasing.newOrderFinish(finishCallBack,{"id":id});
+        return true;
     }
+    return false;
 });
 function finishCallBack() {
     refresh();    
@@ -122,7 +126,9 @@ $("#btn-delete").click(function(){
     var id = $("#new_order_modal").attr("args");
     if(confirm("是否确定删除？")){
         Dajaxice.purchasing.newOrderDelete(deleteCallBack,{"id":id,});
+        return true;
     }
+    return false;
     
 });
 function deleteCallBack(){
@@ -163,7 +169,9 @@ $("#bid-btn-delete").click(function() {
     var id = $("#bid_modal").attr("args");
     if(confirm("是否确定删除？")) {
         Dajaxice.purchasing.newBidDelete(bidDeleteCallBack, {"id": id});
+        return true;
     }
+    return false;
 });
 function bidDeleteCallBack(data) {
     Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
@@ -172,13 +180,17 @@ $("#bid-btn-save").click(function() {
     var id = $("#bid_modal").attr("args");
     if(confirm("是否确认保存？")) {
         Dajaxice.purchasing.newBidSave(saveCallBack, {"id": id, "pendingArray": pendingArray, });
+        return true;
     }
+    return false;
 });
 $("#bid-btn-finish").click(function() {
     var id = $("#bid_modal").attr("args");
     if(confirm("是否确认完成编制？")) {
         Dajaxice.purchasing.newBidFinish(finishCallBack, {"id": id});
+        return true;
     }
+    return false;
 });
 
 
