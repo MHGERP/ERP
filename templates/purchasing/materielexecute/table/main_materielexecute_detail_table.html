@@ -18,9 +18,9 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- {% for main_detail in materielexecute_detail_set %} -->
+                {% for main_detail in materielexecute_detail_set %}
                 <tr id="{{main_detail.id}}">
-                    <!-- <td>{{main_detail.materiel_name}}</td>
+                    <td>{{main_detail.materiel_name}}</td>
                     <td>{{main_detail.materiel_texture}}</td>
                     <td>{{main_detail.quality_class}}</td> 
                     <td>{{main_detail.specification}}</td>
@@ -30,20 +30,9 @@
                     <td>{{main_detail.crack_rank}}</td>
                     <td>{{main_detail.delivery_status}}</td> 
                     <td>{{main_detail.execute_standard}}</td>
-                    <td>{{main_detail.remark}}</td> -->
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{main_detail.remark}}</td>
                 </tr>
-                <!-- {% endfor %} -->
+                {% endfor %}
             </tbody>
         </table>
     </div>

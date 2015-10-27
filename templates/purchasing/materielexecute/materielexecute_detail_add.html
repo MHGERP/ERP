@@ -3,8 +3,10 @@
 	{% include "purchasing/materielexecute/widget/materielexecute_add_form.html" %}
 {% endblock %}
 
-{% block add_button %}
-	<a href="#add-detail-modal" style="margin-left:20px" class="btn btn-primary" role="button" id="add-detail-btn" data-toggle="modal">增加</a>
+{% block form_button %}
+    <a style="margin-left:20px" class="btn btn-success" role="button" id="add-btn">保存</a>
+    <hr>
+	<a href="#add-detail-modal" style="margin-left:20px" class="btn btn-primary" role="button" id="add-detail-btn" data-toggle="modal">填写材料执行详细表</a>
 {% endblock %}
 
 {% block add_modal %}
@@ -31,7 +33,13 @@
 	  	</div>
 	  	<div class="modal-footer">
 	    	<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-	    	<button class="btn btn-primary" id="submit-btn">Save changes</button>
+	    	<button class="btn btn-primary" id="submit-btn">保存</button>
 	  	</div>
+	</div>
+{% endblock %}
+
+{% block commit_button %}
+	<div class="subbtn">
+		<a class="btn btn-success btn-block" role="button" id="commit-btn">提交</a>
 	</div>
 {% endblock %}

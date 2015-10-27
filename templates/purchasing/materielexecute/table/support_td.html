@@ -1,0 +1,16 @@
+{% for support_detail in materielexecute_detail_set %}
+    <tr id="{{support_detail.id}}">
+        <td>{{support_detail.materiel_texture}}</td>
+        <td>{{support_detail.texture_number}}</td>
+        <td>{{support_detail.specification}}</td> 
+        <td>{{support_detail.quantity}}</td>
+        <td>{{support_detail.delivery_status}}</td>
+        <td>{{support_detail.press}}</td> 
+        <td>{{support_detail.crack_rank}}</td>
+        <td>{{support_detail.recheck}}</td>
+        <td>{{support_detail.quota}}</td> 
+        <td>{{support_detail.part}}</td>
+        <td>{{support_detail.oddments}}</td>
+        <td>{{support_detail.remark}}</td>
+    </tr>
+{% endfor %}

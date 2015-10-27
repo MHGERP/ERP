@@ -1,16 +1,24 @@
-<form class="form-search form-horizontal">
-    <div class="control-group">
-        <label class="control-label" for="document_number_input">单据编号</label>
+<form class="form-search form-horizontal" id="execute_form">
+    <div class="control-group {% if MaterielExecuteForm.document_number.errors %} error {% endif %}">
+        <label class="control-label" for="document_number_input">{{MaterielExecuteForm.document_number.label}}</label>
         <div class="controls">
-            <input type="text" id="document_number_input" placeholder="请输入单据编号以添加">
+            <!-- <input type="text" id="document_number_input" placeholder="请输入单据编号以添加"> -->
+            {{MaterielExecuteForm.document_number}}
         </div>
     </div>
-    <div class="control-group">
+    <div class="control-group {% if MaterielExecuteForm.materiel_choice.errors %} error {% endif %}">
+        <label class="control-label" for="document_number_input">{{MaterielExecuteForm.materiel_choice.label}}</label>
+        <div class="controls">
+            <!-- <input type="text" id="document_number_input" placeholder="请输入单据编号以添加"> -->
+            {{MaterielExecuteForm.materiel_choice}}
+        </div>
+    </div>
+    <!-- <div class="control-group">
         <label class="control-label" for="materiel_chice_select">材料选择</label>
         <div class="controls">
             {{materielChoice_form.materiel_chice_select}}
         </div>
-    </div>
+    </div> -->
     <!-- <div class="control-group">
         <div class="controls">
             <a href="#add-detail-modal" class="btn btn-primary" role="button" id="add-detail-btn" data-toggle="modal">增加</a>

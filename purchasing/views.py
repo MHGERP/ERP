@@ -207,14 +207,15 @@ def subApplyHomeViews(request):
 
 @csrf.csrf_protect
 def subApplyViews(request,sid = None):
-    is_show = False
     subapply_obj = MaterialSubApply.objects.get(id = sid)
+    is_show = not subapply_obj.is_submit
     if request.method == "POST":
         subapply_form = SubApplyForm(request.POST,instance = subapply_obj)
         if subapply_form.is_valid():
-            subapply_form.save()
-            subapply_obj.is_submit = True
-            subapply_obj.save()
+            if is_show:
+                subapply_form.save()
+                subapply_obj.is_submit = True
+                subapply_obj.save()
             return HttpResponseRedirect("/purchasing/subApplyHome/")
         else:
             print subapply_form.errors
@@ -233,14 +234,15 @@ def subApplyViews(request,sid = None):
 
 @csrf.csrf_protect
 def subApplyReviewViews(request,sid = None):
-    is_show = True
     subapply_obj = MaterialSubApply.objects.get(id = sid)
+    is_show = subapply_obj.is_submit and subapply_obj.is_approval == REVIEW_COMMENTS_CHOICE_WAIT 
     if request.method == "POST":
         subapply_form = SubApplyInspectForm(request.POST,instance = subapply_obj)
         if subapply_form.is_valid():
-            subapply_form.save()
-            subapply_obj.is_submit = True
-            subapply_obj.save()
+            if is_show:
+                subapply_form.save()
+                subapply_obj.is_submit = True
+                subapply_obj.save()
             return HttpResponseRedirect("/purchasing/subApplyHome/")
     else:
         subapply_form = SubApplyInspectForm(instance = subapply_obj)
@@ -325,11 +327,11 @@ def materielExecuteDetailViews(request, choice, *mid):
         
         if materiel_choice == MAIN_MATERIEL:
             current_materiel_choice = MATERIEL_CHOICE[0][1]
-            materielexecute_detail = MainMaterielExecuteDetail.objects.get(materiel_execute__id = materielexecute_id)
+            materielexecute_detail_set = MainMaterielExecuteDetail.objects.filter(materiel_execute__id = materielexecute_id)
         else:
             current_materiel_choice = MATERIEL_CHOICE[1][1]
-            materielexecute_detail = SupportMaterielExecuteDetail.objects.get(materiel_execute__id = materielexecute_id)
-        materielexecute_detail_set = [materielexecute_detail]
+            materielexecute_detail_set = SupportMaterielExecuteDetail.objects.filter(materiel_execute__id = materielexecute_id)
+        # materielexecute_detail_set = [materielexecute_detail]
         context = {
             "materielexecute_detail_set" : materielexecute_detail_set,
             "choice" : materiel_choice,
@@ -340,14 +342,14 @@ def materielExecuteDetailViews(request, choice, *mid):
         return render(request, "purchasing/materielexecute/materielexecute_detail_view.html", context)
     else:
         #default MAIN_MATERIEL
-        choice_form = MaterielChoiceForm()
+        executeForm = MaterielExecuteForm()
         detailForm = MainMaterielExecuteDetailForm()
         # materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
         context = {
             "choice" : MAIN_MATERIEL,
             "MAIN_MATERIEL" : MAIN_MATERIEL,
             "current_materiel_choice" : MATERIEL_CHOICE[0][1],
-            "materielChoice_form" : choice_form,
+            "MaterielExecuteForm" : executeForm,
             "MainMaterielExecuteDetailForm" : detailForm
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_add.html", context)

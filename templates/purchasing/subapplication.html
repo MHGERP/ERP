@@ -83,7 +83,9 @@
             <blockquote>
                 <fieldset>
                     <legend>{{subapply_form.reasons.label}}</legend>
+                    <div class="control-group {% if subapply_form.reasons.errors %} error{% endif %}">
                     {{subapply_form.reasons}}
+                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>{{subapply_form.comments.label}}</legend>
@@ -97,12 +99,14 @@
                 <div class="controls subapply">
                     {{subapply_form.is_approval}}
                 </div>
-            </div>           
+            </div>
+            {% if is_show %}
             <div class="control-group">
                 <div class="subbtn">
                     <button type="submit" class="btn btn-primary btn-block">提交</button>
                 </div>
             </div>
+            {% endif %}
         </form>
 
         <!-- Modal -->
