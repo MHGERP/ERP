@@ -110,3 +110,15 @@ MATERIEL_CHOICE = (
     (MAIN_MATERIEL, u"主材"),
     (SUPPORT_MATERIEL, u"辅材"),
 )
+
+
+
+
+
+
+
+
+
+AUTHORITY_SET = (
+
+)

@@ -27,6 +27,10 @@ urlpatterns = patterns('',
         r'^purchasing/',
         include('purchasing.urls')
     ),
+    url(
+        r'^management/',
+        include('management.urls')
+    ),
 )
 
 urlpatterns += patterns('', url(r'tinymce/', include('tinymce.urls')),)

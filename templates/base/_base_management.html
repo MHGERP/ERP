@@ -1,0 +1,43 @@
+{% extends "base/base.html"%}
+{% block before_css%}
+{{block.super}}
+{%endblock%}
+{% block basepage%} 
+
+
+<div id="header">
+	<h1><a href="./dashboard.html">ERP</a></h1>		
+</div>
+
+<div id="user-nav" class="navbar navbar-inverse">
+	{% include "base/_usernav.html" %}
+</div>
+    
+<div id="sidebar">
+	<a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
+	<ul>
+		<li><a href="/management/userManagement"><i class="icon icon-user"></i> <span>用户管理</span></a></li>
+		<li><a href="#"><i class="icon icon-edit"></i> <span>职称管理</span></a></li>
+		<li><a href="#"><i class="icon icon-list"></i> <span>群组管理</span></a></li>
+		<li><a href="#"><i class="icon icon-envelope"></i> <span>消息管理</span></a></li>
+		<li><a href="#"><i class="icon icon-arrow-right"></i> <span>pending</span></a></li>
+	</ul>
+		
+</div>
+
+<div id="content">
+   
+        {% block main_title %}{% endblock %}
+	<div class="container-fluid container-full">
+
+		
+		{% block main_content %} {% endblock %}
+
+
+	</div>
+	{# Footer Section #}
+	{% block home-footer %}
+	{% include "widgets/footer.html" %}
+	{% endblock %}
+</div>
+{% endblock%}
