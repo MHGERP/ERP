@@ -11,4 +11,16 @@ urlpatterns=patterns('',
         r'^userManagement$',
         management_views.userManagementViews,
     ),
+    url(
+        r'^groupManagement$',
+        management_views.groupManagementViews,
+    ),
+    url(
+        r'^titleManagement$',
+        management_views.titleManagementViews,
+    ),
+    url(
+        r'^messageManagement$',
+        management_views.messageManagementViews,
+    ),
 )

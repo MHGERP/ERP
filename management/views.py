@@ -17,3 +17,26 @@ def userManagementViews(request):
     context = {}
     return render(request, "management/user_management.html", context)
 
+def groupManagementViews(request):
+    """
+    JunHU
+    """
+    context = {}
+    return render(request, "management/group_management.html", context)
+
+def titleManagementViews(request):
+    """
+    JunHU
+    """
+    context = {}
+    return render(request, "management/title_management.html", context)
+
+def messageManagementViews(request):
+    """
+    JunHU
+    """
+    context = {}
+    return render(request, "management/message_management.html", context)
+
+
+
