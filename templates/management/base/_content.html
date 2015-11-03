@@ -1,0 +1,23 @@
+{% extends "base/_base_management.html"%}
+{% block before_css%}
+{{block.super}}
+{%endblock%}
+{% block main_title %}
+<div class="main-title"> 
+	<div id="content-header">
+	{% block title %}{% endblock %}
+	</div>
+	<div id="breadcrumb">
+		<a href="/management" title="管理员" class="tip-bottom">管理员</a>
+		{% block sub_ref %} {% endblock %}
+    </div>
+</div>
+{%endblock%}
+
+{% block main_content%}
+<div class="main-content">
+    
+    {% block outter_content%}{%endblock%}
+
+</div> 
+{% endblock%}

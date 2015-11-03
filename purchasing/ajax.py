@@ -632,13 +632,23 @@ def saveComment(request, form, bid_id):
 
 @dajaxice_register
 def saveBidApply(request, form, bid_id):
-    bidApplyForm = BidApplyForm(deserialize_form(form))
+    bidform = BidForm.objects.get(id = bid_id)
+    try:
+        bidapply = bidApply.objects.get(bid = bidform)
+        bidApplyForm = BidApplyForm(deserialize_form(form), instance=bidapply)
+    except:
+        bidapply = None
+        bidApplyForm = BidApplyForm(deserialize_form(form))
     if bidApplyForm.is_valid():
-        bidApplyForm.save()
-        ret = {'status': '1', 'message': u"申请书意见提交成功"}
+        if bidapply:
+            bidApplyForm.save()
+        else:
+            bidapply = bidApplyForm.save(commit = False)
+            bidapply.bid = bidform
+            bidapply.save()
+        ret = {'status': '2', 'message': u"申请书保存成功"}
     else:
-        ret = {'status': '0', 'message': u"申请书提交不成功"}
-    print bidApplyForm
+        ret = {'status': '0', 'field':bidApplyForm.data.keys(), 'error_id':bidApplyForm.errors.keys(), 'message': u"申请书保存不成功"}
     return simplejson.dumps(ret)
 
 @dajaxice_register

@@ -131,7 +131,9 @@ INSTALLED_APPS = (
     #local app
     'home',
     'purchasing',
+    'management',
     'const',
+    'users',
     #Add-on
     'dajaxice',
     'dajax',
