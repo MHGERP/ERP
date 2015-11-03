@@ -13,7 +13,7 @@ class SuperAdmin(models.Model):
         return self.admin.user_name
 
 class Group(models.Model):
-    admin = models.ForeignKey(User, blank = True, verbose_name = u"群组管理员")
+    admin = models.ForeignKey(User, blank = True, null = True, verbose_name = u"群组管理员")
     name = models.CharField(max_length = 100, blank = False, verbose_name = u"群组名")
     class Meta:
         verbose_name = u"群组"

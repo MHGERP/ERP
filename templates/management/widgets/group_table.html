@@ -1,0 +1,28 @@
+<table class="table table-bordered table-striped" style="width: 60%;">
+    <thead>
+        <tr>
+            <th>群组名</th>
+            <th>群组管理员</th>
+            <th>操作</th>
+
+        </tr>
+    </thead>
+    {% for item in group_list%}
+    <tr iid="{{item.id}}">
+        <td>{{item.name}}</td>
+        {% if item.admin %}
+            <td>{{item.admin}}</td>
+            <td>
+                <span class="btn btn-small btn-warning btn-change-admin" data-toggle="modal" data-target="#admin_modal">修改管理员</span>
+                <span class="btn btn-small btn-danger btn-delete">删除群组</span>
+            </td>
+        {% else %}
+            <td>无</td>
+            <td>
+                <span class="btn btn-small btn-primary btn-add-admin" data-toggle="modal" data-target="#admin_modal">添加管理员</span>
+                <span class="btn btn-small btn-danger btn-delete">删除群组</span>
+            </td>
+        {% endif %}
+    </tr>
+    {% endfor%}
+</table>
