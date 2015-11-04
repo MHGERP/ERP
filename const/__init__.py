@@ -111,6 +111,15 @@ MATERIEL_CHOICE = (
     (SUPPORT_MATERIEL, u"辅材"),
 )
 
+EntryType_CHOICES = (
+    (0,u"焊材"),
+    (1,u"钢材"),
+    (3,u"板材"),
+    (4,u"型材"),
+    (5,u"锻件"),
+    (6,u"标准件"),
+    (7,u"辅助工具"),
+)
 
 
 

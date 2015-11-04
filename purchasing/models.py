@@ -1,7 +1,6 @@
 # coding: UTF-8
 from const import *
 import datetime
-from const import MATERIEL_CHOICE
 from django.db import models
 from const.models import BidFormStatus,Materiel, WorkOrder, OrderFormStatus, ImplementClassChoices
 from django.contrib.auth.models import User
@@ -157,6 +156,7 @@ class PurchasingEntry(models.Model):
     keeper = models.ForeignKey(User,blank=False,verbose_name=u"库管员" , related_name = "keeper")
     entry_confirm = models.BooleanField(null=False,default=False,verbose_name=u"入库单确认")
     bidform = models.ForeignKey(BidForm,verbose_name=u"标单号")
+    entry_type = models.IntegerField(choices = EntryType_CHOICES,default = 0, verbose_name=u"入库单类型")
 
     class Meta:
         verbose_name = u"入库单"

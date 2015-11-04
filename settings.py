@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     'management',
     'const',
     'users',
+    'storage',
     #Add-on
     'dajaxice',
     'dajax',
