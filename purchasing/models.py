@@ -156,14 +156,15 @@ class PurchasingEntry(models.Model):
     keeper = models.ForeignKey(User,blank=False,verbose_name=u"库管员" , related_name = "keeper")
     entry_confirm = models.BooleanField(null=False,default=False,verbose_name=u"入库单确认")
     bidform = models.ForeignKey(BidForm,verbose_name=u"标单号")
-    entry_type = models.IntegerField(choices = EntryType_CHOICES,default = 0, verbose_name=u"入库单类型")
-
+    entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES,default = 0, verbose_name=u"入库单类型")
+    entry_code = models.IntegerField(blank = False ,max_length = 10, verbose_name = u"单据编号")
+    
     class Meta:
         verbose_name = u"入库单"
         verbose_name_plural = u"入库单"
 
     def __unicode__(self):
-        return '%s' % self.bidform.bid_id
+        return '%s' % self.entry_code
 
 class PurchasingEntryItems(models.Model):
     material = models.ForeignKey(Materiel,blank = True , null = True , verbose_name = u"材料")

@@ -111,15 +111,25 @@ MATERIEL_CHOICE = (
     (SUPPORT_MATERIEL, u"辅材"),
 )
 
-EntryType_CHOICES = (
-    (0,u"焊材"),
-    (1,u"钢材"),
-    (3,u"板材"),
-    (4,u"型材"),
-    (5,u"锻件"),
-    (6,u"标准件"),
-    (7,u"辅助工具"),
+ENTRYTYPE_WELD = 0
+ENTRYTYPE_STEEL = 1
+ENTRYTYPE_BOARD = 2
+ENTRYTYPE_BAR = 3
+ENTRYTYPE_FORGING = 4
+ENTRYTYPE_NORMTEILE = 5
+ENTRYTYPE_ASSISTTOOL = 6
+
+ENTRYTYPE_CHOICES = (
+    (ENTRYTYPE_WELD,u"焊材"),
+    (ENTRYTYPE_STEEL,u"钢材"),
+    (ENTRYTYPE_BOARD,u"板材"),
+    (ENTRYTYPE_BAR,u"型材"),
+    (ENTRYTYPE_FORGING,u"锻件"),
+    (ENTRYTYPE_NORMTEILE,u"标准件"),
+    (ENTRYTYPE_ASSISTTOOL,u"辅助工具"),
 )
+
+
 
 
 
