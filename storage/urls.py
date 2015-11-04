@@ -5,7 +5,7 @@ from storage import views as storage_views
 
 urlpatterns = patterns('',
     url(
-        r'^$',
+        r'^weldmaterialhome$',
         storage_views.weldMaterialHomeViews,
     ),
 )
