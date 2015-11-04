@@ -10,6 +10,8 @@ import json
 from django.db import transaction
 
 
+from forms import GroupForm
+
 def userManagementViews(request):
     """
     JunHU
@@ -28,7 +30,10 @@ def titleManagementViews(request):
     """
     JunHU
     """
-    context = {}
+    form = GroupForm()
+    context = {
+            "form": form,
+        }
     return render(request, "management/title_management.html", context)
 
 def messageManagementViews(request):

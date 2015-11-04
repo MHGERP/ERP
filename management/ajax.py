@@ -82,3 +82,41 @@ def addAdmin(request, group_id, user_id):
         return "ok"
     except:
         return "fail"
+
+@dajaxice_register
+def getTitleList(request, group_id):
+    """
+    JunHU
+    summary: ajax function to get all title belong to one group
+    params: group_id: db id of group
+    return: title list html string
+    """
+    title_list = Title.objects.filter(group = group_id)
+    context = {
+        "title_list": title_list,
+    }
+    html = render_to_string("management/widgets/title_table.html", context)
+    return html
+
+@dajaxice_register
+def createOrModifyTitle(request, group_id, title_name, title_id):
+    """
+    JunHU
+    """
+    if title_id == "-1":
+        group = Group.objects.get(id = group_id)
+        new_title = Title(group = group, name = title_name)
+        new_title.save()
+    else:
+        title = Title.objects.get(id = title_id)
+        title.name = title_name
+        title.save()
+
+@dajaxice_register
+def deleteTitle(request, title_id):
+    """
+    JunHU
+    """
+    title = Title.objects.get(id = title_id)
+    title.delete()
+
