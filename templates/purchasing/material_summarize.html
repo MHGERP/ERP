@@ -24,7 +24,7 @@
 <span class="btn" id="add_to_bid" data-toggle="modal" data-target="#bid_list">加入标单</span>
 
 
-<div id="new_order_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="new_order_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.8">
   <div class="modal-header">
     <h2 id="myModalLabel">订购单</h2>
   </div>
@@ -53,7 +53,7 @@
   </div>
 </div>
 
-<div id="bid_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="bid_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.8">
   <div class="modal-header">
     <h2 id="myModalLabel">标单</h2>
   </div>
@@ -121,4 +121,5 @@
 </div>
 
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/material_summarize.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/modal_adaption.js"></script>
 {% endblock%}
