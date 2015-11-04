@@ -1,4 +1,31 @@
 {% extends "home/base/none_nav_base.html"%}
 {% block inner_content%}
-asdfasdf  sdafasdfsdzf
+<link rel="stylesheet" href="{{STATIC_URL}}style/newhomepage.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{STATIC_URL}}bootstrap-datepicker/css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
+<script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
+<div class="outter_frame">
+	<div class="row-fluid news_frame">
+		<div class="span6">
+			<div class="row-fluid">
+				{% include "home/widgets/company_news.html" %}
+			</div>
+			<div class="row-fluid">
+				{% include "home/widgets/import_info.html" %}
+			</div>
+			<div class="row-fluid">
+				{% include "home/widgets/file_download.html" %}
+			</div>
+		</div>
+		<div class="span2"></div>
+		<div class="span4">
+			<div class="row-fluid">
+				{% include "home/widgets/calendar.html" %}
+			</div>
+			<hr>
+			<div class="row-fluid">
+				
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock%}

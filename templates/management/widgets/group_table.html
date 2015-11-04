@@ -13,12 +13,14 @@
         {% if item.admin %}
             <td>{{item.admin}}</td>
             <td>
+                <span class="btn btn-small btn-warning btn-change-name" data-toggle="modal" data-target="#add_group_modal">修改群组名</span>
                 <span class="btn btn-small btn-warning btn-change-admin" data-toggle="modal" data-target="#admin_modal">修改管理员</span>
                 <span class="btn btn-small btn-danger btn-delete">删除群组</span>
             </td>
         {% else %}
             <td>无</td>
             <td>
+                <span class="btn btn-small btn-warning btn-change-name" data-toggle="modal" data-target="#add_group_modal">修改群组名</span>
                 <span class="btn btn-small btn-primary btn-add-admin" data-toggle="modal" data-target="#admin_modal">添加管理员</span>
                 <span class="btn btn-small btn-danger btn-delete">删除群组</span>
             </td>
