@@ -1,0 +1,20 @@
+
+
+<div class="container">
+<form class="form-horizontal">
+	<div class=" date form_date span5" data-date-format="dd MM yyyy" data-link-format="yyyy-mm-dd"></div>
+</form>
+</div>
+<script type="text/javascript">
+	$('.form_date').datetimepicker({
+		language : 'zh-CN',
+		weekstart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		startView : 2,
+		minView : 2,
+		maxView : 2,
+		forcePase : 0
+	});
+	$('.form_date').datetimepicker('show');
+</script>
