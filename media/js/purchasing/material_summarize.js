@@ -27,6 +27,12 @@ function getOrderListCallBack(data) {
 
 function choose_Inventorytype_callback(data){
     val = $("#id_inventory_type").val();
+    if(val<=2){
+        $("#add_to_execute").show();
+    }
+    else{
+        $("#add_to_execute").hide();
+    }
     item = $("#new_purchasing_order");
     $("#inventory_detail_table").html(data.inventory_detail_html);
     if(val==5){
@@ -193,6 +199,22 @@ $("#bid-btn-finish").click(function() {
     return false;
 });
 
+$("#add_to_execute").click(function(){
+    if(confirm("是否确认添加至材料执行?")){ 
+    var selectedArray = Array();
+    $("input.checkbox").each(function(){
+        if(this.checked) selectedArray.push($(this).attr("args"));
+    });
+
+    Dajaxice.purchasing.AddToMaterialExecute(add_to_material_execute_callback,{
+        "selected":selectedArray
+    });
+
+    }
+});
+function add_to_material_execute_callback(data){
+    refresh();
+}
 
 
 
