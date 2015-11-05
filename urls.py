@@ -11,6 +11,7 @@ admin.autodiscover()
 dajaxice_autodiscover()
 
 urlpatterns = patterns('',
+    url(r'admin/jsi18n/$', 'django.views.i18n.javascript_catalog'),
     url(
         r'^admin/',
         include(admin.site.urls),
@@ -30,6 +31,10 @@ urlpatterns = patterns('',
     url(
         r'^management/',
         include('management.urls')
+    ),
+    url(
+        r'^storage/',
+        include('storage.urls')
     ),
 )
 

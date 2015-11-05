@@ -1,0 +1,21 @@
+<table class="table table-bordered table-striped" style="width: 60%;">
+    <thead>
+        <tr>
+            <th>头衔名</th>
+            <th>所属群组</th>
+            <th>操作</th>
+
+        </tr>
+    </thead>
+    {% for item in title_list%}
+    <tr iid="{{item.id}}">
+        <td>{{item.name}}</td>
+        <td>{{item.group}}</td>
+        <td>
+            <span class="btn btn-warning btn-small btn-change-name"  data-toggle="modal" data-target="#save_modal">修改名称</span> 
+            <span class="btn btn-primary btn-small btn-query-authority">查询权限</span>
+            <span class="btn btn-danger btn-small btn-delete">删除</span>
+        </td>
+    </tr>
+    {% endfor%}
+</table>
