@@ -1,0 +1,77 @@
+/*table.table tbody tr td:nth-child(3){
+    width:150px;
+    overflow:hidden; 
+    text-overflow:ellipsis;
+}
+
+table.table tbody tr td:nth-child(2){
+    width:200px;
+    overflow:hidden; 
+    text-overflow:ellipsis;
+}
+
+table.table tbody tr td:nth-child(1){
+    width:200px;
+    overflow:hidden; 
+    text-overflow:ellipsis;
+}
+
+table.table tbody tr td:nth-child(4){
+    width:500px;
+    overflow:hidden; 
+    text-overflow:ellipsis;
+}
+*/
+
+#name_div
+{
+    margin-left: 0px;
+    margin-top: 20px;
+    width: 100px;
+}
+#amount_div
+{
+    margin-left: 100px;
+    margin-top: 20px;
+    width: 250px;
+
+}
+#remaining_div
+{
+    margin-left: 0px;
+    margin-top: 20px;
+    width: 250px;
+}
+
+#err_div
+{
+    margin-top: -25px;
+    margin-left: 700px;
+}
+
+#add_funds_record
+{
+    margin-left: 100px;
+    margin-top: -5px;   
+}
+
+
+#funds_detail{
+
+    margin-top:20px;
+    margin-bottom:25px;
+}
+
+#id_student_choice
+{
+    width: 140px;
+}
+#temlate_notice_table tbody tr td:nth-child(3){
+    width:200px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+button.id_export_button{
+    width:350px; 
+}
