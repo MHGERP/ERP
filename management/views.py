@@ -12,6 +12,8 @@ from django.db import transaction
 from news.forms import NewsForm
 from news.models import News, DocumentFile, NewsCategory
 
+from forms import GroupForm
+
 def userManagementViews(request):
     """
     JunHU
@@ -30,7 +32,10 @@ def titleManagementViews(request):
     """
     JunHU
     """
-    context = {}
+    form = GroupForm()
+    context = {
+            "form": form,
+        }
     return render(request, "management/title_management.html", context)
 
 def messageManagementViews(request):

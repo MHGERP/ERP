@@ -32,6 +32,10 @@ urlpatterns = patterns('',
         r'^management/',
         include('management.urls')
     ),
+    url(
+        r'^storage/',
+        include('storage.urls')
+    ),
 )
 
 urlpatterns += patterns('', url(r'tinymce/', include('tinymce.urls')),)

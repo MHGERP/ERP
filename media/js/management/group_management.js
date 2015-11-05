@@ -7,20 +7,20 @@ function getGroupCallBack(data) {
     $("#widget-content").html(data);
 }
 
+var group_id;
+
+$("#add_group").click(function() {
+    group_id = "-1";
+    $("#groupLabel").html("添加群组"); 
+});
+$(document).on("click", ".btn-change-name", function() {
+    group_id = $(this).parent().parent().attr("iid");
+    $("#groupLabel").html("修改群组名"); 
+});
 $("#btn-finish").click(function() {
     var name = $("#new_group_name").val();
-    Dajaxice.management.addNewGroup(addCallBack, {"name": name}); 
+    Dajaxice.management.createOrModifyGroup(refresh, {"name": name, "group_id": group_id, }); 
 });
-function addCallBack(data) {
-    if(data == "ok") {
-        alert("添加成功！");
-        refresh();
-    }
-    else {
-        alert("添加失败！");
-    }
-}
-
 
 $(document).on("click", ".btn-delete", function() {
      var id = $(this).parent().parent().attr("iid");
