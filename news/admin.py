@@ -5,9 +5,11 @@ from django.contrib import admin
 from news.models  import *
 
 RegisterClass = (
-    NewsCategory,
-    News,
-    DocumentFile,
+	NewsCategory,
+	News,
+	Message,
+	MessageBox,
+	DocumentFile,
 )
 
 for item in RegisterClass:

@@ -24,6 +24,10 @@ urlpatterns=patterns('',
         management_views.messageManagementViews,
     ),
     url(
+        r'^authorityManagement$',
+        management_views.authorityManagementViews,
+    ),
+    url(
         r'^newsRelease$',
         management_views.newsReleaseViews,
     ),
