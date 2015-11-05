@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'dajaxice',
     'dajax',
     'south',
+    'news',
 )
 
 LOGGING_OUTPUT_ENABLED = True
@@ -199,3 +200,6 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 100 * 1024 * 1024
+
+# news documents path
+NEWS_DOCUMENTS_PATH = "news-documents/%Y/%m/%d"
