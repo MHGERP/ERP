@@ -37,6 +37,7 @@ class News(models.Model):
 class DocumentFile(models.Model):
 	news_document = models.FileField(upload_to=NEWS_DOCUMENTS_PATH, null = False, blank = False)
 	news = models.ForeignKey(News, verbose_name = u"", blank = True, null = True)
+	message = models.ForeignKey(Message, blank = True, null = True, verbose_name = "消息")
 
 	def __unicode__(self):
 		return news_document.filename
@@ -44,3 +45,27 @@ class DocumentFile(models.Model):
 	class Meta:
 		verbose_name = "文件"
 		verbose_name_plural = u"文件"
+
+class Message(models.Model):
+	title = models.CharField(max_length = 100, verbose_name = "标题")
+	content = models.TextField( verbose_name = "内容")
+	writer = modeks.foreignKey(User, "发信人")
+	time = models.DateTimeField(verbose_name = "时间")
+	
+	class Meta:
+		verbose_name = u"消息"
+		verbose_name_plural = u"消息"
+	def __unicode__(self):
+		return self.title
+
+class  MessageBox(models.Model):
+	user = models.OneToOneField(User, verbose_name = "用户")
+	message = models.ForeignKey(Message, verbose_name = "消息")
+	read = models.BooleanField(verbose_name = "是否阅读")
+
+	class Meta:
+		verbose_name = u"信箱"
+		verbose_name_plural = u"信箱"
+	def __unicode__(self):
+		return self.user
+
