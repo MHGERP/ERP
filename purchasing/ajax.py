@@ -13,7 +13,7 @@ from django.db import transaction
 from const.models import WorkOrder, Materiel
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
-from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm, MainMaterielExecuteDetailForm, SupportMaterielExecuteDetailForm
+from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
 from django.db.models import Q
 from datetime import datetime
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
@@ -131,8 +131,16 @@ def chooseInventorytype(request,pid,key):
     for item in items:
         if MaterielFormConnection.objects.filter(materiel = item).count() == 0:
             MaterielFormConnection(materiel = item, count = item.count).save()
-
-        item.can_choose, item.status = (False, u"已加入订购单") if (item.materielformconnection.order_form != None) else (True, u"未加入订购单")
+        
+        if item.inventory_type.id <= 2 :
+            if item.materielexecutedetail_set.count()>0:
+                item.can_choose=False
+                item.status= u"已加入订购单" if (item.materielformconnection.order_form) else u"已加入材料执行"
+            else :
+                item.can_choose=True
+                item.status=u"未处理"
+        else:
+            item.can_choose, item.status = (False, u"已加入订购单") if (item.materielformconnection.order_form != None) else (True, u"未加入订购单")
 
     context={
         "inventory_detail_list":items,
@@ -810,10 +818,13 @@ def newOrderSave(request, id, pendingArray):
     """
     Lei
     """
+    #addToExecute(pendingArray)
     cDate_datetime = datetime.now()
     order_form = OrderForm.objects.get(id = id)
     for id in pendingArray:
         materiel = Materiel.objects.get(id = id)
+        if materiel.inventory_type.id <= 2:
+            addToExecute(materiel)
         try:
             conn = MaterielFormConnection.objects.get(materiel = materiel)
         except:
@@ -937,4 +948,15 @@ def BidformApprove(request,bid,value,comment):
         status=-1
     return simplejson.dumps({"status":status})   
 
+def addToExecute(materiel):
+    materiel_execute_detail=MaterielExecuteDetail(materiel=materiel)
+    materiel_execute_detail.save()
+
+
+
+@dajaxice_register
+def AddToMaterialExecute(request,selected):
+    for item in selected:
+        materiel=Materiel.objects.get(pk=item)
+        addToExecute(materiel)
 
