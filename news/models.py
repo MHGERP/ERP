@@ -39,7 +39,7 @@ class DocumentFile(models.Model):
 	news = models.ForeignKey(News, verbose_name = u"", blank = True, null = True)
 
 	def __unicode__(self):
-		return news_document.filename
+		return os.path.basename(self.news_document.name)
 
 	class Meta:
 		verbose_name = "文件"
