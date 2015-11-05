@@ -18,3 +18,4 @@ class NewsForm(forms.Form):
     news_category = forms.ChoiceField(choices = choice_list)
     news_document = forms.FileField(label='select', help_text='文件上传', required=False, 
                                     widget=forms.FileInput(attrs={'multiple':'multiple'}))
+#attrs={'multiple':'multiple'}

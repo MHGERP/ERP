@@ -25,9 +25,9 @@ def getGroupList(request):
 def createOrModifyGroup(request, name, group_id):
     """
     JunHU
-    summary: ajax function to add a new group
-    params: name: new group name str
-    return: result info
+    summary: ajax function to create or modify a group
+    params: name: new group name str or "-1"
+    return: NULL
     """
     if group_id != "-1":
         group = Group.objects.get(id = group_id)
@@ -103,6 +103,10 @@ def getTitleList(request, group_id):
 def createOrModifyTitle(request, group_id, title_name, title_id):
     """
     JunHU
+    summary: ajax function to create or modify a title
+    params: name: new group name str or "-1"
+    return: NULL
+
     """
     if title_id == "-1":
         group = Group.objects.get(id = group_id)
@@ -117,6 +121,9 @@ def createOrModifyTitle(request, group_id, title_name, title_id):
 def deleteTitle(request, title_id):
     """
     JunHU
+    summary: ajax function to delete a exist title
+    params: id: db id of title
+    return: NULL
     """
     title = Title.objects.get(id = title_id)
     title.delete()

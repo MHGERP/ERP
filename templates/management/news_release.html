@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}admin/css/forms.css" type="text/css" media="screen" />
 <script>function gettext(txt){return txt}</script>
 <script type='text/javascript' src="{{STATIC_URL}}js/news/news_toolbar.js"></script>
-<form id="news_form" action="/adminStaff/news_release" method="post" enctype="multipart/form-data">
+<form id="news_form" action="/management/newsRelease" method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <div>
     新闻标题: {{newsform.news_title}}
