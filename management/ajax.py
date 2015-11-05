@@ -22,19 +22,20 @@ def getGroupList(request):
     return html
 
 @dajaxice_register
-def addNewGroup(request, name):
+def createOrModifyGroup(request, name, group_id):
     """
     JunHU
     summary: ajax function to add a new group
     params: name: new group name str
     return: result info
     """
-    try:
+    if group_id != "-1":
+        group = Group.objects.get(id = group_id)
+        group.name = name
+        group.save()
+    else:
         new_group = Group(name = name)
         new_group.save()
-        return "ok"
-    except:
-        return "fail"
 
 @dajaxice_register
 def deleteGroup(request, id):
