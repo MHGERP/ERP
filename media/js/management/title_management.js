@@ -38,3 +38,9 @@ $(document).on("click", ".btn-delete", function() {
         Dajaxice.management.deleteTitle(refresh, {"title_id": title_id});
     }
 });
+
+
+$(document).on("click", '.btn-query-authority', function() {
+    title_id = $(this).parent().parent().attr("iid");
+    location.href = "/management/authorityManagement?title_id=" + title_id;
+});

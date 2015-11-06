@@ -11,6 +11,7 @@ from django.db import transaction
 
 
 from forms import GroupForm
+from users.models import Title
 
 def userManagementViews(request):
     """
@@ -43,5 +44,13 @@ def messageManagementViews(request):
     context = {}
     return render(request, "management/message_management.html", context)
 
-
-
+def authorityManagementViews(request):
+    """
+    JunHU
+    """
+    title_id = request.GET.get("title_id")
+    title = Title.objects.get(id = title_id)
+    context = {
+            "title": title,
+        }
+    return render(request, "management/authority_management.html", context)
