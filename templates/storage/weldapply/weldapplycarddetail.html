@@ -1,0 +1,83 @@
+{% extends "storage/base/none_nav_base.html" %}
+
+{% block title %}
+<h1>焊材领用卡</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="/storage/weldapply">焊材领用</a>
+<a href="#" class="current">焊材领用卡</a>
+{% block sub_sec %}{% endblock %}
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldapply.css"/>
+{% block main_content %}
+{{block.super}}
+<div class="row" id="storage-weld-apply-card-detail">
+    <h3 style="text-align:center">焊材领用卡</h3>
+    <div>
+        <div class="span3">
+            <label>领用单位:<strong>{{apply_card.department}}</strong></label>
+        </div>
+        <div class="span4" style="text-align:center">
+            <label>日期:<strong>{{apply_card.create_time}}</strong></label>
+        </div>
+        <div class="span4" style="float:right;text-align:center">
+            <label>编号:<strong>{{apply_card.index}}</strong></label>
+           
+        </div>
+    </div>
+    <table class="table table-hover">
+        <tr>
+            <th rowspan="2">工作令</th>
+            <th rowspan="2">焊缝编号</th>
+            <th rowspan="2">焊材编号</th>
+            <th rowspan="2">型号</th>
+            <th rowspan="2">规格</th>
+            <th colspan="2">领用量</th>
+            <th rowspan="2">材质编号</th>
+            <th colspan="2">实发量</th>
+        </tr>
+        <tr>
+            <th>重量(Kg)</th>
+            <th>数量</th>
+            <th>重量(Kg)</th>
+            <th>数量</th>
+        </tr>
+        <tr>
+            <td>{{apply_card.workorder}}</td>
+            <td>{{apply_card.weld_bead_number}}</td>
+            <td>{{apply_card.weld_material_number}}</td>
+            <td>{{apply_card.model}}</td>
+            <td>{{apply_card.standard}}</td>
+            <td>{{apply_card.apply_weight}}</td>
+            <td>{{apply_card.apply_quantity}}</td>
+            <td>{{apply_card.material_number}}</td>
+            <td>{{apply_card.actual_weight}}</td>
+            <td>{{apply_card.actual_quantity}}</td>
+        </tr>
+        <tr>
+            <td colspan="10" style="text-align:left">备注:1.以上前六项为领用人填写;2.后二项微发料人填写。</td>
+        </tr>
+    </table>
+    <div class="row-fluid" style="text-align:center">
+        <div class="span3">
+            <label>领料人:<strong>{{apply_card.applicant}}</strong></label>
+        </div>
+        <div class="span3">
+            <label>审核人:<strong>{{apply_card.auditor}}</strong></label>
+        </div>
+        <div class="span3">
+            <label>检查员:<strong>{{apply_card.inspector}}</strong></label>
+        </div>
+        <div class="span3">
+            <label>发料人:<strong>{{apply_card.commit_user}}</strong></label>
+        </div>
+    <button type="button" id="confirm" class="btn btn-info">确认</button>
+    </div>
+    
+</div>
+{% endblock %}
+{% endblock%}
+

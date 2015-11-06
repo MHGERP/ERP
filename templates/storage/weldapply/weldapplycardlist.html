@@ -1,0 +1,83 @@
+{% extends "storage/base/none_nav_base.html" %}
+
+{% block title %}
+<h1>焊材领用卡列表</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="/storage/weldapply" class="current">焊材领用</a>
+{% block sub_sec %}{% endblock %}
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldapply.css"/>
+{% block main_content %}
+{{block.super}}
+<div class="row" id="storage-weld-apply-card-list-menu">
+    <h3>未处理领料单</h3>
+    <table class="table table-hover">
+        <tr>
+            <th>领用单位</th>
+            <th>日期</th>
+            <th>工作令</th>
+            <th>领料人</th>
+            <th>操作</th>
+        </tr>
+        {% for card in weld_apply_cards %}
+        <tr>
+            <td>{{card.department}}</td>
+            <td>{{card.create_time}}</td>
+            <td>{{card.workorder}}</td>
+            <td>{{card.applicant}}</td>
+            <td><button type="button" class="btn btn-info">处理</button></td>
+        {% endfor %}
+    </table>
+    <h3>历史领料记录</h3>
+    <form class="form-inline" onsubmit="return false">
+        <div class="form-group">
+            <label for="date">日期</label>
+            <input type="text" class="form-control search-query" id="date">
+        </div>
+        <div class="form-group">
+            <label for="department">领用单位</label>
+            <select class="form-control " id="department">
+                {% for department in departments %}
+                <option value="{{department}}">{{department}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="index">编号</label>
+            <input type="text" class="form-control search-query" id="index">
+        </div>
+        <div class="form-group">
+            <label for="work_order">工作令</label>
+            <input type="text" class="form-control search-query" id="work_order">
+        </div>
+        <div class="form-group">
+            <label for="commit_user">发料人</label>
+            <input type="text" class="form-control search-query" id="commit_user">
+        </div>
+        <button type="submit" class="btn btn-info">搜索</button>
+    </form>
+    <table class="table table-hover">
+        <tr>
+            <th>领用单位</th>
+            <th>日期</th>
+            <th>编号</th>
+            <th>工作令</th>
+            <th>查看</th>
+        </tr>
+        {% for card in weld_apply_cards %}
+        <tr>
+            <td>{{card.department}}</td>
+            <td>{{card.create_time}}</td>
+            <td>{{card.workorder}}</td>
+            <td>{{card.applicant}}</td>
+            <td><button type="button" class="btn btn-info">查看详情</button></td>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
+{% endblock%}
+
