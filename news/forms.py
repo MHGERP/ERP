@@ -3,7 +3,7 @@ from datetime import *
 from django import  forms
 from django.contrib.admin import widgets
 
-from news import NEWS_MAX_LENGTH
+from const import NEWS_MAX_LENGTH
 from news.models import NewsCategory
 
 class NewsForm(forms.Form):

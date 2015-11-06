@@ -1,0 +1,30 @@
+{% extends "home/base/none_nav_base.html"%}
+
+{% block inner_content%}
+<link rel="stylesheet" href="{{STATIC_URL}}style/newhomepage.css" type="text/css" media="screen" />
+<div class="news-body">
+	<div class="news-main">
+		<div>
+			<h3>{{ news_cate }} <small>{{ news_cate.category }}</small></h3>
+			<h4><a href="{{ news.id }}">{{ news.news_title }}</a></h4>
+			<h6><a href="/newslist/news_cate={{ news_cate.category }}"><<更多</a></h6>
+			<div class="news-content">
+				<div>
+					{% autoescape off %}
+						{{ news.news_content|safe }}
+					{% endautoescape %}
+					<br>
+					<br>
+					{% if docs %}
+					<p>附件：
+						{% for doc in docs %}
+							<a href="{{ doc.news_document.url }}" target="_blank">{{ doc.document_name }}</a></p>
+						{% endfor %}
+					<br>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock%}

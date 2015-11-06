@@ -4,6 +4,29 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views.decorators import csrf
 
+from news.models import *
+from const import *
+
+def index_context(request):
+	news_company_news = News.objects.filter(news_category__category = NEWS_CATEGORY_COMPANYNEWS).order_by('-news_date')
+	news_import_info = News.objects.filter(news_category__category = NEWS_CATEGORY_IMPORTINFO).order_by('-news_date')
+
+	return context
+
 def homepageViews(request):
-    context = {}
-    return render(request,"home/homepage.html",context)
+	news_company_news = News.objects.filter(news_category__category = NEWS_CATEGORY_COMPANYNEWS).order_by('-news_date')
+	news_import_info = News.objects.filter(news_category__category = NEWS_CATEGORY_IMPORTINFO).order_by('-news_date')
+	homepage_docs = DocumentFile.objects.filter(news__isnull = False).order_by('-news__news_date')
+	# news_homepage_docs = News.objects.filter()
+
+	news_cate = {}
+	news_cate["news_category_companynews"] = NEWS_CATEGORY_COMPANYNEWS
+	news_cate["news_category_importinfo"] = NEWS_CATEGORY_IMPORTINFO
+	news_cate["news_category_document"] = NEWS_CATEGORY_DOCUMENTS
+	context = {
+    			"news_company_news_list" : news_company_news,
+    			"news_import_info_list" : news_import_info,
+    			"homepage_docs_list" : homepage_docs
+    		}
+	context.update(news_cate)
+	return render(request,"home/homepage.html",context)

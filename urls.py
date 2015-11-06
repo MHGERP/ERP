@@ -36,6 +36,10 @@ urlpatterns = patterns('',
         r'^storage/',
         include('storage.urls')
     ),
+    url(
+        r'^news/',
+        include('news.urls')
+    ),
 )
 
 urlpatterns += patterns('', url(r'tinymce/', include('tinymce.urls')),)

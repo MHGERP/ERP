@@ -66,18 +66,18 @@ def newsReleaseViews(request):
         files = request.FILES.getlist("news_document")
         newsform = NewsForm(request.POST)
         if newsform.is_valid():
-            news_news = News(news_title = newsform.cleaned_data["news_title"],
+            new_news = News(news_title = newsform.cleaned_data["news_title"],
                              news_content = newsform.cleaned_data["news_content"],
                              news_date = newsform.cleaned_data["news_date"],
                              news_category = NewsCategory.objects.get(id = newsform.cleaned_data["news_category"])
                             )
-            news_news.save()
+            new_news.save()
         if files:
             for f in files:
                 doc = DocumentFile(news_document = f,
-                                    news = news_news)
+                                    news = new_news)
                 doc.save()
-        return render(request,"home/homepage.html",{})
+        return redirect(request,"news/newslist/%s" % new_news.id)
     else:
         newsform = NewsForm()
         context = {
