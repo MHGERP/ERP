@@ -10,6 +10,12 @@ from django.conf import settings
 admin.autodiscover()
 dajaxice_autodiscover()
 
+#Custome error page
+handler500 = 'backend.errorviews.error500'
+handler403 = 'backend.errorviews.error403'
+handler404 = 'backend.errorviews.error404'
+
+
 urlpatterns = patterns('',
     url(r'admin/jsi18n/$', 'django.views.i18n.javascript_catalog'),
     url(
@@ -39,6 +45,10 @@ urlpatterns = patterns('',
     url(
         r'^news/',
         include('news.urls')
+    ),
+    url(
+        r'^errors/',
+        include("backend.urls")
     ),
 )
 

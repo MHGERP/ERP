@@ -8,6 +8,14 @@ urlpatterns = patterns('',
         r'^weldmaterialhome$',
         storage_views.weldMaterialHomeViews,
     ),
+    url(
+        r'^weldapply$',
+        storage_views.Weld_Apply_Card_List,
+    ),
+    url(
+        r'weldapply/detail$',
+        storage_views.Weld_Apply_Card_Detail,
+    ),
 )
 
 
