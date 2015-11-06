@@ -10,7 +10,6 @@
 .form-inline{
     margin-bottom:20px;
 }
-.td .tr .th{
-    text-align:center;
-    vertical-align:middle;
+.fix_th{
+    line-height:3.5!important;
 }

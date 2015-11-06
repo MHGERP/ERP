@@ -24,15 +24,15 @@
            
         </div>
     </div>
-    <table class="table table-hover">
+    <table class="table table-hover table-bordered">
         <tr>
-            <th rowspan="2">工作令</th>
-            <th rowspan="2">焊缝编号</th>
-            <th rowspan="2">焊材编号</th>
-            <th rowspan="2">型号</th>
-            <th rowspan="2">规格</th>
+            <th class="fix_th" rowspan="2">工作令</th>
+            <th class="fix_th" rowspan="2">焊缝编号</th>
+            <th class="fix_th" rowspan="2">焊材编号</th>
+            <th class="fix_th" rowspan="2">型号</th>
+            <th class="fix_th" rowspan="2">规格</th>
             <th colspan="2">领用量</th>
-            <th rowspan="2">材质编号</th>
+            <th class="fix_th" rowspan="2">材质编号</th>
             <th colspan="2">实发量</th>
         </tr>
         <tr>
@@ -54,7 +54,7 @@
             <td>{{apply_card.actual_quantity}}</td>
         </tr>
         <tr>
-            <td colspan="10" style="text-align:left">备注:1.以上前六项为领用人填写;2.后二项微发料人填写。</td>
+            <td colspan="10" style="text-align:left">备注:1.以上前六项为领用人填写;2.后二项为发料人填写。</td>
         </tr>
     </table>
     <div class="row-fluid" style="text-align:center">

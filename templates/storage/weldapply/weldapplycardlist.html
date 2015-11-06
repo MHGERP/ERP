@@ -11,7 +11,7 @@
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldapply.css"/>
     <h3>未处理领料单</h3>
-    <table class="table table-hover">
+    <table class="table table-hover table-bordered">
         <tr>
             <th>领用单位</th>
             <th>日期</th>
@@ -19,7 +19,7 @@
             <th>领料人</th>
             <th>操作</th>
         </tr>
-        {% for card in weld_apply_cards %}
+        {% for card in unhandled_weld_apply_cards %}
         <tr>
             <td>{{card.department}}</td>
             <td>{{card.create_time}}</td>
@@ -29,14 +29,19 @@
         {% endfor %}
     </table>
     <h3>历史领料记录</h3>
-    <form class="form-inline" onsubmit="return false">
+    
+    <form id="query_form" class="form-inline">
+        {{search_form}}
+        <!--{% csrf_token %}-->
+        <!--
         <div class="form-group">
             <label for="date">日期</label>
-            <input type="text" class="form-control search-query" id="date">
+            <input type="text" class="form-control search-query" name="date" style="background-color:white" value="" id="date" readonly>
         </div>
         <div class="form-group">
             <label for="department">领用单位</label>
-            <select class="form-control " id="department">
+            <select class="form-control " name="department" id="department">
+                <option value="">--------</option>
                 {% for department in departments %}
                 <option value="{{department}}">{{department}}</option>
                 {% endfor %}
@@ -44,34 +49,23 @@
         </div>
         <div class="form-group">
             <label for="index">编号</label>
-            <input type="text" class="form-control search-query" id="index">
+            <input type="text" class="form-control search-query" name="index" id="index">
         </div>
         <div class="form-group">
             <label for="work_order">工作令</label>
-            <input type="text" class="form-control search-query" id="work_order">
+            <input type="text" class="form-control search-query" name="workorder" id="work_order">
         </div>
         <div class="form-group">
             <label for="commit_user">发料人</label>
-            <input type="text" class="form-control search-query" id="commit_user">
+            <input type="text" class="form-control search-query" name="commit_user" id="commit_user">
         </div>
-        <button type="submit" class="btn btn-info">搜索</button>
+        -->
+        <button type="submit" id="search_submit" class="btn btn-info">搜索</button>
     </form>
-    <table class="table table-hover">
-        <tr>
-            <th>领用单位</th>
-            <th>日期</th>
-            <th>编号</th>
-            <th>工作令</th>
-            <th>查看</th>
-        </tr>
-        {% for card in weld_apply_cards %}
-        <tr>
-            <td>{{card.department}}</td>
-            <td>{{card.create_time}}</td>
-            <td>{{card.workorder}}</td>
-            <td>{{card.applicant}}</td>
-            <td><a type="button" class="btn btn-info detail" href="/storage/weldapply/detail?index={{card.index}}">查看详情</a></td>
-        {% endfor %}
-    </table>
+    <div id="history_table">
+    {% include 'storage/weldapply/history_table.html' %}
+</div>
+    
+
 {% endblock%}
 
