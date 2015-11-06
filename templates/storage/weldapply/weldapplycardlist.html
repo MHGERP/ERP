@@ -1,19 +1,15 @@
-{% extends "storage/base/none_nav_base.html" %}
+{% extends "storage/base/weldbase.html" %}
 
 {% block title %}
 <h1>焊材领用卡列表</h1>
 {% endblock %}
 
-{% block sub_ref %}
+{% block sub_sec %}
 <a href="/storage/weldapply" class="current">焊材领用</a>
-{% block sub_sec %}{% endblock %}
 {% endblock %}
 
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldapply.css"/>
-{% block main_content %}
-{{block.super}}
-<div class="row" id="storage-weld-apply-card-list-menu">
     <h3>未处理领料单</h3>
     <table class="table table-hover">
         <tr>
@@ -29,7 +25,7 @@
             <td>{{card.create_time}}</td>
             <td>{{card.workorder}}</td>
             <td>{{card.applicant}}</td>
-            <td><button type="button" class="btn btn-info">处理</button></td>
+            <td><a type="button" class="btn btn-info detail" href="/storage/weldapply/detail?index={{card.index}}">处理</a></td>
         {% endfor %}
     </table>
     <h3>历史领料记录</h3>
@@ -74,10 +70,8 @@
             <td>{{card.create_time}}</td>
             <td>{{card.workorder}}</td>
             <td>{{card.applicant}}</td>
-            <td><button type="button" class="btn btn-info">查看详情</button></td>
+            <td><a type="button" class="btn btn-info detail" href="/storage/weldapply/detail?index={{card.index}}">查看详情</a></td>
         {% endfor %}
     </table>
-</div>
-{% endblock %}
 {% endblock%}
 

@@ -1,4 +1,4 @@
-{% extends "storage/base/none_nav_base.html" %}
+{% extends "storage/base/weldbase.html" %}
 
 {% block title %}
 <h1>焊材领用卡</h1>
@@ -7,14 +7,10 @@
 {% block sub_ref %}
 <a href="/storage/weldapply">焊材领用</a>
 <a href="#" class="current">焊材领用卡</a>
-{% block sub_sec %}{% endblock %}
 {% endblock %}
 
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldapply.css"/>
-{% block main_content %}
-{{block.super}}
-<div class="row" id="storage-weld-apply-card-detail">
     <h3 style="text-align:center">焊材领用卡</h3>
     <div>
         <div class="span3">
@@ -77,7 +73,5 @@
     <button type="button" id="confirm" class="btn btn-info">确认</button>
     </div>
     
-</div>
-{% endblock %}
 {% endblock%}
 

@@ -32,7 +32,7 @@ def Weld_Apply_Card_List(request):
 
 def Weld_Apply_Card_Detail(request):
     context={}
-    card_index=10086 #request.GET['apply_card_index']
+    card_index=int(request.GET['index'])
     apply_card=WeldingMaterialApplyCard.objects.get(index=card_index)
     context['apply_card']=apply_card
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
