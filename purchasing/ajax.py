@@ -13,11 +13,7 @@ from django.db import transaction
 from const.models import WorkOrder, Materiel,Material
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
-<<<<<<< HEAD
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm, MainMaterielExecuteDetailForm, SupportMaterielExecuteDetailForm,OrderInfoForm
-=======
-from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
->>>>>>> e9153e5773d1f38f04b1449d4cf225dab32d6376
 from django.db.models import Q
 from datetime import datetime
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
