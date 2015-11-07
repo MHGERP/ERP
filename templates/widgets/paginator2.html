@@ -1,0 +1,24 @@
+<ul class="pagination pagination-right">
+	{% if item2_page.has_previous %}
+		<li><a href="javascript:void(0)" class="item_page" arg="{{item2_page.previous_page_number}}"><上一页</a></li>
+	{% endif %}
+	{% if not item2_contain_begin %}
+		<li><a href="javascript:void(0)" arg="1" class="item_page">1</a></li>
+    	<li><span>...</span></li>
+	{% endif %}
+	{% for index in item2_index_list %}
+		{% ifequal index item2_page.number %}
+			<li class="disabled" value="{{ index }}"><span>{{ index }}</span></li>
+		{% else %}
+			<li><a href="javascript:void(0)" arg="{{ index }}" class="item_page">{{ index }}</a></li>
+		{% endifequal %}
+	{% endfor %}
+	{% if not item2_contain_end %}
+		<li><span>...</span></li>
+		<li><a href="javascript:void(0)" arg="{{ item2_page.paginator.num_pages }}" class="item_page">{{ item2_page.paginator.num_pages }}</a></li>
+	{% endif %}
+	{% if item2_page.has_next %}
+		<li><a href="javascript:void(0)" arg="{{ item2_page.next_page_number }}" class="item_page">下一页></a></li>
+	{% endif %}
+</ul>
+
