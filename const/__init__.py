@@ -90,7 +90,10 @@ IMPLEMENT_CLASS_CHOICES = (
     (1, u"议标"),
 )
 
-
+SEX_CHOICES = (
+    (0, u"男"),
+    (1, u"女"),
+)
 INDEX_LIST = tuple(
     (i, str(i)) for i in xrange(1, 11)
 )
@@ -136,11 +139,8 @@ ENTRYTYPE_CHOICES = (
 
 
 
+PAGE_ELEMENTS = 10
 
-
-AUTHORITY_SET = (
-
-)
 
 
 NEWS_CATEGORY_COMPANYNEWS = "companynews"
