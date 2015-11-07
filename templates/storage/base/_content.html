@@ -22,8 +22,9 @@ active open
 {% block main_content%}
 <div class="main-content">
     <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}bootstrap-datepicker/css/bootstrap-datetimepicker.css" >  
+    <script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>  
     {% block outter_content%}{%endblock%}
 
-    <script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>  
-</div> 
+</div>
+    <script type="text/javascript" src="{{STATIC_URL}}/js/storage/weld.js"></script>  
 {% endblock%}

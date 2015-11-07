@@ -1,0 +1,33 @@
+{% extends "storage/base/weldbase.html" %}
+{% block title %}
+<h1>焊接材料入库管理</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/weldentryhome" class="current">焊接材料入库管理</a>
+{% endblock %}
+{% block inner_content %}
+<h3>未处理入库单</h3>
+<div class="span8">
+<table class="table table-bordered">
+    <thead>
+        <th>工作令</th>
+        <th>日期</th>
+        <th>采购员</th>
+        <th>检查员</th>
+        <th>操作</th>
+    </thead>
+    </tbody>
+        {% for entry in entry_set %}
+        <tr>
+            <td>{{entry.work_order}}</td>
+            <td>{{entry.entry_time}}</td>
+            <td>{{entry.purchaser}}</td>
+            <td>{{entry.inspector}}</td>
+            <td><a class="btn btn-warning" href="/storage/weldentryconfirm/{{entry.id}}">处理</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
