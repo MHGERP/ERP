@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 @dajaxice_register
 def getUserList(request):
-               
+    print "hell"   
     user_list = User.objects.all()
     context = {
             "user_list": user_list,

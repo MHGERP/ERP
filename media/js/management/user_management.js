@@ -7,8 +7,6 @@ function getUserCallBack(data) {
     $("#widget-content").html(data);
 }
 
-
-
 $("#user-add").click(function() {
     $("#titleLabel").html("新建用户");
 
@@ -20,7 +18,7 @@ $("#user-save").click(function() {
     Dajaxice.management.createUser(refresh, {
                                                     "user_name": user_name,
                                                     "user_password": user_password,
-                                                    
+
                                                     
                                             });
 });
