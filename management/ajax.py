@@ -6,6 +6,17 @@ from django.template.loader import render_to_string
 from users.models import *
 from django.contrib.auth.models import User
 
+
+@dajaxice_register
+def getUserList(request):
+               
+    user_list = User.objects.all()
+    context = {
+            "user_list": user_list,
+       }
+    html = render_to_string("management/widgets/user_table.html", context)
+    return html
+    
 @dajaxice_register
 def getGroupList(request):
     """
@@ -20,6 +31,8 @@ def getGroupList(request):
        }
     html = render_to_string("management/widgets/group_table.html", context)
     return html
+
+    
 
 @dajaxice_register
 def createOrModifyGroup(request, name, group_id):
@@ -98,6 +111,14 @@ def getTitleList(request, group_id):
     }
     html = render_to_string("management/widgets/title_table.html", context)
     return html
+
+@dajaxice_register
+def createUser(request, user_name, user_password):
+    print user_name
+    print user_password
+    #user = User.objects.get(username = user_name)
+    user=User(username=user_name,password=user_password)
+    user.save()
 
 @dajaxice_register
 def createOrModifyTitle(request, group_id, title_name, title_id):

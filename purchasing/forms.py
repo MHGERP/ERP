@@ -56,16 +56,15 @@ class EntryForm(ModelForm):
     def __init__(self,*args,**kwargs):
         super(EntryForm,self).__init__(*args,**kwargs)
         pur_entry = kwargs["instance"]
-        self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.username
-        self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.username
-        self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.username
-        self.fields['bidform'].widget.attrs["value"] = pur_entry.bidform
-        print self
-        print pur_entry.bidform.bid_id
+        self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.username if pur_entry.purchaser else ""
+        self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.username if pur_entry.keeper else ""
+        self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.username if pur_entry.inspector else ""
+        self.fields['bidform'].widget.attrs["value"] = pur_entry.entry_code
+    
     purchaser = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
     inspector = forms.CharField(label=u"检验员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
     keeper = forms.CharField(label=u"库管员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
-    bidform = forms.CharField(label=u"单据编号",widget = forms.TextInput(attrs={'readonly':'readonly','id':'bidform'}))
+    bidform = forms.CharField(label=u"单据编号",widget = forms.TextInput(attrs={'id':'bidform'}))
 class ProcessFollowingForm(ModelForm):
     class Meta:
         model=ProcessFollowingInfo
@@ -83,7 +82,7 @@ class MaterielExecuteForm(ModelForm):
         widgets = {
             'materiel_choice' : forms.Select(attrs={"id" : "materiel_choice_select"})
         }
-
+"""
 class MainMaterielExecuteDetailForm(ModelForm):
     class Meta:
         model = MainMaterielExecuteDetail
@@ -99,7 +98,7 @@ class SupportMaterielExecuteDetailForm(ModelForm):
         widgets = {
             'recheck' : forms.RadioSelect(choices = (('0', '未复验'), ('1', '已复验')))
         }
-
+"""
 
 class SubApplyForm(ModelForm):
     class Meta:
@@ -135,3 +134,12 @@ class StatusChangeApplyForm(ModelForm):
     bidform = forms.CharField(label=u"标单编号",widget = forms.TextInput(attrs={'readonly':'readonly','id':'bidform'}))
     origin_status = forms.CharField(label=u"当前状态",widget=forms.TextInput(attrs={'readonly':'readonly','id':'origin_status'}))
     reason = forms.CharField(label=u"回溯原因",widget=forms.Textarea(attrs={'id':'reason','cols':'80','rows':'5'}))
+
+class OrderInfoForm(ModelForm):
+    class Meta:
+        model = Materiel
+        fields = {'index','name','schematic_index',}
+        widgets = {'index':forms.TextInput(attrs={"class":'form-control',"readonly":'readonly'}),
+                   'name':forms.TextInput(attrs={"class":'form-control'}),
+                   'schematic_index':forms.TextInput(attrs={"class":'form-control'}),
+                   }

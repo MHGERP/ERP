@@ -10,10 +10,10 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from django.db import transaction 
-from const.models import WorkOrder, Materiel
+from const.models import WorkOrder, Materiel,Material
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
-from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm, MainMaterielExecuteDetailForm, SupportMaterielExecuteDetailForm
+from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
 from django.db.models import Q
 from datetime import datetime
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
@@ -131,8 +131,16 @@ def chooseInventorytype(request,pid,key):
     for item in items:
         if MaterielFormConnection.objects.filter(materiel = item).count() == 0:
             MaterielFormConnection(materiel = item, count = item.count).save()
-
-        item.can_choose, item.status = (False, u"已加入订购单") if (item.materielformconnection.order_form != None) else (True, u"未加入订购单")
+        
+        if item.inventory_type.id <= 2 :
+            if item.materielexecutedetail_set.count()>0:
+                item.can_choose=False
+                item.status= u"已加入订购单" if (item.materielformconnection.order_form) else u"已加入材料执行"
+            else :
+                item.can_choose=True
+                item.status=u"未处理"
+        else:
+            item.can_choose, item.status = (False, u"已加入订购单") if (item.materielformconnection.order_form != None) else (True, u"未加入订购单")
 
     context={
         "inventory_detail_list":items,
@@ -810,10 +818,13 @@ def newOrderSave(request, id, pendingArray):
     """
     Lei
     """
+    #addToExecute(pendingArray)
     cDate_datetime = datetime.now()
     order_form = OrderForm.objects.get(id = id)
     for id in pendingArray:
         materiel = Materiel.objects.get(id = id)
+        if materiel.inventory_type.id <= 2:
+            addToExecute(materiel)
         try:
             conn = MaterielFormConnection.objects.get(materiel = materiel)
         except:
@@ -936,5 +947,44 @@ def BidformApprove(request,bid,value,comment):
     else:
         status=-1
     return simplejson.dumps({"status":status})   
+
+@dajaxice_register
+def GetOrderInfoForm(request,uid):
+    """
+    Lei
+    """
+    order = Materiel.objects.get(id=uid)
+    count = order.materielformconnection.count
+    material = order.material.name
+    orderForm = OrderInfoForm(instance=order)
+    form_html = render_to_string("widgets/order_form.html",{'order_form':orderForm,'count':count,'material':material})
+    return simplejson.dumps({'form':form_html})
+
+@dajaxice_register
+def OrderInfo(request,form,uid,count,name):
+    """
+    Lei
+    """
+    order = Materiel.objects.get(id=uid)
+    orderForm = OrderInfoForm(deserialize_form(form),instance=order)
+    order_obj = orderForm.save(commit = False)
+    matconnection = order.materielformconnection
+    matconnection.count = count
+    matconnection.save()
+    material = Material.objects.get(name = name)
+    order_obj.material = material
+    order_obj.save()
+
+def addToExecute(materiel):
+    materiel_execute_detail=MaterielExecuteDetail(materiel=materiel)
+    materiel_execute_detail.save()
+
+
+
+@dajaxice_register
+def AddToMaterialExecute(request,selected):
+    for item in selected:
+        materiel=Materiel.objects.get(pk=item)
+        addToExecute(materiel)
 
 
