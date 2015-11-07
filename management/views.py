@@ -1,5 +1,5 @@
 # coding: UTF-8
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from const.forms import InventoryTypeForm
 from django.template import RequestContext
 from django.views.decorators import csrf
@@ -77,7 +77,7 @@ def newsReleaseViews(request):
                 doc = DocumentFile(news_document = f,
                                     news = new_news)
                 doc.save()
-        return redirect(request,"news/newslist/%s" % new_news.id)
+        return redirect("/news/newslist/%s" % new_news.id)
     else:
         newsform = NewsForm()
         context = {

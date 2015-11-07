@@ -3,15 +3,15 @@
 		<table class="documents">
 			<colgroup>
 				<col width="5%">
-				<col width="75%">
-				<col width="15%">
+				<col width="35%">
+				<col width="10%">
 			</colgroup>
 			<tbody>
 				{% for news in news_list %}
 				<tr>
 					<td></td>
 					<td>
-						<a href="{{ news.id }}">{{ news.news_title }}</a>
+						<a class="newslist-dot" href="{{ news.id }}">{{ news.news_title }}</a>
 					</td>
 					<td>
 						{{ news.news_date|date:"[y-m-d]" }}
