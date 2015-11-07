@@ -1,0 +1,70 @@
+{% extends "storage/base/weldbase.html" %}
+{% block sub_sec %}
+<a href="/storage/weldentryhome">焊接材料入库管理</a>
+<a href="/storage/weldentryhome" class="current">焊接材料入库单</a>
+{% endblock %}
+{% block title %}
+<h1>焊接材料入库单</h1>
+{% endblock %}
+
+{% block inner_content %}
+<div class="control-group" style="margin-top:20px;">
+    <label class="hz-align">入库时间</label>
+    {{entry_form.entry_time}}
+</div>
+<div class="control-group">
+    <label class="hz-align">单据编号</label>
+    {{entry_form.bidform}}
+</div>
+<table id="items_table" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>名称及规格</th>
+            <th>标准号/图号</th>
+            <th>材料牌号</th>
+            <th>单位</th>
+            <th>数量</th>
+            <th>标准</th>
+            <th>状态</th>
+            <th>备注</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for item in entry_set %}
+        <tr eid="{{item.id}}">
+            <td>{{forloop.counter}}</td>
+            <td>{{item.material}}</td>
+            <td>{{item.schematic_index}}</td>
+            <td></td>
+            <td></td>
+            <td>{{item.material.count}}</td>
+            <td style="width:200px;"><input value="{{item.standard}}"></input></td>
+            <td><input value="{{item.status}}"></input></td>
+            <td><input value="{{item.remark}}"></input></td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+<div class="control-group span12" style="margin-top:50px;">
+    <div class="rows span4 purcher">
+        {{entry_form.purchaser.label_tag}}{{entry_form.purchaser}}
+    </div>
+    <div class="span4 purcher">
+        {{entry_form.inspector.label_tag}}
+        {{entry_form.inspector}}
+    </div>
+    <div class="span4 purcher">
+        {{entry_form.keeper.label_tag}}
+        {{entry_form.keeper}}
+    </div>
+</div>
+<center style="margin:30px;">
+    <button  id="entry_confirm" style="width:30%;height:40px;" class="btn btn-primary" onclick="entry_confirm({{pur_entry.id}});">入库单确认</button>
+</center>
+<script>
+    $(function(){
+         $('#entry_time').datetimepicker();
+    });
+</script>
+{% endblock %}
