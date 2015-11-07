@@ -16,6 +16,14 @@ urlpatterns = patterns('',
         r'^weldentryconfirm/(?P<eid>\w+)$',
         storage_views.weldEntryConfirmViews,
     ),
+    url(
+        r'^weldapply$',
+        storage_views.Weld_Apply_Card_List,
+    ),
+    url(
+        r'weldapply/detail$',
+        storage_views.Weld_Apply_Card_Detail,
+    ),
 )
 
 

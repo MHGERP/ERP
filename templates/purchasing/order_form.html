@@ -11,7 +11,7 @@
 
 {% block inner_content%}
 <link rel="stylesheet" href="{{ STATIC_URL }}style/orderform.css" type="text/css" media="screen" />
-
+<link rel="stylesheet" href="{{ STATIC_URL  }}bootstrap-datepicker/css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
 <div id="search_div">
 	订购单编号: <input type="text" class="input-midium" value="{{order_form.order_id}}" id="index"/> 
 	订购单状态: <input type="text" class="input-midium" value="{{order_form.order_status}}" id="status" args="{{order_form.order_status.status}}"/> 
@@ -84,5 +84,31 @@
     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
   </div>
 </div>
+
+<div class="modal  fade" id="order_info_modal" modal-size-width="0.6">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="modal_title">订购单信息修改</h2>
+      </div>
+      <div class="modal-body" >
+        <form class="form-inline well" id="edit_order_form">
+          {% csrf_token %}
+          <div class="row" id="order_form_div">
+            
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel_change">关闭</button>
+        <button type="button" class="btn btn-primary" data-dismiss="" id="save_order">保存</button>
+      </div>
+
+</div>
+
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/orderform.js"></script>
+<script type='text/javascript' src="{{ STATIC_URL }}jquery/jquery.form.js"></script>
+<script type='text/javascript' src="{{ STATIC_URL }}bootstrap-multiselect/bootstrap-multiselect.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
+<script type='text/javascript' src="{{ STATIC_URL }}js/modal_adaption.js"></script>
 {% endblock%}

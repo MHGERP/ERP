@@ -9,5 +9,48 @@
 {% endblock %}
 
 {% block inner_content%}
-sadfadf
+
+<form class="form-search "  style="width:60%">
+<input type="text" id="search_user" class="input-medium search-query"/>
+<input type="button" id="search_user_button" value="检索" class="btn"></input>
+
+    <span class="btn btn-primary" id="user-add" data-toggle="modal" data-target="#save_modal" style="float:right">添加新用户</span> 
+</form>
+<div id="save_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="titleLabel"></h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+      <form class="form-search">
+        <table>
+          <tr>
+            <td>
+              <label>用户名：</label>
+            </td>
+            <td>
+              <input type="text" class="input-medium" id="user_name">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>密&nbsp&nbsp&nbsp&nbsp码：</label>
+            </td>
+            <td>
+              <input type="text" class="input-medium" id="user_password">
+            </td>
+          </tr>
+        </table>
+      </form>	
+  </div>
+  <div class="modal-footer">
+  <span class="btn btn-primary" id="user-save" data-dismiss="modal" aria-hidden="true">确定</span>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+    
+<br/>
+<div id="widget-content">
+</div>
+<script type='text/javascript' src="{{STATIC_URL}}js/management/user_management.js"></script>
 {% endblock%}

@@ -3,7 +3,7 @@ from django.db import models
 import datetime, os
 from settings import NEWS_DOCUMENTS_PATH
 
-from news import NEW_CATEGORY_CHOICES, NEWS_CATEGORY_COMPANYNEWS
+from const import NEW_CATEGORY_CHOICES, NEWS_CATEGORY_COMPANYNEWS
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -62,6 +62,9 @@ class DocumentFile(models.Model):
 	news_document = models.FileField(upload_to=NEWS_DOCUMENTS_PATH, null = False, blank = False, verbose_name = u"文件")
 	news = models.ForeignKey(News, blank = True, null = True, verbose_name = u"新闻")
 	message = models.ForeignKey(Message, blank = True, null = True, verbose_name = u"消息")
+
+	def document_name(self):
+		return os.path.basename(self.news_document.name)
 
 	def __unicode__(self):
 		return os.path.basename(self.news_document.name)

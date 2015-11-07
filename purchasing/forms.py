@@ -134,3 +134,12 @@ class StatusChangeApplyForm(ModelForm):
     bidform = forms.CharField(label=u"标单编号",widget = forms.TextInput(attrs={'readonly':'readonly','id':'bidform'}))
     origin_status = forms.CharField(label=u"当前状态",widget=forms.TextInput(attrs={'readonly':'readonly','id':'origin_status'}))
     reason = forms.CharField(label=u"回溯原因",widget=forms.Textarea(attrs={'id':'reason','cols':'80','rows':'5'}))
+
+class OrderInfoForm(ModelForm):
+    class Meta:
+        model = Materiel
+        fields = {'index','name','schematic_index',}
+        widgets = {'index':forms.TextInput(attrs={"class":'form-control',"readonly":'readonly'}),
+                   'name':forms.TextInput(attrs={"class":'form-control'}),
+                   'schematic_index':forms.TextInput(attrs={"class":'form-control'}),
+                   }
