@@ -13,6 +13,7 @@
 			<th>数量</th>
 			<th>备注</th>
 			<th>状态</th>
+			<th>修改</th>
 		</tr>
   </thead>
 	<tbody>
@@ -23,7 +24,7 @@
 			<input type="checkbox" class="checkbox" args="{{item.id}}">
 			{% endif %}</td> {% endif %}
 			<td>{{item.index}}</td>
-        		<td>{{item.order.order_index}}</th>
+        	<td>{{item.order.order_index}}</th>
 			<td>{{item.name}}</td>
 			<td>{{item.schematic_index}}</td>
 			<td>{{item.material}}</td>
@@ -31,13 +32,16 @@
 			<td>{{item.materielformconnection.count}}</td>
 			<td></td>
 			<td>{{item.status}}</td>
+			<td>
+				<button class="btn btn-primary" uid={{item.id}}>修改</button>
+			</td>
 		</tr>
 		{% endfor %}
 		{% for item in items %}
 		<tr>	
 			{% if can_choose %}
 			<td>{% if item.can_choose %}
-			<input type="checkbox" class="checkbox" args="{{item.id}}">
+			<input type="checkbox" class="checkbox" id="edit" args="{{item.id}}">
 			{% endif %}</td> {% endif %}
 			<td>{{item.index}}</td>
         		<td>{{item.order.order_index}}</th>
@@ -48,7 +52,12 @@
 			<td>{{item.materielformconnection.count}}</td>
 			<td></td>
 			<td>{{item.status}}</td>
+			<td>
+				<button class="btn btn-primary" id="edit" uid={{item.id}}>修改</button>
+			</td>
 		</tr>
 		{% endfor %}
 	</tbody>
 </table>
+
+
