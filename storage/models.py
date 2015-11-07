@@ -29,3 +29,21 @@ class WeldingMaterialApplyCard(models.Model):
     class Meta:
         verbose_name=u'焊材领用卡'
         verbose_name_plural=u'焊材领用卡'
+
+class WeldingMaterialHumitureRecord(models.Model):
+    storeRoom = models.ForeignKey()
+    storeMan = models.CharField(verbose_name=u'库管员',max_length=20,blank=False)
+    demandTemperature = models.CharField(verbose_name=u'要求温度', max_length=20,blank=False)
+    demandHumidity = models.CharField(verbose_name=u'要求湿度', max_length=20,blank=False)
+    actualTemperature1 = models.FloatField(verbose_name=u'实际温度(10:00)',blank=False)
+    actualHumidity1 = models.FloatField(verbose_name=u'实际湿度(10:00)',blank=False)
+    actualTemperature2 = models.FloatField(verbose_name=u'实际温度(16:00)',blank=False)
+    actualHumidity12 = models.FloatField(verbose_name=u'实际温度(16:00)',blank=False)
+    remark = models.CharField(verbose_name=u'备注', max_length=1000,blank=True)
+    date = models.DateField(verbose_name = u"日期")
+    def __unicode__(self):
+        return str(self.date)
+
+    class Meta:
+        verbose_name=u'焊材库温湿度记录卡'
+        verbose_name_plural=u'焊焊材库温湿度记录卡'    
