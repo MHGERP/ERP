@@ -29,3 +29,14 @@ class WeldingMaterialApplyCard(models.Model):
     class Meta:
         verbose_name=u'焊材领用卡'
         verbose_name_plural=u'焊材领用卡'
+
+class StoreRoom(models.Model):
+    name = models.CharField(max_length=20,verbose_name=u"库房名称",blank = False)
+    position = models.CharField(max_length=50,verbose_name=u"位置",blank = False)
+
+    def __unicode__(self):
+        return "%s"  % self.name
+
+    class Meta:
+        verbose_name = u"库房"
+        verbose_name_plural = u"库房"

@@ -28,7 +28,7 @@ def weldMaterialHomeViews(request):
     return render(request,"storage/weldmaterial/weldmaterialhome.html",context)
 
 def weldEntryHomeViews(request):
-    weldentry_set = getEntrySet(PurchasingEntry,"keeper")
+    weldentry_set = getEntrySet(PurchasingEntry,ENTRYSTATUS_KEEPER)
 
     context = {
         "entry_set":weldentry_set,    
@@ -39,11 +39,13 @@ def weldEntryConfirmViews(request,eid):
     entry = PurchasingEntry.objects.get(id = eid)
     items = PurchasingEntryItems.objects.filter(purchasingentry = entry)
     entry_form = EntryForm(instance = entry)
+    entryitem_form = EntryItemsForm()
 
     context = {
         "pur_entry":entry,
         "entry_set":items,
         "entry_form":entry_form,
+        "item_form":entryitem_form,
     }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 

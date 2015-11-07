@@ -6,7 +6,7 @@ from storage.models import *
 from const import ORDERFORM_STATUS_CHOICES
 from const.models import Materiel
 from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE
-
+from purchasing.models import PurchasingEntryItems
 DEPARTMENT_CHOICES=(
         (u' ',u'------'),
         (u'部门A',u'部门A'),
@@ -22,3 +22,10 @@ class ApplyCardHistorySearchForm(forms.Form):
     work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'work_order'}))
     commit_user=forms.CharField(label=u'发料人',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'commit_user'}))
 
+class EntryItemsForm(ModelForm):
+    class Meta:
+        model = PurchasingEntryItems
+        fields = ("remark","date","price")
+        widget = {
+            "data":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
+        }
