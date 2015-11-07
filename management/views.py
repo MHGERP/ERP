@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect,HttpResponse
 import json
 from django.db import transaction
 
-from news.forms import NewsForm
+from news.forms import NewsForm, MessageForm
 from news.models import News, DocumentFile, NewsCategory
 
 from forms import GroupForm
@@ -43,7 +43,10 @@ def messageManagementViews(request):
     """
     JunHU
     """
-    context = {}
+    messageform = MessageForm()
+    context = {
+        "messageform": messageform
+    }
     return render(request, "management/message_management.html", context)
 
 def authorityManagementViews(request):
