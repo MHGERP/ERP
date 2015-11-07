@@ -1,8 +1,22 @@
 #coding: UTF-8
 
+from const import *
 from users import *
+
 from django.db import models
 from django.contrib.auth.models import User
+
+class UserInfo(models.Model):
+    user = models.OneToOneField(User, verbose_name = u"用户")
+    name = models.CharField(blank = True, null = True, max_length = 20, verbose_name = u"姓名")
+    phone = models.CharField(blank = True, null = True, max_length = 20, verbose_name = u"电话")
+    mobile = models.CharField(blank = True, null = True, max_length = 20, verbose_name = u"移动电话")
+    sex = models.IntegerField(blank = True, null = True, choices = SEX_CHOICES, verbose_name = u"性别")
+    class Meta:
+        verbose_name = u"用户信息"
+        verbose_name_plural = u"用户信息"
+    def __unicode__(self):
+        return self.name
 
 class SuperAdmin(models.Model):
     admin = models.ForeignKey(User, blank = False, verbose_name = u"管理员")

@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from django.db import transaction 
-from const.models import WorkOrder, Materiel
+from const.models import WorkOrder, Materiel,Material
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
@@ -948,6 +948,33 @@ def BidformApprove(request,bid,value,comment):
         status=-1
     return simplejson.dumps({"status":status})   
 
+@dajaxice_register
+def GetOrderInfoForm(request,uid):
+    """
+    Lei
+    """
+    order = Materiel.objects.get(id=uid)
+    count = order.materielformconnection.count
+    material = order.material.name
+    orderForm = OrderInfoForm(instance=order)
+    form_html = render_to_string("widgets/order_form.html",{'order_form':orderForm,'count':count,'material':material})
+    return simplejson.dumps({'form':form_html})
+
+@dajaxice_register
+def OrderInfo(request,form,uid,count,name):
+    """
+    Lei
+    """
+    order = Materiel.objects.get(id=uid)
+    orderForm = OrderInfoForm(deserialize_form(form),instance=order)
+    order_obj = orderForm.save(commit = False)
+    matconnection = order.materielformconnection
+    matconnection.count = count
+    matconnection.save()
+    material = Material.objects.get(name = name)
+    order_obj.material = material
+    order_obj.save()
+
 def addToExecute(materiel):
     materiel_execute_detail=MaterielExecuteDetail(materiel=materiel)
     materiel_execute_detail.save()
@@ -959,4 +986,5 @@ def AddToMaterialExecute(request,selected):
     for item in selected:
         materiel=Materiel.objects.get(pk=item)
         addToExecute(materiel)
+
 

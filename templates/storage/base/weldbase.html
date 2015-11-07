@@ -1,17 +1,10 @@
 {% extends "storage/base/none_nav_base.html" %}
 
-{% block title %}
-<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldmaterial.css"/>
-<h1>焊接材料库存管理</h1>
-
-{% endblock %}
 
 {% block sub_ref %}
-<a href="/storage/weldapply" class="current">焊材领用</a>
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldmaterial.css"/>
+<a href="/storage/weldmaterialhome">焊接材料库存管理</a>
+{% block sub_sec %}{% endblock %}
 
 {% endblock %}
-
-{% block inner_content%}
-
-{% endblock%}
 
