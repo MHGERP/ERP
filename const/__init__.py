@@ -90,7 +90,10 @@ IMPLEMENT_CLASS_CHOICES = (
     (1, u"议标"),
 )
 
-
+SEX_CHOICES = (
+    (0, u"男"),
+    (1, u"女"),
+)
 INDEX_LIST = tuple(
     (i, str(i)) for i in xrange(1, 11)
 )
@@ -136,11 +139,8 @@ ENTRYTYPE_CHOICES = (
 
 
 
+PAGE_ELEMENTS = 10
 
-
-AUTHORITY_SET = (
-
-)
 
 
 NEWS_CATEGORY_COMPANYNEWS = "companynews"
@@ -153,3 +153,14 @@ NEW_CATEGORY_CHOICES = (
 )
 
 NEWS_MAX_LENGTH = 10000000
+
+ENTRYSTATUS_PURCHASER = 0
+ENTRYSTATUS_INSPECTOR = 1
+ENTRYSTATUS_KEEPER = 2
+
+ENTRYSTATUS_CHOICES = (
+    (ENTRYSTATUS_PURCHASER,u"采购"),
+    (ENTRYSTATUS_INSPECTOR,u"检查"),
+    (ENTRYSTATUS_KEEPER,u"库管")
+)
+
