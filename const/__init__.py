@@ -138,6 +138,3 @@ ENTRYTYPE_CHOICES = (
 
 
 
-AUTHORITY_SET = (
-
-)

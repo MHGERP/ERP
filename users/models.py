@@ -1,6 +1,6 @@
 #coding: UTF-8
 
-from const import *
+from users import *
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -38,4 +38,4 @@ class Title(models.Model):
         verbose_name = u"头衔"
         verbose_name_plural = u"头衔"
     def __unicode__(self):
-        return self.name
+        return self.group.name + self.name
