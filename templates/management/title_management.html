@@ -9,5 +9,33 @@
 {% endblock %}
 
 {% block inner_content%}
-sadfadf
+
+<form class="form-search" style="width:60%">
+群组：{{form.group}}
+<span class="btn btn-primary" id="btn-add" style="float:right" data-toggle="modal" data-target="#save_modal">新增头衔</span>
+</form>
+<br/>
+<div id="widget-content">
+</div>
+
+<div id="save_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="titleLabel"></h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+      <form class="form-search">
+        <label>头衔名：</label>
+        <input type="text" class="input-medium" id="title-name">
+      </form>	
+  </div>
+  <div class="modal-footer">
+  <span class="btn btn-primary" id="btn-save" data-dismiss="modal" aria-hidden="true">确定</span>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+
+<script type='text/javascript' src="{{STATIC_URL}}js/management/title_management.js"></script>
+
 {% endblock%}

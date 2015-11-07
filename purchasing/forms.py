@@ -83,7 +83,7 @@ class MaterielExecuteForm(ModelForm):
         widgets = {
             'materiel_choice' : forms.Select(attrs={"id" : "materiel_choice_select"})
         }
-
+"""
 class MainMaterielExecuteDetailForm(ModelForm):
     class Meta:
         model = MainMaterielExecuteDetail
@@ -99,7 +99,7 @@ class SupportMaterielExecuteDetailForm(ModelForm):
         widgets = {
             'recheck' : forms.RadioSelect(choices = (('0', '未复验'), ('1', '已复验')))
         }
-
+"""
 
 class SubApplyForm(ModelForm):
     class Meta:

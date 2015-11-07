@@ -1,0 +1,11 @@
+.storage-icon{
+    height:100px;
+    width:100px;
+}
+
+div#storage-weld-menu{
+    font-size:40px;
+}
+div#storage-weld-menu a{
+    vertical-align:text-bottom;
+}

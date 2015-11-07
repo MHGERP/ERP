@@ -1,0 +1,26 @@
+<!--news base template-->
+<div class="front-wrap">
+  <div class="home-news">
+    <div class="usoft-listview-header">
+      <div class="news_display_div">
+        <h3> {%block title%}{%endblock%} </h3>
+        <small>
+          {%block title-sub%}{%endblock%}
+        </small>
+      </div>
+      <span class="usoft-listview-more">
+        {% block more %}
+        <a href="newslist/">更多 More<small>»</small></a>
+        {% endblock %}
+      </span>
+    </div>
+    {% block news-list %}
+    <div class="news-list">
+      <div class="news-documents documents-list ">
+        {%block news-list-items%}
+        {%endblock%}
+      </div><!--end news-documents-->
+    </div><!--end news-list-->
+    {% endblock %}
+  </div><!--home-news-->
+</div><!--front wrap-->

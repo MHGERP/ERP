@@ -1,9 +1,8 @@
 # coding: UTF-8
 from const import *
 import datetime
-from const import MATERIEL_CHOICE
 from django.db import models
-from const.models import BidFormStatus,Materiel, WorkOrder, OrderFormStatus, ImplementClassChoices
+from const.models import BidFormStatus,Materiel,Material, WorkOrder, OrderFormStatus, ImplementClassChoices
 from django.contrib.auth.models import User
 import settings
 # Create your models here.
@@ -157,13 +156,15 @@ class PurchasingEntry(models.Model):
     keeper = models.ForeignKey(User,blank=False,verbose_name=u"库管员" , related_name = "keeper")
     entry_confirm = models.BooleanField(null=False,default=False,verbose_name=u"入库单确认")
     bidform = models.ForeignKey(BidForm,verbose_name=u"标单号")
-
+    entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES,default = 0, verbose_name=u"入库单类型")
+    entry_code = models.IntegerField(blank = False ,max_length = 10, verbose_name = u"单据编号")
+    
     class Meta:
         verbose_name = u"入库单"
         verbose_name_plural = u"入库单"
 
     def __unicode__(self):
-        return '%s' % self.bidform.bid_id
+        return '%s' % self.entry_code
 
 class PurchasingEntryItems(models.Model):
     material = models.ForeignKey(Materiel,blank = True , null = True , verbose_name = u"材料")
@@ -242,11 +243,11 @@ class MaterielExecute(models.Model):
         verbose_name_plural = u"材料执行表"
     def __unicode__(self):
         return '%s' % self.document_number
-
+"""
 class MainMaterielExecuteDetail(models.Model):
     materiel_execute = models.ForeignKey(MaterielExecute, null = True, blank = True, verbose_name = u"材料执行")
     materiel_name = models.CharField(max_length=50, blank=False, verbose_name = u"名称")
-    materiel_texture = models.ForeignKey(Materiel, verbose_name = u"材质")
+    materiel_texture = models.ForeignKey(Material, verbose_name = u"材质")
     quality_class = models.CharField(max_length=20, blank=False, verbose_name = u"质量分类")
     specification = models.CharField(max_length=100, blank=False, verbose_name= u"规格")
     quantity = models.IntegerField(verbose_name = u"数量")
@@ -261,7 +262,7 @@ class MainMaterielExecuteDetail(models.Model):
         verbose_name_plural = u"主材材料执行表详细"
     def __unicode__(self):
         return '%s' % (self.materiel_texture.index)
-
+"""
 class ProcessFollowingInfo(models.Model):
     bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
     following_date=models.DateField(blank=False,null=False,verbose_name=u"跟踪日期")
@@ -275,6 +276,8 @@ class ProcessFollowingInfo(models.Model):
         verbose_name_plural = u"过程跟踪记录"
     def __unicode__(self):
         return self.bidform.bid_id
+
+"""
 class SupportMaterielExecuteDetail(models.Model):
     materiel_execute = models.ForeignKey(MaterielExecute, null = True, blank = True, verbose_name = u"材料执行")
     materiel_texture = models.ForeignKey(Materiel, blank = False, verbose_name = u"材质")
@@ -294,7 +297,7 @@ class SupportMaterielExecuteDetail(models.Model):
         verbose_name_plural = u"辅材材料执行表详细"
     def __unicode__(self):
         return '%s' % (self.materiel_texture.index)
-
+"""
 
 class StatusChange(models.Model):
     bidform=models.ForeignKey(BidForm,verbose_name=u"标单")
@@ -317,3 +320,18 @@ class StatusChangeReason(models.Model):
         verbose_name_plural = u"状态回溯原因"
     def __unicode__(self):
         return "from %s to  %s" % (self.status_change.original_status.__unicode__() , self.status_change.new_status.__unicode__())
+
+class MaterielExecuteDetail(models.Model):
+    materiel_execute = models.ForeignKey(MaterielExecute, null = True, blank = True, verbose_name = u"材料执行")
+    materiel=models.ForeignKey(Materiel,verbose_name=u"物料")
+    recheck = models.BooleanField(default = False, verbose_name = u"复验")
+    quota = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"定额")
+    part = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"零件")
+    oddments = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"余料")
+    remark = models.CharField(max_length = 200, null = True, blank = True, verbose_name = u"备注")
+    class Meta:
+        verbose_name = u"材料执行表详细"
+        verbose_name_plural = u"材料执行表详细"
+    def __unicode__(self):
+        return '%s' % (self.materiel.index)
+

@@ -1,6 +1,6 @@
 #coding: UTF-8
 
-from const import *
+from users import *
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -32,10 +32,10 @@ class Authority(models.Model):
 class Title(models.Model):
     group = models.ForeignKey(Group, blank = False, verbose_name = u"所属群组")
     name = models.CharField(max_length = 100, blank = False, verbose_name = u"头衔名")
-    users = models.ManyToManyField(User, verbose_name = u"拥有头衔用户")
-    authorities = models.ManyToManyField(Authority, verbose_name = u"拥有权限")
+    users = models.ManyToManyField(User, blank = True, null = True, verbose_name = u"拥有头衔用户")
+    authorities = models.ManyToManyField(Authority, blank = True, null = True, verbose_name = u"拥有权限")
     class Meta:
         verbose_name = u"头衔"
         verbose_name_plural = u"头衔"
     def __unicode__(self):
-        return self.name
+        return self.group.name + self.name
