@@ -28,6 +28,9 @@
             <th>标准</th>
             <th>状态</th>
             <th>备注</th>
+            <th>生产日期</th>
+            <th>价格</th>
+            <th>操作<th>
         </tr>
     </thead>
     <tbody>
@@ -39,9 +42,14 @@
             <td></td>
             <td></td>
             <td>{{item.material.count}}</td>
-            <td style="width:200px;"><input value="{{item.standard}}"></input></td>
-            <td><input value="{{item.status}}"></input></td>
-            <td><input value="{{item.remark}}"></input></td>
+            <td>{{item.standard}}</input></td>
+            <td>{{item.status}}</input></td>
+            <td>{{item.remark}}</td>
+            <td>{{item.date}}</td>
+            <td>{{item.price}}</td>
+            <td>
+                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_item({{item.id}})">修改</a>
+            </td>
         </tr>
         {%endfor%}
     </tbody>
@@ -62,9 +70,32 @@
 <center style="margin:30px;">
     <button  id="entry_confirm" style="width:30%;height:40px;" class="btn btn-primary" onclick="entry_confirm({{pur_entry.id}});">入库单确认</button>
 </center>
+ <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">添加</h3>
+            </div>
+            <div class="modal-body">
+                <form id="item_form" action="" class="form-horizontal">
+                    {% for field in item_form %}
+                    <div class="control-group">
+                        <label class="control-label">{{field.label_tag}}</label>
+                        <div class="controls" id="div{{forloop.counter}}">
+                            {{field}}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <button class="btn btn-primary" onclick="item_save();">保存</button>
+            </div>
+        </div>
 <script>
     $(function(){
          $('#entry_time').datetimepicker();
+         $('#entryitem_time').datetimepicker();
     });
 </script>
 {% endblock %}

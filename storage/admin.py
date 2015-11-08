@@ -3,4 +3,10 @@
 from django.contrib import admin
 from models import *
 
-admin.site.register(WeldingMaterialApplyCard)
+Registers = (
+    WeldingMaterialApplyCard,
+    StoreRoom,
+)
+
+for reg in Registers:
+    admin.site.register(reg)

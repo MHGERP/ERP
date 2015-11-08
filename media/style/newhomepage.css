@@ -1,5 +1,5 @@
 .outter_frame {
-    width : 80%;
+    width : 90%;
     margin : 0 auto;
     color : #5a5a5a;
     background-color: rgb(248, 248, 248);
@@ -14,7 +14,7 @@
 }
 
 .front-wrap {
-    height: 290px;
+    height: 300px;
     overflow: hidden;
     padding: 0 10px;
     color: #333;
@@ -25,7 +25,7 @@
 .home-news {
     margin-left: -10px;
     float: left;
-    height: 90%%;
+    height: 90%;
     width: 100%;
     padding: 0;
     display: inline;
@@ -75,52 +75,44 @@ table.documents td {
     height: 100%;
     overflow: hidden;
 }
-#news-list {
-}
+
 .news-content {
     min-height:700px;
     max-height:800px;
     overflow-x:hidden;
     overflow-y:auto;
 }
-.news-content-nav {
-    background-color: transparent;
-    width: 1170px;
-    margin: 0 auto;
-}
-.news-content-nav .nav {
-    margin-bottom: 0px !important;
-}
-.news-content-nav .nav li {
-    line-height: 16px;
-}
-.news-content-nav .nav li a {
-    font-size: 16px;
-    line-height: 15px;
-    font-weight: bold;
-    color: #fff !important;
-    margin-right: 0px !important;
-    padding-left:20px;
-    padding-right:20px;
-    border-top: 0px solid transparent !important;
-    border-left: 0px solid transparent !important;
-    border-right: 0px solid transparent !important;
-    border-radius: 0px;
-}
-.news-content-nav .nav li a:hover,
-.news-content-nav .nav li a:focus,
-.news-content-nav .nav li a:active,
-.news-content-nav .nav li.active a {
-    background-color: rgb(31, 60, 92) !important;
-    border-bottom: 3px solid rgb(245, 81, 84);
-}
-.news-list {
-    margin: 0;
-    float: left;
-    height: 100%;
+
+.home-news-list {
+    float : left;
     width: 95%;
+}
+
+.home-news-list .newslist-dot {
+    border-bottom: #363636 1px dotted;
+    line-height: 32px;
+    height: 32px;
+    display: block;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.news-list {
+    margin: 0 auto;
+    height: 100%;
+    width: 50%;
 /* border-right: 1px solid #0064b9; */
 }
+
+.news-list .newslist-dot {
+    border-bottom: #363636 1px dotted;
+    line-height: 32px;
+    height: 32px;
+    display: block;
+    font-size: 16px;
+    text-decoration: none;
+}
+
 input[type="text"], input[type="button"] ,input[type="submit"],select{
     border-radius: 0px;
 }

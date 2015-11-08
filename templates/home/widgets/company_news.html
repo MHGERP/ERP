@@ -10,7 +10,7 @@ companynews
 {% block news-list-items %}
 {% for news in news_company_news_list %}
 <div class="usoft-listview-basic">
-	<ul>
+	<ul class="newslist-dot">
 		<li>
 			<span class="usoft-listview-item-date">{{news.news_date|date:"m-d"}}</span>
 			<span><a href="/news/newslist/{{ news.id }}" title="{{news.title}}">{{ news.news_title|truncatechars:30 }}</a></span>
