@@ -26,6 +26,3 @@ class EntryItemsForm(ModelForm):
     class Meta:
         model = PurchasingEntryItems
         fields = ("remark","date","price")
-        widget = {
-            "data":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
-        }

@@ -417,18 +417,22 @@ def materielchoiceChange(request, materielChoice):
     print materielChoice
     if materielChoice == MAIN_MATERIEL:
         # materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
-        detailForm = MainMaterielExecuteDetailForm()
+        #detailForm = MainMaterielExecuteDetailForm()
         materielexecute_detail_html = "purchasing/materielexecute/table/main_materielexecute_detail_table.html"
         #formname = "MainMaterielExecuteDetailForm"
-        add_form = render_to_string("purchasing/materielexecute/widget/add_main_detail_form.html", {"MainMaterielExecuteDetailForm":detailForm})
+        #add_form = render_to_string("purchasing/materielexecute/widget/add_main_detail_form.html", {"MainMaterielExecuteDetailForm":detailForm})
         current_materiel_choice = MATERIEL_CHOICE[0][1]
+        materiels=MaterielExecuteDetail.objects.filter(materiel__inventory_type__id=1,materiel_execute__isnull=True)
+        select_materielexecute_html=render_to_string("purchasing/materielexecute/table/select_main_materielexecute.html",{"materiels":materiels})
     else:
         # materielexecute_detail_set = SupportMaterielExecuteDetail.objects.all()
-        detailForm = SupportMaterielExecuteDetailForm()
+        #detailForm = SupportMaterielExecuteDetailForm()
         materielexecute_detail_html = "purchasing/materielexecute/table/support_materielexecute_detail_table.html"
         #formname = "SupportMaterielExecuteDetailForm"
-        add_form = render_to_string("purchasing/materielexecute/widget/add_support_detail_form.html", {"SupportMaterielExecuteDetailForm":detailForm})
+        #add_form = render_to_string("purchasing/materielexecute/widget/add_support_detail_form.html", {"SupportMaterielExecuteDetailForm":detailForm})
         current_materiel_choice = MATERIEL_CHOICE[1][1]
+        materiels=MaterielExecuteDetail.objects.filter(materiel__inventory_type__id=2,materiel_execute__isnull=True)
+        select_materielexecute_html=render_to_string("purchasing/materielexecute/table/select_support_materielexecute.html",{"materiels":materiels})
     # choice_form = MaterielChoiceForm()
     context = {
         "choice" : SUPPORT_MATERIEL,
@@ -436,9 +440,14 @@ def materielchoiceChange(request, materielChoice):
         # "materielChoice_form" : choice_form,
         #formname : detailForm
     }
-
     rendered_materielexecute_detail_html = render_to_string(materielexecute_detail_html, context)
-    return simplejson.dumps({'materielexecute_detail_html' : rendered_materielexecute_detail_html, 'add_form' : add_form, 'current_materiel_choice' : current_materiel_choice})
+    return_context={
+        'materielexecute_detail_html' : rendered_materielexecute_detail_html,
+        #'add_form' : add_form,
+        'current_materiel_choice' : current_materiel_choice,
+        'select_materielexecute_html':select_materielexecute_html
+    }
+    return simplejson.dumps(return_context)
 
 @dajaxice_register
 def saveMaterielExecute(request, form):
@@ -457,17 +466,17 @@ def saveMaterielExecute(request, form):
         ret = {'status' : '0', 'message' : u'材料执行保存失败！'}
     return simplejson.dumps(ret)
 
-
+"""
 @dajaxice_register
 @transaction.commit_manually
 def saveMaterielExecuteDetail(request, form, materielChoice):
-    """
-    mxl
-    summary : save the materielExecute and MainMaterielExecuteDetail(SupportMaterielExecuteDetail) models
-    params : form : the submit form(detail)
-             documentNumberInput : document_number of MaterielExecute model
-             materielChoice : materielChoice of  MaterielExecute model
-    """
+
+   # mxl
+   # summary : save the materielExecute and MainMaterielExecuteDetail(SupportMaterielExecuteDetail) models
+   # params : form : the submit form(detail)
+   #          documentNumberInput : document_number of MaterielExecute model
+   #          materielChoice : materielChoice of  MaterielExecute model
+
     flag = False;
     try:
         # materielexecute = MaterielExecute();
@@ -514,11 +523,21 @@ def saveMaterielExecuteDetail(request, form, materielChoice):
         ret = {'status' : '0', 'message' : u'请检查输入是否正确', 'add_form' : add_form}
         transaction.rollback()
     return simplejson.dumps(ret)
-
+"""
 @dajaxice_register
-def materielExecuteCommit(request, detail_id_array, materielChoice, materielExecuteId):
+def saveMaterielExecuteDetail(request, selected, eid):
+    materielexecute=MaterielExecute.objects.get(document_number=eid)
+    for item in selected:
+        print item
+        materielexecutedetail=MaterielExecuteDetail.objects.get(pk=item)
+        materielexecutedetail.materiel_execute=materielexecute
+        materielexecutedetail.save()
+
+    return simplejson.dumps({"status":u"添加成功!"})
+@dajaxice_register
+def materielExecuteCommit(request,  materielExecuteId):
     try:
-        print materielExecuteId
+        """
         materielExecute = MaterielExecute.objects.get(id=materielExecuteId)
         materielExecute.is_save = True
         if materielChoice == MAIN_MATERIEL:
@@ -534,9 +553,15 @@ def materielExecuteCommit(request, detail_id_array, materielChoice, materielExec
                 supportMaterielExecuteDetail.materiel_execute = materielExecute
                 supportMaterielExecuteDetail.save()
         materielExecute.save()
-        ret = {'status' : '1'}
+        """
+        print materielExecuteId
+        materielexecute=MaterielExecute.objects.get(document_number=materielExecuteId)
+        materielexecute.is_save=True
+        materielexecute.save()
+        ret = {'status' :0,'message':u'材料执行表提交成功！',}
     except Exception, e:
-        ret = {'status' : '0'}
+        print e
+        ret = {'status' :1,'message': u'提交失败！'}
     return simplejson.dumps(ret)
 
 @dajaxice_register

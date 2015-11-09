@@ -1,5 +1,5 @@
 # coding: UTF-8
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from const.forms import InventoryTypeForm
 from django.template import RequestContext
 from django.views.decorators import csrf
@@ -8,12 +8,13 @@ from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect,HttpResponse
 import json
 from django.db import transaction
+from django.contrib.auth.models import User
 
 from news.forms import NewsForm, MessageForm
-from news.models import News, DocumentFile, NewsCategory
-
+from news.models import News, DocumentFile, NewsCategory, Message, MessageBox
+import datetime
 from forms import GroupForm
-from users.models import Title
+from users.models import Title, Group
 
 def userManagementViews(request):
     """
@@ -46,11 +47,29 @@ def messageManagementViews(request):
     """
     JunHU
     """
-    messageform = MessageForm()
-    context = {
-        "messageform": messageform
-    }
-    return render(request, "management/message_management.html", context)
+    if request.method == 'POST':
+        messageform = MessageForm(request.POST)
+        if messageform.is_valid():
+            new_message = Message(title = messageform.cleaned_data["message_title"],
+                                  content = messageform.cleaned_data["message_content"],
+                                  writer = request.user,
+                                  time = datetime.datetime.now()
+                                 )
+            new_message.save()
+            for user_iterator in User.objects.all():
+                for group_id in messageform.cleaned_data["message_groups"]:
+                    group = Group.objects.get(id = int(group_id))
+                    if (user_iterator.title_set.filter(group = group).count() > 0):
+                        new_box = MessageBox(user = user_iterator,
+                                             message = new_message,
+                                             read = False)
+                        new_box.save()
+    else:
+        messageform = MessageForm()
+        context = {
+            "messageform": messageform
+        }
+        return render(request, "management/message_management.html", context)
 
 def authorityManagementViews(request):
     """
@@ -83,7 +102,7 @@ def newsReleaseViews(request):
                 doc = DocumentFile(news_document = f,
                                     news = new_news)
                 doc.save()
-        return redirect(request,"news/newslist/%s" % new_news.id)
+        return redirect("/news/newslist/%s" % new_news.id)
     else:
         newsform = NewsForm()
         context = {
