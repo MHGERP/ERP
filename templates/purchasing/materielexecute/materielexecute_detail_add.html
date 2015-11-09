@@ -4,38 +4,39 @@
 {% endblock %}
 
 {% block form_button %}
-    <a style="margin-left:20px" class="btn btn-success" role="button" id="add-btn">保存</a>
+    <button style="margin-left:20px" class="btn btn-success"  id="add-btn">保存</button>
     <hr>
 	<a href="#add-detail-modal" style="margin-left:20px" class="btn btn-primary" role="button" id="add-detail-btn" data-toggle="modal">填写材料执行详细表</a>
 {% endblock %}
 
 {% block add_modal %}
-	<div id="add-detail-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div id="add-detail-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.8">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 	    	<h3 id="myModalLabel">
-	    		{{current_materiel_choice}}
+                {% if choice == MAIN_MATERIEL%}
+                主材
+                {% else%}
+                辅材
+                {% endif%}
 	    	</h3>
 	  	</div>
 	  	<div class="modal-body" id="modal-body">
-	  		<!-- <div id="errorsFieldDiv">
-	  			{% include "purchasing/materielexecute/widget/errorsField.html" %}
-	  		</div> -->
 
-	  		{% csrf_token %}
-	  		<form class="form-inline well" id="detail_form" method="post">
-		    	{% if choice == MAIN_MATERIEL %}
-					{% include "purchasing/materielexecute/widget/add_main_detail_form.html" %}
-				{% else %}
-					{% include "purchasing/materielexecute/widget/add_support_detail_form.html" %}
-				{% endif %}
-			</form>
+            <div class="form-inline well" id="detail_select" >
+                {% if choice == MAIN_MATERIEL%}
+                {% include "purchasing/materielexecute/table/select_main_materielexecute.html"%}
+                {% else%}
+                {% include "purchasing/materielexecute/table/select_support_materielexecute.html"%}
+                {% endif%}
+			</div>
 	  	</div>
 	  	<div class="modal-footer">
 	    	<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
 	    	<button class="btn btn-primary" id="submit-btn">保存</button>
 	  	</div>
 	</div>
+<script type='text/javascript' src="{{STATIC_URL}}js/modal_adaption.js"></script>
 {% endblock %}
 
 {% block commit_button %}
