@@ -16,6 +16,10 @@ from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect,HttpResponse
 import json
 from django.db import transaction
+
+from users.decorators import authority_required
+from users import *
+
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -45,6 +49,7 @@ def bidformApproveIDViews(request,bid):
     }
     return render(request,"purchasing/bidform_approve_id.html",context)
 
+@authority_required(PENDING_ORDER)
 def pendingOrderViews(request):
     """
     JunHU

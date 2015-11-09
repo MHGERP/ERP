@@ -1,0 +1,66 @@
+{% extends "storage/base/weldbase.html" %}
+{% block sub_sec %}
+<a href="/storage/weldentryhome">焊接材料入库管理</a>
+<a href="/storage/weldentryhome" class="current">焊接材料入库单</a>
+{% endblock %}
+{% block title %}
+<h1>焊接材料入库单</h1>
+{% endblock %}
+
+{% block inner_content %}
+<div class="control-group" style="margin-top:20px;">
+    <label class="hz-align">入库时间</label>
+    {{entry_form.entry_time}}
+</div>
+<div class="control-group">
+    <label class="hz-align">单据编号</label>
+    {{entry_form.bidform}}
+</div>
+<div id = "items_table">
+{% include "storage/widgets/weldentrytable.html" %}
+</div>
+<div class="control-group span12" style="margin-top:50px;">
+    <div class="rows span4 purcher">
+        {{entry_form.purchaser.label_tag}}{{entry_form.purchaser}}
+    </div>
+    <div class="span4 purcher">
+        {{entry_form.inspector.label_tag}}
+        {{entry_form.inspector}}
+    </div>
+    <div class="span4 purcher">
+        {{entry_form.keeper.label_tag}}
+        {{entry_form.keeper}}
+    </div>
+</div>
+<center style="margin:30px;">
+    <button  id="entry_confirm" style="width:30%;height:40px;" class="btn btn-primary" onclick="entry_confirm({{pur_entry.id}});">入库单确认</button>
+</center>
+ <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">添加</h3>
+            </div>
+            <div class="modal-body">
+                <form id="item_form" action="" class="form-horizontal">
+                    {% for field in item_form %}
+                    <div class="control-group">
+                        <label class="control-label">{{field.label_tag}}</label>
+                        <div class="controls" id="div{{forloop.counter}}">
+                            {{field}}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <button class="btn btn-primary" onclick="save_item();">保存</button>
+            </div>
+        </div>
+<script>
+    $(function(){
+        $('#entry_time').datetimepicker({format: "yyyy-mm-dd",minView:2});
+        $('#id_date').datetimepicker({format:"yyyy-mm-dd",minView:2});
+    });
+</script>
+{% endblock %}

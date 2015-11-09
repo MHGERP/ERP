@@ -8,16 +8,18 @@ importinfo
 {% endblock %}
 
 {% block news-list-items %}
+{% for news in news_import_info_list %}
 <div class="usoft-listview-basic">
-	<ul>
+	<ul class="newslist-dot">
 		<li>
-			<span class="usoft-listview-item-date"></span>
-			<span><a href=""></a></span>
+			<span class="usoft-listview-item-date">{{news.news_date|date:"m-d"}}</span>
+			<span><a href="/news/newslist/{{ news.id }}" title="{{news.title}}">{{ news.news_title|truncatechars:30 }}</a></span>
 		</li>
 	</ul>
 </div>
+{% endfor %}
 {% endblock %}
 
 {% block more %}
-<strong><a href="">更多More<sub>》</sub></a></strong>
+<strong><a href="/news/newslist/news_cate={{ news_category_importinfo }}">更多More<sub>》</sub></a></strong>
 {% endblock %}

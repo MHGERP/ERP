@@ -1,4 +1,5 @@
 var pendingArray = Array();
+var order_tr
 
 $(document).ready(refresh);
 
@@ -88,4 +89,25 @@ $("#order_delete").click(function() {
 });
 function deleteCallBack(data) {
     Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
+}
+
+$(document).on("click","#edit",function(){
+    uid = $(this).attr("uid");
+    order_uid = $(this).parent().parent();
+    Dajaxice.purchasing.GetOrderInfoForm(Edit_Order_Callback,{'uid':uid});
+})
+function Edit_Order_Callback(data){
+    $("#order_info_modal").modal();
+    $("#order_form_div").html(data.form);
+}
+
+$("#order_info_modal #save_order").click(function(){
+    var name = $("#material").val();
+    var count =  $("#count").val();
+    Dajaxice.purchasing.OrderInfo(Order_Callback,{'form':$("#edit_order_form").serialize(true),'uid':uid,'count':count,'name':name})
+})
+
+function Order_Callback(data){
+    $("#order_info_modal").modal('hide');
+    refresh();
 }

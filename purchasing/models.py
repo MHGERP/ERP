@@ -151,26 +151,27 @@ class ArrivalInspection(models.Model):
 
 class PurchasingEntry(models.Model):
     entry_time = models.DateField(blank=True, null=True,verbose_name=u"入库时间")
-    purchaser =  models.ForeignKey(User,blank=False,verbose_name=u"采购员",related_name = "purchaser")
-    inspector = models.ForeignKey(User,blank=False,verbose_name=u"检验员",related_name = "inspector")
-    keeper = models.ForeignKey(User,blank=False,verbose_name=u"库管员" , related_name = "keeper")
-    entry_confirm = models.BooleanField(null=False,default=False,verbose_name=u"入库单确认")
+    purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "purchaser")
+    inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "inspector")
+    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "keeper")
+    entry_confirm = models.BooleanField(default=False,verbose_name=u"入库单确认")
     bidform = models.ForeignKey(BidForm,verbose_name=u"标单号")
     entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES,default = 0, verbose_name=u"入库单类型")
-    entry_code = models.IntegerField(blank = False ,max_length = 10, verbose_name = u"单据编号")
-    
+    entry_code = models.IntegerField(blank = False ,max_length = 10, verbose_name = u"单据编号",unique = True)
+    work_order = models.ForeignKey(WorkOrder,verbose_name = u"工作令")
+    entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=0,verbose_name=u"入库单状态")
     class Meta:
         verbose_name = u"入库单"
         verbose_name_plural = u"入库单"
 
     def __unicode__(self):
         return '%s' % self.entry_code
-
+    
 class PurchasingEntryItems(models.Model):
     material = models.ForeignKey(Materiel,blank = True , null = True , verbose_name = u"材料")
-    standard = models.CharField(max_length = 100 , blank = True,default="", verbose_name = u"标准")
-    status = models.CharField(max_length = 100,blank = True,default="", verbose_name = u"状态")
     remark = models.CharField(max_length = 100, blank = True , default="" , verbose_name = u"备注")
+    date = models.DateField( blank = False , verbose_name = u"生产日期")
+    price = models.FloatField( blank = True ,default="0", verbose_name = u"价格")
     purchasingentry = models.ForeignKey(PurchasingEntry,verbose_name = u"入库单")
     class Meta:
         verbose_name = u"入库材料"
