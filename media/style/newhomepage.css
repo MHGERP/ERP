@@ -1,8 +1,13 @@
+a, h1, h2, h3 {
+    color: rgb(32, 183, 240);
+    font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, STHeiti, "LiHei Pro Medium", SimSun, SumHei;
+}
+
 .outter_frame {
-    width : 90%;
+    width : 100%;
     margin : 0 auto;
     color : #5a5a5a;
-    background-color: rgb(248, 248, 248);
+    /*background-color: rgb(248, 248, 248);*/
 }
 
 .news_display_div {
@@ -108,7 +113,7 @@ table.documents td {
     border-bottom: #363636 1px dotted;
     line-height: 32px;
     height: 32px;
-    display: block;
+    /*display: block;*/
     font-size: 16px;
     text-decoration: none;
 }
@@ -156,8 +161,10 @@ input[type="text"], input[type="button"] ,input[type="submit"],select{
     height: 30px;
     width: 280px;
     border-left: 10px solid rgb(32, 183, 240);
-    border-top: 5px solid rgb(248,248,248);
-    border-bottom: 5px solid rgb(248,248,248);
+    /*border-top: 5px solid rgb(248,248,248);
+    border-bottom: 5px solid rgb(248,248,248);*/
+    border-top: 5px solid #eeeeee;
+    border-bottom: 5px solid #eeeeee;
 }
 
 .usoft-listview-item-date

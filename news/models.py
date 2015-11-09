@@ -23,15 +23,15 @@ class NewsCategory(models.Model):
 
 
 class News(models.Model):
-	news_title = models.CharField(verbose_name = u"标题", blank=True, max_length=200)
-	news_content = models.TextField(verbose_name = u"新闻内容", blank=True)
-	news_date = models.DateField(verbose_name = u"发表时间", default=datetime.datetime.today, blank=True)
-	news_category = models.ForeignKey(NewsCategory, verbose_name = u"新闻类型", blank=True, null=True)
+    news_title = models.CharField(verbose_name = u"标题", blank=True, max_length=200)
+    news_content = models.TextField(verbose_name = u"新闻内容", blank=True)
+    news_date = models.DateField(verbose_name = u"发表时间", default=datetime.datetime.today, blank=True)
+    news_category = models.ForeignKey(NewsCategory, verbose_name = u"新闻类型", blank=True, null=True)
 
-	def __unicode__(self):
+    def __unicode__(self):
 		return self.news_title
 
-	class Meta:
+    class Meta:
 	    verbose_name = u"新闻"
 	    verbose_name_plural = u"新闻"
 
@@ -48,7 +48,7 @@ class Message(models.Model):
 		return self.title
 
 class  MessageBox(models.Model):
-	user = models.OneToOneField(User, verbose_name = u"用户")
+	user = models.ForeignKey(User, verbose_name = u"用户")
 	message = models.ForeignKey(Message, verbose_name = u"消息")
 	read = models.BooleanField(verbose_name = u"是否阅读")
 

@@ -1,0 +1,29 @@
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <th><input type="checkbox" name="all" id="selectall"></th>
+        <th>工作令</th>
+        <th>材质</th>
+        <th>材质编号</th>
+        <th>规格</th>
+        <th>数量</th>
+        <th>状态</th>
+        <th>受压</th>
+        <th>探伤级别</th>      
+    </thead>
+    <tbody>
+        {% for item in materiels %}
+        <tr iid="{{item.id}}">
+             <td><input type="checkbox" class="checkbox" args="{{item.id}}"></td>
+             <td>{{item.materiel.order.order_index}}</td>
+             <td>{{item.materiel.material.name}}</td>
+             <td></td>
+             <td></td>
+             <td>{{item.count}}</td>
+             <td></td>
+             <td></td>
+             <td></td>
+        </tr>
+        {% endfor%}
+    </tbody>
+</table>

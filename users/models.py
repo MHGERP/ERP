@@ -36,6 +36,7 @@ class Group(models.Model):
         return self.name
 
 class Authority(models.Model):
+    auth_type = models.IntegerField(blank = False, choices = AUTH_TYPE_CHOICES, verbose_name = u"权限类型")
     authority = models.CharField(max_length = 100, blank = False, choices = AUTHORITY_SET, verbose_name = u"权限名")
     class Meta:
         verbose_name = u"页面权限"

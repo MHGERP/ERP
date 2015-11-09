@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}admin/css/forms.css" type="text/css" media="screen" />
 <script>function gettext(txt){return txt}</script>
 <script type='text/javascript' src="{{STATIC_URL}}js/news/news_toolbar.js"></script>
-<form id="message_form" action="/adminStaff/news_release" method="post" enctype="multipart/form-data">
+<form id="message_form" action="/management/messageManagement" method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <div>
     标题: {{messageform.message_title}}
@@ -34,7 +34,7 @@
       <button class="btn">取消</button>
     </span>
     <span class="pull-right" style="padding-right: 10px">
-      <button type="submit" class="btn btn-primary" disabled id="news_release_button">发送</button>
+      <button type="submit" class="btn btn-primary"id="message_send__button">发送</button>
     </span>
   </div>
 </form>
