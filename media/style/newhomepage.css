@@ -1,3 +1,8 @@
+a, h1, h2, h3 {
+    color: rgb(32, 183, 240);
+    font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, STHeiti, "LiHei Pro Medium", SimSun, SumHei;
+}
+
 .outter_frame {
     width : 100%;
     margin : 0 auto;
@@ -108,7 +113,7 @@ table.documents td {
     border-bottom: #363636 1px dotted;
     line-height: 32px;
     height: 32px;
-    display: block;
+    /*display: block;*/
     font-size: 16px;
     text-decoration: none;
 }
