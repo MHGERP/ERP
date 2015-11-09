@@ -10,12 +10,13 @@
 
 {% block inner_content%}
 
-<form class="form-search "  style="width:60%">
+
+	用户查询
 <input type="text" id="search_user" class="input-medium search-query"/>
-<input type="button" id="search_user_button" value="检索" class="btn"></input>
+<input type="submit" id="search_user_button" value="查询" class="btn"></input>
 
     <span class="btn btn-primary" id="user-add" data-toggle="modal" data-target="#save_modal" style="float:right">添加新用户</span> 
-</form>
+
 <div id="save_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <h2 id="titleLabel"></h2>

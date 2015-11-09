@@ -19,7 +19,10 @@ def userManagementViews(request):
     """
     JunHU
     """
-    context = {}
+    form = GroupForm()
+    context = {
+            "form": form,
+    }
     return render(request, "management/user_management.html", context)
 
 def groupManagementViews(request):
