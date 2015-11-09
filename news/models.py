@@ -48,7 +48,7 @@ class Message(models.Model):
 		return self.title
 
 class  MessageBox(models.Model):
-	user = models.OneToOneField(User, verbose_name = u"用户")
+	user = models.ForeignKey(User, verbose_name = u"用户")
 	message = models.ForeignKey(Message, verbose_name = u"消息")
 	read = models.BooleanField(verbose_name = u"是否阅读")
 
