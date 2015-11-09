@@ -17,7 +17,12 @@
                     <td>{{materielexecute.document_lister}}</td>
                     <td>{{materielexecute.date_date}}</td> 
                     <td>
+                        {% if materielexecute.is_save%}
                         <a class='btn btn-primary' id ="detail_view" href="materielExecuteDetail/0/{{materielexecute.id}}" >查看</a>
+                        {% else%}
+                        <a class='btn btn-warning' id ="detail_view" href="materielExecuteDetail/1/{{materielexecute.id}}" >编辑</a>
+                        
+                        {% endif%}
                     </td>
                 </tr>
                 {% endfor %}
