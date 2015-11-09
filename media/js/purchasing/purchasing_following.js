@@ -116,7 +116,7 @@ function change_item(id){
     a = $("tr#"+item_id).find("td");
     for(var i = 0 ; i < 8 ; i++){
         var did = 'div#div'+(i+1);
-        var in_obj = $(did).find("input");  
+        var in_obj = $(did).find("input"); 
         in_obj.val(a.eq(i).text());
     }
     is_add = false;

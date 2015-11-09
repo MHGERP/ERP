@@ -365,6 +365,7 @@ def addChangeItem(request,subform,sid,item_id = None):
     try:
         if item_id == None:
             subform = SubApplyItemForm(deserialize_form(subform))
+            print subform
             if subform.is_valid():
                 subitem = subform.save(commit = False)
                 subitem.sub_apply = subapply
@@ -375,6 +376,7 @@ def addChangeItem(request,subform,sid,item_id = None):
                 flag = False
         else:
             item = MaterialSubApplyItems.objects.get(id = item_id)
+            print subform
             subform = SubApplyItemForm(deserialize_form(subform),instance = item)
             if subform.is_valid():
                 if not is_pass:
