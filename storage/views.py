@@ -83,6 +83,12 @@ def weldhumNewRecord(request):
     }
     return render(request,"storage/weldhumi/weldhumNewRecord.html",context)
 
-def weldhumDetail(request):
-    context = {}
+def weldhumDetail(request,eid):
+    print eid
+    hum_detail = WeldingMaterialHumitureRecord.objects.get(id = eid)
+    form = HumRecordForm(instance = hum_detail)
+    context = {
+        "form":form,
+        "humRecordDate":hum_detail,
+    }
     return render(request,"storage/weldhumi/weldhumDetail.html",context)

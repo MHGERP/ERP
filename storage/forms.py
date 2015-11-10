@@ -40,3 +40,4 @@ class HumRecordForm(ModelForm):
        #     "storeMan":forms.TextInput(attrs={"class":"form-control"}),
        #     "demandTemp":forms.TextInput(attrs={"class":"form-control"}),
         }
+
