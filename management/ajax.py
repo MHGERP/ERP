@@ -2,29 +2,25 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.template.loader import render_to_string
-
+from django.db.models import Q
 from users.models import *
 from django.contrib.auth.models import User
 
-
 @dajaxice_register
 def searchUser(request,search_user):
+    if search_user!="":
+        user_list = User.objects.filter(Q(username__icontains=search_user) | Q(userinfo__name__icontains=search_user))
+        #user_list = User.objects.filter(username__icontains=search_user)
+    else:
+        user_list = User.objects.all()
+    
 
-    user_list = User.objects.filter(username=search_user)
     context = {
             "user_list": user_list,
        }
     html = render_to_string("management/widgets/user_table.html", context)
     return html
 
-@dajaxice_register
-def getUserList(request):  
-    user_list = User.objects.all()
-    context = {
-            "user_list": user_list,
-       }
-    html = render_to_string("management/widgets/user_table.html", context)
-    return html
     
 @dajaxice_register
 def getGroupList(request):
