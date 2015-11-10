@@ -7,6 +7,8 @@ from const import ORDERFORM_STATUS_CHOICES
 from const.models import Materiel
 from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE
 from purchasing.models import PurchasingEntryItems
+from django.contrib.auth.models import User
+
 DEPARTMENT_CHOICES=(
         (u' ',u'------'),
         (u'部门A',u'部门A'),
@@ -41,3 +43,16 @@ class HumRecordForm(ModelForm):
        #     "demandTemp":forms.TextInput(attrs={"class":"form-control"}),
         }
 
+
+
+class EntrySearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
+    purchaser = forms.ChoiceField(label=u"采购员",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'purchaser'}))
+    work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'work_order'}))
+    def __init__(self,*args,**kwargs):
+        super(EntrySearchForm,self).__init__(*args,**kwargs)
+        Users = User.objects.all()
+        purchaser_list = [(-1,u"未指定")]
+        for user in Users:
+            purchaser_list.append((user.id,user.username))
+        self.fields["purchaser"].choices = tuple(purchaser_list)
