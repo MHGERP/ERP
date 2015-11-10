@@ -24,6 +24,18 @@ urlpatterns = patterns('',
         r'weldapply/detail$',
         storage_views.Weld_Apply_Card_Detail,
     ),
+    url(
+        r'^weldhumiture$',
+        storage_views.weldHumitureHomeViews,
+    ),
+    url(
+        r'^weldhumDetail/(?P<eid>\w+)$',
+        storage_views.weldhumDetail,
+    ),
+    url( 
+        r'^weldhumNewRecord$',
+        storage_views.weldhumNewRecord,
+    ),
 )
 
 

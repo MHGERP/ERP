@@ -26,3 +26,17 @@ class EntryItemsForm(ModelForm):
     class Meta:
         model = PurchasingEntryItems
         fields = ("remark","date","price")
+        widget = {
+            "data":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
+        }
+
+class HumRecordForm(ModelForm):
+    class Meta: 
+        model = WeldingMaterialHumitureRecord 
+        #fields = ("storeRoom","storeMan","demandTemp","demandHumidity","actualTemperature1","actualHumidity1","actualTemperature2","actualHumidity12","remark")
+        widgets = {
+            "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
+       #     "storeRoom":forms.Select(attrs={"class":"form-control"}),
+       #     "storeMan":forms.TextInput(attrs={"class":"form-control"}),
+       #     "demandTemp":forms.TextInput(attrs={"class":"form-control"}),
+        }
