@@ -2,9 +2,13 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.template.loader import render_to_string
+from django.utils import simplejson
 
 from users.models import *
+from news.models import *
 from django.contrib.auth.models import User
+
+from backend.utility import getContext
 
 
 @dajaxice_register
@@ -149,3 +153,32 @@ def deleteTitle(request, title_id):
     title = Title.objects.get(id = title_id)
     title.delete()
 
+@dajaxice_register
+def getNewsList(request, news_cate, news_page = 1):
+    """
+    mxl
+    """
+    try:
+        news_page = int(news_page)
+    except:
+        news_page = 1
+    news_list = News.objects.filter(news_category__category = news_cate).order_by('-news_date')
+    
+    # news_page = request.GET.get("news_page")
+    context = getContext(news_list, news_page, 'news')
+    # context = {
+    #     "news_list": news_list,
+    # }
+    html = render_to_string("management/widgets/news_table.html", context)
+    # return html
+    return simplejson.dumps({
+        'html' : html
+        });
+
+@dajaxice_register
+def deleteNews(request, news_id):
+    """1,cfnsv
+    mxl
+    """
+    news = News.objects.get(id = news_id)
+    news.delete()
