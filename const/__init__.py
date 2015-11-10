@@ -164,3 +164,11 @@ ENTRYSTATUS_CHOICES = (
     (ENTRYSTATUS_KEEPER,u"库管")
 )
 
+
+
+AUTH_TYPE_CHOICES = (
+    (0, u"采购管理"),
+    (1, u"库存管理"),
+    (2, u"生产管理"),
+    (3, u"技术资料管理")
+)
