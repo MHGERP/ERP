@@ -15,6 +15,20 @@ from news.models import News, DocumentFile, NewsCategory, Message, MessageBox
 import datetime
 from forms import GroupForm
 from users.models import Title, Group
+from const.forms import AuthorTypeForm
+
+def titleSettingViews(request):
+    """
+    JunHU
+    """
+    user_id = request.GET.get("user_id")
+    user = User.objects.get(id = user_id)
+    group_form = GroupForm()
+    context = {
+        "setting_user": user,
+        "group_form": group_form,
+    }
+    return render(request, "management/title_setting.html", context)
 
 def userManagementViews(request):
     """
@@ -77,8 +91,10 @@ def authorityManagementViews(request):
     """
     title_id = request.GET.get("title_id")
     title = Title.objects.get(id = title_id)
+    auth_type_form = AuthorTypeForm()
     context = {
             "title": title,
+            "auth_type_form": auth_type_form,
         }
     return render(request, "management/authority_management.html", context)
 

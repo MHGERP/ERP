@@ -12,9 +12,11 @@
         <td>{{item.name}}</td>
         <td>{{item.group}}</td>
         <td>
-            <span class="btn btn-warning btn-small btn-change-name"  data-toggle="modal" data-target="#save_modal">修改名称</span> 
-            <span class="btn btn-primary btn-small btn-query-authority">权限管理</span>
-            <span class="btn btn-danger btn-small btn-delete">删除</span>
+            {% if not item.checked %}
+            <span class="btn btn-success btn-small btn-addorremove">添加</span> 
+            {% else %}
+            <span class="btn btn-warning btn-small btn-addorremove">取消</span> 
+            {% endif %}
         </td>
     </tr>
     {% endfor%}
