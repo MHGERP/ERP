@@ -7,7 +7,7 @@
 
         </tr>
     </thead>
-    {% for user in user_list%}
+    {% for user in user_list %}
     <tr iid="{{user.id}}">
         <td>{{user}}</td>
         <td>{{user.title}}</td>
@@ -16,3 +16,4 @@
             <span class="btn btn-danger btn-small btn-delete">删除</span>
         </td>
     {% endfor %}
+</table>

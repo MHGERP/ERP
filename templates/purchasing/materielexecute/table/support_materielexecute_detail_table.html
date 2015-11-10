@@ -1,17 +1,18 @@
-<div class="widget-box">
 
+<div class="widget-box">
+    
     <div class="widget-content nopadding">
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>材质</th>
-                    <th>材质编号</th>
-                    <th>规格</th>
-                    <th>数量</th>
-                    <th>交货状态</th>
-                    <th>受压</th>
-                    <th>探伤级别</th>
-                    <th>复查</th>
+        <th>材质</th>
+        <th>材质编号</th>
+        <th>规格</th>
+        <th>数量</th>
+        <th>状态</th>
+        <th>受压</th>
+        <th>探伤级别</th>      
+                    <th>复探</th>
                     <th>定额</th>
                     <th>零件</th>
                     <th>余料</th>
@@ -19,20 +20,20 @@
                 </tr>
             </thead>
             <tbody>
-                {% for support_detail in materielexecute_detail_set %}
-                <tr id="{{support_detail.id}}">
-                    <td>{{support_detail.materiel_texture}}</td>
-                    <td>{{support_detail.texture_number}}</td>
-                    <td>{{support_detail.specification}}</td> 
-                    <td>{{support_detail.quantity}}</td>
-                    <td>{{support_detail.delivery_status}}</td>
-                    <td>{{support_detail.press}}</td> 
-                    <td>{{support_detail.crack_rank}}</td>
-                    <td>{{support_detail.recheck}}</td>
-                    <td>{{support_detail.quota}}</td> 
-                    <td>{{support_detail.part}}</td>
-                    <td>{{support_detail.oddments}}</td>
-                    <td>{{support_detail.remark}}</td>
+                {% for item in materielexecute_detail_set %}
+                <tr id="{{item.id}}">
+                    <td>{{item.materiel.material.name}}</td>
+                    <td></td>
+                    <td></td>
+                    <td>{{item.materiel.count}}</td> 
+                    <td></td>
+                    <td></td>
+                    <td></td> 
+                    <td>{{item.recheck}}</td>
+                    <td>{{item.quota}}</td>
+                    <td>{{item.part}}</td>
+                    <td>{{item.oddments}}</td>
+                    <td>{{item.remark}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
