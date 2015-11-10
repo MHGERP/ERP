@@ -4,33 +4,41 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>名称</th>
-                    <th>材质</th>
-                    <th>质量分类</th>
-                    <th>规格</th>
-                    <th>数量（个）</th>
-                    <th>采购（kg）</th>
-                    <th>复验</th>
-                    <th>探伤级别</th>
-                    <th>交货状态</th>
-                    <th>执行标准</th>
+        <th>工作令</th>
+        <th>材质</th>
+        <th>出厂批号</th>
+        <th>材质编号</th>
+        <th>规格</th>
+        <th>数量</th>
+        <th>状态</th>
+        <th>受压</th>
+        <th>探伤级别</th>      
+                    <th>复探</th>
+                    <th>重量</th>
+                    <th>定额</th>
+                    <th>零件</th>
+                    <th>余料</th>
                     <th>备注</th>
                 </tr>
             </thead>
             <tbody>
-                {% for main_detail in materielexecute_detail_set %}
-                <tr id="{{main_detail.id}}">
-                    <td>{{main_detail.materiel_name}}</td>
-                    <td>{{main_detail.materiel_texture}}</td>
-                    <td>{{main_detail.quality_class}}</td> 
-                    <td>{{main_detail.specification}}</td>
-                    <td>{{main_detail.quantity}}</td>
-                    <td>{{main_detail.purchase_weight}}</td> 
-                    <td>{{main_detail.recheck}}</td>
-                    <td>{{main_detail.crack_rank}}</td>
-                    <td>{{main_detail.delivery_status}}</td> 
-                    <td>{{main_detail.execute_standard}}</td>
-                    <td>{{main_detail.remark}}</td>
+                {% for item in materielexecute_detail_set %}
+                <tr id="{{item.id}}">
+                    <td>{{item.materiel.order.order_index}}</td>
+                    <td>{{item.materiel.material.name}}</td>
+                    <td></td> 
+                    <td></td>
+                    <td></td>
+                    <td>{{item.materiel.count}}</td> 
+                    <td></td>
+                    <td></td>
+                    <td></td> 
+                    <td>{{item.recheck}}</td>
+                    <td></td>
+                    <td>{{item.quota}}</td>
+                    <td>{{item.part}}</td>
+                    <td>{{item.oddments}}</td>
+                    <td>{{item.remark}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

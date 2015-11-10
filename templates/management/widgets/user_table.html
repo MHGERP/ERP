@@ -2,17 +2,24 @@
     <thead>
         <tr>
             <th>用户名</th>
+            <th>姓名</th>
             <th>职称</th>
             <th>操作</th>
 
         </tr>
     </thead>
-    {% for user in user_list%}
+    {% for user in item_list %}
     <tr iid="{{user.id}}">
         <td>{{user}}</td>
+        <td>{{user.userinfo.name}}</td>
         <td>{{user.title}}</td>
         <td>
-            <span class="btn btn-warning btn-small btn-change-name"  data-toggle="modal" data-target="#save_modal">修改职称</span> 
+            <span class="btn btn-primary btn-small btn-set-title">头衔设置</span> 
             <span class="btn btn-danger btn-small btn-delete">删除</span>
         </td>
     {% endfor %}
+</table>
+
+<div id="user_paginator" class="user_paginator">
+  {%include "widgets/paginator.html"%}
+</div>

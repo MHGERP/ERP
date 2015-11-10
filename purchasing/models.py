@@ -7,6 +7,12 @@ from django.contrib.auth.models import User
 import settings
 # Create your models here.
 
+import uuid
+def make_uuid():
+    """
+    make uuid
+    """
+    return str(uuid.uuid4())
 
 class OrderForm(models.Model):
     order_id = models.CharField(unique = True, max_length = 20, blank = False, verbose_name = u"订购单编号")
@@ -26,12 +32,25 @@ class BidForm(models.Model):
     audit_time=models.DateTimeField(blank=True,null=True,verbose_name=u"审核日期")
     approved_time=models.DateTimeField(blank=True,null=True,verbose_name=u"批准日期")
     bid_status=models.ForeignKey(BidFormStatus,null=False,verbose_name=u"标单状态")
-
+    contract_id = models.CharField(max_length=50, blank=True, default=make_uuid, verbose_name=u"合同编号")
+    contract_amount = models.IntegerField(verbose_name=u"合同金额")
+    billing_amount = models.IntegerField(verbose_name=u"开票金额")
     class Meta:
         verbose_name = u"标单"
         verbose_name_plural = u"标单"
     def __unicode__(self):
         return '%s'% (self.bid_id)
+
+class ContractDetail(models.Model):
+    user = models.ForeignKey(User, blank = False)
+    submit_date = models.DateField(blank=True,null=True,default=lambda: datetime.datetime.today(),verbose_name=u"提交日期")
+    amount = models.IntegerField(verbose_name=u"金额")
+    bidform = models.ForeignKey(BidForm, null = False, verbose_name = u"标单")
+    class Meta:
+        verbose_name = u"合同金额明细"
+        verbose_name_plural = u"合同金额明细"
+    def __unicode__(self):
+        return self.amount
 
 class BidComment(models.Model):
     user = models.ForeignKey(User, blank = False)
@@ -57,12 +76,7 @@ class MaterielFormConnection(models.Model):
     def __unicode__(self):
         return self.materiel.name
 
-import uuid
-def make_uuid():
-    """
-    make uuid
-    """
-    return str(uuid.uuid4())
+
 
 class bidApply(models.Model):
     apply_id = models.CharField(unique=True, max_length=50, default=make_uuid, verbose_name=u"标单申请编号")
@@ -166,7 +180,7 @@ class PurchasingEntry(models.Model):
 
     def __unicode__(self):
         return '%s' % self.entry_code
-    
+
 class PurchasingEntryItems(models.Model):
     material = models.ForeignKey(Materiel,blank = True , null = True , verbose_name = u"材料")
     remark = models.CharField(max_length = 100, blank = True , default="" , verbose_name = u"备注")
@@ -335,4 +349,3 @@ class MaterielExecuteDetail(models.Model):
         verbose_name_plural = u"材料执行表详细"
     def __unicode__(self):
         return '%s' % (self.materiel.index)
-

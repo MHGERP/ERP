@@ -16,7 +16,7 @@ from datetime import datetime
 from storage.models import *
 from storage.forms import *
 from django.shortcuts import render
-
+from purchasing.models import PurchasingEntryItems
 @dajaxice_register
 def get_apply_card_detail(request,apply_card_index):
     context={}
@@ -65,3 +65,21 @@ def weldhum_insert(request,hum_params):
 """
 
     
+@dajaxice_register
+def entryItemSave(request,form,mid):
+    item = PurchasingEntryItems.objects.get(id = mid)
+    entry_form = EntryItemsForm(deserialize_form(form),instance = item) 
+    print entry_form
+    if entry_form.is_valid():
+        entry_form.save()
+        flag = True
+        message = u"修改成功"
+    else:
+        print entry_form.errors
+        flag = False
+        message = u"修改失败"
+    data = {
+        "flag":flag,
+        "message":message,
+    }
+    return simplejson.dumps(data)

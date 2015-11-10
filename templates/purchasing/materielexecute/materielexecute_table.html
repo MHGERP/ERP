@@ -7,7 +7,7 @@
                     <th>编号</th>
                     <th>制表人</th>
                     <th>生成日期</th>
-                    <th>查看</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,7 +17,11 @@
                     <td>{{materielexecute.document_lister}}</td>
                     <td>{{materielexecute.date_date}}</td> 
                     <td>
+                        {% if materielexecute.is_save == True%}
                         <a class='btn btn-primary' id="edit_supplier" href="#supplier_info" >查看</a>
+                        {% else %}
+                        <a class='btn btn-warning' id="edit_supplier" href="#supplier_info" >编辑</a>
+                        {% endif%}
                     </td>
                 </tr>
                 {% endfor %}

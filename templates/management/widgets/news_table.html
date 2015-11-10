@@ -1,0 +1,36 @@
+<table class="table table-bordered table-striped" style="width: 60%;">
+    <thead>
+        <tr>
+            <th>新闻标题</th>
+            <th>发布时间</th>
+            <th>操作</th>
+
+        </tr>
+    </thead>
+    {% for news in news_list%}
+    <tr iid="{{news.id}}">
+        <td>{{ news.news_title }}</td>
+        <td>{{ news.news_date|date:"y-m-d" }}</td>
+        <td>
+            <a class="btn btn-primary btn-small btn-view-authority" href="/news/newslist/{{ news.id }}">查看新闻</a>
+            <span class="btn btn-danger btn-small btn-delete">删除</span>
+        </td>
+    </tr>
+    {% endfor%}
+</table>
+<hr>
+<div>
+    <span class="step-links">
+      {% if news_page.has_previous %}
+      <a href="?news_page={{ news_page.previous_page_number }}" id="news-previous-page" arg="{{news_page.previous_page_number}}">上一页</a>
+      {% endif %}
+
+      <span class="current">
+        第{{ news_page.number }}页，共{{ news_page.paginator.num_pages }}页
+      </span>
+
+      {% if news_page.has_next %}
+      <a href="?news_page={{ news_page.next_page_number }}" id="news-next-page" arg="{{news_page.next_page_number}}">下一页</a>
+      {% endif %}
+    </span>
+</div>
