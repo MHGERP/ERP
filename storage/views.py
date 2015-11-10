@@ -28,7 +28,7 @@ def weldMaterialHomeViews(request):
     return render(request,"storage/weldmaterial/weldmaterialhome.html",context)
 
 def weldEntryHomeViews(request):
-    weldentry_set = getEntrySet(PurchasingEntry,"keeper")
+    weldentry_set = getEntrySet(PurchasingEntry,ENTRYSTATUS_KEEPER)
 
     context = {
         "entry_set":weldentry_set,    
@@ -39,11 +39,13 @@ def weldEntryConfirmViews(request,eid):
     entry = PurchasingEntry.objects.get(id = eid)
     items = PurchasingEntryItems.objects.filter(purchasingentry = entry)
     entry_form = EntryForm(instance = entry)
+    entryitem_form = EntryItemsForm()
 
     context = {
         "pur_entry":entry,
         "entry_set":items,
         "entry_form":entry_form,
+        "item_form":entryitem_form,
     }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
@@ -61,5 +63,26 @@ def Weld_Apply_Card_Detail(request):
     context['apply_card']=apply_card
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
 
+def weldHumitureHomeViews(request):
+    hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("date") 
+    context = {
+        "hum_set":hum_set,    
+    }
+    return render(request,"storage/weldhumi/weldhumitureHome.html",context)
 
+def weldhumNewRecord(request):
+    if request.method == "POST":
+        form = HumRecordForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect("weldhumiture")
+    else:
+        form = HumRecordForm()
+    context = {
+        "form":form
+    }
+    return render(request,"storage/weldhumi/weldhumNewRecord.html",context)
 
+def weldhumDetail(request):
+    context = {}
+    return render(request,"storage/weldhumi/weldhumDetail.html",context)

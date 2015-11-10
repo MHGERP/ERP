@@ -3,4 +3,11 @@
 from django.contrib import admin
 from models import *
 
-admin.site.register(WeldingMaterialApplyCard)
+Registers = (
+    WeldingMaterialApplyCard,
+    StoreRoom,
+    WeldingMaterialHumitureRecord,
+)
+
+for reg in Registers:
+    admin.site.register(reg)
