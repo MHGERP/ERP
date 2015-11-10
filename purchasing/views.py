@@ -330,16 +330,14 @@ def materielExecuteDetailViews(request, choice, *mid):
         materielexecute = MaterielExecute.objects.get(pk = materielexecute_id)
         materiel_choice = materielexecute.materiel_choice
         
-        if materiel_choice == MAIN_MATERIEL:
-            materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
-        else:
-            materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
+        materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
         # materielexecute_detail_set = [materielexecute_detail]
+        executeForm = MaterielExecuteForm(instance = materielexecute)
         context = {
             "materielexecute_detail_set" : materielexecute_detail_set,
             "choice" : materiel_choice,
             "MAIN_MATERIEL" : MAIN_MATERIEL,
-            "current_document_number" : materielexecute.document_number
+            "executeForm" : executeForm
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_view.html", context)
     else:
@@ -353,11 +351,6 @@ def materielExecuteDetailViews(request, choice, *mid):
             materiel_choice = materielexecute.materiel_choice
             executeForm = MaterielExecuteForm(instance = materielexecute)
             materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
-            if materiel_choice==MAIN_MATERIEL:
-                type=1
-            else:
-                type=2
-            materiels=MaterielExecuteDetail.objects.filter(materiel__inventory_type__id=type,materiel_execute__isnull=True)
 
             
 
@@ -366,6 +359,11 @@ def materielExecuteDetailViews(request, choice, *mid):
             materiel_choice=MAIN_MATERIEL
             materielexecute_detail_set=None
             
+        if materiel_choice==MAIN_MATERIEL:
+            type=1
+        else:
+            type=2
+        materiels=MaterielExecuteDetail.objects.filter(materiel__inventory_type__id=type,materiel_execute__isnull=True)
         context = {
             "materielexecute_detail_set" : materielexecute_detail_set,
             "choice" : materiel_choice,
