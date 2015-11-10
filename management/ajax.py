@@ -161,26 +161,20 @@ def deleteTitle(request, title_id):
     title.delete()
 
 @dajaxice_register
-def getNewsList(request, news_cate, news_page = 1):
+def getNewsList(request, news_cate, page = 1):
     """
     mxl
     """
     try:
-        news_page = int(news_page)
+        page = int(page)
     except:
-        news_page = 1
+        page = 1
     news_list = News.objects.filter(news_category__category = news_cate).order_by('-news_date')
     
-    # news_page = request.GET.get("news_page")
-    context = getContext(news_list, news_page, 'news')
-    # context = {
-    #     "news_list": news_list,
-    # }
+    context = getContext(news_list, page, "item", 0)
     html = render_to_string("management/widgets/news_table.html", context)
     # return html
-    return simplejson.dumps({
-        'html' : html
-        });
+    return simplejson.dumps({'html' : html});
 
 @dajaxice_register
 def deleteNews(request, news_id):
