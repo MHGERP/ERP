@@ -149,3 +149,39 @@ def deleteTitle(request, title_id):
     title = Title.objects.get(id = title_id)
     title.delete()
 
+@dajaxice_register
+def getAuthList(request, auth_type, title_id):
+    """
+    JunHU
+    summary: ajax function to get the author list
+    params: auth_type: the type of request auth; title_id: db id of title
+    return: auth list html string
+    """
+    auth_list = Authority.objects.filter(auth_type = auth_type)
+    title = Title.objects.get(id = title_id)
+    for auth in auth_list:
+        auth.checked = (auth in title.authorities.all())
+    context = {
+        "auth_list": auth_list,
+    }
+    html = render_to_string("management/widgets/auth_table.html", context)
+    return html
+
+@dajaxice_register
+def addOrRemoveAuth(request, auth_id, title_id, flag):
+    """
+    JunHU
+    summary: ajax function to add or remove connection between one auth and one title
+    params: auth_id: db id of auth; title_id: db id of title; flag: indicate add or remove
+    return: result info
+    """
+    try:
+        auth = Authority.objects.get(id = auth_id)
+        title = Title.objects.get(id = title_id)
+        if flag:
+            title.authorities.add(auth)
+        else:
+            title.authorities.remove(auth)
+        return "ok"
+    except:
+        return "fail"
