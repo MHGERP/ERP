@@ -42,6 +42,8 @@ class Materiel(models.Model):
     total_weight = models.FloatField(blank = True, null = True, verbose_name = u"总重")
 
     inventory_type = models.ForeignKey(InventoryType, blank = True, null = True, verbose_name = u"明细表归属")
+
+    remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"

@@ -18,12 +18,29 @@ from users.models import Title, Group
 from const import NEWS_CATEGORY_COMPANYNEWS
 
 from backend.utility import getContext
+from const.forms import AuthorTypeForm
+
+def titleSettingViews(request):
+    """
+    JunHU
+    """
+    user_id = request.GET.get("user_id")
+    user = User.objects.get(id = user_id)
+    group_form = GroupForm()
+    context = {
+        "setting_user": user,
+        "group_form": group_form,
+    }
+    return render(request, "management/title_setting.html", context)
 
 def userManagementViews(request):
     """
     JunHU
     """
-    context = {}
+    form = GroupForm()
+    context = {
+            "form": form,
+    }
     return render(request, "management/user_management.html", context)
 
 def groupManagementViews(request):
@@ -77,8 +94,10 @@ def authorityManagementViews(request):
     """
     title_id = request.GET.get("title_id")
     title = Title.objects.get(id = title_id)
+    auth_type_form = AuthorTypeForm()
     context = {
             "title": title,
+            "auth_type_form": auth_type_form,
         }
     return render(request, "management/authority_management.html", context)
 

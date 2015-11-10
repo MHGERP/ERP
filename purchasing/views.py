@@ -299,7 +299,7 @@ def processFollowingViews(request,bid):
     return render(request,"purchasing/process_following.html",context)
 
 def materielExecuteViews(request):
-    materielexecute_set = MaterielExecute.objects.filter(is_save=True)
+    materielexecute_set = MaterielExecute.objects.all()
     context = {
         "materielexecute_set":materielexecute_set,
     }
@@ -331,31 +331,48 @@ def materielExecuteDetailViews(request, choice, *mid):
         materiel_choice = materielexecute.materiel_choice
         
         if materiel_choice == MAIN_MATERIEL:
-            current_materiel_choice = MATERIEL_CHOICE[0][1]
-            materielexecute_detail_set = MainMaterielExecuteDetail.objects.filter(materiel_execute__id = materielexecute_id)
+            materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
         else:
-            current_materiel_choice = MATERIEL_CHOICE[1][1]
-            materielexecute_detail_set = SupportMaterielExecuteDetail.objects.filter(materiel_execute__id = materielexecute_id)
+            materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
         # materielexecute_detail_set = [materielexecute_detail]
         context = {
             "materielexecute_detail_set" : materielexecute_detail_set,
             "choice" : materiel_choice,
             "MAIN_MATERIEL" : MAIN_MATERIEL,
-            "current_materiel_choice" : current_materiel_choice,
             "current_document_number" : materielexecute.document_number
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_view.html", context)
     else:
         #default MAIN_MATERIEL
-        executeForm = MaterielExecuteForm()
-        detailForm = MainMaterielExecuteDetailForm()
+        #detailForm = MainMaterielExecuteDetailForm()
         # materielexecute_detail_set = MainMaterielExecuteDetail.objects.all()
+        materiel_choice=MAIN_MATERIEL
+        try:
+            materielexecute_id = mid[0]
+            materielexecute = MaterielExecute.objects.get(pk = materielexecute_id)
+            materiel_choice = materielexecute.materiel_choice
+            executeForm = MaterielExecuteForm(instance = materielexecute)
+            materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
+            if materiel_choice==MAIN_MATERIEL:
+                type=1
+            else:
+                type=2
+            materiels=MaterielExecuteDetail.objects.filter(materiel__inventory_type__id=type,materiel_execute__isnull=True)
+
+            
+
+        except:
+            executeForm = MaterielExecuteForm()
+            materiel_choice=MAIN_MATERIEL
+            materielexecute_detail_set=None
+            
         context = {
-            "choice" : MAIN_MATERIEL,
+            "materielexecute_detail_set" : materielexecute_detail_set,
+            "choice" : materiel_choice,
             "MAIN_MATERIEL" : MAIN_MATERIEL,
-            "current_materiel_choice" : MATERIEL_CHOICE[0][1],
             "MaterielExecuteForm" : executeForm,
-            "MainMaterielExecuteDetailForm" : detailForm
+            "materiels":materiels
+           # "MainMaterielExecuteDetailForm" : detailForm
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_add.html", context)
 
