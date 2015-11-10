@@ -1,10 +1,22 @@
 $(document).ready(refresh);
+$("#search_user_button").click(refresh);
 
 function refresh() {
-    Dajaxice.management.searchUser(searchUserCallBack, {
-                                                     "search_user": "",
-    });
+    getList("1")
 }
+
+function getList(page) {
+    var search_user = $("#search_user").val();
+    Dajaxice.management.searchUser(searchUserCallBack, {
+                                                     "search_user": search_user,
+                                                     "page": page,
+    });
+
+}
+$(document).on("click", ".item_page", function() {
+    var page = $(this).attr("arg");   
+    getList(page);
+});
 
 function createUserCallBack(data) {
     if(data == "fail") {
@@ -22,15 +34,6 @@ $("#user-add").click(function() {
     $("#titleLabel").html("新建用户");
 
 });
-
-$("#search_user_button").click(function() {
-    var search_user = $("#search_user").val();
-    Dajaxice.management.searchUser(searchUserCallBack, {
-                                                    "search_user": search_user,
-                                                    
-                                            });
-});
-
 
 $("#user-save").click(function() {
     var user_name = $("#user_name").val();

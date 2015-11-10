@@ -8,7 +8,7 @@
 
         </tr>
     </thead>
-    {% for user in user_list %}
+    {% for user in item_list %}
     <tr iid="{{user.id}}">
         <td>{{user}}</td>
         <td>{{user.userinfo.name}}</td>
@@ -19,3 +19,7 @@
         </td>
     {% endfor %}
 </table>
+
+<div id="user_paginator" class="user_paginator">
+  {%include "widgets/paginator.html"%}
+</div>
