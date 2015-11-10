@@ -76,5 +76,32 @@ def Weld_Apply_Card_Detail(request):
     context['apply_card']=apply_card
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
 
+def weldHumitureHomeViews(request):
+    hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("date") 
+    context = {
+        "hum_set":hum_set,    
+    }
+    return render(request,"storage/weldhumi/weldhumitureHome.html",context)
 
+def weldhumNewRecord(request):
+    if request.method == "POST":
+        form = HumRecordForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect("weldhumiture")
+    else:
+        form = HumRecordForm()
+    context = {
+        "form":form
+    }
+    return render(request,"storage/weldhumi/weldhumNewRecord.html",context)
 
+def weldhumDetail(request,eid):
+    print eid
+    hum_detail = WeldingMaterialHumitureRecord.objects.get(id = eid)
+    form = HumRecordForm(instance = hum_detail)
+    context = {
+        "form":form,
+        "humRecordDate":hum_detail,
+    }
+    return render(request,"storage/weldhumi/weldhumDetail.html",context)

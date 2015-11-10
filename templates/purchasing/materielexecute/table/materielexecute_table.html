@@ -15,7 +15,7 @@
                 <tr id="{{materielexecute.id}}">
                     <td>{{materielexecute.document_number}}</td>
                     <td>{{materielexecute.document_lister}}</td>
-                    <td>{{materielexecute.date_date}}</td> 
+                    <td>{{materielexecute.date|date:"Y-m-d"}}</td> 
                     <td>
                         {% if materielexecute.is_save%}
                         <a class='btn btn-primary' id ="detail_view" href="materielExecuteDetail/0/{{materielexecute.id}}" >查看</a>

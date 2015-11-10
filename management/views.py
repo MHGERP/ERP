@@ -13,9 +13,25 @@ from django.contrib.auth.models import User
 from news.forms import NewsForm, MessageForm
 from news.models import News, DocumentFile, NewsCategory, Message, MessageBox
 import datetime
-from forms import GroupForm
+from forms import GroupForm, NewsCateForm
 from users.models import Title, Group
+from const import NEWS_CATEGORY_COMPANYNEWS
+
+from backend.utility import getContext
 from const.forms import AuthorTypeForm
+
+def titleSettingViews(request):
+    """
+    JunHU
+    """
+    user_id = request.GET.get("user_id")
+    user = User.objects.get(id = user_id)
+    group_form = GroupForm()
+    context = {
+        "setting_user": user,
+        "group_form": group_form,
+    }
+    return render(request, "management/title_setting.html", context)
 
 def userManagementViews(request):
     """
@@ -105,10 +121,22 @@ def newsReleaseViews(request):
                 doc = DocumentFile(news_document = f,
                                     news = new_news)
                 doc.save()
-        return redirect("/news/newslist/%s" % new_news.id)
+        # return redirect("/news/newslist/%s" % new_news.id)
+        return redirect("/management/newsManagement")
     else:
         newsform = NewsForm()
         context = {
             'newsform' : newsform
         }
         return render(request, "management/news_release.html", context)
+
+def newsManagementViews(request, news_cate = NEWS_CATEGORY_COMPANYNEWS):
+    """
+    mxl
+    """
+    form = NewsCateForm()
+    # news_cate = NEWS_CATEGORY_COMPANYNEWS
+    news_list = News.objects.filter(news_category__category = news_cate).order_by('-news_date')
+    context = getContext(news_list, 1, 'news')
+    context["form"] = form
+    return render(request, "management/news_management.html", context)
