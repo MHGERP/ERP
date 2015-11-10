@@ -28,10 +28,10 @@ def weldMaterialHomeViews(request):
     return render(request,"storage/weldmaterial/weldmaterialhome.html",context)
 
 def weldEntryHomeViews(request):
-    weldentry_set = getEntrySet(PurchasingEntry,ENTRYSTATUS_KEEPER)
-
+    weldentry_set = PurchasingEntry.objects.all()
     context = {
-        "entry_set":weldentry_set,    
+        "entry_set":weldentry_set,
+        "ENTRYSTATUS_END":ENTRYSTATUS_END,
     }
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
@@ -40,12 +40,25 @@ def weldEntryConfirmViews(request,eid):
     items = PurchasingEntryItems.objects.filter(purchasingentry = entry)
     entry_form = EntryForm(instance = entry)
     entryitem_form = EntryItemsForm()
-
+    is_show = entry.entry_status == ENTRYSTATUS_KEEPER
+    if request.method == "POST":
+        entry_form = EntryForm(request.POST,instance = entry)
+        if entry_form.is_valid():
+            entry_form.save()
+            entry.keeper = request.user
+            entry.entry_status = ENTRYSTATUS_END
+            entry.save()
+            return HttpResponseRedirect("/storage/weldentryhome")
+        else:
+            print entry_form.errors
+    else:
+        entry_form = EntryForm(instance = entry)
     context = {
         "pur_entry":entry,
         "entry_set":items,
         "entry_form":entry_form,
         "item_form":entryitem_form,
+        "is_show":is_show,
     }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
