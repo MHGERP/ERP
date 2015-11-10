@@ -3,7 +3,7 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from purchasing.models import *
-from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderInfoForm
 from const import *
 from const.models import Materiel,OrderFormStatus, BidFormStatus
 from django.template.loader import render_to_string
@@ -365,6 +365,7 @@ def addChangeItem(request,subform,sid,item_id = None):
     try:
         if item_id == None:
             subform = SubApplyItemForm(deserialize_form(subform))
+            print subform
             if subform.is_valid():
                 subitem = subform.save(commit = False)
                 subitem.sub_apply = subapply
@@ -375,6 +376,7 @@ def addChangeItem(request,subform,sid,item_id = None):
                 flag = False
         else:
             item = MaterialSubApplyItems.objects.get(id = item_id)
+            print subform
             subform = SubApplyItemForm(deserialize_form(subform),instance = item)
             if subform.is_valid():
                 if not is_pass:

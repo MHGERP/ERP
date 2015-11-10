@@ -1,7 +1,7 @@
 {% extends "management/base/none_nav_base.html"%}
 
 {% block title %}
-<h1>权限管理</h1>
+<h1>权限管理（{{title}}）</h1>
 {% endblock %}
 
 {% block sub_ref %}
@@ -10,8 +10,10 @@
 {% endblock %}
 
 {% block inner_content%}
+{{auth_type_form.auth_type}}
 
-
+<div id="widget-content" title_id="{{title.id}}">
+</div>
 <script type='text/javascript' src="{{STATIC_URL}}js/management/authority_management.js"></script>
 
 {% endblock%}
