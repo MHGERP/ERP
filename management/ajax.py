@@ -6,19 +6,18 @@ from django.db.models import Q
 from users.models import *
 from django.contrib.auth.models import User
 from users.utility import createNewUser
+from backend.utility import getContext
 
 @dajaxice_register
-def searchUser(request,search_user):
+def searchUser(request,search_user, page):
+    page = int(page)
+
     if search_user!="":
         user_list = User.objects.filter(Q(username__icontains=search_user) | Q(userinfo__name__icontains=search_user))
         #user_list = User.objects.filter(username__icontains=search_user)
     else:
         user_list = User.objects.all()
-    
-
-    context = {
-            "user_list": user_list,
-       }
+    context = getContext(user_list, page, "item", 0)
     html = render_to_string("management/widgets/user_table.html", context)
     return html
 

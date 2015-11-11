@@ -51,6 +51,9 @@ def getContext(contentList, page=1, name="context", add_index = 1, page_elems=PA
          # If page is out of range (e.g. 9999), deliver last page of results.
          _page = paginator.page(paginator.num_pages)
      page = _page.number
+
+     single_page = (paginator.num_pages == 1)
+    
      index_list = [page + x for x in xrange(-2, 3) if 1 <= page + x <= paginator.num_pages]
          # return the nearest 5 page's index number
      contain_begin = (1 in index_list)
@@ -65,6 +68,7 @@ def getContext(contentList, page=1, name="context", add_index = 1, page_elems=PA
              '%s_index_list'  % name: index_list,
              '%s_contain_end' % name: contain_end,
              '%s_contain_begin' % name: contain_begin,
+             'single_page': single_page,
              }
 
 
