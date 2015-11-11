@@ -130,13 +130,16 @@ def newsReleaseViews(request):
         }
         return render(request, "management/news_release.html", context)
 
-def newsManagementViews(request, news_cate = NEWS_CATEGORY_COMPANYNEWS):
+def newsManagementViews(request):
     """
     mxl
     """
     form = NewsCateForm()
     # news_cate = NEWS_CATEGORY_COMPANYNEWS
-    news_list = News.objects.filter(news_category__category = news_cate).order_by('-news_date')
-    context = getContext(news_list, 1, 'news')
-    context["form"] = form
+    # news_list = News.objects.filter(news_category__category = news_cate).order_by('-news_date')
+    # context = getContext(news_list, 1, 'news')
+    # context["form"] = form
+    context = {
+        'form' : form
+    }
     return render(request, "management/news_management.html", context)
