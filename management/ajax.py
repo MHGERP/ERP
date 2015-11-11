@@ -178,7 +178,7 @@ def getNewsList(request, news_cate, page = 1):
 
 @dajaxice_register
 def deleteNews(request, news_id):
-    """1,cfnsv
+    """
     mxl
     """
     news = News.objects.get(id = news_id)

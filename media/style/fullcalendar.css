@@ -97,7 +97,7 @@ html .fc, .fc table {
 }
 .fc-state-highlight {
     /*background: url("../images/backgrounds/calActiveBg.png") repeat-x scroll 0 0 #F5F5F5;*/
-    background: repeat-x scroll 0 0 #111111;
+    background: repeat-x scroll 0 0 #66ccff;
 }
 .fc-cell-overlay {
     background: none repeat scroll 0 0 #99CCFF;
