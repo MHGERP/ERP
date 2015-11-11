@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 from django.db.models import Q
 from users.models import *
 from django.contrib.auth.models import User
+from users.utility import createNewUser
 
 @dajaxice_register
 def searchUser(request,search_user):
@@ -120,9 +121,8 @@ def getTitleList(request, group_id):
 @dajaxice_register
 def createUser(request, user_name, user_password):
     try:
-        user=User(username=user_name,password=user_password)
-        user.save()
-    except Exception,e:
+        createNewUser(user_name, user_password)
+    except:
         return "fail"
 
 
