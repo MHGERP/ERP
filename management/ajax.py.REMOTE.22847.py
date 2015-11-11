@@ -23,8 +23,6 @@ def searchUser(request,search_user, page):
     else:
         user_list = User.objects.all()
     context = getContext(user_list, page, "item", 0)
-    for user in context["item_list"]:
-        user.titles = "; ".join(map(unicode, user.title_set.all()))
     html = render_to_string("management/widgets/user_table.html", context)
     return html
 
@@ -163,16 +161,7 @@ def deleteTitle(request, title_id):
     title.delete()
 
 @dajaxice_register
-<<<<<<< HEAD
-def deleteUser(request, user_id):
-    user = User.objects.get(id = user_id)
-    user.delete()
-
-@dajaxice_register
-def getNewsList(request, news_cate, news_page = 1):
-=======
 def getNewsList(request, news_cate, page = 1):
->>>>>>> 1cb0d0d6edaa599665258a55e6395407b0425efc
     """
     mxl
     """

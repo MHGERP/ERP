@@ -42,11 +42,34 @@ def Search_History_Apply_Records(request,data):
     else:
         return HttpResponse('FAIL')
 
+"""
+@dajaxice_register
+def weldhum_insert(request,hum_params):
+    hum_params=deserialize_form(hum_params)
+    form = HumRecordForm(hum_params)
+    if form.is_valid():
+        form.save()
+        message = u"录入成功"
+        flag = True
+    else:
+        flag = False
+        message = u"录入失败"
+     
+    html = render_to_string("storage/widgets/humiture_form.html",{"form":form,})
+    data = {
+        "flag":flag,
+        "html":html,
+        "message":message,
+    }
+    return simplejson.dumps(data)
+"""
+
+    
 @dajaxice_register
 def entryItemSave(request,form,mid):
     item = PurchasingEntryItems.objects.get(id = mid)
     entry_form = EntryItemsForm(deserialize_form(form),instance = item) 
-    print entry_form
+    pur_entry = item.purchasingentry
     if entry_form.is_valid():
         entry_form.save()
         flag = True
@@ -55,8 +78,12 @@ def entryItemSave(request,form,mid):
         print entry_form.errors
         flag = False
         message = u"修改失败"
+    entry_set = PurchasingEntryItems.objects.filter(purchasingentry = pur_entry) 
+    html = render_to_string("storage/widgets/weldentrytable.html",{"entry_set":entry_set})
     data = {
         "flag":flag,
         "message":message,
+        "html":html,  
     }
     return simplejson.dumps(data)
+

@@ -49,3 +49,15 @@ function news_delete_callback(data){
       $("p#delete-message").text(data.message);
   }
 }
+
+var file_list = document.getElementById('id_news_document').files;
+$(document).on("change", "#id_news_document", function(){
+  var file_list = document.getElementById('id_news_document').files;
+  var output = [];
+    for (var i = 0, f; i < file_list.length; i++) 
+    {
+      f = file_list[i];
+      output.push('<li><strong>', f.name, '</strong> (', f.type || 'n/a', ')');
+    }
+    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+})

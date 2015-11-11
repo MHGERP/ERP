@@ -34,7 +34,12 @@
     新闻类型: {{newsform.news_category}}
   </div>
   <div>
-    新闻附件: {{newsform.news_document}}
+    新闻附件: 
+    <span class="btn btn-success btn-large btn-file">浏览文件
+      {{newsform.news_document}}
+    </span>
+    <br/>已添加文件：
+    <output id="list"></output>
   </div>
   <div class="form-actions">
     <span class="pull-right">
