@@ -1,0 +1,25 @@
+{% extends "storage/base/weldbase.html" %}
+{% block title %}
+<h1>焊材温湿度记录</h1>
+{% endblock%}
+
+{% block sub_ref %}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldmaterial.css"/>
+<a href="/storage/weldhumiture">焊材温湿度记录</a>
+<a href="#" class="current">#</a>
+{% endblock %}
+
+{% block inner_content %}
+<div class="control-group" style="margin-top:20px">
+    <button type="button" class="btn btn-primary">录入时间：{{humRecordDate}}</button>
+</div>
+
+<div class="widget-box">
+    <div class="widget-content nopadding" id="humiture_div" >
+    {% include "storage/widgets/humiture_form.html" %}
+    </div>
+</div>
+<script>
+    $("#btnInsert").attr("style","display:none")
+</script>
+{% endblock %}
