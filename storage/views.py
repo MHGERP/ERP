@@ -5,7 +5,6 @@ from django.shortcuts import render
 from const import *
 from const.forms import InventoryTypeForm
 from const.utils import *
-from django.http import HttpResponseRedirect
 from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
@@ -83,7 +82,7 @@ def weldEntryConfirmViews(request,eid):
 def Weld_Apply_Card_List(request):
     context={}
     weld_apply_cards=WeldingMaterialApplyCard.objects.filter(commit_user=None).order_by('create_time')#考虑效率问题，注意更改all的获取方式
-    context['unhandled_weld_apply_cards']=weld_apply_cards
+    context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
 
@@ -92,7 +91,20 @@ def Weld_Apply_Card_Detail(request):
     card_index=int(request.GET['index'])
     apply_card=WeldingMaterialApplyCard.objects.get(index=card_index)
     context['apply_card']=apply_card
+    if request.user.is_superuser:#如果是库管员
+        context['apply_card_form']=Commit_ApplyCardForm(instance=apply_card)
+    else:#如果是申请者
+        context['apply_card_form']=Apply_ApplyCardForm(instance=apply_card)
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
+
+def Handle_Apply_Card_Form(request):
+    if request.method=='POST':
+        apply_card_form=WeldingMaterialApplyCardForm(request.POST)
+        print apply_card_form.errors
+        return HttpResponse('RECEIVE')
+    else:
+        return HttpResponse('FAIL')
+
 
 def weldHumitureHomeViews(request):
     hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("date") 

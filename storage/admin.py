@@ -1,7 +1,7 @@
 #coding=UTF-8
+from models import *
 
 from django.contrib import admin
-from models import *
 
 Registers = (
     WeldingMaterialApplyCard,

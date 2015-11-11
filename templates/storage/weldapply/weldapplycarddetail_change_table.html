@@ -1,0 +1,37 @@
+
+{% if apply_card.status != '3' %}
+
+<input type="hidden" name="department" id="id_department" value="{{apply_card.department}}">
+<input type="hidden" name="index" id="id_index" value="{{apply_card.index}}">
+<input type="hidden" name="create_time" id="id_create_time" value="{{apply_card.create_time}}">
+<input type="hidden" name="applicant" id="id_applicant" value="{{apply_card.applicant}}">
+<input type="hidden" name="auditor" id="id_auditor" value="{{apply_card.auditor}}">
+<input type="hidden" name="inspector" id="id_inspector" value="{{apply_card.inspector}}">
+<input type="hidden" name="commit_user" id="id_commit_user" value="{{apply_card.commit_user}}">
+{% if user.is_superuser %} <!--申请表单-->
+{% for item in apply_card_form %}
+<td>{{item}}</td>
+{% endfor %}
+{% elif user.is_authenticated %} <!--库管确认表单-->
+{% for item in apply_card_form %}
+<td>{{item}}</td>
+{% endfor %}
+{% endif %}
+
+
+{% else %} <!--完成状态表单-->
+
+<td>{{apply_card.workorder}}</td>
+<td>{{apply_card.weld_bead_number}}</td>
+<td>{{apply_card.weld_material_number}}</td>
+<td>{{apply_card.model}}</td>
+<td>{{apply_card.standard}}</td>
+<td>{{apply_card.apply_weight}}</td>
+<td>{{apply_card.apply_quantity}}</td>
+<td>{{apply_card.material_number}}</td>
+<td>{{apply_card.actual_weight}}</td>
+<td>{{apply_card.actual_quantity}}</td>
+
+
+{% endif %}
+
