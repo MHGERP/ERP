@@ -31,4 +31,8 @@ urlpatterns=patterns('',
         r'^newsRelease$',
         management_views.newsReleaseViews,
     ),
+    url(
+        r'^titleSetting$',
+        management_views.titleSettingViews,
+    )
 )

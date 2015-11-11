@@ -40,3 +40,9 @@ $("#user-save").click(function() {
                                                     
                                             });
 });
+
+
+$(document).on("click", ".btn-set-title", function() {
+     user_id = $(this).parent().parent().attr("iid");
+     location.href = "/management/titleSetting?user_id=" + user_id;
+});

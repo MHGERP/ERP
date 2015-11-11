@@ -17,6 +17,19 @@ from forms import GroupForm
 from users.models import Title, Group
 from const.forms import AuthorTypeForm
 
+def titleSettingViews(request):
+    """
+    JunHU
+    """
+    user_id = request.GET.get("user_id")
+    user = User.objects.get(id = user_id)
+    group_form = GroupForm()
+    context = {
+        "setting_user": user,
+        "group_form": group_form,
+    }
+    return render(request, "management/title_setting.html", context)
+
 def userManagementViews(request):
     """
     JunHU
