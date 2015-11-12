@@ -3,30 +3,32 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.template.loader import render_to_string
 from django.utils import simplejson
+
+from django.db.models import Q
 from users.models import *
-from django.contrib.auth.models import User
 from news.models import *
+from django.contrib.auth.models import User
+
+from backend.utility import getContext
+from users.utility import createNewUser
+from backend.utility import getContext
 
 
 @dajaxice_register
-def searchUser(request,search_user):
+def searchUser(request,search_user, page):
+    page = int(page)
 
-    user_list = User.objects.filter(username=search_user)
-    context = {
-            "user_list": user_list,
-       }
+    if search_user!="":
+        user_list = User.objects.filter(Q(username__icontains=search_user) | Q(userinfo__name__icontains=search_user))
+        #user_list = User.objects.filter(username__icontains=search_user)
+    else:
+        user_list = User.objects.all()
+    context = getContext(user_list, page, "item", 0)
+    for user in context["item_list"]:
+        user.titles = "; ".join(map(unicode, user.title_set.all()))
     html = render_to_string("management/widgets/user_table.html", context)
     return html
 
-@dajaxice_register
-def getUserList(request):  
-    user_list = User.objects.all()
-    context = {
-            "user_list": user_list,
-       }
-    html = render_to_string("management/widgets/user_table.html", context)
-    return html
-    
 @dajaxice_register
 def getGroupList(request):
     """
@@ -214,6 +216,33 @@ def deleteTitle(request, title_id):
     """
     title = Title.objects.get(id = title_id)
     title.delete()
+def deleteUser(request, user_id):
+    user = User.objects.get(id = user_id)
+    user.delete()
+
+@dajaxice_register
+def getNewsList(request, news_cate, page = 1):
+    """
+    mxl
+    """
+    try:
+        page = int(page)
+    except:
+        page = 1
+    news_list = News.objects.filter(news_category__category = news_cate).order_by('-news_date')
+    
+    context = getContext(news_list, page, "item", 0)
+    html = render_to_string("management/widgets/news_table.html", context)
+    # return html
+    return simplejson.dumps({'html' : html});
+
+@dajaxice_register
+def deleteNews(request, news_id):
+    """1,cfnsv
+    mxl
+    """
+    news = News.objects.get(id = news_id)
+    news.delete()
 
 @dajaxice_register
 def getAuthList(request, auth_type, title_id):
