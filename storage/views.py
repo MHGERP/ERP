@@ -28,27 +28,23 @@ def weldMaterialHomeViews(request):
     return render(request,"storage/weldmaterial/weldmaterialhome.html",context)
 
 def weldEntryHomeViews(request):
-    weldentry_set = PurchasingEntry.objects.filter(entry_status = ENTRYSTATUS_KEEPER)
     if request.method == "POST":
         search_form = EntrySearchForm(request.POST)
+        weldentry_set = []
         if search_form.is_valid():
-            date = search_form.cleaned_data["date"]
-            purchaser = search_form.cleaned_data["purchaser"]
-            work_order = search_form.cleaned_data["work_order"]
-            qset = get_filter(date,purchaser,work_order)
-            if qset:
-                qset = reduce(lambda x,y:x&y ,qset)
-                print qset
-                weldentry_set = PurchasingEntry.objects.filter(qset)
-            else:
-                weldentry_set = PurchasingEntry.objects.all()
+            dict = {}
+            dict["entry_time"] = search_form.cleaned_data["date"]
+            dict["purchaser"] = search_form.cleaned_data["purchaser"]
+            dict["work_order"] = search_form.cleaned_data["work_order"]
+            weldentry_set = get_weld_filter(PurchasingEntry,dict)
         else:
             print search_form.errors
     else:
+        weldentry_set = PurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         search_form = EntrySearchForm()
     context = {
         "entry_set":weldentry_set,
-        "ENTRYSTATUS_END":ENTRYSTATUS_END,
+        "ENTRYSTATUS_END":STORAGESTATUS_END,
         "search_form":search_form,
     }
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
@@ -58,13 +54,13 @@ def weldEntryConfirmViews(request,eid):
     items = PurchasingEntryItems.objects.filter(purchasingentry = entry)
     entry_form = EntryForm(instance = entry)
     entryitem_form = EntryItemsForm()
-    is_show = entry.entry_status == ENTRYSTATUS_KEEPER
+    is_show = entry.entry_status == STORAGESTATUS_KEEPER
     if request.method == "POST":
         entry_form = EntryForm(request.POST,instance = entry)
         if entry_form.is_valid():
             entry_form.save()
             entry.keeper = request.user
-            entry.entry_status = ENTRYSTATUS_END
+            entry.entry_status = STORAGESTATUS_END
             entry.save()
             return HttpResponseRedirect("/storage/weldentryhome")
         else:
@@ -123,3 +119,25 @@ def weldhumDetail(request,eid):
         "humRecordDate":hum_detail,
     }
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
+
+def weldRefundViews(request):
+    if request.method == "POST":
+        search_form = RefundSearchForm(request.POST)
+        if search_form.is_valid():
+            dict = {}
+            dict["date"] = search_form.cleaned_data["date"]
+            dict["department"] = search_form.cleaned_data["department"]
+            dict["code"] = search_form.cleaned_data["refund_code"]
+            dict["work_order"] = search_form.cleaned_data["work_order"]
+            dict["keeper"] = search_form.cleaned_data["keeper"]
+            refund_set = get_weld_filter(WeldRefund,dict)
+    else:
+        search_form = RefundSearchForm()
+        refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
+    print refund_set
+    context = {
+        "search_form":search_form,
+        "refund_set":refund_set,
+        "STORAGESTATUS_END":STORAGESTATUS_END,
+    }
+    return render(request,"storage/weldmaterial/weldrefundhome.html",context ) 

@@ -1,12 +1,13 @@
 #coding=UTF-8
 
 from django.contrib import admin
-from models import *
+from storage.models import *
 
 Registers = (
     WeldingMaterialApplyCard,
     StoreRoom,
     WeldingMaterialHumitureRecord,
+    WeldRefund,
 )
 
 for reg in Registers:

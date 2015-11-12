@@ -62,9 +62,12 @@ def titleManagementViews(request):
 
 def messageManagementViews(request):
     """
-    JunHU
+    BinWu
     """
     if request.method == 'POST':
+        files = request.FILES.getlist("message_document")
+        print("++++++++++++++++++++++++")
+        print(files)
         messageform = MessageForm(request.POST)
         if messageform.is_valid():
             new_message = Message(title = messageform.cleaned_data["message_title"],
@@ -73,6 +76,12 @@ def messageManagementViews(request):
                                   time = datetime.datetime.now()
                                  )
             new_message.save()
+            if files:
+                for file in files:
+                    new_doc = DocumentFile(news_document = file,
+                                           message = new_message)
+                    new_doc.save()
+
             for user_iterator in User.objects.all():
                 for group_id in messageform.cleaned_data["message_groups"]:
                     group = Group.objects.get(id = int(group_id))
@@ -81,12 +90,15 @@ def messageManagementViews(request):
                                              message = new_message,
                                              read = False)
                         new_box.save()
-    else:
-        messageform = MessageForm()
-        context = {
-            "messageform": messageform
-        }
-        return render(request, "management/message_management.html", context)
+    messageform = MessageForm()
+    #message_list = Message.objects.filter(writer = request.user)
+    print(request.user)
+    context = {
+        "messageform": messageform,
+        #"message_list": message_list,
+        "loguser":request.user
+    }
+    return render(request, "management/message_management.html", context)
 
 def authorityManagementViews(request):
     """

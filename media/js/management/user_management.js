@@ -38,10 +38,11 @@ $("#user-add").click(function() {
 $("#user-save").click(function() {
     var user_name = $("#user_name").val();
     var user_password = $("#user_password").val();
+    var user_fullname = $("#user_fullname").val();
     Dajaxice.management.createUser(createUserCallBack, {
                                                     "user_name": user_name,
                                                     "user_password": user_password,
-                                                    
+                                                    "user_fullname": user_fullname,  
                                             });
 });
 
