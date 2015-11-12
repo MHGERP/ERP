@@ -3,9 +3,8 @@ from datetime import *
 from django import  forms
 from django.forms import ModelForm
 from storage.models import *
-from const import ORDERFORM_STATUS_CHOICES
 from const.models import Materiel
-from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE
+from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES
 from purchasing.models import PurchasingEntryItems
 from django.contrib.auth.models import User
 
@@ -52,7 +51,19 @@ class EntrySearchForm(forms.Form):
     def __init__(self,*args,**kwargs):
         super(EntrySearchForm,self).__init__(*args,**kwargs)
         Users = User.objects.all()
-        purchaser_list = [(-1,u"未指定")]
+        purchaser_list = [(-1,u"------")]
         for user in Users:
             purchaser_list.append((user.id,user.username))
         self.fields["purchaser"].choices = tuple(purchaser_list)
+
+
+class RefundSearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
+    department = forms.ChoiceField(label=u"退库单位",choices = STORAGEDEPARTMENT_CHOICES,required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'department'}))
+    refund_code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'refund_code'}))
+    work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'work_order'}))
+    keeper=forms.ChoiceField(label=u'库管员',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'keeper'}))
+    def __init__(self,*args,**kwargs):
+        super(RefundSearchForm,self).__init__(*args,**kwargs)
+        keeper_list = []
+        
