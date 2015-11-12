@@ -72,6 +72,11 @@ ORDERFORM_STATUS_CHOICES = (
     (ORDERFORN_STATUS_FINISH, u"已终止历史订购单"),
 )
 
+RECHECK_CHOICE = (
+    (True,u"是"),
+    (False,u"否"),
+)
+
 INVENTORY_TYPE = (
     (0, u"主材定额"),
     (1, u"辅料定额"),
