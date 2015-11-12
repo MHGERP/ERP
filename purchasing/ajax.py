@@ -468,64 +468,6 @@ def saveMaterielExecute(request, form):
         ret = {'status' : '0', 'message' : u'材料执行保存失败！'}
     return simplejson.dumps(ret)
 
-"""
-@dajaxice_register
-@transaction.commit_manually
-def saveMaterielExecuteDetail(request, form, materielChoice):
-
-   # mxl
-   # summary : save the materielExecute and MainMaterielExecuteDetail(SupportMaterielExecuteDetail) models
-   # params : form : the submit form(detail)
-   #          documentNumberInput : document_number of MaterielExecute model
-   #          materielChoice : materielChoice of  MaterielExecute model
-
-    flag = False;
-    try:
-        # materielexecute = MaterielExecute();
-        # materielexecute.document_number = documentNumberInput
-        # materielexecute.document_lister = request.user
-        # materielexecute.date = datetime.today()
-
-        if materielChoice == MAIN_MATERIEL:
-            # materielexecute.materiel_choice = MATERIEL_CHOICE[0][0]
-            detail_Form = MainMaterielExecuteDetailForm(deserialize_form(form))
-            if detail_Form.is_valid():
-                materielexecute_detail = detail_Form.save()
-                flag = True
-
-        else:
-            # materielexecute.materiel_choice = MATERIEL_CHOICE[1][0]
-            detail_Form = SupportMaterielExecuteDetailForm(deserialize_form(form))
-            if detail_Form.is_valid():
-                materielexecute_detail = detail_Form.save()
-                flag = True
-
-        if flag:
-            # materielexecute.save()
-            # print materielexecute.materiel_choice
-            # materielexecute_detail.materiel_execute = materielexecute
-            materielexecute_detail.save()
-            materielexecute_detail_set = [materielexecute_detail]
-    except Exception, e:
-        transaction.rollback()
-        print e
-    if flag:
-        transaction.commit()
-        if materielChoice == MAIN_MATERIEL:
-            detail_table = render_to_string("purchasing/materielexecute/table/main_td.html", {"materielexecute_detail_set" : materielexecute_detail_set})
-        else:
-            detail_table = render_to_string("purchasing/materielexecute/table/support_td.html", {"materielexecute_detail_set" : materielexecute_detail_set})
-        ret = {'status' : '1', 'message' : u'保存成功', 'detail_table' : detail_table, 'materielexecute_detail_id' : materielexecute_detail.id}
-    else:
-        # errorsFiled = render_to_string("purchasing/materielexecute/widget/errorsField.html", {"errorsFiled" : detail_Form})
-        if materielChoice == MAIN_MATERIEL:
-            add_form = render_to_string("purchasing/materielexecute/widget/add_main_detail_form.html", {"MainMaterielExecuteDetailForm":detail_Form})
-        else:
-            add_form = render_to_string("purchasing/materielexecute/widget/add_support_detail_form.html", {"SupportMaterielExecuteDetailForm":detail_Form})
-        ret = {'status' : '0', 'message' : u'请检查输入是否正确', 'add_form' : add_form}
-        transaction.rollback()
-    return simplejson.dumps(ret)
-"""
 @dajaxice_register
 def saveMaterielExecuteDetail(request, selected, eid):
     materielexecute=MaterielExecute.objects.get(document_number=eid)
@@ -539,26 +481,10 @@ def saveMaterielExecuteDetail(request, selected, eid):
 @dajaxice_register
 def materielExecuteCommit(request,  materielExecuteId):
     try:
-        """
-        materielExecute = MaterielExecute.objects.get(id=materielExecuteId)
-        materielExecute.is_save = True
-        if materielChoice == MAIN_MATERIEL:
-            for detail_id in detail_id_array:
-                print detail_id
-                mainMaterielExecuteDetail = MainMaterielExecuteDetail.objects.get(id=detail_id)
-                mainMaterielExecuteDetail.materiel_execute = materielExecute
-                mainMaterielExecuteDetail.save()
-        else:
-            for detail_id in detail_id_array:
-                print detail_id
-                supportMaterielExecuteDetail = SupportMaterielExecuteDetail.objects.get(id=detail_id)
-                supportMaterielExecuteDetail.materiel_execute = materielExecute
-                supportMaterielExecuteDetail.save()
-        materielExecute.save()
-        """
         print materielExecuteId
         materielexecute=MaterielExecute.objects.get(document_number=materielExecuteId)
         materielexecute.is_save=True
+        materielexecute.date=datetime.today()
         materielexecute.save()
         ret = {'status' :0,'message':u'材料执行表提交成功！',}
     except Exception, e:

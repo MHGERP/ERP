@@ -8,13 +8,15 @@
 {% endblock %}
 
 {% block inner_content %}
-<div class="control-group" style="margin-top:20px;">
+<form class="form" method="post">
+{% csrf_token%}
+<div class="control-group {% if entry_form.entry_time.errors %}error{% endif %}" style="margin-top:20px;">
     <label class="hz-align">入库时间</label>
     {{entry_form.entry_time}}
 </div>
-<div class="control-group">
+<div class="control-group {% if entry_form.entry_code.errors %}error{% endif %}">
     <label class="hz-align">单据编号</label>
-    {{entry_form.bidform}}
+    {{entry_form.entry_code}}
 </div>
 <div id = "items_table">
 {% include "storage/widgets/weldentrytable.html" %}
@@ -32,9 +34,12 @@
         {{entry_form.keeper}}
     </div>
 </div>
+{% if is_show %}
 <center style="margin:30px;">
-    <button  id="entry_confirm" style="width:30%;height:40px;" class="btn btn-primary" onclick="entry_confirm({{pur_entry.id}});">入库单确认</button>
+    <button  id="entry_confirm" style="width:30%;height:40px;" class="btn btn-primary" type="submit">入库单确认</button>
 </center>
+{% endif %}
+</form>
  <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

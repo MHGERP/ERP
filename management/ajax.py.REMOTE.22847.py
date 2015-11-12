@@ -8,7 +8,6 @@ from django.db.models import Q
 from users.models import *
 from news.models import *
 from django.contrib.auth.models import User
-from news.models import *
 
 from backend.utility import getContext
 from users.utility import createNewUser
@@ -24,8 +23,6 @@ def searchUser(request,search_user, page):
     else:
         user_list = User.objects.all()
     context = getContext(user_list, page, "item", 0)
-    for user in context["item_list"]:
-        user.titles = "; ".join(map(unicode, user.title_set.all()))
     html = render_to_string("management/widgets/user_table.html", context)
     return html
 
@@ -126,52 +123,6 @@ def getTitleList(request, group_id):
     return html
 
 @dajaxice_register
-def getMessageList(request, loguser):
-    """
-    BinWu
-    summary: ajax function to get all message writen by loguser
-    params: loguser: db id of the user who logs in
-    return: message list  html string
-    """
-    message_list = Message.objects.filter(writer = loguser)
-    context = {
-        "message_list": message_list,
-    }
-    html = render_to_string("management/widgets/message_table.html", context)
-    return html
-
-@dajaxice_register
-def deleteMessage(request, messageId):
-    """
-    BinWu
-    summary: ajax function to delete the message which is revoked by the writer
-    params: message: db id of the message needs to be revoked
-    return: "success" 
-    """
-    print ("This is messageId")
-    print (messageId)
-    messageObject = Message.objects.get(id = messageId)
-    print ("before delete")
-    messageObject.delete()
-    return "success"
-
-@dajaxice_register
-def checkMessage(request, messageId):
-    """
-    BinWu
-    summary: ajax function to check the content of the message
-    paras: message: db id of the message for checking
-    return: "data"
-    """
-    messageObject = Message.objects.get(id = messageId)
-    data = {
-        "message_title": messageObject.title,
-        "message_content": messageObject.content,
-    }
-    print(data['message_title'])
-    return data;
-
-@dajaxice_register
 def createUser(request, user_name, user_password):
     try:
         createNewUser(user_name, user_password)
@@ -210,11 +161,6 @@ def deleteTitle(request, title_id):
     title.delete()
 
 @dajaxice_register
-def deleteUser(request, user_id):
-    user = User.objects.get(id = user_id)
-    user.delete()
-
-@dajaxice_register
 def getNewsList(request, news_cate, page = 1):
     """
     mxl
@@ -232,7 +178,7 @@ def getNewsList(request, news_cate, page = 1):
 
 @dajaxice_register
 def deleteNews(request, news_id):
-    """
+    """1,cfnsv
     mxl
     """
     news = News.objects.get(id = news_id)
