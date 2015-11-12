@@ -36,6 +36,10 @@ urlpatterns = patterns('',
         r'^weldhumNewRecord$',
         storage_views.weldhumNewRecord,
     ),
+    url( 
+        r'^weldrefund$',
+        storage_views.weldRefundViews,
+    ),
 )
 
 

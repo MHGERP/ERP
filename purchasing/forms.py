@@ -56,9 +56,9 @@ class EntryForm(ModelForm):
     def __init__(self,*args,**kwargs):
         super(EntryForm,self).__init__(*args,**kwargs)
         pur_entry = kwargs["instance"]
-        self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.username if pur_entry.purchaser else ""
-        self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.username if pur_entry.keeper else ""
-        self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.username if pur_entry.inspector else ""
+        self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.userinfo if pur_entry.purchaser else ""
+        self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.userinfo if pur_entry.keeper else ""
+        self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.userinfo if pur_entry.inspector else ""
     
     purchaser = forms.CharField(label=u"采购员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
     inspector = forms.CharField(label=u"检验员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
