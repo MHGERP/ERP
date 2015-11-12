@@ -7,7 +7,8 @@ from const.models import Materiel
 from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES
 from purchasing.models import PurchasingEntryItems
 from django.contrib.auth.models import User
-
+from users.utility import getUserByAuthority
+from users import STORAGE_KEEPER
 DEPARTMENT_CHOICES=(
         (u' ',u'------'),
         (u'部门A',u'部门A'),
@@ -62,9 +63,12 @@ class RefundSearchForm(forms.Form):
     department = forms.ChoiceField(label=u"退库单位",choices = STORAGEDEPARTMENT_CHOICES,required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'department'}))
     refund_code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'refund_code'}))
     work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'work_order'}))
-    keeper=forms.ChoiceField(label=u'库管员',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'keeper'}))
+    keeper=forms.ChoiceField(label=u'库管员',required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'keeper'}))
     def __init__(self,*args,**kwargs):
         super(RefundSearchForm,self).__init__(*args,**kwargs)
-        keeper_list = []
-        
+        keeper_list = [(-1,"------")]
+        users = getUserByAuthority(STORAGE_KEEPER)
+        for user_obj in users:
+            keeper_list.append((user_obj.id,user_obj.userinfo))
+        self.fields["keeper"].choices =tuple (keeper_list)
         

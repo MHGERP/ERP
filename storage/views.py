@@ -20,6 +20,7 @@ from purchasing.forms import EntryForm
 from storage.models import *
 from storage.forms import *
 from storage.utils import *
+from users import STORAGE_KEEPER
 def weldMaterialHomeViews(request):
 
     context = {
@@ -121,8 +122,10 @@ def weldhumDetail(request,eid):
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
 
 def weldRefundViews(request):
+    getUserByAuthority(STORAGE_KEEPER)
     if request.method == "POST":
         search_form = RefundSearchForm(request.POST)
+        print search_form
         if search_form.is_valid():
             dict = {}
             dict["date"] = search_form.cleaned_data["date"]
@@ -134,7 +137,6 @@ def weldRefundViews(request):
     else:
         search_form = RefundSearchForm()
         refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
-    print refund_set
     context = {
         "search_form":search_form,
         "refund_set":refund_set,

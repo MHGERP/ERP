@@ -47,7 +47,7 @@ class Authority(models.Model):
 class Title(models.Model):
     group = models.ForeignKey(Group, blank = False, verbose_name = u"所属部门")
     name = models.CharField(max_length = 100, blank = False, verbose_name = u"头衔名")
-    users = models.ManyToManyField(User, blank = True, null = True, verbose_name = u"拥有头衔用户")
+    users = models.ManyToManyField(User, blank = True, null = True, verbose_name = u"拥有头衔用户",related_name="title_user")
     authorities = models.ManyToManyField(Authority, blank = True, null = True, verbose_name = u"拥有权限")
     class Meta:
         verbose_name = u"头衔"
