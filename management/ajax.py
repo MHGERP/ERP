@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 
 from users.models import *
 from django.contrib.auth.models import User
+from news.models import *
 
 
 @dajaxice_register
@@ -120,6 +121,52 @@ def getTitleList(request, group_id):
     }
     html = render_to_string("management/widgets/title_table.html", context)
     return html
+
+@dajaxice_register
+def getMessageList(request, loguser):
+    """
+    BinWu
+    summary: ajax function to get all message writen by loguser
+    params: loguser: db id of the user who logs in
+    return: message list  html string
+    """
+    message_list = Message.objects.filter(writer = loguser)
+    context = {
+        "message_list": message_list,
+    }
+    html = render_to_string("management/widgets/message_table.html", context)
+    return html
+
+@dajaxice_register
+def deleteMessage(request, messageId):
+    """
+    BinWu
+    summary: ajax function to delete the message which is revoked by the writer
+    params: message: db id of the message needs to be revoked
+    return: "success" 
+    """
+    print ("This is messageId")
+    print (messageId)
+    messageObject = Message.objects.get(id = messageId)
+    print ("before delete")
+    messageObject.delete()
+    return "success"
+
+@dajaxice_register
+def checkMessage(request, messageId):
+    """
+    BinWu
+    summary: ajax function to check the content of the message
+    paras: message: db id of the message for checking
+    return: "data"
+    """
+    messageObject = Message.objects.get(id = messageId)
+    data = {
+        "message_title": messageObject.title,
+        "message_content": messageObject.content,
+    }
+    print(data['message_title'])
+    return data;
 
 @dajaxice_register
 def createUser(request, user_name, user_password):

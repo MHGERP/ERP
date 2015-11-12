@@ -46,7 +46,7 @@ def titleManagementViews(request):
 
 def messageManagementViews(request):
     """
-    JunHU
+    BinWu
     """
     if request.method == 'POST':
         messageform = MessageForm(request.POST)
@@ -65,12 +65,15 @@ def messageManagementViews(request):
                                              message = new_message,
                                              read = False)
                         new_box.save()
-    else:
-        messageform = MessageForm()
-        context = {
-            "messageform": messageform
-        }
-        return render(request, "management/message_management.html", context)
+    messageform = MessageForm()
+    #message_list = Message.objects.filter(writer = request.user)
+    print(request.user)
+    context = {
+        "messageform": messageform,
+        #"message_list": message_list,
+        "loguser":request.user
+    }
+    return render(request, "management/message_management.html", context)
 
 def authorityManagementViews(request):
     """
