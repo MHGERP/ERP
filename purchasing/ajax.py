@@ -60,7 +60,7 @@ def checkArrival(request,aid,cid):
 
 @dajaxice_register
 @transaction.commit_manually
-def genEntry(request,bid):
+def genEntry(request,bid,selected):
     flag = False
     message = ""
     try:
