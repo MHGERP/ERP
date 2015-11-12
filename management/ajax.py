@@ -85,7 +85,7 @@ def searchCandidate(request, key):
     params: key: keyword about candidate
     return: candidate list html string
     """
-    candidate_list = User.objects.filter(username__icontains = key)
+    candidate_list = User.objects.filter(Q(username__icontains = key) | Q(userinfo__name__icontains = key))
     context = {
         "candidate_list": candidate_list,
     }
