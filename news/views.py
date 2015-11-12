@@ -25,17 +25,21 @@ def get_docs(news_id):
 	docs = DocumentFile.objects.filter(news__id = news_id)
 	return docs
 
-def read_news(request, news_id):
+def read_news(request, news_id, source):
 	# print news_id
-	news = get_news(news_id)
-	news_cate = news.news_category
-	news_docs = get_docs(news_id)
-	context = {
+    source = int(source)
+    base = "management/base/none_nav_base.html" if source else "home/base/none_nav_base.html"
+    news = get_news(news_id)
+    news_cate = news.news_category
+    news_docs = get_docs(news_id)
+    context = {
 		'news' : news,
 		'news_cate' : news_cate,
-		'news_docs' : news_docs
+		'news_docs' : news_docs,
+        'base' : base,
+        'source' : source
 	}
-	return render(request, 'home/news-content.html', context)
+    return render(request, 'home/news-content.html', context)
 
 def list_news_by_cate(request, news_cate):
 	try:
