@@ -95,9 +95,11 @@ def Weld_Apply_Card_Detail(request):
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
 
 def weldHumitureHomeViews(request):
-    hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("date") 
+    hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("date")
+    search_form = HumSearchForm()
     context = {
-        "hum_set":hum_set,    
+        "hum_set":hum_set,
+        "search_form":search_form,
     }
     return render(request,"storage/weldhumi/weldhumitureHome.html",context)
 
