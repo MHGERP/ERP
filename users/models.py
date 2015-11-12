@@ -27,11 +27,11 @@ class SuperAdmin(models.Model):
         return self.admin.user_name
 
 class Group(models.Model):
-    admin = models.ForeignKey(User, blank = True, null = True, verbose_name = u"群组管理员")
-    name = models.CharField(max_length = 100, blank = False, verbose_name = u"群组名")
+    admin = models.ForeignKey(User, blank = True, null = True, verbose_name = u"部门管理员")
+    name = models.CharField(max_length = 100, blank = False, verbose_name = u"部门名")
     class Meta:
-        verbose_name = u"群组"
-        verbose_name_plural = u"群组"
+        verbose_name = u"部门"
+        verbose_name_plural = u"部门"
     def __unicode__(self):
         return self.name
 
@@ -45,9 +45,9 @@ class Authority(models.Model):
         return self.get_authority_display()
 
 class Title(models.Model):
-    group = models.ForeignKey(Group, blank = False, verbose_name = u"所属群组")
+    group = models.ForeignKey(Group, blank = False, verbose_name = u"所属部门")
     name = models.CharField(max_length = 100, blank = False, verbose_name = u"头衔名")
-    users = models.ManyToManyField(User, blank = True, null = True, verbose_name = u"拥有头衔用户")
+    users = models.ManyToManyField(User, blank = True, null = True, verbose_name = u"拥有头衔用户",related_name="title_user")
     authorities = models.ManyToManyField(Authority, blank = True, null = True, verbose_name = u"拥有权限")
     class Meta:
         verbose_name = u"头衔"
