@@ -27,6 +27,28 @@
 	</div>
 
 	{% block commit_button %}{% endblock %}
+
+	<div class="modal  fade" id="materielexecute_modal" modal-size-width="0.6">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="modal_title">材料执行表信息修改</h2>
+      </div>
+      <div class="modal-body" >
+        <form class="form-inline well" id="edit_materielexecute_form">
+          {% csrf_token %}
+          <div class="row" id="materielexecute_div">
+            
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel_change">关闭</button>
+        <button type="button" class="btn btn-primary" data-dismiss="" id="save_materiel_excecute">保存</button>
+      </div>
+
+</div>
 	<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/materielexecute_detail.js"></script>
 	<script type='text/javascript' src="{{STATIC_URL}}js/bootstrap_filestyle.js"></script>
+	<script type='text/javascript' src="{{ STATIC_URL }}js/modal_adaption.js"></script>
 {% endblock%}

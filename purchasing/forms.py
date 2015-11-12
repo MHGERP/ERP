@@ -5,7 +5,7 @@ from django.forms import ModelForm
 from purchasing.models import *
 from const import ORDERFORM_STATUS_CHOICES
 from const.models import Materiel
-from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE
+from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE, RECHECK_CHOICE
 
 class SupplierForm(ModelForm):
     class Meta:
@@ -141,3 +141,15 @@ class OrderInfoForm(ModelForm):
                    'name':forms.TextInput(attrs={"class":'form-control'}),
                    'schematic_index':forms.TextInput(attrs={"class":'form-control'}),
                    }
+
+class MeterielExcecuteForm(ModelForm):
+    class Meta:
+        model = MaterielExecuteDetail
+        fields = {'recheck','quota','part','oddments','remark',}
+        widgets = {
+            'recheck':forms.Select(choices=RECHECK_CHOICE, attrs={'class':'form-control','id':'recheck'}),
+            'quota':forms.TextInput(attrs={'class':'form-control','id':'quota'}),
+            'part':forms.TextInput(attrs={'class':'form-control','id':'part'}),
+            'oddments':forms.TextInput(attrs={'class':'form-control','id':'oddments'}),
+            'remark':forms.TextInput(attrs={'class':'form-control','id':'remark'})
+        }
