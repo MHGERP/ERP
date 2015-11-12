@@ -171,12 +171,21 @@ def checkMessage(request, messageId):
     return: "data"
     """
     messageObject = Message.objects.get(id = messageId)
+    file = DocumentFile.objects.filter(message = messageId)
+    file_name = []
+    file_list = []
+    for f in file:
+        file_name.append(f.news_document.name[26:])
+        file_list.append(f.news_document.path)
     data = {
         "message_title": messageObject.title,
         "message_content": messageObject.content,
+        "filepath": file_list,
+        "filename": file_name,
     }
     print("title")
     print(data['message_title'])
+    print(file_list)
     return simplejson.dumps(data)
 
 @dajaxice_register
