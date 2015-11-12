@@ -174,7 +174,7 @@ class PurchasingEntry(models.Model):
     entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES,default = 0, verbose_name=u"入库单类型")
     entry_code = models.IntegerField(blank = False ,max_length = 10, verbose_name = u"单据编号",unique = True)
     work_order = models.ForeignKey(WorkOrder,verbose_name = u"工作令")
-    entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=0,verbose_name=u"入库单状态")
+    entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=STORAGESTATUS_INSPECTOR,verbose_name=u"入库单状态")
     class Meta:
         verbose_name = u"入库单"
         verbose_name_plural = u"入库单"

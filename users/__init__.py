@@ -8,9 +8,9 @@ PURCHASING_AUTHORITY = (
 )
 
 
-
+STORAGE_KEEPER = "storage_keeper"
 STORAGE_AUTHORITY = (
-
+    (STORAGE_KEEPER,u"库管员权"),
 )
 
 AUTHORITY_SET = reduce(operator.add, (PURCHASING_AUTHORITY, STORAGE_AUTHORITY))

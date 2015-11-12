@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # coding=utf-8 
 from const import *
+#from user.model import Title,Authority
+from django.contrib.auth.models import User
 
-def entryConfirm(entry_obj,person,role):
-    setattr(entry_obj,role,person)
-    entry_obj.save()
+#ef getUserByAuthority(authority):
+#   amZth_obj = Authority.objects.get(authority = authority)
 
-def getEntrySet(model_type,status):
-    return model_type.objects.filter(entry_status = status)
+

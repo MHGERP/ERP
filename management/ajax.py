@@ -85,7 +85,7 @@ def searchCandidate(request, key):
     params: key: keyword about candidate
     return: candidate list html string
     """
-    candidate_list = User.objects.filter(username__icontains = key)
+    candidate_list = User.objects.filter(Q(username__icontains = key) | Q(userinfo__name__icontains = key))
     context = {
         "candidate_list": candidate_list,
     }
@@ -273,6 +273,13 @@ def getAuthList(request, auth_type, title_id):
 
 @dajaxice_register
 def addOrRemoveTitle(request, title_id, user_id, flag):
+    """
+    JunHU
+    summary: ajax function to add or remove connection between one user and one title
+    params: user_id: db id of user; title_id: db id of title; flag: indicate add or remove
+    return: result info
+    """
+
     try:
         title = Title.objects.get(id = title_id)
         user = User.objects.get(id = user_id)

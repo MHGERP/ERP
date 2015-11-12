@@ -61,7 +61,7 @@ function searchCallBack(data) {
 $("#btn-select-candidate").click(function() {
     var id = $("input:radio:checked").val();
     if(confirm("你确定添加该用户为新群组管理员？")) {
-        Dajaxice.management.addAdmin(addCallBack, {"group_id": pending_group_id,
+        Dajaxice.management.addAdmin(refresh, {"group_id": pending_group_id,
                                                     "user_id": id,})
         return true;
     }
