@@ -27,7 +27,6 @@ $(document).on("click", ".btn-change-name", function() {
 });
 
 function checkMessageCallBack(data) {
-    alert("caonimei");
-    //$(#message_title).val("title");
-    //$(#message_content).val("content");
+    $("#check_title").html("标题：<b>" + data.message_title + "</b>");
+    $("#check_content").html(data.message_content);
 }
