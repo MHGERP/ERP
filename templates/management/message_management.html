@@ -1,5 +1,5 @@
 {% extends "management/base/none_nav_base.html"%}
-
+<!--This page is writen by BinWu -->
 {% block title %}
 <h1>消息管理</h1>
 {% endblock %}
@@ -9,45 +9,59 @@
 {% endblock %}
 
 {% block inner_content%}
-<script type="text/javascript">window.__admin_media_prefix__ = "/static/admin/";</script>
-<link rel="stylesheet" href="{{ STATIC_URL }}style/adminStaff/font-awesome.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="{{ STATIC_URL }}style/adminStaff/news_release.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="{{ STATIC_URL }}admin/css/forms.css" type="text/css" media="screen" />
-<script>function gettext(txt){return txt}</script>
-<script type='text/javascript' src="{{STATIC_URL}}js/news/news_toolbar.js"></script>
-<form id="message_form" action="/management/messageManagement" method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  <div>
-    标题: {{messageform.message_title}}
-  </div>
-  <div>
-      {{messageform.message_content}}
-  </div>
-  <div>
-	消息附件: {{messageform.message_document}}
-  </div>
-  <div>
-	发送到群组: {{messageform.message_groups}}
-  </div>
-  <div class="form-actions">
-    <span class="pull-right">
-      <button class="btn">取消</button>
-    </span>
-    <span class="pull-right" style="padding-right: 10px">
-      <button type="submit" class="btn btn-primary"id="message_send__button">发送</button>
-    </span>
-  </div>
+
+<form class="form-search" style="width:60%">
+你好：{{loguser.username}}
+<span id="loguser" hidden="true">{{loguser.id}}</span>
+<span class="btn btn-primary" id="btn-add" style="float:right" data-toggle="modal" data-target="#save_modal">新消息</span>
 </form>
-<!-- ajax_csrf-->
-<script type='text/javascript' src="{{STATIC_URL}}js/news/news_release.js"></script>
-<script type='text/javascript' src="{{STATIC_URL}}js/news/jquery.hotkeys.js"></script>
-<script type='text/javascript' src="{{STATIC_URL}}js/news/bootstrap-wysiwyg.js"></script>
-<script type='text/javascript' src="{{STATIC_URL}}js/news/wysiwyg-config.js"></script>
+<br/>
+<div id="widget-content">
 
-<script type="text/javascript" src="/admin/jsi18n/"></script>
-<script type="text/javascript" src="/static/admin/js/core.js"></script>
-<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
-<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
-<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+</div>
 
+<div id="save_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="messageLabel"></h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+      <form id="message_form" action="/management/messageManagement" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div>
+              标题: {{messageform.message_title}}
+          </div>
+          <div>
+              {{messageform.message_content}}
+          </div>
+          <div>
+              消息附件: {{messageform.message_document}}
+          </div>
+          <div>
+              发送到群组: {{messageform.message_groups}}
+          </div>
+      </form>
+  </div>
+  <div class="modal-footer">
+      <button class="btn btn-primary" id="message_send" data-dismiss="modal" aria-hidden="true">发送</button>
+      <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+<div id="check_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="messageLabel"></h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+      <div type="text" id="check_title"></div>
+      <div type="text" id="check_content"></div>
+  </div>
+  <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+
+<script type='text/javascript' src="{{STATIC_URL}}js/management/message_management.js"></script>
 {% endblock%}

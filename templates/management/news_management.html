@@ -1,0 +1,22 @@
+{% extends "management/base/none_nav_base.html"%}
+
+{% block title %}
+<h1>新闻管理</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">新闻管理</a>
+{% endblock %}
+
+{% block inner_content%}
+<form class="form-search" style="width:60%">
+新闻类型：{{form.news_cate}}
+<a class="btn btn-primary" id="btn-add" style="float:right" href="newsRelease">新增新闻</a>
+</form>
+<br/>
+<div id="widget-content">
+	{% include "management/widgets/news_table.html" %}
+</div>
+
+<script type='text/javascript' src="{{STATIC_URL}}js/management/news_management.js"></script>
+{% endblock %}

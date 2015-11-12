@@ -49,7 +49,7 @@ class BidCommentForm(forms.Form):
 class EntryForm(ModelForm):
     class Meta:
         model = PurchasingEntry
-        fields = ('entry_time',)
+        fields = ('entry_time','entry_code')
         widgets = {
             'entry_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entry_time"}),
         }
@@ -59,12 +59,10 @@ class EntryForm(ModelForm):
         self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.username if pur_entry.purchaser else ""
         self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.username if pur_entry.keeper else ""
         self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.username if pur_entry.inspector else ""
-        self.fields['bidform'].widget.attrs["value"] = pur_entry.entry_code
     
-    purchaser = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
-    inspector = forms.CharField(label=u"检验员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
-    keeper = forms.CharField(label=u"库管员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
-    bidform = forms.CharField(label=u"单据编号",widget = forms.TextInput(attrs={'id':'bidform'}))
+    purchaser = forms.CharField(label=u"采购员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
+    inspector = forms.CharField(label=u"检验员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
+    keeper = forms.CharField(label=u"库管员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
 class ProcessFollowingForm(ModelForm):
     class Meta:
         model=ProcessFollowingInfo

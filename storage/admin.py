@@ -6,6 +6,7 @@ from models import *
 Registers = (
     WeldingMaterialApplyCard,
     StoreRoom,
+    WeldingMaterialHumitureRecord,
 )
 
 for reg in Registers:
