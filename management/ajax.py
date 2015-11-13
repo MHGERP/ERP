@@ -180,9 +180,9 @@ def checkMessage(request, messageId):
     return data;
 
 @dajaxice_register
-def createUser(request, user_name, user_password):
+def createUser(request, user_name, user_password, user_fullname):
     try:
-        createNewUser(user_name, user_password)
+        createNewUser(username = user_name, password = user_password, fullname = user_fullname)
     except:
         return "fail"
 
