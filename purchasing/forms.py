@@ -36,6 +36,11 @@ class QualityPriceCardForm(ModelForm):
     class Meta:
         model = qualityPriceCard
 
+class ContractDetailForm(ModelForm):
+    class Meta:
+        model = ContractDetail
+        fields = ('amount', )
+
 class BidCommentForm(forms.Form):
     result_choices=(("-1","请审核"),("0","通过"),("1","不通过"))
     judgeresult =forms.ChoiceField(choices=result_choices,required=True, label=u"审核结果",

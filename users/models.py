@@ -24,7 +24,7 @@ class SuperAdmin(models.Model):
         verbose_name = u"超级管理员"
         verbose_name_plural = u"超级管理员"
     def __unicode__(self):
-        return self.admin.user_name
+        return self.admin.userinfo.name
 
 class Group(models.Model):
     admin = models.ForeignKey(User, blank = True, null = True, verbose_name = u"部门管理员")

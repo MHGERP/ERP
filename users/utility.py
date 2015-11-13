@@ -3,7 +3,7 @@ from users.models import UserInfo,Title,Authority
 
 def createNewUser(username, password, fullname = None):
     try:
-        user = User(username = username, password = password)
+        user = User.objects.create_user(username = username, password = password)
         user.save()
 
         userinfo = UserInfo(user = user, name = fullname)
