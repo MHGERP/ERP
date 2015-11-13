@@ -14,7 +14,7 @@ Registers = (
     BarSteelMaterialLedger,
     CommonSteelMaterialReturnCardInfo,
     BoardSteelMaterialReturnCardContent,
-    BarSteelMaterialReturnCardContent
+    BarSteelMaterialReturnCardContent,
     WeldRefund,
     AuxiliaryTool,
     AuxiliaryToolApplyCard,
