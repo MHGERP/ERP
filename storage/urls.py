@@ -44,6 +44,10 @@ urlpatterns = patterns('',
         r'^weldrefund$',
         storage_views.weldRefundViews,
     ),
+    url( 
+        r'^weldrefunddetail/(?P<rid>\w+)$',
+        storage_views.weldRefundDetailViews,
+    ),
     url(
         r'^auxiliarytools$',
         storage_views.AuxiliaryToolsHomeView,

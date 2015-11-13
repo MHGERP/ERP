@@ -1,0 +1,3 @@
+{%for field in reform %}
+<td><div class="control-group {%if field.errors %}error{% endif %}">{{field}}</div></td>
+{% endfor %}

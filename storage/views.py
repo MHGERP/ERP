@@ -165,7 +165,6 @@ def weldRefundViews(request):
     getUserByAuthority(STORAGE_KEEPER)
     if request.method == "POST":
         search_form = RefundSearchForm(request.POST)
-        print search_form
         if search_form.is_valid():
             dict = {}
             dict["date"] = search_form.cleaned_data["date"]
@@ -185,8 +184,21 @@ def weldRefundViews(request):
     return render(request,"storage/weldmaterial/weldrefundhome.html",context )
 
 def weldRefundDetailViews(request,rid):
+    ref_obj = WeldRefund.objects.get(id = rid)
+    is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
+    if request.method == "POST":
+        reform = WeldRefundForm(request.POST,instance = ref_obj)
+        if reform.is_valid():
+            reform.save()
+            ref_obj.keeper = request.user
+            ref_obj.save()
+            return HttpResponseRedirect("/storage/weldrefund")
+    else:
+        reform = WeldRefundForm(instance = ref_obj) 
     context = {
-        
+        "reform":reform,
+        "ref_obj":ref_obj,
+        "is_show":is_show,
     }
     return render(request,"storage/weldmaterial/weldrefunddetail.html",context) 
 

@@ -3,7 +3,7 @@ from const import *
 from django.db import models
 from const.models import WorkOrder
 from django.contrib.auth.models import User
-from users.models import UserInfo
+from users.models import UserInfo,Group
 from const import STORAGEDEPARTMENT_CHOICES,STORAGESTATUS_KEEPER,REFUNDSTATUS_CHOICES
 # Create your models here.
 
@@ -66,12 +66,13 @@ class WeldingMaterialHumitureRecord(models.Model):
         verbose_name_plural=u'焊焊材库温湿度记录卡'
 
 class WeldRefund(models.Model):
-    department = models.CharField(max_length=20,choices=STORAGEDEPARTMENT_CHOICES,blank=False,verbose_name=u"退库单位")
-    date = models.DateField(blank=False,null=True,verbose_name=u"日期")
+    department = models.ForeignKey(Group,max_length=20,blank=False,verbose_name=u"退库单位")
+    date = models.DateField(blank=False,null=True,verbose_name=u"日期",auto_now_add = True)
     code = models.CharField(max_length=20,blank=False,null=True,unique=True,verbose_name=u"编号")
     work_order = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
     receipts_time = models.DateField(blank=False,null=True,verbose_name=u"领用日期")
     receipts_code = models.CharField(max_length=20,blank=False,null=True,verbose_name=u"领用编号")
+    type_specification = models.CharField(max_length=50,blank=False,null=True,verbose_name=u"型号规格") 
     refund_weight = models.FloatField(default=0,blank=False,verbose_name=u"退库量（重量）")
     refund_count = models.FloatField(default=0,blank=False,verbose_name=u"退库量（数量）")
     refund_status = models.CharField(max_length=20,blank=False,null=True,verbose_name=u"退库状态")

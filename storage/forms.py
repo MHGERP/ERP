@@ -9,6 +9,7 @@ from purchasing.models import PurchasingEntryItems
 from django.contrib.auth.models import User
 from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
+from const.utils import getChoiceList
 DEPARTMENT_CHOICES=(
         (u' ',u'------'),
         (u'部门A',u'部门A'),
@@ -109,7 +110,7 @@ class EntryItemsForm(ModelForm):
         model = PurchasingEntryItems
         fields = ("remark","date","price")
         widget = {
-            "data":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
+            "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
         }
 
 class HumRecordForm(ModelForm):
@@ -131,11 +132,8 @@ class EntrySearchForm(forms.Form):
     work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'work_order'}))
     def __init__(self,*args,**kwargs):
         super(EntrySearchForm,self).__init__(*args,**kwargs)
-        Users = User.objects.all()
-        purchaser_list = [(-1,u"------")]
-        for user in Users:
-            purchaser_list.append((user.id,user.username))
-        self.fields["purchaser"].choices = tuple(purchaser_list)
+        users = User.objects.all()
+        self.fields["purchaser"].choices = getChoiceList(users,"userinfo")
 
 
 class RefundSearchForm(forms.Form):
@@ -146,13 +144,20 @@ class RefundSearchForm(forms.Form):
     keeper=forms.ChoiceField(label=u'库管员',required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'keeper'}))
     def __init__(self,*args,**kwargs):
         super(RefundSearchForm,self).__init__(*args,**kwargs)
-        keeper_list = [(-1,"------")]
         users = getUserByAuthority(STORAGE_KEEPER)
-        for user_obj in users:
-            keeper_list.append((user_obj.id,user_obj.userinfo))
-        self.fields["keeper"].choices =tuple (keeper_list)
-
+        group = Group.objects.all()
+        self.fields["keeper"].choices = getChoiceList(users,"userinfo")
+        self.fields["department"].choices = getChoiceList(group,"name")
 class WeldRefundForm(ModelForm):
     class Meta:
         model = WeldRefund
-        exclude = ('id','refunder','keeper')
+        exclude = ('department','date','code','id','refunder','keeper','weldrefund_status')
+        widgets = {
+            'work_order':forms.Select(attrs={'class':"span2",'readonly':True}),
+            'receipts_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"receipts_time","class":"span2"}),
+            'receipts_code': forms.TextInput(attrs={'class':"span2"}),                      
+            'type_specification': forms.TextInput(attrs={'class':"span2"}),                      
+            'refund_weight': forms.TextInput(attrs={'class':"span1"}),                      
+            'refund_count': forms.TextInput(attrs={'class':"span1"}),                      
+            'refund_status': forms.TextInput(attrs={'class':"span2"}),                      
+        }
