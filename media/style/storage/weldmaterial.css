@@ -1,11 +1,25 @@
 .storage-icon{
-    height:100px;
-    width:100px;
+    height:80px;
+    width:80px;
 }
 
 div#storage-weld-menu{
-    font-size:40px;
+    font-size:30px;
 }
 div#storage-weld-menu a{
     vertical-align:text-bottom;
+}
+
+.bl{
+    width:140px;
+}
+
+div.e3{
+    width:33%;
+    float:left;
+    word-wrap:break-word;
+    margin-bottom:20px;
+}
+div.icon-text{
+    float:left;
 }

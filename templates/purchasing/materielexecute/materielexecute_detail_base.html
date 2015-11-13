@@ -1,0 +1,33 @@
+{% extends "purchasing/base/none_nav_base.html"%}
+{% block title %}
+<h1>材料执行表</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">材料执行表</a>
+{% endblock %}
+{% block inner_content%}
+
+{% block materiel_execute_detail_form%}
+<!--><form class="form-search form-horizontal">
+    <div class="control-group">
+    	<label class="control-label" for=""></label>
+        <div class="controls">
+            <input>
+        </div>
+    </div>
+    <div class="control-group">
+        <a class="btn btn-primary" href="#">新建材料执行表</a>
+    </div>
+</form><-->
+{% endblock %}
+
+<div id="materielexecute_detail_table">
+{% include "purchasing/materielexecute/materielexecute_detail_table.html"%}
+</div>
+
+
+
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/materielexecute_management.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/bootstrap_filestyle.js"></script>
+{% endblock%}

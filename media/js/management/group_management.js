@@ -11,11 +11,11 @@ var group_id;
 
 $("#add_group").click(function() {
     group_id = "-1";
-    $("#groupLabel").html("添加群组"); 
+    $("#groupLabel").html("添加部门"); 
 });
 $(document).on("click", ".btn-change-name", function() {
     group_id = $(this).parent().parent().attr("iid");
-    $("#groupLabel").html("修改群组名"); 
+    $("#groupLabel").html("修改部门名"); 
 });
 $("#btn-finish").click(function() {
     var name = $("#new_group_name").val();
@@ -24,7 +24,7 @@ $("#btn-finish").click(function() {
 
 $(document).on("click", ".btn-delete", function() {
      var id = $(this).parent().parent().attr("iid");
-     if(confirm("您确定删除该群组？"))
+     if(confirm("您确定删除该部门？"))
          Dajaxice.management.deleteGroup(deleteCallBack, {"id": id});
 });
 function deleteCallBack(data) {
@@ -61,7 +61,7 @@ function searchCallBack(data) {
 $("#btn-select-candidate").click(function() {
     var id = $("input:radio:checked").val();
     if(confirm("你确定添加该用户为新群组管理员？")) {
-        Dajaxice.management.addAdmin(addCallBack, {"group_id": pending_group_id,
+        Dajaxice.management.addAdmin(refresh, {"group_id": pending_group_id,
                                                     "user_id": id,})
         return true;
     }

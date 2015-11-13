@@ -6,7 +6,7 @@ from news import views as news_views
 
 urlpatterns=patterns('',
     url(
-        r'^newslist/(?P<news_id>\d+)$',
+        r'^newslist/(\d+)/(\d+)$',
         news_views.read_news,
         name = 'read_news'
     ),

@@ -5,7 +5,7 @@ from django.forms import ModelForm
 from purchasing.models import *
 from const import ORDERFORM_STATUS_CHOICES
 from const.models import Materiel
-from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE
+from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE, RECHECK_CHOICE
 
 class SupplierForm(ModelForm):
     class Meta:
@@ -54,22 +54,20 @@ class BidCommentForm(forms.Form):
 class EntryForm(ModelForm):
     class Meta:
         model = PurchasingEntry
-        fields = ('entry_time',)
+        fields = ('entry_time','entry_code')
         widgets = {
             'entry_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entry_time"}),
         }
     def __init__(self,*args,**kwargs):
         super(EntryForm,self).__init__(*args,**kwargs)
         pur_entry = kwargs["instance"]
-        self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.username if pur_entry.purchaser else ""
-        self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.username if pur_entry.keeper else ""
-        self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.username if pur_entry.inspector else ""
-        self.fields['bidform'].widget.attrs["value"] = pur_entry.entry_code
-
-    purchaser = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
-    inspector = forms.CharField(label=u"检验员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
-    keeper = forms.CharField(label=u"库管员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
-    bidform = forms.CharField(label=u"单据编号",widget = forms.TextInput(attrs={'id':'bidform'}))
+        self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.userinfo if pur_entry.purchaser else ""
+        self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.userinfo if pur_entry.keeper else ""
+        self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.userinfo if pur_entry.inspector else ""
+    
+    purchaser = forms.CharField(label=u"采购员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
+    inspector = forms.CharField(label=u"检验员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
+    keeper = forms.CharField(label=u"库管员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
 class ProcessFollowingForm(ModelForm):
     class Meta:
         model=ProcessFollowingInfo
@@ -148,3 +146,15 @@ class OrderInfoForm(ModelForm):
                    'name':forms.TextInput(attrs={"class":'form-control'}),
                    'schematic_index':forms.TextInput(attrs={"class":'form-control'}),
                    }
+
+class MeterielExcecuteForm(ModelForm):
+    class Meta:
+        model = MaterielExecuteDetail
+        fields = {'recheck','quota','part','oddments','remark',}
+        widgets = {
+            'recheck':forms.Select(choices=RECHECK_CHOICE, attrs={'class':'form-control','id':'recheck'}),
+            'quota':forms.TextInput(attrs={'class':'form-control','id':'quota'}),
+            'part':forms.TextInput(attrs={'class':'form-control','id':'part'}),
+            'oddments':forms.TextInput(attrs={'class':'form-control','id':'oddments'}),
+            'remark':forms.TextInput(attrs={'class':'form-control','id':'remark'})
+        }
