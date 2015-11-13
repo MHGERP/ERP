@@ -40,6 +40,12 @@ class BidForm(models.Model):
         verbose_name_plural = u"标单"
     def __unicode__(self):
         return '%s'% (self.bid_id)
+    def prepaid_amount(self):
+        return reduce(lambda x,y: x + y, [ item.amount for item in self.contractdetail_set.all()] , 0)
+    def payable_amount(self):
+        return self.billing_amount - self.prepaid_amount()
+    def supplier_select(self):
+        return ",".join([ item.supplier.supplier_name for item in self.supplierselect_set.all()])
 
 class ContractDetail(models.Model):
     user = models.ForeignKey(User, blank = False)
@@ -50,7 +56,7 @@ class ContractDetail(models.Model):
         verbose_name = u"合同金额明细"
         verbose_name_plural = u"合同金额明细"
     def __unicode__(self):
-        return self.amount
+        return '%s'% (self.amount)
 
 class BidComment(models.Model):
     user = models.ForeignKey(User, blank = False)

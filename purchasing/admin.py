@@ -23,6 +23,7 @@ RegisterClass = (
     StatusChange,
     StatusChangeReason,
     MaterielExecuteDetail,
+    ContractDetail
 )
 
 for item in RegisterClass:
