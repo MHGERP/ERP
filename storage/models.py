@@ -5,6 +5,7 @@ from const.models import WorkOrder
 from django.contrib.auth.models import User
 from users.models import UserInfo
 from const import STORAGEDEPARTMENT_CHOICES,STORAGESTATUS_KEEPER,REFUNDSTATUS_CHOICES
+from const import LENGHT_MANAGEMENT,WEIGHT_MANAGEMENT,AREA_MANAGEMENT
 # Create your models here.
 
 class WeldingMaterialApplyCard(models.Model):
@@ -125,7 +126,7 @@ class BarSteelMaterialLedger(models.Model):
     quantity = models.IntegerField(blank=False,null=False,verbose_name=u'型材数量')
     store_room = models.ForeignKey(StoreRoom,blank=False,null=False,verbose_name=u'库房位置')
     length = models.FloatField(blank=True,null=True,verbose_name=u"长度",default=0)
-    length_management = model.IntegerField(choices=LENGTH_MANAGEMENT,default=0,verbose_name=u"长度单位")
+    length_management = models.IntegerField(choices=LENGHT_MANAGEMENT,default=0,verbose_name=u"长度单位")
 
     def __unicode__(self):
         return str(self.material_info)
@@ -137,10 +138,10 @@ class BarSteelMaterialLedger(models.Model):
 class CommonSteelMaterialReturnCardInfo(models.Model):
     work_order=models.ForeignKey(WorkOrder,blank=False,null=False,verbose_name=u"工作令")
     date = models.DateField(blank=False,null=False,auto_now_add=True,verbose_name=u"日期")
-    form_code = models.CharField(blank=False,null=False,verbose_name=u"编号")
-    returner = models.ForeignKey(User,blank=False,null=False,verbose_name=u'退料人')
-    inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u'检查员')
-    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员")
+    form_code = models.CharField(max_length=20,blank=False,null=False,verbose_name=u"编号")
+    returner = models.ForeignKey(User,blank=False,null=False,verbose_name=u'退料人',related_name="Steel_returner")
+    inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u'检查员',related_name="steel_return_inspector")
+    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员",related_name="steel_return_keeper")
 
     def __unicode__(self):
         return str(self.form_code)

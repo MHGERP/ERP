@@ -145,13 +145,21 @@ TON = 1
 
 WEIGHT_MANAGEMENT={
     (KILOGRAM,u'千克'),
-    (TON,u'顿')
+    (TON,u'顿'),
 }
 
 SQUARE_METER = 0
 
 AREA_MANAGEMENT={
-    (SQUARE_METER,u'平方米')
+    (SQUARE_METER,u'平方米'),
+}
+
+METER = 0
+CENTIMETER =1
+
+LENGHT_MANAGEMENT={
+    (METER,u'米'),
+    (CENTIMETER,u"厘米"),
 }
 
 
