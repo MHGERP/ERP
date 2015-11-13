@@ -71,4 +71,8 @@ class RefundSearchForm(forms.Form):
         for user_obj in users:
             keeper_list.append((user_obj.id,user_obj.userinfo))
         self.fields["keeper"].choices =tuple (keeper_list)
-        
+
+class WeldRefundForm(ModelForm):
+    class Meta:
+        model = WeldRefund
+        exclude = ('id','refunder','keeper')
