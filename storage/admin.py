@@ -7,6 +7,13 @@ Registers = (
     WeldingMaterialApplyCard,
     StoreRoom,
     WeldingMaterialHumitureRecord,
+    SteelMaterialPurchasingEntry,
+    SteelMaterial,
+    BoardSteelMaterialLedger,
+    BarSteelMaterialLedger,
+    CommonSteelMaterialReturnCardInfo,
+    BoardSteelMaterialReturnCardContent,
+    BarSteelMaterialReturnCardContent
 )
 
 for reg in Registers:
