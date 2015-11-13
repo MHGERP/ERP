@@ -12,8 +12,8 @@
 {% block inner_content%}
 {{group_form.group}}
 
-<div id="widget-content" title_id="{{title.id}}">
+<div id="widget-content" user_id="{{setting_user.id}}">
 </div>
-<script type='text/javascript' src="{{STATIC_URL}}js/management/authority_management.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/management/title_setting.js"></script>
 
 {% endblock%}

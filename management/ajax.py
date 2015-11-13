@@ -111,7 +111,7 @@ def addAdmin(request, group_id, user_id):
         return "fail"
 
 @dajaxice_register
-def getTitleList(request, group_id):
+def getTitleList(request, group_id, setting_user = False):
     """
     JunHU
     summary: ajax function to get all title belong to one group
@@ -119,10 +119,18 @@ def getTitleList(request, group_id):
     return: title list html string
     """
     title_list = Title.objects.filter(group = group_id)
+    if setting_user:
+        user = User.objects.get(id = setting_user)
+        for title in title_list:
+            title.checked = (user in title.users.all())
+           
     context = {
         "title_list": title_list,
     }
-    html = render_to_string("management/widgets/title_table.html", context)
+
+    html = setting_user and \
+        render_to_string("management/widgets/title_setting_table.html", context) or \
+        render_to_string("management/widgets/title_table.html", context) 
     return html
 
 @dajaxice_register
@@ -255,6 +263,20 @@ def getAuthList(request, auth_type, title_id):
     }
     html = render_to_string("management/widgets/auth_table.html", context)
     return html
+
+@dajaxice_register
+def addOrRemoveTitle(request, title_id, user_id, flag):
+    try:
+        title = Title.objects.get(id = title_id)
+        user = User.objects.get(id = user_id)
+        if flag:
+            title.users.add(user)
+        else:
+            title.users.remove(user)
+        return "ok"
+    except:
+        return "fail"
+
 
 @dajaxice_register
 def addOrRemoveAuth(request, auth_id, title_id, flag):

@@ -11,7 +11,7 @@
     <tr iid="{{item.id}}">
         <td>{{item.name}}</td>
         {% if item.admin %}
-            <td>{{item.admin}}</td>
+            <td>{{item.admin.userinfo.name}}</td>
             <td>
                 <span class="btn btn-small btn-warning btn-change-name" data-toggle="modal" data-target="#add_group_modal">修改部门名</span>
                 <span class="btn btn-small btn-warning btn-change-admin" data-toggle="modal" data-target="#admin_modal">修改管理员</span>
