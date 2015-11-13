@@ -99,11 +99,39 @@ def Weld_Apply_Card_Detail(request):
 
 def Handle_Apply_Card_Form(request):
     if request.method=='POST':
-        apply_card_form=WeldingMaterialApplyCardForm(request.POST)
-        print apply_card_form.errors
+        if request.user.is_superuser:
+            Apply_Card_Form_Commit(request)
+        elif request.user.is_authenticated:
+            Apply_Card_Form_Apply(request)
+
+        #print apply_card_form
         return HttpResponse('RECEIVE')
     else:
         return HttpResponse('FAIL')
+
+def Apply_Card_Form_Apply(request):
+    ac=WeldingMaterialApplyCard.objects.get(index=int(request.POST['index']))
+    apply_card_form=ApplyCardForm(request.POST,instance=ac)
+    if apply_card_form.is_valid():
+        print 'VALID'
+        s=apply_card_form.save()
+    else:
+        print 'INVALID'
+        print apply_card_form.errors
+
+def Apply_Card_Form_Commit(request):
+    ac=WeldingMaterialApplyCard.objects.get(index=int(request.POST['index']))
+    apply_card_form=ApplyCardForm(request.POST,instance=ac)
+    if apply_card_form.is_valid():
+        print 'VALID'
+        s=apply_card_form.save(commit=False)
+        s.commit_user=request.user
+        s.status=3
+        s.save()
+    else:
+        print 'INVALID'
+        print apply_card_form.errors
+
 
 
 def weldHumitureHomeViews(request):

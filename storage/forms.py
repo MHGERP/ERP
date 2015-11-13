@@ -24,15 +24,16 @@ class ApplyCardHistorySearchForm(forms.Form):
     work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'work_order'}))
     commit_user=forms.CharField(label=u'发料人',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'commit_user'}))
 
-class WeldingMaterialApplyCardForm(ModelForm):
-    class Meta:
-        model=WeldingMaterialApplyCard
-        exclude=['create_time']
+#class WeldingMaterialApplyCardForm(ModelForm):
+#    class Meta:
+#        model=WeldingMaterialApplyCard
+#        exclude=['create_time']
 
 class ApplyCardForm(ModelForm):
+
     class Meta:
         model=WeldingMaterialApplyCard
-        fields=('workorder','weld_bead_number','weld_material_number','model','standard','apply_weight','apply_quantity','material_number','actual_weight','actual_quantity',)
+        exclude=[]
         
         widgets={
                 'workorder':forms.TextInput(attrs={'class':'form-control','style':'width:60%'}),
@@ -45,6 +46,15 @@ class ApplyCardForm(ModelForm):
                 'material_number':forms.TextInput(attrs={'class':'form-control '}),
                 'actual_weight':forms.TextInput(attrs={'class':'form-control span1'}),
                 'actual_quantity':forms.TextInput(attrs={'class':'form-control span1'}),
+                #hidden
+                'index':forms.HiddenInput(),
+                'department':forms.HiddenInput(),
+                'create_time':forms.HiddenInput(),
+                'applicant':forms.HiddenInput(),
+                'auditor':forms.HiddenInput(),
+                'inspector':forms.HiddenInput(),
+                'commit_user':forms.HiddenInput(),
+                'status':forms.HiddenInput(),
                 }
 class Apply_ApplyCardForm(ApplyCardForm):
     class Meta(ApplyCardForm.Meta):
@@ -59,6 +69,15 @@ class Apply_ApplyCardForm(ApplyCardForm):
                 'material_number':forms.TextInput(attrs={'class':'form-control ','readonly':''}),
                 'actual_weight':forms.TextInput(attrs={'class':'form-control span1','readonly':''}),
                 'actual_quantity':forms.TextInput(attrs={'class':'form-control span1','readonly':''}),
+                #hidden
+                'index':forms.HiddenInput(),
+                'department':forms.HiddenInput(),
+                'create_time':forms.HiddenInput(),
+                'applicant':forms.HiddenInput(),
+                'auditor':forms.HiddenInput(),
+                'inspector':forms.HiddenInput(),
+                'commit_user':forms.HiddenInput(),
+                'status':forms.HiddenInput(),
                 }
 
 class Commit_ApplyCardForm(ApplyCardForm):
@@ -74,6 +93,15 @@ class Commit_ApplyCardForm(ApplyCardForm):
                 'material_number':forms.TextInput(attrs={'class':'form-control '}),
                 'actual_weight':forms.TextInput(attrs={'class':'form-control span1'}),
                 'actual_quantity':forms.TextInput(attrs={'class':'form-control span1'}),
+                #hidden
+                'index':forms.HiddenInput(),
+                'department':forms.HiddenInput(),
+                'create_time':forms.HiddenInput(),
+                'applicant':forms.HiddenInput(),
+                'auditor':forms.HiddenInput(),
+                'inspector':forms.HiddenInput(),
+                'commit_user':forms.HiddenInput(),
+                'status':forms.HiddenInput(),
                 }
 
 class EntryItemsForm(ModelForm):

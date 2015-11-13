@@ -29,6 +29,7 @@ class WeldingMaterialApplyCard(models.Model):
     def __unicode__(self):
         return str(self.index)
 
+
     class Meta:
         verbose_name=u'焊材领用卡'
         verbose_name_plural=u'焊材领用卡'
