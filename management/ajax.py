@@ -3,6 +3,7 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.template.loader import render_to_string
 from django.utils import simplejson
+
 from users.models import *
 from django.contrib.auth.models import User
 from news.models import *
