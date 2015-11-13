@@ -1,7 +1,7 @@
 {% for item in candidate_list%}
 <label class="radio">
     <input type="radio" name="optionsRadios" value="{{item.id}}">
-    {{ item }}
+    {{ item  }} ({{item.userinfo.name}})
 </label>
 {% endfor%}
 

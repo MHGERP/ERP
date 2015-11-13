@@ -3,7 +3,7 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from purchasing.models import *
-from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderInfoForm
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderInfoForm,MeterielExcecuteForm
 from const import *
 from const.models import Materiel,OrderFormStatus, BidFormStatus
 from django.template.loader import render_to_string
@@ -60,7 +60,7 @@ def checkArrival(request,aid,cid):
 
 @dajaxice_register
 @transaction.commit_manually
-def genEntry(request,bid):
+def genEntry(request,bid,selected):
     flag = False
     message = ""
     try:
@@ -928,6 +928,7 @@ def OrderInfo(request,form,uid,count,name):
     order_obj.material = material
     order_obj.save()
 
+
 def addToExecute(materiel):
     materiel_execute_detail=MaterielExecuteDetail(materiel=materiel)
     materiel_execute_detail.save()
@@ -940,4 +941,24 @@ def AddToMaterialExecute(request,selected):
         materiel=Materiel.objects.get(pk=item)
         addToExecute(materiel)
 
+@dajaxice_register
+def GetMeterielExecuteForm(request,uid):
+    """
+    Lei
+    """
+    materielexecute = MaterielExecuteDetail.objects.get(id=uid)
+    materielexecuteForm = MeterielExcecuteForm(instance=materielexecute)
+    form_html = render_to_string("widgets/materielexecute_form.html",{'materielexecute_form':materielexecuteForm})
+    return simplejson.dumps({'form':form_html})
+
+@dajaxice_register
+def materielExecuteInfo(request,form,uid):
+    """
+    Lei
+    """
+    materielexecute = MaterielExecuteDetail.objects.get(id=uid)
+    materielexecuteForm = MeterielExcecuteForm(deserialize_form(form),instance=materielexecute)
+    materielexecute_obj = materielexecuteForm.save()
+    materielexecute_obj.save()
+    print materielexecute_obj
 
