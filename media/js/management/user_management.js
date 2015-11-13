@@ -38,10 +38,11 @@ $("#user-add").click(function() {
 $("#user-save").click(function() {
     var user_name = $("#user_name").val();
     var user_password = $("#user_password").val();
+    var user_fullname = $("#user_fullname").val();
     Dajaxice.management.createUser(createUserCallBack, {
                                                     "user_name": user_name,
                                                     "user_password": user_password,
-                                                    
+                                                    "user_fullname": user_fullname,  
                                             });
 });
 
@@ -49,4 +50,12 @@ $("#user-save").click(function() {
 $(document).on("click", ".btn-set-title", function() {
      user_id = $(this).parent().parent().attr("iid");
      location.href = "/management/titleSetting?user_id=" + user_id;
+});
+
+
+$(document).on("click", ".btn-delete", function() {
+    user_id = $(this).parent().parent().attr("iid");
+    if(confirm("你确定删除该用户？")) {
+        Dajaxice.management.deleteUser(refresh, {"user_id": user_id});
+    }
 });
