@@ -65,6 +65,9 @@ def messageManagementViews(request):
     BinWu
     """
     if request.method == 'POST':
+        files = request.FILES.getlist("message_document")
+        print("++++++++++++++++++++++++")
+        print(files)
         messageform = MessageForm(request.POST)
         if messageform.is_valid():
             new_message = Message(title = messageform.cleaned_data["message_title"],
@@ -73,6 +76,12 @@ def messageManagementViews(request):
                                   time = datetime.datetime.now()
                                  )
             new_message.save()
+            if files:
+                for file in files:
+                    new_doc = DocumentFile(news_document = file,
+                                           message = new_message)
+                    new_doc.save()
+
             for user_iterator in User.objects.all():
                 for group_id in messageform.cleaned_data["message_groups"]:
                     group = Group.objects.get(id = int(group_id))
