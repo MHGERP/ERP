@@ -36,6 +36,11 @@ class QualityPriceCardForm(ModelForm):
     class Meta:
         model = qualityPriceCard
 
+class ContractDetailForm(ModelForm):
+    class Meta:
+        model = ContractDetail
+        fields = ('amount', )
+
 class BidCommentForm(forms.Form):
     result_choices=(("-1","请审核"),("0","通过"),("1","不通过"))
     judgeresult =forms.ChoiceField(choices=result_choices,required=True, label=u"审核结果",
@@ -60,7 +65,7 @@ class EntryForm(ModelForm):
         self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.username if pur_entry.keeper else ""
         self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.username if pur_entry.inspector else ""
         self.fields['bidform'].widget.attrs["value"] = pur_entry.entry_code
-    
+
     purchaser = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
     inspector = forms.CharField(label=u"检验员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
     keeper = forms.CharField(label=u"库管员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))

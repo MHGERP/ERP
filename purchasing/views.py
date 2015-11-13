@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.db.models import Q
 from purchasing.models import *
 from const import *
+from purchasing import *
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
 from const.models import WorkOrder, InventoryType, BidFormStatus
@@ -149,6 +150,15 @@ def bidTrackingViews(request, bid_id):
                "BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED": BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED,
              }
     return render(request, "purchasing/bid_track.html", context)
+
+def contractFinanceViews(request):
+    bidforms = BidForm.objects.all()
+    context = {
+        "bidForms":bidforms,
+        "CONTRACT_ADD_AMOUNT": CONTRACT_ADD_AMOUNT,
+        "CONTRACT_DETAIL": CONTRACT_DETAIL,
+    }
+    return render(request,"purchasing/contract_finance.html",context)
 
 @csrf.csrf_protect
 def arrivalInspectionViews(request):
