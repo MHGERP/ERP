@@ -264,6 +264,13 @@ def getAuthList(request, auth_type, title_id):
 
 @dajaxice_register
 def addOrRemoveTitle(request, title_id, user_id, flag):
+    """
+    JunHU
+    summary: ajax function to add or remove connection between one user and one title
+    params: user_id: db id of user; title_id: db id of title; flag: indicate add or remove
+    return: result info
+    """
+
     try:
         title = Title.objects.get(id = title_id)
         user = User.objects.get(id = user_id)
