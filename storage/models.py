@@ -251,8 +251,23 @@ class AuxiliaryToolApplyCard(models.Model):
     def __unicode__(self):
         return str(self.index)
 
-    
+class WeldStoreList(models.Model):
+    factory = models.CharField(max_length=20,verbose_name=u"厂家")
+    deadline = models.DateField(verbose_name=u"最后期限",null = True)
+    brand = models.CharField(max_length=20,verbose_name=u"牌号")
+    type_specification = models.CharField(max_length=50,verbose_name=u"规格")
+    count = models.FloatField(verbose_name=u"数量")
+    entry_time = models.DateField(verbose_name=u"入库时间")
+    charge_number = models.CharField(max_length=20,verbose_name=u"材料批号")
+    material_id = models.CharField(max_length=20,verbose_name=u"材质编号")
+    remark = models.CharField(max_length=100,verbose_name=u"备注",null = True)
 
+    class Meta:
+        verbose_name = u"焊材库存清单"
+        verbose_name_plural = u"焊材库存清单"
+
+    def __unicode__(self):
+        return "%s(%s)" % (self. type_specification,self.factory)
 
     
 
