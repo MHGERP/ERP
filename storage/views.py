@@ -183,3 +183,7 @@ def weldRefundViews(request):
         "STORAGESTATUS_END":STORAGESTATUS_END,
     }
     return render(request,"storage/weldmaterial/weldrefundhome.html",context ) 
+
+def AuxiliaryToolsHomeView(request):
+    context={}
+    return render(request,'storage/auxiliarytools/home/home.html',context)

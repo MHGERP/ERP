@@ -9,6 +9,8 @@ Registers = (
     StoreRoom,
     WeldingMaterialHumitureRecord,
     WeldRefund,
+    AuxiliaryTool,
+    AuxiliaryToolApplyCard,
 )
 
 for reg in Registers:
