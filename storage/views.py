@@ -5,7 +5,6 @@ from django.shortcuts import render
 from const import *
 from const.forms import InventoryTypeForm
 from const.utils import *
-from django.http import HttpResponseRedirect
 from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
@@ -80,7 +79,7 @@ def weldEntryConfirmViews(request,eid):
 def Weld_Apply_Card_List(request):
     context={}
     weld_apply_cards=WeldingMaterialApplyCard.objects.filter(commit_user=None).order_by('create_time')#考虑效率问题，注意更改all的获取方式
-    context['unhandled_weld_apply_cards']=weld_apply_cards
+    context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
 
@@ -89,7 +88,48 @@ def Weld_Apply_Card_Detail(request):
     card_index=int(request.GET['index'])
     apply_card=WeldingMaterialApplyCard.objects.get(index=card_index)
     context['apply_card']=apply_card
+    if request.user.is_superuser:#如果是库管员
+        context['apply_card_form']=Commit_ApplyCardForm(instance=apply_card)
+    else:#如果是申请者
+        context['apply_card_form']=Apply_ApplyCardForm(instance=apply_card)
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
+
+def Handle_Apply_Card_Form(request):
+    if request.method=='POST':
+        if request.user.is_superuser:
+            Apply_Card_Form_Commit(request)
+        elif request.user.is_authenticated:
+            Apply_Card_Form_Apply(request)
+
+        #print apply_card_form
+        return HttpResponse('RECEIVE')
+    else:
+        return HttpResponse('FAIL')
+
+def Apply_Card_Form_Apply(request):
+    ac=WeldingMaterialApplyCard.objects.get(index=int(request.POST['index']))
+    apply_card_form=ApplyCardForm(request.POST,instance=ac)
+    if apply_card_form.is_valid():
+        print 'VALID'
+        s=apply_card_form.save()
+    else:
+        print 'INVALID'
+        print apply_card_form.errors
+
+def Apply_Card_Form_Commit(request):
+    ac=WeldingMaterialApplyCard.objects.get(index=int(request.POST['index']))
+    apply_card_form=ApplyCardForm(request.POST,instance=ac)
+    if apply_card_form.is_valid():
+        print 'VALID'
+        s=apply_card_form.save(commit=False)
+        s.commit_user=request.user
+        s.status=3
+        s.save()
+    else:
+        print 'INVALID'
+        print apply_card_form.errors
+
+
 
 def weldHumitureHomeViews(request):
     hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("date") 
@@ -149,3 +189,7 @@ def weldRefundDetailViews(request,rid):
         
     }
     return render(request,"storage/weldmaterial/weldrefunddetail.html",context) 
+
+def AuxiliaryToolsHomeView(request):
+    context={}
+    return render(request,'storage/auxiliarytools/home/home.html',context)

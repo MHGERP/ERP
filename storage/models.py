@@ -1,4 +1,5 @@
 #coding=UTF-8
+from const import *
 from django.db import models
 from const.models import WorkOrder
 from django.contrib.auth.models import User
@@ -17,16 +18,18 @@ class WeldingMaterialApplyCard(models.Model):
     standard=models.CharField(verbose_name=u'规格',max_length=20,blank=False)
     apply_weight=models.FloatField(verbose_name=u'领用重量',blank=False)
     apply_quantity=models.FloatField(verbose_name=u'领用数量',blank=False)
-    material_number=models.CharField(verbose_name=u'材质编号',max_length=20,blank=False)
-    actual_weight=models.FloatField(verbose_name=u'实发重量',default=0,blank=True)
-    actual_quantity=models.FloatField(verbose_name=u'实发数量',default=0,blank=True)
+    material_number=models.CharField(verbose_name=u'材质编号',max_length=20,blank=True,null=True)
+    actual_weight=models.FloatField(verbose_name=u'实发重量',default=-1,blank=False)
+    actual_quantity=models.FloatField(verbose_name=u'实发数量',default=-1,blank=False)
     applicant=models.ForeignKey(User,verbose_name=u'领用人',blank=False,related_name="applicants")
     auditor=models.ForeignKey(User,verbose_name=u'审核人',default=None,blank=True,null=True,related_name="auditors")
     inspector=models.ForeignKey(User,verbose_name=u'检查员',default=None,blank=True,null=True,related_name="inspectors")
     commit_user=models.ForeignKey(User,verbose_name=u'发料人',default=None,blank=True,null=True,related_name="commit_users")
+    status=models.IntegerField(verbose_name=u'领用状态',choices=APPLYCARD_STATUS_CHOICES,default=APPLYCARD_APPLY,blank=False)
 
     def __unicode__(self):
         return str(self.index)
+
 
     class Meta:
         verbose_name=u'焊材领用卡'
@@ -82,3 +85,61 @@ class WeldRefund(models.Model):
 
     def __unicode__(self):
         return '%s' % self.code
+
+
+class AuxiliaryTool(models.Model):
+    name=models.CharField(verbose_name=u'材料名称',max_length=30,blank=False)
+    standard=models.CharField(verbose_name=u'规格',max_length=20,blank=False)
+    measurement_unit=models.CharField(verbose_name=u'计量单位',max_length=10,blank=False)
+    quantity=models.FloatField(verbose_name=u'数量',default=0,blank=False)
+    unit_price=models.FloatField(verbose_name=u'单价',blank=False)
+    manufacturer=models.CharField(verbose_name=u'厂家',max_length=30,blank=False)
+
+    class Meta:
+        verbose_name=u'辅助材料'
+        verbose_name_plural=u'辅助材料'
+
+    def __unicode__(self):
+        return self.name+u' 型号:'+self.standard+u' 制造:'+self.manufacturer
+
+class AuxiliaryToolApplyCard(models.Model):
+    create_time=models.DateField(verbose_name=u'申请时间',auto_now_add=True)
+    commit_time=models.DateField(verbose_name=u'实发时间')
+    index=models.IntegerField(verbose_name=u'编号',blank=False,unique=True)
+    apply_item=models.ForeignKey(AuxiliaryTool,verbose_name=u'申请物资',blank=False,related_name="apply_items")
+    apply_quantity=models.IntegerField(verbose_name=u'申请数量',blank=False)
+    apply_total=models.FloatField(verbose_name=u'申请总价',default=0,blank=False)#overwrite the save() method to calculate the apply_total
+
+    actual_item=models.ForeignKey(AuxiliaryTool,verbose_name=u'实发物资',default=None,blank=True,null=True,related_name="actual_items")
+    actual_quantity=models.IntegerField(verbose_name=u'实发数量',default=0,blank=False)
+    actual_total=models.FloatField(verbose_name=u'实际总价',default=0,blank=False)
+    status=models.IntegerField(verbose_name=u'完成状态',default=0,blank=False)
+
+    def save(self,*args,**kwargs):
+        if not self.status==2:
+            self.apply_total=self.apply_item.unit_price*self.apply_quantity
+            self.apply_item.save()
+            self.status=1
+    
+            if self.actual_item and self.status==1:
+                self.actual_total=self.actual_item.unit_price*self.actual_quantity
+                self.actual_item.quantity-=self.actual_quantity
+                self.actual_item.save()
+                self.status=2
+    
+            super(AuxiliaryToolApplyCard,self).save(*args,**kwargs)
+
+    class Meta:
+        verbose_name=u'辅助材料领用卡'
+        verbose_name_plural=u'辅助材料领用卡'
+    def __unicode__(self):
+        return str(self.index)
+
+    
+
+
+    
+
+
+
+

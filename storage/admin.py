@@ -1,4 +1,5 @@
 #coding=UTF-8
+from models import *
 
 from django.contrib import admin
 from storage.models import *
@@ -8,6 +9,8 @@ Registers = (
     StoreRoom,
     WeldingMaterialHumitureRecord,
     WeldRefund,
+    AuxiliaryTool,
+    AuxiliaryToolApplyCard,
 )
 
 for reg in Registers:
