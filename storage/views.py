@@ -187,9 +187,24 @@ def weldhumDetail(request,eid):
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
 
 def weldbakeHomeViews(request):
-    bake_set = WeldingMaterialBakeRecord.objects.all().order_by("-date")
+    if request.method == "POST":
+        search_form = BakeSearchForm(request.POST)
+        dict = {}
+        bake_set = []
+        if search_form.is_valid():
+            dict["date"] = search_form.cleaned_data["date"]
+            dict["standardnum"] = search_form.cleaned_data["standardnum"]
+            dict["weldengineer"] = search_form.cleaned_data["weldengineer"]
+            dict["storeMan"] = search_form.cleaned_data["storeMan"]
+            bake_set = get_weld_filter(WeldingMaterialBakeRecord,dict)
+        else:
+            print search_form.errors
+    else:
+        bake_set = WeldingMaterialBakeRecord.objects.all().order_by("-date")
+        search_form = BakeSearchForm()
     context = {
         "bake_set":bake_set,
+        "search_form":search_form,
     }
     return render(request,"storage/weldbake/weldbakeHome.html",context)
 
@@ -207,9 +222,7 @@ def weldbakeNewRecord(request):
     return render(request,"storage/weldbake/weldbakeNewRecord.html",context)
 
 def weldbakeDetail(request,index):
-    print index + "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
     bake_detail = WeldingMaterialBakeRecord.objects.get(index = index)
-    print bake_detail
     form = BakeRecordForm(instance = bake_detail)
     context = {
         "form":form,
