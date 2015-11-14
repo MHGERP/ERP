@@ -13,5 +13,5 @@ def createNewUser(username, password, fullname = None):
 
 def getUserByAuthority(authority):
     auth_obj = Authority.objects.get(authority = authority)
-    user_list = User.objects.filter(title_user__authorities = auth_obj)
+    user_list = User.objects.filter(title_user__authorities = auth_obj).distinct()
     return user_list    
