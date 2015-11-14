@@ -1,0 +1,38 @@
+{% extends "storage/auxiliarytools/home.html" %}
+
+{% block title %}
+<h1>辅助工具清单</h1>
+{% endblock %}
+
+{% block sub_sec %}
+<a href="#" class="current">辅助工具清单</a>
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
+   <h3 style="text-align:center">辅助材料清单</h3>
+   <table class="table table-hover table-bordered">
+   <tr>
+   <th>材料名称</th>
+   <th>类别</th>
+   <th>计量单位</th>
+   <th>数量</th>
+   <th>单价</th>
+   <th>厂家</th>
+   <th>材料入库</th>
+   </tr>
+   {% for item in auxiliarytools %}
+   <tr>
+   <td>{{item.name}}</td>
+   <td>{{item.model}}</td>
+   <td>{{item.measurement_unit}}</td>
+   <td>{{item.quantity}}</td>
+   <td>{{item.unit_price}}</td>
+   <td>{{item.manufacturer}}</td>
+   <td><a href="/storage/auxiliarytools/entry?id={{item.id}}"><button type="button" class="btn btn-info">入库</button></a></td>
+   </tr>
+
+   {% endfor %}
+   </table>
+{% endblock%}
+

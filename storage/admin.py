@@ -7,6 +7,7 @@ Registers = (
     WeldingMaterialApplyCard,
     StoreRoom,
     WeldingMaterialHumitureRecord,
+    WeldingMaterialBakeRecord,
     SteelMaterialPurchasingEntry,
     SteelMaterial,
     BoardSteelMaterialLedger,
@@ -17,6 +18,9 @@ Registers = (
     WeldRefund,
     AuxiliaryTool,
     AuxiliaryToolApplyCard,
+    AuxiliaryToolEntryCard,
+    WeldMaterialEntry,
+    WeldMaterialEntryItems,
 )
 
 for reg in Registers:
