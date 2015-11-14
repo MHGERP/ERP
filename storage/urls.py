@@ -93,6 +93,14 @@ urlpatterns = patterns('',
         r'^auxiliarytools/entrylist$',
         storage_views.AuxiliaryToolsEntryListView,
     ),
+    url(
+        r'^auxiliarytools/ledger/entry/entry_card$',
+        storage_views.AuxiliaryToolsLedgerEntryCardView,
+    ),
+    url(
+        r'^auxiliarytools/ledger/apply/apply_card$',
+        storage_views.AuxiliaryToolsLedgerApplyCardView,
+    ),
 )
 
 

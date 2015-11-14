@@ -17,6 +17,7 @@ Registers = (
     WeldRefund,
     AuxiliaryTool,
     AuxiliaryToolApplyCard,
+    AuxiliaryToolEntryCard,
 )
 
 for reg in Registers:
