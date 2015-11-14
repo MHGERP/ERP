@@ -24,6 +24,8 @@
            
         </div>
     </div>
+    <form id="detail_form" action="/storage/weldapply/submit" method="POST">
+        {% csrf_token %}
     <table class="table table-hover table-bordered">
         <tr>
             <th class="fix_th" rowspan="2">工作令</th>
@@ -42,16 +44,7 @@
             <th>数量</th>
         </tr>
         <tr>
-            <td>{{apply_card.workorder}}</td>
-            <td>{{apply_card.weld_bead_number}}</td>
-            <td>{{apply_card.weld_material_number}}</td>
-            <td>{{apply_card.model}}</td>
-            <td>{{apply_card.standard}}</td>
-            <td>{{apply_card.apply_weight}}</td>
-            <td>{{apply_card.apply_quantity}}</td>
-            <td>{{apply_card.material_number}}</td>
-            <td>{{apply_card.actual_weight}}</td>
-            <td>{{apply_card.actual_quantity}}</td>
+            {% include "storage/weldapply/weldapplycarddetail_change_table.html" %}
         </tr>
         <tr>
             <td colspan="10" style="text-align:left">备注:1.以上前六项为领用人填写;2.后二项为发料人填写。</td>
@@ -70,8 +63,9 @@
         <div class="span3">
             <label>发料人:<strong>{{apply_card.commit_user}}</strong></label>
         </div>
-    <button type="button" id="confirm" class="btn btn-info">确认</button>
+    <button type="submit" id="confirm" class="btn btn-info">确认</button>
     </div>
+</form>
     
 {% endblock%}
 

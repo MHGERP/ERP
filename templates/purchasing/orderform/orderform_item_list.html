@@ -13,7 +13,9 @@
 			<th>数量</th>
 			<th>备注</th>
 			<th>状态</th>
+			{% if not can_choose %}
 			<th>修改</th>
+			{% endif %}
 		</tr>
   </thead>
 	<tbody>
@@ -32,9 +34,11 @@
 			<td>{{item.materielformconnection.count}}</td>
 			<td></td>
 			<td>{{item.status}}</td>
+            {% if not can_choose %}
 			<td>
 				<button class="btn btn-primary" uid={{item.id}}>修改</button>
 			</td>
+			{% endif %}
 		</tr>
 		{% endfor %}
 		{% for item in items %}
@@ -52,9 +56,11 @@
 			<td>{{item.materielformconnection.count}}</td>
 			<td></td>
 			<td>{{item.status}}</td>
+			{% if not can_choose %}
 			<td>
 				<button class="btn btn-primary" id="edit" uid={{item.id}}>修改</button>
 			</td>
+			{% endif %}
 		</tr>
 		{% endfor %}
 	</tbody>

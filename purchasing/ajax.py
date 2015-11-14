@@ -3,8 +3,9 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from purchasing.models import *
-from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderInfoForm
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderInfoForm, ContractDetailForm, MeterielExcecuteForm
 from const import *
+from purchasing import *
 from const.models import Materiel,OrderFormStatus, BidFormStatus
 from django.template.loader import render_to_string
 from django.utils import simplejson
@@ -60,7 +61,7 @@ def checkArrival(request,aid,cid):
 
 @dajaxice_register
 @transaction.commit_manually
-def genEntry(request,bid):
+def genEntry(request,bid,selected):
     flag = False
     message = ""
     try:
@@ -365,6 +366,7 @@ def addChangeItem(request,subform,sid,item_id = None):
     try:
         if item_id == None:
             subform = SubApplyItemForm(deserialize_form(subform))
+            print subform
             if subform.is_valid():
                 subitem = subform.save(commit = False)
                 subitem.sub_apply = subapply
@@ -375,6 +377,7 @@ def addChangeItem(request,subform,sid,item_id = None):
                 flag = False
         else:
             item = MaterialSubApplyItems.objects.get(id = item_id)
+            print subform
             subform = SubApplyItemForm(deserialize_form(subform),instance = item)
             if subform.is_valid():
                 if not is_pass:
@@ -466,64 +469,6 @@ def saveMaterielExecute(request, form):
         ret = {'status' : '0', 'message' : u'材料执行保存失败！'}
     return simplejson.dumps(ret)
 
-"""
-@dajaxice_register
-@transaction.commit_manually
-def saveMaterielExecuteDetail(request, form, materielChoice):
-
-   # mxl
-   # summary : save the materielExecute and MainMaterielExecuteDetail(SupportMaterielExecuteDetail) models
-   # params : form : the submit form(detail)
-   #          documentNumberInput : document_number of MaterielExecute model
-   #          materielChoice : materielChoice of  MaterielExecute model
-
-    flag = False;
-    try:
-        # materielexecute = MaterielExecute();
-        # materielexecute.document_number = documentNumberInput
-        # materielexecute.document_lister = request.user
-        # materielexecute.date = datetime.today()
-
-        if materielChoice == MAIN_MATERIEL:
-            # materielexecute.materiel_choice = MATERIEL_CHOICE[0][0]
-            detail_Form = MainMaterielExecuteDetailForm(deserialize_form(form))
-            if detail_Form.is_valid():
-                materielexecute_detail = detail_Form.save()
-                flag = True
-
-        else:
-            # materielexecute.materiel_choice = MATERIEL_CHOICE[1][0]
-            detail_Form = SupportMaterielExecuteDetailForm(deserialize_form(form))
-            if detail_Form.is_valid():
-                materielexecute_detail = detail_Form.save()
-                flag = True
-
-        if flag:
-            # materielexecute.save()
-            # print materielexecute.materiel_choice
-            # materielexecute_detail.materiel_execute = materielexecute
-            materielexecute_detail.save()
-            materielexecute_detail_set = [materielexecute_detail]
-    except Exception, e:
-        transaction.rollback()
-        print e
-    if flag:
-        transaction.commit()
-        if materielChoice == MAIN_MATERIEL:
-            detail_table = render_to_string("purchasing/materielexecute/table/main_td.html", {"materielexecute_detail_set" : materielexecute_detail_set})
-        else:
-            detail_table = render_to_string("purchasing/materielexecute/table/support_td.html", {"materielexecute_detail_set" : materielexecute_detail_set})
-        ret = {'status' : '1', 'message' : u'保存成功', 'detail_table' : detail_table, 'materielexecute_detail_id' : materielexecute_detail.id}
-    else:
-        # errorsFiled = render_to_string("purchasing/materielexecute/widget/errorsField.html", {"errorsFiled" : detail_Form})
-        if materielChoice == MAIN_MATERIEL:
-            add_form = render_to_string("purchasing/materielexecute/widget/add_main_detail_form.html", {"MainMaterielExecuteDetailForm":detail_Form})
-        else:
-            add_form = render_to_string("purchasing/materielexecute/widget/add_support_detail_form.html", {"SupportMaterielExecuteDetailForm":detail_Form})
-        ret = {'status' : '0', 'message' : u'请检查输入是否正确', 'add_form' : add_form}
-        transaction.rollback()
-    return simplejson.dumps(ret)
-"""
 @dajaxice_register
 def saveMaterielExecuteDetail(request, selected, eid):
     materielexecute=MaterielExecute.objects.get(document_number=eid)
@@ -537,26 +482,10 @@ def saveMaterielExecuteDetail(request, selected, eid):
 @dajaxice_register
 def materielExecuteCommit(request,  materielExecuteId):
     try:
-        """
-        materielExecute = MaterielExecute.objects.get(id=materielExecuteId)
-        materielExecute.is_save = True
-        if materielChoice == MAIN_MATERIEL:
-            for detail_id in detail_id_array:
-                print detail_id
-                mainMaterielExecuteDetail = MainMaterielExecuteDetail.objects.get(id=detail_id)
-                mainMaterielExecuteDetail.materiel_execute = materielExecute
-                mainMaterielExecuteDetail.save()
-        else:
-            for detail_id in detail_id_array:
-                print detail_id
-                supportMaterielExecuteDetail = SupportMaterielExecuteDetail.objects.get(id=detail_id)
-                supportMaterielExecuteDetail.materiel_execute = materielExecute
-                supportMaterielExecuteDetail.save()
-        materielExecute.save()
-        """
         print materielExecuteId
         materielexecute=MaterielExecute.objects.get(document_number=materielExecuteId)
         materielexecute.is_save=True
+        materielexecute.date=datetime.today()
         materielexecute.save()
         ret = {'status' :0,'message':u'材料执行表提交成功！',}
     except Exception, e:
@@ -635,6 +564,39 @@ def deleteDetail(request,uid):
 
     param = {"uid":uid}
     return simplejson.dumps(param)
+
+@dajaxice_register
+def contractAmount(request, tid, bid,  form):
+    if tid == CONTRACT_ADD_AMOUNT:
+        table = render_to_string("purchasing/widgets/contract_detail_form.html", {"ContractDetailForm": ContractDetailForm(),
+                                                                                  "CONTRACT_ADD_DETAIL": CONTRACT_ADD_DETAIL,
+                                                                                  "bid":bid})
+        ret = {'status': '1', 'table': table}
+    elif tid == CONTRACT_DETAIL:
+        bidform = BidForm.objects.get(bid_id = bid)
+        contractDetails = ContractDetail.objects.filter(bidform = bidform)
+        table = render_to_string("purchasing/widgets/contract_detail.html", {"contractDetails": contractDetails})
+        ret = {'status': '1', 'table': table}
+    elif tid == CONTRACT_ADD_DETAIL:
+        contractDetailForm = ContractDetailForm(deserialize_form(form))
+        bidform = BidForm.objects.get(bid_id = bid)
+        if contractDetailForm.is_valid():
+            amount = int(contractDetailForm.cleaned_data["amount"])
+            if amount <= bidform.payable_amount():
+                contractDetail = contractDetailForm.save(commit = False)
+                contractDetail.user = request.user
+                contractDetail.bidform = bidform
+                contractDetail.save()
+                return simplejson.dumps({'status': '0', 'message': u"合同金额添加成功"})
+            else:
+                return simplejson.dumps({'status': '2', 'message': u"合同金额添加应小于应付金额"})
+        if message == "":
+            message = u"合同金额添加失败"
+        ret = {'status': '2', 'message': message}
+        print ret
+    else:
+        pass
+    return simplejson.dumps(ret)
 
 @dajaxice_register
 def saveComment(request, form, bid_id):
@@ -1000,6 +962,7 @@ def OrderInfo(request,form,uid,count,name):
     order_obj.material = material
     order_obj.save()
 
+
 def addToExecute(materiel):
     materiel_execute_detail=MaterielExecuteDetail(materiel=materiel)
     materiel_execute_detail.save()
@@ -1012,4 +975,24 @@ def AddToMaterialExecute(request,selected):
         materiel=Materiel.objects.get(pk=item)
         addToExecute(materiel)
 
+@dajaxice_register
+def GetMeterielExecuteForm(request,uid):
+    """
+    Lei
+    """
+    materielexecute = MaterielExecuteDetail.objects.get(id=uid)
+    materielexecuteForm = MeterielExcecuteForm(instance=materielexecute)
+    form_html = render_to_string("widgets/materielexecute_form.html",{'materielexecute_form':materielexecuteForm})
+    return simplejson.dumps({'form':form_html})
+
+@dajaxice_register
+def materielExecuteInfo(request,form,uid):
+    """
+    Lei
+    """
+    materielexecute = MaterielExecuteDetail.objects.get(id=uid)
+    materielexecuteForm = MeterielExcecuteForm(deserialize_form(form),instance=materielexecute)
+    materielexecute_obj = materielexecuteForm.save()
+    materielexecute_obj.save()
+    print materielexecute_obj
 

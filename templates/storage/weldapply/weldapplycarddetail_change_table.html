@@ -1,0 +1,41 @@
+<input type="hidden" id="status" value="{{apply_card.status}}">
+{% if apply_card.status != '3' %}
+
+{% if user.is_superuser %} <!--申请表单-->
+{% for item in apply_card_form %}
+
+{% if item.is_hidden %}
+{{item}}
+{% else %}
+<td>{{item}}</td>
+{% endif %}
+{% endfor %}
+
+{% elif user.is_authenticated %} <!--库管确认表单-->
+
+{% for item in apply_card_form %}
+{% if item.is_hidden %}
+{{item}}
+{% else %}
+<td>{{item}}</td>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+{% else %} <!--完成状态表单-->
+
+<td>{{apply_card.workorder}}</td>
+<td>{{apply_card.weld_bead_number}}</td>
+<td>{{apply_card.weld_material_number}}</td>
+<td>{{apply_card.model}}</td>
+<td>{{apply_card.standard}}</td>
+<td>{{apply_card.apply_weight}}</td>
+<td>{{apply_card.apply_quantity}}</td>
+<td>{{apply_card.material_number}}</td>
+<td>{{apply_card.actual_weight}}</td>
+<td>{{apply_card.actual_quantity}}</td>
+
+
+{% endif %}
+

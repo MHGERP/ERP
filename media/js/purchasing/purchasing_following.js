@@ -30,21 +30,39 @@ function check_arrival_callback(data){
     }
     else
         alert(data.message);
+    window.location.reload();
 }
 
 function gen_entry(bid){
     btn = $(this);
-    Dajaxice.purchasing.genEntry(gen_entry_callback,{'bid':bid});
+    var box=$("#arrivalinspection_table").find(".arrival_checkbox");
+    var selected=new Array();
+    for(var i=0;i<box.length;++i)
+    {
+        if(box[i].checked){
+            var val=box[i].parentNode.parentNode.getAttribute('aid');
+            selected.push(val);
+        }
+    }
+    if(selected.length==0){
+       // $("#info_alert").html("没有选定课程!");
+       // $("#alert_info_modal").modal('show');
+        alert("没有选定入库信息!");
+        return false;
+    }
+
+    Dajaxice.purchasing.genEntry(gen_entry_callback,{'bid':bid,'selected':selected});
 }
 
 function gen_entry_callback(data){
-    if(data.flag){
-        alert(data.message);
-        $("#genbtn").remove();
-    }
-    else{
-        alert(data.message);
-    }
+    // if(data.flag){
+    //    alert(data.message);
+    //    $("#genbtn").remove();
+    // }
+    // else{
+    //    alert(data.message);
+    // }
+    window.location.reload();
 }
 
 function entry_confirm(pid){
@@ -116,7 +134,7 @@ function change_item(id){
     a = $("tr#"+item_id).find("td");
     for(var i = 0 ; i < 8 ; i++){
         var did = 'div#div'+(i+1);
-        var in_obj = $(did).find("input");  
+        var in_obj = $(did).find("input"); 
         in_obj.val(a.eq(i).text());
     }
     is_add = false;

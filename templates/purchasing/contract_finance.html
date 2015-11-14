@@ -1,0 +1,49 @@
+{% extends "purchasing/base/none_nav_base.html"%}
+
+{% block title %}
+<h1>合同金额管理</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">合同金额管理</a>
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}bootstrap-datepicker/css/bootstrap-datetimepicker.css" >
+<link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/purchasing/bidtrack.css" >
+
+<div class="widget-content">
+  <div>
+    {% include "purchasing/widgets/contract_table.html"%}
+  </div>
+  <div class="row">
+    {%for item in bid_status%}
+    <a {%if item.class == "btn-warning" %}href="#BidCommentModal" {%endif%} role="button" class="btn {{item.class}}" data-toggle="modal">{{item.name}}</a>
+    {%endfor%}
+  </div>
+  <br>
+</div>
+
+
+<div id="ContractManagementModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">合同金额管理</h3>
+  </div>
+  <div class="modal-body">
+    <form class="well form" method="POST" action="" id="contract_add_form">
+     {% csrf_token %}
+        <div id="contract_div">
+        </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-primary">Save changes</button>
+  </div>
+</div>
+
+<script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/purchasing/contract_management.js"></script>
+{% endblock%}

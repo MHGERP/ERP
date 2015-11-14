@@ -33,6 +33,34 @@ urlpatterns = patterns('',
         r'weldapply/detail$',
         storage_views.Weld_Apply_Card_Detail,
     ),
+    url(
+        r'weldapply/submit$',
+        storage_views.Handle_Apply_Card_Form,
+    ),
+    url(
+        r'^weldhumiture$',
+        storage_views.weldHumitureHomeViews,
+    ),
+    url(
+        r'^weldhumDetail/(?P<eid>\w+)$',
+        storage_views.weldhumDetail,
+    ),
+    url( 
+        r'^weldhumNewRecord$',
+        storage_views.weldhumNewRecord,
+    ),
+    url( 
+        r'^weldrefund$',
+        storage_views.weldRefundViews,
+    ),
+    url( 
+        r'^weldrefunddetail/(?P<rid>\w+)$',
+        storage_views.weldRefundDetailViews,
+    ),
+    url(
+        r'^auxiliarytools$',
+        storage_views.AuxiliaryToolsHomeView,
+    ),
 )
 
 

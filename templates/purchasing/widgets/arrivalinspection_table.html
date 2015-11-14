@@ -1,4 +1,4 @@
-<table name="confirm" class="table table-bordered table-hover table-striped">
+<table name="confirm" class="table table-bordered table-hover table-striped" id="arrivalinspection_table">
     <thead>
         <tr>
             <th>序号</th>
@@ -15,7 +15,7 @@
     <tbody>
         {% for cargo in cargo_set %}
         <tr aid="{{cargo.id}}">
-            <td>{{forloop.counter}}</td>
+            <td> <input type="checkbox" class="arrival_checkbox" {% if cargo.material_confirm and cargo.soft_confirm and cargo.inspect_confirm%}{%else%}disabled="disabled"{% endif%}></td>
             <td>{{cargo.material.name}}</td>
             <td>{{cargo.material.schematic_index}}</td>
             <td></td>

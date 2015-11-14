@@ -1,0 +1,23 @@
+<table class="table table-bordered table-striped" style="width: 60%;">
+    <thead>
+        <tr>
+            <th>页面权限</th>
+            <th>所属类别</th>
+            <th>操作</th>
+
+        </tr>
+    </thead>
+    {% for item in auth_list%}
+    <tr iid="{{item.id}}">
+        <td>{{item.get_authority_display}}</td>
+        <td>{{item.get_auth_type_display}}</td>
+        <td>
+            {% if not item.checked %}
+            <span class="btn btn-success btn-small btn-addorremove">添加</span> 
+            {% else %}
+            <span class="btn btn-warning btn-small btn-addorremove">取消</span> 
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor%}
+</table>

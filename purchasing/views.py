@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.db.models import Q
 from purchasing.models import *
 from const import *
+from purchasing import *
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
 from const.models import WorkOrder, InventoryType, BidFormStatus
@@ -149,6 +150,15 @@ def bidTrackingViews(request, bid_id):
                "BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED": BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED,
              }
     return render(request, "purchasing/bid_track.html", context)
+
+def contractFinanceViews(request):
+    bidforms = BidForm.objects.all()
+    context = {
+        "bidForms":bidforms,
+        "CONTRACT_ADD_AMOUNT": CONTRACT_ADD_AMOUNT,
+        "CONTRACT_DETAIL": CONTRACT_DETAIL,
+    }
+    return render(request,"purchasing/contract_finance.html",context)
 
 @csrf.csrf_protect
 def arrivalInspectionViews(request):
@@ -330,16 +340,14 @@ def materielExecuteDetailViews(request, choice, *mid):
         materielexecute = MaterielExecute.objects.get(pk = materielexecute_id)
         materiel_choice = materielexecute.materiel_choice
         
-        if materiel_choice == MAIN_MATERIEL:
-            materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
-        else:
-            materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
+        materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
         # materielexecute_detail_set = [materielexecute_detail]
+        executeForm = MaterielExecuteForm(instance = materielexecute)
         context = {
             "materielexecute_detail_set" : materielexecute_detail_set,
             "choice" : materiel_choice,
             "MAIN_MATERIEL" : MAIN_MATERIEL,
-            "current_document_number" : materielexecute.document_number
+            "executeForm" : executeForm
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_view.html", context)
     else:
@@ -353,11 +361,6 @@ def materielExecuteDetailViews(request, choice, *mid):
             materiel_choice = materielexecute.materiel_choice
             executeForm = MaterielExecuteForm(instance = materielexecute)
             materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
-            if materiel_choice==MAIN_MATERIEL:
-                type=1
-            else:
-                type=2
-            materiels=MaterielExecuteDetail.objects.filter(materiel__inventory_type__id=type,materiel_execute__isnull=True)
 
             
 
@@ -366,6 +369,11 @@ def materielExecuteDetailViews(request, choice, *mid):
             materiel_choice=MAIN_MATERIEL
             materielexecute_detail_set=None
             
+        if materiel_choice==MAIN_MATERIEL:
+            type=1
+        else:
+            type=2
+        materiels=MaterielExecuteDetail.objects.filter(materiel__inventory_type__id=type,materiel_execute__isnull=True)
         context = {
             "materielexecute_detail_set" : materielexecute_detail_set,
             "choice" : materiel_choice,

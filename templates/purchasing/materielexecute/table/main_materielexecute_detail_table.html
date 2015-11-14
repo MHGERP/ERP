@@ -4,21 +4,24 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-        <th>工作令</th>
-        <th>材质</th>
-        <th>出厂批号</th>
-        <th>材质编号</th>
-        <th>规格</th>
-        <th>数量</th>
-        <th>状态</th>
-        <th>受压</th>
-        <th>探伤级别</th>      
+                    <th>工作令</th>
+                    <th>材质</th>
+                    <th>出厂批号</th>
+                    <th>材质编号</th>
+                    <th>规格</th>
+                    <th>数量</th>
+                    <th>状态</th>
+                    <th>受压</th>
+                    <th>探伤级别</th>      
                     <th>复探</th>
                     <th>重量</th>
                     <th>定额</th>
                     <th>零件</th>
                     <th>余料</th>
                     <th>备注</th>
+                    {% if not materielexecute_detail_set.0.materiel_execute.is_save %}
+                    <th>修改</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -39,6 +42,11 @@
                     <td>{{item.part}}</td>
                     <td>{{item.oddments}}</td>
                     <td>{{item.remark}}</td>
+                    {% if not item.materiel_execute.is_save %}
+                    <td>
+                        <button class="btn btn-primary" id="detail_edit" uid={{item.id}}>修改</button>
+                    </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

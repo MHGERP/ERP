@@ -1,17 +1,30 @@
 {% extends "home/base/none_nav_base.html"%}
 
+{% block main_title %}
+<div class="main-title"> 
+    <div id="content-header">
+    	<h1>新闻列表</h1>
+    </div>
+    <div id="breadcrumb">
+        <a href="/home" title="首页" class="tip-bottom">首页</a>
+        <!-- <a href="#" class="tip-bottom">新闻列表</a> -->
+        <a href="#" class="current">新闻列表</a>
+    </div>
+</div>
+{%endblock%}
+
 {% block inner_content%}
 <link rel="stylesheet" href="{{STATIC_URL}}style/newhomepage.css" type="text/css" media="screen" />
 <div class="news-body">
 	<div class="news-list">
-		<div>
+		<!-- <div>
 			<div class="search">
 				<form action="#" metho="get">
 					<input type="text" id="news-search-input" class="seach-input" size="16" alt="Search.">
 					<input type="button" id="search-news" class="search-news" value="Go." title="G." >
 				</form>
 			</div>
-		</div>
+		</div> -->
 		{% include "home/widgets/_news_list.html" %}
 	</div>
 </div>

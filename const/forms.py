@@ -2,7 +2,15 @@
 # coding=utf-8
 
 from django import forms
+from const import *
 from const.models import InventoryType
+
+class AuthorTypeForm(forms.Form):
+    """
+    JunHU
+    summary: store all type of author type
+    """
+    auth_type = forms.ChoiceField(choices = AUTH_TYPE_CHOICES, widget = forms.Select(attrs = {'class': 'form-control input'}))
 
 class InventoryTypeForm(forms.Form):
     """
