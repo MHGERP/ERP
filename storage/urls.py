@@ -9,8 +9,17 @@ urlpatterns = patterns('',
         storage_views.weldMaterialHomeViews,
     ),
     url(
+
+        r'^steelmaterialhome$',
+        storage_views.steelMaterialHomeViews,
+    ),
+    url(
         r'^weldentryhome$',
         storage_views.weldEntryHomeViews,
+    ),
+    url(
+        r'^steelentryhome$',
+        storage_views.steelEntryHomeViews,
     ),
     url(
         r'^weldentryconfirm/(?P<eid>\w+)$',
