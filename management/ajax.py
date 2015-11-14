@@ -228,6 +228,8 @@ def deleteTitle(request, title_id):
     """
     title = Title.objects.get(id = title_id)
     title.delete()
+
+@dajaxice_register
 def deleteUser(request, user_id):
     user = User.objects.get(id = user_id)
     user.delete()
