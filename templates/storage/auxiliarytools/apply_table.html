@@ -9,6 +9,11 @@
         <th>领用人</th>
         <th></th>
     </tr>
+    {% if not rets %}
+    <tr>
+    <td colspan="8">未找到相关项</td>
+    </tr>
+    {% endif %}
     {% for record in rets %}
     <tr>
     <td>{{forloop.counter}}</td>
