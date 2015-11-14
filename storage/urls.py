@@ -36,10 +36,23 @@ urlpatterns = patterns('',
         r'^weldhumNewRecord$',
         storage_views.weldhumNewRecord,
     ),
-    url( 
+    url(
+        r'^weldbake$',
+        storage_views.weldbakeHomeViews,
+    ),
+    url(
         r'^weldrefund$',
         storage_views.weldRefundViews,
     ),
+    url(
+        r'^weldbakeDetail/(?P<index>\w+)$',
+        storage_views.weldbakeDetail,
+    ),
+    url( 
+        r'^weldbakeNewRecord$',
+        storage_views.weldbakeNewRecord,
+    ),
+    
 )
 
 

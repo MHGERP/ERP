@@ -1,0 +1,55 @@
+{% extends "storage/base/weldbase.html" %}
+{% block title %}
+<h1>焊材烘焙记录</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/weldbake" class="current">焊材烘焙记录</a>
+{% endblock %}
+
+{% block inner_content %}
+<!--
+<div class="span8">
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        {% for field in search_form %}
+        {{field.label}}
+        {{field}}
+        {% endfor %}
+        <button class="btn btn-success">检索</button> 
+    </form>
+</div>
+-->
+<div class="span8" style="margin-top:20px;margin-bottom:20px">
+    <a type="button" class="btn btn-primary btn-large" href="weldbakeNewRecord">新增记录卡</a>
+</div>
+<br>
+<div class="span8">
+<table class="table table-bordered">
+    <thead>
+        <th>日期</th>
+        <th>标准号</th>
+        <th>规格</th>
+        <th>炉批号</th>
+        <th>编码标记</th>
+        <th>库管员</th>
+        <th>焊接工程师</th>
+        <th>操作</th>
+    </thead>
+    </tbody>
+        {% for i in bake_set %}
+        <tr>
+            <td>{{i.date}}</td>
+            <td>{{i.standardnum}}</td>
+            <td>{{i.size}}</td>
+            <td>{{i.heatnum}}</td>
+            <td>{{i.codedmark}}</td>
+            <td>{{i.storeMan}}</td>
+            <td>{{i.weldengineer}}</td>
+            <td><a class="btn btn-warning" href="/storage/weldbakeDetail/{{i.index}}">查看详情</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

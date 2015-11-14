@@ -91,8 +91,20 @@ def Weld_Apply_Card_Detail(request):
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
 
 def weldHumitureHomeViews(request):
-    hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("date")
-    search_form = HumSearchForm()
+    if request.method == "POST":
+        search_form = HumSearchForm(request.POST)
+        dict = {}
+        hum_set = []
+        if search_form.is_valid():
+            dict["date"] = search_form.cleaned_data["date"]
+            dict["storeRoom"] = search_form.cleaned_data["storeRoom"]
+            dict["storeMan"] = search_form.cleaned_data["storeMan"]
+            hum_set = get_weld_filter(WeldingMaterialHumitureRecord,dict)
+        else:
+            print search_form.errors
+    else:
+        hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("-date")
+        search_form = HumSearchForm()
     context = {
         "hum_set":hum_set,
         "search_form":search_form,
@@ -121,6 +133,36 @@ def weldhumDetail(request,eid):
         "humRecordDate":hum_detail,
     }
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
+
+def weldbakeHomeViews(request):
+    bake_set = WeldingMaterialBakeRecord.objects.all().order_by("-date")
+    context = {
+        "bake_set":bake_set,
+    }
+    return render(request,"storage/weldbake/weldbakeHome.html",context)
+
+def weldbakeNewRecord(request):
+    if request.method == "POST":
+        form = BakeRecordForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect("weldbake")
+    else:
+        form = BakeRecordForm()
+    context = {
+        "form":form
+    }
+    return render(request,"storage/weldbake/weldbakeNewRecord.html",context)
+
+def weldbakeDetail(request,index):
+    print index + "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+    bake_detail = WeldingMaterialBakeRecord.objects.get(index = index)
+    print bake_detail
+    form = BakeRecordForm(instance = bake_detail)
+    context = {
+        "form":form,
+    }
+    return render(request,"storage/weldbake/weldbakeDetail.html",context)
 
 def weldRefundViews(request):
     if request.method == "POST":

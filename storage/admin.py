@@ -7,6 +7,7 @@ Registers = (
     WeldingMaterialApplyCard,
     StoreRoom,
     WeldingMaterialHumitureRecord,
+    WeldingMaterialBakeRecord,
     WeldRefund,
 )
 

@@ -54,6 +54,18 @@ class HumSearchForm(forms.Form):
             room_list.append((room.id,room.name))
         self.fields["storeRoom"].choices = tuple(room_list)
 
+class BakeRecordForm(ModelForm):
+    class Meta:
+        model = WeldingMaterialBakeRecord
+        widgets = { 
+            "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
+            "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"date"}),
+            "intoheattime":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"intoheattime"}),
+            "timefortemp":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"timefortemp"}),
+            "tempfalltime":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"tempfalltime"}),
+            "timeforremainheat":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"timeforremainheat"}),
+            "usetime":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"usetime"}),
+        }
 
 class EntrySearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
