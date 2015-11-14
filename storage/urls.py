@@ -61,6 +61,38 @@ urlpatterns = patterns('',
         r'^auxiliarytools$',
         storage_views.AuxiliaryToolsHomeView,
     ),
+    url(
+        r'^auxiliarytools/apply$',
+        storage_views.AuxiliaryToolsApplyView,
+    ),
+    url(
+        r'^auxiliarytools/ledger$',
+        storage_views.AuxiliaryToolsLedgerView,
+    ),
+    url(
+        r'^auxiliarytools/ledger/entry$',
+        storage_views.AuxiliaryToolsLedgerEntryView,
+    ),
+    url(
+        r'^auxiliarytools/ledger/apply$',
+        storage_views.AuxiliaryToolsLedgerApplyView,
+    ),
+    url(
+        r'^auxiliarytools/ledger/inventory$',
+        storage_views.AuxiliaryToolsLedgerInventoryView,
+    ),
+    url(
+        r'^auxiliarytools/warehousedetail$',
+        storage_views.AuxiliaryToolsEntryApplyDetailView,
+    ),
+    url(
+        r'^auxiliarytools/entry$',
+        storage_views.AuxiliaryToolsEntryView,
+    ),
+    url(
+        r'^auxiliarytools/entrylist$',
+        storage_views.AuxiliaryToolsEntryListView,
+    ),
 )
 
 

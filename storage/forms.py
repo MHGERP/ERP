@@ -178,3 +178,30 @@ class EntryForm(ModelForm):
     purchaser = forms.CharField(label=u"采购员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
     inspector = forms.CharField(label=u"检验员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
     keeper = forms.CharField(label=u"库管员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
+
+class AuxiliaryToolsCardForm(ModelForm):
+    class Meta:
+        model=AuxiliaryToolApplyCard
+        exclude=['create_time','commit_time']
+
+class AuxiliaryToolsForm(ModelForm):
+    class Meta:
+        model=AuxiliaryTool
+        exclude=[]
+
+        widgets={
+                'name':forms.TextInput(attrs={'class':'form-control search-query','readonly':'readonly'}),
+                'model':forms.TextInput(attrs={'class':'form-control search-query','readonly':'readonly'}),
+                'measurement_unit':forms.TextInput(attrs={'class':'form-control search-query','readonly':'readonly'}),
+                'unit_price':forms.TextInput(attrs={'class':'form-control search-query','readonly':'readonly'}),
+                'manufacturer':forms.TextInput(attrs={'class':'form-control search-query','readonly':'readonly'}),
+                'quantity':forms.TextInput(attrs={'class':'form-control search-query'}),
+
+                }
+
+class AuxiliaryToolsInventorySearchForm(forms.Form):
+    date=forms.DateField(label=u'日期',required=False,widget=forms.TextInput(attrs={'readonly':'readonly','class':'form-control search-query','id':'date'}))
+    name=forms.CharField(label=u'名称',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'name'}))
+    model=forms.CharField(label=u'类别',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'model'}))
+    manufacturer=forms.CharField(label=u'厂家',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'manufacturer'}))
+

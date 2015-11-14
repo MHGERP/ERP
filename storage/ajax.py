@@ -15,6 +15,7 @@ from django.db.models import Q
 from datetime import datetime
 from storage.models import *
 from storage.forms import *
+from storage.utils import *
 from django.shortcuts import render
 @dajaxice_register
 def get_apply_card_detail(request,apply_card_index):
@@ -40,6 +41,16 @@ def Search_History_Apply_Records(request,data):
 
     else:
         return HttpResponse('FAIL')
+
+@dajaxice_register
+def Search_Auxiliary_Tools_Inventory(request,data):
+    context={}
+    form=AuxiliaryToolsInventorySearchForm(deserialize_form(data))
+    if form.is_valid():
+        conditions=form.cleaned_data
+        context['rets'] = get_weld_filter(AuxiliaryTool,conditions)
+        return render_to_string('storage/auxiliarytools/inventory_table.html',context)
+
 
 """
 @dajaxice_register
