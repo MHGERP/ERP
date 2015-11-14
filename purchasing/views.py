@@ -194,16 +194,7 @@ def inventoryTableViews(request):
     return render(request, "purchasing/inventory_table_base.html", context)
 
 def materialEntryViews(request,bid):
-    try:
-        purchasingentry = PurchasingEntry.objects.get(bidform__bid_id = bid)
-        entry_set = PurchasingEntryItems.objects.filter(purchasingentry = purchasingentry)
-        entry_form = EntryForm(instance = purchasingentry)
-    except Exception,e:
-        print e
     context = {
-        "pur_entry":purchasingentry,
-        "entry_set":entry_set,
-        "entry_form":entry_form,
     }
     return render(request,"purchasing/purchasing_materialentry.html",context)
 

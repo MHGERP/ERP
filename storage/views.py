@@ -14,8 +14,6 @@ from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect,HttpResponse
 from django.db import transaction
 
-from purchasing.models import PurchasingEntry,PurchasingEntryItems
-from purchasing.forms import EntryForm 
 from storage.models import *
 from storage.forms import *
 from storage.utils import *
@@ -46,7 +44,7 @@ def weldEntryHomeViews(request):
         else:
             print search_form.errors
     else:
-        weldentry_set = PurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
+        weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         search_form = EntrySearchForm()
     context = {
         "entry_set":weldentry_set,

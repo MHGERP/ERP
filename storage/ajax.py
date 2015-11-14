@@ -16,7 +16,6 @@ from datetime import datetime
 from storage.models import *
 from storage.forms import *
 from django.shortcuts import render
-from purchasing.models import PurchasingEntryItems
 @dajaxice_register
 def get_apply_card_detail(request,apply_card_index):
     context={}

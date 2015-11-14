@@ -51,23 +51,6 @@ class BidCommentForm(forms.Form):
     reason=forms.CharField(required=False, label=u"审核意见",  widget=forms.Textarea(attrs={'class':'form-control','row':10}))
 
 
-class EntryForm(ModelForm):
-    class Meta:
-        model = PurchasingEntry
-        fields = ('entry_time','entry_code')
-        widgets = {
-            'entry_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entry_time"}),
-        }
-    def __init__(self,*args,**kwargs):
-        super(EntryForm,self).__init__(*args,**kwargs)
-        pur_entry = kwargs["instance"]
-        self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.userinfo if pur_entry.purchaser else ""
-        self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.userinfo if pur_entry.keeper else ""
-        self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.userinfo if pur_entry.inspector else ""
-    
-    purchaser = forms.CharField(label=u"采购员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
-    inspector = forms.CharField(label=u"检验员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
-    keeper = forms.CharField(label=u"库管员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
 class ProcessFollowingForm(ModelForm):
     class Meta:
         model=ProcessFollowingInfo
