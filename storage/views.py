@@ -8,8 +8,7 @@ from const.utils import *
 from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
-from django.db.models import Q
-
+from django.db.models import Q,F
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect,HttpResponse
 from django.db import transaction
@@ -204,4 +203,51 @@ def weldRefundDetailViews(request,rid):
 
 def AuxiliaryToolsHomeView(request):
     context={}
-    return render(request,'storage/auxiliarytools/home/home.html',context)
+    return render(request,'storage/auxiliarytools/home.html',context)
+
+def AuxiliaryToolsEntryListView(request):
+    context={}
+    context['auxiliarytools']=AuxiliaryTool.objects.all()
+    return render(request,'storage/auxiliarytools/auxiliarytoolsentry_list.html',context)
+
+def AuxiliaryToolsEntryView(request):
+    context={}
+    if request.method=='POST':
+        object_id=int(request.POST['object_id'])
+        auxiliarytool=AuxiliaryTool.objects.get(id=object_id)
+        new_entry_quantity=float(request.POST['quantity'])
+        auxiliarytool.quantity=F('quantity')+new_entry_quantity
+        auxiliarytool.save()
+        return AuxiliaryToolsEntryListView(request)
+    else:
+        object_id=int(request.GET['id'])
+        auxiliarytool=AuxiliaryTool.objects.get(id=object_id)
+        context['object_id']=object_id
+        context['entry_form']=AuxiliaryToolsForm(initial={'quantity':0},instance=auxiliarytool)
+        return render(request,'storage/auxiliarytools/auxiliarytoolsentry.html',context)
+
+def AuxiliaryToolsApplyView(request):
+    context={}
+    context['apply_form']=AuxiliaryToolsCardForm()
+    return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
+
+def AuxiliaryToolsLedgerView(request):
+    context={}
+    return render(request,'storage/auxiliarytools/ledger.html',context)
+
+def AuxiliaryToolsLedgerEntryView(request):
+    context={}
+    return render(request,'storage/auxiliarytools/ledger_entry.html',context)
+
+def AuxiliaryToolsLedgerApplyView(request):
+    context={}
+    return render(request,'storage/auxiliarytools/ledger_apply.html',context)
+
+def AuxiliaryToolsLedgerInventoryView(request):
+    context={}
+    context['search_form']=AuxiliaryToolsInventorySearchForm()
+    return render(request,'storage/auxiliarytools/ledger_inventory.html',context)
+
+def AuxiliaryToolsEntryApplyDetailView(request):
+    context={}
+    return render(request,'storage/auxiliarytools/entry_apply_detail.html',context)

@@ -226,3 +226,11 @@ AUTH_TYPE_CHOICES = (
     (2, u"生产管理"),
     (3, u"技术资料管理")
 )
+
+AUXILIARY_TOOLS_MODELS_CHOICES=(
+        (0,u'碳棒'),
+        (1,u'面罩'),
+        (2,u'白黑玻璃'),
+        )
+
+

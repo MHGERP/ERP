@@ -4,6 +4,7 @@ from django.db import models
 from const.models import WorkOrder
 from django.contrib.auth.models import User
 from users.models import UserInfo,Group
+from django.utils import timezone
 from const import STORAGEDEPARTMENT_CHOICES,STORAGESTATUS_KEEPER,REFUNDSTATUS_CHOICES
 from const import LENGHT_MANAGEMENT,WEIGHT_MANAGEMENT,AREA_MANAGEMENT
 # Create your models here.
@@ -205,7 +206,7 @@ class WeldRefund(models.Model):
 
 class AuxiliaryTool(models.Model):
     name=models.CharField(verbose_name=u'材料名称',max_length=30,blank=False)
-    standard=models.CharField(verbose_name=u'规格',max_length=20,blank=False)
+    model=models.IntegerField(verbose_name=u'类别',blank=False,choices=AUXILIARY_TOOLS_MODELS_CHOICES)
     measurement_unit=models.CharField(verbose_name=u'计量单位',max_length=10,blank=False)
     quantity=models.FloatField(verbose_name=u'数量',default=0,blank=False)
     unit_price=models.FloatField(verbose_name=u'单价',blank=False)
@@ -216,7 +217,7 @@ class AuxiliaryTool(models.Model):
         verbose_name_plural=u'辅助材料'
 
     def __unicode__(self):
-        return self.name+u' 型号:'+self.standard+u' 制造:'+self.manufacturer
+        return self.name+u' 制造:'+self.manufacturer
 
 class AuxiliaryToolApplyCard(models.Model):
     create_time=models.DateField(verbose_name=u'申请时间',auto_now_add=True)
@@ -241,6 +242,7 @@ class AuxiliaryToolApplyCard(models.Model):
                 self.actual_total=self.actual_item.unit_price*self.actual_quantity
                 self.actual_item.quantity-=self.actual_quantity
                 self.actual_item.save()
+                self.commit_time=timezone.now()
                 self.status=2
     
             super(AuxiliaryToolApplyCard,self).save(*args,**kwargs)
