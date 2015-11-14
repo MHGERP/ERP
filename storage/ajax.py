@@ -42,6 +42,17 @@ def Search_History_Apply_Records(request,data):
     else:
         return HttpResponse('FAIL')
 
+@dajaxice_register
+def Auxiliary_Detail_Query(request,id):
+    context={}
+    object_id=int(id)
+    auxiliary_tool=AuxiliaryTool.objects.get(id=object_id)
+    context['model']=dict(AUXILIARY_TOOLS_MODELS_CHOICES)[int(auxiliary_tool.model)]
+    context['measurement_unit']=auxiliary_tool.measurement_unit
+    context['unit_price']=auxiliary_tool.unit_price
+    return HttpResponse(simplejson.dumps(context))
+
+
 
 @dajaxice_register
 def Search_Auxiliary_Tools_Records(request,data,search_type):
