@@ -143,9 +143,23 @@ def Apply_Card_Form_Commit(request):
 
 
 def weldHumitureHomeViews(request):
-    hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("date") 
+    if request.method == "POST":
+        search_form = HumSearchForm(request.POST)
+        dict = {}
+        hum_set = []
+        if search_form.is_valid():
+            dict["date"] = search_form.cleaned_data["date"]
+            dict["storeRoom"] = search_form.cleaned_data["storeRoom"]
+            dict["storeMan"] = search_form.cleaned_data["storeMan"]
+            hum_set = get_weld_filter(WeldingMaterialHumitureRecord,dict)
+        else:
+            print search_form.errors
+    else:
+        hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("-date")
+        search_form = HumSearchForm()
     context = {
-        "hum_set":hum_set,    
+        "hum_set":hum_set,
+        "search_form":search_form,
     }
     return render(request,"storage/weldhumi/weldhumitureHome.html",context)
 
@@ -171,6 +185,49 @@ def weldhumDetail(request,eid):
         "humRecordDate":hum_detail,
     }
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
+
+def weldbakeHomeViews(request):
+    if request.method == "POST":
+        search_form = BakeSearchForm(request.POST)
+        dict = {}
+        bake_set = []
+        if search_form.is_valid():
+            dict["date"] = search_form.cleaned_data["date"]
+            dict["standardnum"] = search_form.cleaned_data["standardnum"]
+            dict["weldengineer"] = search_form.cleaned_data["weldengineer"]
+            dict["storeMan"] = search_form.cleaned_data["storeMan"]
+            bake_set = get_weld_filter(WeldingMaterialBakeRecord,dict)
+        else:
+            print search_form.errors
+    else:
+        bake_set = WeldingMaterialBakeRecord.objects.all().order_by("-date")
+        search_form = BakeSearchForm()
+    context = {
+        "bake_set":bake_set,
+        "search_form":search_form,
+    }
+    return render(request,"storage/weldbake/weldbakeHome.html",context)
+
+def weldbakeNewRecord(request):
+    if request.method == "POST":
+        form = BakeRecordForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect("weldbake")
+    else:
+        form = BakeRecordForm()
+    context = {
+        "form":form
+    }
+    return render(request,"storage/weldbake/weldbakeNewRecord.html",context)
+
+def weldbakeDetail(request,index):
+    bake_detail = WeldingMaterialBakeRecord.objects.get(index = index)
+    form = BakeRecordForm(instance = bake_detail)
+    context = {
+        "form":form,
+    }
+    return render(request,"storage/weldbake/weldbakeDetail.html",context)
 
 def weldRefundViews(request):
     getUserByAuthority(STORAGE_KEEPER)

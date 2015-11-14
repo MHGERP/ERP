@@ -68,6 +68,33 @@ class WeldingMaterialHumitureRecord(models.Model):
 
     class Meta:
         verbose_name=u'焊材库温湿度记录卡'
+        verbose_name_plural=u'焊材库温湿度记录卡'
+
+class WeldingMaterialBakeRecord(models.Model):
+    date = models.DateField(verbose_name = u"日期",blank=True,null=True)
+    index = models.CharField(verbose_name=u'编号',max_length=50,unique = True)
+    standardnum = models.CharField(verbose_name=u'标准号',max_length=50,blank=True)
+    size = models.CharField(verbose_name=u'规格',max_length=50,blank=True)
+    classnum = models.CharField(verbose_name=u'牌号',max_length=50,blank=True)
+    heatnum = models.CharField(verbose_name=u'炉批号',max_length=50,blank=True)
+    codedmark = models.CharField(verbose_name=u'编码标记',max_length=50,blank=True)
+    quantity = models.FloatField(verbose_name=u'数量',default = 0,blank=True)
+    intoheattime = models.DateTimeField(verbose_name=u'进炉时间',blank=True,null=True) 
+    bakingtemp = models.FloatField(verbose_name=u'烘焙温度',default = 0,blank=True)
+    timefortemp = models.DateTimeField(verbose_name=u'到达温度时间',blank=True,null=True)
+    tempfalltime = models.DateTimeField(verbose_name=u'降温时间',blank=True,null=True)
+    timeforremainheat = models.DateTimeField(verbose_name=u'进保湿炉时间',blank=True,null=True)
+    keepheattemp = models.FloatField(verbose_name=u'保温温度',default = 0,blank=True)
+    usetime = models.DateTimeField(verbose_name=u'领用时间',blank=True,null=True)
+    storeMan = models.CharField(verbose_name=u'库管员',max_length=50,blank=True)
+    weldengineer = models.CharField(verbose_name=u'焊接工程师',max_length=50,blank=True)
+    remark = models.CharField(verbose_name=u'备注', max_length=1000,blank=True)
+    def __unicode__(self):
+        return str(self.index)
+
+    class Meta:
+        verbose_name=u'焊材烘焙记录卡'
+        verbose_name_plural=u'焊材烘焙记录卡'
         verbose_name_plural=u'焊焊材库温湿度记录卡'    
 
 
