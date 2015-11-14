@@ -24,6 +24,9 @@ from backend.logging import loginfo
 def check_auth(user = None, authority = None):
     """
     JunHU
+    summary: function to check one user has one authority
+    params: user: user object, authority: auth string of authority
+    return: boolean value
     """
     if user is None or authority is None or user.is_anonymous() is True:
         return False
@@ -32,7 +35,7 @@ def check_auth(user = None, authority = None):
     except Authority.DoesNotExist, err:
         loginfo(p=err, label="ERROR in check_auth function!!!")
         return False
-    if user.title_set and user.title_set.filter(authorities = auth).count() > 0:
+    if user.title_user and user.title_user.filter(authorities = auth).count() > 0:
         return True
 
     return False

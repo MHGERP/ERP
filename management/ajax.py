@@ -25,7 +25,7 @@ def searchUser(request,search_user, page):
         user_list = User.objects.all()
     context = getContext(user_list, page, "item", 0)
     for user in context["item_list"]:
-        user.titles = "; ".join(map(unicode, user.title_set.all()))
+        user.titles = "; ".join(map(unicode, user.title_user.all()))
     html = render_to_string("management/widgets/user_table.html", context)
     return html
 
