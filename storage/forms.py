@@ -5,7 +5,6 @@ from django.forms import ModelForm
 from storage.models import *
 from const.models import Materiel
 from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES
-from purchasing.models import PurchasingEntryItems
 from django.contrib.auth.models import User
 from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
@@ -107,7 +106,7 @@ class Commit_ApplyCardForm(ApplyCardForm):
 
 class EntryItemsForm(ModelForm):
     class Meta:
-        model = PurchasingEntryItems
+        model = WeldMaterialEntryItems
         fields = ("remark","date","price")
         widget = {
             "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
@@ -161,6 +160,24 @@ class WeldRefundForm(ModelForm):
             'refund_count': forms.TextInput(attrs={'class':"span1"}),                      
             'refund_status': forms.TextInput(attrs={'class':"span2"}),                      
         }
+
+class EntryForm(ModelForm):
+    class Meta:
+        model = WeldMaterialEntry
+        fields = ('entry_time','entry_code')
+        widgets = {
+            'entry_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entry_time"}),
+        }
+    def __init__(self,*args,**kwargs):
+        super(EntryForm,self).__init__(*args,**kwargs)
+        pur_entry = kwargs["instance"]
+        self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.userinfo if pur_entry.purchaser else ""
+        self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.userinfo if pur_entry.keeper else ""
+        self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.userinfo if pur_entry.inspector else ""
+    
+    purchaser = forms.CharField(label=u"采购员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
+    inspector = forms.CharField(label=u"检验员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
+    keeper = forms.CharField(label=u"库管员",required = False,widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
 
 class AuxiliaryToolsCardForm(ModelForm):
     class Meta:
