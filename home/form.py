@@ -11,4 +11,4 @@ class userInfoForm(ModelForm):
                    	'phone':forms.TextInput(),
                    	'mobile':forms.TextInput(),
                    }
-        
+         

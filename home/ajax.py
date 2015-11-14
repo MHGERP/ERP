@@ -28,4 +28,4 @@ def getUserInfoForm(request):
 	userinfoform=render_to_string("base/userinfoform.html",{"user_form":user_form})
 	return userinfoform
 
-
+  
