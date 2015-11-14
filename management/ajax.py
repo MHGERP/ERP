@@ -13,19 +13,22 @@ from backend.utility import getContext
 from users.utility import createNewUser
 from backend.utility import getContext
 
+from users.decorators import checkAdmin, checkSuperAdmin
 
 @dajaxice_register
 def searchUser(request,search_user, page):
     page = int(page)
-
-    if search_user!="":
-        user_list = User.objects.filter(Q(username__icontains=search_user) | Q(userinfo__name__icontains=search_user))
-        #user_list = User.objects.filter(username__icontains=search_user)
-    else:
+    if checkSuperAdmin(request.user):
         user_list = User.objects.all()
+    else:
+        user_list = User.objects.filter(title_user__group__admin = request.user).distinct()
+
+    if search_user != "":
+        user_list = user_list.filter(Q(username__icontains=search_user) | Q(userinfo__name__icontains=search_user))
+    
     context = getContext(user_list, page, "item", 0)
     for user in context["item_list"]:
-        user.titles = "; ".join(map(unicode, user.title_set.all()))
+        user.titles = "; ".join(map(unicode, user.title_user.all()))
     html = render_to_string("management/widgets/user_table.html", context)
     return html
 
@@ -171,12 +174,21 @@ def checkMessage(request, messageId):
     return: "data"
     """
     messageObject = Message.objects.get(id = messageId)
+    file = DocumentFile.objects.filter(message = messageId)
+    file_name = []
+    file_list = []
+    for f in file:
+        file_name.append(f.news_document.name[26:])
+        file_list.append(f.news_document.path)
     data = {
         "message_title": messageObject.title,
         "message_content": messageObject.content,
+        "filepath": file_list,
+        "filename": file_name,
     }
     print("title")
     print(data['message_title'])
+    print(file_list)
     return simplejson.dumps(data)
 
 @dajaxice_register
@@ -216,6 +228,8 @@ def deleteTitle(request, title_id):
     """
     title = Title.objects.get(id = title_id)
     title.delete()
+
+@dajaxice_register
 def deleteUser(request, user_id):
     user = User.objects.get(id = user_id)
     user.delete()

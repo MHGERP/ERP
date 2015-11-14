@@ -1,0 +1,30 @@
+{% extends "storage/base/steelbase.html" %}
+
+{% block sub_sec %}
+<a href="/storage/steelentryconfirm" class="current">钢材入库单</a>
+{% endblock %}
+
+{% block title %}
+<h1>钢材入库单</h1>
+{% endblock %}
+
+{% block inner_content %}
+<div class="control-group" style="margin-top:20px;">
+    <label class="hz-align">货物来源</label>
+    {{entry_form.goods_source}}
+</div>
+<div class="control-group">
+    <lable class="hz-align">订购单编号</lable>
+    {{entry_form.order_id}}
+</div>
+<div class="control-group" style="margin-left:300px;">
+    <label class="hz-align">接受检查记录表编号</label>
+    {{entry-form.checkList_id}}
+</div>
+<div class="control-group" style="margin-left:300px;">
+    <label class="hz-align">编号</label>
+    {{entry-form.entry_id}}
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,24 @@
+<table class="table table-hover table-bordered">
+    <tr>
+        <th>序号</th>
+        <th>名称</th>
+        <th>类别</th>
+        <th>出库数量</th>
+        <th>厂家</th>
+        <th>日期</th>
+        <th>领用人</th>
+        <th></th>
+    </tr>
+    {% for record in rets %}
+    <tr>
+    <td>{{forloop.counter}}</td>
+    <td>{{record.actual_item.name}}</td>
+    <td>{{record.actual_item.model}}</td>
+    <td>{{record.actual_quantity}}</td>
+    <td>{{record.actual_item.manufacturer}}</td>
+    <td>{{record.commit_time}}</td>
+    <td>{{record.applicant}}</td>
+    <td><a href="/storage/auxiliarytools/ledger/apply/apply_card?id={{record.id}}"><button type="button" class="btn btn-info">查看出库单</button></a></td>
+    </tr>
+    {% endfor %}
+</table>

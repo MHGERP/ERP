@@ -1,0 +1,15 @@
+.fixed{
+    margin-left:20px;
+}
+.form-group{
+    display:inline;
+}
+.form-control{
+    width:120px;
+}
+.form-inline{
+    margin-bottom:20px;
+}
+.fix_th{
+    line-height:3.5!important;
+}
