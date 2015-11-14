@@ -3,8 +3,9 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from purchasing.models import *
-from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderInfoForm
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderInfoForm, ContractDetailForm, MeterielExcecuteForm
 from const import *
+from purchasing import *
 from const.models import Materiel,OrderFormStatus, BidFormStatus
 from django.template.loader import render_to_string
 from django.utils import simplejson
@@ -60,7 +61,7 @@ def checkArrival(request,aid,cid):
 
 @dajaxice_register
 @transaction.commit_manually
-def genEntry(request,bid):
+def genEntry(request,bid,selected):
     flag = False
     message = ""
     try:
@@ -565,6 +566,39 @@ def deleteDetail(request,uid):
     return simplejson.dumps(param)
 
 @dajaxice_register
+def contractAmount(request, tid, bid,  form):
+    if tid == CONTRACT_ADD_AMOUNT:
+        table = render_to_string("purchasing/widgets/contract_detail_form.html", {"ContractDetailForm": ContractDetailForm(),
+                                                                                  "CONTRACT_ADD_DETAIL": CONTRACT_ADD_DETAIL,
+                                                                                  "bid":bid})
+        ret = {'status': '1', 'table': table}
+    elif tid == CONTRACT_DETAIL:
+        bidform = BidForm.objects.get(bid_id = bid)
+        contractDetails = ContractDetail.objects.filter(bidform = bidform)
+        table = render_to_string("purchasing/widgets/contract_detail.html", {"contractDetails": contractDetails})
+        ret = {'status': '1', 'table': table}
+    elif tid == CONTRACT_ADD_DETAIL:
+        contractDetailForm = ContractDetailForm(deserialize_form(form))
+        bidform = BidForm.objects.get(bid_id = bid)
+        if contractDetailForm.is_valid():
+            amount = int(contractDetailForm.cleaned_data["amount"])
+            if amount <= bidform.payable_amount():
+                contractDetail = contractDetailForm.save(commit = False)
+                contractDetail.user = request.user
+                contractDetail.bidform = bidform
+                contractDetail.save()
+                return simplejson.dumps({'status': '0', 'message': u"合同金额添加成功"})
+            else:
+                return simplejson.dumps({'status': '2', 'message': u"合同金额添加应小于应付金额"})
+        if message == "":
+            message = u"合同金额添加失败"
+        ret = {'status': '2', 'message': message}
+        print ret
+    else:
+        pass
+    return simplejson.dumps(ret)
+
+@dajaxice_register
 def saveComment(request, form, bid_id):
     bidCommentForm = BidCommentForm(deserialize_form(form))
     if bidCommentForm.is_valid():
@@ -928,6 +962,7 @@ def OrderInfo(request,form,uid,count,name):
     order_obj.material = material
     order_obj.save()
 
+
 def addToExecute(materiel):
     materiel_execute_detail=MaterielExecuteDetail(materiel=materiel)
     materiel_execute_detail.save()
@@ -940,4 +975,24 @@ def AddToMaterialExecute(request,selected):
         materiel=Materiel.objects.get(pk=item)
         addToExecute(materiel)
 
+@dajaxice_register
+def GetMeterielExecuteForm(request,uid):
+    """
+    Lei
+    """
+    materielexecute = MaterielExecuteDetail.objects.get(id=uid)
+    materielexecuteForm = MeterielExcecuteForm(instance=materielexecute)
+    form_html = render_to_string("widgets/materielexecute_form.html",{'materielexecute_form':materielexecuteForm})
+    return simplejson.dumps({'form':form_html})
+
+@dajaxice_register
+def materielExecuteInfo(request,form,uid):
+    """
+    Lei
+    """
+    materielexecute = MaterielExecuteDetail.objects.get(id=uid)
+    materielexecuteForm = MeterielExcecuteForm(deserialize_form(form),instance=materielexecute)
+    materielexecute_obj = materielexecuteForm.save()
+    materielexecute_obj.save()
+    print materielexecute_obj
 

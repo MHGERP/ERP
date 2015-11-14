@@ -40,6 +40,12 @@ class BidForm(models.Model):
         verbose_name_plural = u"标单"
     def __unicode__(self):
         return '%s'% (self.bid_id)
+    def prepaid_amount(self):
+        return reduce(lambda x,y: x + y, [ item.amount for item in self.contractdetail_set.all()] , 0)
+    def payable_amount(self):
+        return self.billing_amount - self.prepaid_amount()
+    def supplier_select(self):
+        return ",".join([ item.supplier.supplier_name for item in self.supplierselect_set.all()])
 
 class ContractDetail(models.Model):
     user = models.ForeignKey(User, blank = False)
@@ -50,7 +56,7 @@ class ContractDetail(models.Model):
         verbose_name = u"合同金额明细"
         verbose_name_plural = u"合同金额明细"
     def __unicode__(self):
-        return self.amount
+        return '%s'% (self.amount)
 
 class BidComment(models.Model):
     user = models.ForeignKey(User, blank = False)
@@ -164,35 +170,7 @@ class ArrivalInspection(models.Model):
     def __unicode__(self):
         return '%s(%s)' % (self.bidform.bid_id,self.material.name)
 
-class PurchasingEntry(models.Model):
-    entry_time = models.DateField(blank=False, null=True,verbose_name=u"入库时间")
-    purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "purchaser")
-    inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "inspector")
-    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "keeper")
-    entry_confirm = models.BooleanField(default=False,verbose_name=u"入库单确认")
-    bidform = models.ForeignKey(BidForm,verbose_name=u"标单号")
-    entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES,default = 0, verbose_name=u"入库单类型")
-    entry_code = models.IntegerField(blank = False ,max_length = 10, verbose_name = u"单据编号",unique = True)
-    work_order = models.ForeignKey(WorkOrder,verbose_name = u"工作令")
-    entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=0,verbose_name=u"入库单状态")
-    class Meta:
-        verbose_name = u"入库单"
-        verbose_name_plural = u"入库单"
 
-    def __unicode__(self):
-        return '%s' % self.entry_code
-
-class PurchasingEntryItems(models.Model):
-    material = models.ForeignKey(Materiel,blank = True , null = True , verbose_name = u"材料")
-    remark = models.CharField(max_length = 100, blank = True , default="" , verbose_name = u"备注")
-    date = models.DateField( blank = False , verbose_name = u"生产日期")
-    price = models.FloatField( blank = True ,default="0", verbose_name = u"价格")
-    purchasingentry = models.ForeignKey(PurchasingEntry,verbose_name = u"入库单")
-    class Meta:
-        verbose_name = u"入库材料"
-        verbose_name_plural = u"入库材料"
-    def __unicode__(self):
-        return '%s(%s)' % (self.material.name, self.purchasingentry)
 
 class MaterielPurchasingStatus(models.Model):
     materiel = models.OneToOneField(Materiel)
@@ -212,6 +190,7 @@ class SupplierSelect(models.Model):
         unique_together = (("bidform", "supplier", ), )
     def __unicode__(self):
         return "%s select %s" % (self.bidform.bid_id, self.supplier.supplier_name)
+
 class MaterialSubApply(models.Model):
     receipts_code = models.CharField(max_length = 100, unique = True, blank = False ,null = True, verbose_name = u"单据编号")
     pic_code =  models.CharField(max_length = 100, blank = False , null = True, verbose_name = u"图号")

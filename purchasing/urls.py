@@ -93,4 +93,8 @@ urlpatterns=patterns('',
         r'^bidformapproveid/(?P<bid>\w+)/$',
         purchasing_views.bidformApproveIDViews,
     ),
+    url(
+        r'^contractFinance/$',
+        purchasing_views.contractFinanceViews,
+    ),
 )

@@ -94,3 +94,21 @@ $(document).on("click", "input#selectall", function(){
         this.checked = target; 
     });
 });
+
+$(document).on("click","#detail_edit",function(){
+  uid = $(this).attr("uid");
+  Dajaxice.purchasing.GetMeterielExecuteForm(Detail_Edit_Callback,{'uid':uid});
+});
+function Detail_Edit_Callback(data){
+  $('#materielexecute_modal').modal();
+  $('#materielexecute_div').html(data.form);
+}
+
+$(document).on("click","#save_materiel_excecute",function(){
+  Dajaxice.purchasing.materielExecuteInfo(MaterielExecuteInfo_Callback,{'form':$('#edit_materielexecute_form').serialize(true),'uid':uid})
+});
+function MaterielExecuteInfo_Callback(data){
+  $('#materielexecute_modal').modal('hide');
+  window.location.reload();
+}
+

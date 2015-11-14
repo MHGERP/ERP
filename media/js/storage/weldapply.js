@@ -15,4 +15,11 @@ $(document).ready(function(){
         'data':data,
     });
   });
+  if($("#status").val()==3)
+ {
+     $("#confirm").attr('disabled','disabled');
+     $("#confirm").hide();
+     $("#confirm").after('<a type="button" href="/storage/weldapply" class="btn btn-info">返回</a>');
+
+ }
 });

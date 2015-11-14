@@ -47,6 +47,10 @@ urlpatterns = patterns('',
         include('news.urls')
     ),
     url(
+        r'^techdata/',
+        include('techdata.urls')
+    ),
+    url(
         r'^errors/',
         include("backend.urls")
     ),

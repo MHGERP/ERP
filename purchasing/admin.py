@@ -11,8 +11,6 @@ RegisterClass = (
     ArrivalInspection,
     Supplier,
     SupplierFile,
-    PurchasingEntry,
-    PurchasingEntryItems,
     MaterielPurchasingStatus,
     SupplierSelect,
     MaterialSubApply,
@@ -23,6 +21,7 @@ RegisterClass = (
     StatusChange,
     StatusChangeReason,
     MaterielExecuteDetail,
+    ContractDetail
 )
 
 for item in RegisterClass:
