@@ -45,7 +45,7 @@ class authority_required(object):
     JunHU
     summary: functor of authority decorator
     params: authority: authority alias
-    return: wrappered functor
+    return: wrappered function object
     """
     def __init__(self, authority):
         self.authority = authority
@@ -60,3 +60,41 @@ class authority_required(object):
             else:
                 return HttpResponseRedirect(reverse('backend.errorviews.error403'))
         return wrappered_method
+
+def checkSuperAdmin(user):
+    if user is None or user.is_anonymous() is True:
+        return False
+    if SuperAdmin.objects.filter(admin = user).count() > 0:
+        return True
+    return False
+
+def checkAdmin(user):
+    """
+    JunHU
+    summary: function to check a user is super-admin or group-admin
+    params: user: user object
+    return: boolean value
+    """
+    if user is None or user.is_anonymous() is True:
+        return False
+
+    if Group.objects.filter(admin = user).count() > 0:
+        return True
+    return False
+
+def admin_authority_required(method):
+    """
+    JunHU
+    summary: function of admin authority decorator
+    params: method: function object
+    return: wrappered function object
+    """
+    def wrappered_method(request, *args, **kwargs):
+        user = request.user
+        is_passed = (checkAdmin(user = request.user) or checkSuperAdmin(user = request.user))
+        if is_passed:
+            response = method(request, *args, **kwargs)
+            return response
+        else:
+            return HttpResponseRedirect(reverse('backend.errorviews.error403'))
+    return wrappered_method
