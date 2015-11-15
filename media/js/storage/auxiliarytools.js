@@ -5,15 +5,40 @@ $('#date').datetimepicker({
 });
 
 $(document).ready(function(){
-  $("#query_form").submit(function(e){
+  $("#inventory_form").submit(function(e){
     e.preventDefault();
-    var data=$("#query_form").serialize();
-    Dajaxice.storage.Search_Auxiliary_Tools_Inventory(function(data){
+    var data=$("#inventory_form").serialize();
+    Dajaxice.storage.Search_Auxiliary_Tools_Records(function(data){
         $('#inventory_table').html(data);
         $('#date').val('');
     },
     {
         'data':data,
+        'search_type':'inventory',
+    });
+  });
+  $("#entry_form").submit(function(e){
+    e.preventDefault();
+    var data=$("#entry_form").serialize();
+    Dajaxice.storage.Search_Auxiliary_Tools_Records(function(data){
+        $('#entry_table').html(data);
+        $('#date').val('');
+    },
+    {
+        'data':data,
+        'search_type':'entry',
+    });
+  });
+  $("#apply_form").submit(function(e){
+    e.preventDefault();
+    var data=$("#apply_form").serialize();
+    Dajaxice.storage.Search_Auxiliary_Tools_Records(function(data){
+        $('#apply_table').html(data);
+        $('#date').val('');
+    },
+    {
+        'data':data,
+        'search_type':'apply',
     });
   });
 });

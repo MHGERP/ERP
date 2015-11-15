@@ -233,7 +233,8 @@ class AuxiliaryToolApplyCard(models.Model):
     actual_quantity=models.IntegerField(verbose_name=u'实发数量',default=0,blank=False)
     actual_total=models.FloatField(verbose_name=u'实际总价',default=0,blank=False)
     status=models.IntegerField(verbose_name=u'完成状态',default=0,blank=False)
-
+    applicant=models.ForeignKey(User,verbose_name=u'领用人',default=None,blank=True,null=True,related_name="at_applicants")
+    commit_user=models.ForeignKey(User,verbose_name=u'确认人',default=None,blank=True,null=True,related_name="at_commit_users")
     def save(self,*args,**kwargs):
         if not self.status==2:
             self.apply_total=self.apply_item.unit_price*self.apply_quantity
@@ -254,6 +255,20 @@ class AuxiliaryToolApplyCard(models.Model):
         verbose_name_plural=u'辅助材料领用卡'
     def __unicode__(self):
         return str(self.index)
+
+class AuxiliaryToolEntryCard(models.Model):
+    create_time=models.DateField(verbose_name=u'创建时间',auto_now_add=True)
+    auxiliary_tool=models.ForeignKey(AuxiliaryTool,verbose_name=u'入库材料',blank=False)
+    quantity=models.FloatField(verbose_name=u'入库数量',blank=False)
+
+    class Meta:
+        verbose_name=u'辅助材料入库单'
+        verbose_name_plural=u'辅助材料入库单'
+
+    def __unicode__(self):
+        return u'%s %s %s'%(self.auxiliary_tool,self.quantity,self.create_time)
+
+
 
 class WeldStoreList(models.Model):
     factory = models.CharField(max_length=20,verbose_name=u"厂家")
