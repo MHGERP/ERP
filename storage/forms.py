@@ -123,7 +123,38 @@ class HumRecordForm(ModelForm):
        #     "demandTemp":forms.TextInput(attrs={"class":"form-control"}),
         }
 
+class HumSearchForm(forms.Form):
+    date = forms.DateField(label = u"日期",required = False, widget = forms.TextInput(attrs={'class':'form-controli span2','id':'date'}))
+    storeRoom = forms.ChoiceField(label = u"库房",required = False, widget = forms.Select(attrs={"class":'form-control span2','id':'storeRoom'}))
+    storeMan = forms.CharField(label = u"库管员",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'storeMan'}))
+    def __init__(self,*args,**kwargs):
+        storeRoom = StoreRoom.objects.all()
+        super(HumSearchForm,self).__init__(*args,**kwargs)
+        room_list = [(-1,u"--------")]
+        for room in storeRoom:
+            room_list.append((room.id,room.name))
+        self.fields["storeRoom"].choices = tuple(room_list)
 
+class BakeRecordForm(ModelForm):
+    class Meta:
+        model = WeldingMaterialBakeRecord
+        widgets = { 
+            "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
+            "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"date"}),
+            "intoheattime":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"intoheattime"}),
+            "timefortemp":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"timefortemp"}),
+            "tempfalltime":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"tempfalltime"}),
+            "timeforremainheat":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"timeforremainheat"}),
+            "usetime":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"usetime"}),
+        }
+
+class BakeSearchForm(forms.Form):
+    date = forms.DateField(label = u"日期",required = False, widget = forms.TextInput(attrs={'class':'form-controli span2','id':'date'}))
+    standardnum = forms.CharField(label = u"标准号",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'standardnum'}))
+    weldengineer = forms.CharField(label = u"焊接工程师",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'weldengineer'}))
+    storeMan = forms.CharField(label = u"库管员",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'storeMan'}))
+    def __init__(self,*args,**kwargs):
+        super(BakeSearchForm,self).__init__(*args,**kwargs)
 
 class EntrySearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
@@ -196,10 +227,9 @@ class AuxiliaryToolsForm(ModelForm):
                 'unit_price':forms.TextInput(attrs={'class':'form-control search-query','readonly':'readonly'}),
                 'manufacturer':forms.TextInput(attrs={'class':'form-control search-query','readonly':'readonly'}),
                 'quantity':forms.TextInput(attrs={'class':'form-control search-query'}),
-
                 }
 
-class AuxiliaryToolsInventorySearchForm(forms.Form):
+class AuxiliaryToolsSearchForm(forms.Form):
     date=forms.DateField(label=u'日期',required=False,widget=forms.TextInput(attrs={'readonly':'readonly','class':'form-control search-query','id':'date'}))
     name=forms.CharField(label=u'名称',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'name'}))
     model=forms.CharField(label=u'类别',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'model'}))

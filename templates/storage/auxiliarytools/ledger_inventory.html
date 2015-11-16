@@ -5,13 +5,18 @@
 {% endblock %}
 
 {% block sub_sec %}
+<a href="/storage/auxiliarytools/ledger" >辅助工具台账</a>
 <a href="#" class="current">辅助工具库存台账</a>
 {% endblock %}
 
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
-        <form id="query_form" class="form-inline">
-        {{search_form}}
+        <form id="inventory_form" class="form-inline">
+        {% for field in search_form %}
+        {% if field.id_for_label != 'date' %}
+        {{ field.label_tag }} {{ field }}
+        {% endif %}
+        {% endfor %}
         <button type="submit" id="search_submit" class="btn btn-info">搜索</button>
     </form>
     <div id="inventory_table">

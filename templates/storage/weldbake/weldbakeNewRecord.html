@@ -1,0 +1,17 @@
+{% extends "storage/base/weldbase.html" %}
+{% block title %}
+<h1>焊材烘焙记录</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/weldbake">焊材烘焙记录</a>
+<a href="#" class="current">记录录入</a>
+{% endblock %}
+
+{% block inner_content %}
+<div class="widget-box">
+    <div class="widget-content nopadding" id="bake_div" >
+    {% include "storage/widgets/bake_form.html" %}
+    </div>
+</div>
+{% endblock %}
