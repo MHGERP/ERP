@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
 from const.utils import getChoiceList
+
 DEPARTMENT_CHOICES=(
         (u' ',u'------'),
         (u'部门A',u'部门A'),
@@ -218,3 +219,12 @@ class AuxiliaryToolsSearchForm(forms.Form):
     model=forms.CharField(label=u'类别',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'model'}))
     manufacturer=forms.CharField(label=u'厂家',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'manufacturer'}))
 
+class SteelRefundSearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
+    refund_code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'refund_code'}))
+    work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'work_order'}))
+    keeper=forms.ChoiceField(label=u'库管员',required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'keeper'}))
+    def __init__(self,*args,**kwargs):
+        super(SteelRefundSearchForm,self).__init__(*args,**kwargs)
+        users = getUserByAuthority(STORAGE_KEEPER)
+        self.fields["keeper"].choices = getChoiceList(users,"userinfo")

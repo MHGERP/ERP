@@ -9,10 +9,13 @@
 	<h1><a href="./dashboard.html">ERP</a></h1>		
 </div>
 
-<div id="user-nav" class="navbar navbar-inverse">
 	{% include "base/_usernav.html" %}
+
+
+<div id="check_mymessage" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    {% include "base/model-message.html" %}
 </div>
-    
+
 <div id="sidebar">
 	<a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
 	<ul>

@@ -9,7 +9,10 @@ urlpatterns = patterns('',
         storage_views.weldMaterialHomeViews,
     ),
     url(
-
+        r'^steelrefund$',
+        storage_views.steelRefundViews,
+    ),
+    url(
         r'^steelmaterialhome$',
         storage_views.steelMaterialHomeViews,
     ),

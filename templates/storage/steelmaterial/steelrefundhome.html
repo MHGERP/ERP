@@ -1,0 +1,51 @@
+{% extends "storage/base/steelbase.html" %}
+{% block title %}
+<h1>钢材退库</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/weldrefund" class="current">钢材退库</a>
+{% endblock %}
+
+{% block inner_content %}
+<h3>退库单管理</h3>
+<form class="form-inline" method="post">
+    {% csrf_token %}
+    {% for field in search_form %}
+        {{field.label}}
+        {{field}}
+    {% endfor %}
+    <button class="btn btn-success">检索</button> 
+</form>
+<br>
+<table class="table table-bordered">
+    <thead>
+        <th>日期</th>
+        <th>编号</th>
+        <th>工作令</th>
+        <th>库管人</th>
+        <th>退料人</th>
+        <th>操作</th>
+    </thead>
+    </tbody>
+        {% for ref_obj in refund_set %}
+        <tr>
+            <td>{{ref_obj.date|date:"Ymd"}}</td>
+            <td>{{ref_obj.form_code}}</td>
+            <td>{{ref_obj.work_order}}</td>
+            <td>{{ref_obj.keeper.userinfo}}</td>
+            <td>{{ref_obj.returner.userinfo}}</td>
+            <td>
+                {{ref_obj.return_confirm}}
+                {% ifequal ref_obj.return_confirm  True %}
+                    <a class="btn" href="/storage/weldrefunddetail/{{ref_obj.id}}">查看</a>
+                {% else %}
+                    <a class="btn btn-warning" href="/storage/weldrefunddetail/{{ref_obj.id}}">待处理</a>
+                {% endifequal %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

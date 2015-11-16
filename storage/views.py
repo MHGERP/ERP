@@ -18,7 +18,6 @@ from storage.forms import *
 from storage.utils import *
 from users import STORAGE_KEEPER
 def weldMaterialHomeViews(request):
-
     context = {
     
     }
@@ -29,6 +28,15 @@ def steelMaterialHomeViews(request):
 
     }
     return render(request,"storage/steelmaterial/steelmaterialhome.html",context)
+
+def steelRefundViews(request):
+    search_form = SteelRefundSearchForm()
+    refund_set = CommonSteelMaterialReturnCardInfo.objects.all()
+    context={
+        "search_form":search_form,
+        "refund_set":refund_set
+    }
+    return render(request,"storage/steelmaterial/steelrefundhome.html",context)
     
 def weldEntryHomeViews(request):
     if request.method == "POST":
