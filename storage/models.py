@@ -216,8 +216,8 @@ class WeldRefund(models.Model):
     code = models.CharField(max_length=20,blank=False,null=True,unique=True,verbose_name=u"编号")
     work_order = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
     receipts_time = models.DateField(blank=False,null=True,verbose_name=u"领用日期")
-    receipts_code = models.CharField(max_length=20,blank=False,null=True,verbose_name=u"领用编号")
-    type_specification = models.CharField(max_length=50,blank=False,null=True,verbose_name=u"型号规格") 
+    receipts_code = models.ForeignKey(WeldingMaterialApplyCard,blank=False,verbose_name=u"领用编号")
+    specification = models.CharField(max_length=50,blank=False,null=True,verbose_name=u"型号规格") 
     refund_weight = models.FloatField(default=0,blank=False,verbose_name=u"退库量（重量）")
     refund_count = models.FloatField(default=0,blank=False,verbose_name=u"退库量（数量）")
     refund_status = models.CharField(max_length=20,blank=False,null=True,verbose_name=u"退库状态")
@@ -298,13 +298,13 @@ class AuxiliaryToolEntryCard(models.Model):
 
 
 class WeldStoreList(models.Model):
-    factory = models.CharField(max_length=20,verbose_name=u"厂家")
+    factory = models.CharField(max_length=20,null = True,verbose_name=u"厂家")
     deadline = models.DateField(verbose_name=u"最后期限",null = True)
-    brand = models.CharField(max_length=20,verbose_name=u"牌号")
-    type_specification = models.CharField(max_length=50,verbose_name=u"规格")
+    brand = models.CharField(max_length=20,verbose_name=u"牌号",null=True)
+    specification = models.CharField(max_length=50,verbose_name=u"规格")
     count = models.FloatField(verbose_name=u"数量")
     entry_time = models.DateField(verbose_name=u"入库时间")
-    charge_number = models.CharField(max_length=20,verbose_name=u"材料批号")
+    charge_number = models.CharField(max_length=20,verbose_name=u"材料批号",null=True)
     material_id = models.CharField(max_length=20,verbose_name=u"材质编号")
     remark = models.CharField(max_length=100,verbose_name=u"备注",null = True)
 
@@ -313,10 +313,10 @@ class WeldStoreList(models.Model):
         verbose_name_plural = u"焊材库存清单"
 
     def __unicode__(self):
-        return "%s(%s)" % (self. type_specification,self.factory)
+        return "%s(%s)" % (self.specification,self.factory)
 
 class WeldMaterialEntry(models.Model):
-    entry_time = models.DateField(blank=False, null=True,verbose_name=u"入库时间")
+    entry_time = models.DateField(blank=False, null=True,verbose_name=u"入库时间",auto_now = True)
     purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "purchaser")
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "keeper")

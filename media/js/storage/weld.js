@@ -35,6 +35,7 @@ function entryconfirm(eid){
 function entry_confirm_callback(data){
     if(data.flag){
         alert("入库单确认成功");
+        window.location.reload();
     }
     else{
         alert("入库单确认失败");

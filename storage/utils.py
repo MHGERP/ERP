@@ -28,3 +28,15 @@ def get_weld_filter(model_type,dict):
         res_set = []
     return res_set
 
+def weldStoreItemsCreate(entry):
+    weld_set = entry.weldmaterialentryitems_set.all()
+    for item in weld_set:
+        storeitem = WeldStoreList.objects.filter(material_id = item.material.material.material_id,specification = item.material.specification,entry_time=item.entry.entry_time)
+        if storeitem.count() > 0:
+            old_item = storeitem[0]
+            old_item.count = old_item.count + float(item.material.count)
+            old_item.save()
+        else:
+            storeitem = WeldStoreList(entry_time = item.entry.entry_time,specification=item.material.specification,material_id=item.material.material.material_id,count=item.material.count)
+            storeitem.save()
+

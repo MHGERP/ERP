@@ -133,11 +133,15 @@ def entryItemSave(request,form,mid):
 def entryConfirm(request,eid,entry_code):
     try:
         entry = WeldMaterialEntry.objects.get(id = eid)
-        entry.entry_code = entry_code
-        entry.keeper = request.user
-        entry.entry_status = STORAGESTATUS_END
-        entry.save()
-        flag = True
+        if entry.entry_status == STORAGESTATUS_KEEPER:
+            entry.entry_code = entry_code
+            entry.keeper = request.user
+            entry.entry_status = STORAGESTATUS_END
+            weldStoreItemsCreate(entry) 
+            entry.save()
+            flag = True
+        else:
+            flag = False
     except Exception,e:
         flag = False
         print e

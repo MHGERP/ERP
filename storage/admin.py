@@ -21,6 +21,7 @@ Registers = (
     AuxiliaryToolEntryCard,
     WeldMaterialEntry,
     WeldMaterialEntryItems,
+    WeldStoreList,
 )
 
 for reg in Registers:
