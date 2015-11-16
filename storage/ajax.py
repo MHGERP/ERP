@@ -15,8 +15,8 @@ from django.db.models import Q
 from datetime import datetime
 from storage.models import *
 from storage.forms import *
+from storage.utils import *
 from django.shortcuts import render
-from purchasing.models import PurchasingEntryItems
 @dajaxice_register
 def get_apply_card_detail(request,apply_card_index):
     context={}
@@ -42,6 +42,48 @@ def Search_History_Apply_Records(request,data):
     else:
         return HttpResponse('FAIL')
 
+@dajaxice_register
+def Auxiliary_Detail_Query(request,id):
+    context={}
+    object_id=int(id)
+    auxiliary_tool=AuxiliaryTool.objects.get(id=object_id)
+    context['model']=dict(AUXILIARY_TOOLS_MODELS_CHOICES)[int(auxiliary_tool.model)]
+    context['measurement_unit']=auxiliary_tool.measurement_unit
+    context['unit_price']=auxiliary_tool.unit_price
+    return HttpResponse(simplejson.dumps(context))
+
+
+
+@dajaxice_register
+def Search_Auxiliary_Tools_Records(request,data,search_type):
+    context={}
+    print search_type
+    form=AuxiliaryToolsSearchForm(deserialize_form(data))
+    if form.is_valid():
+        if search_type=='inventory':
+            conditions=form.cleaned_data
+            context['rets'] = get_weld_filter(AuxiliaryTool,conditions)
+            return render_to_string('storage/auxiliarytools/inventory_table.html',context)
+        else:
+            conditions=form.cleaned_data
+            if search_type=='entry':
+                q1=(conditions['date'] and Q(create_time=conditions['date'])) or None
+                q2=(conditions['name'] and Q(auxiliary_tool__name=conditions['name'])) or None
+                q3=(conditions['model'] and Q(auxiliary_tool__model=conditions['model'])) or None
+                q4=(conditions['manufacturer'] and Q(auxiliary_tool__manufacturer=conditions['manufacturer'])) or None
+                query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4]))
+                entry_records=AuxiliaryToolEntryCard.objects.filter(query_conditions)
+                context['rets']=entry_records
+                return render_to_string('storage/auxiliarytools/entry_table.html',context)
+            elif search_type=='apply':
+                q1=(conditions['date'] and Q(commit_time=conditions['date'])) or None
+                q2=(conditions['name'] and Q(actual_item__name=conditions['name'])) or None
+                q3=(conditions['model'] and Q(actual_item__model=conditions['model'])) or None
+                q4=(conditions['manufacturer'] and Q(actual_item__manufacturer=conditions['manufacturer'])) or None
+                query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4]))                
+                apply_records=AuxiliaryToolApplyCard.objects.filter(query_conditions)
+                context['rets']=apply_records
+                return render_to_string('storage/auxiliarytools/apply_table.html',context)
 """
 @dajaxice_register
 def weldhum_insert(request,hum_params):
@@ -67,9 +109,9 @@ def weldhum_insert(request,hum_params):
     
 @dajaxice_register
 def entryItemSave(request,form,mid):
-    item = PurchasingEntryItems.objects.get(id = mid)
+    item = WeldMaterialEntryItems.objects.get(id = mid)
     entry_form = EntryItemsForm(deserialize_form(form),instance = item) 
-    pur_entry = item.purchasingentry
+    pur_entry = item.entry
     if entry_form.is_valid():
         entry_form.save()
         flag = True
@@ -78,7 +120,7 @@ def entryItemSave(request,form,mid):
         print entry_form.errors
         flag = False
         message = u"修改失败"
-    entry_set = PurchasingEntryItems.objects.filter(purchasingentry = pur_entry) 
+    entry_set = WeldMaterialEntryItems.objects.filter(entry = pur_entry) 
     html = render_to_string("storage/widgets/weldentrytable.html",{"entry_set":entry_set})
     data = {
         "flag":flag,
@@ -87,3 +129,16 @@ def entryItemSave(request,form,mid):
     }
     return simplejson.dumps(data)
 
+@dajaxice_register
+def entryConfirm(request,eid,entry_code):
+    try:
+        entry = WeldMaterialEntry.objects.get(id = eid)
+        entry.entry_code = entry_code
+        entry.keeper = request.user
+        entry.entry_status = STORAGESTATUS_END
+        entry.save()
+        flag = True
+    except Exception,e:
+        flag = False
+        print e
+    return simplejson.dumps({'flag':flag})

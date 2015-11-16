@@ -2,13 +2,14 @@
     <thead>
         <tr>
             <th>序号</th>
-            <th>名称及规格</th>
-            <th>标准号/图号</th>
-            <th>材料牌号</th>
-            <th>单位</th>
+            <th>名称</th>
+            <th>材质</th>
+            <th>规格</th>
             <th>数量</th>
+            <th>单位</th>
             <th>标准</th>
             <th>状态</th>
+            <th>材质编号</th>
             <th>备注</th>
             <th>生产日期</th>
             <th>价格</th>
@@ -20,12 +21,13 @@
         <tr id="{{item.id}}">
             <td>{{forloop.counter}}</td>
             <td>{{item.material}}</td>
-            <td>{{item.schematic_index}}</td>
-            <td></td>
-            <td></td>
+            <td>{{item.material.material}}</td>
+            <td>{{item.material.specification}}</td>
             <td>{{item.material.count}}</td>
-            <td>{{item.standard}}</input></td>
-            <td>{{item.status}}</input></td>
+            <td>{{item.material.unit}}</td>
+            <td>{{item.material.standard}}</input></td>
+            <td>{{item.material.status}}</input></td>
+            <td>{{item.material.material.material_id}}</td>
             <td>{{item.remark}}</td>
             <td>{{item.date|date:"Y-m-d"}}</td>
             <td>{{item.price}}</td>

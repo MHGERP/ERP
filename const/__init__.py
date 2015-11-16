@@ -120,22 +120,48 @@ MATERIEL_CHOICE = (
 )
 
 ENTRYTYPE_WELD = 0
-ENTRYTYPE_STEEL = 1
-ENTRYTYPE_BOARD = 2
-ENTRYTYPE_BAR = 3
+ENTRYTYPE_NORMTEILE = 1
+ENTRYTYPE_ASSISTTOOL = 2
 ENTRYTYPE_FORGING = 4
-ENTRYTYPE_NORMTEILE = 5
-ENTRYTYPE_ASSISTTOOL = 6
 
 ENTRYTYPE_CHOICES = (
     (ENTRYTYPE_WELD,u"焊材"),
-    (ENTRYTYPE_STEEL,u"钢材"),
-    (ENTRYTYPE_BOARD,u"板材"),
-    (ENTRYTYPE_BAR,u"型材"),
     (ENTRYTYPE_FORGING,u"锻件"),
     (ENTRYTYPE_NORMTEILE,u"标准件"),
     (ENTRYTYPE_ASSISTTOOL,u"辅助工具"),
 )
+
+
+ENTRYTYPE_BOARD = 0
+ENTRYTYPE_BAR = 1
+
+ENTRYTYPE_CHOICES_2 = {
+    (ENTRYTYPE_BOARD,u"板材"),
+    (ENTRYTYPE_BAR,u"型材"),
+}
+
+KILOGRAM = 0
+TON = 1
+
+WEIGHT_MANAGEMENT={
+    (KILOGRAM,u'千克'),
+    (TON,u'顿'),
+}
+
+SQUARE_METER = 0
+
+AREA_MANAGEMENT={
+    (SQUARE_METER,u'平方米'),
+}
+
+METER = 0
+CENTIMETER =1
+
+LENGHT_MANAGEMENT={
+    (METER,u'米'),
+    (CENTIMETER,u"厘米"),
+}
+
 
 
 
@@ -200,3 +226,11 @@ AUTH_TYPE_CHOICES = (
     (2, u"生产管理"),
     (3, u"技术资料管理")
 )
+
+AUXILIARY_TOOLS_MODELS_CHOICES=(
+        (0,u'碳棒'),
+        (1,u'面罩'),
+        (2,u'白黑玻璃'),
+        )
+
+

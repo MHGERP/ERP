@@ -1,13 +1,13 @@
 {% extends "storage/base/weldbase.html" %}
 {% block title %}
-<h1>焊接材料入库管理</h1>
+<h1>焊材退库</h1>
 {% endblock%}
 
 {% block sub_sec %}
-<a href="/storage/weldentryhome" class="current">焊接材料入库管理</a>
+<a href="/storage/weldrefund" class="current">焊材退库</a>
 {% endblock %}
 {% block inner_content %}
-<h3>焊接材料入库单</h3>
+<h3>焊材退库</h3>
 <div class="rows">
 <form class="form-inline" method="post">
     {% csrf_token %}
@@ -30,12 +30,12 @@
     </tbody>
         {% for ref_obj in refund_set %}
         <tr>
-            <td>{{ref_obj.work_order}}</td>
-            <td>{{ref_obj.entry_time|date:"Ymd"}}</td>
+            <td>{{ref_obj.department}}</td>
+            <td>{{ref_obj.date|date:"Ymd"}}</td>
             <td>{{ref_obj.code}}</td>
             <td>{{ref_obj.work_order}}</td>
             <td>{{ref_obj.keeper.userinfo}}</td>
-            <td>{% ifequal ref_obj.weldrefund_status  STORAGESTATUS_END %}<a class="btn" href="/storage/weldentryconfirm/{{ref_obj.id}}">查看</a>{% else %}<a class="btn btn-warning" href="/storage/weldentryconfirm/{{ref_obj.id}}">待处理</a>{% endifequal %}</td>
+            <td>{% ifequal ref_obj.weldrefund_status  STORAGESTATUS_END %}<a class="btn" href="/storage/weldrefunddetail/{{ref_obj.id}}">查看</a>{% else %}<a class="btn btn-warning" href="/storage/weldrefunddetail/{{ref_obj.id}}">待处理</a>{% endifequal %}</td>
         </tr>
         {% endfor %}
     </tbody>

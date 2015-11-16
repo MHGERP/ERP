@@ -3,7 +3,7 @@ from users.models import UserInfo,Title,Authority
 
 def createNewUser(username, password, fullname = None):
     try:
-        user = User(username = username, password = password)
+        user = User.objects.create_user(username = username, password = password)
         user.save()
 
         userinfo = UserInfo(user = user, name = fullname)
@@ -13,5 +13,5 @@ def createNewUser(username, password, fullname = None):
 
 def getUserByAuthority(authority):
     auth_obj = Authority.objects.get(authority = authority)
-    user_list = User.objects.filter(title_user__authorities = auth_obj)
+    user_list = User.objects.filter(title_user__authorities = auth_obj).distinct()
     return user_list    

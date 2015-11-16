@@ -92,7 +92,6 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
 )
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -114,7 +113,18 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     join(SETTINGS_ROOT, 'templates'),
 )
-
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.request',
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.csrf',
+    'django.contrib.messages.context_processors.messages',
+    'context.application_settings',
+    'context.userauth_settings',
+)
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -135,6 +145,7 @@ INSTALLED_APPS = (
     'const',
     'users',
     'storage',
+    'techdata',
     #Add-on
     'dajaxice',
     'dajax',

@@ -19,20 +19,23 @@ from const import NEWS_CATEGORY_COMPANYNEWS
 
 from backend.utility import getContext
 from const.forms import AuthorTypeForm
+from users.decorators import admin_authority_required
 
+@admin_authority_required
 def titleSettingViews(request):
     """
     JunHU
     """
     user_id = request.GET.get("user_id")
     user = User.objects.get(id = user_id)
-    group_form = GroupForm()
+    group_form = GroupForm(request = request)
     context = {
         "setting_user": user,
         "group_form": group_form,
     }
     return render(request, "management/title_setting.html", context)
 
+@admin_authority_required
 def userManagementViews(request):
     """
     JunHU
@@ -43,6 +46,7 @@ def userManagementViews(request):
     }
     return render(request, "management/user_management.html", context)
 
+@admin_authority_required
 def groupManagementViews(request):
     """
     JunHU
@@ -50,16 +54,18 @@ def groupManagementViews(request):
     context = {}
     return render(request, "management/group_management.html", context)
 
+@admin_authority_required
 def titleManagementViews(request):
     """
     JunHU
     """
-    form = GroupForm()
+    form = GroupForm(request = request)
     context = {
             "form": form,
         }
     return render(request, "management/title_management.html", context)
 
+@admin_authority_required
 def messageManagementViews(request):
     """
     BinWu
@@ -102,6 +108,7 @@ def messageManagementViews(request):
     }
     return render(request, "management/message_management.html", context)
 
+@admin_authority_required
 def authorityManagementViews(request):
     """
     JunHU
@@ -115,7 +122,7 @@ def authorityManagementViews(request):
         }
     return render(request, "management/authority_management.html", context)
 
-
+@admin_authority_required
 def newsReleaseViews(request):
     """
     mxl
@@ -144,6 +151,7 @@ def newsReleaseViews(request):
         }
         return render(request, "management/news_release.html", context)
 
+@admin_authority_required
 def newsManagementViews(request):
     """
     mxl

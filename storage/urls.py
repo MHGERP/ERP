@@ -9,8 +9,17 @@ urlpatterns = patterns('',
         storage_views.weldMaterialHomeViews,
     ),
     url(
+
+        r'^steelmaterialhome$',
+        storage_views.steelMaterialHomeViews,
+    ),
+    url(
         r'^weldentryhome$',
         storage_views.weldEntryHomeViews,
+    ),
+    url(
+        r'^steelentryhome$',
+        storage_views.steelEntryHomeViews,
     ),
     url(
         r'^weldentryconfirm/(?P<eid>\w+)$',
@@ -40,13 +49,70 @@ urlpatterns = patterns('',
         r'^weldhumNewRecord$',
         storage_views.weldhumNewRecord,
     ),
-    url( 
+    url(
+        r'^weldbake$',
+        storage_views.weldbakeHomeViews,
+    ),
+    url(
         r'^weldrefund$',
         storage_views.weldRefundViews,
     ),
     url(
+        r'^weldbakeDetail/(?P<index>\w+)$',
+        storage_views.weldbakeDetail,
+    ),
+    url( 
+        r'^weldbakeNewRecord$',
+        storage_views.weldbakeNewRecord,
+    ),
+    
+    url( 
+        r'^weldrefunddetail/(?P<rid>\w+)$',
+        storage_views.weldRefundDetailViews,
+    ),
+    url(
         r'^auxiliarytools$',
         storage_views.AuxiliaryToolsHomeView,
+    ),
+    url(
+        r'^auxiliarytools/apply$',
+        storage_views.AuxiliaryToolsApplyView,
+    ),
+    url(
+        r'^auxiliarytools/ledger$',
+        storage_views.AuxiliaryToolsLedgerView,
+    ),
+    url(
+        r'^auxiliarytools/ledger/entry$',
+        storage_views.AuxiliaryToolsLedgerEntryView,
+    ),
+    url(
+        r'^auxiliarytools/ledger/apply$',
+        storage_views.AuxiliaryToolsLedgerApplyView,
+    ),
+    url(
+        r'^auxiliarytools/ledger/inventory$',
+        storage_views.AuxiliaryToolsLedgerInventoryView,
+    ),
+    url(
+        r'^auxiliarytools/warehousedetail$',
+        storage_views.AuxiliaryToolsEntryApplyDetailView,
+    ),
+    url(
+        r'^auxiliarytools/entry$',
+        storage_views.AuxiliaryToolsEntryView,
+    ),
+    url(
+        r'^auxiliarytools/entrylist$',
+        storage_views.AuxiliaryToolsEntryListView,
+    ),
+    url(
+        r'^auxiliarytools/ledger/entry/entry_card$',
+        storage_views.AuxiliaryToolsLedgerEntryCardView,
+    ),
+    url(
+        r'^auxiliarytools/ledger/apply/apply_card$',
+        storage_views.AuxiliaryToolsLedgerApplyCardView,
     ),
 )
 
