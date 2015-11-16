@@ -1,31 +1,33 @@
-    <table class="table table-hover table-bordered">
+    <table id="apply_table" class="table table-hover table-bordered">
         <tr>
-            <th class="fix_th"></th>
-            <th class="fix_th">材料名称</th>
-            <th class="fix_th">规格</th>
-            <th class="fix_th">单位</th>
-            <th class="fix_th">数量</th>
-            <th class="fix_th">单价</th>
-            <th class="fix_th">总价</th>
-        </tr>
+            <th class="fix_th span1"></th>
+            <th class="fix_th span2">材料名称</th>
+            <th class="fix_th span4">规格</th>
+            <th class="fix_th span1">单位</th>
+            <th class="fix_th span2">数量</th>
+            <th class="fix_th span1">单价</th>
+            <th class="fix_th span1">总价</th>
+        </tr> 
         <tr>
         	<td>请领</td>
         	<td>{{apply_form.apply_item}}</td>
-        	<td></td>
-        	<td></td>
+        	<td>未选择</td>
+        	<td>未选择</td>
         	<td>{{apply_form.apply_quantity}}</td>
-        	<td></td>
-        	<td></td>
+        	<td>未选择</td>
+        	<td>未选择</td>
         </tr>
+        {% if user.is_superuser %}
         <tr>
         	<td>实发</td>
         	<td>{{apply_form.actual_item}}</td>
-        	<td></td>
-        	<td></td>
+        	<td>未选择</td>
+        	<td>未选择</td>
         	<td>{{apply_form.actual_quantity}}</td>
-        	<td></td>
-        	<td></td>
+        	<td>未选择</td>
+        	<td>未选择</td>
         </tr>
+        {% endif %}
         <tr>
         	<td>备注</td>
         	<td colspan="6"></td>
