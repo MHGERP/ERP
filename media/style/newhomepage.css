@@ -22,9 +22,10 @@ a, h1, h2, h3 {
     height: 300px;
     overflow: hidden;
     padding: 0 10px;
+    background: #fff;
     color: #333;
-    /* border: 1px solid #eaeaea; */
-    border: 0px solid #eaeaea;
+    border: 1px solid #eaeaea; 
+    /*border: 0px solid #eaeaea;*/
 }
 
 .home-news {
@@ -94,7 +95,7 @@ table.documents td {
 }
 
 .home-news-list .newslist-dot {
-    border-bottom: #363636 1px dotted;
+    /*border-bottom: #363636 1px dotted;*/
     line-height: 32px;
     height: 32px;
     display: block;
@@ -110,11 +111,11 @@ table.documents td {
 }
 
 .news-list .newslist-dot {
-    border-bottom: #363636 1px dotted;
+    /*border-bottom: #363636 1px dotted;*/
     line-height: 32px;
     height: 32px;
     /*display: block;*/
-    font-size: 16px;
+    font-size: 14px;
     text-decoration: none;
 }
 
@@ -153,18 +154,18 @@ input[type="text"], input[type="button"] ,input[type="submit"],select{
 {
     /* background: url(../images/bg0.png) 0px 0px no-repeat;  */
     margin: 0px;
-    line-height: 30px;
-    height: 30px;
+    line-height: 35px;
+    height: 35px;
 }
 .usoft-listview-header div {
     /* background-color:rgb(245,79,81); */
     height: 30px;
     width: 280px;
     border-left: 10px solid rgb(32, 183, 240);
-    /*border-top: 5px solid rgb(248,248,248);
-    border-bottom: 5px solid rgb(248,248,248);*/
-    border-top: 5px solid #eeeeee;
-    border-bottom: 5px solid #eeeeee;
+    border-top: 5px solid rgb(248,248,248);
+    border-bottom: 5px solid rgb(248,248,248);
+/*    border-top: 5px solid #eeeeee;
+    border-bottom: 5px solid #eeeeee;*/
 }
 
 .usoft-listview-item-date

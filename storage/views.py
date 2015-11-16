@@ -39,7 +39,7 @@ def weldEntryHomeViews(request):
             dict["entry_time"] = search_form.cleaned_data["date"]
             dict["purchaser"] = search_form.cleaned_data["purchaser"]
             dict["work_order"] = search_form.cleaned_data["work_order"]
-            weldentry_set = get_weld_filter(PurchasingEntry,dict)
+            weldentry_set = get_weld_filter(WeldMaterialEntry,dict)
         else:
             print search_form.errors
     else:
@@ -75,8 +75,8 @@ def steelEntryHomeViews(request):
     return render(request,"storage/steelmaterial/steelentryhome.html",context)
 
 def weldEntryConfirmViews(request,eid):
-    entry = PurchasingEntry.objects.get(id = eid)
-    items = PurchasingEntryItems.objects.filter(purchasingentry = entry)
+    entry = WeldMaterialEntry.objects.get(id = eid)
+    items = WeldMaterialEntryItems.objects.filter(entry = entry)
     entry_form = EntryForm(instance = entry)
     entryitem_form = EntryItemsForm()
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
@@ -93,7 +93,7 @@ def weldEntryConfirmViews(request,eid):
     else:
         entry_form = EntryForm(instance = entry)
     context = {
-        "pur_entry":entry,
+        "entry":entry,
         "entry_set":items,
         "entry_form":entry_form,
         "item_form":entryitem_form,
