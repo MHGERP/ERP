@@ -109,9 +109,9 @@ def weldhum_insert(request,hum_params):
     
 @dajaxice_register
 def entryItemSave(request,form,mid):
-    item = PurchasingEntryItems.objects.get(id = mid)
+    item = WeldMaterialEntryItems.objects.get(id = mid)
     entry_form = EntryItemsForm(deserialize_form(form),instance = item) 
-    pur_entry = item.purchasingentry
+    pur_entry = item.entry
     if entry_form.is_valid():
         entry_form.save()
         flag = True
@@ -120,7 +120,7 @@ def entryItemSave(request,form,mid):
         print entry_form.errors
         flag = False
         message = u"修改失败"
-    entry_set = PurchasingEntryItems.objects.filter(purchasingentry = pur_entry) 
+    entry_set = WeldMaterialEntryItems.objects.filter(entry = pur_entry) 
     html = render_to_string("storage/widgets/weldentrytable.html",{"entry_set":entry_set})
     data = {
         "flag":flag,
@@ -129,3 +129,16 @@ def entryItemSave(request,form,mid):
     }
     return simplejson.dumps(data)
 
+@dajaxice_register
+def entryConfirm(request,eid,entry_code):
+    try:
+        entry = WeldMaterialEntry.objects.get(id = eid)
+        entry.entry_code = entry_code
+        entry.keeper = request.user
+        entry.entry_status = STORAGESTATUS_END
+        entry.save()
+        flag = True
+    except Exception,e:
+        flag = False
+        print e
+    return simplejson.dumps({'flag':flag})
