@@ -81,11 +81,13 @@ def messageManagementViews(request):
                     new_doc = DocumentFile(news_document = file,
                                            message = new_message)
                     new_doc.save()
-
+            
+            
             for user_iterator in User.objects.all():
+               
                 for group_id in messageform.cleaned_data["message_groups"]:
-                    group = Group.objects.get(id = int(group_id))
-                    if (user_iterator.title_set.filter(group = group).count() > 0):
+                    queryset =  Title.objects.filter(users=user_iterator,group=group_id)
+                    if (queryset.count() > 0):
                         new_box = MessageBox(user = user_iterator,
                                              message = new_message,
                                              read = False)
