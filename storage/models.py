@@ -296,26 +296,6 @@ class AuxiliaryToolEntryCard(models.Model):
     def __unicode__(self):
         return u'%s %s %s'%(self.auxiliary_tool,self.quantity,self.create_time)
 
-
-
-class WeldStoreList(models.Model):
-    factory = models.CharField(max_length=20,null = True,verbose_name=u"厂家")
-    deadline = models.DateField(verbose_name=u"最后期限",null = True)
-    brand = models.CharField(max_length=20,verbose_name=u"牌号",null=True)
-    specification = models.CharField(max_length=50,verbose_name=u"规格")
-    count = models.FloatField(verbose_name=u"数量")
-    entry_time = models.DateField(verbose_name=u"入库时间")
-    charge_number = models.CharField(max_length=20,verbose_name=u"材料批号",null=True)
-    material_id = models.CharField(max_length=20,verbose_name=u"材质编号")
-    remark = models.CharField(max_length=100,verbose_name=u"备注",null = True)
-
-    class Meta:
-        verbose_name = u"焊材库存清单"
-        verbose_name_plural = u"焊材库存清单"
-
-    def __unicode__(self):
-        return "%s(%s)" % (self.specification,self.factory)
-
 class WeldMaterialEntry(models.Model):
     entry_time = models.DateField(blank=False, null=True,verbose_name=u"入库时间",auto_now = True)
     purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "purchaser")
@@ -343,3 +323,21 @@ class WeldMaterialEntryItems(models.Model):
         verbose_name_plural = u"焊材入库材料"
     def __unicode__(self):
         return '%s(%s)' % (self.material.name, self.entry)
+
+class WeldStoreList(models.Model):
+    factory = models.CharField(max_length=20,null = True,verbose_name=u"厂家")
+    deadline = models.DateField(verbose_name=u"最后期限",null = True)
+    brand = models.CharField(max_length=20,verbose_name=u"牌号",null=True)
+    specification = models.CharField(max_length=50,verbose_name=u"规格")
+    count = models.FloatField(verbose_name=u"数量")
+    entry_time = models.DateField(verbose_name=u"入库时间")
+    charge_number = models.CharField(max_length=20,verbose_name=u"材料批号",null=True)
+    material_id = models.CharField(max_length=20,verbose_name=u"材质编号")
+    remark = models.CharField(max_length=100,verbose_name=u"备注",null = True)
+    entry_item = models.ForeignKey(WeldMaterialEntryItems,verbose_name = u"焊材入库单")
+    class Meta:
+        verbose_name = u"焊材库存清单"
+        verbose_name_plural = u"焊材库存清单"
+
+    def __unicode__(self):
+        return "%s(%s)" % (self.specification,self.factory)

@@ -1,5 +1,6 @@
 # coding:UTF-8
 
+import datetime
 from django.shortcuts import render
 
 from const import *
@@ -89,7 +90,7 @@ def Weld_Apply_Card_Detail(request):
     context={}
     card_index=int(request.GET['index'])
     apply_card=WeldingMaterialApplyCard.objects.get(index=card_index)
-    context['apply_card']=apply_card
+    context['apply_card']=apply_card 
     if request.user.is_superuser:#如果是库管员
         context['apply_card_form']=Commit_ApplyCardForm(instance=apply_card)
     else:#如果是申请者
@@ -127,6 +128,7 @@ def Apply_Card_Form_Commit(request):
         s.commit_user=request.user
         s.status=3
         s.save()
+        storeConsume(ac) 
     else:
         print 'INVALID'
         print apply_card_form.errors
@@ -314,3 +316,35 @@ def AuxiliaryToolsLedgerInventoryView(request):
 def AuxiliaryToolsEntryApplyDetailView(request):
     context={}
     return render(request,'storage/auxiliarytools/entry_apply_detail.html',context)
+
+def weldAccountHomeViews(request):
+    context = {}
+    return render(request,"storage/weldmaterial/weldaccount/weldaccounthome.html",context)
+
+def weldEntryAccountViews(request):
+    items_set = WeldStoreList.objects.all().order_by("specification","entry_time")
+    if request.method == "POST":
+        search_form = WeldAccountSearchForm(request.POST)
+        if search_form.is_valid():
+            items_set = get_weld_filter(WeldStoreList,search_form.cleaned_data)
+    else:
+        search_form = WeldAccountSearchForm()
+    context = {
+        "items_set":items_set,
+        "search_form":search_form,
+    }
+    return render(request,"storage/weldmaterial/weldaccount/weldentryhome.html",context)
+
+def weldStorageAccountHomeViews(request):
+    items_set = WeldStoreList.objects.filter(deadline__gte = datetime.date.today())
+    if request.method == "POST":
+        search_form = WeldAccountSearchForm(request.POST)
+        if search_form.is_valid():
+            items_set = get_weld_filter(WeldStoreList,search_form.cleaned_data)
+    else:
+        search_form = WeldAccountSearchForm()
+    context = {
+        "items_set":items_set,
+        "search_form":search_form,
+    }
+    return render(request,"storage/weldmaterial/weldaccount/weldstoragehome.html",context)

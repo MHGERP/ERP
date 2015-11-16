@@ -117,6 +117,22 @@ urlpatterns = patterns('',
         r'^auxiliarytools/ledger/apply/apply_card$',
         storage_views.AuxiliaryToolsLedgerApplyCardView,
     ),
+    url(
+        r'^weldaccounthome$',
+        storage_views.weldAccountHomeViews,
+    ),
+    url(
+        r'^weldentryaccount$',
+        storage_views.weldEntryAccountViews,
+    ),   
+    url(
+        r'^weldaccounthome$',
+        storage_views.weldAccountHomeViews,
+    ),   
+    url(
+        r'^weldstorageaccount$',
+        storage_views.weldStorageAccountHomeViews,
+    ),
 )
 
 

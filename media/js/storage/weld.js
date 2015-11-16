@@ -41,3 +41,11 @@ function entry_confirm_callback(data){
         alert("入库单确认失败");
     }
 }
+
+function get_overtime(){
+    Dajaxice.storage.getOverTimeItems(get_overtime_callback)
+}
+
+function get_overtime_callback(data){
+   $("#item_table").html(data.html); 
+}

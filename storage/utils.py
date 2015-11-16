@@ -31,12 +31,21 @@ def get_weld_filter(model_type,dict):
 def weldStoreItemsCreate(entry):
     weld_set = entry.weldmaterialentryitems_set.all()
     for item in weld_set:
-        storeitem = WeldStoreList.objects.filter(material_id = item.material.material.material_id,specification = item.material.specification,entry_time=item.entry.entry_time)
-        if storeitem.count() > 0:
-            old_item = storeitem[0]
-            old_item.count = old_item.count + float(item.material.count)
-            old_item.save()
-        else:
-            storeitem = WeldStoreList(entry_time = item.entry.entry_time,specification=item.material.specification,material_id=item.material.material.material_id,count=item.material.count)
-            storeitem.save()
+        storeitem = WeldStoreList(entry_time = item.entry.entry_time,specification=item.material.specification,material_id=item.material.material.material_id,count=item.material.count,entry_item = item)
+        storeitem.save()
 
+def storeConsume(applycard):
+    specification = applycard.standard
+    material_id = applycard.material_number
+    consume_count = applycard.actual_quantity
+    avail_items = WeldStoreList.objects.filter(material_id=material_id,specification = specification).order_by("entry_time")
+    for item in avail_items:
+        if consume_count <= item.count:
+            item.count -= consume_count
+            item.save()
+            break
+        else:
+            consume_count -= item.count
+            item.count = 0
+            item.save()
+    

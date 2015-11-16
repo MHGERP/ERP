@@ -1,4 +1,5 @@
 # coding: UTF-8
+import datetime
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
@@ -146,3 +147,11 @@ def entryConfirm(request,eid,entry_code):
         flag = False
         print e
     return simplejson.dumps({'flag':flag})
+
+@dajaxice_register
+def getOverTimeItems(request):
+    items_set = WeldStoreList.objects.filter(deadline__lt = datetime.date.today() )
+    print items_set
+    html = render_to_string("storage/widgets/item_table.html",{"items_set":items_set})
+    print html
+    return simplejson.dumps({"html":html})

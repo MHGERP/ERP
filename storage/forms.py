@@ -228,3 +228,16 @@ class SteelRefundSearchForm(forms.Form):
         super(SteelRefundSearchForm,self).__init__(*args,**kwargs)
         users = getUserByAuthority(STORAGE_KEEPER)
         self.fields["keeper"].choices = getChoiceList(users,"userinfo")
+
+class WeldAccountSearchForm(forms.Form):
+    entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'entry_time'}))
+    material_id = forms.CharField(label=u'材质编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'material_id'}))
+    brand=forms.CharField(label=u'牌号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'brand'}))
+    specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'specification'}))
+    charge_number=forms.CharField(label=u'材料批号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'charge_number'}))
+
+class WeldAccountSearchForm(forms.Form):
+    material_id = forms.CharField(label=u'材质编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'material_id'}))
+    brand=forms.CharField(label=u'牌号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'brand'}))
+    specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'specification'}))
+    charge_number=forms.CharField(label=u'材料批号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'charge_number'}))
