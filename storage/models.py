@@ -145,6 +145,7 @@ class CommonSteelMaterialReturnCardInfo(models.Model):
     returner = models.ForeignKey(User,blank=False,null=False,verbose_name=u'退料人',related_name="Steel_returner")
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u'检查员',related_name="steel_return_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员",related_name="steel_return_keeper")
+    return_confirm = models.BooleanField(default=False,verbose_name=u'退库单确认')
 
     def __unicode__(self):
         return str(self.form_code)
@@ -165,8 +166,8 @@ class BoardSteelMaterialReturnCardContent(models.Model):
         return str(card_info)
 
     class Meta:
-        verbose_name=u"板材退库单"
-        verbose_name_plural=u"板材退库单"
+        verbose_name=u"板材退库单详细信息"
+        verbose_name_plural=u"板材退库单详细信息"
 
 class BarSteelMaterialReturnCardContent(models.Model):
     card_info = models.ForeignKey(CommonSteelMaterialReturnCardInfo,blank=False,null=False,verbose_name=u"退库单表头")
@@ -180,8 +181,8 @@ class BarSteelMaterialReturnCardContent(models.Model):
         return str(card_info)
 
     class Meta:
-        verbose_name=u"型材退库单"
-        verbose_name_plural=u"板材退库单"
+        verbose_name=u"型材退库单详细信息"
+        verbose_name_plural=u"型材退库单详细信息"
 
 class WeldRefund(models.Model):
     department = models.ForeignKey(Group,max_length=20,blank=False,verbose_name=u"退库单位")
