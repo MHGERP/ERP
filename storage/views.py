@@ -61,11 +61,11 @@ def steelEntryHomeViews(request):
             dict["entry_time"] = search_form.cleaned_data["date"]
             dict["purchaser"] = search_form.cleaned_data["purchaser"]
             dict["work_order"] = search_form.cleaned_data["work_order"]
-            steelentry_set = get_weld_filter(PurchasingEntry,dict)
+            steelentry_set = get_weld_filter(SteelMaterialPurchasingEntry,dict)
         else:
             print search_form.errors
     else:
-        steelentry_set = PurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
+        steelentry_set = SteelMaterialPurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         search_form = EntrySearchForm()
     context = {
         "entry_set":steelentry_set,
