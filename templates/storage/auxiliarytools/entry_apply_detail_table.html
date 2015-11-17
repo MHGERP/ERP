@@ -1,8 +1,22 @@
 <table class="table table-hover table-bordered">
 <tr>
+<th>编号</th>
 <th>名称</th>
 <th>规格</th>
 <th>用量</th>
 <th>单价</th>
 <th>总价</th>
+<th></th>
+</tr>
+{% for ret in rets %}
+<tr>
+<td>{{ret.index}}</td>
+<td>{{ret.apply_item.name}}</td>
+<td>{{ret.apply_item.model}}</td>
+<td>{{ret.apply_quantity}}</td>
+<td>{{ret.apply_item.unit_price}}</td>
+<td>{{ret.apply_total}}</td>
+<td><a href="storage/auxiliarytools/apply?index={{ret.index}}" type="button" class="btn btn-info">处理申请</a></td>
+</tr>
+{% endfor %}
 </table>
