@@ -3,8 +3,9 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from purchasing.models import *
-from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderInfoForm,MeterielExcecuteForm
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderInfoForm, ContractDetailForm, MeterielExcecuteForm
 from const import *
+from purchasing import *
 from const.models import Materiel,OrderFormStatus, BidFormStatus
 from django.template.loader import render_to_string
 from django.utils import simplejson
@@ -564,6 +565,39 @@ def deleteDetail(request,uid):
 
     param = {"uid":uid}
     return simplejson.dumps(param)
+
+@dajaxice_register
+def contractAmount(request, tid, bid,  form):
+    if tid == CONTRACT_ADD_AMOUNT:
+        table = render_to_string("purchasing/widgets/contract_detail_form.html", {"ContractDetailForm": ContractDetailForm(),
+                                                                                  "CONTRACT_ADD_DETAIL": CONTRACT_ADD_DETAIL,
+                                                                                  "bid":bid})
+        ret = {'status': '1', 'table': table}
+    elif tid == CONTRACT_DETAIL:
+        bidform = BidForm.objects.get(bid_id = bid)
+        contractDetails = ContractDetail.objects.filter(bidform = bidform)
+        table = render_to_string("purchasing/widgets/contract_detail.html", {"contractDetails": contractDetails})
+        ret = {'status': '1', 'table': table}
+    elif tid == CONTRACT_ADD_DETAIL:
+        contractDetailForm = ContractDetailForm(deserialize_form(form))
+        bidform = BidForm.objects.get(bid_id = bid)
+        if contractDetailForm.is_valid():
+            amount = int(contractDetailForm.cleaned_data["amount"])
+            if amount <= bidform.payable_amount():
+                contractDetail = contractDetailForm.save(commit = False)
+                contractDetail.user = request.user
+                contractDetail.bidform = bidform
+                contractDetail.save()
+                return simplejson.dumps({'status': '0', 'message': u"合同金额添加成功"})
+            else:
+                return simplejson.dumps({'status': '2', 'message': u"合同金额添加应小于应付金额"})
+        if message == "":
+            message = u"合同金额添加失败"
+        ret = {'status': '2', 'message': message}
+        print ret
+    else:
+        pass
+    return simplejson.dumps(ret)
 
 @dajaxice_register
 def saveComment(request, form, bid_id):

@@ -29,8 +29,9 @@ $(document).on("click", ".btn-change-name", function() {
 function checkMessageCallBack(data) {
     $("#check_title").html("标题：<b>" + data.message_title + "</b>");
     $("#check_content").html("内容：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + data.message_content);
-    if (data.filepath.length > 0) {
-        html = "<table class='table table-bordered table-striped' style='width: 60%;'>";
+    if (data.filepath.length > 0) 
+    {
+        html = "<p>附件：</p>" + "<table class='table table-bordered table-striped' style='width: 60%;'>";
         for (i = 0; i < data.filepath.length; i++) {
             html += "<tr>" +
                         "<td>" + data.filename[i]  + "</td>" +
@@ -40,6 +41,9 @@ function checkMessageCallBack(data) {
                     "</tr>";
         }
     }
+    else {
+        html = "";
+    }
     html += "</table>";
-    $("#check_download").html("<p>附件：</p>" + html);
+    $("#check_download").html(html);
 }

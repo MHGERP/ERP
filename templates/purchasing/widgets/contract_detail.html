@@ -1,0 +1,20 @@
+<table class="table table-condensed" id="alloced_subject_table">
+  <thead>
+    <tr>
+      <th>序号</th>
+      <th>用户</th>
+      <th>金额</th>
+      <th>提交日期</th>
+    </tr>
+  </thead>
+  <tbody>
+  {%for item in contractDetails %}
+    <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.user }}</td>
+      <td>{{ item.amount }}</td>
+      <td>{{ item.submit_date|date:"Y-m-d" }}</td>
+    </tr>
+  {%endfor%}
+  </tbody>
+</table>

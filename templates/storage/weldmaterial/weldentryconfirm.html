@@ -8,64 +8,76 @@
 {% endblock %}
 
 {% block inner_content %}
-<form class="form" method="post">
-{% csrf_token%}
-<div class="control-group {% if entry_form.entry_time.errors %}error{% endif %}" style="margin-top:20px;">
-    <label class="hz-align">入库时间</label>
-    {{entry_form.entry_time}}
-</div>
-<div class="control-group {% if entry_form.entry_code.errors %}error{% endif %}">
-    <label class="hz-align">单据编号</label>
-    {{entry_form.entry_code}}
-</div>
-<div id = "items_table">
-{% include "storage/widgets/weldentrytable.html" %}
-</div>
-<div class="control-group span12" style="margin-top:50px;">
-    <div class="rows span4 purcher">
-        {{entry_form.purchaser.label_tag}}{{entry_form.purchaser}}
-    </div>
-    <div class="span4 purcher">
-        {{entry_form.inspector.label_tag}}
-        {{entry_form.inspector}}
-    </div>
-    <div class="span4 purcher">
-        {{entry_form.keeper.label_tag}}
-        {{entry_form.keeper}}
-    </div>
-</div>
-{% if is_show %}
-<center style="margin:30px;">
-    <button  id="entry_confirm" style="width:30%;height:40px;" class="btn btn-primary" type="submit">入库单确认</button>
-</center>
-{% endif %}
-</form>
- <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">添加</h3>
-            </div>
-            <div class="modal-body">
-                <form id="entry_item_form" action="" class="form-horizontal">
-                    {% for field in item_form %}
-                    <div class="control-group">
-                        <label class="control-label">{{field.label_tag}}</label>
-                        <div class="controls">
-                            {{field}}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-                <button class="btn btn-primary" data-dismiss="modal" onclick="save_item();">保存</button>
-            </div>
+<form class="form form-inline" method="post">
+    {% csrf_token%}
+    <div class="row" style="margin-bottom:20px;">
+        <div class="span3">
+            <label class="hz-align">工作令：</label>
+            <strong>{{entry.work_order}}</strong>
         </div>
+        <div class="span3">
+            <label class="hz-align">入库时间：</label>
+            <strong>{{entry.entry_time|date:"Ymd"}}</strong>
+        </div>
+        <div class="span4">
+            <label class="hz-align">单据编号：</label>
+            {% if is_show %}
+            <div class="controls-group" style="display:inline" id="entry_code">
+                <input type="text" id = "input_entry_code" class="span2" value="{{entry.entry_code}}"></input>
+            </div>
+            {% else %}
+            <strong>{{entry.entry_code}}</strong>
+            {% endif %}
+        </div>
+    </div>
+    <div id = "items_table">
+        {% include "storage/widgets/weldentrytable.html" %}
+    </div>
+    <div class="control-group span12" style="margin-top:50px;">
+        <div class="rows span4 purcher">
+            采购员：<strong>{{entry.purchaser.userinfo}}</strong>
+        </div>
+        <div class="span4 purcher">
+            检查员：<strong>{{entry.inspector.userinfo}}</strong>
+        </div>
+        <div class="span4 purcher">
+            库管员：<strong>{{entry.keeper.userinfo}}</strong>
+        </div>
+    </div>
+    <center style="margin:30px;">
+    {% if is_show %}
+    <button  id="entry_confirm" style="width:30%;height:40px;" class="btn btn-primary" type="button" onclick="entryconfirm({{entry.id}});">入库单确认</button>
+    {% else %}
+        <a style="width:30%;height:40px;" class="btn btn-primary" type="button" href="/storage/weldentryhome">返回</a>
+    {% endif %}
+    </center>
+</form>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">添加</h3>
+    </div>
+    <div class="modal-body">
+        <form id="entry_item_form" action="" class="form-horizontal">
+            {% for field in item_form %}
+            <div class="control-group">
+                <label class="control-label">{{field.label_tag}}</label>
+                <div class="controls">
+                    {{field}}
+                </div>
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" data-dismiss="modal" onclick="save_item();">保存</button>
+    </div>
+</div>
 <script>
     $(function(){
-        $('#entry_time').datetimepicker({format: "yyyy-mm-dd",minView:2});
-        $('#id_date').datetimepicker({format:"yyyy-mm-dd",minView:2});
-    });
+            $('#entry_time').datetimepicker({format: "yyyy-mm-dd",minView:2,autoclose:true});
+            $('#id_date').datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true});
+            });
 </script>
 {% endblock %}

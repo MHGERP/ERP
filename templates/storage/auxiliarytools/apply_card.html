@@ -1,0 +1,68 @@
+{% extends "storage/auxiliarytools/home.html" %}
+
+{% block title %}
+<h1>辅助工具出库单</h1>
+{% endblock %}
+
+{% block sub_sec %}
+<a href="#" class="current">辅助工具出库单</a>
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
+   <h3 style="text-align:center">辅助材料出库单</h3>
+    <div>
+        <div class="span3">
+            <label>申请时间:<strong>{{object.create_time}}</strong></label>
+        </div>
+        <div class="span4" style="text-align:center">
+            <label>实发时间:<strong>{{object.commit_time}}</strong></label>
+        </div>
+        <div class="span4" style="float:right;text-align:center">
+            <label>编号:<strong>{{object.index}}</strong></label>
+           
+        </div>
+    </div>
+   <table class="table table-hover table-bordered">
+        <tr>
+            <th class="fix_th"></th>
+            <th class="fix_th">材料名称</th>
+            <th class="fix_th">规格</th>
+            <th class="fix_th">单位</th>
+            <th class="fix_th">数量</th>
+            <th class="fix_th">单价</th>
+            <th class="fix_th">总价</th>
+        </tr>
+        <tr>
+            <td>请领</td>
+            <td>{{object.apply_item.name}}</td>
+            <td>{{object.apply_item.model}}</td>
+            <td>{{object.apply_item.measurement_unit}}</td>
+            <td>{{object.apply_quantity}}</td>
+            <td>{{object.apply_item.unit_price}}</td>
+            <td>{{object.apply_total}}</td>
+        </tr>
+        <tr>
+            <td>实发</td>
+            <td>{{object.actual_item.name}}</td>
+            <td>{{object.actual_item.model}}</td>
+            <td>{{object.actual_item.measurement_unit}}</td>
+            <td>{{object.actual_quantity}}</td>
+            <td>{{object.actual_item.unit_price}}</td>
+            <td>{{object.actual_total}}</td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td colspan="6" style="text-align:left">{{object.remark}}</td>
+        <tr>
+            <td>主管</td>
+            <td colspan="2">{{object.commit_user}}</td>
+            <td>领料</td>
+            <td colspan="3">{{object.applicant}}</td>
+        </tr>
+    </table>
+        <input type="hidden" name="object_id" value="{{object_id}}">
+    <div class="row-fluid" style="text-align:center">
+    </div>
+{% endblock%}
+

@@ -15,11 +15,19 @@ div#storage-weld-menu a{
 }
 
 div.e3{
-    width:33%;
+    width:50%;
     float:left;
     word-wrap:break-word;
     margin-bottom:20px;
 }
 div.icon-text{
     float:left;
+}
+
+.fix_th{
+    line-height:3.5!important;
+}
+
+.search-in{
+    width:150px;
 }
