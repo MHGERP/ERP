@@ -18,6 +18,9 @@ from storage.models import *
 from storage.forms import *
 from storage.utils import *
 from users import STORAGE_KEEPER
+
+from random import randint
+
 def weldMaterialHomeViews(request):
     context = {
     
@@ -81,7 +84,7 @@ def weldEntryConfirmViews(request,eid):
 
 def Weld_Apply_Card_List(request):
     context={}
-    weld_apply_cards=WeldingMaterialApplyCard.objects.filter(commit_user=None).order_by('create_time')#考虑效率问题，注意更改all的获取方式
+    weld_apply_cards=WeldingMaterialApplyCard.objects.exclude(status=3).order_by('create_time')#考虑效率问题，注意更改all的获取方式
     context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
@@ -275,10 +278,41 @@ def AuxiliaryToolsEntryView(request):
         context['entry_form']=AuxiliaryToolsForm(initial={'quantity':0},instance=auxiliarytool)
         return render(request,'storage/auxiliarytools/auxiliarytoolsentry.html',context)
 
+def AuxiliaryToolsApplyListView(request):
+    context={}
+    apply_cards=AuxiliaryToolApplyCard.objects.exclude(status=2).order_by('-create_time')
+    context['search_form']=AuxiliaryToolsApplyCardSearchForm()
+    context['apply_cards']=apply_cards
+    return render(request,'storage/auxiliarytools/auxiliarytoolsapply_list.html',context)
+
+
 def AuxiliaryToolsApplyView(request):
     context={}
-    context['apply_form']=AuxiliaryToolsCardForm()
-    return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
+    if request.method=='GET':
+        ins_index=int(request.GET['index']) 
+        ins=AuxiliaryToolApplyCard.objects.get(index=ins_index) if ins_index!=0 else None
+
+        if request.user.is_superuser:
+            context['instance']=ins
+            context['apply_form']=AuxiliaryToolsCardCommitForm(instance=ins)
+        else:
+            context['apply_form']=AuxiliaryToolsCardApplyForm()
+
+        #apply or commit setting
+        return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
+    else:
+        ins_index=int(request.POST['index'])
+        if ins_index!=0:
+            ins=AuxiliaryToolApplyCard.objects.get(index=ins_index)
+        else:
+            ins=None
+
+        apply_card=AuxiliaryToolsCardCommitForm(request.POST,instance=ins)
+        if apply_card.is_valid():
+            apply_card.save()
+        else:
+            print apply_card.errors
+        return AuxiliaryToolsApplyListView(request)
 
 def AuxiliaryToolsLedgerView(request):
     context={}
@@ -315,6 +349,7 @@ def AuxiliaryToolsLedgerInventoryView(request):
 
 def AuxiliaryToolsEntryApplyDetailView(request):
     context={}
+    context['search_form']=YearMonthForm()
     return render(request,'storage/auxiliarytools/entry_apply_detail.html',context)
 
 def weldAccountHomeViews(request):
@@ -336,13 +371,13 @@ def weldEntryAccountViews(request):
     return render(request,"storage/weldmaterial/weldaccount/weldentryhome.html",context)
 
 def weldStorageAccountHomeViews(request):
-    items_set = WeldStoreList.objects.filter(deadline__gte = datetime.date.today())
+    items_set = WeldStoreList.objects.all().order_by('specification').order_by("entry_time")
     if request.method == "POST":
-        search_form = WeldAccountSearchForm(request.POST)
+        search_form = WeldStorageSearchForm(request.POST)
         if search_form.is_valid():
             items_set = get_weld_filter(WeldStoreList,search_form.cleaned_data)
     else:
-        search_form = WeldAccountSearchForm()
+        search_form = WeldStorageSearchForm()
     context = {
         "items_set":items_set,
         "search_form":search_form,

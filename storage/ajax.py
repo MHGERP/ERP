@@ -151,7 +151,20 @@ def entryConfirm(request,eid,entry_code):
 @dajaxice_register
 def getOverTimeItems(request):
     items_set = WeldStoreList.objects.filter(deadline__lt = datetime.date.today() )
-    print items_set
     html = render_to_string("storage/widgets/item_table.html",{"items_set":items_set})
-    print html
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def getThreadItems(request):
+    items_set = WeldStoreList.objects.values("specification").annotate(Sum('count'))
+    warning_set = []
+    for tmp in items_set:
+        try:
+            thread = WeldStoreThread.objects.get(specification = tmp["specification"])
+            if tmp["count__sum"] < thread.count:
+                tmp["count"] = tmp["count__sum"]
+                warning_set.append(tmp)
+        except Exception,e:
+            print e
+    html = render_to_string("storage/widgets/item_table.html",{"items_set":warning_set})
     return simplejson.dumps({"html":html})
