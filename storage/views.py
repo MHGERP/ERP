@@ -81,7 +81,8 @@ def weldEntryConfirmViews(request,eid):
 
 def Weld_Apply_Card_List(request):
     context={}
-    weld_apply_cards=WeldingMaterialApplyCard.objects.filter(commit_user=None).order_by('create_time')#考虑效率问题，注意更改all的获取方式
+    #weld_apply_cards=WeldingMaterialApplyCard.objects.filter(commit_user=None).order_by('create_time')#考虑效率问题，注意更改all的获取方式
+    weld_apply_cards = WeldingMaterialApplyCard.objects.all()
     context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
