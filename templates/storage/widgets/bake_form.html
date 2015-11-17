@@ -1,0 +1,117 @@
+<form class="form-inline well" id="humiture_form" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <div class="row">
+        <div class="span4 control-group {% if form.date.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.date.label}}</button>
+            {{form.date}}
+        </div>
+        <div class="span4 control-group {% if form.index.errors %}error{% endif %}"> 
+            <button type="button" class="btn btn-default bl">{{form.index.label}}</button>
+            {{form.index}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="span4 control-group {% if form.standardnum.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.standardnum.label}}</button>
+            {{form.standardnum}}
+        </div>
+        <div class="span4 control-group {% if form.size.errors %}error{% endif %}"> 
+            <button type="button" class="btn btn-default bl">{{form.size.label}}</button>
+            {{form.size}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="span4 control-group {% if form.classnum.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.classnum.label}}</button>
+            {{form.classnum}}
+        </div>
+        <div class="span4 control-group {% if form.heatnum.errors %}error{% endif %}"> 
+            <button type="button" class="btn btn-default bl">{{form.heatnum.label}}</button>
+            {{form.heatnum}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="span4 control-group {% if form.codedmark.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.codedmark.label}}</button>
+            {{form.codedmark}}
+        </div>
+        <div class="span4 control-group {% if form.quantity.errors %}error{% endif %}"> 
+            <button type="button" class="btn btn-default bl">{{form.quantity.label}}</button>
+            {{form.quantity}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="span4 control-group {% if form.intoheattime.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.intoheattime.label}}</button>
+            {{form.intoheattime}}
+        </div>
+        <div class="span4 control-group {% if form.bakingtemp.errors %}error{% endif %}"> 
+            <button type="button" class="btn btn-default bl">{{form.bakingtemp.label}}</button>
+            {{form.bakingtemp}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="span4 control-group {% if form.timefortemp.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.timefortemp.label}}</button>
+            {{form.timefortemp}}
+        </div>
+        <div class="span4 control-group {% if form.tempfalltime.errors %}error{% endif %}"> 
+            <button type="button" class="btn btn-default bl">{{form.tempfalltime.label}}</button>
+            {{form.tempfalltime}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="span4 control-group {% if form.timeforremainheat.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.timeforremainheat.label}}</button>
+            {{form.timeforremainheat}}
+        </div>
+        <div class="span4 control-group {% if form.keepheattemp.errors %}error{% endif %}"> 
+            <button type="button" class="btn btn-default bl">{{form.keepheattemp.label}}</button>
+            {{form.keepheattemp}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="span4 control-group {% if form.usetime.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.usetime.label}}</button>
+            {{form.usetime}}
+        </div>
+        <div class="span4 control-group {% if form.storeMan.errors %}error{% endif %}"> 
+            <button type="button" class="btn btn-default bl">{{form.storeMan.label}}</button>
+            {{form.storeMan}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="span4 control-group {% if form.weldengineer.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.weldengineer.label}}</button>
+            {{form.weldengineer}}
+        </div>
+    </div>
+    <br>
+    <div class="row ">
+        <div class="span12">
+            <button type="button" class="btn btn-default bl">{{form.remark.label}}</button>
+            {{form.remark}}
+        </div>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-success btn-large bl" id="btnBakeInsert">录入</button>
+    <script>
+        $(function (){
+            $("#date").datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true})
+            $("#intoheattime").datetimepicker({format:"yyyy-mm-dd hh:ii",minView:0,minuteStep:1,startView:1,autoclose:true})
+            $("#timefortemp").datetimepicker({format:"yyyy-mm-dd hh:ii",minView:0,minuteStep:1,startView:1,autoclose:true})
+            $("#tempfalltime").datetimepicker({format:"yyyy-mm-dd hh:ii",minView:0,minuteStep:1,startView:1,autoclose:true})
+            $("#timeforremainheat").datetimepicker({format:"yyyy-mm-dd hh:ii",minView:0,minuteStep:1,startView:1,autoclose:true})
+            $("#usetime").datetimepicker({format:"yyyy-mm-dd hh:ii",minView:0,minuteStep:1,startView:1,autoclose:true})
+
+        }) 
+    </script>
+</form>

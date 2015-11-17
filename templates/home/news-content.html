@@ -20,10 +20,10 @@
 {% block inner_content%}
 <link rel="stylesheet" href="{{STATIC_URL}}style/newhomepage.css" type="text/css" media="screen" />
 <div class="news-body">
-	<div class="news-main">
+	<div class="news-main" style="">
 		<div>
-			<h3>{{ news_cate }} <small>{{ news_cate.category }}</small></h3>
-			<h4><a href="{{ news.id }}">{{ news.news_title }}</a></h4>
+			<!-- <h3>{{ news_cate }} <small>{{ news_cate.category }}</small></h3> -->
+			<h2><a href="{{ news.id }}">{{ news.news_title }}</a></h2>
 			<!-- <h6><a href="/news/newslist/news_cate={{ news_cate.category }}"><<更多</a></h6> -->
 			<div class="news-content">
 				<div>

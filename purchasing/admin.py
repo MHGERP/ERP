@@ -11,8 +11,6 @@ RegisterClass = (
     ArrivalInspection,
     Supplier,
     SupplierFile,
-    PurchasingEntry,
-    PurchasingEntryItems,
     MaterielPurchasingStatus,
     SupplierSelect,
     MaterialSubApply,
