@@ -8,6 +8,7 @@ from django.utils import timezone
 from const import STORAGEDEPARTMENT_CHOICES,STORAGESTATUS_KEEPER,REFUNDSTATUS_CHOICES
 from const import LENGHT_MANAGEMENT,WEIGHT_MANAGEMENT,AREA_MANAGEMENT  
 from purchasing.models import BidForm
+from random import randint
 
 # Create your models here.
 
@@ -251,8 +252,8 @@ class AuxiliaryTool(models.Model):
 
 class AuxiliaryToolApplyCard(models.Model):
     create_time=models.DateField(verbose_name=u'申请时间',auto_now_add=True)
-    commit_time=models.DateField(verbose_name=u'实发时间')
-    index=models.IntegerField(verbose_name=u'编号',blank=False,unique=True)
+    commit_time=models.DateField(verbose_name=u'实发时间',blank=True,null=True)
+    index=models.IntegerField(verbose_name=u'编号',default=0,blank=False,unique=True)
     apply_item=models.ForeignKey(AuxiliaryTool,verbose_name=u'申请物资',blank=False,related_name="apply_items")
     apply_quantity=models.IntegerField(verbose_name=u'申请数量',blank=False)
     apply_total=models.FloatField(verbose_name=u'申请总价',default=0,blank=False)#overwrite the save() method to calculate the apply_total
@@ -263,10 +264,14 @@ class AuxiliaryToolApplyCard(models.Model):
     status=models.IntegerField(verbose_name=u'完成状态',default=0,blank=False)
     applicant=models.ForeignKey(User,verbose_name=u'领用人',default=None,blank=True,null=True,related_name="at_applicants")
     commit_user=models.ForeignKey(User,verbose_name=u'确认人',default=None,blank=True,null=True,related_name="at_commit_users")
+    remark=models.TextField(verbose_name=u'备注',default=None,blank=True,null=True)
     def save(self,*args,**kwargs):
         if not self.status==2:
             self.apply_total=self.apply_item.unit_price*self.apply_quantity
             self.apply_item.save()
+            if not self.index:
+                self.index=randint(0,10000000)
+
             self.status=1
     
             if self.actual_item and self.status==1:
