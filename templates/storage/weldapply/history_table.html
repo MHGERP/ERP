@@ -13,26 +13,7 @@
             <td>{{card.create_time}}</td>
             <td>{{card.index}}</td>
             <td>{{card.workorder}}</td>
-            <td>
-                
-                {% if card.status == '3' %}
-                <span class="label label-success">
-                    确认领用
-                {% endif %}
-                {% if card.status == '2' %}
-                <span class="label label-info">
-                领用检查
-                {% endif %}
-                {% if card.status == '1' %}
-                <span class="label label-info">
-                领用审核
-                {% endif %}
-                {% if card.status == '0' %}
-                <span class="label label-warning">
-                领用申请
-                {% endif %}
-            </span>
-            </td>
+            <td>{{card.status}}</td>
             {% if card.status == '3' %}
             <td><a type="button" class="btn btn-success detail" href="/storage/weldapply/detail?index={{card.index}}">详情</a></td>
             {% else %}
