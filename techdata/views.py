@@ -16,6 +16,19 @@ def techPreparationPlanViews(request):
     context = {}
     return render(request, "techdata/tech_preparation_plan.html", context)
 
+def processExaminationViews(request):
+    context = {}
+    return render(request, "techdata/process_examinationViews.html", context)
+
 def techFileDirectoryViews(request):
     context = {}
     return render(request, "techdata/tech_file_directory.html", context)
+
+def firstFeedingViews(request):
+    context = {}
+    return render(request, "techdata/first_feeding.html", context)
+
+def principalMaterialViews(request):
+    context = {}
+    return render(request, "techdata/principal_material.html", context)
+

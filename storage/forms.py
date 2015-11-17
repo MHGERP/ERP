@@ -194,10 +194,35 @@ class WeldRefundForm(ModelForm):
         }
 
 
-class AuxiliaryToolsCardForm(ModelForm):
+class AuxiliaryToolsCardCommitForm(ModelForm):
     class Meta:
         model=AuxiliaryToolApplyCard
         exclude=['create_time','commit_time']
+
+        widgets={
+                'remark':forms.HiddenInput(),
+                'apply_quantity':forms.HiddenInput(),
+                'apply_item':forms.HiddenInput(),
+                'actual_quantity':forms.TextInput(attrs={'class':'form-control search-query'}),
+                'index':forms.HiddenInput(),
+                'apply_total':forms.HiddenInput(),
+                'actual_total':forms.HiddenInput(),
+                'status':forms.HiddenInput(),
+                }
+class AuxiliaryToolsCardApplyForm(ModelForm):
+    class Meta:
+        model=AuxiliaryToolApplyCard
+        exclude=['create_time','commit_time']
+
+        widgets={
+                'remark':forms.TextInput(attrs={'class':'form-control search-query','style':'width:90%'}),
+                'apply_quantity':forms.TextInput(attrs={'class':'form-control search-query'}),
+                'actual_quantity':forms.HiddenInput(),
+                'index':forms.HiddenInput(),
+                'apply_total':forms.HiddenInput(),
+                'actual_total':forms.HiddenInput(),
+                'status':forms.HiddenInput(),
+                }
 
 class AuxiliaryToolsForm(ModelForm):
     class Meta:
@@ -218,6 +243,12 @@ class AuxiliaryToolsSearchForm(forms.Form):
     name=forms.CharField(label=u'名称',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'name'}))
     model=forms.CharField(label=u'类别',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'model'}))
     manufacturer=forms.CharField(label=u'厂家',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'manufacturer'}))
+
+class AuxiliaryToolsApplyCardSearchForm(forms.Form):
+    create_time=forms.DateField(label=u'申请时间',required=False,widget=forms.TextInput(attrs={'readonly':'readonly','class':'form-control search-query','id':'create_time'}))
+    apply_item=forms.CharField(label=u'申请物资',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'apply_item'}))
+    applicant=forms.CharField(label=u'领用人',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'applicant'}))
+    index=forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'index'}))
 
 class SteelRefundSearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))

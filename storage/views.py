@@ -18,6 +18,9 @@ from storage.models import *
 from storage.forms import *
 from storage.utils import *
 from users import STORAGE_KEEPER
+
+from random import randint
+
 def weldMaterialHomeViews(request):
     context = {
     
@@ -80,14 +83,25 @@ def weldEntryConfirmViews(request,eid):
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
 def Weld_Apply_Card_List(request):
+    """
+    Time1ess
+    summary: A list of welding Material apply cards
+    params: NULL
+    return: NULL
+    """
     context={}
-    #weld_apply_cards=WeldingMaterialApplyCard.objects.filter(commit_user=None).order_by('create_time')#考虑效率问题，注意更改all的获取方式
-    weld_apply_cards = WeldingMaterialApplyCard.objects.all()
+    weld_apply_cards=WeldingMaterialApplyCard.objects.exclude(status=3).order_by('create_time')#考虑效率问题，注意更改all的获取方式
     context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
 
 def Weld_Apply_Card_Detail(request):
+    """
+    Time1ess
+    summary: The detail information of the given index
+    params: index(GET)
+    return: NULL
+    """
     context={}
     card_index=int(request.GET['index'])
     apply_card=WeldingMaterialApplyCard.objects.get(index=card_index)
@@ -99,6 +113,12 @@ def Weld_Apply_Card_Detail(request):
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
 
 def Handle_Apply_Card_Form(request):
+    """
+    Time1ess
+    summary: Check current user's authority to call the right function
+    params: request object
+    return: NULL
+    """
     if request.method=='POST':
         if request.user.is_superuser:
             Apply_Card_Form_Commit(request)
@@ -111,6 +131,12 @@ def Handle_Apply_Card_Form(request):
         return HttpResponse('FAIL')
 
 def Apply_Card_Form_Apply(request):
+    """
+    Time1ess
+    summary: Handle welding material apply card form in apply stage
+    params: index(POST)
+    return: NULL
+    """
     ac=WeldingMaterialApplyCard.objects.get(index=int(request.POST['index']))
     apply_card_form=ApplyCardForm(request.POST,instance=ac)
     if apply_card_form.is_valid():
@@ -121,6 +147,12 @@ def Apply_Card_Form_Apply(request):
         print apply_card_form.errors
 
 def Apply_Card_Form_Commit(request):
+    """
+    Tim1ess
+    summary: Handle welding material apply card form in commit stage
+    params: index(POST)
+    return: NULL
+    """
     ac=WeldingMaterialApplyCard.objects.get(index=int(request.POST['index']))
     apply_card_form=ApplyCardForm(request.POST,instance=ac)
     if apply_card_form.is_valid():
@@ -250,20 +282,40 @@ def weldRefundDetailViews(request,rid):
     return render(request,"storage/weldmaterial/weldrefunddetail.html",context) 
 
 def AuxiliaryToolsHomeView(request):
+    """
+    Time1ess
+    summary: the home page of the auxiliary tools functions
+    params: NULL
+    return: NULL
+    """
     context={}
     return render(request,'storage/auxiliarytools/home.html',context)
 
 def AuxiliaryToolsEntryListView(request):
+    """
+    Time1ess
+    summary: show the list of auxiliary tools entry
+    params: NULL
+    return: NULL
+    """
     context={}
     context['auxiliarytools']=AuxiliaryTool.objects.all()
     return render(request,'storage/auxiliarytools/auxiliarytoolsentry_list.html',context)
 
 def AuxiliaryToolsEntryView(request):
+    """
+    Time1ess
+    summary: Auxiliary tools entry
+    params: id(GET,POST),quantity(POST)
+    return: NULL
+    """
     context={}
     if request.method=='POST':
         object_id=int(request.POST['object_id'])
         auxiliarytool=AuxiliaryTool.objects.get(id=object_id)
         new_entry_quantity=float(request.POST['quantity'])
+        if new_entry_quantity<0:
+            return HttpResponse('ERROR')
         auxiliarytool.quantity=F('quantity')+new_entry_quantity
         auxiliarytool.save()
         entryrecord=AuxiliaryToolEntryCard(auxiliary_tool=auxiliarytool,quantity=new_entry_quantity)
@@ -276,21 +328,83 @@ def AuxiliaryToolsEntryView(request):
         context['entry_form']=AuxiliaryToolsForm(initial={'quantity':0},instance=auxiliarytool)
         return render(request,'storage/auxiliarytools/auxiliarytoolsentry.html',context)
 
-def AuxiliaryToolsApplyView(request):
+def AuxiliaryToolsApplyListView(request):
+    """
+    Time1ess
+    summary: A list of auxiliary tool apply cards
+    params: NULL
+    return: NULL
+    """
     context={}
-    context['apply_form']=AuxiliaryToolsCardForm()
-    return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
+    apply_cards=AuxiliaryToolApplyCard.objects.exclude(status=2).order_by('-create_time')
+    context['search_form']=AuxiliaryToolsApplyCardSearchForm()
+    context['apply_cards']=apply_cards
+    return render(request,'storage/auxiliarytools/auxiliarytoolsapply_list.html',context)
+
+
+def AuxiliaryToolsApplyView(request):
+    """
+    Time1ess
+    summary: Handle auxiliary tool apply
+    params: index(GET,POST)
+    return: NULL
+    """
+    context={}
+    if request.method=='GET':
+        ins_index=int(request.GET['index']) 
+        ins=AuxiliaryToolApplyCard.objects.get(index=ins_index) if ins_index!=0 else None
+
+        if request.user.is_superuser:
+            context['instance']=ins
+            context['apply_form']=AuxiliaryToolsCardCommitForm(instance=ins)
+        else:
+            context['apply_form']=AuxiliaryToolsCardApplyForm()
+
+        #apply or commit setting
+        return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
+    else:
+        ins_index=int(request.POST['index'])
+        if ins_index!=0:
+            ins=AuxiliaryToolApplyCard.objects.get(index=ins_index)
+        else:
+            ins=None
+
+        apply_card=AuxiliaryToolsCardCommitForm(request.POST,instance=ins)
+        if apply_card.is_valid():
+            apply_card.save()
+        else:
+            print apply_card.errors
+        return AuxiliaryToolsApplyListView(request)
 
 def AuxiliaryToolsLedgerView(request):
+    """
+    Time1ess
+    summary: The home page of auxiliary tools Ledger
+    params: NULL
+    return: NULL
+    """
     context={}
     return render(request,'storage/auxiliarytools/ledger.html',context)
 
 def AuxiliaryToolsLedgerEntryView(request):
+    """
+    Time1ess
+    summary: The list of auxiliary tool entry ledger
+    params: NULL
+    return: NULL
+    """
     context={}
     context['search_form']=AuxiliaryToolsSearchForm()
+    context['rets']=AuxiliaryToolEntryCard.objects.all()
     return render(request,'storage/auxiliarytools/ledger_entry.html',context)
 
 def AuxiliaryToolsLedgerEntryCardView(request):
+    """
+    Time1ess
+    summary: The detail of auxiliary tool entry card
+    params: id(GET)
+    return: NULL
+    """
     context={}
     object_id=int(request.GET['id'])
     auxiliary_tool_entry_card=AuxiliaryToolEntryCard.objects.get(id=object_id)
@@ -298,11 +412,24 @@ def AuxiliaryToolsLedgerEntryCardView(request):
     return render(request,'storage/auxiliarytools/entry_card.html',context)
 
 def AuxiliaryToolsLedgerApplyView(request):
+    """
+    Time1ess
+    summary: The list of auxiliary tool apply ledger
+    params: NULL
+    return: NULL
+    """
     context={}
     context['search_form']=AuxiliaryToolsSearchForm()
+    context['rets']=AuxiliaryToolApplyCard.objects.filter(status=2)
     return render(request,'storage/auxiliarytools/ledger_apply.html',context)
 
 def AuxiliaryToolsLedgerApplyCardView(request):
+    """
+    Time1ess
+    summary: The detail of auxiliary tool apply card
+    params: NULL
+    return: NULL
+    """
     context={}
     object_id=int(request.GET['id'])
     auxiliary_tool_apply_card=AuxiliaryToolApplyCard.objects.get(id=object_id)
@@ -310,13 +437,23 @@ def AuxiliaryToolsLedgerApplyCardView(request):
     return render(request,'storage/auxiliarytools/apply_card.html',context)
 
 def AuxiliaryToolsLedgerInventoryView(request):
+    """
+    Time1ess
+    summary: The list of auxiliary tool inventory
+    params: NULL
+    return: NULL
+    """
     context={}
     context['search_form']=AuxiliaryToolsSearchForm()
+    context['rets']=AuxiliaryTool.objects.all()
     return render(request,'storage/auxiliarytools/ledger_inventory.html',context)
 
 def AuxiliaryToolsEntryApplyDetailView(request):
-    context={}
-    return render(request,'storage/auxiliarytools/entry_apply_detail.html',context)
+    """
+    [ABANDONED]
+    Time1ess
+    """
+    pass
 
 def weldAccountHomeViews(request):
     context = {}

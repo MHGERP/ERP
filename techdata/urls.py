@@ -9,7 +9,19 @@ urlpatterns=patterns('',
         techdata_views.techPreparationPlanViews,
     ),
     url(
+        r'^processExamination$',
+        techdata_views.processExaminationViews,
+    ),
+    url(
         r'^techFileDirectory$',
         techdata_views.techFileDirectoryViews,
+    ),
+    url(
+        r'^firstFeeding$',
+        techdata_views.firstFeedingViews,
+    ),
+    url(
+        r'^principalMaterial$',
+        techdata_views.principalMaterialViews,
     ),
 )
