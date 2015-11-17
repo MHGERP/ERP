@@ -24,16 +24,4 @@ urlpatterns=patterns('',
         r'^principalMaterial$',
         techdata_views.principalMaterialViews,
     ),
-    url(
-
-        r'^weldList',
-        techdata_views.weldListViews,
-
-    ),
-    url(
-
-        r'^weldEdit',
-        techdata_views.weldEditViews,
-
-    ),
 )
