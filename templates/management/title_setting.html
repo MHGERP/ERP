@@ -10,8 +10,11 @@
 {% endblock %}
 
 {% block inner_content%}
-{{group_form.group}}
 
+<form class="form-search" style="width:60%">
+部门：{{group_form.group}}
+</form>
+<br/>
 <div id="widget-content" user_id="{{setting_user.id}}">
 </div>
 <script type='text/javascript' src="{{STATIC_URL}}js/management/title_setting.js"></script>
