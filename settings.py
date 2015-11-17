@@ -150,6 +150,7 @@ INSTALLED_APPS = (
     'dajax',
     'south',
     'news',
+    'production',
 )
 
 LOGGING_OUTPUT_ENABLED = True
