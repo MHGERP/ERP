@@ -49,3 +49,11 @@ function get_overtime(){
 function get_overtime_callback(data){
    $("#item_table").html(data.html); 
 }
+
+function get_thread(){
+    Dajaxice.storage.getThreadItems(get_thread_callback);
+}
+
+function get_thread_callback(data){
+   $("#item_table").html(data.html); 
+}

@@ -1,11 +1,25 @@
 <div class="modal-header">
     <h2 id="messageLabel">我的邮箱</h2>
-  </div>
-  <div class="modal-footer">
-      <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-  </div>
-  <script>
-      $("#mymessage_box").click(function() {
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="span4">
+            <ol>
+                <li>毛小龙</li>
+                <li>毛日犬</li>
+            </ol>
+        </div>
+        <div class="span8">
+            这是显示内容的
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+</div>
+<script>
+    $("#mymessage_box").click(function() {
         $("#check_mymessage").modal('show');
-        });
-  </script>
+    });
+</script>
+<script type='text/javascript' src="{{STATIC_URL}}js/modal_adaption.js"></script>

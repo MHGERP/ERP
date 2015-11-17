@@ -22,6 +22,7 @@ Registers = (
     WeldMaterialEntry,
     WeldMaterialEntryItems,
     WeldStoreList,
+    WeldStoreThread,
 )
 
 for reg in Registers:

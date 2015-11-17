@@ -371,13 +371,13 @@ def weldEntryAccountViews(request):
     return render(request,"storage/weldmaterial/weldaccount/weldentryhome.html",context)
 
 def weldStorageAccountHomeViews(request):
-    items_set = WeldStoreList.objects.filter(deadline__gte = datetime.date.today())
+    items_set = WeldStoreList.objects.all().order_by('specification').order_by("entry_time")
     if request.method == "POST":
-        search_form = WeldAccountSearchForm(request.POST)
+        search_form = WeldStorageSearchForm(request.POST)
         if search_form.is_valid():
             items_set = get_weld_filter(WeldStoreList,search_form.cleaned_data)
     else:
-        search_form = WeldAccountSearchForm()
+        search_form = WeldStorageSearchForm()
     context = {
         "items_set":items_set,
         "search_form":search_form,
