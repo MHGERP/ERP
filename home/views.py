@@ -37,3 +37,4 @@ def homepageViews(request):
  #    		}
 	context.update(news_cate)
 	return render(request,"home/homepage.html",context)
+

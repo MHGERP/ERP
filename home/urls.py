@@ -7,5 +7,7 @@ urlpatterns = patterns('',
         r'^$',
         home_views.homepageViews,
     ),
+  
+
 )
 
