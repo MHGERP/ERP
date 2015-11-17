@@ -11,5 +11,9 @@ urlpatterns=patterns('',
     url(
         r'^processExamination$',
         techdata_views.processExaminationViews,
+    )
+    url(
+        r'^techFileDirectory$',
+        techdata_views.techFileDirectoryViews,
     ),
 )

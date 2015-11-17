@@ -1,4 +1,5 @@
 # coding: UTF-8
+import datetime
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
@@ -133,12 +134,37 @@ def entryItemSave(request,form,mid):
 def entryConfirm(request,eid,entry_code):
     try:
         entry = WeldMaterialEntry.objects.get(id = eid)
-        entry.entry_code = entry_code
-        entry.keeper = request.user
-        entry.entry_status = STORAGESTATUS_END
-        entry.save()
-        flag = True
+        if entry.entry_status == STORAGESTATUS_KEEPER:
+            entry.entry_code = entry_code
+            entry.keeper = request.user
+            entry.entry_status = STORAGESTATUS_END
+            weldStoreItemsCreate(entry) 
+            entry.save()
+            flag = True
+        else:
+            flag = False
     except Exception,e:
         flag = False
         print e
     return simplejson.dumps({'flag':flag})
+
+@dajaxice_register
+def getOverTimeItems(request):
+    items_set = WeldStoreList.objects.filter(deadline__lt = datetime.date.today() )
+    html = render_to_string("storage/widgets/item_table.html",{"items_set":items_set})
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def getThreadItems(request):
+    items_set = WeldStoreList.objects.values("specification").annotate(Sum('count'))
+    warning_set = []
+    for tmp in items_set:
+        try:
+            thread = WeldStoreThread.objects.get(specification = tmp["specification"])
+            if tmp["count__sum"] < thread.count:
+                tmp["count"] = tmp["count__sum"]
+                warning_set.append(tmp)
+        except Exception,e:
+            print e
+    html = render_to_string("storage/widgets/item_table.html",{"items_set":warning_set})
+    return simplejson.dumps({"html":html})

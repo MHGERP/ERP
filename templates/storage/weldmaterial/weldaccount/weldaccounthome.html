@@ -1,23 +1,26 @@
-{% extends "storage/auxiliarytools/base/base.html" %}
+{% extends "storage/base/weldbase.html" %}
 
 {% block title %}
-<h1>辅助工具管理</h1>
+<h1>焊接材料库存管理</h1>
 
 {% endblock %}
 
+{% block sub_sec %}
+<a href="/storage/weldaccounthome" class="current">焊材台账</a>
+{% endblock %}
 {% block inner_content%}
 <div class="row span12" id="storage-weld-menu">
     <div class="e3">
         <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
-        <a href="/storage/auxiliarytools/entrylist">辅助工具入库</a>
+        <a href="/storage/weldentryaccount">焊材入库台账</a>
     </div>
     <div class="e3">
         <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
-        <a href="/storage/auxiliarytools/ledger">辅助工具台账查看</a>
+        <a href="/storage/weldapplyaccount">焊材出库台账</a>
     </div>
     <div class="e3">
         <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
-        <a href="/storage/auxiliarytools/applylist">辅助工具领用</a>
+        <a href="/storage/weldstorageaccount">焊材库存台账</a>
     </div>
 </div>
 {% endblock%}

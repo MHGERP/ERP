@@ -19,3 +19,7 @@ def techPreparationPlanViews(request):
 def processExaminationViews(request):
     context = {}
     return render(request, "techdata/process_examinationViews.html", context)
+
+def techFileDirectoryViews(request):
+    context = {}
+    return render(request, "techdata/tech_file_directory.html", context)

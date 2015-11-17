@@ -9,7 +9,10 @@ urlpatterns = patterns('',
         storage_views.weldMaterialHomeViews,
     ),
     url(
-
+        r'^steelrefund$',
+        storage_views.steelRefundViews,
+    ),
+    url(
         r'^steelmaterialhome$',
         storage_views.steelMaterialHomeViews,
     ),
@@ -79,6 +82,11 @@ urlpatterns = patterns('',
         storage_views.AuxiliaryToolsApplyView,
     ),
     url(
+        r'^auxiliarytools/applylist$',
+        storage_views.AuxiliaryToolsApplyListView,
+    ),
+
+    url(
         r'^auxiliarytools/ledger$',
         storage_views.AuxiliaryToolsLedgerView,
     ),
@@ -113,6 +121,26 @@ urlpatterns = patterns('',
     url(
         r'^auxiliarytools/ledger/apply/apply_card$',
         storage_views.AuxiliaryToolsLedgerApplyCardView,
+    ),
+    url(
+        r'^auxiliarytools/entry_apply_detail$',
+        storage_views.AuxiliaryToolsEntryApplyDetailView,
+    ),
+    url(
+        r'^weldaccounthome$',
+        storage_views.weldAccountHomeViews,
+    ),
+    url(
+        r'^weldentryaccount$',
+        storage_views.weldEntryAccountViews,
+    ),   
+    url(
+        r'^weldaccounthome$',
+        storage_views.weldAccountHomeViews,
+    ),   
+    url(
+        r'^weldstorageaccount$',
+        storage_views.weldStorageAccountHomeViews,
     ),
 )
 
