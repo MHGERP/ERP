@@ -85,6 +85,23 @@ def Search_Auxiliary_Tools_Records(request,data,search_type):
                 apply_records=AuxiliaryToolApplyCard.objects.filter(query_conditions)
                 context['rets']=apply_records
                 return render_to_string('storage/auxiliarytools/apply_table.html',context)
+
+@dajaxice_register
+def Search_Auxiliary_Tools_Apply_Card(request,data):
+    context={}
+    form=AuxiliaryToolsApplyCardSearchForm(deserialize_form(data))
+    if form.is_valid():
+        conditions=form.cleaned_data
+        q1=(conditions['create_time'] and Q(create_time=conditions['create_time'])) or None
+        q2=(conditions['apply_item'] and Q(apply_item__name=conditions['apply_item'])) or None
+        q3=(conditions['applicant'] and Q(applicant=conditions['applicant'])) or None
+        q4=(conditions['index'] and Q(index=conditions['index'])) or None
+        q5=Q(status=1)
+        query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4,q5]))                
+        apply_records=AuxiliaryToolApplyCard.objects.filter(query_conditions)
+        context['rets']=apply_records
+        return render_to_string('storage/auxiliarytools/entry_apply_detail_table.html',context)    
+
 """
 @dajaxice_register
 def weldhum_insert(request,hum_params):

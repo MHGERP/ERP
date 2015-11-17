@@ -45,6 +45,20 @@ $(document).ready(function(){
         'search_type':'apply',
     });
   });
+  $("#apply_card_form").submit(function(e){
+    e.preventDefault();
+    var data=$("#apply_card_form").serialize();
+    Dajaxice.storage.Search_Auxiliary_Tools_Apply_Card(function(data){
+        $('#apply_card_table').html(data);
+        $('#create_time').val('');
+        $('#apply_item').val('');
+        $('#applicant').val('');
+        $('#index').val('');
+    },
+    {
+        'data':data,
+    });
+  });  
 });
 function SetValue(obj,model,measurement_unit,unit_price)
 {
