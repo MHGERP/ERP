@@ -16,4 +16,12 @@ urlpatterns=patterns('',
         r'^techFileDirectory$',
         techdata_views.techFileDirectoryViews,
     ),
+    url(
+        r'^firstFeeding$',
+        techdata_views.firstFeedingViews,
+    ),
+    url(
+        r'^principalMaterial$',
+        techdata_views.principalMaterialViews,
+    ),
 )
