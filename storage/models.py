@@ -1,6 +1,7 @@
 #coding=UTF-8
 from const import *
 from django.db import models
+from django.db.models import Sum
 from const.models import WorkOrder,Materiel
 from django.contrib.auth.models import User
 from users.models import UserInfo,Group
@@ -341,3 +342,11 @@ class WeldStoreList(models.Model):
 
     def __unicode__(self):
         return "%s(%s)" % (self.specification,self.factory)
+class WeldStoreThread(models.Model):
+    specification = models.CharField(max_length=50,verbose_name=u"规格")
+    count = models.FloatField(verbose_name=u"数量")
+    class Meta:
+        verbose_name = u"焊材库存安全量"
+        verbose_name_plural = u"焊材库存安全量"
+    def __unicode__(self):
+        return '%s' % self.specification
