@@ -36,4 +36,10 @@ urlpatterns=patterns('',
         techdata_views.weldEditViews,
 
     ),
+    url(
+
+        r'^programmeEdit',
+        techdata_views.programmeEditViews,
+
+    ),
 )
