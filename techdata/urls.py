@@ -8,4 +8,8 @@ urlpatterns=patterns('',
         r'^techPreparationPlan$',
         techdata_views.techPreparationPlanViews,
     ),
+    url(
+        r'^processExamination$',
+        techdata_views.processExaminationViews,
+    ),
 )

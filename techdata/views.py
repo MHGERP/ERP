@@ -15,3 +15,7 @@ from backend.utility import getContext
 def techPreparationPlanViews(request):
     context = {}
     return render(request, "techdata/tech_preparation_plan.html", context)
+
+def processExaminationViews(request):
+    context = {}
+    return render(request, "techdata/process_examinationViews.html", context)
