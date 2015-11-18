@@ -21,12 +21,12 @@ from django.shortcuts import render
 @dajaxice_register
 def get_apply_card_detail(request,apply_card_index):
     context={}
-    print apply_card_index
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
 
 @dajaxice_register
 def Search_History_Apply_Records(request,data):
     context={}
+    context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
     form=ApplyCardHistorySearchForm(deserialize_form(data))
     if form.is_valid():
         conditions=form.cleaned_data
@@ -36,9 +36,8 @@ def Search_History_Apply_Records(request,data):
         q4=(conditions['work_order'] and Q(workorder__order_index=int(conditions['work_order']))) or None
         q5=(conditions['commit_user'] and Q(commit_user__username=conditions['commit_user'])) or None
         query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4,q5]))
-        apply_records=WeldingMaterialApplyCard.objects.filter(query_conditions)
-        print query_conditions
-        return render_to_string('storage/weldapply/history_table.html',{'weld_apply_cards':apply_records})
+        context['weld_apply_cards']=WeldingMaterialApplyCard.objects.filter(query_conditions)
+        return render_to_string('storage/weldapply/history_table.html',context)
 
     else:
         return HttpResponse('FAIL')
@@ -58,7 +57,6 @@ def Auxiliary_Detail_Query(request,id):
 @dajaxice_register
 def Search_Auxiliary_Tools_Records(request,data,search_type):
     context={}
-    print search_type
     form=AuxiliaryToolsSearchForm(deserialize_form(data))
     if form.is_valid():
         if search_type=='inventory':
