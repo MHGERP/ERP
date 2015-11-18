@@ -6,9 +6,19 @@
 <a href="#" class="current">生产任务分配</a>
 {% endblock %}
 {% block inner_content%}
-<div class="form-inline">
+<div class="form-inline" style="padding:20px; margin-bottom:20px;">
     <label>工作令</label>
     {{taskallocationform.workorder}}
+    <label>编号</label>
+    {{taskallocationform.identifier}}
+    <label>工序号</label>
+    {{taskallocationform.processnumber}}
+    <label>组号</label>
+    {{taskallocationform.groupnumber}}
+    <button class="btn btn-primary">检索</button>
 </div>
-
+<button class="btn btn-success">生成领料单</button>
+<div style="margin-top:20px">
+{% include "production/table/task_allocation_table.html"%}
+</div>
 {% endblock%}
