@@ -17,6 +17,14 @@ urlpatterns=patterns('',
         techdata_views.techFileDirectoryViews,
     ),
     url(
+        r'^designLibEdit$',
+        techdata_views.designLibEditViews,
+    ),
+    url(
+        r'^connectionOrientationEdit$',
+        techdata_views.connectionOrientationEditViews,
+    ),
+    url(
         r'^firstFeeding$',
         techdata_views.firstFeedingViews,
     ),
@@ -24,6 +32,11 @@ urlpatterns=patterns('',
         r'^principalMaterial$',
         techdata_views.principalMaterialViews,
     ),
+    url(
+        r'^auxiliaryMaterial$',
+        techdata_views.auxiliaryMaterialViews,
+    ),
+
     url(
         r'^weldList',
         techdata_views.weldListViews,

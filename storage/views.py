@@ -129,9 +129,9 @@ def Handle_Apply_Card_Form(request):
             Apply_Card_Form_Apply(request)
 
         #print apply_card_form
-        return HttpResponse('RECEIVE')
+        return HttpResponseRedirect('/storage/weldapply')
     else:
-        return HttpResponse('FAIL')
+        return HttpResponseRedirect('/storage/weldapply')
 
 def Apply_Card_Form_Apply(request):
     """
@@ -320,7 +320,7 @@ def AuxiliaryToolsEntryView(request):
         auxiliarytool=AuxiliaryTool.objects.get(id=object_id)
         new_entry_quantity=float(request.POST['quantity'])
         if new_entry_quantity<0:
-            return HttpResponse('ERROR')
+            return HttpResponseRedirect('/storage/auxiliarytools/entrylist')
         auxiliarytool.quantity=F('quantity')+new_entry_quantity
         auxiliarytool.save()
         entryrecord=AuxiliaryToolEntryCard(auxiliary_tool=auxiliarytool,quantity=new_entry_quantity)

@@ -24,6 +24,14 @@ def techFileDirectoryViews(request):
     context = {}
     return render(request, "techdata/tech_file_directory.html", context)
 
+def designLibEditViews(request):
+    context = {}
+    return render(request, "techdata/design_lib_edit.html", context)
+
+def connectionOrientationEditViews(request):
+    context = {}
+    return render(request, "techdata/connection_orientation_edit.html", context)
+
 def firstFeedingViews(request):
     context = {}
     return render(request, "techdata/first_feeding.html", context)
@@ -31,6 +39,10 @@ def firstFeedingViews(request):
 def principalMaterialViews(request):
     context = {}
     return render(request, "techdata/principal_material.html", context)
+
+def auxiliaryMaterialViews(request):
+    context = {}
+    return render(request, "techdata/auxiliary_material.html", context)
 
 def processBOMViews(request):
     context = {}
