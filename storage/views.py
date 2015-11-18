@@ -277,6 +277,8 @@ def weldRefundDetailViews(request,rid):
             ref_obj.weldrefund_status = STORAGESTATUS_END
             ref_obj.save()
             return HttpResponseRedirect("/storage/weldrefund")
+        else:
+            print reform.errors
     else:
         reform = WeldRefundForm(instance = ref_obj) 
     context = {

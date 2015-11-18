@@ -182,9 +182,9 @@ class RefundSearchForm(forms.Form):
 class WeldRefundForm(ModelForm):
     class Meta:
         model = WeldRefund
-        exclude = ('department','date','code','id','refunder','keeper','weldrefund_status')
+        exclude = ('department','date','code','id','refunder','keeper','weldrefund_status',)
         widgets = {
-            'work_order':forms.Select(attrs={'class':"span2",'readonly':True}),
+            'work_order':forms.HiddenInput(),
             'receipts_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"receipts_time","class":"span2"}),
             'receipts_code': forms.Select(attrs={'class':"span2"}),                      
             'specification': forms.TextInput(attrs={'class':"span2"}),                      
