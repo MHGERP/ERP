@@ -1,11 +1,11 @@
 {% extends "techdata/base/none_nav_base.html"%}
 
 {% block title %}
-<h1>焊缝表</h1>
+<h1>焊缝明细</h1>
 {% endblock %}
 
 {% block sub_ref %}
-<a href="#" class="current">焊缝表</a>
+<a href="#" class="current">焊缝明细</a>
 {% endblock %}
 
 {% block inner_content%}
@@ -21,11 +21,17 @@
     <span class="btn" id="order_search">检索</span> 
 </form>
 
-
-<div class="widget-content">
-	
-	{% include "techdata/widgets/weld_list_table.html" %}
-	
+<div class="widget-box">
+	<div class="widget-title">
+		<span class="icon"><i class="icon-th"></i></span>
+		<h5>工作令：03015001B</h5>
+		<h5>产品名称：第一中温变换炉</h5>
+		<h5>单位：公斤</h5>
+		<h5>编制人：</h5>
+		<h5>审核人：</h5>
+	</div>
+	<div class="widget-content nopadding">
+        {% include "techdata/widgets/weld_list_table.html" %}
+	</div>
 </div>
-
 {% endblock%}

@@ -20,6 +20,10 @@
     <a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
     <ul>
         <li {% block HOME_ACTIVE %}{% endblock %}><a href="/home"><i class="icon icon-home"></i> <span>首页</span></a></li>
+        <li class="submenu {% block DISTRIBUTE_ACTICVE %}{% endblock %}">
+        <a href="#"><i class="icon icon-globe"></i> <span>经销管理</span></a>
+        </li>
+
         <li class="submenu {% block TECHDATA_ACTICVE %}{% endblock %}">
         <a href="#"><i class="icon icon-folder-close"></i> <span>技术资料管理</span></a>
         {% include "techdata/widgets/menu_list.html"%}
@@ -35,7 +39,12 @@
         </li>
         <li class="submenu {% block PRODUCTION_ACTICVE %}{% endblock %}">
         <a href="#"><i class="icon icon-wrench"></i> <span>生产管理</span></a>
+        {% include "production/widgets/menu_list.html"%}
         </li>
+        <li class="submenu {% block TEST_ACTICVE %}{% endblock %}">
+        <a href="#"><i class="icon icon-zoom-in"></i> <span>质量检验管理</span></a>
+        </li>
+
 
     </ul>
 
