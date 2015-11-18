@@ -78,7 +78,6 @@ def weldEntryHomeViews(request):
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
 def steelEntryHomeViews(request):
-<<<<<<< HEAD
     if request.method == "POST":
         search_form = EntrySearchForm(request.POST)
         steelentry_set = []
@@ -94,12 +93,10 @@ def steelEntryHomeViews(request):
         "ENTRYSTATUS_END":STORAGESTATUS_END,
         "search_form":search_form,
     }
-=======
     steelentry_set = getEntrySet(PurchasingEntry,ENTRYSTATUS_KEEPER)
     context  = {
             "entry_set":steelentry_set,
             }
->>>>>>> 621a8f04134df2697c560d6fb7e257eb46d5aaaf
     return render(request,"storage/steelmaterial/steelentryhome.html",context)
 
 def weldEntryConfirmViews(request,eid):
