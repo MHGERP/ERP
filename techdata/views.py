@@ -35,3 +35,7 @@ def principalMaterialViews(request):
 def weldListViews(request):
     context = {}
     return render(request, "techdata/weld_list.html", context)
+
+def weldQuotaViews(request):
+    context = {}
+    return render(request, "techdata/weld_quota.html", context)

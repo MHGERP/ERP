@@ -28,4 +28,8 @@ urlpatterns=patterns('',
         r'^weldList',
         techdata_views.weldListViews,
     ),
+    url(
+        r'^weldQuota',
+        techdata_views.weldQuotaViews,
+    )
 )
