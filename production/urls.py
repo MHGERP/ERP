@@ -7,6 +7,13 @@ urlpatterns=patterns('',
     url(
         r'^task_allocation$',
         production_views.taskAllocationViews,
-    )
-
+    ),
+    url(
+        r'^synthesize_filelist$',
+        production_views.synthesizeFileListViews,
+    ),
+    url(
+    	r'^man_hour_summarize$',
+    	production_views.man_hour_summarizeViews,
+    ),
 )
