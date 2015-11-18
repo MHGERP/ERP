@@ -16,4 +16,12 @@ urlpatterns=patterns('',
         r'^techFileDirectory$',
         techdata_views.techFileDirectoryViews,
     ),
+    url(
+        r'^designLibEdit$',
+        techdata_views.designLibEditViews,
+    ),
+    url(
+        r'^connectionOrientationEdit$',
+        techdata_views.connectionOrientationEditViews,
+    ),
 )
