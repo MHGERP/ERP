@@ -4,12 +4,20 @@ from django.conf.urls.defaults import *
 from techdata import views as techdata_views
 
 urlpatterns=patterns('',
-    url(
-        r'^techPreparationPlan$',
-        techdata_views.techPreparationPlanViews,
-    ),
-    url(
-        r'^techFileDirectory$',
-        techdata_views.techFileDirectoryViews,
-    ),
-)
+                     url(
+                         r'^techPreparationPlan$',
+                         techdata_views.techPreparationPlanViews,
+                        ),
+                     url(
+                         r'^techFileDirectory$',
+                         techdata_views.techFileDirectoryViews,
+                        ),
+                     url(
+                         r'^techInstallWeld$',
+                         techdata_views.techInstallWeldViews,
+                        ),
+                     url(
+                         r'^techHotDeel$',
+                         techdata_views.techHotDeelViews,
+                        ),
+                    )

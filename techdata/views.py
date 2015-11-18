@@ -19,3 +19,11 @@ def techPreparationPlanViews(request):
 def techFileDirectoryViews(request):
     context = {}
     return render(request, "techdata/tech_file_directory.html", context)
+
+def techInstallWeldViews(request):
+    context = {}
+    return render(request, "techdata/tech_install_weld.html", context)
+
+def techHotDeelViews(request):
+    context = {}
+    return render(request, "techdata/tech_hot_deel.html", context)
