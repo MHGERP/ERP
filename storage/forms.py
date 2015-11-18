@@ -182,9 +182,9 @@ class RefundSearchForm(forms.Form):
 class WeldRefundForm(ModelForm):
     class Meta:
         model = WeldRefund
-        exclude = ('department','date','code','id','refunder','keeper','weldrefund_status')
+        exclude = ('department','date','code','id','refunder','keeper','weldrefund_status',)
         widgets = {
-            'work_order':forms.Select(attrs={'class':"span2",'readonly':True}),
+            'work_order':forms.HiddenInput(),
             'receipts_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"receipts_time","class":"span2"}),
             'receipts_code': forms.Select(attrs={'class':"span2"}),                      
             'specification': forms.TextInput(attrs={'class':"span2"}),                      
@@ -268,3 +268,16 @@ class WeldStorageSearchForm(forms.Form):
 
 class WeldAccountSearchForm(WeldStorageSearchForm):
     entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'entry_time'}))
+
+class WeldApplyAccountSearchForm(forms.Form):
+    workorder = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"class":'form-control search-in','id':'workorder'}))
+    weld_bead_number = forms.CharField(label=u"焊缝编号",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'weld_bead_number'}))
+    index = forms.CharField(label=u"编号",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'index'}))
+    create_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'create_time'}))
+    def __init__(self,*args,**kwargs):
+        super(WeldApplyAccountSearchForm,self).__init__(*args,**kwargs)
+        workorder_list = WeldingMaterialApplyCard.objects.values("workorder").distinct()
+        work_order_set = []
+        for list_tmp in workorder_list:
+            work_order_set.append(WorkOrder.objects.get(id = list_tmp["workorder"]))
+        self.fields["workorder"].choices = getChoiceList(work_order_set,"order_index")

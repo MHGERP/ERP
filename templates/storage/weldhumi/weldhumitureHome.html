@@ -15,11 +15,11 @@
         {{field.label}}
         {{field}}
         {% endfor %}
-        <button class="btn btn-success">检索</button> 
+        <button class="btn btn-primary">检索</button> 
     </form>
 </div>
-<div class="span8" style="margin-top:20px;margin-bottom:20px">
-    <a type="button" class="btn btn-primary btn-large" href="weldhumNewRecord">新增记录</a>
+<div class="span12" style="margin-top:20px;margin-bottom:20px">
+    <a type="button" class="btn btn-primary" href="weldhumNewRecord">新增记录</a>
 </div>
 <br>
 <div class="span8">
@@ -33,7 +33,7 @@
     </tbody>
         {% for index in hum_set %}
         <tr>
-            <td>{{index.date}}</td>
+            <td>{{index.date|date:'Ymd'}}</td>
             <td>{{index.storeRoom}}</td>
             <td>{{index.storeMan}}</td>
             <td><a class="btn btn-warning" href="/storage/weldhumDetail/{{index.id}}">查看详情</a></td>

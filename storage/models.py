@@ -219,7 +219,7 @@ class WeldRefund(models.Model):
     code = models.CharField(max_length=20,blank=False,null=True,unique=True,verbose_name=u"编号")
     work_order = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
     receipts_time = models.DateField(blank=False,null=True,verbose_name=u"领用日期")
-    receipts_code = models.ForeignKey(WeldingMaterialApplyCard,blank=False,verbose_name=u"领用编号")
+    receipts_code = models.OneToOneField(WeldingMaterialApplyCard,blank=False,verbose_name=u"领用编号")
     specification = models.CharField(max_length=50,blank=False,null=True,verbose_name=u"型号规格") 
     refund_weight = models.FloatField(default=0,blank=False,verbose_name=u"退库量（重量）")
     refund_count = models.FloatField(default=0,blank=False,verbose_name=u"退库量（数量）")
@@ -262,25 +262,25 @@ class AuxiliaryToolApplyCard(models.Model):
     actual_item=models.ForeignKey(AuxiliaryTool,verbose_name=u'实发物资',default=None,blank=True,null=True,related_name="actual_items")
     actual_quantity=models.IntegerField(verbose_name=u'实发数量',default=0,blank=False)
     actual_total=models.FloatField(verbose_name=u'实际总价',default=0,blank=False)
-    status=models.IntegerField(verbose_name=u'完成状态',default=0,blank=False)
+    status=models.IntegerField(verbose_name=u'完成状态',choices=AUXILIARY_TOOL_APPLY_CARD_STATUS,default=AUXILIARY_TOOL_APPLY_CARD_CREATED,blank=False)
     applicant=models.ForeignKey(User,verbose_name=u'领用人',default=None,blank=True,null=True,related_name="at_applicants")
     commit_user=models.ForeignKey(User,verbose_name=u'确认人',default=None,blank=True,null=True,related_name="at_commit_users")
     remark=models.TextField(verbose_name=u'备注',default=None,blank=True,null=True)
     def save(self,*args,**kwargs):
-        if not self.status==2:
+        if not self.status==AUXILIARY_TOOL_APPLY_CARD_COMMITED:
             self.apply_total=self.apply_item.unit_price*self.apply_quantity
             self.apply_item.save()
             if not self.index:
                 self.index=randint(0,10000000)
 
-            self.status=1
+            self.status=AUXILIARY_TOOL_APPLY_CARD_APPLYED
     
-            if self.actual_item and self.status==1:
+            if self.actual_item and self.status==AUXILIARY_TOOL_APPLY_CARD_APPLYED:
                 self.actual_total=self.actual_item.unit_price*self.actual_quantity
                 self.actual_item.quantity-=self.actual_quantity
                 self.actual_item.save()
                 self.commit_time=timezone.now()
-                self.status=2
+                self.status=AUXILIARY_TOOL_APPLY_CARD_COMMITED
     
             super(AuxiliaryToolApplyCard,self).save(*args,**kwargs)
 

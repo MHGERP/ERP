@@ -21,8 +21,25 @@
     <span class="btn" id="order_search">检索</span> 
 </form>
 
+<div class="widget-box">
+ 
 
-<div class="widget-content">
+  <div class="widget-title">
+
+    <span class="icon"><i class="icon-th"></i></span>
+    <h5>工作令：03015001B</h5>
+    <h5>产品名称：第一中温变换炉</h5>
+    <h5>单位：公斤</h5>
+    <h5>编制人：</h5>
+    <h5>审核人：</h5>
+  </div>
+  <div class="widget-content nopadding">
+
+        {% include "techdata/widgets/process_examination_table.html" %}
+  </div>
+</div>
+
+<!-- <div class="widget-content">
 	<div >
 		<nobr>
 		{% include "techdata/widgets/pending_order_header.html" %}
@@ -31,6 +48,6 @@
 	</div>
 	{% include "techdata/widgets/process_examination_table.html" %}
 	<div  style="width:85%"><span style="float:right;" class="btn" id="order_search">新增</span></div>
-</div>
+</div> -->
 
 {% endblock%}

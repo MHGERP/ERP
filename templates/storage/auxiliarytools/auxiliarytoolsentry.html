@@ -10,17 +10,36 @@
 
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
+<div style="width:80%">
    <h3 style="text-align:center">辅助材料入库</h3>
     <form id="detail_form" action="/storage/auxiliarytools/entry" method="POST">
         {% csrf_token %}
         <table class="table table-hover table-bordered">
-        {{ entry_form.as_table }}
+        <tr>
+            <td>材料名称:</td>
+            <td>{{entry_form.name}}</td>
+            <td>类别:</td>
+            <td>{{entry_form.model}}</td>
+        </tr>
+        <tr>
+            <td>计量单位:</td>
+            <td>{{entry_form.measurement_unit}}</td>
+            <td>数量:</td>
+            <td>{{entry_form.quantity}}</td>
+        </tr>
+        <tr>
+            <td>单价:</td>
+            <td>{{entry_form.unit_price}}</td>
+            <td>厂家:</td>
+            <td>{{entry_form.manufacturer}}</td>
+        </tr>
         </table>
         <input type="hidden" name="object_id" value="{{object_id}}">
 
     <div class="row-fluid" style="text-align:center">
-    <button type="submit" id="confirm" class="btn btn-info">确认</button>
+    <button type="submit" id="confirm" class="btn btn-primary">确认</button>
     </div>
 </form>
+</div>
 {% endblock%}
 
