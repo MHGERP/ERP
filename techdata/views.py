@@ -31,3 +31,31 @@ def designLibEditViews(request):
 def connectionOrientationEditViews(request):
     context = {}
     return render(request, "techdata/connection_orientation_edit.html", context)
+
+def firstFeedingViews(request):
+    context = {}
+    return render(request, "techdata/first_feeding.html", context)
+
+def principalMaterialViews(request):
+    context = {}
+    return render(request, "techdata/principal_material.html", context)
+
+def processBOMViews(request):
+    context = {}
+    return render(request, "techdata/processBOM.html", context)
+
+def weldListViews(request):
+    context = {}
+    return render(request, "techdata/weld_list.html", context)
+
+def weldQuotaViews(request):
+    context = {}
+    return render(request, "techdata/weld_quota.html", context)
+def weldEditViews(request):
+    context = {}
+    return render(request, "techdata/weld_edit.html", context)
+
+def programmeEditViews(request):
+    context = {}
+    return render(request, "techdata/programme_edit.html", context)
+

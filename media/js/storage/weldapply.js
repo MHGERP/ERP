@@ -19,7 +19,7 @@ $(document).ready(function(){
  {
      $("#confirm").attr('disabled','disabled');
      $("#confirm").hide();
-     $("#confirm").after('<a type="button" href="/storage/weldapply" class="btn btn-info">返回</a>');
+     $("#confirm").after('<a type="button" href="/storage/weldapply" class="btn btn-primary">返回</a>');
 
  }
 });
