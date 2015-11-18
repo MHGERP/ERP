@@ -219,7 +219,7 @@ class WeldRefund(models.Model):
     code = models.CharField(max_length=20,blank=False,null=True,unique=True,verbose_name=u"编号")
     work_order = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
     receipts_time = models.DateField(blank=False,null=True,verbose_name=u"领用日期")
-    receipts_code = models.ForeignKey(WeldingMaterialApplyCard,blank=False,verbose_name=u"领用编号")
+    receipts_code = models.OneToOneField(WeldingMaterialApplyCard,blank=False,verbose_name=u"领用编号")
     specification = models.CharField(max_length=50,blank=False,null=True,verbose_name=u"型号规格") 
     refund_weight = models.FloatField(default=0,blank=False,verbose_name=u"退库量（重量）")
     refund_count = models.FloatField(default=0,blank=False,verbose_name=u"退库量（数量）")
