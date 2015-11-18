@@ -1,0 +1,36 @@
+from django.conf.urls import patterns, include, url
+from dajaxice.core import dajaxice_autodiscover, dajaxice_config
+from django.conf.urls.defaults import *
+from techdata import views as techdata_views
+
+urlpatterns=patterns('',
+    url(
+        r'^techPreparationPlan$',
+        techdata_views.techPreparationPlanViews,
+    ),
+    url(
+        r'^processExamination$',
+        techdata_views.processExaminationViews,
+    ),
+    url(
+        r'^techFileDirectory$',
+        techdata_views.techFileDirectoryViews,
+    ),
+    url(
+        r'^firstFeeding$',
+        techdata_views.firstFeedingViews,
+    ),
+    url(
+        r'^principalMaterial$',
+        techdata_views.principalMaterialViews,
+    ),
+    url(
+<<<<<<< HEAD
+        r'^weldEdit$',
+        techdata_views.weldEditViews,
+=======
+        r'^weldList',
+        techdata_views.weldListViews,
+>>>>>>> 53b4b71c7bb41c220644d019bb252ccce4b93dab
+    ),
+)

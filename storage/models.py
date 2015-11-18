@@ -1,6 +1,7 @@
 #coding=UTF-8
 from const import *
 from django.db import models
+from django.db.models import Sum
 from const.models import WorkOrder,Materiel
 from django.contrib.auth.models import User
 from users.models import UserInfo,Group
@@ -8,6 +9,7 @@ from django.utils import timezone
 from const import STORAGEDEPARTMENT_CHOICES,STORAGESTATUS_KEEPER,REFUNDSTATUS_CHOICES
 from const import LENGHT_MANAGEMENT,WEIGHT_MANAGEMENT,AREA_MANAGEMENT  
 from purchasing.models import BidForm
+from random import randint
 
 # Create your models here.
 
@@ -109,7 +111,6 @@ class SteelMaterialPurchasingEntry(models.Model):
     entry_confirm = models.BooleanField(default=False,verbose_name=u"入库单确认")
     entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES_2,default=0,verbose_name=u"入库单类型")
     entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=0,verbose_name=u"入库单状态")
-
     def __unicode__(self):
         return str(self.form_code)
 
@@ -251,8 +252,8 @@ class AuxiliaryTool(models.Model):
 
 class AuxiliaryToolApplyCard(models.Model):
     create_time=models.DateField(verbose_name=u'申请时间',auto_now_add=True)
-    commit_time=models.DateField(verbose_name=u'实发时间')
-    index=models.IntegerField(verbose_name=u'编号',blank=False,unique=True)
+    commit_time=models.DateField(verbose_name=u'实发时间',blank=True,null=True)
+    index=models.IntegerField(verbose_name=u'编号',default=0,blank=False,unique=True)
     apply_item=models.ForeignKey(AuxiliaryTool,verbose_name=u'申请物资',blank=False,related_name="apply_items")
     apply_quantity=models.IntegerField(verbose_name=u'申请数量',blank=False)
     apply_total=models.FloatField(verbose_name=u'申请总价',default=0,blank=False)#overwrite the save() method to calculate the apply_total
@@ -260,21 +261,25 @@ class AuxiliaryToolApplyCard(models.Model):
     actual_item=models.ForeignKey(AuxiliaryTool,verbose_name=u'实发物资',default=None,blank=True,null=True,related_name="actual_items")
     actual_quantity=models.IntegerField(verbose_name=u'实发数量',default=0,blank=False)
     actual_total=models.FloatField(verbose_name=u'实际总价',default=0,blank=False)
-    status=models.IntegerField(verbose_name=u'完成状态',default=0,blank=False)
+    status=models.IntegerField(verbose_name=u'完成状态',choices=AUXILIARY_TOOL_APPLY_CARD_STATUS,default=AUXILIARY_TOOL_APPLY_CARD_CREATED,blank=False)
     applicant=models.ForeignKey(User,verbose_name=u'领用人',default=None,blank=True,null=True,related_name="at_applicants")
     commit_user=models.ForeignKey(User,verbose_name=u'确认人',default=None,blank=True,null=True,related_name="at_commit_users")
+    remark=models.TextField(verbose_name=u'备注',default=None,blank=True,null=True)
     def save(self,*args,**kwargs):
-        if not self.status==2:
+        if not self.status==AUXILIARY_TOOL_APPLY_CARD_COMMITED:
             self.apply_total=self.apply_item.unit_price*self.apply_quantity
             self.apply_item.save()
-            self.status=1
+            if not self.index:
+                self.index=randint(0,10000000)
+
+            self.status=AUXILIARY_TOOL_APPLY_CARD_APPLYED
     
-            if self.actual_item and self.status==1:
+            if self.actual_item and self.status==AUXILIARY_TOOL_APPLY_CARD_APPLYED:
                 self.actual_total=self.actual_item.unit_price*self.actual_quantity
                 self.actual_item.quantity-=self.actual_quantity
                 self.actual_item.save()
                 self.commit_time=timezone.now()
-                self.status=2
+                self.status=AUXILIARY_TOOL_APPLY_CARD_COMMITED
     
             super(AuxiliaryToolApplyCard,self).save(*args,**kwargs)
 
@@ -341,3 +346,11 @@ class WeldStoreList(models.Model):
 
     def __unicode__(self):
         return "%s(%s)" % (self.specification,self.factory)
+class WeldStoreThread(models.Model):
+    specification = models.CharField(max_length=50,verbose_name=u"规格")
+    count = models.FloatField(verbose_name=u"数量")
+    class Meta:
+        verbose_name = u"焊材库存安全量"
+        verbose_name_plural = u"焊材库存安全量"
+    def __unicode__(self):
+        return '%s' % self.specification

@@ -14,7 +14,9 @@
     <span class="btn" id="order_search">工作令查询</span> <label style="color: red">支持前缀缺省查询</label>
 </form>
 <div class="widget-content">
+    {% include "techdata/widgets/pending_order_header.html" %}
 
+    {% include "techdata/widgets/tech_preparation_plan_table.html" %}
 </div>
 
 {% endblock%}

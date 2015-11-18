@@ -194,10 +194,35 @@ class WeldRefundForm(ModelForm):
         }
 
 
-class AuxiliaryToolsCardForm(ModelForm):
+class AuxiliaryToolsCardCommitForm(ModelForm):
     class Meta:
         model=AuxiliaryToolApplyCard
         exclude=['create_time','commit_time']
+
+        widgets={
+                'remark':forms.HiddenInput(),
+                'apply_quantity':forms.HiddenInput(),
+                'apply_item':forms.HiddenInput(),
+                'actual_quantity':forms.TextInput(attrs={'class':'form-control search-query'}),
+                'index':forms.HiddenInput(),
+                'apply_total':forms.HiddenInput(),
+                'actual_total':forms.HiddenInput(),
+                'status':forms.HiddenInput(),
+                }
+class AuxiliaryToolsCardApplyForm(ModelForm):
+    class Meta:
+        model=AuxiliaryToolApplyCard
+        exclude=['create_time','commit_time']
+
+        widgets={
+                'remark':forms.TextInput(attrs={'class':'form-control search-query','style':'width:90%'}),
+                'apply_quantity':forms.TextInput(attrs={'class':'form-control search-query'}),
+                'actual_quantity':forms.HiddenInput(),
+                'index':forms.HiddenInput(),
+                'apply_total':forms.HiddenInput(),
+                'actual_total':forms.HiddenInput(),
+                'status':forms.HiddenInput(),
+                }
 
 class AuxiliaryToolsForm(ModelForm):
     class Meta:
@@ -219,6 +244,12 @@ class AuxiliaryToolsSearchForm(forms.Form):
     model=forms.CharField(label=u'类别',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'model'}))
     manufacturer=forms.CharField(label=u'厂家',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'manufacturer'}))
 
+class AuxiliaryToolsApplyCardSearchForm(forms.Form):
+    create_time=forms.DateField(label=u'申请时间',required=False,widget=forms.TextInput(attrs={'readonly':'readonly','class':'form-control search-query','id':'create_time'}))
+    apply_item=forms.CharField(label=u'申请物资',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'apply_item'}))
+    applicant=forms.CharField(label=u'领用人',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'applicant'}))
+    index=forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'index'}))
+
 class SteelRefundSearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
     refund_code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'refund_code'}))
@@ -229,15 +260,24 @@ class SteelRefundSearchForm(forms.Form):
         users = getUserByAuthority(STORAGE_KEEPER)
         self.fields["keeper"].choices = getChoiceList(users,"userinfo")
 
-class WeldAccountSearchForm(forms.Form):
-    entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'entry_time'}))
+class WeldStorageSearchForm(forms.Form):
     material_id = forms.CharField(label=u'材质编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'material_id'}))
     brand=forms.CharField(label=u'牌号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'brand'}))
     specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'specification'}))
     charge_number=forms.CharField(label=u'材料批号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'charge_number'}))
 
-class WeldAccountSearchForm(forms.Form):
-    material_id = forms.CharField(label=u'材质编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'material_id'}))
-    brand=forms.CharField(label=u'牌号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'brand'}))
-    specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'specification'}))
-    charge_number=forms.CharField(label=u'材料批号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'charge_number'}))
+class WeldAccountSearchForm(WeldStorageSearchForm):
+    entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'entry_time'}))
+
+class WeldApplyAccountSearchForm(forms.Form):
+    workorder = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"class":'form-control search-in','id':'workorder'}))
+    weld_bead_number = forms.CharField(label=u"焊缝编号",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'weld_bead_number'}))
+    index = forms.CharField(label=u"编号",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'index'}))
+    create_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'create_time'}))
+    def __init__(self,*args,**kwargs):
+        super(WeldApplyAccountSearchForm,self).__init__(*args,**kwargs)
+        workorder_list = WeldingMaterialApplyCard.objects.values("workorder").distinct()
+        work_order_set = []
+        for list_tmp in workorder_list:
+            work_order_set.append(WorkOrder.objects.get(id = list_tmp["workorder"]))
+        self.fields["workorder"].choices = getChoiceList(work_order_set,"order_index")
