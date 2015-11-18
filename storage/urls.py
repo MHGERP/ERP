@@ -135,8 +135,8 @@ urlpatterns = patterns('',
         storage_views.weldEntryAccountViews,
     ),   
     url(
-        r'^weldaccounthome$',
-        storage_views.weldAccountHomeViews,
+        r'^weldapplyaccount$',
+        storage_views.weldApplyAccountViews,
     ),   
     url(
         r'^weldstorageaccount$',

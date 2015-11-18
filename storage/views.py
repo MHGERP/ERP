@@ -51,7 +51,8 @@ def weldEntryHomeViews(request):
         else:
             print search_form.errors
     else:
-        weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
+        #weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
+        weldentry_set = WeldMaterialEntry.objects.all()
         search_form = EntrySearchForm()
     context = {
         "entry_set":weldentry_set,
@@ -254,7 +255,8 @@ def weldRefundViews(request):
             refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data)
     else:
         search_form = RefundSearchForm()
-        refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
+        #refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
+        refund_set = WeldRefund.objects.all()
     context = {
         "search_form":search_form,
         "refund_set":refund_set,
@@ -270,6 +272,7 @@ def weldRefundDetailViews(request,rid):
         if reform.is_valid():
             reform.save()
             ref_obj.keeper = request.user
+            ref_obj.weldrefund_status = STORAGESTATUS_END
             ref_obj.save()
             return HttpResponseRedirect("/storage/weldrefund")
     else:
@@ -486,3 +489,21 @@ def weldStorageAccountHomeViews(request):
         "search_form":search_form,
     }
     return render(request,"storage/weldmaterial/weldaccount/weldstoragehome.html",context)
+
+def weldApplyAccountViews(request):
+    apply_set = WeldingMaterialApplyCard.objects.all()
+    if request.method == "POST":
+        search_form =  WeldApplyAccountSearchForm(request.POST)
+        if search_form.is_valid():
+            print search_form.cleaned_data
+            apply_set = get_weld_filter(WeldingMaterialApplyCard,search_form.cleaned_data)
+            print apply_set
+        else:
+            print search_form.errors
+    else:
+        search_form = WeldApplyAccountSearchForm()
+    context = {
+        "apply_set":apply_set,
+        "search_form":search_form,
+    }
+    return render(request,"storage/weldmaterial/weldaccount/weldapplyhome.html",context)
