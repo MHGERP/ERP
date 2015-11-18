@@ -1,0 +1,34 @@
+{% extends "storage/base/weldbase.html" %}
+{% block title %}
+<h1>焊材台账</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/weldaccounthome">焊材台账</a>
+<a href="/storage/weldstorageaccount" class="current">焊接库存台账</a>
+{% endblock %}
+{% block inner_content %}
+<h3>焊材库存台账</h3>
+<div>
+<form class="form-inline" method="post">
+    {% csrf_token %}
+    {% for field in search_form %}
+    {{field.label}}
+    {{field}}
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">检索</button> 
+    <button class="btn btn-primary" type="button" onclick="get_thread()">需采购</button> 
+    <button class="btn btn-primary" type="button" onclick="get_overtime();">过期</button> 
+</form>
+<br>
+<div id = "item_table">
+    {% include "storage/widgets/item_table.html"%}
+</div>
+</div>
+<script>
+    $(function(){
+                        $('#entry_time').datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true});
+                                    
+            });
+</script>
+{% endblock %}

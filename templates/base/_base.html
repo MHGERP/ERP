@@ -6,54 +6,61 @@
 
 
 <div id="header">
-	<h1><a href="./dashboard.html">ERP</a></h1>		
+    <h1><a href="./dashboard.html">ERP</a></h1>		
 </div>
 
-	{% include "base/_usernav.html" %}
+{% include "base/_usernav.html" %}
 
 
-<div id="check_mymessage" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="check_mymessage" class="modal hide fade" modal-size-width="0.618"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     {% include "base/model-message.html" %}
 </div>
 
 <div id="sidebar">
-	<a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
-	<ul>
-		<li {% block HOME_ACTIVE %}{% endblock %}><a href="/home"><i class="icon icon-home"></i> <span>首页</span></a></li>
+    <a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
+    <ul>
+        <li {% block HOME_ACTIVE %}{% endblock %}><a href="/home"><i class="icon icon-home"></i> <span>首页</span></a></li>
+        <li class="submenu {% block DISTRIBUTE_ACTICVE %}{% endblock %}">
+        <a href="#"><i class="icon icon-globe"></i> <span>经销管理</span></a>
+        </li>
+
         <li class="submenu {% block TECHDATA_ACTICVE %}{% endblock %}">
-			<a href="#"><i class="icon icon-folder-close"></i> <span>技术资料管理</span></a>
-            {% include "techdata/widgets/menu_list.html"%}
-		</li>
+        <a href="#"><i class="icon icon-folder-close"></i> <span>技术资料管理</span></a>
+        {% include "techdata/widgets/menu_list.html"%}
+        </li>
 
-		<li class="submenu {% block PURCHASING_ACTICVE %}{% endblock %}">
-			<a href="#"><i class="icon icon-shopping-cart"></i> <span>采购管理</span></a>
-			{% include "purchasing/widgets/menu_list.html"%}
-		</li>
-		<li class="submenu {% block STORAGE_ACTICVE %}{% endblock %}">
-			<a href="#"><i class="icon icon-th-list"></i> <span>库存管理</span></a>
-			{% include "storage/widgets/menu_list.html"%}
-		</li>
-        <li class="submenu {% block PRODUCE_ACTICVE %}{% endblock %}">
-			<a href="#"><i class="icon icon-wrench"></i> <span>生产管理</span></a>
-		</li>
+        <li class="submenu {% block PURCHASING_ACTICVE %}{% endblock %}">
+        <a href="#"><i class="icon icon-shopping-cart"></i> <span>采购管理</span></a>
+        {% include "purchasing/widgets/menu_list.html"%}
+        </li>
+        <li class="submenu {% block STORAGE_ACTICVE %}{% endblock %}">
+        <a href="#"><i class="icon icon-th-list"></i> <span>库存管理</span></a>
+        {% include "storage/widgets/menu_list.html"%}
+        </li>
+        <li class="submenu {% block PRODUCTION_ACTICVE %}{% endblock %}">
+        <a href="#"><i class="icon icon-wrench"></i> <span>生产管理</span></a>
+        </li>
+        <li class="submenu {% block TEST_ACTICVE %}{% endblock %}">
+        <a href="#"><i class="icon icon-zoom-in"></i> <span>质量检验管理</span></a>
+        </li>
 
-	</ul>
-		
+
+    </ul>
+
 </div>
-
 <div id="content">
-   
-        {% block main_title %}{% endblock %}
-	<div class="container-fluid container-full">
 
-		
-		{% block main_content %} {% endblock %}
+    {% block main_title %}{% endblock %}
+    <div class="container-fluid container-full">
 
 
-	</div>
-	{# Footer Section #}
-	{% block home-footer %}
-	{% include "widgets/footer.html" %}
-	{% endblock %}
+        {% block main_content %} {% endblock %}
+
+
+    </div>
+    {# Footer Section #}
+    {% block home-footer %}
+    {% include "widgets/footer.html" %}
+    {% endblock %}
 </div>
 {% endblock%}

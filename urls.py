@@ -50,6 +50,10 @@ urlpatterns = patterns('',
         r'^techdata/',
         include('techdata.urls')
     ),
+   url(
+        r'^production/',
+        include('production.urls')
+    ),
     url(
         r'^errors/',
         include("backend.urls")

@@ -1,0 +1,27 @@
+<table class="table table-hover table-bordered">
+    <tr>
+        <th>序号</th>
+        <th>编号</th>
+        <th>申请物资</th>
+        <th>申请数量</th>
+        <th>申请时间</th>
+        <th>领用人</th>
+        <th></th>
+    </tr>
+    {% if not apply_cards %}
+    <tr>
+    <td colspan="8">未找到相关项</td>
+    </tr>
+    {% endif %}
+    {% for record in apply_cards %}
+    <tr>
+    <td>{{forloop.counter}}</td>
+    <td>{{record.index}}</td>
+    <td>{{record.apply_item.name}}</td>
+    <td>{{record.apply_quantity}}</td>
+    <td>{{record.create_time}}</td>
+    <td>{{record.applicant}}</td>
+    <td><a href="/storage/auxiliarytools/apply?index={{record.index}}"><button type="button" class="btn btn-primary">处理申请</button></a></td>
+    </tr>
+    {% endfor %}
+</table>

@@ -24,12 +24,12 @@
    {% for item in auxiliarytools %}
    <tr>
    <td>{{item.name}}</td>
-   <td>{{item.model}}</td>
+   <td>{{item.get_model_display}}</td>
    <td>{{item.measurement_unit}}</td>
    <td>{{item.quantity}}</td>
    <td>{{item.unit_price}}</td>
    <td>{{item.manufacturer}}</td>
-   <td><a href="/storage/auxiliarytools/entry?id={{item.id}}"><button type="button" class="btn btn-info">入库</button></a></td>
+   <td><a href="/storage/auxiliarytools/entry?id={{item.id}}"><button type="button" class="btn btn-primary">入库</button></a></td>
    </tr>
 
    {% endfor %}

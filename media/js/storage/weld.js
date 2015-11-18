@@ -35,8 +35,25 @@ function entryconfirm(eid){
 function entry_confirm_callback(data){
     if(data.flag){
         alert("入库单确认成功");
+        window.location.reload();
     }
     else{
         alert("入库单确认失败");
     }
+}
+
+function get_overtime(){
+    Dajaxice.storage.getOverTimeItems(get_overtime_callback)
+}
+
+function get_overtime_callback(data){
+   $("#item_table").html(data.html); 
+}
+
+function get_thread(){
+    Dajaxice.storage.getThreadItems(get_thread_callback);
+}
+
+function get_thread_callback(data){
+   $("#item_table").html(data.html); 
 }
