@@ -37,6 +37,22 @@ def steelRefundViews(request):
         "refund_set":refund_set
     }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
+
+def steelrefunddetailViews(request,typeid,rid):
+    typeid=int(typeid)
+    common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
+    if typeid:
+        return_cards = common_Info.barsteelmaterialreturncardcontent_set.all()
+    else:
+        return_cards = common_Info.boardsteelmaterialreturncardcontent_set.all()
+    context={
+        'return_cards':return_cards,
+        'common_Info':common_Info,
+    }
+    if typeid==1:
+        return render(request,"storage/steelmaterial/barsteelrefunddetail.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelrefunddetail.html",context)
     
 def weldEntryHomeViews(request):
     if request.method == "POST":
@@ -62,7 +78,6 @@ def weldEntryHomeViews(request):
 
 def steelEntryHomeViews(request):
     steelentry_set = getEntrySet(PurchasingEntry,ENTRYSTATUS_KEEPER)
-
     context  = {
         "entry_set":steelentry_set,
     }
