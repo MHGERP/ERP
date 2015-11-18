@@ -90,7 +90,7 @@ def Weld_Apply_Card_List(request):
     return: NULL
     """
     context={}
-    weld_apply_cards=WeldingMaterialApplyCard.objects.exclude(status=3).order_by('create_time')#考虑效率问题，注意更改all的获取方式
+    weld_apply_cards=WeldingMaterialApplyCard.objects.exclude(status=APPLYCARD_COMMIT).order_by('create_time')#考虑效率问题，注意更改all的获取方式
     context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
@@ -159,7 +159,7 @@ def Apply_Card_Form_Commit(request):
         print 'VALID'
         s=apply_card_form.save(commit=False)
         s.commit_user=request.user
-        s.status=3
+        s.status=APPLYCARD_COMMIT
         s.save()
         storeConsume(ac) 
     else:
@@ -336,7 +336,7 @@ def AuxiliaryToolsApplyListView(request):
     return: NULL
     """
     context={}
-    apply_cards=AuxiliaryToolApplyCard.objects.exclude(status=2).order_by('-create_time')
+    apply_cards=AuxiliaryToolApplyCard.objects.exclude(status=AUXILIARY_TOOL_APPLY_CARD_COMMITED).order_by('-create_time')
     context['search_form']=AuxiliaryToolsApplyCardSearchForm()
     context['apply_cards']=apply_cards
     return render(request,'storage/auxiliarytools/auxiliarytoolsapply_list.html',context)
@@ -420,7 +420,7 @@ def AuxiliaryToolsLedgerApplyView(request):
     """
     context={}
     context['search_form']=AuxiliaryToolsSearchForm()
-    context['rets']=AuxiliaryToolApplyCard.objects.filter(status=2)
+    context['rets']=AuxiliaryToolApplyCard.objects.filter(status=AUXILIARY_TOOL_APPLY_CARD_COMMITED)
     return render(request,'storage/auxiliarytools/ledger_apply.html',context)
 
 def AuxiliaryToolsLedgerApplyCardView(request):

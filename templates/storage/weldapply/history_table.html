@@ -13,7 +13,9 @@
             <td>{{card.create_time}}</td>
             <td>{{card.index}}</td>
             <td>{{card.workorder}}</td>
-            <td>{{card.status}}</td>
+            <td>
+                {{card.get_status_display}}    
+            </td>
             {% if card.status == '3' %}
             <td><a type="button" class="btn btn-success detail" href="/storage/weldapply/detail?index={{card.index}}">详情</a></td>
             {% else %}
