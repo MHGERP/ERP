@@ -4,32 +4,51 @@
 {% endblock%}
 
 {% block sub_sec %}
-<a href="/storage/weldbake">焊材发放回收记录</a>
+<a href="/storage/weldapplyrefund">焊材发放回收记录</a>
 <a href="#" class="current">#</a>
 {% endblock %}
 
 {% block inner_content %}
 <div class="control-group" style="margin-top:20px">
     <button type="button" class="btn btn-primary">工作令：{{workorder.order_index}}</button>
-    <button type="button" class="btn btn-primary">录入时间：{{workorder.product_name}}</button>
+    <button type="button" class="btn btn-primary">产品名称：{{workorder.product_name}}</button>
 </div>
-<div class="span12">
+<div>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>焊缝编号</th>
-                <th>焊材标号</th>
-                <th>焊材规格</th>
-                <th>材质编号</th>
+                <th rowspan="2">焊缝编号</th>
+                <th rowspan="2">焊材标号</th>
+                <th rowspan="2">焊材规格</th>
+                <th rowspan="2">材质编号</th>
+                <th colspan="4">发放</th>
+                <th colspan="4">回收</th>
             </tr>
+            <tr>
+                <th>领用单号</th>
+                <th>领用数量</th>
+                <th>领用人</th>
+                <th>库管人</th>
+                <th>退库单号</th>
+                <th>退库数量</th>
+                <th>退库人</th>
+                <th>库管人</th>
         </thead>
         <tbody>
-            {% for i in apply_set %}
+            {% for i in applyrefund_set %}
             <tr>
                 <td>{{i.weld_bead_number}}</td>
                 <td>{{i.weld_material_number}}</td>
                 <td>{{i.standard}}</td>
                 <td>{{i.material_number}}</td>
+                <td>{{i.index}}</td>
+                <td>{{i.apply_quantity}}</td>
+                <td>{{i.applicant.userinfo}}</td>
+                <td>{{i.commit_user.userinfo}}</td>
+                <td>{{i.weldrefund.code}}</td>
+                <td>{{i.weldrefund.refund_count}}</td>
+                <td>{{i.weldrefund.refunder.userinfo}}</td>
+                <td>{{i.weldrefund.keeper.userinfo}}</td>
             </tr>
             {% endfor %}
     </table>

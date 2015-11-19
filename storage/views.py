@@ -303,14 +303,22 @@ def weldapplyrefundHomeViews(request):
     """
     kad
     """
-    workorders = WeldingMaterialApplyCard.objects.values("workorder").distinct()
-    workorder_set = []
-    for i in workorders:
-        workorder_set.append(WorkOrder.objects.get(id = i["workorder"]))
-    print workorder_set
-    #search_form = BakeSearchForm()
+    if request.method == "POST":
+        search_form = ApplyRefundSearchForm(request.POST)
+        workorder_set = []
+        if search_form.is_valid():
+            workorder_set = get_weld_filter(WorkOrder,search_form.cleaned_data)
+    else:
+        search_form = ApplyRefundSearchForm()
+        workorders = WeldingMaterialApplyCard.objects.values("workorder").distinct()
+        workorder_set = []
+        for i in workorders:
+            workorder_set.append(WorkOrder.objects.get(id = i["workorder"]))
+        #print workorder_set
+    print search_form
     context = {
             "workorder_set":workorder_set,
+            "search_form":search_form,
             }
     return render(request,"storage/weldapplyrefund/weldapplyrefundHome.html",context)
 
@@ -319,16 +327,12 @@ def weldapplyrefundDetail(request,index):
     kad
     """
     workorder = WorkOrder.objects.get(id = index)
-    apply_set = WeldingMaterialApplyCard.objects.filter(workorder = workorder)
-    refund_set = []
-    for i in apply_set:
-        print i.weldrefund
-    print apply_set
-    print refund_set
+    applyrefund_set = WeldingMaterialApplyCard.objects.filter(workorder = workorder)
+    #for i in apply_set:
+    #    print i.weldrefund.department
     context = {
             "workorder":workorder,
-            "apply_set":apply_set,
-            "refund_set":refund_set,
+            "applyrefund_set":applyrefund_set,
             }
     return render(request,"storage/weldapplyrefund/weldapplyrefundDetail.html",context)
 
