@@ -40,6 +40,10 @@ def principalMaterialViews(request):
     context = {}
     return render(request, "techdata/principal_material.html", context)
 
+def auxiliaryMaterialViews(request):
+    context = {}
+    return render(request, "techdata/auxiliary_material.html", context)
+
 def processBOMViews(request):
     context = {}
     return render(request, "techdata/processBOM.html", context)

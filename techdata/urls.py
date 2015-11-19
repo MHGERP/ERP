@@ -33,6 +33,11 @@ urlpatterns=patterns('',
         techdata_views.principalMaterialViews,
     ),
     url(
+        r'^auxiliaryMaterial$',
+        techdata_views.auxiliaryMaterialViews,
+    ),
+
+    url(
         r'^weldList',
         techdata_views.weldListViews,
     ),
