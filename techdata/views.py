@@ -32,6 +32,9 @@ def principalMaterialViews(request):
     context = {}
     return render(request, "techdata/principal_material.html", context)
 
+def processBOMViews(request):
+    context = {}
+    return render(request, "techdata/processBOM.html", context)
 
 def weldListViews(request):
     context = {}

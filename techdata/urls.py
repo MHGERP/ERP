@@ -25,22 +25,20 @@ urlpatterns=patterns('',
         techdata_views.principalMaterialViews,
     ),
     url(
-
         r'^weldList',
         techdata_views.weldListViews,
-
     ),
     url(
-
         r'^weldEdit',
         techdata_views.weldEditViews,
-
     ),
     url(
-
+        r'^processBOM$',
+        techdata_views.processBOMViews,
+    ),
+    url(
         r'^programmeEdit',
         techdata_views.programmeEditViews,
-
     ),
     url(
         r'^weldQuota',

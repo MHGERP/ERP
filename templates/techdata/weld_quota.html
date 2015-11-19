@@ -22,10 +22,17 @@
 </form>
 
 
-<div class="widget-content">
-	
-	{% include "techdata/widgets/weld_quota_table.html" %}
-	
+<div class="widget-box">
+	<div class="widget-title">
+		<span class="icon"><i class="icon-th"></i></span>
+		<h5>工作令：03015001B</h5>
+		<h5>产品名称：第一中温变换炉</h5>
+		<h5>编制人：</h5>
+		<h5>审核人：</h5>
+	</div>
+	<div class="widget-content nopadding">
+        {% include "techdata/widgets/weld_quota_table.html" %}
+	</div>
 </div>
 
 {% endblock%}
