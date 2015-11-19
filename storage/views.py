@@ -23,25 +23,25 @@ from random import randint
 
 def weldMaterialHomeViews(request):
     context = {
-    
-    }
+
+            }
     return render(request,"storage/weldmaterial/weldmaterialhome.html",context)
 
 def steelMaterialHomeViews(request):
     context = {
 
-    }
+            }
     return render(request,"storage/steelmaterial/steelmaterialhome.html",context)
 
 def steelRefundViews(request):
     search_form = SteelRefundSearchForm()
     refund_set = CommonSteelMaterialReturnCardInfo.objects.all()
     context={
-        "search_form":search_form,
-        "refund_set":refund_set
-    }
+            "search_form":search_form,
+            "refund_set":refund_set
+            }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
-    
+
 def weldEntryHomeViews(request):
     if request.method == "POST":
         search_form = EntrySearchForm(request.POST)
@@ -51,21 +51,22 @@ def weldEntryHomeViews(request):
         else:
             print search_form.errors
     else:
-        weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
+        #weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
+        weldentry_set = WeldMaterialEntry.objects.all()
         search_form = EntrySearchForm()
     context = {
-        "entry_set":weldentry_set,
-        "ENTRYSTATUS_END":STORAGESTATUS_END,
-        "search_form":search_form,
-    }
+            "entry_set":weldentry_set,
+            "ENTRYSTATUS_END":STORAGESTATUS_END,
+            "search_form":search_form,
+            }
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
 def steelEntryHomeViews(request):
     steelentry_set = getEntrySet(PurchasingEntry,ENTRYSTATUS_KEEPER)
 
     context  = {
-        "entry_set":steelentry_set,
-    }
+            "entry_set":steelentry_set,
+            }
     return render(request,"storage/steelmaterial/steelentryhome.html",context)
 
 def weldEntryConfirmViews(request,eid):
@@ -73,13 +74,13 @@ def weldEntryConfirmViews(request,eid):
     items = WeldMaterialEntryItems.objects.filter(entry = entry)
     entryitem_form = EntryItemsForm()
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
-    
+
     context = {
-        "entry":entry,
-        "entry_set":items,
-        "item_form":entryitem_form,
-        "is_show":is_show,
-    }
+            "entry":entry,
+            "entry_set":items,
+            "item_form":entryitem_form,
+            "is_show":is_show,
+            }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
 def Weld_Apply_Card_List(request):
@@ -90,7 +91,8 @@ def Weld_Apply_Card_List(request):
     return: NULL
     """
     context={}
-    weld_apply_cards=WeldingMaterialApplyCard.objects.exclude(status=APPLYCARD_COMMIT).order_by('create_time')#考虑效率问题，注意更改all的获取方式
+    context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
+    weld_apply_cards=WeldingMaterialApplyCard.objects.exclude(status=APPLYCARD_COMMIT).order_by('create_time')
     context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
@@ -106,6 +108,7 @@ def Weld_Apply_Card_Detail(request):
     card_index=int(request.GET['index'])
     apply_card=WeldingMaterialApplyCard.objects.get(index=card_index)
     context['apply_card']=apply_card 
+    context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
     if request.user.is_superuser:#如果是库管员
         context['apply_card_form']=Commit_ApplyCardForm(instance=apply_card)
     else:#如果是申请者
@@ -180,9 +183,9 @@ def weldHumitureHomeViews(request):
         hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("-date")
         search_form = HumSearchForm()
     context = {
-        "hum_set":hum_set,
-        "search_form":search_form,
-    }
+            "hum_set":hum_set,
+            "search_form":search_form,
+            }
     return render(request,"storage/weldhumi/weldhumitureHome.html",context)
 
 def weldhumNewRecord(request):
@@ -194,8 +197,8 @@ def weldhumNewRecord(request):
     else:
         form = HumRecordForm()
     context = {
-        "form":form
-    }
+            "form":form
+            }
     return render(request,"storage/weldhumi/weldhumNewRecord.html",context)
 
 def weldhumDetail(request,eid):
@@ -203,9 +206,9 @@ def weldhumDetail(request,eid):
     hum_detail = WeldingMaterialHumitureRecord.objects.get(id = eid)
     form = HumRecordForm(instance = hum_detail)
     context = {
-        "form":form,
-        "humRecordDate":hum_detail,
-    }
+            "form":form,
+            "humRecordDate":hum_detail,
+            }
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
 
 def weldbakeHomeViews(request):
@@ -220,9 +223,9 @@ def weldbakeHomeViews(request):
         bake_set = WeldingMaterialBakeRecord.objects.all().order_by("-date")
         search_form = BakeSearchForm()
     context = {
-        "bake_set":bake_set,
-        "search_form":search_form,
-    }
+            "bake_set":bake_set,
+            "search_form":search_form,
+            }
     return render(request,"storage/weldbake/weldbakeHome.html",context)
 
 def weldbakeNewRecord(request):
@@ -234,16 +237,16 @@ def weldbakeNewRecord(request):
     else:
         form = BakeRecordForm()
     context = {
-        "form":form
-    }
+            "form":form
+            }
     return render(request,"storage/weldbake/weldbakeNewRecord.html",context)
 
 def weldbakeDetail(request,index):
     bake_detail = WeldingMaterialBakeRecord.objects.get(index = index)
     form = BakeRecordForm(instance = bake_detail)
     context = {
-        "form":form,
-    }
+            "form":form,
+            }
     return render(request,"storage/weldbake/weldbakeDetail.html",context)
 
 def weldRefundViews(request):
@@ -254,12 +257,13 @@ def weldRefundViews(request):
             refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data)
     else:
         search_form = RefundSearchForm()
-        refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
+        #refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
+        refund_set = WeldRefund.objects.all()
     context = {
-        "search_form":search_form,
-        "refund_set":refund_set,
-        "STORAGESTATUS_END":STORAGESTATUS_END,
-    }
+            "search_form":search_form,
+            "refund_set":refund_set,
+            "STORAGESTATUS_END":STORAGESTATUS_END,
+            }
     return render(request,"storage/weldmaterial/weldrefundhome.html",context )
 
 def weldRefundDetailViews(request,rid):
@@ -270,15 +274,16 @@ def weldRefundDetailViews(request,rid):
         if reform.is_valid():
             reform.save()
             ref_obj.keeper = request.user
+            ref_obj.weldrefund_status = STORAGESTATUS_END
             ref_obj.save()
             return HttpResponseRedirect("/storage/weldrefund")
     else:
         reform = WeldRefundForm(instance = ref_obj) 
     context = {
-        "reform":reform,
-        "ref_obj":ref_obj,
-        "is_show":is_show,
-    }
+            "reform":reform,
+            "ref_obj":ref_obj,
+            "is_show":is_show,
+            }
     return render(request,"storage/weldmaterial/weldrefunddetail.html",context) 
 
 def AuxiliaryToolsHomeView(request):
@@ -468,9 +473,9 @@ def weldEntryAccountViews(request):
     else:
         search_form = WeldAccountSearchForm()
     context = {
-        "items_set":items_set,
-        "search_form":search_form,
-    }
+            "items_set":items_set,
+            "search_form":search_form,
+            }
     return render(request,"storage/weldmaterial/weldaccount/weldentryhome.html",context)
 
 def weldStorageAccountHomeViews(request):
@@ -482,7 +487,25 @@ def weldStorageAccountHomeViews(request):
     else:
         search_form = WeldStorageSearchForm()
     context = {
-        "items_set":items_set,
+            "items_set":items_set,
+            "search_form":search_form,
+            }
+    return render(request,"storage/weldmaterial/weldaccount/weldstoragehome.html",context)
+
+def weldApplyAccountViews(request):
+    apply_set = WeldingMaterialApplyCard.objects.all()
+    if request.method == "POST":
+        search_form =  WeldApplyAccountSearchForm(request.POST)
+        if search_form.is_valid():
+            print search_form.cleaned_data
+            apply_set = get_weld_filter(WeldingMaterialApplyCard,search_form.cleaned_data)
+            print apply_set
+        else:
+            print search_form.errors
+    else:
+        search_form = WeldApplyAccountSearchForm()
+    context = {
+        "apply_set":apply_set,
         "search_form":search_form,
     }
-    return render(request,"storage/weldmaterial/weldaccount/weldstoragehome.html",context)
+    return render(request,"storage/weldmaterial/weldaccount/weldapplyhome.html",context)
