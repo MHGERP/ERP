@@ -1,0 +1,91 @@
+{% extends "storage/base/steelbase.html" %}
+
+{% block sub_sec %}
+<a href="/storage/steelentryconfirm" class="current">钢材入库单</a>
+{% endblock %}
+
+{% block title %}
+<h1>钢材入库单</h1>
+{% endblock %}
+
+{% block inner_content %}
+<form class="form form-inline" method="post">
+    {% csrf_token%}
+    <div class="row" style="margin-bottom:20px;">
+        <div class="span3">
+            <label class="hz-align">工作令：</label>
+            <strong>{{entry.work_order}}</strong>
+        </div>
+        <div class="span3">
+            <label class="hz-align">入库时间：</label>
+            <strong>{{entry.entry_time|date:"Ymd"}}</strong>
+        </div>
+        <div class="span4">
+            <label class="hz-align">入库单编号：</label>
+            {% if is_show %}
+            <div class="controls-group" style="display:inline" id="entry_code">
+                <input type="text" id = "input_entry_code" class="span2" value="{{entry.form_code}}"></input>
+            </div>
+            {% else %}
+            <strong>{{entry.form_code}}</strong>
+            {% endif %}
+        </div>
+    </div>
+    <table id="items_table" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>名称</th>
+            <th>规格</th>
+            <th>炉号</th>
+            <th>批号</th>
+            <th>材质编号</th>
+            <th>退库次数</th>
+            <th>货物来源</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+       <!--  {% for item in items_1 %}
+        <tr id="{{item1.id}}">
+            <td>{{forloop.counter}}</td>
+            <td>{{items_1.name}}</td>
+            <td>{{items_1.material.material}}</td>
+            <td>{{item.material.specification}}</td>
+            <td>{{item.material.count}}</td>
+            <td>{{item.material.unit}}</td>
+            <td>{{item.material.standard}}</input></td>
+            <td>{{item.material.status}}</input></td>
+            <td>{{item.material.material.material_id}}</td>
+            <td>{{item.remark}}</td>
+            <td>{{item.date|date:"Y-m-d"}}</td>
+            <td>{{item.price}}</td>
+            <td>
+                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_item({{item.id}})">修改</a>
+            </td>
+        </tr>
+        {%endfor%} -->
+    </tbody>
+</table>
+    <div class="control-group span12" style="margin-top:50px;">
+        <div class="rows span4 purcher">
+            采购员：<strong>{{entry.purchaser.userinfo}}</strong>
+        </div>
+        <div class="span4 purcher">
+            检查员：<strong>{{entry.inspector.userinfo}}</strong>
+        </div>
+        <div class="span4 purcher">
+            库管员：<strong>{{entry.keeper.userinfo}}</strong>
+        </div>
+    </div>
+    <center style="margin:110px;">
+    {% if is_show %}
+    <button  id="entry_confirm" style="width:20%;height:20px;" class="btn btn-primary" type="button" onclick="entryconfirm({{entry.id}});">入库单确认</button>
+    {% else %}
+        <a style="width:20%;height:20px;" class="btn btn-primary" type="button" href="/storage/steelentryhome">返回</a>
+    {% endif %}
+    </center>
+</form>
+
+{% endblock %}

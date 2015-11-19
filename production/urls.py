@@ -15,6 +15,13 @@ urlpatterns=patterns('',
     url(
         r'^materiel_use$',
         production_views.materielUseViews,
-    )
-
+    ),
+    url(
+        r'^synthesize_filelist$',
+        production_views.synthesizeFileListViews,
+    ),
+    url(
+    	r'^man_hour_summarize$',
+    	production_views.man_hour_summarizeViews,
+    ),
 )

@@ -18,3 +18,12 @@ def taskConfirmViews(request):
 def materielUseViews(request):
     context={}
     return render(request,"production/materiel_use.html",context)
+def synthesizeFileListViews(request):
+    orderIndexForm = OrderIndexForm();
+    context={"orderIndexForm":orderIndexForm}
+    return render(request,"production/synthesize_filelist.html",context)
+
+def man_hour_summarizeViews(request):
+    orderIndexForm = OrderIndexForm();
+    context={"orderIndexForm":orderIndexForm}
+    return render(request,"production/man_hour_summarize.html",context)

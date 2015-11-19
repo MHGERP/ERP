@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from users.models import UserInfo,Group
 from django.utils import timezone
 from const import STORAGEDEPARTMENT_CHOICES,STORAGESTATUS_KEEPER,REFUNDSTATUS_CHOICES
-from const import LENGHT_MANAGEMENT,WEIGHT_MANAGEMENT,AREA_MANAGEMENT  
+from const import LENGHT_MANAGEMENT,WEIGHT_MANAGEMENT,AREA_MANAGEMENT,STEEL_RETURN_CARD_TYPE
 from purchasing.models import BidForm
 from random import randint
 
@@ -111,7 +111,6 @@ class SteelMaterialPurchasingEntry(models.Model):
     entry_confirm = models.BooleanField(default=False,verbose_name=u"入库单确认")
     entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES_2,default=0,verbose_name=u"入库单类型")
     entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=0,verbose_name=u"入库单状态")
-
     def __unicode__(self):
         return str(self.form_code)
 
@@ -124,13 +123,14 @@ class SteelMaterial(models.Model):
     specifications = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'规格')
     batch_number = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'炉号')
     lot_number = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'批号')
+    material = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'材质')
     material_number = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'材质编号')
     return_time = models.IntegerField(default=0,verbose_name=u'退库次数')
     entry_form = models.ForeignKey(SteelMaterialPurchasingEntry,blank=False,null=False,verbose_name=u'表头')
     work_order = models.ManyToManyField(WorkOrder,blank=False,null=False,verbose_name=u'工作令')
 
     def __unicode__(self):
-        return str(self.name)+'('+str(self.specifications)+')'
+        return "%s(%s)"%(self.name,self.specifications)
 
     class Meta:
         verbose_name=u'钢材参数信息'
@@ -175,6 +175,7 @@ class CommonSteelMaterialReturnCardInfo(models.Model):
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u'检查员',related_name="steel_return_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员",related_name="steel_return_keeper")
     return_confirm = models.BooleanField(default=False,verbose_name=u'退库单确认')
+    steel_type = models.IntegerField(choices=STEEL_RETURN_CARD_TYPE,default=0,verbose_name=u'钢材类型')
 
     def __unicode__(self):
         return str(self.form_code)
@@ -184,30 +185,33 @@ class CommonSteelMaterialReturnCardInfo(models.Model):
         verbose_name_plural=u'退库单'
 
 class BoardSteelMaterialReturnCardContent(models.Model):
+    steel_material = models.ForeignKey(SteelMaterial,blank=False,null=False,verbose_name=u"材料信息")
     card_info = models.ForeignKey(CommonSteelMaterialReturnCardInfo,blank=False,null=False,verbose_name=u"退库单表头")
     status = models.CharField(max_length=20,blank=False,null=False,verbose_name=u"状态")
-    quantity = models.FloatField(blank=False,null=False,verbose_name=u"数量")
+    quantity = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
     weight = models.FloatField(blank=False,null=False,verbose_name=u"重量")
     weight_management =models.IntegerField(choices=WEIGHT_MANAGEMENT,blank=False,null=False,verbose_name=u"重量单位")
+    graph = models.CharField(max_length=100,blank=False,null=False,verbose_name=u"套料图")
     remark = models.CharField(max_length=100,blank=True,null=True,verbose_name=u"备注")
 
     def __unicode__(self):
-        return str(card_info)
+        return str(self.card_info)
 
     class Meta:
         verbose_name=u"板材退库单详细信息"
         verbose_name_plural=u"板材退库单详细信息"
 
 class BarSteelMaterialReturnCardContent(models.Model):
+    steel_material = models.ForeignKey(SteelMaterial,blank=False,null=False,verbose_name=u'材料信息')
     card_info = models.ForeignKey(CommonSteelMaterialReturnCardInfo,blank=False,null=False,verbose_name=u"退库单表头")
     status = models.CharField(max_length=20,blank=False,null=False,verbose_name=u"状态")
-    quantity = models.FloatField(blank=False,null=False,verbose_name=u"数量")
+    quantity = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
     length = models.FloatField(blank=False,null=False,verbose_name=u"长度")
     length_management =models.IntegerField(choices=LENGHT_MANAGEMENT,blank=False,null=False,verbose_name=u"长度单位")
     remark = models.CharField(max_length=100,blank=True,null=True,verbose_name=u"备注")
 
     def __unicode__(self):
-        return str(card_info)
+        return str(self.card_info)
 
     class Meta:
         verbose_name=u"型材退库单详细信息"

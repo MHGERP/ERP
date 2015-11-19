@@ -44,11 +44,11 @@
             库管员：<strong>{{entry.keeper.userinfo}}</strong>
         </div>
     </div>
-    <center style="margin:30px;">
+    <center style="margin:110px;">
     {% if is_show %}
-    <button  id="entry_confirm" style="width:20%;" class="btn btn-primary" type="button" onclick="entryconfirm({{entry.id}});">入库单确认</button>
+    <button  id="entry_confirm" style="width:20%;height:20px;" class="btn btn-primary" type="button" onclick="entryconfirm({{entry.id}});">入库单确认</button>
     {% else %}
-        <a style="width:20%;" class="btn btn-primary " type="button" href="/storage/weldentryhome">返回</a>
+        <a style="width:20%;height:20px;" class="btn btn-primary" type="button" href="/storage/weldentryhome">返回</a>
     {% endif %}
     </center>
 </form>
