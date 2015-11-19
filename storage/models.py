@@ -118,6 +118,24 @@ class SteelMaterialPurchasingEntry(models.Model):
         verbose_name=u'钢材入库单'
         verbose_name_plural=u'钢材入库单'
 
+class SteelMaterialApplyCardHeader(models.Model):
+    department = models.CharField(max_length=50,blank=False,null=False,verbose_name=u"领用单位")
+    date = models.DateField(blank=False,null=False,verbose_name=u"日期")
+    form_code = models.CharField(blank=False,null=False,max_length=20,verbose_name=u"编号")
+    remarkment = models.CharField(blank=True,null=True,max_length=100,verbose_name=u'备注')
+    applicant=models.ForeignKey(User,verbose_name=u'领用人',blank=False,related_name="steel_applicants")
+    auditor=models.ForeignKey(User,verbose_name=u'审核人',default=None,blank=True,null=True,related_name="steel_auditors")
+    inspector=models.ForeignKey(User,verbose_name=u'检查员',default=None,blank=True,null=True,related_name="steel_inspectors")
+    commit_user=models.ForeignKey(User,verbose_name=u'发料人',default=None,blank=True,null=True,related_name="steel_commit_users")
+    apply_confim = models.BooleanField(blank=False,null=False,default=False,verbose_name=u"出库确认")
+
+    def __unicode__(self):
+        return str(self.form_code)
+
+    class Meta:
+        verbose_name=u"钢材领用单"
+        verbose_name_plural=u"钢材领用单"
+
 class SteelMaterial(models.Model):
     name = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'材料名称')
     specifications = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'规格')

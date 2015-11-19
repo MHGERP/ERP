@@ -119,6 +119,7 @@ def steelEntryConfirmViews(request,eid):
                 "entry":entry,
     }
     return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
+    
 def Weld_Apply_Card_List(request):
     """
     Time1ess
