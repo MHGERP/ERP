@@ -42,6 +42,22 @@ def steelRefundViews(request):
             }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
+def steelrefunddetailViews(request,typeid,rid):
+    typeid=int(typeid)
+    common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
+    if typeid:
+        return_cards = common_Info.barsteelmaterialreturncardcontent_set.all()
+    else:
+        return_cards = common_Info.boardsteelmaterialreturncardcontent_set.all()
+    context={
+        'return_cards':return_cards,
+        'common_Info':common_Info,
+    }
+    if typeid==1:
+        return render(request,"storage/steelmaterial/barsteelrefunddetail.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelrefunddetail.html",context)
+    
 def weldEntryHomeViews(request):
     if request.method == "POST":
         search_form = EntrySearchForm(request.POST)
@@ -62,11 +78,21 @@ def weldEntryHomeViews(request):
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
 def steelEntryHomeViews(request):
-    steelentry_set = getEntrySet(PurchasingEntry,ENTRYSTATUS_KEEPER)
-
-    context  = {
-            "entry_set":steelentry_set,
-            }
+    if request.method == "POST":
+        search_form = EntrySearchForm(request.POST)
+        steelentry_set = []
+        if search_form.is_valid():
+            steelentry_set = get_weld_filter(SteelMaterialPurchasingEntry,search_form.cleaned_data)
+        else:
+            print search_form.errors
+    else:
+        steelentry_set = SteelMaterialPurchasingEntry.objects.all()
+        search_form = EntrySearchForm()
+    context = {
+        "entry_set":steelentry_set,
+        "ENTRYSTATUS_END":STORAGESTATUS_END,
+        "search_form":search_form,
+    }
     return render(request,"storage/steelmaterial/steelentryhome.html",context)
 
 def weldEntryConfirmViews(request,eid):
@@ -83,6 +109,12 @@ def weldEntryConfirmViews(request,eid):
             }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
+def steelEntryConfirmViews(request,eid):
+    entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
+    context = {
+                "entry":entry,
+    }
+    return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
 def Weld_Apply_Card_List(request):
     """
     Time1ess
@@ -129,9 +161,9 @@ def Handle_Apply_Card_Form(request):
             Apply_Card_Form_Apply(request)
 
         #print apply_card_form
-        return HttpResponse('RECEIVE')
+        return HttpResponseRedirect('/storage/weldapply')
     else:
-        return HttpResponse('FAIL')
+        return HttpResponseRedirect('/storage/weldapply')
 
 def Apply_Card_Form_Apply(request):
     """
@@ -329,6 +361,8 @@ def weldRefundDetailViews(request,rid):
             ref_obj.weldrefund_status = STORAGESTATUS_END
             ref_obj.save()
             return HttpResponseRedirect("/storage/weldrefund")
+        else:
+            print reform.errors
     else:
         reform = WeldRefundForm(instance = ref_obj) 
     context = {
@@ -372,7 +406,7 @@ def AuxiliaryToolsEntryView(request):
         auxiliarytool=AuxiliaryTool.objects.get(id=object_id)
         new_entry_quantity=float(request.POST['quantity'])
         if new_entry_quantity<0:
-            return HttpResponse('ERROR')
+            return HttpResponseRedirect('/storage/auxiliarytools/entrylist')
         auxiliarytool.quantity=F('quantity')+new_entry_quantity
         auxiliarytool.save()
         entryrecord=AuxiliaryToolEntryCard(auxiliary_tool=auxiliarytool,quantity=new_entry_quantity)
