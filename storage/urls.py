@@ -68,7 +68,16 @@ urlpatterns = patterns('',
         r'^weldbakeNewRecord$',
         storage_views.weldbakeNewRecord,
     ),
-    
+    url(
+        r'^weldapplyrefund$',
+        storage_views.weldapplyrefundHomeViews,
+    ),
+    url(
+        r'^weldapplyrefundDetail/(?P<index>\w+)$',
+        storage_views.weldapplyrefundDetail,
+    ),
+
+
     url( 
         r'^weldrefunddetail/(?P<rid>\w+)$',
         storage_views.weldRefundDetailViews,
