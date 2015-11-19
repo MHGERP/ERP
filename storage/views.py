@@ -42,6 +42,33 @@ def steelRefundViews(request):
             }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
+def steelApplyView(request):
+    search_form = SteelRefundSearchForm()
+    refund_set = CommonSteelMaterialApplyCardInfo.objects.all()
+    context={
+        "search_form":search_form,
+        "refund_set":refund_set,
+    }
+    return render(request,"storage/steelmaterial/steelapplyhome.html",context)
+
+def steelApplyDetailViews(request,typeid,rid):
+    typeid = int(typeid)
+    common_Info = CommonSteelMaterialApplyCardInfo.objects.get(id=int(rid))
+    if typeid:
+        apply_cards = common_Info.barsteelmaterialapplycardcontent_set.all()
+    else:
+        apply_cards = common_Info.boardsteelmaterialapplycardcontent_set.all()
+    print apply_cards
+    context={
+        'apply_cards':apply_cards,
+        'common_Info':common_Info,
+    }
+    if typeid==1:
+        return render(request,"storage/steelmaterial/barsteelapplydetail.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelapplydetail.html",context)
+
+
 def steelrefunddetailViews(request,typeid,rid):
     typeid=int(typeid)
     common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))

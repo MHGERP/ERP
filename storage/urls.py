@@ -21,6 +21,14 @@ urlpatterns = patterns('',
         storage_views.steelMaterialHomeViews,
     ),
     url(
+        r'^steelapply$',
+        storage_views.steelApplyView,
+    ),
+    url(
+        r'^steelapplydetail/(?P<typeid>\d+)/(?P<rid>\d+)$',
+        storage_views.steelApplyDetailViews,
+    ),
+    url(
         r'^weldentryhome$',
         storage_views.weldEntryHomeViews,
     ),
