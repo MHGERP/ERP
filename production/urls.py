@@ -7,6 +7,14 @@ urlpatterns=patterns('',
     url(
         r'^task_allocation$',
         production_views.taskAllocationViews,
+    ),
+    url(
+        r'^task_confirm$',
+        production_views.taskConfirmViews,
+    ),
+    url(
+        r'^materiel_use$',
+        production_views.materielUseViews,
     )
 
 )
