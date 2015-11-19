@@ -14,29 +14,12 @@
             <td>{{card.index}}</td>
             <td>{{card.workorder}}</td>
             <td>
-                
-                {% if card.status == '3' %}
-                <span class="label label-success">
-                    确认领用
-                {% endif %}
-                {% if card.status == '2' %}
-                <span class="label label-info">
-                领用检查
-                {% endif %}
-                {% if card.status == '1' %}
-                <span class="label label-info">
-                领用审核
-                {% endif %}
-                {% if card.status == '0' %}
-                <span class="label label-warning">
-                领用申请
-                {% endif %}
-            </span>
+                {{card.get_status_display}}    
             </td>
-            {% if card.status == '3' %}
-            <td><a type="button" class="btn btn-success detail" href="/storage/weldapply/detail?index={{card.index}}">详情</a></td>
+            {% if card.status == APPLYCARD_COMMIT %}
+            <td><a type="button" class="btn detail" href="/storage/weldapply/detail?index={{card.index}}">详情</a></td>
             {% else %}
-            <td><a type="button" class="btn btn-primary detail" href="/storage/weldapply/detail?index={{card.index}}">处理</a></td>
+            <td><a type="button" class="btn btn-warning detail" href="/storage/weldapply/detail?index={{card.index}}">处理</a></td>
             {% endif %}
         {% endfor %}
     </table>
