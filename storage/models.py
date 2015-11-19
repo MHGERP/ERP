@@ -358,4 +358,29 @@ class WeldStoreThread(models.Model):
         verbose_name = u"焊材库存安全量"
         verbose_name_plural = u"焊材库存安全量"
     def __unicode__(self):
-        return '%s' % self.specification
+        return '%s' % self.specifications
+
+class OutSideBuyingEntry(models.Model):
+    workorder = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
+    entry_time = models.DateField(verbose_name=u"入库时间",null=True,auto_now=True)
+    code = models.CharField(verbose_name=u"单据编号",max_length=20,null = True)
+    purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "out_purchaser")
+    inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "out_inspector")
+    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "out_keeper") 
+    entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=STORAGESTATUS_INSPECTOR,verbose_name=u"入库单状态")
+
+    class Meta:
+        verbose_name = u"外购件入库单"
+        verbose_name_plural = u"外购件入库单"
+    def __unicode__(self):
+        return '%s' % self.code
+
+class OutSideBuyingItems(models.Model):
+    material = models.ForeignKey(Materiel,blank = True , null = True , verbose_name = u"材料")
+    remark = models.CharField(max_length = 100, blank = True , default="" , verbose_name = u"备注")
+    entry = models.ForeignKey(OutSideBuyingEntry,verbose_name = u"入库单")
+    class Meta:
+        verbose_name = u"外购件材料"
+        verbose_name_plural = u"外购件材料"
+    def __unicode__(self):
+        return '%s(%s)' % (self.material.name, self.entry)
