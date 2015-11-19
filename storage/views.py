@@ -86,7 +86,7 @@ def steelEntryHomeViews(request):
         else:
             print search_form.errors
     else:
-        steelentry_set = SteelMaterialPurchasingEntry.objects.all
+        steelentry_set = SteelMaterialPurchasingEntry.objects.all()
         search_form = EntrySearchForm()
     context = {
         "entry_set":steelentry_set,
