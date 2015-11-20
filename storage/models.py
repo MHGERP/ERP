@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from users.models import UserInfo,Group
 from django.utils import timezone
 from const import STORAGEDEPARTMENT_CHOICES,STORAGESTATUS_KEEPER,REFUNDSTATUS_CHOICES
-from const import LENGHT_MANAGEMENT,WEIGHT_MANAGEMENT,AREA_MANAGEMENT,STEEL_RETURN_CARD_TYPE
+from const import LENGHT_MANAGEMENT,WEIGHT_MANAGEMENT,AREA_MANAGEMENT,STEEL_TYPE,MATERIAL_TYPE
 from purchasing.models import BidForm
 from random import randint
 
@@ -45,6 +45,7 @@ class WeldingMaterialApplyCard(models.Model):
 class StoreRoom(models.Model):
     name = models.CharField(max_length=20,verbose_name=u"库房名称",blank = False)
     position = models.CharField(max_length=50,verbose_name=u"位置",blank = False)
+    material_type = models.IntegerField(choices=MATERIAL_TYPE,blank=False,null=False,default=0,verbose_name=u"材料类型")
 
     def __unicode__(self):
         return "%s"  % self.name
@@ -147,7 +148,7 @@ class CommonSteelMaterialApplyCardInfo(models.Model):
     applicant = models.ForeignKey(User,blank=False,null=False,verbose_name=u'退料人',related_name="Steel_applicanter")
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u'检查员',related_name="steel_apply_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员",related_name="steel_apply_keeper")
-    steel_type = models.IntegerField(choices=STEEL_RETURN_CARD_TYPE,default=0,verbose_name=u'钢材类型')
+    steel_type = models.IntegerField(choices=STEEL_TYPE,default=0,verbose_name=u'钢材类型')
     apply_confirm = models.BooleanField(blank=False,null=False,default=False,verbose_name=u"出库确认")
     remarkment = models.CharField(blank=True,null=True,max_length=100,verbose_name=u'备注')
 
@@ -185,7 +186,7 @@ class BarSteelMaterialApplyCardContent(models.Model):
     remark = models.CharField(max_length=100,blank=True,null=True,verbose_name=u"备注")
 
     def __unicode__(self):
-        return str(self.card_info)
+        return self.card_info
 
     class Meta:
         verbose_name=u"型材领用单详细信息"
@@ -205,7 +206,7 @@ class BoardSteelMaterialLedger(models.Model):
     slice_cad = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'套料图')
 
     def __unicode__(self):
-        return str(self.material_info)
+        return "%s(%s)"%(self.material_info.name,self.material_info.specifications)
 
     class Meta:
         verbose_name=u'板材台账'
@@ -219,7 +220,7 @@ class BarSteelMaterialLedger(models.Model):
     length_management = models.IntegerField(choices=LENGHT_MANAGEMENT,default=0,verbose_name=u"长度单位")
 
     def __unicode__(self):
-        return str(self.material_info)
+        return "%s(%s)"%(self.material_info.name,self.material_info.specifications)
 
     class Meta:
         verbose_name=u'型材台账'
@@ -233,7 +234,7 @@ class CommonSteelMaterialReturnCardInfo(models.Model):
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u'检查员',related_name="steel_return_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员",related_name="steel_return_keeper")
     return_confirm = models.BooleanField(default=False,verbose_name=u'退库单确认')
-    steel_type = models.IntegerField(choices=STEEL_RETURN_CARD_TYPE,default=0,verbose_name=u'钢材类型')
+    steel_type = models.IntegerField(choices=STEEL_TYPE,default=0,verbose_name=u'钢材类型')
 
     def __unicode__(self):
         return str(self.form_code)
