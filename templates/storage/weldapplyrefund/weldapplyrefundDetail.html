@@ -1,0 +1,40 @@
+{% extends "storage/base/weldbase.html" %}
+{% block title %}
+<h1>焊材发放回收记录</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/weldbake">焊材发放回收记录</a>
+<a href="#" class="current">#</a>
+{% endblock %}
+
+{% block inner_content %}
+<div class="control-group" style="margin-top:20px">
+    <button type="button" class="btn btn-primary">工作令：{{workorder.order_index}}</button>
+    <button type="button" class="btn btn-primary">录入时间：{{workorder.product_name}}</button>
+</div>
+<div class="span12">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>焊缝编号</th>
+                <th>焊材标号</th>
+                <th>焊材规格</th>
+                <th>材质编号</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in apply_set %}
+            <tr>
+                <td>{{i.weld_bead_number}}</td>
+                <td>{{i.weld_material_number}}</td>
+                <td>{{i.standard}}</td>
+                <td>{{i.material_number}}</td>
+            </tr>
+            {% endfor %}
+    </table>
+</div>
+<script>
+    $("#btnBakeInsert").attr("style","display:none")
+</script>
+{% endblock %}

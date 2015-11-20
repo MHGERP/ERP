@@ -42,6 +42,22 @@ def steelRefundViews(request):
             }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
+def steelrefunddetailViews(request,typeid,rid):
+    typeid=int(typeid)
+    common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
+    if typeid:
+        return_cards = common_Info.barsteelmaterialreturncardcontent_set.all()
+    else:
+        return_cards = common_Info.boardsteelmaterialreturncardcontent_set.all()
+    context={
+        'return_cards':return_cards,
+        'common_Info':common_Info,
+    }
+    if typeid==1:
+        return render(request,"storage/steelmaterial/barsteelrefunddetail.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelrefunddetail.html",context)
+    
 def weldEntryHomeViews(request):
     if request.method == "POST":
         search_form = EntrySearchForm(request.POST)
@@ -62,11 +78,21 @@ def weldEntryHomeViews(request):
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
 def steelEntryHomeViews(request):
-    steelentry_set = getEntrySet(PurchasingEntry,ENTRYSTATUS_KEEPER)
-
-    context  = {
-            "entry_set":steelentry_set,
-            }
+    if request.method == "POST":
+        search_form = EntrySearchForm(request.POST)
+        steelentry_set = []
+        if search_form.is_valid():
+            steelentry_set = get_weld_filter(SteelMaterialPurchasingEntry,search_form.cleaned_data)
+        else:
+            print search_form.errors
+    else:
+        steelentry_set = SteelMaterialPurchasingEntry.objects.all()
+        search_form = EntrySearchForm()
+    context = {
+        "entry_set":steelentry_set,
+        "ENTRYSTATUS_END":STORAGESTATUS_END,
+        "search_form":search_form,
+    }
     return render(request,"storage/steelmaterial/steelentryhome.html",context)
 
 def weldEntryConfirmViews(request,eid):
@@ -83,6 +109,12 @@ def weldEntryConfirmViews(request,eid):
             }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
+def steelEntryConfirmViews(request,eid):
+    entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
+    context = {
+                "entry":entry,
+    }
+    return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
 def Weld_Apply_Card_List(request):
     """
     Time1ess
@@ -129,9 +161,9 @@ def Handle_Apply_Card_Form(request):
             Apply_Card_Form_Apply(request)
 
         #print apply_card_form
-        return HttpResponse('RECEIVE')
+        return HttpResponseRedirect('/storage/weldapply')
     else:
-        return HttpResponse('FAIL')
+        return HttpResponseRedirect('/storage/weldapply')
 
 def Apply_Card_Form_Apply(request):
     """
@@ -172,6 +204,9 @@ def Apply_Card_Form_Commit(request):
 
 
 def weldHumitureHomeViews(request):
+    """
+    kad
+    """
     if request.method == "POST":
         search_form = HumSearchForm(request.POST)
         hum_set = []
@@ -189,6 +224,9 @@ def weldHumitureHomeViews(request):
     return render(request,"storage/weldhumi/weldhumitureHome.html",context)
 
 def weldhumNewRecord(request):
+    """
+    kad
+    """
     if request.method == "POST":
         form = HumRecordForm(request.POST)
         if form.is_valid():
@@ -202,6 +240,9 @@ def weldhumNewRecord(request):
     return render(request,"storage/weldhumi/weldhumNewRecord.html",context)
 
 def weldhumDetail(request,eid):
+    """
+    kad
+    """
     print eid
     hum_detail = WeldingMaterialHumitureRecord.objects.get(id = eid)
     form = HumRecordForm(instance = hum_detail)
@@ -212,6 +253,9 @@ def weldhumDetail(request,eid):
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
 
 def weldbakeHomeViews(request):
+    """
+    kad
+    """
     if request.method == "POST":
         search_form = BakeSearchForm(request.POST)
         bake_set = []
@@ -229,6 +273,9 @@ def weldbakeHomeViews(request):
     return render(request,"storage/weldbake/weldbakeHome.html",context)
 
 def weldbakeNewRecord(request):
+    """
+    kad
+    """
     if request.method == "POST":
         form = BakeRecordForm(request.POST)
         if form.is_valid():
@@ -242,12 +289,49 @@ def weldbakeNewRecord(request):
     return render(request,"storage/weldbake/weldbakeNewRecord.html",context)
 
 def weldbakeDetail(request,index):
+    """
+    kad
+    """
     bake_detail = WeldingMaterialBakeRecord.objects.get(index = index)
     form = BakeRecordForm(instance = bake_detail)
     context = {
             "form":form,
             }
     return render(request,"storage/weldbake/weldbakeDetail.html",context)
+
+def weldapplyrefundHomeViews(request):
+    """
+    kad
+    """
+    workorders = WeldingMaterialApplyCard.objects.values("workorder").distinct()
+    workorder_set = []
+    for i in workorders:
+        workorder_set.append(WorkOrder.objects.get(id = i["workorder"]))
+    print workorder_set
+    #search_form = BakeSearchForm()
+    context = {
+            "workorder_set":workorder_set,
+            }
+    return render(request,"storage/weldapplyrefund/weldapplyrefundHome.html",context)
+
+def weldapplyrefundDetail(request,index):
+    """
+    kad
+    """
+    workorder = WorkOrder.objects.get(id = index)
+    apply_set = WeldingMaterialApplyCard.objects.filter(workorder = workorder)
+    refund_set = []
+    for i in apply_set:
+        print i.weldrefund
+    print apply_set
+    print refund_set
+    context = {
+            "workorder":workorder,
+            "apply_set":apply_set,
+            "refund_set":refund_set,
+            }
+    return render(request,"storage/weldapplyrefund/weldapplyrefundDetail.html",context)
+
 
 def weldRefundViews(request):
     getUserByAuthority(STORAGE_KEEPER)
@@ -277,6 +361,8 @@ def weldRefundDetailViews(request,rid):
             ref_obj.weldrefund_status = STORAGESTATUS_END
             ref_obj.save()
             return HttpResponseRedirect("/storage/weldrefund")
+        else:
+            print reform.errors
     else:
         reform = WeldRefundForm(instance = ref_obj) 
     context = {
@@ -320,7 +406,7 @@ def AuxiliaryToolsEntryView(request):
         auxiliarytool=AuxiliaryTool.objects.get(id=object_id)
         new_entry_quantity=float(request.POST['quantity'])
         if new_entry_quantity<0:
-            return HttpResponse('ERROR')
+            return HttpResponseRedirect('/storage/auxiliarytools/entrylist')
         auxiliarytool.quantity=F('quantity')+new_entry_quantity
         auxiliarytool.save()
         entryrecord=AuxiliaryToolEntryCard(auxiliary_tool=auxiliarytool,quantity=new_entry_quantity)

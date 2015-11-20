@@ -4,7 +4,7 @@
 {% endblock%}
 
 {% block sub_sec %}
-<a href="/storage/weldrefund" class="current">钢材退库</a>
+<a href="/storage/steelrefund" class="current">钢材退库</a>
 {% endblock %}
 
 {% block inner_content %}
@@ -27,7 +27,7 @@
         <th>退料人</th>
         <th>操作</th>
     </thead>
-    </tbody>
+    <tbody>
         {% for ref_obj in refund_set %}
         <tr>
             <td>{{ref_obj.date|date:"Ymd"}}</td>
@@ -36,11 +36,10 @@
             <td>{{ref_obj.keeper.userinfo}}</td>
             <td>{{ref_obj.returner.userinfo}}</td>
             <td>
-                {{ref_obj.return_confirm}}
-                {% ifequal ref_obj.return_confirm  True %}
-                    <a class="btn" href="/storage/weldrefunddetail/{{ref_obj.id}}">查看</a>
+                {% ifequal ref_obj.return_confirm 1 %}
+                    <a class="btn btn-primary" href="/storage/steelrefunddetail/{{ref_obj.steel_type}}/{{ref_obj.id}}">查看</a>
                 {% else %}
-                    <a class="btn btn-warning" href="/storage/weldrefunddetail/{{ref_obj.id}}">待处理</a>
+                    <a class="btn btn-warning" href="/storage/steelrefunddetail/{{ref_obj.steel_type}}/{{ref_obj.id}}">待处理</a>
                 {% endifequal %}
             </td>
         </tr>
