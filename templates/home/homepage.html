@@ -5,28 +5,22 @@
 <script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
 <div class="outter_frame">
 	<div class="row-fluid news_frame">
-		<div class="span7">
-			<div class="">
+			<div class="span7">
 				{% include "home/widgets/company_news.html" %}
 			</div>
-			<hr>
-			<div class="">
+			<div class="span5">
+				{% include "home/widgets/calendar.html" %}
+				
+			</div>
+	</div>
+	<hr>
+	<div class="row-fluid news_frame">
+			<div class="span7">
 				{% include "home/widgets/import_info.html" %}
 			</div>
-			<hr>
-			<div class="">
+			<div class="span5">
 				{% include "home/widgets/file_download.html" %}
 			</div>
-		</div>
-		<!-- <div class="span2"></div> -->
-		<div class="span5">
-			<div class="">
-				{% include "home/widgets/calendar.html" %}
-			</div>
-			<hr>
-			<div class="">
-			</div>
-		</div>
 	</div>
 </div>
 {% endblock%}
