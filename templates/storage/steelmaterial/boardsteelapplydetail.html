@@ -1,0 +1,66 @@
+{% extends "storage/base/steelbase.html" %}
+
+{% block before_css%}
+{{block.super}}
+<link rel="stylesheet" href="{{STATIC_URL}}style/storage/steelmaterial/barsteel.css" />
+{%endblock%}
+
+{% block title %}
+<h1>钢材领用</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="#" class="current">领用单详情</a>
+{% endblock %}
+
+{% block inner_content %}
+<h3 class="table-title">板材领用单</h3>
+<div class="return_card_header row">
+    <span class="span3">领用单位: {{common_Info.department}}</span>
+    <span class="span3">工作令: {{common_Info.work_order}}</span>
+    <span class="span3">日期: {{common_Info.date|date:"Ymd"}}</span>
+    <span class="span3">编号: {{common_Info.form_code}}</span>
+</div>
+<table class="table table-bordered">
+    <thead>
+        <th>名称</th>
+        <th>材质</th>
+        <th>规格</th>
+        <th>材质编号</th>
+        <th>状态</th>
+        <th>数量</th>
+        <th>重量</th>
+        <th>入库编号</th>
+        <th>备注</th>
+    </thead>
+    <tbody>
+        {% for card in apply_cards %}
+        <tr>
+            <td>{{card.steel_material.name}}</td>
+            <td>{{card.steel_material.material}}</td>
+            <td>{{card.steel_material.specifications}}</td>
+            <td>{{card.steel_material.material_number}}</td>
+            <td>{{card.status}}</td>
+            <td>{{card.quantity}}</td>
+            <td>{{card.weight}}</td>
+            <td>{{card.steel_material.entry_form.form_code}}</td>
+            <td>{{card.remark}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>领料员</td>
+            <td colspan="2">{{common_Info.applicant.userinfo.name}}</td>
+            <td>检验员</td>
+            <td colspan="2">{{common_Info.inspector.userinfo.name}}</td>
+            <td>库管员</td>
+            <td colspan="2">{{common_Info.keeper.userinfo.name}}</td>
+        </tr>
+    </tbody>
+</table>
+    <center class="card-sure">
+        {% ifequal common_Info.apply_confirm 0 %}
+        <button class="card-ensure-btn btn btn-success">确认</button>   
+        {% endifequal %}
+    </center>
+</div>
+{% endblock %}

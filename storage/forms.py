@@ -165,6 +165,10 @@ class BakeSearchForm(forms.Form):
     def __init__(self,*args,**kwargs):
         super(BakeSearchForm,self).__init__(*args,**kwargs)
 
+class ApplyRefundSearchForm(forms.Form):
+    order_index = forms.CharField(label = u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'order_index'}))
+    product_name = forms.CharField(label = u"产品名称",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'product_name'}))
+
 class EntrySearchForm(forms.Form):
     entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_time'}))
     purchaser = forms.ChoiceField(label=u"采购员",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'purchaser'}))

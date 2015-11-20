@@ -100,6 +100,8 @@ class WeldingMaterialBakeRecord(models.Model):
         verbose_name_plural=u'焊焊材库温湿度记录卡'    
 
 
+
+
 class SteelMaterialPurchasingEntry(models.Model):
     material_source = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'货物来源')
     form_code = models.CharField(max_length=20,blank=False,null=False,verbose_name="入库单编号")
@@ -143,6 +145,62 @@ class SteelMaterial(models.Model):
     class Meta:
         verbose_name=u'钢材参数信息'
         verbose_name_plural=u'钢材参数信息'
+
+
+class CommonSteelMaterialApplyCardInfo(models.Model):
+    department = models.CharField(max_length=50,blank=False,null=False,verbose_name=u"领用单位")
+    work_order=models.ForeignKey(WorkOrder,blank=False,null=False,verbose_name=u"工作令")
+    date = models.DateField(blank=False,null=False,auto_now_add=True,verbose_name=u"日期")
+    form_code = models.CharField(max_length=20,blank=False,null=False,verbose_name=u"编号")
+    applicant = models.ForeignKey(User,blank=False,null=False,verbose_name=u'退料人',related_name="Steel_applicanter")
+    inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u'检查员',related_name="steel_apply_inspector")
+    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员",related_name="steel_apply_keeper")
+    steel_type = models.IntegerField(choices=STEEL_RETURN_CARD_TYPE,default=0,verbose_name=u'钢材类型')
+    apply_confirm = models.BooleanField(blank=False,null=False,default=False,verbose_name=u"出库确认")
+    remarkment = models.CharField(blank=True,null=True,max_length=100,verbose_name=u'备注')
+
+    def __unicode__(self):
+        return str(self.form_code)
+
+    class Meta:
+        verbose_name=u"钢材领用单"
+        verbose_name_plural=u"钢材领用单"
+
+class BoardSteelMaterialApplyCardContent(models.Model):
+    steel_material = models.ForeignKey(SteelMaterial,blank=False,null=False,verbose_name=u"材料信息")
+    card_info = models.ForeignKey(CommonSteelMaterialApplyCardInfo,blank=False,null=False,verbose_name=u"领用单表头")
+    status = models.CharField(max_length=20,blank=False,null=False,verbose_name=u"状态")
+    quantity = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
+    weight = models.FloatField(blank=False,null=False,verbose_name=u"重量")
+    weight_management =models.IntegerField(choices=WEIGHT_MANAGEMENT,blank=False,null=False,verbose_name=u"重量单位")
+    graph = models.CharField(max_length=100,blank=False,null=False,verbose_name=u"套料图")
+    remark = models.CharField(max_length=100,blank=True,null=True,verbose_name=u"备注")
+
+    def __unicode__(self):
+        return str(self.card_info)
+
+    class Meta:
+        verbose_name=u"板材领用单详细信息"
+        verbose_name_plural=u"板材领用单详细信息"
+
+class BarSteelMaterialApplyCardContent(models.Model):
+    steel_material = models.ForeignKey(SteelMaterial,blank=False,null=False,verbose_name=u'材料信息')
+    card_info = models.ForeignKey(CommonSteelMaterialApplyCardInfo,blank=False,null=False,verbose_name=u"领用单表头")
+    status = models.CharField(max_length=20,blank=False,null=False,verbose_name=u"状态")
+    quantity = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
+    length = models.FloatField(blank=False,null=False,verbose_name=u"长度")
+    length_management =models.IntegerField(choices=LENGHT_MANAGEMENT,blank=False,null=False,verbose_name=u"长度单位")
+    remark = models.CharField(max_length=100,blank=True,null=True,verbose_name=u"备注")
+
+    def __unicode__(self):
+        return str(self.card_info)
+
+    class Meta:
+        verbose_name=u"型材领用单详细信息"
+        verbose_name_plural=u"型材领用单详细信息"
+
+
+
 
 class BoardSteelMaterialLedger(models.Model):
     material_info = models.ForeignKey(SteelMaterial,blank=False,null=False,verbose_name="钢材信息")
@@ -189,8 +247,8 @@ class CommonSteelMaterialReturnCardInfo(models.Model):
         return str(self.form_code)
 
     class Meta:
-        verbose_name=u'退库单'
-        verbose_name_plural=u'退库单'
+        verbose_name=u'钢材退库单'
+        verbose_name_plural=u'钢材退库单'
 
 class BoardSteelMaterialReturnCardContent(models.Model):
     steel_material = models.ForeignKey(SteelMaterial,blank=False,null=False,verbose_name=u"材料信息")
@@ -366,4 +424,29 @@ class WeldStoreThread(models.Model):
         verbose_name = u"焊材库存安全量"
         verbose_name_plural = u"焊材库存安全量"
     def __unicode__(self):
-        return '%s' % self.specification
+        return '%s' % self.specifications
+
+class OutSideBuyingEntry(models.Model):
+    workorder = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
+    entry_time = models.DateField(verbose_name=u"入库时间",null=True,auto_now=True)
+    code = models.CharField(verbose_name=u"单据编号",max_length=20,null = True)
+    purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "out_purchaser")
+    inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "out_inspector")
+    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "out_keeper") 
+    entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=STORAGESTATUS_INSPECTOR,verbose_name=u"入库单状态")
+
+    class Meta:
+        verbose_name = u"外购件入库单"
+        verbose_name_plural = u"外购件入库单"
+    def __unicode__(self):
+        return '%s' % self.code
+
+class OutSideBuyingItems(models.Model):
+    material = models.ForeignKey(Materiel,blank = True , null = True , verbose_name = u"材料")
+    remark = models.CharField(max_length = 100, blank = True , default="" , verbose_name = u"备注")
+    entry = models.ForeignKey(OutSideBuyingEntry,verbose_name = u"入库单")
+    class Meta:
+        verbose_name = u"外购件材料"
+        verbose_name_plural = u"外购件材料"
+    def __unicode__(self):
+        return '%s(%s)' % (self.material.name, self.entry)

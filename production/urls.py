@@ -9,6 +9,14 @@ urlpatterns=patterns('',
         production_views.taskAllocationViews,
     ),
     url(
+        r'^task_confirm$',
+        production_views.taskConfirmViews,
+    ),
+    url(
+        r'^materiel_use$',
+        production_views.materielUseViews,
+    ),
+    url(
         r'^synthesize_filelist$',
         production_views.synthesizeFileListViews,
     ),

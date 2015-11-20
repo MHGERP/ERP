@@ -24,6 +24,30 @@ def techFileDirectoryViews(request):
     context = {}
     return render(request, "techdata/tech_file_directory.html", context)
 
+def techInstallWeldViews(request):
+    context = {}
+    return render(request, "techdata/tech_install_weld.html", context)
+
+def techHotDeelViews(request):
+    context = {}
+    return render(request, "techdata/tech_hot_deel.html", context)
+
+def techTestPresureViews(request):
+    context = {}
+    return render(request, "techdata/tech_test_presure.html", context)
+
+def techBoxMaterialViews(request):
+    context = {}
+    return render(request, "techdata/tech_box_material.html", context)
+
+def techBoxWeldViews(request):
+    context = {}
+    return render(request, "techdata/tech_box_weld.html", context)
+
+def techBoxOutboughtViews(request):
+    context = {}
+    return render(request, "techdata/tech_box_outbought.html", context)
+
 def designLibEditViews(request):
     context = {}
     return render(request, "techdata/design_lib_edit.html", context)
@@ -62,4 +86,3 @@ def weldEditViews(request):
 def programmeEditViews(request):
     context = {}
     return render(request, "techdata/programme_edit.html", context)
-

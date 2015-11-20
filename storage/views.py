@@ -42,6 +42,33 @@ def steelRefundViews(request):
             }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
+def steelApplyView(request):
+    search_form = SteelRefundSearchForm()
+    refund_set = CommonSteelMaterialApplyCardInfo.objects.all()
+    context={
+        "search_form":search_form,
+        "refund_set":refund_set,
+    }
+    return render(request,"storage/steelmaterial/steelapplyhome.html",context)
+
+def steelApplyDetailViews(request,typeid,rid):
+    typeid = int(typeid)
+    common_Info = CommonSteelMaterialApplyCardInfo.objects.get(id=int(rid))
+    if typeid:
+        apply_cards = common_Info.barsteelmaterialapplycardcontent_set.all()
+    else:
+        apply_cards = common_Info.boardsteelmaterialapplycardcontent_set.all()
+    print apply_cards
+    context={
+        'apply_cards':apply_cards,
+        'common_Info':common_Info,
+    }
+    if typeid==1:
+        return render(request,"storage/steelmaterial/barsteelapplydetail.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelapplydetail.html",context)
+
+
 def steelrefunddetailViews(request,typeid,rid):
     typeid=int(typeid)
     common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
@@ -121,6 +148,7 @@ def steelEntryConfirmViews(request,eid):
             "is_show":is_show,
             }
     return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
+    
 def Weld_Apply_Card_List(request):
     """
     Time1ess
@@ -210,6 +238,9 @@ def Apply_Card_Form_Commit(request):
 
 
 def weldHumitureHomeViews(request):
+    """
+    kad
+    """
     if request.method == "POST":
         search_form = HumSearchForm(request.POST)
         hum_set = []
@@ -227,6 +258,9 @@ def weldHumitureHomeViews(request):
     return render(request,"storage/weldhumi/weldhumitureHome.html",context)
 
 def weldhumNewRecord(request):
+    """
+    kad
+    """
     if request.method == "POST":
         form = HumRecordForm(request.POST)
         if form.is_valid():
@@ -240,6 +274,9 @@ def weldhumNewRecord(request):
     return render(request,"storage/weldhumi/weldhumNewRecord.html",context)
 
 def weldhumDetail(request,eid):
+    """
+    kad
+    """
     print eid
     hum_detail = WeldingMaterialHumitureRecord.objects.get(id = eid)
     form = HumRecordForm(instance = hum_detail)
@@ -250,6 +287,9 @@ def weldhumDetail(request,eid):
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
 
 def weldbakeHomeViews(request):
+    """
+    kad
+    """
     if request.method == "POST":
         search_form = BakeSearchForm(request.POST)
         bake_set = []
@@ -267,6 +307,9 @@ def weldbakeHomeViews(request):
     return render(request,"storage/weldbake/weldbakeHome.html",context)
 
 def weldbakeNewRecord(request):
+    """
+    kad
+    """
     if request.method == "POST":
         form = BakeRecordForm(request.POST)
         if form.is_valid():
@@ -280,12 +323,53 @@ def weldbakeNewRecord(request):
     return render(request,"storage/weldbake/weldbakeNewRecord.html",context)
 
 def weldbakeDetail(request,index):
+    """
+    kad
+    """
     bake_detail = WeldingMaterialBakeRecord.objects.get(index = index)
     form = BakeRecordForm(instance = bake_detail)
     context = {
             "form":form,
             }
     return render(request,"storage/weldbake/weldbakeDetail.html",context)
+
+def weldapplyrefundHomeViews(request):
+    """
+    kad
+    """
+    if request.method == "POST":
+        search_form = ApplyRefundSearchForm(request.POST)
+        workorder_set = []
+        if search_form.is_valid():
+            workorder_set = get_weld_filter(WorkOrder,search_form.cleaned_data)
+    else:
+        search_form = ApplyRefundSearchForm()
+        workorders = WeldingMaterialApplyCard.objects.values("workorder").distinct()
+        workorder_set = []
+        for i in workorders:
+            workorder_set.append(WorkOrder.objects.get(id = i["workorder"]))
+        #print workorder_set
+    print search_form
+    context = {
+            "workorder_set":workorder_set,
+            "search_form":search_form,
+            }
+    return render(request,"storage/weldapplyrefund/weldapplyrefundHome.html",context)
+
+def weldapplyrefundDetail(request,index):
+    """
+    kad
+    """
+    workorder = WorkOrder.objects.get(id = index)
+    applyrefund_set = WeldingMaterialApplyCard.objects.filter(workorder = workorder)
+    #for i in apply_set:
+    #    print i.weldrefund.department
+    context = {
+            "workorder":workorder,
+            "applyrefund_set":applyrefund_set,
+            }
+    return render(request,"storage/weldapplyrefund/weldapplyrefundDetail.html",context)
+
 
 def weldRefundViews(request):
     getUserByAuthority(STORAGE_KEEPER)

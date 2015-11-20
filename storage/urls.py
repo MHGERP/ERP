@@ -21,6 +21,14 @@ urlpatterns = patterns('',
         storage_views.steelMaterialHomeViews,
     ),
     url(
+        r'^steelapply$',
+        storage_views.steelApplyView,
+    ),
+    url(
+        r'^steelapplydetail/(?P<typeid>\d+)/(?P<rid>\d+)$',
+        storage_views.steelApplyDetailViews,
+    ),
+    url(
         r'^weldentryhome$',
         storage_views.weldEntryHomeViews,
     ),
@@ -76,7 +84,16 @@ urlpatterns = patterns('',
         r'^weldbakeNewRecord$',
         storage_views.weldbakeNewRecord,
     ),
-    
+    url(
+        r'^weldapplyrefund$',
+        storage_views.weldapplyrefundHomeViews,
+    ),
+    url(
+        r'^weldapplyrefundDetail/(?P<index>\w+)$',
+        storage_views.weldapplyrefundDetail,
+    ),
+
+
     url( 
         r'^weldrefunddetail/(?P<rid>\w+)$',
         storage_views.weldRefundDetailViews,
