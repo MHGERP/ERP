@@ -56,5 +56,29 @@ urlpatterns=patterns('',
     url(
         r'^weldQuota',
         techdata_views.weldQuotaViews,
-    )
+    ),
+    url(
+        r'^techInstallWeld$',
+        techdata_views.techInstallWeldViews,
+    ),
+    url(
+        r'^techHotDeel$',
+        techdata_views.techHotDeelViews,
+    ),
+    url(
+        r'^techTestPresure$',
+        techdata_views.techTestPresureViews,
+    ),
+    url(
+        r'^techBoxMaterial$',
+        techdata_views.techBoxMaterialViews,
+    ),
+    url(
+        r'^techBoxWeld$',
+        techdata_views.techBoxWeldViews,
+    ),
+    url(
+        r'^techBoxOutbought$',
+        techdata_views.techBoxOutboughtViews,
+    ),
 )
