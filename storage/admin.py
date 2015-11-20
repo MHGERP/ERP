@@ -13,8 +13,11 @@ Registers = (
     BoardSteelMaterialLedger,
     BarSteelMaterialLedger,
     CommonSteelMaterialReturnCardInfo,
+    CommonSteelMaterialApplyCardInfo,
     BoardSteelMaterialReturnCardContent,
+    BoardSteelMaterialApplyCardContent,
     BarSteelMaterialReturnCardContent,
+    BarSteelMaterialApplyCardContent,
     WeldRefund,
     AuxiliaryTool,
     AuxiliaryToolApplyCard,
@@ -23,6 +26,8 @@ Registers = (
     WeldMaterialEntryItems,
     WeldStoreList,
     WeldStoreThread,
+    OutSideBuyingEntry,
+    OutSideBuyingItems,
 )
 
 for reg in Registers:
