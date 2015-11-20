@@ -1,0 +1,54 @@
+{% extends "techdata/base/none_nav_base.html"%}
+
+{% block title %}
+<h1>装箱备料工艺</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">装箱备料工艺</a>
+{% endblock %}
+
+{% block inner_content%}
+<form class="form-search ">
+    工作令
+    <span class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>action1</li>
+            <li>action2</li>
+        </ul>
+    </span>
+    <span>
+        <button class="btn">
+            检索
+        </button>
+    </span>
+</form>
+</br>
+<div>
+    <span>   
+        <table class="table table-bordered table-striped" style="width:60%">
+            <tr>
+                <td>工作令</td>
+                <td></td>
+                <td>产品名称</td>
+                <td></td>
+                <td>产品图号</td>
+            </tr>
+        </table>
+        <button class="bnt">
+            工艺修改记录
+        </button>
+        <button class="bnt">
+            审核
+        </button>
+    </span>
+</div>
+<div class="widget-content">
+    {% include "techdata/widgets/tech_box_material_table.html" %}
+</div>
+
+{% endblock%}

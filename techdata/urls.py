@@ -69,4 +69,16 @@ urlpatterns=patterns('',
         r'^techTestPresure$',
         techdata_views.techTestPresureViews,
     ),
+    url(
+        r'^techBoxMaterial$',
+        techdata_views.techBoxMaterialViews,
+    ),
+    url(
+        r'^techBoxWeld$',
+        techdata_views.techBoxWeldViews,
+    ),
+    url(
+        r'^techBoxOutbought$',
+        techdata_views.techBoxOutboughtViews,
+    ),
 )

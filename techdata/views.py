@@ -36,6 +36,18 @@ def techTestPresureViews(request):
     context = {}
     return render(request, "techdata/tech_test_presure.html", context)
 
+def techBoxMaterialViews(request):
+    context = {}
+    return render(request, "techdata/tech_box_material.html", context)
+
+def techBoxWeldViews(request):
+    context = {}
+    return render(request, "techdata/tech_box_weld.html", context)
+
+def techBoxOutboughtViews(request):
+    context = {}
+    return render(request, "techdata/tech_box_outbought.html", context)
+
 def designLibEditViews(request):
     context = {}
     return render(request, "techdata/design_lib_edit.html", context)
