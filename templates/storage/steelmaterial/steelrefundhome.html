@@ -9,42 +9,16 @@
 
 {% block inner_content %}
 <h3>退库单管理</h3>
-<form class="form-inline" method="post">
-    {% csrf_token %}
+<form class="form-inline refund-card-search-form">
     {% for field in search_form %}
         {{field.label}}
         {{field}}
     {% endfor %}
-    <button class="btn btn-success">检索</button> 
+    <button type="button" class="btn btn-success refund-card-search-btn">检索</button> 
 </form>
 <br>
-<table class="table table-bordered">
-    <thead>
-        <th>日期</th>
-        <th>编号</th>
-        <th>工作令</th>
-        <th>库管人</th>
-        <th>退料人</th>
-        <th>操作</th>
-    </thead>
-    <tbody>
-        {% for ref_obj in refund_set %}
-        <tr>
-            <td>{{ref_obj.date|date:"Ymd"}}</td>
-            <td>{{ref_obj.form_code}}</td>
-            <td>{{ref_obj.work_order}}</td>
-            <td>{{ref_obj.keeper.userinfo}}</td>
-            <td>{{ref_obj.returner.userinfo}}</td>
-            <td>
-                {% ifequal ref_obj.return_confirm 1 %}
-                    <a class="btn btn-primary" href="/storage/steelrefunddetail/{{ref_obj.steel_type}}/{{ref_obj.id}}">查看</a>
-                {% else %}
-                    <a class="btn btn-warning" href="/storage/steelrefunddetail/{{ref_obj.steel_type}}/{{ref_obj.id}}">待处理</a>
-                {% endifequal %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+<div class="refund-cards-table">
+    {% include "storage/widgets/refund_card_table.html" %}
 </div>
 {% endblock %}

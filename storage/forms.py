@@ -256,13 +256,19 @@ class AuxiliaryToolsApplyCardSearchForm(forms.Form):
 
 class SteelRefundSearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
-    refund_code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'refund_code'}))
-    work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'work_order'}))
-    keeper=forms.ChoiceField(label=u'库管员',required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'keeper'}))
+    form_code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'form_code'}))
+    work_order=forms.ChoiceField(label=u'工作令',required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'work_order'}))
+    # keeper=forms.ChoiceField(label=u'库管员',required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'keeper'}))
     def __init__(self,*args,**kwargs):
         super(SteelRefundSearchForm,self).__init__(*args,**kwargs)
-        users = getUserByAuthority(STORAGE_KEEPER)
-        self.fields["keeper"].choices = getChoiceList(users,"userinfo")
+        # users = getUserByAuthority(STORAGE_KEEPER)
+        # self.fields["keeper"].choices = getChoiceList(users,"userinfo")
+
+        workorder_list = CommonSteelMaterialApplyCardInfo.objects.values("work_order").distinct()
+        work_order_set = []
+        for list_tmp in workorder_list:
+            work_order_set.append(WorkOrder.objects.get(id = list_tmp["work_order"]))
+        self.fields["work_order"].choices = getChoiceList(work_order_set,"order_index")
 
 class WeldStorageSearchForm(forms.Form):
     material_id = forms.CharField(label=u'材质编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'material_id'}))
@@ -289,8 +295,8 @@ class WeldApplyAccountSearchForm(forms.Form):
 class SteelLedgerSearchForm(forms.Form):
     steel_type = forms.ChoiceField(label=u"钢材类型",required=False,widget=forms.Select(attrs={"class":'form-control'}))
     store_room = forms.ChoiceField(label=u"库房",required=False,widget=forms.Select(attrs={"class":"form-control"}))
-    materail_code = forms.CharField(label=u"材质编号",required=False,widget=forms.TextInput(attrs={"class":"form-control"}))
-    is_returned = forms.ChoiceField(label=u"是否被退库",required=False,widget=forms.Select(attrs={"class":"form-control"}))
+    material_number = forms.CharField(label=u"材质编号",required=False,widget=forms.TextInput(attrs={"class":"form-control"}))
+    # is_returned = forms.ChoiceField(label=u"是否被退库",required=False,widget=forms.Select(attrs={"class":"form-control"}))
 
     def __init__(self,*args,**kwargs):
         super(SteelLedgerSearchForm,self).__init__(*args,**kwargs)
@@ -301,6 +307,6 @@ class SteelLedgerSearchForm(forms.Form):
             storeroom_choice.append((storeroom.id,storeroom.name))
         self.fields['store_room'].choices = storeroom_choice
         return_choice = [(-1,""),(False,'未退库'),(True,'退库过')]
-        self.fields['is_returned'].choices=return_choice
+        # self.fields['is_returned'].choices=return_choice
 
 

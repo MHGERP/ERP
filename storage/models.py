@@ -131,6 +131,8 @@ class SteelMaterial(models.Model):
     return_time = models.IntegerField(default=0,verbose_name=u'退库次数')
     entry_form = models.ForeignKey(SteelMaterialPurchasingEntry,blank=False,null=False,verbose_name=u'表头')
     work_order = models.ManyToManyField(WorkOrder,blank=False,null=False,verbose_name=u'工作令')
+    steel_type = models.IntegerField(choices=STEEL_TYPE,blank=False,null=False,default=0,verbose_name=u'钢材类型')
+    store_room = models.ForeignKey(StoreRoom,blank=False,null=False,verbose_name=u'库房位置')
 
     def __unicode__(self):
         return "%s(%s)"%(self.name,self.specifications)
@@ -196,13 +198,13 @@ class BarSteelMaterialApplyCardContent(models.Model):
 
 
 class BoardSteelMaterialLedger(models.Model):
-    material_info = models.ForeignKey(SteelMaterial,blank=False,null=False,verbose_name="钢材信息")
+    material_info = models.OneToOneField(SteelMaterial,blank=False,null=False,verbose_name="钢材信息")
     quantity = models.IntegerField(blank=False,null=False,verbose_name=u'钢板数量')
     weight = models.FloatField(blank=False,null=False,verbose_name=u'钢板重量',default=0)
     weight_management = models.IntegerField(choices=WEIGHT_MANAGEMENT,default=0,blank=False,null=False,verbose_name=u'重量单位')
     area = models.FloatField(blank=False,null=False,verbose_name=u'钢板面积',default=0)
     area_management = models.IntegerField(choices=AREA_MANAGEMENT,default=0,blank=False,null=False,verbose_name=u'面积单位')
-    store_room = models.ForeignKey(StoreRoom,blank=False,null=False,verbose_name=u'库房位置')
+    # store_room = models.ForeignKey(StoreRoom,blank=False,null=False,verbose_name=u'库房位置')
     slice_cad = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'套料图')
 
     def __unicode__(self):
@@ -213,9 +215,9 @@ class BoardSteelMaterialLedger(models.Model):
         verbose_name_plural=u'板材台账'
 
 class BarSteelMaterialLedger(models.Model):
-    material_info = models.ForeignKey(SteelMaterial,blank=False,null=False,verbose_name=u"钢材信息")
+    material_info = models.OneToOneField(SteelMaterial,blank=False,null=False,verbose_name=u"钢材信息")
     quantity = models.IntegerField(blank=False,null=False,verbose_name=u'型材数量')
-    store_room = models.ForeignKey(StoreRoom,blank=False,null=False,verbose_name=u'库房位置')
+    # store_room = models.ForeignKey(StoreRoom,blank=False,null=False,verbose_name=u'库房位置')
     length = models.FloatField(blank=True,null=True,verbose_name=u"长度",default=0)
     length_management = models.IntegerField(choices=LENGHT_MANAGEMENT,default=0,verbose_name=u"长度单位")
 
