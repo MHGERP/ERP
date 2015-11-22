@@ -39,10 +39,10 @@ def steelRefundViews(request):
     context={
             "search_form":search_form,
             "refund_set":refund_set
-            }
+    }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
-def steelApplyView(request):
+def steelApplyViews(request):
     search_form = SteelRefundSearchForm()
     refund_set = CommonSteelMaterialApplyCardInfo.objects.all()
     context={
@@ -58,7 +58,6 @@ def steelApplyDetailViews(request,typeid,rid):
         apply_cards = common_Info.barsteelmaterialapplycardcontent_set.all()
     else:
         apply_cards = common_Info.boardsteelmaterialapplycardcontent_set.all()
-    print apply_cards
     context={
         'apply_cards':apply_cards,
         'common_Info':common_Info,
@@ -67,6 +66,17 @@ def steelApplyDetailViews(request,typeid,rid):
         return render(request,"storage/steelmaterial/barsteelapplydetail.html",context)
     else:
         return render(request,"storage/steelmaterial/boardsteelapplydetail.html",context)
+
+def steelLedgerViews(request):
+    search_form = SteelLedgerSearchForm()
+    board_steel_set = BoardSteelMaterialLedger.objects.all()
+    bar_steel_set =BarSteelMaterialLedger.objects.all()
+    context={
+        "search_form":search_form,
+        "board_steel_set":board_steel_set,
+        "bar_steel_set":bar_steel_set,
+    }
+    return render(request,"storage/steelmaterial/steelledger.html",context)
 
 
 def steelrefunddetailViews(request,typeid,rid):

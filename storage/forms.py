@@ -4,7 +4,7 @@ from django import  forms
 from django.forms import ModelForm
 from storage.models import *
 from const.models import Materiel
-from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES
+from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES,STEEL_TYPE,STEEL
 from django.contrib.auth.models import User
 from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
@@ -302,3 +302,22 @@ class WeldApplyAccountSearchForm(forms.Form):
         for list_tmp in workorder_list:
             work_order_set.append(WorkOrder.objects.get(id = list_tmp["workorder"]))
         self.fields["workorder"].choices = getChoiceList(work_order_set,"order_index")
+
+class SteelLedgerSearchForm(forms.Form):
+    steel_type = forms.ChoiceField(label=u"钢材类型",required=False,widget=forms.Select(attrs={"class":'form-control'}))
+    store_room = forms.ChoiceField(label=u"库房",required=False,widget=forms.Select(attrs={"class":"form-control"}))
+    materail_code = forms.CharField(label=u"材质编号",required=False,widget=forms.TextInput(attrs={"class":"form-control"}))
+    is_returned = forms.ChoiceField(label=u"是否被退库",required=False,widget=forms.Select(attrs={"class":"form-control"}))
+
+    def __init__(self,*args,**kwargs):
+        super(SteelLedgerSearchForm,self).__init__(*args,**kwargs)
+        self.fields["steel_type"].choices = STEEL_TYPE
+        storerooms = StoreRoom.objects.filter(material_type=STEEL)
+        storeroom_choice=[(-1,'')]
+        for storeroom in storerooms:
+            storeroom_choice.append((storeroom.id,storeroom.name))
+        self.fields['store_room'].choices = storeroom_choice
+        return_choice = [(-1,""),(False,'未退库'),(True,'退库过')]
+        self.fields['is_returned'].choices=return_choice
+
+
