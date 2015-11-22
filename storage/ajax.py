@@ -18,10 +18,77 @@ from storage.models import *
 from storage.forms import *
 from storage.utils import *
 from django.shortcuts import render
+
 @dajaxice_register
 def get_apply_card_detail(request,apply_card_index):
     context={}
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
+
+@dajaxice_register
+def searchApplyCard(request,form):
+    """
+    author: Rosen
+    summary:process the search request for steel apply card and return the result
+    params: search form
+    return: search result and message
+    """
+    form = SteelRefundSearchForm(deserialize_form(form))
+    context={}
+    if form.is_valid():
+        conditions = form.cleaned_data
+        steel_apply_cards = get_weld_filter(CommonSteelMaterialApplyCardInfo,conditions)
+        print steel_apply_cards
+        result_table = render_to_string("storage/widgets/apply_card_table.html",{"apply_cards":steel_apply_cards})
+        message = "success"
+        context["result_table"]=result_table
+    else:
+        message = "errors"
+    context["message"]=message
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def searchRefundCard(request,form):
+    """
+    author: Rosen
+    summary:process the search request for steel refund card and return the result
+    params: search form
+    return: search result and message
+    """
+    form = SteelRefundSearchForm(deserialize_form(form))
+    context={}
+    if form.is_valid():
+        conditions = form.cleaned_data
+        steel_refund_cards = get_weld_filter(CommonSteelMaterialReturnCardInfo,conditions)
+        print steel_refund_cards
+        result_table = render_to_string("storage/widgets/refund_card_table.html",{"refund_cards":steel_refund_cards})
+        message = "success"
+        context["result_table"]=result_table
+    else:
+        message = "errors"
+    context["message"]=message
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def searchSteelLedger(request,form):
+    """
+    author: Rosen
+    summary:process the search request for steel ledger and return the result
+    params: search form
+    return: search result and message
+    """
+    form = SteelLedgerSearchForm(deserialize_form(form))
+    context={}
+    if form.is_valid():
+        conditions = form.cleaned_data
+        steel_set = get_weld_filter(SteelMaterial,conditions)
+        print steel_set
+        result_table = render_to_string("storage/widgets/steel_ledger_table.html",{"steel_set":steel_set})
+        message = "success"
+        context["result_table"]=result_table
+    else:
+        message = "errors"
+    context["message"]=message
+    return simplejson.dumps(context)
 
 @dajaxice_register
 def Search_History_Apply_Records(request,data):
@@ -38,7 +105,6 @@ def Search_History_Apply_Records(request,data):
         query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4,q5]))
         context['weld_apply_cards']=WeldingMaterialApplyCard.objects.filter(query_conditions)
         return render_to_string('storage/weldapply/history_table.html',context)
-
     else:
         return HttpResponse('FAIL')
 

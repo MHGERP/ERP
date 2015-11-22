@@ -13,6 +13,7 @@ def get_weld_filter(model_type,dict):
     return: model_type set
     """
     filter_list = []
+    print dict
     for key,val in dict.items():
         dict_tmp = {}
         if val == "-1":
@@ -21,11 +22,12 @@ def get_weld_filter(model_type,dict):
         q = (val and Q(**dict_tmp)) or None
         filter_list.append(q)
     qset = filter(lambda x : x!= None ,filter_list)
+    print qset
     if qset:
         qset = reduce(lambda x,y:x & y ,qset)
         res_set = model_type.objects.filter(qset)
     else:
-        res_set = []
+        res_set = model_type.objects.all()
     return res_set
 
 def weldStoreItemsCreate(entry):

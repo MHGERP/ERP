@@ -1,9 +1,16 @@
 {% extends "storage/base/none_nav_base.html" %}
 
 
+{% block before_css%}
+{{block.super}}
+<link rel="stylesheet" href="{{STATIC_URL}}style/storage/steelmaterial/steel.css" />
+{%endblock%}
+
 {% block sub_ref %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldmaterial.css"/>
+<script type="text/javascript" src="{{STATIC_URL}}/js/storage/steel.js"></script>
 <a href="/storage/steelmaterialhome">钢材库存管理</a>
 {% block sub_sec %}{% endblock %}
 
 {% endblock %}
+
