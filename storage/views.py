@@ -39,7 +39,7 @@ def steelRefundViews(request):
     context={
             "search_form":search_form,
             "refund_set":refund_set
-            }
+    }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
 def steelApplyViews(request):
@@ -58,7 +58,6 @@ def steelApplyDetailViews(request,typeid,rid):
         apply_cards = common_Info.barsteelmaterialapplycardcontent_set.all()
     else:
         apply_cards = common_Info.boardsteelmaterialapplycardcontent_set.all()
-    print apply_cards
     context={
         'apply_cards':apply_cards,
         'common_Info':common_Info,
