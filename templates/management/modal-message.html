@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h2 id="messageLabel">我的邮箱</h2>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="span3">
+            <table class="table">
+                {% for item in box_list%}
+                {% if item.read%}
+                <tr class="success" bid="{{item.id}}">
+                    <td>{{item.message.title}}</td>
+                    <td>{{item.message.time}}</td>
+                </tr>
+                {% else%}
+                <tr class="warning" bid="{{item.id}}">
+                    <td>{{item.message.title}}</td>
+                    <td>{{item.message.time}}</td>
+                </tr>
+                {% endif%}
+                {% endfor%}
+            </table>
+        </div>
+        <div class="span5">
+            <div id="box_title">
+
+            </div>
+            <div id="box_content">
+
+            </div>
+            <div id = "box_download">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+</div>

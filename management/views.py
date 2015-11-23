@@ -98,7 +98,7 @@ def messageManagementViews(request):
                                              message = new_message,
                                              read = False)
                         new_box.save()
-    messageform = MessageForm()
+    messageform = MessageForm(request=request)
     #message_list = Message.objects.filter(writer = request.user)
     print(request.user)
     context = {
