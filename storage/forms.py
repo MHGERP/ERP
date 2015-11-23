@@ -113,6 +113,14 @@ class EntryItemsForm(ModelForm):
             "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
         }
 
+class SteelEntryItemsForm(ModelForm):
+    class Meta:
+        model = SteelMaterialPurchasingEntry
+        fields = ("remark",)
+        widget = {
+            "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
+        }
+
 class HumRecordForm(ModelForm):
     class Meta: 
         model = WeldingMaterialHumitureRecord 
@@ -170,6 +178,15 @@ class EntrySearchForm(forms.Form):
         users = User.objects.all()
         self.fields["purchaser"].choices = getChoiceList(users,"userinfo")
 
+class SteelEntrySearchForm(forms.Form):
+    entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_time'}))
+    form_code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'form_code'}))
+    material_source = forms.CharField(label=u'货物来源',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'material_source'}))
+    purchaser = forms.ChoiceField(label=u"采购员",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'purchaser'}))
+    def __init__(self,*args,**kwargs):
+        super(SteelEntrySearchForm,self).__init__(*args,**kwargs)
+        users = User.objects.all()
+        self.fields["purchaser"].choices = getChoiceList(users,"userinfo")
 
 class RefundSearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))

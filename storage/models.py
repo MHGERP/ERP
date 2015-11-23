@@ -135,6 +135,14 @@ class SteelMaterial(models.Model):
     def __unicode__(self):
         return "%s(%s)"%(self.name,self.specifications)
 
+    def show_workorder(self):
+        workorder_set = self.work_order.all()
+        work_order_list = []
+        for order in workorder_set:
+            work_order_list.append(order.order_index)
+        work_order_str = ','.join(work_order_list)
+        return work_order_str
+
     class Meta:
         verbose_name=u'钢材参数信息'
         verbose_name_plural=u'钢材参数信息'

@@ -39,7 +39,7 @@ def steelRefundViews(request):
     context={
             "search_form":search_form,
             "refund_set":refund_set
-            }
+    }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
 def steelApplyViews(request):
@@ -58,7 +58,6 @@ def steelApplyDetailViews(request,typeid,rid):
         apply_cards = common_Info.barsteelmaterialapplycardcontent_set.all()
     else:
         apply_cards = common_Info.boardsteelmaterialapplycardcontent_set.all()
-    print apply_cards
     context={
         'apply_cards':apply_cards,
         'common_Info':common_Info,
@@ -117,7 +116,7 @@ def weldEntryHomeViews(request):
 
 def steelEntryHomeViews(request):
     if request.method == "POST":
-        search_form = EntrySearchForm(request.POST)
+        search_form = SteelEntrySearchForm(request.POST)
         steelentry_set = []
         if search_form.is_valid():
             steelentry_set = get_weld_filter(SteelMaterialPurchasingEntry,search_form.cleaned_data)
@@ -125,7 +124,7 @@ def steelEntryHomeViews(request):
             print search_form.errors
     else:
         steelentry_set = SteelMaterialPurchasingEntry.objects.all()
-        search_form = EntrySearchForm()
+        search_form = SteelEntrySearchForm()
     context = {
         "entry_set":steelentry_set,
         "ENTRYSTATUS_END":STORAGESTATUS_END,
@@ -149,9 +148,15 @@ def weldEntryConfirmViews(request,eid):
 
 def steelEntryConfirmViews(request,eid):
     entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
+    items = SteelMaterial.objects.filter(entry_form = entry)
+    entryitem_form = SteelEntryItemsForm()
+    is_show = entry.entry_status == STORAGESTATUS_KEEPER
     context = {
-                "entry":entry,
-    }
+            "entry":entry,
+            "entry_set":items,
+            "item_form":entryitem_form,
+            "is_show":is_show,
+            }
     return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
     
 def Weld_Apply_Card_List(request):
