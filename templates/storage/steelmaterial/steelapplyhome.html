@@ -9,43 +9,17 @@
 
 {% block inner_content %}
 <h3>领用单管理</h3>
-<form class="form-inline" method="post">
-    {% csrf_token %}
+<form class="form-inline apply-card-search-form">
     {% for field in search_form %}
         {{field.label}}
         {{field}}
     {% endfor %}
-    <button class="btn btn-success">检索</button> 
+    <button  type="button" class="btn btn-success apply-card-search-btn">检索</button> 
 </form>
+
 <br>
-<table class="table table-bordered">
-    <thead>
-        <th>日期</th>
-        <th>编号</th>
-        <th>工作令</th>
-        <th>库管人</th>
-        <th>领用人</th>
-        <th>领用单位</th>
-        <th>操作</th>
-    </thead>
-    <tbody>
-        {% for ref_obj in refund_set %}
-        <tr>
-            <td>{{ref_obj.date|date:"Ymd"}}</td>
-            <td>{{ref_obj.form_code}}</td>
-            <td>{{ref_obj.work_order}}</td>
-            <td>{{ref_obj.keeper.userinfo.name}}</td>
-            <td>{{ref_obj.applicant.userinfo.name}}</td>
-            <td>{{ref_obj.department}}</td>
-            <td>
-                {% ifequal ref_obj.apply_confirm 1 %}
-                    <a class="btn btn-primary" href="/storage/steelapplydetail/{{ref_obj.steel_type}}/{{ref_obj.id}}">查看</a>
-                {% else %}
-                    <a class="btn btn-warning" href="/storage/steelapplydetail/{{ref_obj.steel_type}}/{{ref_obj.id}}">待处理</a>
-                {% endifequal %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="apply-cards-table">
+    {% include "storage/widgets/apply_card_table.html" %}
+</div>
+
 {% endblock %}

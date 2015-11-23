@@ -42,7 +42,6 @@
             <th>批号</th>
             <th>材质</th>
             <th>材质编号</th>
-            <th>退库次数</th>
             <th>备注</th>
             <th>操作</th>
         </tr>
@@ -58,10 +57,9 @@
             <td>{{item.lot_number}}</td>
             <td>{{item.material}}</td>
             <td>{{item.material_number}}</input></td>
-            <td>{{item.return_time}}</input></td>
-            <td>{{item.SteelMaterialPurchasingEntry.remark}}</td>
+            <td>{{entry.remark}}</td>
             <td>
-                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_item({{item.id}})">修改</a>
+                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_steelEntryItem({{item.id}})">修改</a>
             </td>
         </tr>
         {%endfor%}
@@ -80,9 +78,9 @@
     </div>
     <center style="margin:110px;">
     {% if is_show %}
-    <button  id="entry_confirm" style="width:20%;height:20px;" class="btn btn-primary" type="button" onclick="entryconfirm({{entry.id}});">入库单确认</button>
+    <button  id="entry_confirm"  class="btn btn-primary" type="button" onclick="entryconfirm({{entry.id}});">入库单确认</button>
     {% else %}
-        <a style="width:20%;height:20px;" class="btn btn-primary" type="button" href="/storage/steelentryhome">返回</a>
+        <a style="width:10%;height:20px;" class="btn btn-primary" type="button" href="/storage/steelentryhome">返回</a>
     {% endif %}
     </center>
 </form>
@@ -105,7 +103,7 @@
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-        <button class="btn btn-primary" data-dismiss="modal" onclick="save_item();">保存</button>
+        <button class="btn btn-primary" data-dismiss="modal" onclick="save_steelEntryItem();">保存</button>
     </div>
 </div>
 {% endblock %}

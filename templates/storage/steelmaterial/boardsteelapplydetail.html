@@ -1,13 +1,8 @@
 {% extends "storage/base/steelbase.html" %}
 
-{% block before_css%}
-{{block.super}}
-<link rel="stylesheet" href="{{STATIC_URL}}style/storage/steelmaterial/barsteel.css" />
-{%endblock%}
-
 {% block title %}
 <h1>钢材领用</h1>
-{% endblock%}
+{% endblock %}
 
 {% block sub_sec %}
 <a href="#" class="current">领用单详情</a>
@@ -59,7 +54,7 @@
 </table>
     <center class="card-sure">
         {% ifequal common_Info.apply_confirm 0 %}
-        <button class="card-ensure-btn btn btn-success">确认</button>   
+        <button class="apply-card-ensure-btn btn btn-success">确认</button>   
         {% endifequal %}
     </center>
 </div>
