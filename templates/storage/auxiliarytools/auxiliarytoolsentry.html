@@ -17,21 +17,21 @@
         <table class="table table-hover table-bordered">
         <tr>
             <td>材料名称:</td>
-            <td>{{entry_form.name}}</td>
+            <td>{{entry_form.name.value}}</td>
             <td>类别:</td>
-            <td>{{entry_form.model}}</td>
+            <td>{{object.get_model_display}}</td>
         </tr>
         <tr>
             <td>计量单位:</td>
-            <td>{{entry_form.measurement_unit}}</td>
+            <td>{{entry_form.measurement_unit.value}}</td>
             <td>数量:</td>
             <td>{{entry_form.quantity}}</td>
         </tr>
         <tr>
             <td>单价:</td>
-            <td>{{entry_form.unit_price}}</td>
+            <td>{{entry_form.unit_price.value}}</td>
             <td>厂家:</td>
-            <td>{{entry_form.manufacturer}}</td>
+            <td>{{entry_form.manufacturer.value}}</td>
         </tr>
         </table>
         <input type="hidden" name="object_id" value="{{object_id}}">
