@@ -16,58 +16,16 @@
 {% block inner_content %}
 
 <h3>钢材台账查看</h3>
-<form class="form-inline" method="post">
-    {% csrf_token %}
+<form class="form-inline ledger-search-form">
     {% for field in search_form %}
         {{field.label}}
         {{field}}
     {% endfor %}
-    <button class="btn btn-success">检索</button> 
+    <button type="button" class="btn btn-success ledger-search-btn">检索</button> 
 </form>
 <br>
-<table class="table table-bordered">
-    <thead>
-        <th>名称</th>
-        <th>类型</th>
-        <th>规格</th>
-        <th>材质编号</th>
-        <th>数量</th>
-        <th>库房</th>
-        <th>退库次数</th>
-        <th>套料图</th>
-    </thead>
-    <tbody>
-        {% for barsteel in bar_steel_set %}
-        <tr>
-            <td>{{barsteel.material_info.name}}</td>
-            <td>型材</td>
-            <td>{{barsteel.material_info.specifications}}</td>
-            <td>{{barsteel.material_info.material_number}}</td>
-            <td>{{barsteel.quantity}}</td>
-            <td>{{barsteel.store_room}}</td>
-            <td>{{barsteel.material_info.return_time}}</td>
-            <td></td>
-        </tr>
-        {% endfor %}
-        {% for boardsteel in board_steel_set %}
-        <tr>
-            <td>{{boardsteel.material_info.name}}</td>
-            <td>板材</td>
-            <td>{{boardsteel.material_info.specifications}}</td>
-            <td>{{boardsteel.material_info.material_number}}</td>
-            <td>{{boardsteel.quantity}}</td>
-            <td>{{boardsteel.store_room}}</td>
-            <td>{{boardsteel.material_info.return_time}}</td>
-            <td>
-                {% ifequal boardsteel.material_info.return_time 0%}
-                    尚未退库
-                {% else %}
-                    {{boardsteel.slice_cad}}
-                {% endifequal%}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="steel-ledger-table">
+    {% include "storage/widgets/steel_ledger_table.html" %}
+</div>
 
 {% endblock %}

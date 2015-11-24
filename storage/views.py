@@ -30,24 +30,24 @@ def weldMaterialHomeViews(request):
 def steelMaterialHomeViews(request):
     context = {
 
-            }
+    }
     return render(request,"storage/steelmaterial/steelmaterialhome.html",context)
 
 def steelRefundViews(request):
     search_form = SteelRefundSearchForm()
-    refund_set = CommonSteelMaterialReturnCardInfo.objects.all()
+    refund_cards = CommonSteelMaterialReturnCardInfo.objects.all()
     context={
             "search_form":search_form,
-            "refund_set":refund_set
+            "refund_cards":refund_cards,
     }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
 def steelApplyViews(request):
     search_form = SteelRefundSearchForm()
-    refund_set = CommonSteelMaterialApplyCardInfo.objects.all()
+    apply_cards = CommonSteelMaterialApplyCardInfo.objects.all()
     context={
         "search_form":search_form,
-        "refund_set":refund_set,
+        "apply_cards":apply_cards,
     }
     return render(request,"storage/steelmaterial/steelapplyhome.html",context)
 
@@ -69,12 +69,10 @@ def steelApplyDetailViews(request,typeid,rid):
 
 def steelLedgerViews(request):
     search_form = SteelLedgerSearchForm()
-    board_steel_set = BoardSteelMaterialLedger.objects.all()
-    bar_steel_set =BarSteelMaterialLedger.objects.all()
+    steel_set = SteelMaterial.objects.all()
     context={
         "search_form":search_form,
-        "board_steel_set":board_steel_set,
-        "bar_steel_set":bar_steel_set,
+        "steel_set":steel_set,
     }
     return render(request,"storage/steelmaterial/steelledger.html",context)
 

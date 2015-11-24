@@ -151,6 +151,19 @@ def getMessageList(request, loguser):
     return html
 
 @dajaxice_register
+def getBoxList(request):
+    """
+    BinWu
+    """
+    print ("I am here")
+    box_list = MessageBox.objects.filter(user__id  = request.user.id).order_by("read", "message")
+    context = {
+        "box_list": box_list,
+    }
+    html = render_to_string("management/modal-message.html", context)
+    return html
+
+@dajaxice_register
 def deleteMessage(request, messageId):
     """
     BinWu
@@ -173,6 +186,36 @@ def checkMessage(request, messageId):
     paras: message: db id of the message for checking
     return: "data"
     """
+    messageObject = Message.objects.get(id = messageId)
+    file = DocumentFile.objects.filter(message = messageId)
+    file_name = []
+    file_list = []
+    for f in file:
+        file_name.append(f.news_document.name[26:])
+        file_list.append(f.news_document.path)
+    data = {
+        "message_title": messageObject.title,
+        "message_content": messageObject.content,
+        "filepath": file_list,
+        "filename": file_name,
+    }
+    print("title")
+    print(data['message_title'])
+    print(file_list)
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def checkBox(request, boxId):
+    """
+    BinWu
+    summary: ajax function to check the content of the messagebox
+    paras: message: db id of the message for checking
+    return: "data"
+    """
+    boxObject = MessageBox.objects.get(id = boxId)
+    messageId = boxObject.message.id
+    boxObject.read = True;
+    boxObject.save()
     messageObject = Message.objects.get(id = messageId)
     file = DocumentFile.objects.filter(message = messageId)
     file_name = []
