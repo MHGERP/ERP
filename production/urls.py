@@ -21,7 +21,15 @@ urlpatterns=patterns('',
         production_views.synthesizeFileListViews,
     ),
     url(
-    	r'^man_hour_summarize$',
-    	production_views.man_hour_summarizeViews,
+        r'^man_hour_summarize$',
+        production_views.man_hour_summarizeViews,
+    ),
+    url(
+        r'^production_plan$',
+        production_views.production_planViews,
+    ),
+    url(
+        r'^ledger$',
+        production_views.ledgerViews,
     ),
 )
