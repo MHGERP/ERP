@@ -33,7 +33,7 @@
     </tbody>
         {% for index in hum_set %}
         <tr>
-            <td>{{index.date|date:'Ymd'}}</td>
+            <td>{{index.date|date:'Y年m月d日'}}</td>
             <td>{{index.storeRoom}}</td>
             <td>{{index.storeMan}}</td>
             <td><a class="btn btn-warning" href="/storage/weldhumDetail/{{index.id}}">查看详情</a></td>

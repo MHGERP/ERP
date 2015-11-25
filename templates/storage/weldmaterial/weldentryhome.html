@@ -30,7 +30,7 @@
         {% for entry in entry_set %}
         <tr>
             <td>{{entry.work_order}}</td>
-            <td>{{entry.entry_time|date:"Ymd"}}</td>
+            <td>{{entry.entry_time|date:"Y年m月d日"}}</td>
             <td>{{entry.purchaser.userinfo}}</td>
             <td>{{entry.inspector.userinfo}}</td>
             <td>{% ifequal entry.entry_status  ENTRYSTATUS_END %}<a class="btn" href="/storage/weldentryconfirm/{{entry.id}}">查看</a>{% else %}<a class="btn btn-warning" href="/storage/weldentryconfirm/{{entry.id}}">待处理</a>{% endifequal %}</td>

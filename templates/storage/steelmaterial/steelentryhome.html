@@ -30,7 +30,7 @@
     </tbody>
         {% for entry in entry_set %}
         <tr>
-            <td>{{entry.entry_time|date:"Ymd"}}</td>
+            <td>{{entry.entry_time|date:"Y年m月d日"}}</td>
             <td>{{entry.form_code}}</td>
             <td>{{entry.material_source}}</td>
             <td>{{entry.purchaser.userinfo}}</td>

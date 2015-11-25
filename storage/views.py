@@ -105,6 +105,7 @@ def weldEntryHomeViews(request):
         #weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         weldentry_set = WeldMaterialEntry.objects.all()
         search_form = EntrySearchForm()
+    weldentry_set = weldentry_set.order_by("entry_time")
     context = {
             "entry_set":weldentry_set,
             "ENTRYSTATUS_END":STORAGESTATUS_END,
@@ -166,7 +167,7 @@ def Weld_Apply_Card_List(request):
     """
     context={}
     context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
-    weld_apply_cards=WeldingMaterialApplyCard.objects.exclude(status=APPLYCARD_COMMIT).order_by('create_time')
+    weld_apply_cards=WeldingMaterialApplyCard.objects.all().order_by('create_time')
     context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
@@ -605,6 +606,7 @@ def weldEntryAccountViews(request):
             items_set = get_weld_filter(WeldStoreList,search_form.cleaned_data)
     else:
         search_form = WeldAccountSearchForm()
+        items_set = items_set.order_by("entry_time")
     context = {
             "items_set":items_set,
             "search_form":search_form,
@@ -619,6 +621,7 @@ def weldStorageAccountHomeViews(request):
             items_set = get_weld_filter(WeldStoreList,search_form.cleaned_data)
     else:
         search_form = WeldStorageSearchForm()
+    items_set = items_set.order_by("entry_time")
     context = {
             "items_set":items_set,
             "search_form":search_form,

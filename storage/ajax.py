@@ -102,8 +102,12 @@ def Search_History_Apply_Records(request,data):
         q3=(conditions['index'] and Q(index=int(conditions['index']))) or None
         q4=(conditions['work_order'] and Q(workorder__order_index=int(conditions['work_order']))) or None
         q5=(conditions['commit_user'] and Q(commit_user__username=conditions['commit_user'])) or None
-        query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4,q5]))
-        context['weld_apply_cards']=WeldingMaterialApplyCard.objects.filter(query_conditions)
+        qset = filter(lambda x:x!=None,[q1,q2,q3,q4,q5]) 
+        if qset:
+            query_conditions=reduce(lambda x,y:x&y,qset)
+            context['weld_apply_cards'] = WeldingMaterialApplyCard.objects.filter(query_conditions)
+        else:
+            context['weld_apply_cards']=WeldingMaterialApplyCard.objects.all()
         return render_to_string('storage/weldapply/history_table.html',context)
     else:
         return HttpResponse('FAIL')

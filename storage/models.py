@@ -427,7 +427,7 @@ class WeldStoreThread(models.Model):
         verbose_name = u"焊材库存安全量"
         verbose_name_plural = u"焊材库存安全量"
     def __unicode__(self):
-        return '%s' % self.specifications
+        return '%s' % self.specification
 
 class OutSideBuyingEntry(models.Model):
     workorder = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
