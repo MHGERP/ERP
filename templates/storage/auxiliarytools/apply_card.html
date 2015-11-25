@@ -13,10 +13,10 @@
    <h3 style="text-align:center">辅助材料出库单</h3>
     <div>
         <div class="span3">
-            <label>申请时间:<strong>{{object.create_time}}</strong></label>
+            <label>申请时间:<strong>{{object.create_time|date:"Y年m月d日"}}</strong></label>
         </div>
         <div class="span4" style="text-align:center">
-            <label>实发时间:<strong>{{object.commit_time}}</strong></label>
+            <label>实发时间:<strong>{{object.commit_time|date:"Y年m月d日"}}</strong></label>
         </div>
         <div class="span4" style="float:right;text-align:center">
             <label>编号:<strong>{{object.index}}</strong></label>
