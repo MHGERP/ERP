@@ -56,9 +56,9 @@
             <td colspan="6" style="text-align:left">{{object.remark}}</td>
         <tr>
             <td>主管</td>
-            <td colspan="2">{{object.commit_user}}</td>
+            <td colspan="2">{{object.commit_user.userinfo.name}}</td>
             <td>领料</td>
-            <td colspan="3">{{object.applicant}}</td>
+            <td colspan="3">{{object.applicant.userinfo.name}}</td>
         </tr>
     </table>
         <input type="hidden" name="object_id" value="{{object_id}}">

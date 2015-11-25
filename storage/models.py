@@ -355,7 +355,7 @@ class AuxiliaryToolApplyCard(models.Model):
                 self.commit_time=timezone.now()
                 self.status=AUXILIARY_TOOL_APPLY_CARD_COMMITED
     
-            super(AuxiliaryToolApplyCard,self).save(*args,**kwargs)
+        super(AuxiliaryToolApplyCard,self).save(*args,**kwargs)
 
     class Meta:
         verbose_name=u'辅助材料领用卡'
