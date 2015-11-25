@@ -210,6 +210,26 @@ def entryItemSave(request,form,mid):
         "html":html,  
     }
     return simplejson.dumps(data)
+def steelEntryItemSave(request,form,mid):
+    item = SteelMaterialPurchasingEntry.objects.get(id = mid)
+    entry_form = SteelEntryItemsForm(deserialize_form(form),instance = item) 
+    pur_entry = item.entry
+    if entry_form.is_valid():
+        entry_form.save()
+        flag = True
+        message = u"修改成功"
+    else:
+        print entry_form.errors
+        flag = False
+        message = u"修改失败"
+    entry_set = SteelMaterialPurchasingEntry.objects.filter(entry = pur_entry) 
+    html = render_to_string("storage/steelmaterial/steelentryconfirm.html",{"entry_set":entry_set})
+    data = {
+        "flag":flag,
+        "message":message,
+        "html":html,  
+    }
+    return simplejson.dumps(data)
 
 @dajaxice_register
 def entryConfirm(request,eid,entry_code):
