@@ -260,6 +260,7 @@ AUXILIARY_TOOLS_MODELS_CHOICES=(
         (0,u'碳棒'),
         (1,u'面罩'),
         (2,u'白黑玻璃'),
+        (3,u'安全帽'),
         )
 
 
