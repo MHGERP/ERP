@@ -44,7 +44,7 @@ class WeldingMaterialApplyCard(models.Model):
 
 class StoreRoom(models.Model):
     name = models.CharField(max_length=20,verbose_name=u"库房名称",blank = False)
-    position = models.CharField(max_length=50,verbose_name=u"位置",blank = False)
+    position = models.CharField(max_length=50,verbose_name=u"位置",blank = True)
     material_type = models.IntegerField(choices=MATERIAL_TYPE,blank=False,null=False,default=0,verbose_name=u"材料类型")
 
     def __unicode__(self):
@@ -112,7 +112,7 @@ class SteelMaterialPurchasingEntry(models.Model):
     remark = models.CharField(max_length=50,blank=True,null=True,verbose_name="备注")
     entry_time = models.DateField(blank=False,null=True,auto_now_add=True,verbose_name=u"入库时间")
     entry_confirm = models.BooleanField(default=False,verbose_name=u"入库单确认")
-    entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES_2,default=0,verbose_name=u"入库单类型")
+    #entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES_2,default=0,verbose_name=u"入库单类型")
     entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=0,verbose_name=u"入库单状态")
     def __unicode__(self):
         return str(self.form_code)

@@ -23,9 +23,9 @@ class NewsForm(forms.Form):
 
 class MessageForm(forms.Form):
     message_title = forms.CharField(max_length=100, required=True,
-                                    widget=forms.TextInput(attrs={'class':'span6', 'id':"message_title", 'placeholder':u"消息标题 "}),)
+                                    widget=forms.TextInput(attrs={'class':'span6', 'id':"message_title", 'placeholder':u"消息标题 ", 'style':"width:400px"}),)
     message_content = forms.CharField(max_length=1000, required=True,
-                                      widget=forms.Textarea(attrs={'id':"message_content", 'rows':10, 'cols':80}))
+                                      widget=forms.Textarea(attrs={'id':"message_content", 'style':"width:500px"}))
     message_document = forms.FileField(label='select', help_text='文件上传', required=False,
                                        widget=forms.FileInput(attrs={'multiple':'multiple'}))
     message_group_list = Group.objects.all()
