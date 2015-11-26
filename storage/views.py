@@ -463,6 +463,7 @@ def AuxiliaryToolsEntryView(request):
         auxiliarytool=AuxiliaryTool.objects.get(id=object_id)
         context['object_id']=object_id
         context['entry_form']=AuxiliaryToolsForm(initial={'quantity':0},instance=auxiliarytool)
+        context['object']=auxiliarytool
         return render(request,'storage/auxiliarytools/auxiliarytoolsentry.html',context)
 
 def AuxiliaryToolsApplyListView(request):
@@ -532,7 +533,7 @@ def AuxiliaryToolsLedgerEntryView(request):
     """
     context={}
     context['search_form']=AuxiliaryToolsSearchForm()
-    context['rets']=AuxiliaryToolEntryCard.objects.all()
+    context['rets']=AuxiliaryToolEntryCard.objects.all().order_by('-create_time')
     return render(request,'storage/auxiliarytools/ledger_entry.html',context)
 
 def AuxiliaryToolsLedgerEntryCardView(request):
