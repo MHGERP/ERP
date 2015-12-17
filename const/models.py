@@ -65,9 +65,17 @@ class CirculationName(models.Model):
         return self.full_name
 
 class CirculationRoute(models.Model):
-    materiel_belong = models.ForeignKey(Material, blank = False, verbose_name = u"所属物料")
-    index = models.IntegerField(blank = False, choices = INDEX_LIST, verbose_name = u"流转序号")
-    name = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称")
+    materiel_belong = models.OneToOneField(Material, blank = False, verbose_name = u"所属物料")
+    L1 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称1", related_name = "L1")
+    L2 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称2", related_name = "L2")
+    L3 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称3", related_name = "L3")
+    L4 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称4", related_name = "L4")
+    L5 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称5", related_name = "L5")
+    L6 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称6", related_name = "L6")
+    L7 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称7", related_name = "L7")
+    L8 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称8", related_name = "L8")
+    L9 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称9", related_name = "L9")
+    L10 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称10", related_name = "L10")
     class Meta:
         verbose_name = u"流转路线"
         verbose_name_plural = u"流转路线"
