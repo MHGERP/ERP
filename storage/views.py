@@ -105,7 +105,7 @@ def weldEntryHomeViews(request):
         #weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         weldentry_set = WeldMaterialEntry.objects.all()
         search_form = EntrySearchForm()
-    weldentry_set = weldentry_set.order_by("entry_time")
+    weldentry_set = weldentry_set.order_by("-entry_time")
     context = {
             "entry_set":weldentry_set,
             "ENTRYSTATUS_END":STORAGESTATUS_END,

@@ -4,7 +4,7 @@ from django import  forms
 from django.forms import ModelForm
 from storage.models import *
 from const.models import Materiel
-from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES,STEEL_TYPE,STEEL
+from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES,STEEL_TYPE,STEEL,STORAGE_ENTRY_TYPECHOICES
 from django.contrib.auth.models import User
 from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
@@ -326,4 +326,5 @@ class SteelLedgerSearchForm(forms.Form):
         return_choice = [(-1,""),(False,'未退库'),(True,'退库过')]
         # self.fields['is_returned'].choices=return_choice
 
-
+class EntryTypeForm(forms.Form):
+    entry_type=forms.ChoiceField(label=u'入库单类型',choices=STORAGE_ENTRY_TYPECHOICES,required=True,widget=forms.Select(attrs={'class':'form-control span2','id':'work_order'}))
