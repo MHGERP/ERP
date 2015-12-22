@@ -22,6 +22,7 @@ Registers = (
     AuxiliaryTool,
     AuxiliaryToolApplyCard,
     AuxiliaryToolEntryCard,
+    AuxiliaryToolEntryCardList,
     WeldMaterialEntry,
     WeldMaterialEntryItems,
     WeldStoreList,

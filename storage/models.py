@@ -364,14 +364,41 @@ class AuxiliaryToolApplyCard(models.Model):
     def __unicode__(self):
         return str(self.index)
 
+
+
+class AuxiliaryToolEntryCardList(models.Model):
+    create_time = models.DateField(verbose_name=u'创建时间', auto_now_add=True)
+    workorder = models.ForeignKey(WorkOrder, verbose_name=u'工作令',
+                                  blank=True, null=True)
+    purchaser = models.ForeignKey(User, blank=True, null=True,
+                                  verbose_name=u'采购员', related_name='au_purchaser')
+    inspector = models.ForeignKey(User, blank=True, null=True,
+                                  verbose_name=u'检验员', related_name='au_inspector')
+    keeper = models.ForeignKey(User, blank=True, null=True,
+                               verbose_name=u'库管员', related_name='au_keeper')
+    index = models.CharField(blank=False, null=False, max_length=20,
+                             verbose_name=u'编号', unique=True)
+    status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,
+                                 default=STORAGESTATUS_PURCHASER,
+                                 verbose_name=u'入库单状态')
+
+    class Meta:
+        verbose_name = u'辅助材料入库单'
+        verbose_name_plural = u'辅助材料入库单'
+
+    def __unicode__(self):
+        return '%s' % self.index
+
 class AuxiliaryToolEntryCard(models.Model):
     create_time=models.DateField(verbose_name=u'创建时间',auto_now_add=True)
     auxiliary_tool=models.ForeignKey(AuxiliaryTool,verbose_name=u'入库材料',blank=False)
     quantity=models.FloatField(verbose_name=u'入库数量',blank=False)
+    card_list=models.ForeignKey(AuxiliaryToolEntryCardList, blank=True,
+                                null=True, verbose_name=u'入库单')
 
     class Meta:
-        verbose_name=u'辅助材料入库单'
-        verbose_name_plural=u'辅助材料入库单'
+        verbose_name=u'辅助材料入库单项'
+        verbose_name_plural=u'辅助材料入库单项'
 
     def __unicode__(self):
         return u'%s %s %s'%(self.auxiliary_tool,self.quantity,self.create_time)
