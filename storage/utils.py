@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 
+import datetime
 from storage.models import *
 from purchasing.models import *
 from django.db.models import Q
@@ -49,4 +50,9 @@ def storeConsume(applycard):
             consume_count -= item.count
             item.count = 0
             item.save()
-    
+   
+def get_today(timetype=""):
+    """
+    timetype : String year,month,day
+    """
+    return getattr(datetime.date.today(),timetype) if timetype != "" else datetime.date.today()

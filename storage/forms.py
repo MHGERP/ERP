@@ -127,7 +127,7 @@ class HumRecordForm(ModelForm):
         #fields = ("storeRoom","storeMan","demandTemp","demandHumidity","actualTemperature1","actualHumidity1","actualTemperature2","actualHumidity12","remark")
         widgets = {
             "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
-       #     "storeRoom":forms.Select(attrs={"class":"form-control"}),
+            "storeRoom":forms.HiddenInput(),
        #     "storeMan":forms.TextInput(attrs={"class":"form-control"}),
        #     "demandTemp":forms.TextInput(attrs={"class":"form-control"}),
         }
@@ -172,7 +172,7 @@ class ApplyRefundSearchForm(forms.Form):
 class EntrySearchForm(forms.Form):
     entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_time'}))
     purchaser = forms.ChoiceField(label=u"采购员",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'purchaser'}))
-    work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'work_order'}))
+    entry_code=forms.CharField(label=u'入库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'entry_code'}))
     def __init__(self,*args,**kwargs):
         super(EntrySearchForm,self).__init__(*args,**kwargs)
         users = User.objects.all()

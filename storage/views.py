@@ -102,8 +102,7 @@ def weldEntryHomeViews(request):
         else:
             print search_form.errors
     else:
-        #weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
-        weldentry_set = WeldMaterialEntry.objects.all()
+        weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         search_form = EntrySearchForm()
     weldentry_set = weldentry_set.order_by("-entry_time")
     context = {
@@ -381,7 +380,7 @@ def weldapplyrefundDetail(request,index):
 
 
 def weldRefundViews(request):
-    getUserByAuthority(STORAGE_KEEPER)
+    print checkAuthority(STORAGE_KEEPER,request.user)
     if request.method == "POST":
         search_form = RefundSearchForm(request.POST)
         if search_form.is_valid():
@@ -614,12 +613,12 @@ def weldEntryAccountViews(request):
     return render(request,"storage/weldmaterial/weldaccount/weldentryhome.html",context)
 
 def weldStorageAccountHomeViews(request):
-    items_set = WeldStoreList.objects.all().order_by('specification').order_by("entry_time")
     if request.method == "POST":
         search_form = WeldStorageSearchForm(request.POST)
         if search_form.is_valid():
             items_set = get_weld_filter(WeldStoreList,search_form.cleaned_data)
     else:
+        items_set = WeldStoreList.objects.qualified_set().order_by('specification')
         search_form = WeldStorageSearchForm()
     items_set = items_set.order_by("entry_time")
     context = {
