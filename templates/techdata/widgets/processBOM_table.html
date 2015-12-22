@@ -33,8 +33,25 @@
 			</tr>
 		<thead>
 		<tbody>
-
-
+			{% for item in BOM %}
+			<tr iid="{{item.id}}">
+				<td>{{item.index}}</td>
+				<td></td>
+				<td>{{item.schematic_index}}</td>
+				<td>{{item.name}}</td>
+				<td>{{item.parent_schematic_index}}</td>				
+				<td>{{item.count}}</td>
+				<td>{{item.material}}</td>
+				<td>{{item.net_weight}}</td>
+				<td>{{item.total_weight}}</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>{{item.remark}}</td>
+				<td></td>
+			</tr>				
+			{% endfor %}
 		<tbody>
 	</table>
 </div>
