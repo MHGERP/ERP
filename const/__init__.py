@@ -271,3 +271,25 @@ STORAGE_ENTRY_TYPECHOICES=(
     (1,u"钢材"),
 )
 
+
+
+
+
+#技术资料管理
+H1 = "0"
+J = "2"
+R = "3"
+ZM = "4"
+GY = "5"
+DY = "6"
+XZ = "7"
+
+CIRCULATION_CHOICES = (
+    (H1, "H1"),
+    (J, "J"),
+    (ZM, "ZM"),
+    (R, "R"),
+    (GY, "GY"),
+    (DY, "DY"),
+    (XZ, "XZ"),
+)

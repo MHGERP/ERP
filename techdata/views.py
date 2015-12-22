@@ -11,6 +11,7 @@ from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
 
+from const.forms import WorkOrderForm
 
 def techPreparationPlanViews(request):
     context = {}
@@ -69,7 +70,13 @@ def auxiliaryMaterialViews(request):
     return render(request, "techdata/auxiliary_material.html", context)
 
 def processBOMViews(request):
-    context = {}
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "form": work_order_form,
+    }
     return render(request, "techdata/processBOM.html", context)
 
 def weldListViews(request):
