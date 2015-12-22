@@ -198,14 +198,16 @@ def entryItemSave(request,form,mid):
     item = WeldMaterialEntryItems.objects.get(id = mid)
     entry_form = EntryItemsForm(deserialize_form(form),instance = item) 
     pur_entry = item.entry
-    if entry_form.is_valid():
-        entry_form.save()
-        flag = True
-        message = u"修改成功"
+    flag = False
+    if pur_entry.auth_status(STORAGESTATUS_KEEPER):
+        if entry_form.is_valid():
+            entry_form.save()
+            flag = True
+            message = u"修改成功"
+        else:
+            message = u"修改失败"
     else:
-        print entry_form.errors
-        flag = False
-        message = u"修改失败"
+        message = u"修改失败，入库单已确认过"
     entry_set = WeldMaterialEntryItems.objects.filter(entry = pur_entry) 
     html = render_to_string("storage/widgets/weldentrytable.html",{"entry_set":entry_set})
     data = {
@@ -243,8 +245,9 @@ def entryConfirm(request,eid,entry_code):
             entry.entry_code = entry_code
             entry.keeper = request.user
             entry.entry_status = STORAGESTATUS_END
-            weldStoreItemsCreate(entry) 
+            entry.entry_time = datetime.date.today()
             entry.save()
+            weldStoreItemsCreate(entry)
             flag = True
         else:
             flag = False
