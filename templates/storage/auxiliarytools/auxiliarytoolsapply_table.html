@@ -12,7 +12,7 @@
             <th class="fix_th span1">单价</th>
             <th class="fix_th span1">总价</th>
         </tr> 
-        {% if user.is_superuser %}
+        {% if storage_keeper %}
         {{apply_form.apply_quantity}}
         {{apply_form.apply_item}}
         <tr>

@@ -34,7 +34,8 @@ class InventoryType(models.Model):
 
 class Materiel(models.Model):
     order = models.ForeignKey(WorkOrder, blank = False, verbose_name = u"所属工作号")
-    index = models.CharField(blank = True, max_length = 20, verbose_name = u"编号")
+    index = models.CharField(blank = True, max_length = 20, verbose_name = u"工作票号")
+
     schematic_index = models.CharField(blank = False, max_length = 50, verbose_name = u"零件图号")
     parent_schematic_index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"部件图号")
     material = models.ForeignKey(Material, verbose_name = u"材料")
@@ -56,26 +57,26 @@ class Materiel(models.Model):
         return self.name
 
 class CirculationName(models.Model):
-    name = models.CharField(blank = False, max_length = 10, verbose_name = u"流转简称")
-    full_name = models.CharField(blank = False, max_length = 10, verbose_name = u"流转名称全称")
+    name = models.CharField(blank = False, max_length = 10, choices = CIRCULATION_CHOICES, verbose_name = u"流转简称")
+    full_name = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"流转名称全称")
     class Meta:
         verbose_name = u"流转名称"
         verbose_name_plural = u"流转名称"
     def __unicode__(self):
-        return self.full_name
+        return self.get_name_display()
 
 class CirculationRoute(models.Model):
     materiel_belong = models.OneToOneField(Material, blank = False, verbose_name = u"所属物料")
-    L1 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称1", related_name = "L1")
-    L2 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称2", related_name = "L2")
-    L3 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称3", related_name = "L3")
-    L4 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称4", related_name = "L4")
-    L5 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称5", related_name = "L5")
-    L6 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称6", related_name = "L6")
-    L7 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称7", related_name = "L7")
-    L8 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称8", related_name = "L8")
-    L9 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称9", related_name = "L9")
-    L10 = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称10", related_name = "L10")
+    L1 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称1", related_name = "L1")
+    L2 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称2", related_name = "L2")
+    L3 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称3", related_name = "L3")
+    L4 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称4", related_name = "L4")
+    L5 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称5", related_name = "L5")
+    L6 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称6", related_name = "L6")
+    L7 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称7", related_name = "L7")
+    L8 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称8", related_name = "L8")
+    L9 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称9", related_name = "L9")
+    L10 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称10", related_name = "L10")
     class Meta:
         verbose_name = u"流转路线"
         verbose_name_plural = u"流转路线"
