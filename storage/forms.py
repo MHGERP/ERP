@@ -124,10 +124,10 @@ class SteelEntryItemsForm(ModelForm):
 class HumRecordForm(ModelForm):
     class Meta: 
         model = WeldingMaterialHumitureRecord 
+        exclude = ("storeMan","id")
         #fields = ("storeRoom","storeMan","demandTemp","demandHumidity","actualTemperature1","actualHumidity1","actualTemperature2","actualHumidity12","remark")
         widgets = {
             "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
-            "storeRoom":forms.HiddenInput(),
        #     "storeMan":forms.TextInput(attrs={"class":"form-control"}),
        #     "demandTemp":forms.TextInput(attrs={"class":"form-control"}),
         }
