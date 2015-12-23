@@ -83,3 +83,12 @@ function humi_change_save(hid){
 function humi_change_save_callback(data){
     alert(data.message)
 }
+
+function bake_save(bid){
+    Dajaxice.storage.bakeSave(bake_save_callback,{"bakeform":$("#weldbake_form").serialize(),"bid":bid});
+}
+
+function bake_save_callback(data){
+    $("#bake_div").html(data.html);
+    alert(data.message);
+}

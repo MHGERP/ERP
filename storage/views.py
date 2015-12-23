@@ -336,16 +336,26 @@ def weldbakeNewRecord(request):
             }
     return render(request,"storage/weldbake/weldbakeNewRecord.html",context)
 
-def weldbakeDetail(request,index):
+def weldbakeDetail(request):
     """
     kad
     """
-    bake_detail = WeldingMaterialBakeRecord.objects.get(index = index)
-    form = BakeRecordForm(instance = bake_detail)
-    context = {
-            "form":form,
-            }
+    context = getWeldBakeDetailContext(request)
     return render(request,"storage/weldbake/weldbakeDetail.html",context)
+
+def getWeldBakeDetailContext(request):
+    context = {}
+    request_dic,method = getRequestByMethod(request)
+    index = request_dic.get("index",None)
+    if index != None: 
+        weldbake = WeldingMaterialBakeRecord.objects.get(index = index)
+        form = BakeRecordForm(instance = weldbake)
+        context["weldbake"] = weldbake
+    else:
+        form = BakeRecordForm()
+    context["is_show"] = True
+    context["form"] = form
+    return context
 
 def weldapplyrefundHomeViews(request):
     """

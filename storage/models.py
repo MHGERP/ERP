@@ -90,8 +90,8 @@ class WeldingMaterialBakeRecord(models.Model):
     timeforremainheat = models.DateTimeField(verbose_name=u'进保湿炉时间',blank=True,null=True)
     keepheattemp = models.FloatField(verbose_name=u'保温温度',default = 0,blank=True)
     usetime = models.DateTimeField(verbose_name=u'领用时间',blank=True,null=True)
-    storeMan = models.CharField(verbose_name=u'库管员',max_length=50,blank=True)
-    weldengineer = models.CharField(verbose_name=u'焊接工程师',max_length=50,blank=True)
+    storeMan = models.ForeignKey(User,verbose_name=u'库管员',related_name="weldbake_storeMan",blank=True)
+    weldengineer = models.ForeignKey(User,verbose_name=u'焊接工程师',related_name="weldbake_engineer",blank=True)
     remark = models.CharField(verbose_name=u'备注', max_length=1000,blank=True)
     def __unicode__(self):
         return str(self.index)
