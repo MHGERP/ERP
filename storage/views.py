@@ -444,7 +444,7 @@ def AuxiliaryToolsEntryListView(request):
     context={}
     if request.method=='GET':
         context['entry_list']=AuxiliaryToolEntryCardList.objects.filter(
-            status=STORAGESTATUS_KEEPER).order_by('-create_time')
+            status=STORAGESTATUS_KEEPER).order_by('-id')
     else:
         search_form = AuxiliaryEntrySearchForm(request.POST)
         if search_form.is_valid():
@@ -455,32 +455,39 @@ def AuxiliaryToolsEntryListView(request):
     context['search_form'] = AuxiliaryEntrySearchForm()
     return render(request,'storage/auxiliarytools/auxiliarytoolsentry_list.html',context)
 
+
 def AuxiliaryToolsEntryView(request):
     """
     Time1ess
-    summary: Auxiliary tools entry
-    params: id(GET,POST),quantity(POST)
+    summary: Confirm auxiliary tools entry
+    params: id(GET,POST)
     return: NULL
     """
-    context={}
-    if request.method=='POST':
-        object_id=int(request.POST['object_id'])
-        auxiliarytool=AuxiliaryTool.objects.get(id=object_id)
-        new_entry_quantity=float(request.POST['quantity'])
-        if new_entry_quantity<0:
-            return HttpResponseRedirect('/storage/auxiliarytools/entrylist')
-        auxiliarytool.quantity=F('quantity')+new_entry_quantity
-        auxiliarytool.save()
-        entryrecord=AuxiliaryToolEntryCard(auxiliary_tool=auxiliarytool,quantity=new_entry_quantity)
-        entryrecord.save()
+    context = {}
+    if request.method == 'POST':
+        object_id = int(request.POST['object_id'])
+        auxiliary_card_list = AuxiliaryToolEntryCardList.objects.get(id=object_id)
+        auxiliarytools = AuxiliaryToolEntryCard.objects.filter(card_list__id=object_id)
+        for at in auxiliarytools:
+            if at.quantity<0:
+                print '[ERROR]Auxiliary tools entry quantity error'
+                return AuxiliaryToolsEntryListView(request)
+            at.auxiliary_tool.quantity=F('quantity')+at.quantity
+        for at in auxiliarytools:
+            at.auxiliary_tool.save()
+        auxiliary_card_list.status=STORAGESTATUS_END
+        auxiliary_card_list.save()
         return AuxiliaryToolsEntryListView(request)
     else:
-        object_id=int(request.GET['id'])
-        auxiliarytool=AuxiliaryTool.objects.get(id=object_id)
-        context['object_id']=object_id
-        context['entry_form']=AuxiliaryToolsForm(initial={'quantity':0},instance=auxiliarytool)
-        context['object']=auxiliarytool
-        return render(request,'storage/auxiliarytools/auxiliarytoolsentry.html',context)
+        object_id = int(request.GET['id'])
+        auxiliary_tool_card_list = AuxiliaryToolEntryCardList.objects.get(
+            id=object_id)
+        context['object'] = auxiliary_tool_card_list
+        context['sub_objects'] = AuxiliaryToolEntryCard.objects.filter(
+            card_list=auxiliary_tool_card_list)
+        return render(request,
+                      'storage/auxiliarytools/auxiliarytoolsentry.html',
+                      context)
 
 def AuxiliaryToolsApplyListView(request):
     """
