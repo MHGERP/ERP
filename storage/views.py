@@ -448,7 +448,9 @@ def AuxiliaryToolsEntryListView(request):
     else:
         search_form = AuxiliaryEntrySearchForm(request.POST)
         if search_form.is_valid():
-            context['entry_list'] = get_weld_filter(AuxiliaryToolEntryCardList,search_form.cleaned_data)
+            context['entry_list'] =\
+            get_weld_filter(AuxiliaryToolEntryCardList,search_form.cleaned_data)\
+                    .filter(status=STORAGESTATUS_KEEPER)
         else:
             context['entry_list']=[]
             print search_form.errors
@@ -565,7 +567,8 @@ def AuxiliaryToolsLedgerEntryView(request):
         search_form = AuxiliaryEntrySearchForm(request.POST)
         if search_form.is_valid():
             context['rets'] = get_weld_filter(AuxiliaryToolEntryCardList,
-                                              search_form.cleaned_data)
+                                              search_form.cleaned_data)\
+                    .filter(status=STORAGESTATUS_END)
         else:
             context['rets'] = []
             print search_form.errors
@@ -579,6 +582,7 @@ def AuxiliaryToolsLedgerEntryCardView(request):
     params: id(GET)
     return: NULL
     """
+    context={}
     object_id = int(request.GET['id'])
     auxiliary_tool_card_list = AuxiliaryToolEntryCardList.objects.get(
         id=object_id)
