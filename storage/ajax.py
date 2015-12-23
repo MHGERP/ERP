@@ -276,3 +276,18 @@ def getThreadItems(request):
             print e
     html = render_to_string("storage/widgets/item_table.html",{"items_set":warning_set})
     return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def humiChangeSave(request,hidform,hid):
+    message = u"修改失败,有未填数据"
+    try:
+        humi_obj = WeldingMaterialHumitureRecord.objects.get(id=hid)
+        form = HumRecordForm(deserialize_form(hidform),instance = humi_obj)
+        if form.is_valid():
+            humi_obj = form.save(commit = False)
+            if humi_obj.date == get_today():
+                form.save()
+                message = u"修改成功"
+    except Exception,e:
+        print e
+    return simplejson.dumps({"message":message})

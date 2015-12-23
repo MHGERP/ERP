@@ -38,7 +38,7 @@ class Materiel(models.Model):
 
     schematic_index = models.CharField(blank = False, max_length = 50, verbose_name = u"零件图号")
     parent_schematic_index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"部件图号")
-    material = models.ForeignKey(Material, verbose_name = u"材料")
+    material = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"材料")
     name = models.CharField(blank = False, max_length = 20, verbose_name = u"名称")
     count = models.CharField(blank = True, max_length = 20, null = True, verbose_name = u"数量")
     net_weight = models.FloatField(blank = True, null = True, verbose_name = u"净重")
@@ -66,7 +66,7 @@ class CirculationName(models.Model):
         return self.get_name_display()
 
 class CirculationRoute(models.Model):
-    materiel_belong = models.OneToOneField(Material, blank = False, verbose_name = u"所属物料")
+    materiel_belong = models.OneToOneField(Materiel, blank = False, verbose_name = u"所属物料")
     L1 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称1", related_name = "L1")
     L2 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称2", related_name = "L2")
     L3 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称3", related_name = "L3")
@@ -81,7 +81,7 @@ class CirculationRoute(models.Model):
         verbose_name = u"流转路线"
         verbose_name_plural = u"流转路线"
     def __unicode__(self):
-        return self.name
+        return self.materiel_belong.name
 
 class BidFormStatus(models.Model):
     #status=models.IntegerField(blank=False,unique=True,choices=BIDFORM_STATUS_CHOICES,verbose_name=u"标单状态")

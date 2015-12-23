@@ -272,12 +272,17 @@ def weldhumNewRecord(request):
     if request.method == "POST":
         form = HumRecordForm(request.POST)
         if form.is_valid():
-            form.save()
+            humrecord = form.save(commit = False)
+            humrecord.storeMan = request.user
+            humrecord.save()
             return HttpResponseRedirect("weldhumiture")
+        else:
+            print form.errors
     else:
         form = HumRecordForm()
     context = {
-            "form":form
+            "form":form,
+            "changeEnable":False,
             }
     return render(request,"storage/weldhumi/weldhumNewRecord.html",context)
 
@@ -285,12 +290,13 @@ def weldhumDetail(request,eid):
     """
     kad
     """
-    print eid
     hum_detail = WeldingMaterialHumitureRecord.objects.get(id = eid)
     form = HumRecordForm(instance = hum_detail)
+    changeEnable = hum_detail.date == get_today()
     context = {
             "form":form,
             "humRecordDate":hum_detail,
+            "changeEnable":changeEnable,
             }
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
 

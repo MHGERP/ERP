@@ -5,9 +5,9 @@
             <button type="button" class="btn btn-default bl">{{form.storeRoom.label}}</button>
             {{form.storeRoom}}
         </div>
-        <div class="span4 control-group {% if form.storeMan.errors %}error{% endif %}"> 
-            <button type="button" class="btn btn-default bl">{{form.storeMan.label}}</button>
-            {{form.storeMan}}
+        <div class="span4 control-group"> 
+            <button type="button" class="btn btn-default bl">库管员</button>
+            <input id="id_demandTemperature" type="text" value="{{humRecordDate.storeMan.userinfo}}" disabled placeholder="自动填写"/>
         </div>
     </div>
     <br>
@@ -51,5 +51,9 @@
         </div>
     </div>
     <br>
+    {% if changeEnable %}
+    <button type="button" class="btn btn-success" onclick="humi_change_save({{humRecordDate.id}})">保存修改</button>
+    {% else %}
     <button type="submit" class="btn btn-success btn-large bl" id="btnInsert">录入</button>
+    {% endif %}
 </form>
