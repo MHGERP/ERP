@@ -16,11 +16,12 @@
     {% for record in rets %}
     <tr>
         <td>{{forloop.counter}}</td>
+        <td>{{record.index}}</td>
         <td>{{record.create_time|date:"Y年m月d日"}}</td>
         <td>{{record.purchaser.userinfo.name}}</td>
         <td>{{record.inspector.userinfo.name}}</td>
         <td>{{record.keeper.userinfo.name}}</td>
-        <td><a href="entry_card?id={{record.id}}"><button type="button" class="btn btn-primary">查看入库单</button></a></td>
+        <td><a href="entry/entry_card?id={{record.id}}"><button type="button" class="btn btn-primary">查看入库单</button></a></td>
     </tr>
     {% endfor %}
 </table>

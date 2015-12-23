@@ -579,11 +579,15 @@ def AuxiliaryToolsLedgerEntryCardView(request):
     params: id(GET)
     return: NULL
     """
-    context={}
-    object_id=int(request.GET['id'])
-    auxiliary_tool_entry_card=AuxiliaryToolEntryCard.objects.get(id=object_id)
-    context['object']=auxiliary_tool_entry_card
-    return render(request,'storage/auxiliarytools/entry_card.html',context)
+    object_id = int(request.GET['id'])
+    auxiliary_tool_card_list = AuxiliaryToolEntryCardList.objects.get(
+        id=object_id)
+    context['object'] = auxiliary_tool_card_list
+    context['sub_objects'] = AuxiliaryToolEntryCard.objects.filter(
+        card_list=auxiliary_tool_card_list)
+    return render(request,
+                  'storage/auxiliarytools/entry_card.html',
+                  context)
 
 def AuxiliaryToolsLedgerApplyView(request):
     """
