@@ -481,13 +481,14 @@ def AuxiliaryToolsEntryView(request):
         for at in auxiliarytools:
             if at.quantity<0:
                 print '[ERROR]Auxiliary tools entry quantity error'
-                return AuxiliaryToolsEntryListView(request)
+                return HttpResponseRedirect('/storage/auxiliarytools/entrylist')
             at.auxiliary_tool.quantity=F('quantity')+at.quantity
         for at in auxiliarytools:
             at.auxiliary_tool.save()
         auxiliary_card_list.status=STORAGESTATUS_END
+        auxiliary_card_list.keeper=request.user
         auxiliary_card_list.save()
-        return AuxiliaryToolsEntryListView(request)
+        return HttpResponseRedirect('/storage/auxiliarytools/entrylist')
     else:
         object_id = int(request.GET['id'])
         auxiliary_tool_card_list = AuxiliaryToolEntryCardList.objects.get(
@@ -566,10 +567,20 @@ def AuxiliaryToolsLedgerEntryView(request):
     params: NULL
     return: NULL
     """
-    context={}
-    context['search_form']=AuxiliaryToolsSearchForm()
-    context['rets']=AuxiliaryToolEntryCard.objects.all().order_by('-create_time')
-    return render(request,'storage/auxiliarytools/ledger_entry.html',context)
+    context = {}
+    if request.method == 'GET':
+        context['rets'] = AuxiliaryToolEntryCardList.objects.filter(
+            status=STORAGESTATUS_END).order_by('-create_time')
+    else:
+        search_form = AuxiliaryEntrySearchForm(request.POST)
+        if search_form.is_valid():
+            context['rets'] = get_weld_filter(AuxiliaryToolEntryCardList,
+                                              search_form.cleaned_data)
+        else:
+            context['rets'] = []
+            print search_form.errors
+    context['search_form'] = AuxiliaryEntrySearchForm()
+    return render(request, 'storage/auxiliarytools/ledger_entry.html', context)
 
 def AuxiliaryToolsLedgerEntryCardView(request):
     """

@@ -282,17 +282,18 @@ class AuxiliaryToolsApplyCardSearchForm(forms.Form):
 
 class AuxiliaryEntrySearchForm(forms.Form):
     create_time = forms.DateField(label=u"日期", required=False,
-                                  widget=forms.TextInput(
-                                      attrs={"class": 'form-control span2',
-                                             'id': 'entry_time'}))
+                                  widget=forms.TextInput(attrs={
+                                          'class': 'form-control search-query',
+                                          'readonly': 'readonly',
+                                          'id': 'entry_time'}))
     purchaser = forms.ChoiceField(label=u"采购员", required=False,
-                                  widget=forms.Select(
-                                      attrs={"class": 'form-control span2',
-                                             'id': 'purchaser'}))
+                                  widget=forms.Select(attrs={
+                                          "class": 'form-control search-query',
+                                          'id': 'purchaser'}))
     status = forms.CharField(label=u'入库单编号', required=False,
-                             widget=forms.TextInput(
-                                 attrs={'class': 'form-control span2',
-                                        'id': 'entry_code'}))
+                             widget=forms.TextInput(attrs={
+                                     'class': 'form-control search-query',
+                                     'id': 'entry_code'}))
 
     def __init__(self, *args, **kwargs):
         super(AuxiliaryEntrySearchForm, self).__init__(*args, **kwargs)
