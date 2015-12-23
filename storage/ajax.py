@@ -291,3 +291,24 @@ def humiChangeSave(request,hidform,hid):
     except Exception,e:
         print e
     return simplejson.dumps({"message":message})
+
+@dajaxice_register
+def bakeSave(request,bakeform,bid=None):
+    weldbake = ""
+    if bid != None:
+        weldbake = WeldingMaterialBakeRecord.objects.get(id = bid)
+    bakeform = deserialize_form(bakeform)
+    form = BakeRecordForm(bakeform,instance = weldbake) if bid !=None else BakeRecordForm(bakeform)
+    if form.is_valid():
+        weldbake = form.save(commit = False)
+        weldbake.save()
+        message = u"录入成功"
+    else:
+        message = u"录入失败"
+    context = {
+        "form":form,
+        "weldbake":weldbake,
+    }
+    html = render_to_string("storage/widgets/bake_form.html",context)
+    return simplejson.dumps({"html":html,"message":message})
+

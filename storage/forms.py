@@ -147,6 +147,7 @@ class HumSearchForm(forms.Form):
 class BakeRecordForm(ModelForm):
     class Meta:
         model = WeldingMaterialBakeRecord
+        exclude = ("storeMan",)
         widgets = { 
             "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
             "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"date"}),
@@ -156,6 +157,11 @@ class BakeRecordForm(ModelForm):
             "timeforremainheat":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"timeforremainheat"}),
             "usetime":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"usetime"}),
         }
+    def __init__(self,*args,**kwargs):
+        super(BakeRecordForm,self).__init__(*args,**kwargs)
+        engineers = getUserByAuthority(STORAGE_KEEPER)
+        engin_tuple = tuple([ (user.id,user.userinfo) for user in engineers ]) 
+        self.fields["weldengineer"].choices = engin_tuple
 
 class BakeSearchForm(forms.Form):
     date = forms.DateField(label = u"日期",required = False, widget = forms.TextInput(attrs={'class':'form-controli span2','id':'date'}))
