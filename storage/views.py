@@ -436,7 +436,17 @@ def AuxiliaryToolsEntryListView(request):
     return: NULL
     """
     context={}
-    context['auxiliarytools']=AuxiliaryTool.objects.all()
+    if request.method=='GET':
+        context['entry_list']=AuxiliaryToolEntryCardList.objects.filter(
+            status=STORAGESTATUS_KEEPER).order_by('-create_time')
+    else:
+        search_form = AuxiliaryEntrySearchForm(request.POST)
+        if search_form.is_valid():
+            context['entry_list'] = get_weld_filter(AuxiliaryToolEntryCardList,search_form.cleaned_data)
+        else:
+            context['entry_list']=[]
+            print search_form.errors
+    context['search_form'] = AuxiliaryEntrySearchForm()
     return render(request,'storage/auxiliarytools/auxiliarytoolsentry_list.html',context)
 
 def AuxiliaryToolsEntryView(request):

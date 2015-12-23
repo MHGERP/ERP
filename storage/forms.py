@@ -178,6 +178,8 @@ class EntrySearchForm(forms.Form):
         users = User.objects.all()
         self.fields["purchaser"].choices = getChoiceList(users,"userinfo")
 
+
+
 class SteelEntrySearchForm(forms.Form):
     entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_time'}))
     form_code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'form_code'}))
@@ -270,6 +272,27 @@ class AuxiliaryToolsApplyCardSearchForm(forms.Form):
     apply_item=forms.CharField(label=u'申请物资',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'apply_item'}))
     applicant=forms.CharField(label=u'领用人',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'applicant'}))
     index=forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'index'}))
+
+
+class AuxiliaryEntrySearchForm(forms.Form):
+    create_time = forms.DateField(label=u"日期", required=False,
+                                  widget=forms.TextInput(
+                                      attrs={"class": 'form-control span2',
+                                             'id': 'entry_time'}))
+    purchaser = forms.ChoiceField(label=u"采购员", required=False,
+                                  widget=forms.Select(
+                                      attrs={"class": 'form-control span2',
+                                             'id': 'purchaser'}))
+    status = forms.CharField(label=u'入库单编号', required=False,
+                             widget=forms.TextInput(
+                                 attrs={'class': 'form-control span2',
+                                        'id': 'entry_code'}))
+
+    def __init__(self, *args, **kwargs):
+        super(AuxiliaryEntrySearchForm, self).__init__(*args, **kwargs)
+        users = User.objects.all()
+        self.fields["purchaser"].choices = getChoiceList(users, "userinfo")
+
 
 class SteelRefundSearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
