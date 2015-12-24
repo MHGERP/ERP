@@ -24,6 +24,7 @@
 				<th>数量</th>
 				<th>材料</th>
 				<th>净重</th>
+                <th>总重</th>
 				<th>消耗</th>
 				<th>传递路线</th>
 				<th>工序</th>
@@ -34,18 +35,18 @@
 		<thead>
 		<tbody>
 			{% for item in BOM %}
-			<tr iid="{{item.id}}">
+			<tr iid="{{item.id}}" data-toggle="modal" data-target="#card_modal">
 				<td>{{item.index}}</td>
 				<td></td>
 				<td>{{item.schematic_index}}</td>
 				<td>{{item.name}}</td>
-				<td>{{item.parent_schematic_index}}</td>				
-				<td>{{item.count}}</td>
-				<td>{{item.material}}</td>
-				<td>{{item.net_weight}}</td>
-				<td>{{item.total_weight}}</td>
+				<td>{{item.parent_schematic_index|default_if_none:""}}</td>				
+				<td>{{item.count|default_if_none:""}}</td>
+				<td>{{item.material|default_if_none:""}}</td>
+				<td>{{item.net_weight|default_if_none:""}}</td>
+				<td>{{item.total_weigh|default_if_none:""}}</td>
 				<td></td>
-				<td></td>
+                <td>{{item.route}}</td>
 				<td></td>
 				<td></td>
 				<td>{{item.remark}}</td>
