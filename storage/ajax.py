@@ -129,22 +129,21 @@ def Search_Auxiliary_Tools_Records(request,data,search_type):
     context={}
     form=AuxiliaryToolsSearchForm(deserialize_form(data))
     if form.is_valid():
+        conditions=form.cleaned_data
         if search_type=='inventory':
-            conditions=form.cleaned_data
             context['rets'] = get_weld_filter(AuxiliaryTool,conditions)
             return render_to_string('storage/auxiliarytools/inventory_table.html',context)
         else:
-            conditions=form.cleaned_data
-            if search_type=='entry':
-                q1=(conditions['date'] and Q(create_time=conditions['date'])) or None
-                q2=(conditions['name'] and Q(auxiliary_tool__name=conditions['name'])) or None
-                q3=(conditions['model'] and Q(auxiliary_tool__model=conditions['model'])) or None
-                q4=(conditions['manufacturer'] and Q(auxiliary_tool__manufacturer=conditions['manufacturer'])) or None
-                query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4]))
-                entry_records=AuxiliaryToolEntryCard.objects.filter(query_conditions)
-                context['rets']=entry_records
-                return render_to_string('storage/auxiliarytools/entry_table.html',context)
-            elif search_type=='apply':
+#            if search_type=='entry':
+#                q1=(conditions['date'] and Q(create_time=conditions['date'])) or None
+#                q2=(conditions['name'] and Q(auxiliary_tool__name=conditions['name'])) or None
+#                q3=(conditions['model'] and Q(auxiliary_tool__model=conditions['model'])) or None
+#                q4=(conditions['manufacturer'] and Q(auxiliary_tool__manufacturer=conditions['manufacturer'])) or None
+#                query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4]))
+#                entry_records=AuxiliaryToolEntryCard.objects.filter(query_conditions)
+#                context['rets']=entry_records
+#                return render_to_string('storage/auxiliarytools/entry_table.html',context)
+            if search_type=='apply':
                 q1=(conditions['date'] and Q(commit_time=conditions['date'])) or None
                 q2=(conditions['name'] and Q(actual_item__name=conditions['name'])) or None
                 q3=(conditions['model'] and Q(actual_item__model=conditions['model'])) or None
@@ -291,3 +290,24 @@ def humiChangeSave(request,hidform,hid):
     except Exception,e:
         print e
     return simplejson.dumps({"message":message})
+
+@dajaxice_register
+def bakeSave(request,bakeform,bid=None):
+    weldbake = ""
+    if bid != None:
+        weldbake = WeldingMaterialBakeRecord.objects.get(id = bid)
+    bakeform = deserialize_form(bakeform)
+    form = BakeRecordForm(bakeform,instance = weldbake) if bid !=None else BakeRecordForm(bakeform)
+    if form.is_valid():
+        weldbake = form.save(commit = False)
+        weldbake.save()
+        message = u"录入成功"
+    else:
+        message = u"录入失败"
+    context = {
+        "form":form,
+        "weldbake":weldbake,
+    }
+    html = render_to_string("storage/widgets/bake_form.html",context)
+    return simplejson.dumps({"html":html,"message":message})
+

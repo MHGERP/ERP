@@ -19,7 +19,7 @@
     </form>
 </div>
 <div class="span12" style="margin-top:20px;margin-bottom:20px">
-    <a type="button" class="btn btn-primary btn-large" href="weldbakeNewRecord">新增记录卡</a>
+    <a type="button" class="btn btn-primary" href="/storage/weldbakeDetail">新增记录卡</a>
 </div>
 <br>
 <div class="span8">
@@ -44,7 +44,7 @@
             <td>{{i.codedmark}}</td>
             <td>{{i.storeMan}}</td>
             <td>{{i.weldengineer}}</td>
-            <td><a class="btn btn-warning" href="/storage/weldbakeDetail/{{i.index}}">查看详情</a></td>
+            <td><a class="btn btn-warning" href="/storage/weldbakeDetail/?index={{i.index}}">查看详情</a></td>
         </tr>
         {% endfor %}
     </tbody>

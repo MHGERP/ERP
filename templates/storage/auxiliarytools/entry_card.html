@@ -13,27 +13,28 @@
    <h3 style="text-align:center">辅助材料入库单</h3>
         <table class="table table-hover table-bordered">
         <tr>
-        <th>入库材料</th>
-        <td>{{object.auxiliary_tool.name}}</td>
+            <th>序号</th>
+            <th>名称</th>
+            <th>类别</th>
+            <th>计量单位</th>
+            <th>数量</th>
+            <th>厂家</th>
         </tr>
+        {% for object in sub_objects %}
         <tr>
-        <th>材料类别</th>
-        <td>{{object.auxiliary_tool.get_model_display}}</td>
+            <td>{{forloop.counter}}</td>
+            <td>{{object.auxiliary_tool.name}}</td>
+            <td>{{object.auxiliary_tool.get_model_display}}</td>
+            <td>{{object.auxiliary_tool.measurement_unit}}</td>
+            <td>{{object.quantity}}</td>
+            <td>{{object.auxiliary_tool.manufacturer}}</td>
         </tr>
-        <tr>
-        <th>入库数量</th>
-        <td>{{object.quantity}}</td>
-        </tr>
-        <tr>
-        <th>材料厂家</th>
-        <td>{{object.auxiliary_tool.manufacturer}}</td>
-        </tr>
-        <tr>
-        <th>入库时间</th>
-        <td>{{object.create_time}}</td>
-        </tr>
+        {% endfor %}
         </table>
-        <input type="hidden" name="object_id" value="{{object_id}}">
+        <div style="text-align:center">
+        <a type="button" class="btn btn-primary" href="../entry">返回上级</a>
+        </div>
+
     <div class="row-fluid" style="text-align:center">
     </div>
 {% endblock%}
