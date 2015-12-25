@@ -81,7 +81,7 @@ urlpatterns = patterns('',
         storage_views.weldRefundViews,
     ),
     url(
-        r'^weldbakeDetail/(?P<index>\w+)$',
+        r'^weldbakeDetail/$',
         storage_views.weldbakeDetail,
     ),
     url( 

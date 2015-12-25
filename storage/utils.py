@@ -56,3 +56,9 @@ def get_today(timetype=""):
     timetype : String year,month,day
     """
     return getattr(datetime.date.today(),timetype) if timetype != "" else datetime.date.today()
+
+def getRequestByMethod(request):
+    if request.method == "GET":
+        return request.GET,"GET"
+    else:
+        return request.POST,"POST"
