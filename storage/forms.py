@@ -328,3 +328,12 @@ class SteelLedgerSearchForm(forms.Form):
 
 class EntryTypeForm(forms.Form):
     entry_type=forms.ChoiceField(label=u'入库单类型',choices=STORAGE_ENTRY_TYPECHOICES,required=True,widget=forms.Select(attrs={'class':'form-control span2','id':'work_order'}))
+
+class ThreadEntryItemsForm(ModelForm):
+    class Meta:
+        model = WeldStoreThread
+        fields = ("specification","count",)
+        widget = {
+            "specification": forms.TextInput(attrs={'class':"form-control span1"}),
+            "count": forms.TextInput(attrs={'class':"form_control span2"}),
+        }

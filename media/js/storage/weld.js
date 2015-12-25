@@ -75,3 +75,4 @@ function get_thread(){
 function get_thread_callback(data){
    $("#item_table").html(data.html); 
 }
+ 

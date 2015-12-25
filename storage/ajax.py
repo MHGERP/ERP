@@ -276,3 +276,63 @@ def getThreadItems(request):
             print e
     html = render_to_string("storage/widgets/item_table.html",{"items_set":warning_set})
     return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def storeThreadSave(request,form,mid):
+    item = WeldStoreThread.objects.get(id = mid)
+    entry_form = ThreadEntryItemsForm(deserialize_form(form),instance = item)
+    flag = False
+    if entry_form.is_valid():
+            entry_form.save()
+            flag = True
+            message = u"修改成功"
+    else:
+            message = u"修改失败"
+    items_set = WeldStoreThread.objects.all();
+    html = render_to_string("storage/widgets/storethread_table.html",{"items_set":items_set})
+    data = {
+        "flag":flag,
+        "message":message,
+        "html":html,
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def storeThreadDelete(request,mid):
+    item = WeldStoreThread.objects.get(id = mid)
+    item.delete()
+    flag = True
+    message = u"删除成功"
+    items_set = WeldStoreThread.objects.all();
+    html = render_to_string("storage/widgets/storethread_table.html",{"items_set":items_set})
+    data = {
+        "flag":flag,
+        "message":message,
+        "html":html,
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def storeThreadAdd(request,form):
+    entry_form = ThreadEntryItemsForm(deserialize_form(form))
+    if entry_form.is_valid():
+        speci = entry_form.cleaned_data['specification']
+        is_exist = WeldStoreThread.objects.filter(specification = speci).exists()
+        if is_exist:
+            message = u"安全量已存在，录入失败"
+            flag = False
+        else:
+            entry_form.save()
+            message = u"录入成功"
+            flag = True
+    else:
+        flag = False
+        message = u"录入失败"
+    items_set = WeldStoreThread.objects.all();
+    html = render_to_string("storage/widgets/storethread_table.html",{"items_set":items_set})
+    data = {
+        "flag":flag,
+        "message":message,
+        "html":html,
+    }
+    return simplejson.dumps(data)
