@@ -31,3 +31,12 @@ div.icon-text{
 .search-in{
     width:150px;
 }
+
+.bakeform-btn{
+    width:100px;
+    margin-right:20px;
+}
+
+form#weldbake_form .bl{
+    width:120px;
+}

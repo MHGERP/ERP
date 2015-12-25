@@ -1,4 +1,4 @@
-<form class="form-inline well" id="humiture_form" enctype="multipart/form-data" method="POST">
+<form class="form-inline well" id="weldbake_form" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
     <div class="row">
         <div class="span4 control-group {% if form.date.errors %}error{% endif %}">
@@ -82,14 +82,14 @@
             <button type="button" class="btn btn-default bl">{{form.usetime.label}}</button>
             {{form.usetime}}
         </div>
-        <div class="span4 control-group {% if form.storeMan.errors %}error{% endif %}"> 
-            <button type="button" class="btn btn-default bl">{{form.storeMan.label}}</button>
-            {{form.storeMan}}
+        <div class="span4 control-group"> 
+            <button type="button" class="btn btn-default bl">库管员</button>
+            <input type="text" placeholder="自动填写" value="{{weldbake.storeMan.userinfo}}" disabled/>
         </div>
     </div>
     <br>
     <div class="row">
-        <div class="span4 control-group {% if form.weldengineer.errors %}error{% endif %}">
+        <div class="span4 control-group">
             <button type="button" class="btn btn-default bl">{{form.weldengineer.label}}</button>
             {{form.weldengineer}}
         </div>
@@ -102,7 +102,11 @@
         </div>
     </div>
     <br>
-    <button type="submit" class="btn btn-success btn-large bl" id="btnBakeInsert">录入</button>
+
+    {% if is_show %}
+    <a class="btn btn-success bakeform-btn" id="btnBakeInsert" onclick="bake_save({{weldbake.id}})">录入</a>
+    {% endif %}
+    <a class="btn btn-success bakeform-btn"  href="/storage/weldbake">返回</a>
     <script>
         $(function (){
             $("#date").datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true})

@@ -15,7 +15,7 @@
         {{field.label}}
         {{field}}
         {% endfor %}
-        <button class="btn btn-primary">检索</button> 
+        <button class="btn btn-success">检索</button> 
     </form>
 </div>
 <div class="span12" style="margin-top:20px;margin-bottom:20px">
@@ -35,7 +35,7 @@
         <tr>
             <td>{{index.date|date:'Y年m月d日'}}</td>
             <td>{{index.storeRoom}}</td>
-            <td>{{index.storeMan}}</td>
+            <td>{{index.storeMan.userinfo}}</td>
             <td><a class="btn btn-warning" href="/storage/weldhumDetail/{{index.id}}">查看详情</a></td>
         </tr>
         {% endfor %}

@@ -15,12 +15,12 @@
     {{field.label}}
     {{field}}
     {% endfor %}
-    <button class="btn btn-primary">检索</button> 
+    <button class="btn btn-success">检索</button> 
 </form>
 <br>
 <table class="table table-bordered">
     <thead>
-        <th>工作令</th>
+        <th>入库单编号</th>
         <th>日期</th>
         <th>采购员</th>
         <th>检查员</th>
@@ -29,7 +29,7 @@
     </tbody>
         {% for entry in entry_set %}
         <tr>
-            <td>{{entry.work_order}}</td>
+            <td>{{entry.entry_code}}</td>
             <td>{{entry.entry_time|date:"Y年m月d日"}}</td>
             <td>{{entry.purchaser.userinfo}}</td>
             <td>{{entry.inspector.userinfo}}</td>

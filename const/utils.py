@@ -15,6 +15,13 @@ def getUserByAuthority(authority):
     user_list = User.objects.filter(title_user__authorities = auth_obj)
     return user_list    
 
+def checkAuthority(authority,user):
+    """
+    author: shenlian
+    func: check authority
+    """
+    return getUserByAuthority(authority).filter(id = user.id).count() > 0 
+
 def getChoiceList(obj_set,field):
     """
     author: Shen Lian
