@@ -9,6 +9,8 @@
 {% endblock %}
 
 {% block inner_content%}
+<link rel="stylesheet" href="{{ STATIC_URL }}style/designBOM_edit.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
 <form class="form-search ">
    工作令: 
    <select class="input-medium search-query" id="search_pending_order">
@@ -32,7 +34,7 @@
     <div class="widget-content nopadding">
         {% include "techdata/widgets/design_lib_edit_table.html" %}
     </div>
-
+    {% include "techdata/widgets/design_lib_edit_modal.html" %}
 </div>
 
 {% endblock%}
