@@ -49,9 +49,15 @@ def techBoxOutboughtViews(request):
     context = {}
     return render(request, "techdata/tech_box_outbought.html", context)
 
-def designLibEditViews(request):
-    context = {}
-    return render(request, "techdata/design_lib_edit.html", context)
+def designBOMViews(request):
+    """
+    mxl
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "form" : work_order_form
+    }
+    return render(request, "techdata/designBOM.html", context)
 
 def connectionOrientationEditViews(request):
     context = {}

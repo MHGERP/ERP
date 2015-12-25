@@ -17,8 +17,8 @@ urlpatterns=patterns('',
         techdata_views.techFileDirectoryViews,
     ),
     url(
-        r'^designLibEdit$',
-        techdata_views.designLibEditViews,
+        r'^designBOM$',
+        techdata_views.designBOMViews,
     ),
     url(
         r'^connectionOrientationEdit$',
