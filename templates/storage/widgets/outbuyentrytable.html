@@ -1,0 +1,28 @@
+<table id="items_table" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>标准号或图号</th>
+            <th>名称及规格</th>
+            <th>材质</th>
+            <th>数量</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in entry_set %}
+        <tr id="{{item.id}}">
+            <td>{{forloop.counter}}</td>
+            <td>{{item.material.schematic_index}}</td>
+            <td>{{item.material.name}}</td>
+            <td>{{item.material.material}}</td>
+            <td>{{item.material.count}}</td>
+            <td>{{item.remark}}</td>
+            <td>
+                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_item({{item.id}})">修改</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

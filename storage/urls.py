@@ -171,6 +171,10 @@ urlpatterns = patterns('',
         r'^weldstorageaccount$',
         storage_views.weldStorageAccountHomeViews,
     ),
+    url(
+        r'^storethread$',
+        storage_views.StoreThreadViews,
+    )
 )
 
 

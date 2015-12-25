@@ -698,3 +698,14 @@ def weldApplyAccountViews(request):
         "search_form":search_form,
     }
     return render(request,"storage/weldmaterial/weldaccount/weldapplyhome.html",context)
+
+def StoreThreadViews(request):
+    items_set = WeldStoreThread.objects.all()
+    entry_form = ThreadEntryItemsForm()
+    context = {
+        "items_set":items_set,
+        "entry_form":entry_form,
+    }
+    return render(request,"storage/storethread/storethread.html",context)
+
+
