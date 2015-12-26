@@ -237,6 +237,7 @@ class AuxiliaryToolsCardCommitForm(ModelForm):
                 'apply_total':forms.HiddenInput(),
                 'actual_total':forms.HiddenInput(),
                 'status':forms.HiddenInput(),
+                'applicant':forms.HiddenInput(),
                 }
 class AuxiliaryToolsCardApplyForm(ModelForm):
     class Meta:

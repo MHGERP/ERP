@@ -537,7 +537,6 @@ def AuxiliaryToolsApplyView(request):
             context['storage_keeper']=False
             context['apply_form']=AuxiliaryToolsCardApplyForm()
 
-        #apply or commit setting
         return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
     else:
         ins_index=int(request.POST['index'])
@@ -545,10 +544,20 @@ def AuxiliaryToolsApplyView(request):
             ins=AuxiliaryToolApplyCard.objects.get(index=ins_index)
         else:
             ins=None
-
         apply_card=AuxiliaryToolsCardCommitForm(request.POST,instance=ins)
         if apply_card.is_valid():
-            apply_card.save()
+            save_ins=apply_card.save(commit=False)
+            print 'BEFORE----------'
+            print '[APPLICANT]:',save_ins.applicant
+            print '[COMMITER]',save_ins.commit_user
+            if ins_index!=0:
+                save_ins.commit_user=request.user
+            else:
+                save_ins.applicant=request.user
+            print 'AFTER----------'
+            print '[APPLICANT]',save_ins.applicant
+            print '[COMMITER]',save_ins.commit_user
+            save_ins.save()
         else:
             print apply_card.errors
         return AuxiliaryToolsApplyListView(request)
