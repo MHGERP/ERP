@@ -301,6 +301,7 @@ def bakeSave(request,bakeform,bid=None):
     form = BakeRecordForm(bakeform,instance = weldbake) if bid !=None else BakeRecordForm(bakeform)
     if form.is_valid():
         weldbake = form.save(commit = False)
+        weldbake.storeMan = request.user
         weldbake.save()
         message = u"录入成功"
     else:
@@ -312,3 +313,27 @@ def bakeSave(request,bakeform,bid=None):
     html = render_to_string("storage/widgets/bake_form.html",context)
     return simplejson.dumps({"html":html,"message":message})
 
+@dajaxice_register
+def outsideEntryConfirm(request,eid,form):
+    status_list = [ x[0]  for x in ENTRYSTATUS_CHOICES ] 
+    html,flag = getEntryData(request,eid,form,OutsideStandardEntry,OutsideStandardItem,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,"outside/entryhome","keeper",status_list)
+    if flag:
+        message = u"保存成功"
+    else:
+        message = u"保存失败"
+    status_list = [ x[0]  for x in ENTRYSTATUS_CHOICES ] 
+    return simplejson.dumps({"html":html,"message":message})
+
+def getEntryData(request,eid,form,_Model,_ItemModel,_Inform,_Reform,entryhomeurl,role,status_list,entry_status=STORAGESTATUS_KEEPER):
+    entry_obj = _Model.objects.get(id = eid)
+    form = deserialize_form(form)
+    inform = _Inform(form,instance=entry_obj)
+    reform = _Reform(form,instance=entry_obj)
+    form_list = [("inform",inform),("reform",reform)]
+    entryobject = EntryObject(status_list,_Model,eid) 
+    context = entryobject.save_entry(entry_obj,role,request.user,form_list)
+    is_show = entryobject.checkShow(entry_obj,STORAGESTATUS_KEEPER)
+    context["entryhomeurl"] = entryhomeurl
+    context["is_show"]=is_show
+    context["entry_set"] = _ItemModel.objects.filter(entry=entry_obj)
+    return render_to_string("storage/widgets/entryAbody.html",context),entryobject.flag

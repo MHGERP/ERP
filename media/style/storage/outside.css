@@ -1,0 +1,18 @@
+.form-horizontal .controls {
+    margin-left:110px!important;
+}
+.form-horizontal .control-label {
+    width:100px!important;
+    text-align:left!important;
+}
+.e3 {
+    width:33.3%;
+}
+
+.form-horizontal .control-group {
+    border:0px!important;
+}
+
+table#items_table{
+    width:80%;
+}

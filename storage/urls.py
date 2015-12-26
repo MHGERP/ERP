@@ -171,6 +171,23 @@ urlpatterns = patterns('',
         r'^weldstorageaccount$',
         storage_views.weldStorageAccountHomeViews,
     ),
+    url(
+        r'^outsidehome$',
+        storage_views.outsideHomeViews,
+    ),
+    url(
+        r'^outside/entryhome$',
+        storage_views.outsideEntryHomeViews,
+    ),
+    url(
+        r'^outside/entryhome$',
+        storage_views.outsideEntryHomeViews,    
+    ),
+    url(
+        r'^outside/entryconfirm/(?P<eid>\w+)$',
+        storage_views.outsideEntryConfirmViews,    
+    )
+
 )
 
 
