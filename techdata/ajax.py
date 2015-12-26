@@ -19,11 +19,32 @@ def getProcessBOM(request, id_work_order):
     JunHU
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
-    print work_order
     BOM = Materiel.objects.filter(order = work_order)
+    for item in BOM:
+        if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
+            CirculationRoute(materiel_belong = item).save()
+        item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).name for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
     context = {
         "work_order": work_order,
         "BOM": BOM,
     }
     html = render_to_string("techdata/widgets/processBOM_table.html", context)
+    return html
+
+@dajaxice_register
+def getDesignBOM(request, id_work_order):
+    """
+    mxl
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    BOM = Materiel.objects.filter(order = work_order)
+    for item in BOM:
+        if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
+            CirculationRoute(materiel_belong = item).save()
+        item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).name for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
+    context = {
+        "work_order" : work_order,
+        "BOM" : BOM,
+    }
+    html = render_to_string("techdata/widgets/designBOM_table.html", context)
     return html

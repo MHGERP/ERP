@@ -17,7 +17,7 @@
     {{field.label}}
     {{field}}
     {% endfor %}
-    <button class="btn btn-success">检索</button> 
+    <button class="btn btn-primary">检索</button> 
    </form>
 
    <table class="table table-hover table-bordered">
@@ -35,7 +35,7 @@
    <td>{{item.purchaser.userinfo.name}}</td>
    <td>{{item.inspector.userinfo.name}}</td>
    
-   <td><a href="#"><button type="button" class="btn btn-warning">待处理</button></a></td>
+   <td><a href="/storage/auxiliarytools/entry?id={{item.id}}"><button type="button" class="btn btn-warning">待处理</button></a></td>
    </tr>
 
    {% endfor %}

@@ -18,5 +18,23 @@
 <div class="widget-box" id="widget-box">
 
 </div>
+
+<div id="card_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="groupLabel">材料信息卡</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+      <form class="form-search">
+        <label>部门名：</label>
+        <input type="text" class="input-medium" id="new_group_name">
+      </form>
+  </div>
+  <div class="modal-footer">
+    <span class="btn btn-primary" id="btn-finish" data-dismiss="modal" aria-hidden="true">完成</span>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/processBOM.js"></script>
 {% endblock%}

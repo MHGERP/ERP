@@ -177,17 +177,16 @@ urlpatterns = patterns('',
     ),
     url(
         r'^outside/entryhome$',
-        storage_views.outsideEntryHomeViews,
-    ),
-    url(
-        r'^outside/entryhome$',
         storage_views.outsideEntryHomeViews,    
     ),
     url(
         r'^outside/entryconfirm/(?P<eid>\w+)$',
         storage_views.outsideEntryConfirmViews,    
+    ),
+    url(
+        r'^storethread$',
+        storage_views.StoreThreadViews,
     )
-
 )
 
 

@@ -1,0 +1,49 @@
+{% extends "storage/base/outbuybase.html" %}
+{% block sub_sec %}
+<a href="/storage/outbuyentryhome">外购件入库管理</a>
+<a href="#" class="current">外购件入库单</a>
+{% endblock %}
+{% block title %}
+<h1>外购件入库单</h1>
+{% endblock %}
+
+{% block inner_content %}
+<form class="form form-inline" method="post">
+    {% csrf_token %}
+    <div class="row" style="margin-bottpm:20px;">
+        <div class="span3">
+            <label class="hz-align">工作令：</label>
+            <strong>{{entry.workorder}}</strong>
+        </div>
+        <div class="span3">
+            <label class="hz-align">入库时间：</label>
+            <strong>{{entry.entry_time|date:"Ymd"}}</strong>
+        </div>
+        <div class="span4">
+            <label class="hz-align">单据编号：</label>
+            <strong>{{entry.code}}</strong>
+        </div>
+    </div>
+    <br />
+    <div id="items_table">
+        {% include "storage/widgets/outbuyentrytable.html" %}
+    <div class="control-group span12" style="margin-top:50px;">
+        <div class="rows span4 purcher">
+            采购员：<strong>{{entry.purchaser.userinfo}}</strong>
+        </div>
+        <div class="span4 purcher">
+            检验员：<strong>{{entry.inspector.userinfo}}</strong>
+        </div>
+        <div class="span4 purcher">
+            库管员：<strong>{{entry.keeper.userinfo}}</strong>
+        </div>
+    </div>
+    <center style="margin:110px">
+        {% if is_show %}
+        <button id="entry_confirm" style="width:20%;height:30px;" class="btn btn-primary" type="button" onclick="entryconfirm({{entry.id}});">入库单确认</button>
+        {% else %}
+        <a style="width:20%;height:20px;" class="bth bth_primary" type="button" href="/storage/outbuyhome">返回</a>
+        {% endif %}
+    </center>
+</form>
+{% endblock %}

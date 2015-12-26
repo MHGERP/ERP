@@ -240,6 +240,7 @@ class AuxiliaryToolsCardCommitForm(ModelForm):
                 'apply_total':forms.HiddenInput(),
                 'actual_total':forms.HiddenInput(),
                 'status':forms.HiddenInput(),
+                'applicant':forms.HiddenInput(),
                 }
 class AuxiliaryToolsCardApplyForm(ModelForm):
     class Meta:
@@ -285,17 +286,18 @@ class AuxiliaryToolsApplyCardSearchForm(forms.Form):
 
 class AuxiliaryEntrySearchForm(forms.Form):
     create_time = forms.DateField(label=u"日期", required=False,
-                                  widget=forms.TextInput(
-                                      attrs={"class": 'form-control span2',
-                                             'id': 'entry_time'}))
+                                  widget=forms.TextInput(attrs={
+                                          'class': 'form-control search-query',
+                                          'readonly': 'readonly',
+                                          'id': 'entry_time'}))
     purchaser = forms.ChoiceField(label=u"采购员", required=False,
-                                  widget=forms.Select(
-                                      attrs={"class": 'form-control span2',
-                                             'id': 'purchaser'}))
+                                  widget=forms.Select(attrs={
+                                          "class": 'form-control search-query',
+                                          'id': 'purchaser'}))
     status = forms.CharField(label=u'入库单编号', required=False,
-                             widget=forms.TextInput(
-                                 attrs={'class': 'form-control span2',
-                                        'id': 'entry_code'}))
+                             widget=forms.TextInput(attrs={
+                                     'class': 'form-control search-query',
+                                     'id': 'entry_code'}))
 
     def __init__(self, *args, **kwargs):
         super(AuxiliaryEntrySearchForm, self).__init__(*args, **kwargs)
@@ -385,4 +387,11 @@ class StorageOutsideEntryRemarkForm(ModelForm):
         fields = ("remark",)
         widgets = {
             "remark":forms.Textarea(attrs={"rows":"10","cols":"40","style":"max-height:80px;overflow-y:auto"}),
+class ThreadEntryItemsForm(ModelForm):
+    class Meta:
+        model = WeldStoreThread
+        fields = ("specification","count",)
+        widget = {
+            "specification": forms.TextInput(attrs={'class':"form-control span1"}),
+            "count": forms.TextInput(attrs={'class':"form_control span2"}),
         }

@@ -231,7 +231,7 @@ AUXILIARY_TOOL_APPLY_CARD_APPLYED=1
 AUXILIARY_TOOL_APPLY_CARD_COMMITED=2
 AUXILIARY_TOOL_APPLY_CARD_STATUS=(
         (AUXILIARY_TOOL_APPLY_CARD_CREATED,u'创建完成'),
-        (AUXILIARY_TOOL_APPLY_CARD_COMMITED,u'提交完成'),
+        (AUXILIARY_TOOL_APPLY_CARD_APPLYED,u'提交完成'),
         (AUXILIARY_TOOL_APPLY_CARD_COMMITED,u'确认完成'),
         )
 
@@ -292,4 +292,44 @@ CIRCULATION_CHOICES = (
     (GY, "GY"),
     (DY, "DY"),
     (XZ, "XZ"),
+)
+
+W = "0"
+W1 = "1"
+W2 = "2"
+W3 = "3"
+W4 = "4"
+W5 = "5"
+W6 = "6"
+W25 = "7"
+P01 = "8"
+P02 = "9"
+R = "10"
+R1 = "11"
+R2 = "12"
+Z = "13"
+H = "14"
+M = "15"
+L = "16"
+Y = "17"
+
+PROCESSING_CHOICES = (
+    (W, "W"),    
+    (W1, "W1"),
+    (W2, "W2"),
+    (W3, "W3"),
+    (W4, "W4"),
+    (W5, "W5"),
+    (W6, "W6"),
+    (W25, "W25"),
+    (P01, "P01"),
+    (P02, "P02"),
+    (R, "R"),
+    (R1, "R1"),
+    (R2, "R2"),
+    (Z, "Z"),
+    (H, "H"),
+    (M, "M"),
+    (L, "L"),
+    (Y, "Y"),
 )
