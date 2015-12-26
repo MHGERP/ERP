@@ -513,6 +513,7 @@ def AuxiliaryToolsApplyListView(request):
     apply_cards=AuxiliaryToolApplyCard.objects.exclude(status=AUXILIARY_TOOL_APPLY_CARD_COMMITED).order_by('-create_time')
     context['search_form']=AuxiliaryToolsApplyCardSearchForm()
     context['apply_cards']=apply_cards
+    context['STORAGE_KEEPER']=checkAuthority(STORAGE_KEEPER,request.user)
     return render(request,'storage/auxiliarytools/auxiliarytoolsapply_list.html',context)
 
 
@@ -528,7 +529,7 @@ def AuxiliaryToolsApplyView(request):
         ins_index=int(request.GET['index']) 
         ins=AuxiliaryToolApplyCard.objects.get(index=ins_index) if ins_index!=0 else None
 
-        if request.user.is_superuser:#checkAuthority(STORAGE_KEEPER,request.user):
+        if checkAuthority(STORAGE_KEEPER,request.user):
             context['instance']=ins
             context['storage_keeper']=True
             context['apply_form']=AuxiliaryToolsCardCommitForm(instance=ins)
