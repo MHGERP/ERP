@@ -14,7 +14,8 @@ function refreshCallBack(data) {
 //});
 
 $(document).on("click", "#designBOM_table tbody tr", function(){
-    Dajaxice.techdata.getDesignBOMForm(getDesignBOMFormCallback, {});
+    var iid = $(this).attr("iid");
+    Dajaxice.techdata.getDesignBOMForm(getDesignBOMFormCallback, {"iid" : iid});
 });
 
 function getDesignBOMFormCallback(data) {
