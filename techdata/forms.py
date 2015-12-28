@@ -14,7 +14,7 @@ class MaterielForm(forms.ModelForm):
             "name": forms.TextInput(attrs = {"class": "input-medium"}),
             "index": forms.TextInput(attrs = {"class": "input-small"}),
             "schematic_index": forms.TextInput(attrs = {"class": "input-medium"}),
-            "material": forms.TextInput(attrs = {"class": "input-medium"}),
+            "material": forms.Select(attrs = {"class": "input-medium"}),
             "count": forms.TextInput(attrs = {"class": "input-medium"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium"}),
         }
