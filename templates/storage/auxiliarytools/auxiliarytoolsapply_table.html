@@ -15,10 +15,11 @@
         {% if storage_keeper %}
         {{apply_form.apply_quantity}}
         {{apply_form.apply_item}}
+        {{apply_form.applicant}}
         <tr>
         	<td>请领</td>
         	<td>{{instance.apply_item.name}}</td>
-        	<td>{{instance.apply_item.model}}</td>
+        	<td>{{instance.apply_item.get_model_display}}</td>
         	<td>{{instance.apply_item.measurement_unit}}</td>
         	<td>{{instance.apply_quantity}}</td>
         	<td>{{instance.apply_item.unit_price}}</td>
