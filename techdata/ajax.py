@@ -27,3 +27,14 @@ def getProcessBOM(request, id_work_order):
     }
     html = render_to_string("techdata/widgets/processBOM_table.html", context)
     return html
+
+@dajaxice_register
+def boxOutBought(request, boxoutbought):
+    """
+    BinWu
+    """
+    print ("here")
+    context = {}
+    html = render_to_string("techdata/widgets/tech_box_outbought_table.html", context)
+    print html
+    return html
