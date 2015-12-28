@@ -14,6 +14,7 @@ from backend.utility import getContext
 from const.models import *
 
 from techdata.forms import MaterielForm, CirculationRouteForm
+from techdata.models import *
 
 @dajaxice_register
 def getProcessBOM(request, id_work_order):
@@ -67,8 +68,9 @@ def boxOutBought(request, boxoutbought):
     """
     BinWu
     """
-    print ("here")
-    context = {}
+    list = Materiel.objects.all();
+    context = {
+        "list" : list,
+    }
     html = render_to_string("techdata/widgets/tech_box_outbought_table.html", context)
-    print html
     return html
