@@ -276,6 +276,7 @@ STORAGE_ENTRY_TYPECHOICES=(
 
 
 #技术资料管理
+NULL = "-1"
 H1 = "0"
 J = "2"
 R = "3"
@@ -285,6 +286,7 @@ DY = "6"
 XZ = "7"
 
 CIRCULATION_CHOICES = (
+    (NULL, u"空"),
     (H1, "H1"),
     (J, "J"),
     (ZM, "ZM"),

@@ -26,7 +26,7 @@ class CirculationRouteForm(ModelForm):
         CIRCULATIONNAME_CHOICES = tuple((item.id, item) for item in CirculationName.objects.all())
         #i = 0
         for field in self.fields:
-            print field
+            #print field
             #field = forms.ChoiceField(widget = forms.Select(attrs = {'class' : 'form-control', 'style' : 'width:100px!important'}))
             #field.choices = CIRCULATIONNAME_CHOICES
             #field.label = "L%d" % i
