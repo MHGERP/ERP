@@ -7,3 +7,26 @@ function refresh() {
 function refreshCallBack(data) {
     $("#widget-box").html(data);
 }
+
+//$("#designBOM_table tbody tr").click(function(){
+//    alert("cao");
+//    Dajaxice.techdata.getDesignBOMForm(getDesignBOMFormCallback, {});
+//});
+
+$(document).on("click", "#designBOM_table tbody tr", function(){
+    Dajaxice.techdata.getDesignBOMForm(getDesignBOMFormCallback, {});
+});
+
+function getDesignBOMFormCallback(data) {
+    $("#materiel_div").html(data.materiel_form);
+    $("#circulationroute_div").html(data.circulationroute_form);
+    $("#designBOM_edit_modal").modal();
+}
+
+$("#save_desginBOM_btn").click(function(){
+    //Dajaxice.techdata.saveDesignBOM(saveDesignBOMCallback, {});
+});
+
+function savedesignBOMCallback(data) {
+    
+}
