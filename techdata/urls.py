@@ -81,4 +81,8 @@ urlpatterns=patterns('',
         r'^techBoxOutbought$',
         techdata_views.techBoxOutboughtViews,
     ),
+    url(
+        r'^techDetailTable$',
+        techdata_views.techDetailTableViews,
+    ),
 )
