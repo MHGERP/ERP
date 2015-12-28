@@ -35,7 +35,7 @@
 		<thead>
 		<tbody>
 			{% for item in BOM %}
-			<tr iid="{{item.id}}" data-toggle="modal" data-target="#card_modal">
+			<tr iid="{{item.id}}" data-toggle="modal" data-target="#card_modal" class="tr_materiel">
 				<td>{{item.index}}</td>
 				<td></td>
 				<td>{{item.schematic_index}}</td>
@@ -49,7 +49,7 @@
                 <td>{{item.route}}</td>
 				<td></td>
 				<td></td>
-				<td>{{item.remark}}</td>
+				<td>{{item.remark|default_if_none:""}}</td>
 				<td></td>
 			</tr>				
 			{% endfor %}

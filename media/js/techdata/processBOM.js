@@ -7,3 +7,12 @@ function refresh(){
 function refreshCallBack(data) {
     $("#widget-box").html(data);
 }
+
+
+$(document).on("click", ".tr_materiel", function() {
+    var iid = $(this).attr("iid");
+    Dajaxice.techdata.getMaterielInfo(getInfoCallBack, {"iid": iid})
+});
+function getInfoCallBack(data) {
+    $("#base-info-area").html(data);
+}
