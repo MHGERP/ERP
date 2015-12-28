@@ -6,11 +6,12 @@
     margin-left : 100px!important;
 }
 .label_margin{
-    margin-right: 20px;
-    width:80px;
+    margin-left: 20px;
+    width:60px;
     padding-top:3px;
 }
 .div_margin{
     margin-bottom: 10px;
+    margin-left:15px;
     display: inline-block;
 }
