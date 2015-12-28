@@ -11,6 +11,17 @@
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
    <h3 style="text-align:center">辅助材料入库单</h3>
+   <div class="row-fluid span12">
+       <div class="span4">
+           <p>编号:<strong>{{object.index}}</strong></p>
+       </div>
+       <div class="span4">
+           <p>工作令:<strong>{{object.workorder}}</strong></p>
+       </div>
+       <div class="span4">
+           <p>创建时间:<strong>{{object.create_time|date:'Y年m月d日'}}</strong></p>
+       </div>
+   </div>
         <table class="table table-hover table-bordered">
         <tr>
             <th>序号</th>
@@ -30,8 +41,19 @@
             <td>{{object.auxiliary_tool.manufacturer}}</td>
         </tr>
         {% endfor %}
-        </table>
-        <div style="text-align:center">
+       </table>
+         <div class="row-fluid span12">
+           <div class="span4">
+               <p>采购员:<strong>{{object.purchaser.userinfo.name}}</strong></p>
+           </div>
+           <div class="span4">
+               <p>检验员:<strong>{{object.inspector.userinfo.name}}</strong></p>
+           </div>
+           <div class="span4">
+               <p>库管员:<strong>{{object.keeper.userinfo.name}}</strong></p>
+           </div>
+       </div>
+       <div style="text-align:center">
         <a type="button" class="btn btn-primary" href="../entry">返回上级</a>
         </div>
 

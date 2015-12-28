@@ -513,6 +513,7 @@ def AuxiliaryToolsApplyListView(request):
     apply_cards=AuxiliaryToolApplyCard.objects.exclude(status=AUXILIARY_TOOL_APPLY_CARD_COMMITED).order_by('-create_time')
     context['search_form']=AuxiliaryToolsApplyCardSearchForm()
     context['apply_cards']=apply_cards
+    context['STORAGE_KEEPER']=checkAuthority(STORAGE_KEEPER,request.user)
     return render(request,'storage/auxiliarytools/auxiliarytoolsapply_list.html',context)
 
 
@@ -528,7 +529,7 @@ def AuxiliaryToolsApplyView(request):
         ins_index=int(request.GET['index']) 
         ins=AuxiliaryToolApplyCard.objects.get(index=ins_index) if ins_index!=0 else None
 
-        if request.user.is_superuser:#checkAuthority(STORAGE_KEEPER,request.user):
+        if checkAuthority(STORAGE_KEEPER,request.user):
             context['instance']=ins
             context['storage_keeper']=True
             context['apply_form']=AuxiliaryToolsCardCommitForm(instance=ins)
@@ -536,7 +537,6 @@ def AuxiliaryToolsApplyView(request):
             context['storage_keeper']=False
             context['apply_form']=AuxiliaryToolsCardApplyForm()
 
-        #apply or commit setting
         return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
     else:
         ins_index=int(request.POST['index'])
@@ -544,10 +544,20 @@ def AuxiliaryToolsApplyView(request):
             ins=AuxiliaryToolApplyCard.objects.get(index=ins_index)
         else:
             ins=None
-
         apply_card=AuxiliaryToolsCardCommitForm(request.POST,instance=ins)
         if apply_card.is_valid():
-            apply_card.save()
+            save_ins=apply_card.save(commit=False)
+            print 'BEFORE----------'
+            print '[APPLICANT]:',save_ins.applicant
+            print '[COMMITER]',save_ins.commit_user
+            if ins_index!=0:
+                save_ins.commit_user=request.user
+            else:
+                save_ins.applicant=request.user
+            print 'AFTER----------'
+            print '[APPLICANT]',save_ins.applicant
+            print '[COMMITER]',save_ins.commit_user
+            save_ins.save()
         else:
             print apply_card.errors
         return AuxiliaryToolsApplyListView(request)
@@ -698,3 +708,14 @@ def weldApplyAccountViews(request):
         "search_form":search_form,
     }
     return render(request,"storage/weldmaterial/weldaccount/weldapplyhome.html",context)
+
+def StoreThreadViews(request):
+    items_set = WeldStoreThread.objects.all()
+    entry_form = ThreadEntryItemsForm()
+    context = {
+        "items_set":items_set,
+        "entry_form":entry_form,
+    }
+    return render(request,"storage/storethread/storethread.html",context)
+
+

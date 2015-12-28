@@ -14,7 +14,7 @@ RegisterClass = (
     CirculationRoute,
     CirculationName,
     ImplementClassChoices,
+    Processing,
 )
-
 for item in RegisterClass:
     admin.site.register(item)

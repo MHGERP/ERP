@@ -83,6 +83,21 @@ class CirculationRoute(models.Model):
     def __unicode__(self):
         return self.materiel_belong.name
 
+class Processing(models.Model):
+    materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")
+    name = models.CharField(blank = False, choices = PROCESSING_CHOICES, max_length = 10, verbose_name = u"工序名")
+    next_processing = models.ForeignKey('self', null = True, blank = True, verbose_name = u"下一工序")
+    is_first_processing = models.BooleanField(blank = False, default = False, verbose_name = u"首道工序")
+    instruction = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"说明")
+    index = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"工号")
+    hour = models.FloatField(blank = True, null = True, verbose_name = u"工时")
+    class Meta:
+        verbose_name = u"工序"
+        verbose_name_plural = u"工序"
+
+    def __unicode__(self):
+        return self.materiel_belong.name
+
 class BidFormStatus(models.Model):
     #status=models.IntegerField(blank=False,unique=True,choices=BIDFORM_STATUS_CHOICES,verbose_name=u"标单状态")
     main_status=models.IntegerField(blank=False,choices=BIDFORM_STATUS_CHOICES,verbose_name=u"标单状态")

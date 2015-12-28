@@ -10,6 +10,7 @@ import json
 from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
+from techdata.forms import MaterielForm, CirculationRouteForm
 
 from const.forms import WorkOrderForm
 
@@ -49,9 +50,17 @@ def techBoxOutboughtViews(request):
     context = {}
     return render(request, "techdata/tech_box_outbought.html", context)
 
-def designLibEditViews(request):
-    context = {}
-    return render(request, "techdata/design_lib_edit.html", context)
+def designBOMViews(request):
+    """
+    mxl
+    """
+    #materiel_form = MaterielForm()
+    #circulationroute_form = CirculationRouteForm()
+    work_order_form = WorkOrderForm()
+    context = {
+        "work_order_form" : work_order_form
+    }
+    return render(request, "techdata/designBOM.html", context)
 
 def connectionOrientationEditViews(request):
     context = {}
