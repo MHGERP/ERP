@@ -102,3 +102,7 @@ def weldEditViews(request):
 def programmeEditViews(request):
     context = {}
     return render(request, "techdata/programme_edit.html", context)
+
+def techDetailTableViews(request):
+    context = {}
+    return render(request, "techdata/detail_table.html", context)

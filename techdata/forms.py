@@ -1,23 +1,27 @@
 #!/usr/bin/env python
 # coding=utf-8
+from django import  forms
+from const.models import Materiel, CirculationRoute, CirculationName
 
-from django import forms
-from django.forms import ModelForm
-from const.models import Materiel, Material, CirculationName, CirculationRoute
-
-class MaterielForm(ModelForm):
+class MaterielForm(forms.ModelForm):
+    """
+    JunHU
+    """
     class Meta:
         model = Materiel
-        fields= ('index', 'schematic_index', 'parent_schematic_index', 'material', 'name', 'count', 'net_weight', 'total_weight', 'remark')
+        exclude = ("id", )
         widgets = {
-            'material' : forms.Select(attrs = {"class" : "form-control input"})
+            "name": forms.TextInput(attrs = {"class": "input-medium"}),
+            "index": forms.TextInput(attrs = {"class": "input-small"}),
+            "schematic_index": forms.TextInput(attrs = {"class": "input-medium"}),
+            "material": forms.TextInput(attrs = {"class": "input-medium"}),
+            "count": forms.TextInput(attrs = {"class": "input-medium"}),
+            "remark": forms.TextInput(attrs = {"class": "input-medium"}),
         }
-    def __init__(self, *args, **kwargs):
-        super(MaterielForm, self).__init__(*args, **kwargs)
-        MATERIAL_CHOICES = tuple((item.id, item) for item in Material.objects.all())
-        self.fields['material'].choices = MATERIAL_CHOICES
 
-class CirculationRouteForm(ModelForm):
+    
+
+class CirculationRouteForm(forms.ModelForm):
     class Meta:
         model = CirculationRoute
         exclude = ('materiel_belong')
