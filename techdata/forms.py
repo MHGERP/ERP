@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # coding=utf-8
 from django import  forms
-from const.models import Materiel, CirculationRoute, CirculationName
+from const.models import Materiel
+from techdata.models import CirculationRoute, CirculationName
+from const import PROCESSING_CHOICES
 
 class MaterielForm(forms.ModelForm):
     """
@@ -20,6 +22,11 @@ class MaterielForm(forms.ModelForm):
         }
 
     
+class ProcessingForm(forms.Form):
+    """
+    JunHU
+    """
+    process = forms.ChoiceField(choices = PROCESSING_CHOICES, widget = forms.Select(attrs = {"class": "input-medium"}))
 
 class CirculationRouteForm(forms.ModelForm):
     """

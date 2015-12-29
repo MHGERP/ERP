@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block inner_content%}
+<link rel="stylesheet" href="{{ STATIC_URL }}style/designBOM_edit.css" type="text/css" media="screen" />
 <form class="form-search ">
    工作令: 
    {{ form.work_order }}
@@ -25,9 +26,16 @@
   </div>
 
   <div class="modal-body" style="clear:both;">
-		<form id="base-info-area" class="form well">
+		<div id="base-info-area" class="well">
 
-		</form>
+		</div>
+		<div id="processing-area" class="well">
+		    <form class="form-search">
+                {{process_form.process}} <span class="btn btn-primary" id="id_add_process">添加工序</span>
+            </form>
+            <div id="process_table">
+            </div>
+		</div>
         
   </div>
   <div class="modal-footer">
@@ -37,3 +45,4 @@
 
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/processBOM.js"></script>
 {% endblock%}
+

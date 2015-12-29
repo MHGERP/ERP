@@ -11,8 +11,29 @@ function refreshCallBack(data) {
 
 $(document).on("click", ".tr_materiel", function() {
     var iid = $(this).attr("iid");
-    Dajaxice.techdata.getMaterielInfo(getInfoCallBack, {"iid": iid})
+    $("#card_modal").attr("iid", iid);
+    Dajaxice.techdata.getMaterielInfo(getInfoCallBack, {"iid": iid});
+    Dajaxice.techdata.getProcess(getProcessCallBack, {"iid": iid});
 });
 function getInfoCallBack(data) {
     $("#base-info-area").html(data);
+}
+function getProcessCallBack(data) {
+    $("#process_table").html(data);
+}
+
+$("#id_add_process").click(function() {
+    var process_id = $("#id_process").val();
+    var iid = $("#card_modal").attr("iid");
+    Dajaxice.techdata.addProcess(refreshProcess, {"process_id": process_id, "iid": iid, });
+});
+
+$(document).on("click", ".btn-del-process", function() {
+    var pid = $(this).attr("pid");
+    Dajaxice.techdata.deleteProcess(refreshProcess, {"pid": pid});
+});
+
+function refreshProcess() {
+    var iid = $("#card_modal").attr("iid");
+    Dajaxice.techdata.getProcess(getProcessCallBack, {"iid": iid});
 }

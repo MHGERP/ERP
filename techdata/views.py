@@ -10,7 +10,7 @@ import json
 from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
-from techdata.forms import MaterielForm, CirculationRouteForm
+from techdata.forms import MaterielForm, CirculationRouteForm, ProcessingForm
 
 from const.forms import WorkOrderForm
 
@@ -83,8 +83,10 @@ def processBOMViews(request):
     JunHU
     """
     work_order_form = WorkOrderForm()
+    process_form = ProcessingForm()
     context = {
         "form": work_order_form,
+        "process_form": process_form,
     }
     return render(request, "techdata/processBOM.html", context)
 
