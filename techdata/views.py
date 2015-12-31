@@ -91,7 +91,13 @@ def processBOMViews(request):
     return render(request, "techdata/processBOM.html", context)
 
 def weldListViews(request):
-    context = {}
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "form": WorkOrderForm,
+    }
     return render(request, "techdata/weld_list.html", context)
 
 def weldQuotaViews(request):

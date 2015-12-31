@@ -178,4 +178,16 @@ def addWeldSeam(request, iid, form):
         }
         html = render_to_string("techdata/widgets/weld_seam_card.html", context)
         return html
-        
+       
+
+@dajaxice_register
+def getWeldSeamList(self, id_work_order):
+    weldseam_list = WeldSeam.objects.filter(materiel_belong__order__id = id_work_order)
+    print weldseam_list
+    context = {
+        "weldseam_list": weldseam_list,
+    }
+    html = render_to_string("techdata/widgets/weld_list_table.html", context)
+    return html
+
+
