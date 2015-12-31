@@ -25,7 +25,7 @@ function getDesignBOMFormCallback(data) {
 }
 
 $("#save_desginBOM_btn").click(function(){
-    //Dajaxice.techdata.saveDesignBOM(saveDesignBOMCallback, {});
+    Dajaxice.techdata.saveDesignBOM(saveDesignBOMCallback, {});
 });
 
 function savedesignBOMCallback(data) {
