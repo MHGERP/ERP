@@ -1,25 +1,23 @@
 function func() {
     var s = $('select option:selected').val();
     if (s == "0")
-        return;
+        $("#detail_table").html("");
     else if (s == "1")
-        Dajaxice.techdata.boxOutBought(boxOutBoughtCallback, {"boxoutbought" : s});
+        Dajaxice.techdata.firstFeeding(tableCallback, {});
     else if (s == "2")
-        alert("2");
+        Dajaxice.techdata.principalMaterial(tableCallback, {});
     else if (s == "3")
-        alert("3");
+        Dajaxice.techdata.auxiliaryMaterial(tableCallback, {});
     else if (s == "4")
-        alert("4");
+        Dajaxice.techdata.weldList(tableCallback, {});
     else if (s == "5")
-        alert("5");
+        Dajaxice.techdata.weldQuota(tableCallback, {});
     else if (s == "6")
-        alert("6");
+        Dajaxice.techdata.techBoxWeld(tableCallback, {});
     else if (s == "7")
-        alert("7");
-    else if (s == "8")
-        alert("8");
+        Dajaxice.techdata.boxOutBought(tableCallback, {});
 }
 
-function boxOutBoughtCallback(data) {
+function tableCallback(data) {
    $("#detail_table").html(data);
 }
