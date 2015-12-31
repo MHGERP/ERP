@@ -1,36 +1,60 @@
-<div class="form-inline div_margin">
-    <label class="span1 label_margin">工作票号</label>
-    {{materiel_form.index}}
+<div class="row-fluid" style="margin-top: 0px">
+    <div class="span4">
+        <div class="input-prepend">
+            <span class="add-on">工作票号:</span>
+            {{materiel_form.index}}
+        </div>
+    </div>
+    <div class="span4">
+        <div class="input-prepend">
+            <span class="add-on">图号:</span>
+            {{materiel_form.schematic_index}}
+        </div>
+    </div>
+    <div class="span4">
+        <div class="input-prepend">
+            <span class="add-on">名称:</span>
+            {{materiel_form.name}}
+        </div>
+    </div>
 </div>
-<div class="form-inline div_margin">
-    <label class="span1 label_margin">图号</label>
-    {{materiel_form.schematic_index}}
+<div class="row-fluid" style="margin-top:0px">
+    <div class="span4">
+        <div class="input-prepend">
+            <span class="add-on">所属图号:</span>
+            {{materiel_form.parent_schematic_index}}
+        </div>
+    </div>
+    <div class="span4">
+        <div class="input-prepend">
+            <span class="">材料:</span>
+            {{materiel_form.material}}
+        </div>
+    </div>
+    <div class="span4">
+        <div class="input-prepend">
+            <span class="add-on">数量:</span>
+            {{materiel_form.count}}
+        </div>
+    </div>
 </div>
-<div class="form-inline div_margin">
-    <label class="span1 label_margin">名称</label>
-    {{materiel_form.name}}
-</div>
-<div class="form-inline div_margin">
-    <label class="span1 label_margin">所属图号</label>
-    {{materiel_form.parent_schematic_index}}
-</div>
-<div class="form-inline div_margin">
-    <label class="span1 label_margin">材料</label>
-    {{materiel_form.material}}
-</div>
-<div class="form-inline div_margin">
-    <label class="span1 label_margin">数量</label>
-    {{materiel_form.count}}
-</div>
-<div class="form-inline div_margin">
-    <label class="span1 label_margin">净重</label>
-    {{materiel_form.net_weight}}
-</div>
-<div class="form-inline div_margin">
-    <label class="span1 label_margin">总重</label>
-    {{materiel_form.total_weight}}
-</div>
-<div class="form-inline div_margin"> 
-    <label class="span1 label_margin">备注</label>
-    {{materiel_form.remark}}
+<div class="row-fluid" style="margin-top:0px">
+    <div class="span4">
+        <div class="input-prepend">
+            <span class="add-on">净重:</span>
+            {{materiel_form.net_weight}}
+        </div>
+    </div>
+    <div class="span4">
+        <div class="input-prepend">
+            <span class="add-on">总重:</span>
+            {{materiel_form.total_weight}}
+        </div>
+    </div>
+    <div class="span4">
+        <div class="input-prepend">
+            <span class="add-on">备注:</span>
+            {{materiel_form.remark}}
+        </div>
+    </div>
 </div>
