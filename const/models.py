@@ -17,7 +17,7 @@ class WorkOrder(models.Model):
 class Material(models.Model):
     name = models.CharField(blank = False, max_length = 50, verbose_name = u"材料名称")
     material_id= models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"材质编号") 
-    categories =  models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"材料类别")
+    categories =  models.CharField(blank = True, null = True , choices = MATERIAL_CATEGORY_CHOICES, max_length = 20, verbose_name = u"材料类别")
     class Meta:
         verbose_name = u"材料"
         verbose_name_plural = u"材料"

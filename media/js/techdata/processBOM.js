@@ -37,3 +37,30 @@ function refreshProcess() {
     var iid = $("#card_modal").attr("iid");
     Dajaxice.techdata.getProcess(getProcessCallBack, {"iid": iid});
 }
+
+
+$("#weldseam_edit").click(function() {
+    Dajaxice.techdata.getWeldSeamCard(getCardCallBack, {}); 
+});
+function getCardCallBack(data) {
+    $("#weld_seam_card").html(data);
+}
+
+$(document).on("click", "#btn_cancel", function() {
+    $("#weld_seam_card").html("");
+});
+
+
+$(document).on("click", "#btn_weldseam_confirm", function() {
+    var iid = $("#card_modal").attr("iid");
+    Dajaxice.techdata.addWeldSeam(addWeldSeamCallBack, {"iid": iid, "form": $("#weld_seam_card").serialize()})
+});
+function addWeldSeamCallBack(data) {
+    if(data == "ok") {
+        alert("焊缝添加成功！");
+        $("#weld_seam_card").html("");
+    }
+    else {
+        $("#weld_seam_card").html(data);
+    }
+}
