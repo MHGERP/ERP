@@ -11,25 +11,22 @@
 {% block inner_content%}
 <div>
     <form class="form-search ">
-        <span class="btn-group">
-            <select onchange="func()" class="dropdown-menu">
+        <select onchange="func()" class="input-medium search-query">
             <option value="0" selected="selected">表单选择</option>
-            <option value="1">装箱外购件明细</option>
-            <option value="2">外购件明细</option>
-            <option value="3">先投件明细</option>
-            <option value="4">主材定额明细</option>
-            <option value="5">辅材定额明细</option>
-            <option value="6">焊缝明细</option>
-            <option value="7">焊材定额</option>
-            <option value="8">装箱焊材消定额</option>
-            </select>
-        </span>
+            <option value="1">先投件明细</option>
+            <option value="2">主材定额明细</option>
+            <option value="3">辅材定额明细</option>
+            <option value="4">焊缝明细</option>
+            <option value="5">焊材定额</option>
+            <option value="6">装箱焊材消耗定额</option>
+            <option value="7">装箱外购件明细</option>
+        </select>
     </form>
 </div>
 </br>
 </br>
 <div class="widget-content" id="detail_table">
-    
+
 </div>
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/detailtable.js"></script>
 {% endblock%}
