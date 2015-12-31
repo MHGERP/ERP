@@ -1,172 +1,196 @@
-<div class="dataTables_length">
-    <span class="btn btn-small btn-primary">完成</span>
-    <span class="btn btn-small btn-primary">审核</span>
-    <span class="btn btn-small btn-primary">工艺修改记录</span>
-</div>
-<table class="table table-bordered table-striped" >
-    <thead>
-	    <tr>
-		    <th>焊条</th>
-		    <th>焊丝</th>
-		    <th>焊带</th>
-		    <th>焊剂</th>
-		    <th>规格</th>
-		    <th>定额（kg）</th>
-		    <th>备注</th>
-		
-	    </tr>
-	<thead>
-	<tbody>
-<tr>
-<td>  </td>
-<td>  </td>
-<td> H309L-15 </td>
-<td>  </td>
-<td> 0.5x60 </td>
-<td> 2355 </td>
-<td> 
-</td>
-</tr>
-<tr>
-<td>  </td>
-<td>  </td>
-<td> H347-15 </td>
-<td>  </td>
-<td> 0.5x60 </td>
-<td> 2355 </td>
-<td> 
-</td>
-</tr>
-<tr>
-<td>  </td>
-<td>  </td>
-<td>  </td>
-<td> SJ15B </td>
-<td>  </td>
-<td> 3532.5 </td>
-<td> 
-</td>
-</tr>
-<tr>
-<td>  </td>
-<td> E347LT1-1 </td>
-<td>  </td>
-<td>  </td>
-<td> （φ1.2） </td>
-<td> 771.93 </td>
-<td> 
-</td>
-</tr>
-<tr>
-<td>  </td>
-<td> E309LT1-1 </td>
-<td>  </td>
-<td>  </td>
-<td> （φ1.2） </td>
-<td> 622.5 </td>
-<td> 
-</td>
-</tr>
-<tr>
-<td>  </td>
-<td> ER50-6 </td>
-<td>  </td>
-<td>  </td>
-<td> （φ1.2） </td>
-<td> 23 </td>
-<td> 
-</td>
-</tr>
-<tr>
-<td>  </td>
-<td> E309LMoT1-1 </td>
-<td>  </td>
-<td>  </td>
-<td> （φ1.2） </td>
-<td> 11.74 </td>
-<td> 
-</td>
-</tr>
-<tr>
-<td>  </td>
-<td> H08Mn2SiA </td>
-<td>  </td>
-<td>  </td>
-<td> （φ1.2） </td>
-<td> 98 </td>
-<td> 
-</td>
-</tr>
-<tr>
-<td>  </td>
-<td> H08CrMoA2) </td>
-<td>  </td>
-<td>  </td>
-<td> (φ4.0) </td>
-<td> 995.6 </td>
-<td> 
-</td>
-</tr>
-<tr>
-<td> R3072)3) </td>
-<td>  </td>
-<td>  </td>
-<td>  </td>
-<td> (φ4.0) </td>
-<td> 1493 </td>
-<td> 
-</td>
-</tr>
-<tr>
-<td>  </td>
-<td>  </td>
-<td>  </td>
-<td> SJ1012) </td>
-<td>  </td>
-<td> 1109.5 </td>
-<td> 
-</td>
-</tr>
-<tr>
-<td> T Phoenix Cr1Mo SC2)3) </td>
-<td>  </td>
-<td>  </td>
-<td>  </td>
-<td> (φ4.0) </td>
-<td> 49.5 </td>
-<td> 已提
-</td>
-</tr>
-<tr>
-<td>  </td>
-<td> T Union SA Cr1Mo SC2) </td>
-<td>  </td>
-<td>  </td>
-<td> (φ3.0) </td>
-<td> 229.334 </td>
-<td> 已提
-</td>
-</tr>
-<tr>
-<td>  </td>
-<td>  </td>
-<td>  </td>
-<td> UV420TTR2) </td>
-<td>  </td>
-<td> 277.5 </td>
-<td> 已提
-</td>
-</tr>
-<tr>
-<td> ENi6625 </td>
-<td>  </td>
-<td>  </td>
-<td>  </td>
-<td> (φ4.0) </td>
-<td> 25 </td>
-<td> 
-</td>
-</tr>
+<form class="form-search ">
+    工作令: 
+    <select class="input-medium search-query" id="search_pending_order">
+        <option style="width:200px">03015001B</option>
+        <option style="width:200px">2</option>
+        <option style="width:200px">3</option>
+        <option style="width:200px">4</option>
+        <option style="width:200px">5</option>
+    </select>
+    <span class="btn" id="order_search">检索</span> 
+</form>
 
-	<tbody>
-</table>
+
+<div class="widget-box">
+    <div class="widget-title">
+        <span class="icon"><i class="icon-th"></i></span>
+        <h5>工作令：03015001B</h5>
+        <h5>产品名称：第一中温变换炉</h5>
+        <h5>编制人：</h5>
+        <h5>审核人：</h5>
+    </div>
+    <div class="widget-content nopadding">
+        <div class="dataTables_length">
+            <span class="btn btn-small btn-primary">完成</span>
+            <span class="btn btn-small btn-primary">审核</span>
+            <span class="btn btn-small btn-primary">工艺修改记录</span>
+        </div>
+        <table class="table table-bordered table-striped" >
+            <thead>
+                <tr>
+                    <th>焊条</th>
+                    <th>焊丝</th>
+                    <th>焊带</th>
+                    <th>焊剂</th>
+                    <th>规格</th>
+                    <th>定额（kg）</th>
+                    <th>备注</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> H309L-15 </td>
+                    <td>  </td>
+                    <td> 0.5x60 </td>
+                    <td> 2355 </td>
+                    <td> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> H347-15 </td>
+                    <td>  </td>
+                    <td> 0.5x60 </td>
+                    <td> 2355 </td>
+                    <td> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> SJ15B </td>
+                    <td>  </td>
+                    <td> 3532.5 </td>
+                    <td> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td> E347LT1-1 </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> （φ1.2） </td>
+                    <td> 771.93 </td>
+                    <td> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td> E309LT1-1 </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> （φ1.2） </td>
+                    <td> 622.5 </td>
+                    <td> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td> ER50-6 </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> （φ1.2） </td>
+                    <td> 23 </td>
+                    <td> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td> E309LMoT1-1 </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> （φ1.2） </td>
+                    <td> 11.74 </td>
+                    <td> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td> H08Mn2SiA </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> （φ1.2） </td>
+                    <td> 98 </td>
+                    <td> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td> H08CrMoA2) </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> (φ4.0) </td>
+                    <td> 995.6 </td>
+                    <td> 
+                    </td>
+                </tr>
+                <tr>
+                    <td> R3072)3) </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> (φ4.0) </td>
+                    <td> 1493 </td>
+                    <td> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> SJ1012) </td>
+                    <td>  </td>
+                    <td> 1109.5 </td>
+                    <td> 
+                    </td>
+                </tr>
+                <tr>
+                    <td> T Phoenix Cr1Mo SC2)3) </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> (φ4.0) </td>
+                    <td> 49.5 </td>
+                    <td> 已提
+                    </td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td> T Union SA Cr1Mo SC2) </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> (φ3.0) </td>
+                    <td> 229.334 </td>
+                    <td> 已提
+                    </td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> UV420TTR2) </td>
+                    <td>  </td>
+                    <td> 277.5 </td>
+                    <td> 已提
+                    </td>
+                </tr>
+                <tr>
+                    <td> ENi6625 </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td> (φ4.0) </td>
+                    <td> 25 </td>
+                    <td> 
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
