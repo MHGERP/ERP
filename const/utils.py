@@ -3,6 +3,8 @@
 from const import *
 from users.models import Title,Authority
 from django.contrib.auth.models import User
+from const.models import Material
+from django.db.models import Q
 
 def getUserByAuthority(authority):
     """
@@ -33,3 +35,10 @@ def getChoiceList(obj_set,field):
     for obj in obj_set:
         obj_list.append((obj.id,getattr(obj,field)))
     return tuple(obj_list)
+
+def getMaterialQuerySet(*categories):
+    """
+    JunHU
+    """
+    qset = reduce(lambda x, y: x | y, [Q(categories = cate) for cate in categories]) 
+    return Material.objects.filter(qset)

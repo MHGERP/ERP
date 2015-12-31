@@ -2,7 +2,7 @@
 # coding=utf-8
 from django import  forms
 from const.models import Materiel
-from techdata.models import CirculationRoute, CirculationName
+from techdata.models import WeldSeam, CirculationRoute
 from const import PROCESSING_CHOICES
 
 class MaterielForm(forms.ModelForm):
@@ -28,6 +28,28 @@ class ProcessingForm(forms.Form):
     """
     process = forms.ChoiceField(choices = PROCESSING_CHOICES, widget = forms.Select(attrs = {"class": "input-medium"}))
 
+class WeldSeamForm(forms.ModelForm):
+    """
+    JunHU
+    """
+    class Meta:
+        model = WeldSeam
+        exclude = ('materiel_belong',)
+        widgets = {
+            "weld_index": forms.TextInput(attrs = {"class": "input-small"}),
+            "base_metal_thin_1": forms.TextInput(attrs = {"class": "input-small"}),
+            "base_metal_thin_2": forms.TextInput(attrs = {"class": "input-small"}),
+            "length": forms.TextInput(attrs = {"class": "input-small"}),
+            "weight_1": forms.TextInput(attrs = {"class": "input-small"}),
+            "weight_2": forms.TextInput(attrs = {"class": "input-small"}),
+            "weld_material_1": forms.Select(attrs = {"class": "input-small"}),
+            "weld_material_2": forms.Select(attrs = {"class": "input-small"}),
+            "weld_method": forms.Select(attrs = {"class": "input-small"}),
+            "weldseam_type": forms.Select(attrs = {"class": "input-small"}),
+            "size_1": forms.TextInput(attrs = {"class": "input-small"}),
+            "size_2": forms.TextInput(attrs = {"class": "input-small"}),
+            "remark": forms.TextInput(attrs = {"class": "input-medium"}),
+        }
 class CirculationRouteForm(forms.ModelForm):
     """
     mxl
