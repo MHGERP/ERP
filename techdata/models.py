@@ -19,7 +19,7 @@ class Processing(models.Model):
         return self.materiel_belong.name + "(%s)" % self.get_name_display()
 
 class ProcessReview(models.Model):
-    meteriel = models.ForeignKey(Materiel, verbose_name = u"零件")
+    materiel = models.ForeignKey(Materiel, verbose_name = u"零件")
     problem_statement = models.CharField(blank = True, null = True, max_length = 200, verbose_name = u"存在问题")
     advice_statement = models.CharField(blank = True, null = True, max_length = 200, verbose_name = u"改进建议")
     class Meta:
