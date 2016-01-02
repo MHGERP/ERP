@@ -1,0 +1,23 @@
+{% extends "storage/base/outsidebase.html" %}
+
+{% block title %}
+<h1>外购件库存管理</h1>
+
+{% endblock %}
+
+{% block inner_content%}
+<div class="row span12" id="storage-menu">
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/outside/entryhome">外购件入库管理</a>
+    </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/outside/applycardhome">外购件出库管理</a>
+    </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/outside/outsideaccounthome">外购件台账管理</a>
+    </div>
+</div>
+{% endblock%}

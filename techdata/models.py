@@ -1,8 +1,7 @@
 #coding: utf=8
-
+from const import PROCESSING_CHOICES, CIRCULATION_CHOICES, NONDESTRUCTIVE_INSPECTION_TYPE
 from django.db import models
-from const.models import Materiel
-from const import PROCESSING_CHOICES, CIRCULATION_CHOICES
+from const.models import Materiel, Material
 
 class Processing(models.Model):
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")
@@ -55,4 +54,56 @@ class CirculationRoute(models.Model):
         verbose_name_plural = u"流转路线"
     def __unicode__(self):
         return self.materiel_belong.name
+
+class WeldSeamType(models.Model):
+    name = models.CharField(blank = False, max_length = 100, verbose_name = u"类型名")
+    class Meta:
+        verbose_name = u"焊缝类型"
+        verbose_name_plural = u"焊缝类型"
+    def __unicode__(self):
+        return self.name
+
+class WeldMethod(models.Model):
+    name = models.CharField(blank = False, max_length = 100, verbose_name = u"方法名")
+    class Meta:
+        verbose_name = u"焊接方法"
+        verbose_name_plural = u"焊接方法"
+    def __unicode__(self):
+        return self.name
+
+
+class NondestructiveInspection(models.Model):
+    name = models.CharField(blank = False, choices = NONDESTRUCTIVE_INSPECTION_TYPE, max_length = 20, verbose_name = u"探伤种类名")
+    class Meta:
+        verbose_name = u"无损探伤"
+        verbose_name_plural = u"无损探伤"
+    def __unicode__(self):
+        return self.name
+
+class WeldSeam(models.Model):
+    materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")
+    weld_index = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"焊缝编号")
+    weldseam_type = models.ForeignKey(WeldSeamType, verbose_name = u"焊缝类型")
+    weld_method = models.ForeignKey(WeldMethod, verbose_name = u"焊接方法")
+    base_metal_thin_1 = models.CharField(blank = False, max_length = 100, verbose_name = u"母材厚度1")
+    base_metal_thin_2 = models.CharField(blank = False, max_length = 100, verbose_name = u"母材厚度2")
+    length = models.CharField(blank = False, max_length = 100, verbose_name = u"长度")
+    weld_material_1 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊材1", related_name = "weld_material_1")
+    size_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"规格1")
+    weight_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"重量1")
+    weld_material_2 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊材2", related_name = "weld_material_2")
+    size_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"规格2")
+    weight_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"重量2")
+    remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
+
+    groove_inspction = models.ManyToManyField(NondestructiveInspection, blank = True, null = True, verbose_name = u"坡口探伤", related_name = "groove_inspction")
+    welded_status_inspection = models.ManyToManyField(NondestructiveInspection, blank = True, null = True, verbose_name = u"焊态探伤", related_name = "welded_status_inspection")
+    heat_treatment_inspection = models.ManyToManyField(NondestructiveInspection, blank = True, null = True, verbose_name = u"热处理后探伤", related_name = "heat_treatment_inspection")
+    pressure_test_inspection = models.ManyToManyField(NondestructiveInspection, blank = True, null = True, verbose_name = u"试压后探伤", related_name = "pressure_test_inspection")
+
+    class Meta:
+        verbose_name = u"焊缝"
+        verbose_name_plural = u"焊缝"
+    def __unicode__(self):
+        return self.materiel_belong.name   
 

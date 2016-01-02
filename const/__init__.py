@@ -207,6 +207,9 @@ STORAGESTATUS_PURCHASER = 0
 STORAGESTATUS_INSPECTOR = 1
 STORAGESTATUS_KEEPER = 2
 STORAGESTATUS_REFUNDER = 3
+STORAGESTATUS_AUDITOR = 4
+STORAGESTATUS_PROPOSER = 5
+
 STORAGESTATUS_END = -2
 ENTRYSTATUS_CHOICES = (
     (STORAGESTATUS_PURCHASER,u"待采购员确认"),
@@ -214,7 +217,14 @@ ENTRYSTATUS_CHOICES = (
     (STORAGESTATUS_KEEPER,u"待库管确认"),
     (STORAGESTATUS_END,u"结束"),
 )
-
+ENTRYSTATUS_LIST = [x[0] for x in ENTRYTYPE_CHOICES]
+APPLYCARDSTATUS_CHOICES = (
+    (STORAGESTATUS_AUDITOR,u"待审核人确认"),
+    (STORAGESTATUS_INSPECTOR,u"待检查确认"),
+    (STORAGESTATUS_KEEPER,u"待库管确认"),
+    (STORAGESTATUS_END,u"结束"),
+)
+APPLYCARDSTATUS_LIST = [ x[0] for x in APPLYCARDSTATUS_CHOICES ]
 APPLYCARD_APPLY=0
 APPLYCARD_AUDIT=1
 APPLYCARD_INSPECT=2
@@ -332,4 +342,39 @@ PROCESSING_CHOICES = (
     (M, "M"),
     (L, "L"),
     (Y, "Y"),
+)
+
+
+WELD_ROD = "weld_rod"
+WELD_WIRE = "weld_wire"
+WELD_RIBBON = "weld_ribbon"
+WELD_FLUX = "weld_flux"
+
+SHEET = "sheet"
+PROFILE = "profile"
+PURCHASED = "purchased"
+OTHER = "other"
+MATERIAL_CATEGORY_CHOICES = (
+    (WELD_ROD, u"焊条"),
+    (WELD_WIRE, u"焊丝"),
+    (WELD_RIBBON, u"焊带"),
+    (WELD_FLUX, u"焊剂"),
+    (SHEET, u"板材"),
+    (PROFILE, u"型材"),
+    (PURCHASED, u"外购件"),
+    (OTHER, u"其他"),
+)
+
+RT = "RT"
+UT = "UT"
+MT = "MT"
+PT = "PT"
+VT = "VT"
+
+NONDESTRUCTIVE_INSPECTION_TYPE = (
+    (RT, "RT"),
+    (UT, "UT"),
+    (MT, "MT"),
+    (PT, "PT"),
+    (VT, "VT"),
 )
