@@ -243,6 +243,9 @@ def weldQuota(request):
 
 @dajaxice_register
 def addWeldSeam(request, iid, form):
+    """
+    JunHU
+    """
     materiel = Materiel.objects.get(id = iid)
     form = WeldSeamForm(deserialize_form(form))
     if form.is_valid():
@@ -256,10 +259,29 @@ def addWeldSeam(request, iid, form):
         }
         html = render_to_string("techdata/widgets/weld_seam_card.html", context)
         return html
-       
+
+@dajaxice_register
+def modifyWeldSeam(request, iid, form):
+    """
+    JunHU
+    """
+    weldseam = WeldSeam.objects.get(id = iid)
+    form = WeldSeamForm(deserialize_form(form), instance = weldseam)
+    if form.is_valid():
+        form.save()
+        return "ok"
+    else:
+        context = {
+            "form": form,
+        }
+        html = render_to_string("techdata/widgets/weld_seam_full_card.html", context)
+        return html
 
 @dajaxice_register
 def getWeldSeamList(self, id_work_order):
+    """
+    JunHU
+    """
     work_order = WorkOrder.objects.get(id = id_work_order)
     weldseam_list = WeldSeam.objects.filter(materiel_belong__order = work_order)
     context = {

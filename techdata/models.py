@@ -1,5 +1,5 @@
 #coding: utf=8
-from const import PROCESSING_CHOICES, CIRCULATION_CHOICES
+from const import PROCESSING_CHOICES, CIRCULATION_CHOICES, NONDESTRUCTIVE_INSPECTION_TYPE
 from django.db import models
 from const.models import Materiel, Material
 
@@ -71,6 +71,15 @@ class WeldMethod(models.Model):
     def __unicode__(self):
         return self.name
 
+
+class NondestructiveInspection(models.Model):
+    name = models.CharField(blank = False, choices = NONDESTRUCTIVE_INSPECTION_TYPE, max_length = 20, verbose_name = u"探伤种类名")
+    class Meta:
+        verbose_name = u"无损探伤"
+        verbose_name_plural = u"无损探伤"
+    def __unicode__(self):
+        return self.name
+
 class WeldSeam(models.Model):
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")
     weld_index = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"焊缝编号")
@@ -86,6 +95,12 @@ class WeldSeam(models.Model):
     size_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"规格2")
     weight_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"重量2")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
+
+    groove_inspction = models.ManyToManyField(NondestructiveInspection, blank = True, null = True, verbose_name = u"坡口探伤", related_name = "groove_inspction")
+    welded_status_inspection = models.ManyToManyField(NondestructiveInspection, blank = True, null = True, verbose_name = u"焊态探伤", related_name = "welded_status_inspection")
+    heat_treatment_inspection = models.ManyToManyField(NondestructiveInspection, blank = True, null = True, verbose_name = u"热处理后探伤", related_name = "heat_treatment_inspection")
+    pressure_test_inspection = models.ManyToManyField(NondestructiveInspection, blank = True, null = True, verbose_name = u"试压后探伤", related_name = "pressure_test_inspection")
+
     class Meta:
         verbose_name = u"焊缝"
         verbose_name_plural = u"焊缝"

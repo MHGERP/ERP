@@ -12,6 +12,7 @@ RegisterClass = (
     WeldSeam,
     WeldSeamType,
     WeldMethod,
+    NondestructiveInspection,
 )
 
 for item in RegisterClass:

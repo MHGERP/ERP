@@ -49,7 +49,12 @@ class WeldSeamForm(forms.ModelForm):
             "size_1": forms.TextInput(attrs = {"class": "input-small"}),
             "size_2": forms.TextInput(attrs = {"class": "input-small"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium"}),
+            "groove_inspction": forms.SelectMultiple(attrs = {"class": "input-small"}),
+            "welded_status_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
+            "heat_treatment_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
+            "pressure_test_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
         }
+
 class CirculationRouteForm(forms.ModelForm):
     """
     mxl
