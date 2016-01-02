@@ -35,7 +35,7 @@ def getProcessBOM(request, id_work_order):
     html = render_to_string("techdata/widgets/processBOM_table.html", context)
     return html
 
-@dajaxice_register
+@dajaxice_register  
 def getMaterielInfo(request, iid):
     """
     JunHU
@@ -48,6 +48,37 @@ def getMaterielInfo(request, iid):
         "circulationroute_form": circulationroute_form,
     }
     html = render_to_string("techdata/widgets/materiel_base_info.html", context)
+    return html 
+
+@dajaxice_register  
+def getTechdataList(request, id_work_order):
+    """
+    MH Chen
+    """
+    workorder = WorkOrder.objects.filter(id = id_work_order)[0]
+    materiel = Materiel.objects.filter(order = id_work_order)
+    print "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    print "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+
+    context = {
+        "workorder": workorder,
+        "materiel":materiel,
+    }
+    html = render_to_string("techdata/widgets/process_examination_table.html", context)
+    return html
+
+@dajaxice_register  
+def getIndex(request, index):
+    """
+    MH Chen
+    """
+    materiel = Materiel.objects.filter(index = index)
+    if len(materiel)==0:return
+    form = MaterielForm(instance = materiel[0])
+    context = {
+        "form": form,
+    }
+    html = render_to_string("techdata/widgets/process_examination_table2.html", context)
     return html
 
 @dajaxice_register
