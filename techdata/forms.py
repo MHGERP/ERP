@@ -2,7 +2,7 @@
 # coding=utf-8
 from django import  forms
 from const.models import Materiel
-from techdata.models import CirculationRoute, CirculationName
+from techdata.models import *
 from const import PROCESSING_CHOICES
 
 class MaterielForm(forms.ModelForm):
