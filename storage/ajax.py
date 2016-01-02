@@ -359,6 +359,7 @@ def bakeSave(request,bakeform,bid=None):
     form = BakeRecordForm(bakeform,instance = weldbake) if bid !=None else BakeRecordForm(bakeform)
     if form.is_valid():
         weldbake = form.save(commit = False)
+        weldbake.storeMan = request.user
         weldbake.save()
         message = u"录入成功"
     else:
@@ -370,3 +371,89 @@ def bakeSave(request,bakeform,bid=None):
     html = render_to_string("storage/widgets/bake_form.html",context)
     return simplejson.dumps({"html":html,"message":message})
 
+@dajaxice_register
+def outsideEntryConfirm(request,eid,form):
+    status_list = [ x[0]  for x in ENTRYSTATUS_CHOICES ] 
+    html,flag,context = getEntryData(request,eid,form,OutsideStandardEntry,OutsideStandardItem,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,"outside/entryhome","keeper",status_list)
+    entry_obj = context["entry_obj"]
+    items_set = context["entry_set"]
+    genOutsideStoreList(items_set)
+    if flag:
+        message = u"保存成功"
+    else:
+        message = u"保存失败"
+    status_list = [ x[0]  for x in ENTRYSTATUS_CHOICES ] 
+    return simplejson.dumps({"html":html,"message":message})
+
+def getEntryData(request,eid,form,_Model,_ItemModel,_Inform,_Reform,entryhomeurl,role,status_list,entry_status=STORAGESTATUS_KEEPER):
+    entry_obj = _Model.objects.get(id = eid)
+    form = deserialize_form(form)
+    inform = _Inform(form,instance=entry_obj)
+    reform = _Reform(form,instance=entry_obj)
+    form_list = [("inform",inform),("reform",reform)]
+    entryobject = EntryObject(status_list,_Model,eid) 
+    context = entryobject.save_entry(entry_obj,role,request.user,form_list)
+    is_show = entryobject.checkShow(entry_obj,STORAGESTATUS_KEEPER)
+    context["entryhomeurl"] = entryhomeurl
+    context["is_show"]=is_show
+    context["entry_set"] = _ItemModel.objects.filter(entry=entry_obj)
+    return render_to_string("storage/widgets/entryAbody.html",context),entryobject.flag,context
+
+
+def genOutsideStoreList(items_set):
+    try:
+        for item in items_set:
+            storeitem = OutsideStorageList.objects.filter(specification = item.specification,texture = item.materiel.material)
+            if storeitem.count() > 0:
+                storeitem  = storeitem[0]
+                storeitem.number += item.number
+                storeitem.save()
+            else:
+                storeitem = OutsideStorageList(specification = item.specification , texture = item.materiel.material ,number = item.number,unit = item.unit)
+                storeitem.save()
+        return True
+    except Exception,e:
+        print e
+        return False
+
+@dajaxice_register
+def outsideApplyCardItemRemarkChange(request,itemid,remark):
+    item = OutsideApplyCardItem.objects.get(id = itemid)
+    item.remark = remark
+    item.save()
+    return simplejson.dumps({"remark":item.remark,"id":item.id})
+
+@dajaxice_register
+def outsideApplyCardConfirm(request,form,aid):
+    applycard = OutsideApplyCard.objects.get(id = aid)
+    form = OutsideApplyCardForm(deserialize_form(form),instance=applycard)
+    if form.is_valid():
+        form.save()
+        saveRolers(applycard,"keeper",request.user)
+        items_set = OutsideApplyCardItem.objects.filter(applycard = applycard,is_past = False)
+        isOk = updateStorageLits(items_set,OutsideStorageList)
+        if isOk:
+            message = u"确认成功"
+            setObjAttr(applycard,"entry_status",STORAGESTATUS_END)
+        else:
+            message = u"确认失败，部分材料库存不够"
+    else:
+        message = u"确认失败，领用单内容未填全"
+        print form.errors
+    url = "outside/applycardhome"
+    default_status = STORAGESTATUS_KEEPER
+    context = getOutsideApplyCardContext(applycard,form,url,default_status)
+    html = render_to_string("storage/widgets/applycardbody.html",context)
+    return simplejson.dumps({"message":message,"html":html})
+
+def getOutsideApplyCardContext(applycard,inform,url,default_status):
+    is_show = applycard.entry_status == default_status
+    items_set = OutsideApplyCardItem.objects.filter(applycard = applycard,is_past=False)
+    context = {
+        "inform":inform,
+        "applycard":applycard,
+        "applycardurl":url,
+        "is_show":is_show,
+        "items_set":items_set,
+    }
+    return context
