@@ -109,6 +109,7 @@ def weldEntryHomeViews(request):
             "entry_set":weldentry_set,
             "ENTRYSTATUS_END":STORAGESTATUS_END,
             "search_form":search_form,
+            "entryurl":"weldentryconfirm",
             }
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
@@ -696,9 +697,7 @@ def weldApplyAccountViews(request):
     if request.method == "POST":
         search_form =  WeldApplyAccountSearchForm(request.POST)
         if search_form.is_valid():
-            print search_form.cleaned_data
             apply_set = get_weld_filter(WeldingMaterialApplyCard,search_form.cleaned_data)
-            print apply_set
         else:
             print search_form.errors
     else:
@@ -709,6 +708,57 @@ def weldApplyAccountViews(request):
     }
     return render(request,"storage/weldmaterial/weldaccount/weldapplyhome.html",context)
 
+
+def outsideHomeViews(request):
+    context = {
+
+            }
+    return render(request,"storage/outside/outsidehome.html",context)
+
+def outsideEntryHomeViews(request):
+    key_list = ["entry_set","entryurl","ENTRYSTATUS_END"]
+    context = getStorageHomeContext(request,OutsideStandardEntry,OutsideEntrySearchForm,STORAGESTATUS_KEEPER,"outside/entryconfirm",key_list,"entry_time")
+    return render(request,"storage/outside/outsideentryhome.html",context)
+
+def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list,order_field):
+    if request.method == "POST":
+        search_form = _SearchForm(request.POST)
+        if search_form.is_valid():
+            obj_set = get_weld_filter(_Model,search_form.cleaned_data)
+        else:
+            print search_form.errors
+    else:
+        obj_set = _Model.objects.filter(entry_status=default_status)
+        search_form = _SearchForm()
+    obj_set = obj_set.order_by(order_field)
+    context = {
+            key_list[0]:obj_set,
+            "search_form":search_form,
+            key_list[1]:url,
+            key_list[2]:STORAGESTATUS_END,
+            }
+    return context
+
+def outsideEntryConfirmViews(request,eid):
+    entryurl = "outside/entryhome"
+    context = getEntryConfirmContext(eid,OutsideStandardEntry,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,entryurl)
+    return render(request,"storage/outside/entryconfirm.html",context)
+
+def getEntryConfirmContext(eid,_Model,_Inform,_Reform,entryurl):
+    entry_obj = _Model.objects.get(id = eid)
+    inform = _Inform(instance = entry_obj)
+    reform = _Reform(instance = entry_obj)
+    is_show = entry_obj.entry_status == STORAGESTATUS_KEEPER
+    entry_set = OutsideStandardItem.objects.filter(entry = entry_obj)
+    context = {
+        "inform":inform,
+        "reform":reform,
+        "entry_obj":entry_obj,
+        "entryhomeurl":"outside/entryhome",
+        "is_show":is_show,
+        "entry_set":entry_set,
+    }
+    return context
 def StoreThreadViews(request):
     items_set = WeldStoreThread.objects.all()
     entry_form = ThreadEntryItemsForm()
@@ -718,4 +768,32 @@ def StoreThreadViews(request):
     }
     return render(request,"storage/storethread/storethread.html",context)
 
+def outsideApplyCardHomeViews(request):
+    applyurl = "outside/applycardconfirm"
+    key_list = ["card_set","applyurl","APPLYSTATUS_END"]
+    context = getStorageHomeContext(request,OutsideApplyCard,OutsideApplyCardSearchForm,STORAGESTATUS_KEEPER,applyurl,key_list,"date")
+    return render(request,"storage/outside/applycardhome.html",context)
 
+def outsideApplyCardConfirmViews(request,cid):
+    url = "outside/applycardhome"
+    default_status = STORAGESTATUS_KEEPER
+    context = getOutsideApplyCardConfirmContext(cid,OutsideApplyCardForm,url,default_status) 
+    return render(request,"storage/outside/applycardconfirm.html",context)
+
+def getOutsideApplyCardConfirmContext(cid,_Inform,url,default_status):
+    applycard = OutsideApplyCard.objects.get(id = cid)
+    inform = _Inform(instance = applycard)
+    is_show = applycard.entry_status == default_status
+    items_set = OutsideApplyCardItem.objects.filter(applycard = applycard,is_past = False)
+    context = {
+        "inform":inform,
+        "applycard":applycard,
+        "entryhomeurl":url,
+        "is_show":is_show,
+        "items_set":items_set,
+    }
+    return context
+
+def outsideAccountHomeViews(request):
+    context = {}
+    return render(request,"storage/outside/accounthome.html",context)

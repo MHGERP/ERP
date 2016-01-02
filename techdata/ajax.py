@@ -49,6 +49,60 @@ def getMaterielInfo(request, iid):
     }
     html = render_to_string("techdata/widgets/materiel_base_info.html", context)
     return html
+    
+@dajaxice_register
+def getProcess(request, iid):
+    """
+    JunHU
+    """
+    materiel = Materiel.objects.get(id = iid)
+    try:
+        process = Processing.objects.get(materiel_belong = materiel, is_first_processing = True)  
+        process_list = []
+        while process:
+            process_list.append(process)
+            process = process.next_processing
+    except:
+        process_list = []
+    
+    context = {
+        "process_list": process_list,
+    }
+    html = render_to_string("techdata/widgets/process_table.html", context)
+    return html
+
+@dajaxice_register
+def addProcess(request, process_id, iid):
+    """
+    JunHU
+    """
+    materiel = Materiel.objects.get(id = iid)
+    if Processing.objects.filter(materiel_belong = materiel).count() == 0:
+        process = Processing(materiel_belong = materiel, name = process_id, is_first_processing = True)
+        process.save()
+    else:
+        pre_process = Processing.objects.get(materiel_belong = materiel, next_processing = None)
+        process = Processing(materiel_belong = materiel, name = process_id)
+        process.save()
+        pre_process.next_processing = process
+        pre_process.save()
+
+@dajaxice_register
+def deleteProcess(request, pid):
+    """
+    JunHU
+    """
+    process = Processing.objects.get(id = pid)
+    if process.is_first_processing == True:
+        if process.next_processing:
+            process.next_processing.is_first_processing = True
+            process.next_processing.save()
+        process.delete()
+    else:
+        pre_process = Processing.objects.get(next_processing = process)
+        pre_process.next_processing = process.next_processing
+        pre_process.save()
+        process.delete()
 
 @dajaxice_register
 def getDesignBOM(request, id_work_order):
@@ -82,18 +136,25 @@ def getDesignBOMForm(request, iid):
     return simplejson.dumps({'materiel_form' : materiel_form_html, 'circulationroute_form' : circulationroute_form_html})
 
 @dajaxice_register
-def getWeldSeamCard(self):
+def getWeldSeamCard(self, full = False, iid = None):
     """
     JunHU
     """
-    form = WeldSeamForm()
+    if iid:
+        weld_seam = WeldSeam.objects.get(id = iid)
+        form = WeldSeamForm(instance = weld_seam)
+    else:
+        form = WeldSeamForm()
     material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE, WELD_RIBBON, WELD_FLUX)
     form.fields["weld_material_1"].queryset = material_set
     form.fields["weld_material_2"].queryset = material_set
     context = {
         "form": form,
     }
-    html = render_to_string("techdata/widgets/weld_seam_card.html", context)
+    if full:
+        html = render_to_string("techdata/widgets/weld_seam_full_card.html", context)
+    else:
+        html = render_to_string("techdata/widgets/weld_seam_card.html", context)
     return html
 
 @dajaxice_register
@@ -199,10 +260,11 @@ def addWeldSeam(request, iid, form):
 
 @dajaxice_register
 def getWeldSeamList(self, id_work_order):
-    weldseam_list = WeldSeam.objects.filter(materiel_belong__order__id = id_work_order)
-    print weldseam_list
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    weldseam_list = WeldSeam.objects.filter(materiel_belong__order = work_order)
     context = {
         "weldseam_list": weldseam_list,
+        "work_order": work_order,
     }
     html = render_to_string("techdata/widgets/weld_list_table.html", context)
     return html
