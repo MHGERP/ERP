@@ -4,18 +4,27 @@
             <span class="add-on">工作票号:</span>
             {{materiel_form.index}}
         </div>
+        {% if materiel_form.errors.index %}
+            {{ materiel_form.errors.index }}
+        {% endif %}
     </div>
     <div class="span4">
         <div class="input-prepend">
             <span class="add-on">图号:</span>
             {{materiel_form.schematic_index}}
         </div>
+        {% if materiel_form.errors.schematic_index %}
+            {{ materiel_form.errors.schematic_index }}
+        {% endif %}
     </div>
     <div class="span4">
         <div class="input-prepend">
             <span class="add-on">名称:</span>
             {{materiel_form.name}}
         </div>
+        {% if materiel_form.errors.name %}
+            {{ materiel_form.errors.name }}
+        {% endif %}
     </div>
 </div>
 <div class="row-fluid" style="margin-top:0px">
@@ -24,18 +33,27 @@
             <span class="add-on">所属图号:</span>
             {{materiel_form.parent_schematic_index}}
         </div>
+        {% if materiel_form.errors.parent_schematic_index %}
+            {{ materiel_form.errors.parent_schematic_index }}
+        {% endif %}
     </div>
     <div class="span4">
         <div class="input-prepend">
             <span class="add-on">材料:</span>
             {{materiel_form.material}}
         </div>
+        {% if materiel_form.errors.material %}
+            {{ materiel_form.errors.material }}
+        {% endif %}
     </div>
     <div class="span4">
         <div class="input-prepend">
             <span class="add-on">数量:</span>
             {{materiel_form.count}}
         </div>
+        {% if materiel_form.errors.count %}
+            {{ materiel_form.errors.count }}
+        {% endif %}
     </div>
 </div>
 <div class="row-fluid" style="margin-top:0px">
@@ -44,17 +62,26 @@
             <span class="add-on">净重:</span>
             {{materiel_form.net_weight}}
         </div>
+        {% if materiel_form.errors.net_weight %}
+            {{ materiel_form.errors.net_weight }}
+        {% endif %}
     </div>
     <div class="span4">
         <div class="input-prepend">
             <span class="add-on">总重:</span>
             {{materiel_form.total_weight}}
         </div>
+        {% if materiel_form.errors.total_weight %}
+            {{ materiel_form.errors.total_weight }}
+            {% endif %}
     </div>
     <div class="span4">
         <div class="input-prepend">
             <span class="add-on">备注:</span>
             {{materiel_form.remark}}
         </div>
+        {% if materiel_form.errors.remark %}
+            {{ materiel_form.errors.remark }}
+        {% endif %}
     </div>
 </div>

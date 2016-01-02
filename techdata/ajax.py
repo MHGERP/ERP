@@ -208,3 +208,41 @@ def getWeldSeamList(self, id_work_order):
     return html
 
 
+@dajaxice_register
+def saveDesignBOM(request, iid,  materiel_form, circulationroute_form):
+    """
+    mxl
+    """
+    materiel = Materiel.objects.get(id = iid)
+    circulationroute = CirculationRoute.objects.filter(materiel_belong = materiel)[0]
+    materiel_form = MaterielForm(deserialize_form(materiel_form), instance = materiel)
+    circulationroute_form = CirculationRouteForm(deserialize_form(circulationroute_form), instance = circulationroute)
+    if materiel_form.is_valid() and circulationroute_form.is_valid():
+        materiel_form.save()
+        obj = circulationroute_form.save(commit = False)
+        obj.materiel_belong = materiel
+        obj.save()
+        ret = {"status" : "ok"}
+    else:
+       # for field in materiel_form:
+       #     if field.errors:
+       #
+       #         print field
+       #     for error in field.errors:
+       #         print error
+       # for field in circulationroute_form:
+       #     if field.errors:
+       #         print field
+       #     for error in field.errors:
+       #         print error
+        ret = {
+            "status" : "fail",
+        }
+        if not materiel_form.is_valid():
+            html = render_to_string("techdata/widgets/designBOM_materiel_form.html", {"materiel_form" : materiel_form})
+            ret["html"] = html
+            ret["materiel_error"] = "1"
+        if not circulationroute_form.is_valid():
+            ret["circulationroute_error"] = "1"
+    return simplejson.dumps(ret)
+
