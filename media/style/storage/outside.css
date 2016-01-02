@@ -1,14 +1,17 @@
 .form-horizontal .controls {
     margin-left:110px!important;
 }
-.form-horizontal .control-label {
+div#applyform_div .control-label {
     width:100px!important;
     text-align:left!important;
 }
-.e3 {
+form .e3 {
     width:33.3%;
 }
 
+div#applyform_div select{
+    width:80%;
+}
 .form-horizontal .control-group {
     border:0px!important;
 }
@@ -16,3 +19,12 @@
 table#items_table{
     width:80%;
 }
+
+form#applycardform table{
+    width:100%;
+}
+
+div#remark label{
+    width:100px!important;
+}
+

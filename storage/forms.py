@@ -8,7 +8,7 @@ from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CH
 from django.contrib.auth.models import User
 from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
-from const.utils import getChoiceList
+from const.utils import getChoiceList,getDistinctSet
 
 DEPARTMENT_CHOICES=(
         (u' ',u'------'),
@@ -387,6 +387,7 @@ class StorageOutsideEntryRemarkForm(ModelForm):
         fields = ("remark",)
         widgets = {
             "remark":forms.Textarea(attrs={"rows":"10","cols":"40","style":"max-height:80px;overflow-y:auto"}),
+        }
 class ThreadEntryItemsForm(ModelForm):
     class Meta:
         model = WeldStoreThread
@@ -395,3 +396,22 @@ class ThreadEntryItemsForm(ModelForm):
             "specification": forms.TextInput(attrs={'class':"form-control span1"}),
             "count": forms.TextInput(attrs={'class':"form_control span2"}),
         }
+
+class OutsideApplyCardSearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
+    workorder = forms.ChoiceField(label=u"工作令",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'workorder'}))
+    proposer=forms.ChoiceField(label=u"领用人",required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'proposer'})) 
+    entry_code = forms.CharField(label=u"工作令",required=False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_code'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideApplyCardSearchForm,self).__init__(*args,**kwargs)
+        workorders = getDistinctSet(OutsideApplyCard,WorkOrder,'workorder')
+        proposers = getDistinctSet(OutsideApplyCard,User,'proposer')
+        self.fields['workorder'].choices = getChoiceList(workorders,'order_index')
+        self.fields['proposer'].choices = getChoiceList(proposers,'userinfo')
+
+class OutsideApplyCardForm(ModelForm):
+    class Meta:
+        model = OutsideApplyCard
+        fields = ("change_code","sample_report","entry_code")
+    def __init__(self,*args,**kwargs):
+        super(OutsideApplyCardForm,self).__init__(*args,**kwargs)

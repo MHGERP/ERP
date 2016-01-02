@@ -716,25 +716,26 @@ def outsideHomeViews(request):
     return render(request,"storage/outside/outsidehome.html",context)
 
 def outsideEntryHomeViews(request):
-    context = getEntryHomeContext(request,OutsideStandardEntry,OutsideEntrySearchForm,STORAGESTATUS_KEEPER,"outside/entryconfirm")
+    key_list = ["entry_set","entryurl","ENTRYSTATUS_END"]
+    context = getStorageHomeContext(request,OutsideStandardEntry,OutsideEntrySearchForm,STORAGESTATUS_KEEPER,"outside/entryconfirm",key_list,"entry_time")
     return render(request,"storage/outside/outsideentryhome.html",context)
 
-def getEntryHomeContext(request,_Model,_SearchForm,default_status,entryurl,order_field="entry_time"):
+def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list,order_field):
     if request.method == "POST":
         search_form = _SearchForm(request.POST)
         if search_form.is_valid():
-            entry_set = get_weld_filter(_Model,search_form.cleaned_data)
+            obj_set = get_weld_filter(_Model,search_form.cleaned_data)
         else:
             print search_form.errors
     else:
-        entry_set = _Model.objects.filter(entry_status=default_status)
+        obj_set = _Model.objects.filter(entry_status=default_status)
         search_form = _SearchForm()
-    entry_set = entry_set.order_by(order_field)
+    obj_set = obj_set.order_by(order_field)
     context = {
-            "entry_set":entry_set,
+            key_list[0]:obj_set,
             "search_form":search_form,
-            "entryurl":entryurl,
-            "ENTRYSTATUS_END":STORAGESTATUS_END,
+            key_list[1]:url,
+            key_list[2]:STORAGESTATUS_END,
             }
     return context
 
@@ -767,4 +768,32 @@ def StoreThreadViews(request):
     }
     return render(request,"storage/storethread/storethread.html",context)
 
+def outsideApplyCardHomeViews(request):
+    applyurl = "outside/applycardconfirm"
+    key_list = ["card_set","applyurl","APPLYSTATUS_END"]
+    context = getStorageHomeContext(request,OutsideApplyCard,OutsideApplyCardSearchForm,STORAGESTATUS_KEEPER,applyurl,key_list,"date")
+    return render(request,"storage/outside/applycardhome.html",context)
 
+def outsideApplyCardConfirmViews(request,cid):
+    url = "outside/applycardhome"
+    default_status = STORAGESTATUS_KEEPER
+    context = getOutsideApplyCardConfirmContext(cid,OutsideApplyCardForm,url,default_status) 
+    return render(request,"storage/outside/applycardconfirm.html",context)
+
+def getOutsideApplyCardConfirmContext(cid,_Inform,url,default_status):
+    applycard = OutsideApplyCard.objects.get(id = cid)
+    inform = _Inform(instance = applycard)
+    is_show = applycard.entry_status == default_status
+    items_set = OutsideApplyCardItem.objects.filter(applycard = applycard,is_past = False)
+    context = {
+        "inform":inform,
+        "applycard":applycard,
+        "entryhomeurl":url,
+        "is_show":is_show,
+        "items_set":items_set,
+    }
+    return context
+
+def outsideAccountHomeViews(request):
+    context = {}
+    return render(request,"storage/outside/accounthome.html",context)

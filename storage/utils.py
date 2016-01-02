@@ -106,3 +106,34 @@ class EntryObject(object):
         self.flag = flag
         return flag
 
+def saveRolers(obj,role,user,status = None):
+    """
+    author:shenlian
+    func:save entry,change each role and status
+    params: role is a string
+    """
+    setattr(obj,role,user)
+    if status != None:
+        obj.entry_status = status
+    obj.save()
+
+def setObjAttr(obj,field,value):
+    setattr(obj,field,value)
+    obj.save()
+
+def updateStorageLits(items_set,_StorageModel):
+    isOk = True 
+    for item in items_set:
+        try:
+            storageItem = _StorageModel.objects.get(specification = item.specification)
+            if storageItem.number >= item.number:
+                storageItem.number -= item.number
+                item.is_past = True
+                item.save()
+                storageItem.save()
+            else:
+                isOk = False
+        except Exception,e:
+            isOk = False
+            print e
+    return isOk

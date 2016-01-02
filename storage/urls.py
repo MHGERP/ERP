@@ -186,7 +186,19 @@ urlpatterns = patterns('',
     url(
         r'^storethread$',
         storage_views.StoreThreadViews,
-    )
+    ),
+    url(
+        r'^outside/applycardhome$',
+        storage_views.outsideApplyCardHomeViews,    
+    ),
+    url(
+        r'^outside/applycardconfirm/(?P<cid>\w+)$',
+        storage_views.outsideApplyCardConfirmViews,    
+    ),
+    url(
+        r'^outside/outsideaccounthome$',
+        storage_views.outsideAccountHomeViews,    
+    ),
 )
 
 
