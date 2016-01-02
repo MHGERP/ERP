@@ -1,0 +1,21 @@
+<br/>
+<table class="table table-bordered">
+    <thead>
+        <th>工序</th>
+        <th>工号</th>
+        <th>工时</th>
+        <th>说明</th>
+        <th>操作</th>
+    </thead>
+    <tbody>
+        {% for process in process_list %}
+        <tr>
+            <td>{{process.get_name_display}}</td>
+            <td>{{process.index}}</td>
+            <td>{{process.hour}}</td>
+            <td>{{process.instruction}}</td>
+            <td><span class="btn btn-danger btn-small btn-del-process" pid="{{process.id}}">删除</span></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

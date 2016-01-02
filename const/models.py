@@ -17,7 +17,7 @@ class WorkOrder(models.Model):
 class Material(models.Model):
     name = models.CharField(blank = False, max_length = 50, verbose_name = u"材料名称")
     material_id= models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"材质编号") 
-    categories =  models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"材料类别")
+    categories =  models.CharField(blank = True, null = True , choices = MATERIAL_CATEGORY_CHOICES, max_length = 20, verbose_name = u"材料类别")
     class Meta:
         verbose_name = u"材料"
         verbose_name_plural = u"材料"
@@ -56,47 +56,6 @@ class Materiel(models.Model):
     def __unicode__(self):
         return self.name
 
-class CirculationName(models.Model):
-    name = models.CharField(blank = False, max_length = 10, choices = CIRCULATION_CHOICES, verbose_name = u"流转简称")
-    full_name = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"流转名称全称")
-    class Meta:
-        verbose_name = u"流转名称"
-        verbose_name_plural = u"流转名称"
-    def __unicode__(self):
-        return self.get_name_display()
-
-class CirculationRoute(models.Model):
-    materiel_belong = models.OneToOneField(Materiel, blank = False, verbose_name = u"所属物料")
-    L1 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称1", related_name = "L1")
-    L2 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称2", related_name = "L2")
-    L3 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称3", related_name = "L3")
-    L4 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称4", related_name = "L4")
-    L5 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称5", related_name = "L5")
-    L6 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称6", related_name = "L6")
-    L7 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称7", related_name = "L7")
-    L8 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称8", related_name = "L8")
-    L9 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称9", related_name = "L9")
-    L10 = models.ForeignKey(CirculationName, blank = True, null = True, verbose_name = u"流转名称10", related_name = "L10")
-    class Meta:
-        verbose_name = u"流转路线"
-        verbose_name_plural = u"流转路线"
-    def __unicode__(self):
-        return self.materiel_belong.name
-
-class Processing(models.Model):
-    materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")
-    name = models.CharField(blank = False, choices = PROCESSING_CHOICES, max_length = 10, verbose_name = u"工序名")
-    next_processing = models.ForeignKey('self', null = True, blank = True, verbose_name = u"下一工序")
-    is_first_processing = models.BooleanField(blank = False, default = False, verbose_name = u"首道工序")
-    instruction = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"说明")
-    index = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"工号")
-    hour = models.FloatField(blank = True, null = True, verbose_name = u"工时")
-    class Meta:
-        verbose_name = u"工序"
-        verbose_name_plural = u"工序"
-
-    def __unicode__(self):
-        return self.materiel_belong.name
 
 class BidFormStatus(models.Model):
     #status=models.IntegerField(blank=False,unique=True,choices=BIDFORM_STATUS_CHOICES,verbose_name=u"标单状态")
@@ -108,7 +67,6 @@ class BidFormStatus(models.Model):
         verbose_name_plural = u"标单状态"
     def __unicode__(self):
         return self.get_part_status_display()
-
 
 class OrderFormStatus(models.Model):
     status = models.IntegerField(blank = False, choices = ORDERFORM_STATUS_CHOICES, verbose_name = u"订购单状态")

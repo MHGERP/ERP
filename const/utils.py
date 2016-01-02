@@ -3,6 +3,8 @@
 from const import *
 from users.models import Title,Authority
 from django.contrib.auth.models import User
+from const.models import Material
+from django.db.models import Q
 
 def getUserByAuthority(authority):
     """
@@ -42,3 +44,9 @@ def getDistinctSet(_Model,_FModel,field):
         if obj_tmp[field] != None:
             obj_set.append(_FModel.objects.get(id = obj_tmp[field]))
     return  obj_set
+def getMaterialQuerySet(*categories):
+    """
+    JunHU
+    """
+    qset = reduce(lambda x, y: x | y, [Q(categories = cate) for cate in categories]) 
+    return Material.objects.filter(qset)

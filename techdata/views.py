@@ -10,6 +10,7 @@ import json
 from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
+from techdata.forms import MaterielForm, CirculationRouteForm, ProcessingForm
 
 from const.forms import WorkOrderForm
 
@@ -53,9 +54,11 @@ def designBOMViews(request):
     """
     mxl
     """
+    #materiel_form = MaterielForm()
+    #circulationroute_form = CirculationRouteForm()
     work_order_form = WorkOrderForm()
     context = {
-        "form" : work_order_form
+        "work_order_form" : work_order_form
     }
     return render(request, "techdata/designBOM.html", context)
 
@@ -80,13 +83,21 @@ def processBOMViews(request):
     JunHU
     """
     work_order_form = WorkOrderForm()
+    process_form = ProcessingForm()
     context = {
         "form": work_order_form,
+        "process_form": process_form,
     }
     return render(request, "techdata/processBOM.html", context)
 
 def weldListViews(request):
-    context = {}
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "form": WorkOrderForm,
+    }
     return render(request, "techdata/weld_list.html", context)
 
 def weldQuotaViews(request):
@@ -99,3 +110,7 @@ def weldEditViews(request):
 def programmeEditViews(request):
     context = {}
     return render(request, "techdata/programme_edit.html", context)
+
+def techDetailTableViews(request):
+    context = {}
+    return render(request, "techdata/detail_table.html", context)

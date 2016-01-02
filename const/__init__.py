@@ -343,3 +343,24 @@ PROCESSING_CHOICES = (
     (L, "L"),
     (Y, "Y"),
 )
+
+
+WELD_ROD = "weld_rod"
+WELD_WIRE = "weld_wire"
+WELD_RIBBON = "weld_ribbon"
+WELD_FLUX = "weld_flux"
+
+SHEET = "sheet"
+PROFILE = "profile"
+PURCHASED = "purchased"
+OTHER = "other"
+MATERIAL_CATEGORY_CHOICES = (
+    (WELD_ROD, u"焊条"),
+    (WELD_WIRE, u"焊丝"),
+    (WELD_RIBBON, u"焊带"),
+    (WELD_FLUX, u"焊剂"),
+    (SHEET, u"板材"),
+    (PROFILE, u"型材"),
+    (PURCHASED, u"外购件"),
+    (OTHER, u"其他"),
+)

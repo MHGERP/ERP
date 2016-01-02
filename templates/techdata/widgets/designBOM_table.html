@@ -12,7 +12,7 @@
         <span class="btn btn-small btn-primary">审核</span>
         <span class="btn btn-small btn-primary">设计修改记录</span>
     </div>
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped" id="designBOM_table">
         <thead>
             <tr>
                 <td>工作票号</td>
@@ -30,7 +30,7 @@
         </thead>
         <tbody>
             {% for item in BOM %}
-            <tr iid="{{item.id}}" data-toggle="modal" data-target="#designBOM_edit_modal">
+            <tr iid="{{item.id}}" class="desginBOM_row">
                 <td>{{item.index}}</td>
                 <td></td>
                 <td>{{item.schematic_index}}</td>
