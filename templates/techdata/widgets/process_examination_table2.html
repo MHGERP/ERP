@@ -1,14 +1,10 @@
-{% for field in form %}
-<div class="span3">
-  <div class="input-prepend">
-    <span class="add-on">图号：</span>
-    {{form.schematic_index}}
-  </div>
-</div>
-<div class="span3">
-  <div class="input-prepend">
-   <span class="add-on">名称：</span>
-    {{form.name}}
-  </div>
-</div>
-{% endfor %}
+{% for item in materiel_list %}
+<tr>
+	<td >
+      <input type = "radio" name = "materiel" 
+      value ="{{item.name}}"> 
+      {{item.name}}
+  	</td>
+ </tr>
+ 
+{% endfor%}

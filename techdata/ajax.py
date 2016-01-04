@@ -55,14 +55,11 @@ def getTechdataList(request, id_work_order):
     """
     MH Chen
     """
-    workorder = WorkOrder.objects.filter(id = id_work_order)[0]
-    materiel = Materiel.objects.filter(order = id_work_order)
-    print "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    print "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-
+    workorder = WorkOrder.objects.get(id = id_work_order)
+    review_list = ProcessReview.objects.filter(materiel__order = workorder)
     context = {
         "workorder": workorder,
-        "materiel":materiel,
+        "review_list":review_list,
     }
     html = render_to_string("techdata/widgets/process_examination_table.html", context)
     return html
@@ -72,14 +69,24 @@ def getIndex(request, index):
     """
     MH Chen
     """
-    materiel = Materiel.objects.filter(index = index)
-    if len(materiel)==0:return
-    form = MaterielForm(instance = materiel[0])
-    context = {
-        "form": form,
+    if(index!=""):
+        materiel_list = Materiel.objects.filter(index__icontains = index)
+        
+        
+    context = { 
+            "materiel_list": materiel_list,
     }
     html = render_to_string("techdata/widgets/process_examination_table2.html", context)
-    return html
+    return html 
+
+@dajaxice_register  
+def addProcessReview(request,materiel_name,problem_statement,advice_statement):
+    """
+    MH Chen
+    """
+    materiel = Materiel.objects.get(name = materiel_name)
+    processReview = ProcessReview (materiel = materiel, problem_statement = problem_statement,advice_statement=advice_statement)
+    processReview.save()
     
 @dajaxice_register
 def getProcess(request, iid):
