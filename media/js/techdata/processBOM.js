@@ -8,7 +8,15 @@ function refreshCallBack(data) {
     $("#widget-box").html(data);
 }
 
-
+function refreshSingleRow() {
+    var iid = $("#card_modal").attr("iid");
+    Dajaxice.techdata.getSingleProcessBOM(refreshSingleCallBack, {"iid": iid})
+}
+function refreshSingleCallBack(data) {
+    var cur_iid = $("#card_modal").attr("iid");
+    var row = $("tr[iid='" + cur_iid + "']");
+    row.html(data);
+}
 $(document).on("click", ".tr_materiel", function() {
     var iid = $(this).attr("iid");
     fill(iid);
@@ -39,6 +47,7 @@ $(document).on("click", ".btn-del-process", function() {
 
 function refreshProcess() {
     var iid = $("#card_modal").attr("iid");
+    refreshSingleRow();
     Dajaxice.techdata.getProcess(getProcessCallBack, {"iid": iid});
 }
 

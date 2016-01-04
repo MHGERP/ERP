@@ -9,12 +9,15 @@
     </thead>
     <tbody>
         {% for process in process_list %}
-        <tr>
+        <tr iid="{{process.id}}">
             <td>{{process.get_name_display}}</td>
-            <td>{{process.index}}</td>
-            <td>{{process.hour}}</td>
-            <td>{{process.instruction}}</td>
-            <td><span class="btn btn-danger btn-small btn-del-process" pid="{{process.id}}">删除</span></td>
+            <td><input value='{{process.index|default_if_none:""}}' class="input input-small"/></td>
+            <td><input value='{{process.hour|default_if_none:""}}' class="input input-small"/></td>
+            <td><input value='{{process.instruction|default_if_none:""}}' class="input input-small"/></td>
+            <td>
+                <span class="btn btn-small btn-save-process" pid="{{process.id}}">保存</span>
+                <span class="btn btn-danger btn-small btn-del-process" pid="{{process.id}}">删除</span>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

@@ -36,21 +36,7 @@
 		<tbody>
 			{% for item in BOM %}
 			<tr iid="{{item.id}}" data-toggle="modal" data-target="#card_modal" class="tr_materiel">
-				<td>{{item.index}}</td>
-				<td></td>
-				<td>{{item.schematic_index}}</td>
-				<td>{{item.name}}</td>
-				<td>{{item.parent_schematic_index|default_if_none:""}}</td>				
-				<td>{{item.count|default_if_none:""}}</td>
-				<td>{{item.material|default_if_none:""}}</td>
-				<td>{{item.net_weight|default_if_none:""}}</td>
-				<td>{{item.total_weigh|default_if_none:""}}</td>
-				<td></td>
-                <td>{{item.route}}</td>
-				<td>{{item.processRoute}}</td>
-				<td></td>
-				<td>{{item.remark|default_if_none:""}}</td>
-				<td></td>
+				{% include "techdata/widgets/processBOM_row.html" %}
 			</tr>				
 			{% endfor %}
 		<tbody>

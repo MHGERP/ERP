@@ -34,21 +34,7 @@
 	    <tbody>
             {% for item in weldseam_list %}
             <tr iid="{{item.id}}" data-toggle="modal" data-target="#card_modal" class="tr_materiel">
-                <td>{{item.materiel_belong.schematic_index}}</td>
-                <td>{{item.weld_index}}</td>
-                <td>{{item.materiel_belong.index}}</td>
-                <td>{{item.weldseam_type}}</td>
-                <td>{{item.weld_method}}</td>
-                <td>{{item.base_metal_thin_1}}</td>
-                <td>{{item.base_metal_thin_2}}</td>
-                <td>{{item.length}}</td>
-                <td>{{item.weld_material_1}}</td>
-                <td>{{item.size_1}}</td>
-                <td>{{item.weight_1}}</td>
-                <td>{{item.weld_material_2|default_if_none:""}}</td>
-                <td>{{item.size_2|default_if_none:""}}</td>
-                <td>{{item.weight_2|default_if_none:""}}</td>
-                <td>{{item.remark|default_if_none:""}}</td>
+                {% include "techdata/widgets/weld_row.html" %}
             </tr>
             {% endfor %}
 	    <tbody>
