@@ -19,7 +19,13 @@ def techPreparationPlanViews(request):
     return render(request, "techdata/tech_preparation_plan.html", context)
 
 def processExaminationViews(request):
-    context = {}
+    """
+    MH Chen
+    """
+    form = WorkOrderForm()
+    context = {
+            "form": form,
+    }
     return render(request, "techdata/process_examinationViews.html", context)
 
 def techFileDirectoryViews(request):

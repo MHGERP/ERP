@@ -70,7 +70,7 @@ def getSingleProcessBOM(request, iid):
     html = render_to_string("techdata/widgets/processBOM_row.html", context)
     return html
 
-@dajaxice_register
+@dajaxice_register  
 def getMaterielInfo(request, iid):
     """
     JunHU
@@ -81,7 +81,45 @@ def getMaterielInfo(request, iid):
         "form": form,
     }
     html = render_to_string("techdata/widgets/materiel_base_info.html", context)
+    return html 
+
+@dajaxice_register  
+def getTechdataList(request, id_work_order):
+    """
+    MH Chen
+    """
+    workorder = WorkOrder.objects.get(id = id_work_order)
+    review_list = ProcessReview.objects.filter(materiel__order = workorder)
+    context = {
+        "workorder": workorder,
+        "review_list":review_list,
+    }
+    html = render_to_string("techdata/widgets/process_examination_table.html", context)
     return html
+
+@dajaxice_register  
+def getIndex(request, index):
+    """
+    MH Chen
+    """
+    if(index!=""):
+        materiel_list = Materiel.objects.filter(index__icontains = index)
+        
+        
+    context = { 
+            "materiel_list": materiel_list,
+    }
+    html = render_to_string("techdata/widgets/process_examination_table2.html", context)
+    return html 
+
+@dajaxice_register  
+def addProcessReview(request,materiel_name,problem_statement,advice_statement):
+    """
+    MH Chen
+    """
+    materiel = Materiel.objects.get(name = materiel_name)
+    processReview = ProcessReview (materiel = materiel, problem_statement = problem_statement,advice_statement=advice_statement)
+    processReview.save()
     
 @dajaxice_register
 def getProcess(request, iid):

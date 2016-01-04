@@ -1,16 +1,25 @@
-<div class="dataTables_length">
-    <span class="btn btn-small btn-primary">设计意见</span>
-    <span class="btn btn-small btn-primary">审核</span>
-    <span class="btn btn-small btn-primary">新增</span>
+<div class="widget-box" id="widget-box">
+<div class="widget-title">
+	<span class="icon"><i class="icon-th"></i></span>
+	<h5>工作令：{{workorder.order_index}}</h5>
+	<h5>产品名称：{{workorder.sell_type}}</h5>
+	<h5>单位：公斤</h5>
+	<h5>编制人：{{workorder.client_name}}</h5>
+	<h5>审核人：{{workorder.product_name}}</h5>
 </div>
-<table class="table table-bordered table-striped" >
+<div class="widget-content nopadding" style="max-height:800px; overflow-y:auto;">
+	<div class="dataTables_length">
+	    <span class="btn btn-small btn-primary">设计意见</span>
+	    <span class="btn btn-small btn-primary">审核</span>
+	    <span class="btn btn-small btn-primary" data-toggle="modal"data-target="#modal-add-event">新增</span>
+	</div>  
+	
+	<table class="table table-bordered table-striped" id="process_examination_table" >
 	
 	<thead>
-		<th>序号
+		<th>名称
 		</th>
-		<th>零部件号及名称
-		</th>
-		<th>图号
+		<th>零件图号
 		</th>
 		<th>存在问题
 		</th>
@@ -18,29 +27,33 @@
 		</th>
 	</tbody> 
 	<tbody>
+		{% for field in review_list%}
 		<tr>
-			<td>1
+			<td>{{field.materiel.name}}
 			</td>
-			<td>23
+			<td>{{field.materiel.schematic_index}}
 			</td>
-			<td>23
+			<td>{{field.problem_statement}}
 			</td>
-			<td>23
-			</td>
-			<td>23
+			<td>{{field.advice_statement}}
 			</td>
 		</tr> 
-		<tr>
-			<td>2
-			</td>
-			<td>23
-			</td>
-			<td>23
-			</td>
-			<td>23
-			</td>
-			<td>23
-			</td>
-		</tr> 
+		{% endfor %}
 	</tbody>
-</table>
+</table> 
+
+</div>
+</div>
+<div class="modal hide fade" id="modal-add-event" >
+		<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h2>新增审查项</h3>
+		</div>
+	 	<div class="modal-body">
+	    {% include "techdata/process_examination_edit.html" %}
+		</div>
+		<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">取消</a>
+		<a href="#" id="update-process" class="btn btn-primary" data-dismiss="modal">保存</a>
+		</div>
+</div>

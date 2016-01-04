@@ -1,0 +1,10 @@
+{% for item in materiel_list %}
+<tr>
+	<td >
+      <input type = "radio" name = "materiel" 
+      value ="{{item.name}}"> 
+      {{item.name}}
+  	</td>
+ </tr>
+ 
+{% endfor%}
