@@ -11,9 +11,9 @@
         {% for process in process_list %}
         <tr iid="{{process.id}}">
             <td>{{process.get_name_display}}</td>
-            <td><input value='{{process.index|default_if_none:""}}' class="input input-small"/></td>
-            <td><input value='{{process.hour|default_if_none:""}}' class="input input-small"/></td>
-            <td><input value='{{process.instruction|default_if_none:""}}' class="input input-small"/></td>
+            <td>{{process.form.index|default_if_none:""}}</td>
+            <td>{{process.form.hour|default_if_none:""}}</td>
+            <td>{{process.form.instruction|default_if_none:""}}</td>
             <td>
                 <span class="btn btn-small btn-save-process" pid="{{process.id}}">保存</span>
                 <span class="btn btn-danger btn-small btn-del-process" pid="{{process.id}}">删除</span>

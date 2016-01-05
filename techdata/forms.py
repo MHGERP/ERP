@@ -55,6 +55,18 @@ class WeldSeamForm(forms.ModelForm):
             "pressure_test_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
         }
 
+class ProcessInfoForm(forms.ModelForm):
+    """
+    JunHU
+    """
+    class Meta:
+        model = Processing
+        exclude = ("materiel_belong", "name", "next_processing", "is_first_processing", )
+        widgets = {
+            "instruction" : forms.TextInput(attrs = {"class" : "input-small"}),
+            "index" : forms.TextInput(attrs = {"class" : "input-small"}),
+            "hour" : forms.TextInput(attrs = {"class" : "input-small"}),
+        }
 class CirculationRouteForm(forms.ModelForm):
     """
     mxl

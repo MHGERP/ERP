@@ -136,6 +136,8 @@ def getProcess(request, iid):
     except:
         process_list = []
     
+    for process in process_list:
+        process.form = ProcessInfoForm(instance = process)
     context = {
         "process_list": process_list,
     }
@@ -174,6 +176,22 @@ def deleteProcess(request, pid):
         pre_process.next_processing = process.next_processing
         pre_process.save()
         process.delete()
+
+@dajaxice_register
+def saveProcessInfo(request, iid, index, hour, instruction):
+    """
+    JunHU
+    """
+    process = Processing.objects.get(id = iid)
+    try:
+        process.index = index
+        process.hour = float(hour)
+        process.instruction = instruction
+        process.save()
+    except:
+        return "fail"
+
+    return "ok"
 
 @dajaxice_register
 def getDesignBOM(request, id_work_order):
