@@ -29,12 +29,45 @@ def getProcessBOM(request, id_work_order):
     for item in BOM:
         if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
             CirculationRoute(materiel_belong = item).save()
-        item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
+        item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
+        
+        try:
+            process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
+            process_list = []
+            while process:
+                process_list.append(process)
+                process = process.next_processing
+        except:
+            process_list = []
+        item.processRoute = '.'.join(process.get_name_display() for process in process_list)
+
     context = {
         "work_order": work_order,
         "BOM": BOM,
     }
     html = render_to_string("techdata/widgets/processBOM_table.html", context)
+    return html
+
+@dajaxice_register
+def getSingleProcessBOM(request, iid):
+    item = Materiel.objects.get(id = iid)
+    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
+        CirculationRoute(materiel_belong = item).save()
+    item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
+        
+    try:
+        process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
+        process_list = []
+        while process:
+            process_list.append(process)
+            process = process.next_processing
+    except:
+        process_list = []
+    item.processRoute = '.'.join(process.get_name_display() for process in process_list)
+    context = {
+        "item": item,
+    }
+    html = render_to_string("techdata/widgets/processBOM_row.html", context)
     return html
 
 @dajaxice_register  
@@ -103,6 +136,8 @@ def getProcess(request, iid):
     except:
         process_list = []
     
+    for process in process_list:
+        process.form = ProcessInfoForm(instance = process)
     context = {
         "process_list": process_list,
     }
@@ -141,6 +176,22 @@ def deleteProcess(request, pid):
         pre_process.next_processing = process.next_processing
         pre_process.save()
         process.delete()
+
+@dajaxice_register
+def saveProcessInfo(request, iid, index, hour, instruction):
+    """
+    JunHU
+    """
+    process = Processing.objects.get(id = iid)
+    try:
+        process.index = index
+        process.hour = float(hour)
+        process.instruction = instruction
+        process.save()
+    except:
+        return "fail"
+
+    return "ok"
 
 @dajaxice_register
 def getDesignBOM(request, id_work_order):
@@ -351,6 +402,18 @@ def updateProcessReview(request, iid,processReview_form):
         return  "ok"
     else:
         return "fail"
+
+@dajaxice_register
+def getSingleWeldSeamInfo(self, iid):
+    """
+    JunHU
+    """
+    weldseam = WeldSeam.objects.get(id = iid)
+    context = {
+        "item": weldseam,
+    }
+    html = render_to_string("techdata/widgets/weld_row.html", context)
+    return html
 
 @dajaxice_register
 def saveDesignBOM(request, iid,  materiel_form, circulationroute_form):

@@ -8,6 +8,15 @@ function refresh() {
 function refreshCallBack(data) {
     $("#widget-box").html(data);
 }
+function refreshSingleRow() {
+    var iid = $("#card_modal").attr("iid");
+    Dajaxice.techdata.getSingleWeldSeamInfo(refreshSingleCallBack, {"iid": iid})
+}
+function refreshSingleCallBack(data) {
+    var cur_iid = $("#card_modal").attr("iid");
+    var row = $("tr[iid='" + cur_iid + "']");
+    row.html(data);
+}
 $(document).on("click", ".tr_materiel", function() {
     var iid = $(this).attr("iid");
     fill(iid);
@@ -27,6 +36,7 @@ $("#id_save").click(function() {
 });
 function saveCallBack(data) {
     if(data == "ok") {
+        refreshSingleRow();
         alert("焊缝信息修改成功！");
     }
     else {
