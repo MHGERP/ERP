@@ -15,8 +15,28 @@
    
     <span class="btn" id="order_search">检索</span> 
 </form>
-<div id="widget-content"></div>
+<div class="widget-box" id="widget-box"></div>
+<div id="card_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.45">
+  <div class="modal-header">
 
+  	<button type="button" class="close" data-dismiss="modal">×</button>
+  	<h2 id="material_name" >
+      </h2>
+  </div>
+	<div class="modal-body" style="clear:both;">
+		
+      <div class="well" id="materiel_div">
+            
+      </div>
+   
+  </div>
+  <div class="modal-footer">
+    <button class="btn" id="id_goto_prev" style="float: left">上一条</button>
+    <button class="btn" id="id_goto_next" style="float: left">下一条</button>
+	<button id="save_process_btn" class="btn">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
 
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/process_examination.js"></script>
 {% endblock%}

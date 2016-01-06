@@ -86,8 +86,8 @@ def addProcessReview(request,materiel_name,problem_statement,advice_statement):
     """
     materiel = Materiel.objects.get(name = materiel_name)
     processReview = ProcessReview (materiel = materiel, problem_statement = problem_statement,advice_statement=advice_statement)
-    processReview.save()
-    
+    processReview.save()        
+
 @dajaxice_register
 def getProcess(request, iid):
     """
@@ -172,6 +172,16 @@ def getDesignBOMForm(request, iid):
     materiel_form_html = render_to_string("techdata/widgets/designBOM_materiel_form.html", {'materiel_form' : materiel_form})
     circulationroute_form_html = render_to_string("techdata/widgets/designBOM_circulationroute_form.html", {'circulationroute_form' : circulationroute_form})
     return simplejson.dumps({'materiel_form' : materiel_form_html, 'circulationroute_form' : circulationroute_form_html})
+
+@dajaxice_register
+def getProcessReviewForm(request, iid):
+    """
+    MH Chen
+    """
+    processReview = ProcessReview.objects.get(id = iid)
+    processReview_form = ProcessReviewForm(instance = processReview)
+    html = render_to_string("techdata/widgets/processReview_form.html", {'processReview_form' : processReview_form})
+    return html
 
 @dajaxice_register
 def getWeldSeamCard(self, full = False, iid = None):
@@ -329,6 +339,18 @@ def getWeldSeamList(self, id_work_order):
     html = render_to_string("techdata/widgets/weld_list_table.html", context)
     return html
 
+@dajaxice_register  
+def updateProcessReview(request, iid,processReview_form):
+    """
+    MH Chen
+    """
+    processReview = ProcessReview.objects.get(id = iid)
+    processReview_form = ProcessReviewForm(deserialize_form(processReview_form),instance = processReview)
+    if processReview_form.is_valid():
+        processReview_form.save()
+        return  "ok"
+    else:
+        return "fail"
 
 @dajaxice_register
 def saveDesignBOM(request, iid,  materiel_form, circulationroute_form):

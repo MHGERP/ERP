@@ -21,6 +21,19 @@ class MaterielForm(forms.ModelForm):
             "remark": forms.TextInput(attrs = {"class": "input-medium"}),
         }
 
+class ProcessReviewForm(forms.ModelForm):
+    """
+    MH Chen
+    """
+    class Meta:
+        model = ProcessReview
+        exclude = ("materiel")
+        widgets = {
+            "problem_statement": forms.Textarea(attrs = {"rows":"5","style":"resize: none;width:300px"}),
+            "advice_statement": forms.Textarea(attrs = {"rows":"5","style":"resize: none;width:300px"}),
+            # "materiel":forms.CharField( )
+        }
+
     
 class ProcessingForm(forms.Form):
     """
