@@ -367,3 +367,11 @@ class ThreadEntryItemsForm(ModelForm):
             "specification": forms.TextInput(attrs={'class':"form-control span1"}),
             "count": forms.TextInput(attrs={'class':"form_control span2"}),
         }
+
+class ThreadSearchForm(ModelForm):
+        class Meta:
+            model = WeldStoreThread
+            fields = ("specification",)
+            widget = {
+                "specification": forms.TextInput(attrs={'class':"form-control span1"}),
+            }

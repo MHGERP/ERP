@@ -702,9 +702,16 @@ def weldApplyAccountViews(request):
 def StoreThreadViews(request):
     items_set = WeldStoreThread.objects.all()
     entry_form = ThreadEntryItemsForm()
+    if request.method == "POST":
+        search_form = ThreadSearchForm(request.POST)
+        if search_form.is_valid():
+            items_set = get_weld_filter(WeldStoreThread,search_form.cleaned_data)
+    else:
+        search_form = ThreadSearchForm()
     context = {
         "items_set":items_set,
         "entry_form":entry_form,
+        "search_form":search_form,
     }
     return render(request,"storage/storethread/storethread.html",context)
 
