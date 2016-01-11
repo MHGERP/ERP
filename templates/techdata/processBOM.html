@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block inner_content%}
+<link rel="stylesheet" href="{{ STATIC_URL }}style/designBOM_edit.css" type="text/css" media="screen" />
 <form class="form-search ">
    工作令: 
    {{ form.work_order }}
@@ -19,22 +20,56 @@
 
 </div>
 
-<div id="card_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="card_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.8">
   <div class="modal-header">
     <h2 id="groupLabel">材料信息卡</h2>
   </div>
 
   <div class="modal-body" style="clear:both;">
-      <form class="form-search">
-        <label>部门名：</label>
-        <input type="text" class="input-medium" id="new_group_name">
-      </form>
+		<div id="base-info-area" class="well">
+
+		</div>
+		<div id="processing-area" class="well">
+		    <form class="form-search">
+                {{process_form.process}} 
+                <span class="btn btn-primary" id="id_add_process">添加工序</span>
+                <span class="btn btn-primary">工时生成</span>
+                <span class="btn btn-primary">工号生成</span>
+            </form>
+            <div class="row-fluid">
+                <div id="process_table" class="span6">
+                </div>
+                <div class="span6">
+                    <label>样本工序:</label>
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <span class="btn" style="width: 70%">筒体</span>
+                        </div>
+                        <div class="span4">
+                            <span class="btn" style="width: 70%">锥体</span>
+                        </div>
+                        <div class="span4">
+                            <span class="btn" style="width: 70%">封头</span>
+                        </div>
+                    </div>
+                    <br/>
+                    <center>
+                        <span class="btn" id="weldseam_edit" style="width: 50%">编辑焊缝</span>
+                    </center> 
+                    <form id="weld_seam_card">
+                        
+                    </form>
+                </div>
+            </div>
+		</div>
   </div>
   <div class="modal-footer">
-    <span class="btn btn-primary" id="btn-finish" data-dismiss="modal" aria-hidden="true">完成</span>
+    <button class="btn" id="id_goto_prev" style="float: left">上一条</button>
+    <button class="btn" id="id_goto_next" style="float: left">下一条</button>
     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
   </div>
 </div>
 
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/processBOM.js"></script>
 {% endblock%}
+

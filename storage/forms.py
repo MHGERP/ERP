@@ -8,7 +8,7 @@ from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CH
 from django.contrib.auth.models import User
 from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
-from const.utils import getChoiceList
+from const.utils import getChoiceList,getDistinctSet
 
 DEPARTMENT_CHOICES=(
         (u' ',u'------'),
@@ -166,10 +166,13 @@ class BakeRecordForm(ModelForm):
 class BakeSearchForm(forms.Form):
     date = forms.DateField(label = u"日期",required = False, widget = forms.TextInput(attrs={'class':'form-controli span2','id':'date'}))
     standardnum = forms.CharField(label = u"标准号",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'standardnum'}))
-    weldengineer = forms.CharField(label = u"焊接工程师",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'weldengineer'}))
-    storeMan = forms.CharField(label = u"库管员",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'storeMan'}))
+    weldengineer = forms.ChoiceField(label = u"焊接工程师",required = False, widget = forms.Select(attrs={"class":'form-control span2','id':'weldengineer'}))
+    storeMan = forms.ChoiceField(label = u"库管员",required = False, widget = forms.Select(attrs={"class":'form-control span2','id':'storeMan'}))
     def __init__(self,*args,**kwargs):
         super(BakeSearchForm,self).__init__(*args,**kwargs)
+        print  getChoiceList(getUserByAuthority(STORAGE_KEEPER),"userinfo")
+        self.fields["weldengineer"].choices = getChoiceList(getUserByAuthority(STORAGE_KEEPER),"userinfo")
+        self.fields["storeMan"].choices =  getChoiceList(getUserByAuthority(STORAGE_KEEPER),"userinfo")
 
 class ApplyRefundSearchForm(forms.Form):
     order_index = forms.CharField(label = u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'order_index'}))
@@ -181,7 +184,7 @@ class EntrySearchForm(forms.Form):
     entry_code=forms.CharField(label=u'入库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'entry_code'}))
     def __init__(self,*args,**kwargs):
         super(EntrySearchForm,self).__init__(*args,**kwargs)
-        users = User.objects.all()
+        users = getUserByAuthority(STORAGE_KEEPER)
         self.fields["purchaser"].choices = getChoiceList(users,"userinfo")
 
 
@@ -237,6 +240,7 @@ class AuxiliaryToolsCardCommitForm(ModelForm):
                 'apply_total':forms.HiddenInput(),
                 'actual_total':forms.HiddenInput(),
                 'status':forms.HiddenInput(),
+                'applicant':forms.HiddenInput(),
                 }
 class AuxiliaryToolsCardApplyForm(ModelForm):
     class Meta:
@@ -359,6 +363,31 @@ class SteelLedgerSearchForm(forms.Form):
 class EntryTypeForm(forms.Form):
     entry_type=forms.ChoiceField(label=u'入库单类型',choices=STORAGE_ENTRY_TYPECHOICES,required=True,widget=forms.Select(attrs={'class':'form-control span2','id':'work_order'}))
 
+class OutsideEntrySearchForm(EntrySearchForm):
+    def __init__(self,*args,**kwargs):
+        super(OutsideEntrySearchForm,self).__init__(*args,**kwargs)
+
+class StorageEntryAForm(forms.Form):
+    change_code = forms.CharField(label=u"修改号",required=False,widget=forms.TextInput())
+    sample_report = forms.CharField(label=u"样表",required=False,widget=forms.TextInput())
+    entry_code = forms.CharField(label=u"单据编号",required=False,widget=forms.TextInput())
+    source = forms.CharField(label=u"货物来源",required=False,widget=forms.TextInput())
+    change_code = forms.CharField(label=u"检查记录表编号",required=False,widget=forms.TextInput())
+    change_code = forms.CharField(label=u"订购单编号",required=False,widget=forms.TextInput())
+    remark = forms.CharField(label=u"备注",required=False,widget=forms.Textarea(attrs={"cols":80,"rows":4,"style":"max-height:50px;overflow:auto"}))
+
+class StorageOutsideEntryInfoForm(ModelForm):
+    class Meta:
+        model = OutsideStandardEntry
+        exclude = ("id","entry_status","purchaser","inspector","keeper","remark")
+
+class StorageOutsideEntryRemarkForm(ModelForm):
+    class Meta:
+        model = OutsideStandardEntry
+        fields = ("remark",)
+        widgets = {
+            "remark":forms.Textarea(attrs={"rows":"10","cols":"40","style":"max-height:80px;overflow-y:auto"}),
+        }
 class ThreadEntryItemsForm(ModelForm):
     class Meta:
         model = WeldStoreThread
@@ -375,3 +404,21 @@ class ThreadSearchForm(ModelForm):
             widget = {
                 "specification": forms.TextInput(attrs={'class':"form-control span1"}),
             }
+class OutsideApplyCardSearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
+    workorder = forms.ChoiceField(label=u"工作令",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'workorder'}))
+    proposer=forms.ChoiceField(label=u"领用人",required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'proposer'})) 
+    entry_code = forms.CharField(label=u"工作令",required=False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_code'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideApplyCardSearchForm,self).__init__(*args,**kwargs)
+        workorders = getDistinctSet(OutsideApplyCard,WorkOrder,'workorder')
+        proposers = getDistinctSet(OutsideApplyCard,User,'proposer')
+        self.fields['workorder'].choices = getChoiceList(workorders,'order_index')
+        self.fields['proposer'].choices = getChoiceList(proposers,'userinfo')
+
+class OutsideApplyCardForm(ModelForm):
+    class Meta:
+        model = OutsideApplyCard
+        fields = ("change_code","sample_report","entry_code")
+    def __init__(self,*args,**kwargs):
+        super(OutsideApplyCardForm,self).__init__(*args,**kwargs)

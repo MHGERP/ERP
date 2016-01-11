@@ -14,9 +14,7 @@
         {{search_form}}
         <button type="submit" id="search_submit" class="btn btn-primary">搜索</button>
     </form>
-    {% if not user.is_superuser %}
     <a type="button" id="create_new_apply_card" href="/storage/auxiliarytools/apply?index=0" class="btn" style="float:left;margin-bottom:10px">创建领用卡</a>
-    {% endif %}
     <div id="apply_card_table">
     {% include 'storage/auxiliarytools/apply_card_table.html' %}
     </div>
