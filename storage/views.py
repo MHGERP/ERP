@@ -797,3 +797,12 @@ def getOutsideApplyCardConfirmContext(cid,_Inform,url,default_status):
 def outsideAccountHomeViews(request):
     context = {}
     return render(request,"storage/outside/accounthome.html",context)
+
+def outsideEntryAccountHomeViews(request):
+    context = {
+        
+    }
+    return render(request,"storage/outside/account/entryhome.html",context)
+
+def outsideApplyCardAccountHomeViews(request):
+    return render(request,"storage/outside/account/applycardhome.html")

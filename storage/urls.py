@@ -196,9 +196,15 @@ urlpatterns = patterns('',
         storage_views.outsideApplyCardConfirmViews,    
     ),
     url(
-        r'^outside/outsideaccounthome$',
+        r'^outside/account/home$',
         storage_views.outsideAccountHomeViews,    
     ),
+    url(
+        r'^outside/account/entryhome$',
+        storage_views.outsideEntryAccountHomeViews,name="outside_account_entryhome"
+    ),
+    url(
+        r'^outside/account/applycardhome$',
+        storage_views.outsideApplyCardAccountHomeViews,name="outside_account_applycardhome"
+    ),
 )
-
-
