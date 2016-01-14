@@ -8,7 +8,15 @@ function refreshCallBack(data) {
     $("#widget-box").html(data);
 }
 
-
+function refreshSingleRow() {
+    var iid = $("#card_modal").attr("iid");
+    Dajaxice.techdata.getSingleProcessBOM(refreshSingleCallBack, {"iid": iid})
+}
+function refreshSingleCallBack(data) {
+    var cur_iid = $("#card_modal").attr("iid");
+    var row = $("tr[iid='" + cur_iid + "']");
+    row.html(data);
+}
 $(document).on("click", ".tr_materiel", function() {
     var iid = $(this).attr("iid");
     fill(iid);
@@ -39,6 +47,7 @@ $(document).on("click", ".btn-del-process", function() {
 
 function refreshProcess() {
     var iid = $("#card_modal").attr("iid");
+    refreshSingleRow();
     Dajaxice.techdata.getProcess(getProcessCallBack, {"iid": iid});
 }
 
@@ -69,7 +78,21 @@ function addWeldSeamCallBack(data) {
     }
 }
 
-
+$(document).on("click", ".btn-save-process", function() {
+    var tr = $(this).parent().parent();
+    var iid = tr.attr("iid");
+    var index = tr.find("input").eq(0).val();
+    var hour = tr.find("input").eq(1).val();
+    var instruction = tr.find("input").eq(2).val();
+    Dajaxice.techdata.saveProcessInfo(saveProcessInfoCallBack, {"iid": iid,
+                                                                "index": index,
+                                                                "hour": hour,
+                                                                "instruction": instruction});
+});
+function saveProcessInfoCallBack(data) {
+    if(data == "ok") alert("保存成功！");
+    else alert("格式有错误！");
+}
 $("#id_goto_next").click(function() {
     var cur_iid = $("#card_modal").attr("iid");
     var row = $("tr[iid='" + cur_iid + "']");

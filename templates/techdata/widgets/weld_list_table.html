@@ -1,46 +1,42 @@
-<div class="dataTables_length">
-    <span class="btn btn-small btn-primary">完成</span>
-    <span class="btn btn-small btn-primary">审核</span>
+<div class="widget-title">
+	<span class="icon"><i class="icon-th"></i></span>
+	<h5>工作令：{{work_order.order_index}}</h5>
+	<h5>产品名称：{{work_order.product_name}}</h5>
+	<h5>单位：公斤</h5>
+	<h5>编制人：</h5>
+	<h5>审核人：</h5>
 </div>
-<table class="table table-bordered table-striped" >
-    <thead>
-	    <tr>
-		    <th>零部件图号</th>
-		    <th>焊缝编号</th>
-		    <th>工作票号</th>
-		    <th>焊缝类型</th>
-		    <th>焊接方法</th>
-		    <th>母材厚度1</th>
-		    <th>母材厚度2</th>
-		    <th>长度</th>
-		    <th>焊材1</th>
-		    <th>规格1</th>
-		    <th>重量1</th>
-		    <th>焊材2</th>
-		    <th>规格2</th>
-		    <th>重量2</th>
-		    <th>备注</th>
-	    </tr>
-	<thead>
-	<tbody>
-        {% for item in weldseam_list %}
-        <tr>
-            <td>{{item.materiel_belong.schematic_index}}</td>
-            <td>{{item.weld_index}}</td>
-            <td>{{item.materiel_belong.index}}</td>
-            <td>{{item.weldseam_type}}</td>
-            <td>{{item.weld_method}}</td>
-            <td>{{item.base_metal_thin_1}}</td>
-            <td>{{item.base_metal_thin_2}}</td>
-            <td>{{item.length}}</td>
-            <td>{{item.weld_material_1}}</td>
-            <td>{{item.size_1}}</td>
-            <td>{{item.weight_1}}</td>
-            <td>{{item.weld_material_2}}</td>
-            <td>{{item.size_2}}</td>
-            <td>{{item.weight_2}}</td>
-            <td>{{item.remark}}</td>
-        </tr>
-        {% endfor %}
-	<tbody>
-</table>
+<div class="widget-content nopadding" style="max-height:800px; overflow-y:auto;">
+    <div class="dataTables_length">
+        <span class="btn btn-small btn-primary">完成</span>
+        <span class="btn btn-small btn-primary">审核</span>
+    </div>
+    <table class="table table-bordered table-striped" >
+        <thead>
+	        <tr>
+		        <th>零部件图号</th>
+		        <th>焊缝编号</th>
+		        <th>工作票号</th>
+		        <th>焊缝类型</th>
+		        <th>焊接方法</th>
+		        <th>母材厚度1</th>
+		        <th>母材厚度2</th>
+		        <th>长度</th>
+		        <th>焊材1</th>
+		        <th>规格1</th>
+		        <th>重量1</th>
+		        <th>焊材2</th>
+		        <th>规格2</th>
+		        <th>重量2</th>
+		        <th>备注</th>
+	        </tr>
+	    <thead>
+	    <tbody>
+            {% for item in weldseam_list %}
+            <tr iid="{{item.id}}" data-toggle="modal" data-target="#card_modal" class="tr_materiel">
+                {% include "techdata/widgets/weld_row.html" %}
+            </tr>
+            {% endfor %}
+	    <tbody>
+    </table>
+</div>

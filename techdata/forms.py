@@ -2,7 +2,7 @@
 # coding=utf-8
 from django import  forms
 from const.models import Materiel
-from techdata.models import WeldSeam, CirculationRoute
+from techdata.models import *
 from const import PROCESSING_CHOICES
 
 class MaterielForm(forms.ModelForm):
@@ -11,7 +11,7 @@ class MaterielForm(forms.ModelForm):
     """
     class Meta:
         model = Materiel
-        exclude = ("id", )
+        exclude = ("id", "order")
         widgets = {
             "name": forms.TextInput(attrs = {"class": "input-medium"}),
             "index": forms.TextInput(attrs = {"class": "input-small"}),
@@ -19,6 +19,19 @@ class MaterielForm(forms.ModelForm):
             "material": forms.Select(attrs = {"class": "input-medium"}),
             "count": forms.TextInput(attrs = {"class": "input-medium"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium"}),
+        }
+
+class ProcessReviewForm(forms.ModelForm):
+    """
+    MH Chen
+    """
+    class Meta:
+        model = ProcessReview
+        exclude = ("materiel")
+        widgets = {
+            "problem_statement": forms.Textarea(attrs = {"rows":"5","style":"resize: none;width:300px"}),
+            "advice_statement": forms.Textarea(attrs = {"rows":"5","style":"resize: none;width:300px"}),
+            # "materiel":forms.CharField( )
         }
 
     
@@ -49,6 +62,23 @@ class WeldSeamForm(forms.ModelForm):
             "size_1": forms.TextInput(attrs = {"class": "input-small"}),
             "size_2": forms.TextInput(attrs = {"class": "input-small"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium"}),
+            "groove_inspction": forms.SelectMultiple(attrs = {"class": "input-small"}),
+            "welded_status_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
+            "heat_treatment_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
+            "pressure_test_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
+        }
+
+class ProcessInfoForm(forms.ModelForm):
+    """
+    JunHU
+    """
+    class Meta:
+        model = Processing
+        exclude = ("materiel_belong", "name", "next_processing", "is_first_processing", )
+        widgets = {
+            "instruction" : forms.TextInput(attrs = {"class" : "input-small"}),
+            "index" : forms.TextInput(attrs = {"class" : "input-small"}),
+            "hour" : forms.TextInput(attrs = {"class" : "input-small"}),
         }
 class CirculationRouteForm(forms.ModelForm):
     """
@@ -73,4 +103,15 @@ class CirculationRouteForm(forms.ModelForm):
     #    super(CirculationRouteForm, self).__init__(*args, **kwargs)
     #    for field in self.fields:
     #        self.fields[field] = forms.ChoiceField(widget = forms.Select(attrs = {'class' : 'form-control input-mini',}))
+    def clean(self):
+        cleaned_data = super(CirculationRouteForm, self).clean()
+        for i in range(2, 11):
+            curfield = "L%d" % i
+            prevfield = "L%d" % (i - 1)
+            #print cleaned_data.get(prevfield)
+            #print cleaned_data.get(curfield)
+            if cleaned_data.get(curfield) != None and cleaned_data.get(prevfield) == None:
+                #print "circulation error"
+                raise forms.ValidationError("流转路线必须连续")
+        return cleaned_data
 

@@ -364,3 +364,17 @@ MATERIAL_CATEGORY_CHOICES = (
     (PURCHASED, u"外购件"),
     (OTHER, u"其他"),
 )
+
+RT = "RT"
+UT = "UT"
+MT = "MT"
+PT = "PT"
+VT = "VT"
+
+NONDESTRUCTIVE_INSPECTION_TYPE = (
+    (RT, "RT"),
+    (UT, "UT"),
+    (MT, "MT"),
+    (PT, "PT"),
+    (VT, "VT"),
+)

@@ -397,6 +397,13 @@ class ThreadEntryItemsForm(ModelForm):
             "count": forms.TextInput(attrs={'class':"form_control span2"}),
         }
 
+class ThreadSearchForm(ModelForm):
+        class Meta:
+            model = WeldStoreThread
+            fields = ("specification",)
+            widget = {
+                "specification": forms.TextInput(attrs={'class':"form-control span1"}),
+            }
 class OutsideApplyCardSearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
     workorder = forms.ChoiceField(label=u"工作令",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'workorder'}))

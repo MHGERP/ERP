@@ -15,6 +15,7 @@ function refreshCallBack(data) {
 
 $(document).on("click", "#designBOM_table tbody tr", function(){
     var iid = $(this).attr("iid");
+    $("#designBOM_edit_modal").attr("iid", iid);
     Dajaxice.techdata.getDesignBOMForm(getDesignBOMFormCallback, {"iid" : iid});
 });
 
@@ -24,10 +25,25 @@ function getDesignBOMFormCallback(data) {
     $("#designBOM_edit_modal").modal();
 }
 
-$("#save_desginBOM_btn").click(function(){
-    //Dajaxice.techdata.saveDesignBOM(saveDesignBOMCallback, {});
+$(document).on("click","#save_desginBOM_btn", function(){
+    var iid = $("#designBOM_edit_modal").attr("iid");
+    //alert(iid);
+    Dajaxice.techdata.saveDesignBOM(saveDesignBOMCallback, 
+                                    {
+                                        'iid' : iid,
+                                        'materiel_form' :$("#materiel_form").serialize(),
+                                        'circulationroute_form' : $("#circulationroute_form").serialize()
+                                    });
 });
 
-function savedesignBOMCallback(data) {
-    
+function saveDesignBOMCallback(data) {
+    if(data.status == "ok") {
+        alert("修改成功！");
+    }
+    else {
+        if(data.circulationroute_error == "1")
+            alert("流转路线必须连续");
+        if(data.materiel_error == "1")
+            alert("#materiel_div").html(data.html);
+    }
 }

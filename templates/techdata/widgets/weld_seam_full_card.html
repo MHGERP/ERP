@@ -1,4 +1,3 @@
-<br/>
 <div class="row-fluid">
     <div class="span4">
         <div class="input-prepend">
@@ -119,6 +118,32 @@
     <span class="add-on">备注</span>
     {{form.remark}}
 </div>
-<span class="btn" id="btn_weldseam_calculate"style="width:27%">定额计算</span>
-<span class="btn" id="btn_weldseam_confirm"style="width:27%">确认</span>
-<span class="btn" id="btn_cancel"style="width:27%">取消</span>
+<div class="row-fluid">
+    <div class="span3">
+        <div class="input-prepend">
+            <span class="add-on">坡口</span>
+            {{form.groove_inspction}}
+        </div>
+    </div>
+    <div class="span3">
+        <div class="input-prepend">
+            <span class="add-on">焊态</span>
+            {{form.welded_status_inspection}}
+        </div>
+    </div>
+    <div class="span3">
+        <div class="input-prepend">
+            <span class="add-on">热处理后</span>
+            {{form.heat_treatment_inspection}}
+        </div>
+    </div>
+    <div class="span3">
+        <div class="input-prepend">
+            <span class="add-on">试压后</span>
+            {{form.pressure_test_inspection}}
+        </div>
+    </div>
+</div>
+
+
+
