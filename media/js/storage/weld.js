@@ -10,12 +10,6 @@ function change_item(itemid){
     $("input#id_price").val(a.eq(11).text());
 }
 
-function change_steelEntryItem(itemid){
-    mid = itemid;
-    var a = $("tr#"+mid).find("td");
-    $("input#id_remark").val(a.eq(8).text());
-}
-
 function save_item(){
     Dajaxice.storage.entryItemSave(save_item_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
 }

@@ -45,3 +45,9 @@ function searchRefundCard_CallBack(data){
 		$(".refund-cards-table").html(data["result_table"]);
 	}
 }
+var mid
+function change_steelEntryItem(itemid){
+    mid = itemid;
+    var a = $("tr#"+mid).find("td");
+    $("input#id_remark").val(a.eq(8).text());
+}
