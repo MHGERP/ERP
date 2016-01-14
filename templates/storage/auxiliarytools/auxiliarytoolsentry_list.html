@@ -11,25 +11,31 @@
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
    <h3 style="text-align:center">辅助材料清单</h3>
+   <form class="form-inline" method="post">
+    {% csrf_token %}
+    {% for field in search_form %}
+    {{field.label}}
+    {{field}}
+    {% endfor %}
+    <button class="btn btn-primary">检索</button> 
+   </form>
+
    <table class="table table-hover table-bordered">
    <tr>
-   <th>材料名称</th>
-   <th>类别</th>
-   <th>计量单位</th>
-   <th>数量</th>
-   <th>单价</th>
-   <th>厂家</th>
-   <th>材料入库</th>
+   <th>入库单编号</th>
+   <th>日期</th>
+   <th>采购员</th>
+   <th>检查员</th>
+   <th>操作</th>
    </tr>
-   {% for item in auxiliarytools %}
+   {% for item in entry_list %}
    <tr>
-   <td>{{item.name}}</td>
-   <td>{{item.get_model_display}}</td>
-   <td>{{item.measurement_unit}}</td>
-   <td>{{item.quantity}}</td>
-   <td>{{item.unit_price}}</td>
-   <td>{{item.manufacturer}}</td>
-   <td><a href="/storage/auxiliarytools/entry?id={{item.id}}"><button type="button" class="btn btn-primary">入库</button></a></td>
+   <td>{{item.index}}</td>
+   <td>{{item.create_time|date:'Y年m月d日'}}</td>
+   <td>{{item.purchaser.userinfo.name}}</td>
+   <td>{{item.inspector.userinfo.name}}</td>
+   
+   <td><a href="/storage/auxiliarytools/entry?id={{item.id}}"><button type="button" class="btn btn-warning">待处理</button></a></td>
    </tr>
 
    {% endfor %}

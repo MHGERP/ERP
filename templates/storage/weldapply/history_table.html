@@ -10,7 +10,7 @@
         {% for card in weld_apply_cards %}
         <tr>
             <td>{{card.department}}</td>
-            <td>{{card.create_time}}</td>
+            <td>{{card.create_time|date:"Y年m月d日"}}</td>
             <td>{{card.index}}</td>
             <td>{{card.workorder}}</td>
             <td>

@@ -12,13 +12,14 @@
             <th class="fix_th span1">单价</th>
             <th class="fix_th span1">总价</th>
         </tr> 
-        {% if user.is_superuser %}
+        {% if storage_keeper %}
         {{apply_form.apply_quantity}}
         {{apply_form.apply_item}}
+        {{apply_form.applicant}}
         <tr>
         	<td>请领</td>
         	<td>{{instance.apply_item.name}}</td>
-        	<td>{{instance.apply_item.model}}</td>
+        	<td>{{instance.apply_item.get_model_display}}</td>
         	<td>{{instance.apply_item.measurement_unit}}</td>
         	<td>{{instance.apply_quantity}}</td>
         	<td>{{instance.apply_item.unit_price}}</td>
@@ -38,9 +39,9 @@
         	<td colspan="6" style="text-align:left">{{apply_form.remark}}{{instance.remark}}</td>
         <tr>
             <td>主管</td>
-            <td colspan="2">{{instance.commit_user}}</td>
+            <td colspan="2">{{instance.commit_user.userinfo.name}}</td>
             <td>领料</td>
-            <td colspan="3">{{instance.applicant}}</td>
+            <td colspan="3">{{instance.applicant.userinfo.name}}</td>
         </tr>
         {% else %}
         {{apply_form.actual_quantity}}

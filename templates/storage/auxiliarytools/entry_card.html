@@ -11,29 +11,52 @@
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
    <h3 style="text-align:center">辅助材料入库单</h3>
+   <div class="row-fluid span12">
+       <div class="span4">
+           <p>编号:<strong>{{object.index}}</strong></p>
+       </div>
+       <div class="span4">
+           <p>工作令:<strong>{{object.workorder}}</strong></p>
+       </div>
+       <div class="span4">
+           <p>创建时间:<strong>{{object.create_time|date:'Y年m月d日'}}</strong></p>
+       </div>
+   </div>
         <table class="table table-hover table-bordered">
         <tr>
-        <th>入库材料</th>
-        <td>{{object.auxiliary_tool.name}}</td>
+            <th>序号</th>
+            <th>名称</th>
+            <th>类别</th>
+            <th>计量单位</th>
+            <th>数量</th>
+            <th>厂家</th>
         </tr>
+        {% for object in sub_objects %}
         <tr>
-        <th>材料类别</th>
-        <td>{{object.auxiliary_tool.model}}</td>
+            <td>{{forloop.counter}}</td>
+            <td>{{object.auxiliary_tool.name}}</td>
+            <td>{{object.auxiliary_tool.get_model_display}}</td>
+            <td>{{object.auxiliary_tool.measurement_unit}}</td>
+            <td>{{object.quantity}}</td>
+            <td>{{object.auxiliary_tool.manufacturer}}</td>
         </tr>
-        <tr>
-        <th>入库数量</th>
-        <td>{{object.quantity}}</td>
-        </tr>
-        <tr>
-        <th>材料厂家</th>
-        <td>{{object.auxiliary_tool.manufacturer}}</td>
-        </tr>
-        <tr>
-        <th>入库时间</th>
-        <td>{{object.create_time}}</td>
-        </tr>
-        </table>
-        <input type="hidden" name="object_id" value="{{object_id}}">
+        {% endfor %}
+       </table>
+         <div class="row-fluid span12">
+           <div class="span4">
+               <p>采购员:<strong>{{object.purchaser.userinfo.name}}</strong></p>
+           </div>
+           <div class="span4">
+               <p>检验员:<strong>{{object.inspector.userinfo.name}}</strong></p>
+           </div>
+           <div class="span4">
+               <p>库管员:<strong>{{object.keeper.userinfo.name}}</strong></p>
+           </div>
+       </div>
+       <div style="text-align:center">
+        <a type="button" class="btn btn-primary" href="../entry">返回上级</a>
+        </div>
+
     <div class="row-fluid" style="text-align:center">
     </div>
 {% endblock%}

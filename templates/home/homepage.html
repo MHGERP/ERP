@@ -4,23 +4,22 @@
 <link rel="stylesheet" href="{{STATIC_URL}}bootstrap-datepicker/css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
 <script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
 <div class="outter_frame">
-	<div class="row-fluid news_frame">
-			<div class="span7">
-				{% include "home/widgets/company_news.html" %}
-			</div>
-			<div class="span5">
-				{% include "home/widgets/calendar.html" %}
-				
-			</div>
-	</div>
-	<hr>
-	<div class="row-fluid news_frame">
-			<div class="span7">
-				{% include "home/widgets/import_info.html" %}
-			</div>
-			<div class="span5">
-				{% include "home/widgets/file_download.html" %}
-			</div>
-	</div>
+  <div class="row-fluid news_frame">
+    <div class="span7">
+      {% include "home/widgets/company_news.html" %}
+    </div>
+    <div class="span5">
+      {% include "home/widgets/calendar.html" %}
+    </div>
+  </div>
+  <hr>
+  <div class="row-fluid news_frame">
+    <div class="span7">
+      {% include "home/widgets/import_info.html" %}
+    </div>
+    <div class="span5">
+      {% include "home/widgets/file_download.html" %}
+    </div>
+  </div>
 </div>
 {% endblock%}

@@ -207,13 +207,24 @@ STORAGESTATUS_PURCHASER = 0
 STORAGESTATUS_INSPECTOR = 1
 STORAGESTATUS_KEEPER = 2
 STORAGESTATUS_REFUNDER = 3
+STORAGESTATUS_AUDITOR = 4
+STORAGESTATUS_PROPOSER = 5
+
 STORAGESTATUS_END = -2
 ENTRYSTATUS_CHOICES = (
-    (STORAGESTATUS_INSPECTOR,u"检查"),
-    (STORAGESTATUS_KEEPER,u"库管"),
+    (STORAGESTATUS_PURCHASER,u"待采购员确认"),
+    (STORAGESTATUS_INSPECTOR,u"待检查确认"),
+    (STORAGESTATUS_KEEPER,u"待库管确认"),
     (STORAGESTATUS_END,u"结束"),
 )
-
+ENTRYSTATUS_LIST = [x[0] for x in ENTRYTYPE_CHOICES]
+APPLYCARDSTATUS_CHOICES = (
+    (STORAGESTATUS_AUDITOR,u"待审核人确认"),
+    (STORAGESTATUS_INSPECTOR,u"待检查确认"),
+    (STORAGESTATUS_KEEPER,u"待库管确认"),
+    (STORAGESTATUS_END,u"结束"),
+)
+APPLYCARDSTATUS_LIST = [ x[0] for x in APPLYCARDSTATUS_CHOICES ]
 APPLYCARD_APPLY=0
 APPLYCARD_AUDIT=1
 APPLYCARD_INSPECT=2
@@ -230,7 +241,7 @@ AUXILIARY_TOOL_APPLY_CARD_APPLYED=1
 AUXILIARY_TOOL_APPLY_CARD_COMMITED=2
 AUXILIARY_TOOL_APPLY_CARD_STATUS=(
         (AUXILIARY_TOOL_APPLY_CARD_CREATED,u'创建完成'),
-        (AUXILIARY_TOOL_APPLY_CARD_COMMITED,u'提交完成'),
+        (AUXILIARY_TOOL_APPLY_CARD_APPLYED,u'提交完成'),
         (AUXILIARY_TOOL_APPLY_CARD_COMMITED,u'确认完成'),
         )
 
@@ -260,6 +271,110 @@ AUXILIARY_TOOLS_MODELS_CHOICES=(
         (0,u'碳棒'),
         (1,u'面罩'),
         (2,u'白黑玻璃'),
-        )
+        (3,u'安全帽'),
+    )
+STORAGE_ENTRY_TYPE_WELD = 0
+STORAGE_ENTRY_TYPE_STEEL = 1
+
+STORAGE_ENTRY_TYPECHOICES=(
+    (0,u"焊材"),
+    (1,u"钢材"),
+)
 
 
+
+
+
+#技术资料管理
+H1 = "0"
+J = "2"
+R = "3"
+ZM = "4"
+GY = "5"
+DY = "6"
+XZ = "7"
+
+CIRCULATION_CHOICES = (
+    (H1, "H1"),
+    (J, "J"),
+    (ZM, "ZM"),
+    (R, "R"),
+    (GY, "GY"),
+    (DY, "DY"),
+    (XZ, "XZ"),
+)
+
+W = "0"
+W1 = "1"
+W2 = "2"
+W3 = "3"
+W4 = "4"
+W5 = "5"
+W6 = "6"
+W25 = "7"
+P01 = "8"
+P02 = "9"
+R = "10"
+R1 = "11"
+R2 = "12"
+Z = "13"
+H = "14"
+M = "15"
+L = "16"
+Y = "17"
+
+PROCESSING_CHOICES = (
+    (W, "W"),    
+    (W1, "W1"),
+    (W2, "W2"),
+    (W3, "W3"),
+    (W4, "W4"),
+    (W5, "W5"),
+    (W6, "W6"),
+    (W25, "W25"),
+    (P01, "P01"),
+    (P02, "P02"),
+    (R, "R"),
+    (R1, "R1"),
+    (R2, "R2"),
+    (Z, "Z"),
+    (H, "H"),
+    (M, "M"),
+    (L, "L"),
+    (Y, "Y"),
+)
+
+
+WELD_ROD = "weld_rod"
+WELD_WIRE = "weld_wire"
+WELD_RIBBON = "weld_ribbon"
+WELD_FLUX = "weld_flux"
+
+SHEET = "sheet"
+PROFILE = "profile"
+PURCHASED = "purchased"
+OTHER = "other"
+MATERIAL_CATEGORY_CHOICES = (
+    (WELD_ROD, u"焊条"),
+    (WELD_WIRE, u"焊丝"),
+    (WELD_RIBBON, u"焊带"),
+    (WELD_FLUX, u"焊剂"),
+    (SHEET, u"板材"),
+    (PROFILE, u"型材"),
+    (PURCHASED, u"外购件"),
+    (OTHER, u"其他"),
+)
+
+RT = "RT"
+UT = "UT"
+MT = "MT"
+PT = "PT"
+VT = "VT"
+
+NONDESTRUCTIVE_INSPECTION_TYPE = (
+    (RT, "RT"),
+    (UT, "UT"),
+    (MT, "MT"),
+    (PT, "PT"),
+    (VT, "VT"),
+)

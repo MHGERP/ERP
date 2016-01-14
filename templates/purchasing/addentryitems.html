@@ -1,0 +1,19 @@
+<h4>入库单类型：<strong>{{entrytype}}</strong></h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>名称</th>
+            <th>数量</th>
+        </tr>
+    </thead>
+    <thead>
+        {% for item in items %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{item.material.name}}</td>
+            <td>{{item.material.count}}</td>
+        </tr>
+        {% endfor %}
+    </thead>
+</table>

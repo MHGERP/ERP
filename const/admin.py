@@ -11,10 +11,7 @@ RegisterClass = (
     InventoryType,
     Materiel,
     Material,
-    CirculationRoute,
-    CirculationName,
     ImplementClassChoices,
 )
-
 for item in RegisterClass:
     admin.site.register(item)

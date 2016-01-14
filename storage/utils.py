@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 
+import datetime
 from storage.models import *
 from purchasing.models import *
 from django.db.models import Q
@@ -13,7 +14,6 @@ def get_weld_filter(model_type,dict):
     return: model_type set
     """
     filter_list = []
-    print dict
     for key,val in dict.items():
         dict_tmp = {}
         if val == "-1":
@@ -22,8 +22,8 @@ def get_weld_filter(model_type,dict):
         q = (val and Q(**dict_tmp)) or None
         filter_list.append(q)
     qset = filter(lambda x : x!= None ,filter_list)
-    print qset
     if qset:
+        print qset
         qset = reduce(lambda x,y:x & y ,qset)
         res_set = model_type.objects.filter(qset)
     else:
@@ -50,4 +50,90 @@ def storeConsume(applycard):
             consume_count -= item.count
             item.count = 0
             item.save()
+   
+def get_today(timetype=""):
+    """
+    timetype : String year,month,day
+    """
+    return getattr(datetime.date.today(),timetype) if timetype != "" else datetime.date.today()
+
+def getRequestByMethod(request):
+    if request.method == "GET":
+        return request.GET,"GET"
+    else:
+        return request.POST,"POST"
+
+def saveEntry(obj,role,user,status):
+    """
+    author:shenlian
+    func:save entry,change each role and status
+    params: role is a string
+    """
+    setattr(obj,role,user)
+    obj.entry_status = status
+    obj.save()
+
+class EntryObject(object):
+    context = {}
+    flag = False
+    def __init__(self,status_list,_Model,eid):
+        self.status_list = status_list
+        self._Model = _Model
+    def save_entry(self,entry_obj,role,user,form_list):
+        if self.save_form(form_list):
+            entry_status = entry_obj.entry_status
+            index = self.status_list.index(entry_status)
+            if entry_status != self.status_list[-1]:
+                index += 1
+                entry_obj.entry_status = self.status_list[index]
+                setattr(entry_obj,role,user)
+                entry_obj.save()
+        self.context["entry_obj"] = entry_obj
+        return self.context
     
+    def checkShow(self,entry_obj,entry_status):
+        return entry_obj. entry_status == entry_status
+    
+    def save_form(self,form_list):
+        flag = True
+        for form in form_list:
+            if not form[1].is_valid():
+                flag = False
+            self.context[form[0]] = form[1] 
+        if flag:
+            for form in form_list:
+                form[1].save()
+        self.flag = flag
+        return flag
+
+def saveRolers(obj,role,user,status = None):
+    """
+    author:shenlian
+    func:save entry,change each role and status
+    params: role is a string
+    """
+    setattr(obj,role,user)
+    if status != None:
+        obj.entry_status = status
+    obj.save()
+
+def setObjAttr(obj,field,value):
+    setattr(obj,field,value)
+    obj.save()
+
+def updateStorageLits(items_set,_StorageModel):
+    isOk = True 
+    for item in items_set:
+        try:
+            storageItem = _StorageModel.objects.get(specification = item.specification)
+            if storageItem.number >= item.number:
+                storageItem.number -= item.number
+                item.is_past = True
+                item.save()
+                storageItem.save()
+            else:
+                isOk = False
+        except Exception,e:
+            isOk = False
+            print e
+    return isOk

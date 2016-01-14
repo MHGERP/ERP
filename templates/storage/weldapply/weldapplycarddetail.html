@@ -17,7 +17,7 @@
         <label>领用单位:<strong>{{apply_card.department}}</strong></label>
     </div>
     <div class="span4" style="text-align:center">
-        <label>日期:<strong>{{apply_card.create_time}}</strong></label>
+        <label>日期:<strong>{{apply_card.create_time|date:'Y年m月d日'}}</strong></label>
     </div>
     <div class="span4" style="float:right;text-align:center">
         <label>编号:<strong>{{apply_card.index}}</strong></label>
@@ -52,16 +52,16 @@
     </table>
     <div class="row-fluid" style="text-align:center">
         <div class="span3">
-            <label>领料人:<strong>{{apply_card.applicant}}</strong></label>
+            <label>领料人:<strong>{{apply_card.applicant.userinfo}}</strong></label>
         </div>
         <div class="span3">
-            <label>审核人:<strong>{{apply_card.auditor}}</strong></label>
+            <label>审核人:<strong>{{apply_card.auditor.userinfo}}</strong></label>
         </div>
         <div class="span3">
-            <label>检查员:<strong>{{apply_card.inspector}}</strong></label>
+            <label>检查员:<strong>{{apply_card.inspector.userinfo}}</strong></label>
         </div>
         <div class="span3">
-            <label>发料人:<strong>{{apply_card.commit_user}}</strong></label>
+            <label>发料人:<strong>{{apply_card.commit_user.userinfo}}</strong></label>
         </div>
         <button type="submit" id="confirm" class="btn btn-primary">确认</button>
     </div>

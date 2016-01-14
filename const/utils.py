@@ -3,6 +3,8 @@
 from const import *
 from users.models import Title,Authority
 from django.contrib.auth.models import User
+from const.models import Material
+from django.db.models import Q
 
 def getUserByAuthority(authority):
     """
@@ -15,6 +17,13 @@ def getUserByAuthority(authority):
     user_list = User.objects.filter(title_user__authorities = auth_obj)
     return user_list    
 
+def checkAuthority(authority,user):
+    """
+    author: shenlian
+    func: check authority
+    """
+    return getUserByAuthority(authority).filter(id = user.id).count() > 0 
+
 def getChoiceList(obj_set,field):
     """
     author: Shen Lian
@@ -26,3 +35,18 @@ def getChoiceList(obj_set,field):
     for obj in obj_set:
         obj_list.append((obj.id,getattr(obj,field)))
     return tuple(obj_list)
+
+def getDistinctSet(_Model,_FModel,field):
+    obj_list = _Model.objects.values(field).distinct()
+    #obj_list = filter(lambda x: x[field] != None,obj_list)
+    obj_set = []
+    for obj_tmp in obj_list:
+        if obj_tmp[field] != None:
+            obj_set.append(_FModel.objects.get(id = obj_tmp[field]))
+    return  obj_set
+def getMaterialQuerySet(*categories):
+    """
+    JunHU
+    """
+    qset = reduce(lambda x, y: x | y, [Q(categories = cate) for cate in categories]) 
+    return Material.objects.filter(qset)

@@ -1,0 +1,71 @@
+<form class="form form-horizontal" id="entryform"  method="post">
+    {% csrf_token%}
+    <div class="row" style="margin-bottom:20px;">
+        {% for field in inform %}
+        <div class="span3">
+            <div class="control-group {% if field.errors %} error{% endif %}">
+                <label class="control-label">{{field.label}}</label>
+                <div class="controls">
+                    {{field}}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <table id="items_table" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>工作令</th>
+                <th>标准号或图号</th>
+                <th>名称及规格</th>
+                <th>材料牌号</th>
+                <th>炉批号</th>
+                <th>标记号</th>
+                <th>单位</th>
+                <th>数量</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in entry_set %}
+            <tr id="{{item.id}}">
+                <td>{{forloop.counter}}</td>
+                <td>{{item.materiel.order}}</td>
+                <td>{{item.schematic_index}}</td>
+                <td>{{item.specification}}</td>
+                <td>{{item.material_mark}}</td>
+                <td>{{item.batch_number}}</td>
+                <td>{{item.tag_number}}</td>
+                <td>{{item.unit}}</td>
+                <td>{{item.number}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+    <div class="row">
+            <div class="span12">
+                <fieldset>
+                    <legend>{{reform.remark.label}}</legend>
+                    {{reform.remark}}
+                    <fieldset>
+                    </div>
+            </div>
+            <div class="control-group span12" style="margin-top:50px;">
+                <div class="rows span4 purcher">
+                    采购员：<strong>{{entry_obj.purchaser.userinfo}}</strong>
+                </div>
+                <div class="span4 purcher">
+                    检查员：<strong>{{entry_obj.inspector.userinfo}}</strong>
+                </div>
+                <div class="span4 purcher">
+                    库管员：<strong>{{entry_obj.keeper.userinfo}}</strong>
+                </div>
+            </div>
+            <center style="margin:110px;">
+                {% if is_show %}
+                <button  id="entry_confirm"  class="btn btn-primary" type="button" onclick="outsideentryconfirm({{entry_obj.id}});">入库单确认</button>
+                {% else %}
+                <a style="width:10%;height:20px;" class="btn btn-primary" type="button" href="/storage/{{entryhomeurl}}">返回</a>
+                {% endif %}
+            </center>
+        </form>

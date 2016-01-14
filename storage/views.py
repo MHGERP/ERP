@@ -102,13 +102,14 @@ def weldEntryHomeViews(request):
         else:
             print search_form.errors
     else:
-        #weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
-        weldentry_set = WeldMaterialEntry.objects.all()
+        weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         search_form = EntrySearchForm()
+    weldentry_set = weldentry_set.order_by("-entry_time")
     context = {
             "entry_set":weldentry_set,
             "ENTRYSTATUS_END":STORAGESTATUS_END,
             "search_form":search_form,
+            "entryurl":"weldentryconfirm",
             }
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
@@ -157,7 +158,7 @@ def Weld_Apply_Card_List(request):
     """
     context={}
     context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
-    weld_apply_cards=WeldingMaterialApplyCard.objects.exclude(status=APPLYCARD_COMMIT).order_by('create_time')
+    weld_apply_cards=WeldingMaterialApplyCard.objects.all().order_by('create_time')
     context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
@@ -174,7 +175,7 @@ def Weld_Apply_Card_Detail(request):
     apply_card=WeldingMaterialApplyCard.objects.get(index=card_index)
     context['apply_card']=apply_card 
     context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
-    if request.user.is_superuser:#如果是库管员
+    if checkAuthority(STORAGE_KEEPER,request.user):#如果是库管员
         context['apply_card_form']=Commit_ApplyCardForm(instance=apply_card)
     else:#如果是申请者
         context['apply_card_form']=Apply_ApplyCardForm(instance=apply_card)
@@ -188,7 +189,7 @@ def Handle_Apply_Card_Form(request):
     return: NULL
     """
     if request.method=='POST':
-        if request.user.is_superuser:
+        if checkAuthority(STORAGE_KEEPER,request.user):
             Apply_Card_Form_Commit(request)
         elif request.user.is_authenticated:
             Apply_Card_Form_Apply(request)
@@ -263,12 +264,17 @@ def weldhumNewRecord(request):
     if request.method == "POST":
         form = HumRecordForm(request.POST)
         if form.is_valid():
-            form.save()
+            humrecord = form.save(commit = False)
+            humrecord.storeMan = request.user
+            humrecord.save()
             return HttpResponseRedirect("weldhumiture")
+        else:
+            print form.errors
     else:
         form = HumRecordForm()
     context = {
-            "form":form
+            "form":form,
+            "changeEnable":False,
             }
     return render(request,"storage/weldhumi/weldhumNewRecord.html",context)
 
@@ -276,12 +282,13 @@ def weldhumDetail(request,eid):
     """
     kad
     """
-    print eid
     hum_detail = WeldingMaterialHumitureRecord.objects.get(id = eid)
     form = HumRecordForm(instance = hum_detail)
+    changeEnable = hum_detail.date == get_today()
     context = {
             "form":form,
             "humRecordDate":hum_detail,
+            "changeEnable":changeEnable,
             }
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
 
@@ -321,16 +328,26 @@ def weldbakeNewRecord(request):
             }
     return render(request,"storage/weldbake/weldbakeNewRecord.html",context)
 
-def weldbakeDetail(request,index):
+def weldbakeDetail(request):
     """
     kad
     """
-    bake_detail = WeldingMaterialBakeRecord.objects.get(index = index)
-    form = BakeRecordForm(instance = bake_detail)
-    context = {
-            "form":form,
-            }
+    context = getWeldBakeDetailContext(request)
     return render(request,"storage/weldbake/weldbakeDetail.html",context)
+
+def getWeldBakeDetailContext(request):
+    context = {}
+    request_dic,method = getRequestByMethod(request)
+    index = request_dic.get("index",None)
+    if index != None: 
+        weldbake = WeldingMaterialBakeRecord.objects.get(index = index)
+        form = BakeRecordForm(instance = weldbake)
+        context["weldbake"] = weldbake
+    else:
+        form = BakeRecordForm()
+    context["is_show"] = True
+    context["form"] = form
+    return context
 
 def weldapplyrefundHomeViews(request):
     """
@@ -371,7 +388,7 @@ def weldapplyrefundDetail(request,index):
 
 
 def weldRefundViews(request):
-    getUserByAuthority(STORAGE_KEEPER)
+    print checkAuthority(STORAGE_KEEPER,request.user)
     if request.method == "POST":
         search_form = RefundSearchForm(request.POST)
         if search_form.is_valid():
@@ -427,34 +444,55 @@ def AuxiliaryToolsEntryListView(request):
     return: NULL
     """
     context={}
-    context['auxiliarytools']=AuxiliaryTool.objects.all()
+    if request.method=='GET':
+        context['entry_list']=AuxiliaryToolEntryCardList.objects.filter(
+            status=STORAGESTATUS_KEEPER).order_by('-id')
+    else:
+        search_form = AuxiliaryEntrySearchForm(request.POST)
+        if search_form.is_valid():
+            context['entry_list'] =\
+            get_weld_filter(AuxiliaryToolEntryCardList,search_form.cleaned_data)\
+                    .filter(status=STORAGESTATUS_KEEPER)
+        else:
+            context['entry_list']=[]
+            print search_form.errors
+    context['search_form'] = AuxiliaryEntrySearchForm()
     return render(request,'storage/auxiliarytools/auxiliarytoolsentry_list.html',context)
+
 
 def AuxiliaryToolsEntryView(request):
     """
     Time1ess
-    summary: Auxiliary tools entry
-    params: id(GET,POST),quantity(POST)
+    summary: Confirm auxiliary tools entry
+    params: id(GET,POST)
     return: NULL
     """
-    context={}
-    if request.method=='POST':
-        object_id=int(request.POST['object_id'])
-        auxiliarytool=AuxiliaryTool.objects.get(id=object_id)
-        new_entry_quantity=float(request.POST['quantity'])
-        if new_entry_quantity<0:
-            return HttpResponseRedirect('/storage/auxiliarytools/entrylist')
-        auxiliarytool.quantity=F('quantity')+new_entry_quantity
-        auxiliarytool.save()
-        entryrecord=AuxiliaryToolEntryCard(auxiliary_tool=auxiliarytool,quantity=new_entry_quantity)
-        entryrecord.save()
-        return AuxiliaryToolsEntryListView(request)
+    context = {}
+    if request.method == 'POST':
+        object_id = int(request.POST['object_id'])
+        auxiliary_card_list = AuxiliaryToolEntryCardList.objects.get(id=object_id)
+        auxiliarytools = AuxiliaryToolEntryCard.objects.filter(card_list__id=object_id)
+        for at in auxiliarytools:
+            if at.quantity<0:
+                print '[ERROR]Auxiliary tools entry quantity error'
+                return HttpResponseRedirect('/storage/auxiliarytools/entrylist')
+            at.auxiliary_tool.quantity=F('quantity')+at.quantity
+        for at in auxiliarytools:
+            at.auxiliary_tool.save()
+        auxiliary_card_list.status=STORAGESTATUS_END
+        auxiliary_card_list.keeper=request.user
+        auxiliary_card_list.save()
+        return HttpResponseRedirect('/storage/auxiliarytools/entrylist')
     else:
-        object_id=int(request.GET['id'])
-        auxiliarytool=AuxiliaryTool.objects.get(id=object_id)
-        context['object_id']=object_id
-        context['entry_form']=AuxiliaryToolsForm(initial={'quantity':0},instance=auxiliarytool)
-        return render(request,'storage/auxiliarytools/auxiliarytoolsentry.html',context)
+        object_id = int(request.GET['id'])
+        auxiliary_tool_card_list = AuxiliaryToolEntryCardList.objects.get(
+            id=object_id)
+        context['object'] = auxiliary_tool_card_list
+        context['sub_objects'] = AuxiliaryToolEntryCard.objects.filter(
+            card_list=auxiliary_tool_card_list)
+        return render(request,
+                      'storage/auxiliarytools/auxiliarytoolsentry.html',
+                      context)
 
 def AuxiliaryToolsApplyListView(request):
     """
@@ -467,6 +505,7 @@ def AuxiliaryToolsApplyListView(request):
     apply_cards=AuxiliaryToolApplyCard.objects.exclude(status=AUXILIARY_TOOL_APPLY_CARD_COMMITED).order_by('-create_time')
     context['search_form']=AuxiliaryToolsApplyCardSearchForm()
     context['apply_cards']=apply_cards
+    context['STORAGE_KEEPER']=checkAuthority(STORAGE_KEEPER,request.user)
     return render(request,'storage/auxiliarytools/auxiliarytoolsapply_list.html',context)
 
 
@@ -482,13 +521,14 @@ def AuxiliaryToolsApplyView(request):
         ins_index=int(request.GET['index']) 
         ins=AuxiliaryToolApplyCard.objects.get(index=ins_index) if ins_index!=0 else None
 
-        if request.user.is_superuser:
+        if checkAuthority(STORAGE_KEEPER,request.user):
             context['instance']=ins
+            context['storage_keeper']=True
             context['apply_form']=AuxiliaryToolsCardCommitForm(instance=ins)
         else:
+            context['storage_keeper']=False
             context['apply_form']=AuxiliaryToolsCardApplyForm()
 
-        #apply or commit setting
         return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
     else:
         ins_index=int(request.POST['index'])
@@ -496,10 +536,20 @@ def AuxiliaryToolsApplyView(request):
             ins=AuxiliaryToolApplyCard.objects.get(index=ins_index)
         else:
             ins=None
-
         apply_card=AuxiliaryToolsCardCommitForm(request.POST,instance=ins)
         if apply_card.is_valid():
-            apply_card.save()
+            save_ins=apply_card.save(commit=False)
+            print 'BEFORE----------'
+            print '[APPLICANT]:',save_ins.applicant
+            print '[COMMITER]',save_ins.commit_user
+            if ins_index!=0:
+                save_ins.commit_user=request.user
+            else:
+                save_ins.applicant=request.user
+            print 'AFTER----------'
+            print '[APPLICANT]',save_ins.applicant
+            print '[COMMITER]',save_ins.commit_user
+            save_ins.save()
         else:
             print apply_card.errors
         return AuxiliaryToolsApplyListView(request)
@@ -521,10 +571,21 @@ def AuxiliaryToolsLedgerEntryView(request):
     params: NULL
     return: NULL
     """
-    context={}
-    context['search_form']=AuxiliaryToolsSearchForm()
-    context['rets']=AuxiliaryToolEntryCard.objects.all()
-    return render(request,'storage/auxiliarytools/ledger_entry.html',context)
+    context = {}
+    if request.method == 'GET':
+        context['rets'] = AuxiliaryToolEntryCardList.objects.filter(
+            status=STORAGESTATUS_END).order_by('-create_time')
+    else:
+        search_form = AuxiliaryEntrySearchForm(request.POST)
+        if search_form.is_valid():
+            context['rets'] = get_weld_filter(AuxiliaryToolEntryCardList,
+                                              search_form.cleaned_data)\
+                    .filter(status=STORAGESTATUS_END)
+        else:
+            context['rets'] = []
+            print search_form.errors
+    context['search_form'] = AuxiliaryEntrySearchForm()
+    return render(request, 'storage/auxiliarytools/ledger_entry.html', context)
 
 def AuxiliaryToolsLedgerEntryCardView(request):
     """
@@ -534,10 +595,15 @@ def AuxiliaryToolsLedgerEntryCardView(request):
     return: NULL
     """
     context={}
-    object_id=int(request.GET['id'])
-    auxiliary_tool_entry_card=AuxiliaryToolEntryCard.objects.get(id=object_id)
-    context['object']=auxiliary_tool_entry_card
-    return render(request,'storage/auxiliarytools/entry_card.html',context)
+    object_id = int(request.GET['id'])
+    auxiliary_tool_card_list = AuxiliaryToolEntryCardList.objects.get(
+        id=object_id)
+    context['object'] = auxiliary_tool_card_list
+    context['sub_objects'] = AuxiliaryToolEntryCard.objects.filter(
+        card_list=auxiliary_tool_card_list)
+    return render(request,
+                  'storage/auxiliarytools/entry_card.html',
+                  context)
 
 def AuxiliaryToolsLedgerApplyView(request):
     """
@@ -595,6 +661,7 @@ def weldEntryAccountViews(request):
             items_set = get_weld_filter(WeldStoreList,search_form.cleaned_data)
     else:
         search_form = WeldAccountSearchForm()
+        items_set = items_set.order_by("entry_time")
     context = {
             "items_set":items_set,
             "search_form":search_form,
@@ -602,13 +669,14 @@ def weldEntryAccountViews(request):
     return render(request,"storage/weldmaterial/weldaccount/weldentryhome.html",context)
 
 def weldStorageAccountHomeViews(request):
-    items_set = WeldStoreList.objects.all().order_by('specification').order_by("entry_time")
     if request.method == "POST":
         search_form = WeldStorageSearchForm(request.POST)
         if search_form.is_valid():
             items_set = get_weld_filter(WeldStoreList,search_form.cleaned_data)
     else:
+        items_set = WeldStoreList.objects.qualified_set().order_by('specification')
         search_form = WeldStorageSearchForm()
+    items_set = items_set.order_by("entry_time")
     context = {
             "items_set":items_set,
             "search_form":search_form,
@@ -620,9 +688,7 @@ def weldApplyAccountViews(request):
     if request.method == "POST":
         search_form =  WeldApplyAccountSearchForm(request.POST)
         if search_form.is_valid():
-            print search_form.cleaned_data
             apply_set = get_weld_filter(WeldingMaterialApplyCard,search_form.cleaned_data)
-            print apply_set
         else:
             print search_form.errors
     else:
@@ -632,3 +698,109 @@ def weldApplyAccountViews(request):
         "search_form":search_form,
     }
     return render(request,"storage/weldmaterial/weldaccount/weldapplyhome.html",context)
+
+
+def outsideHomeViews(request):
+    context = {
+
+            }
+    return render(request,"storage/outside/outsidehome.html",context)
+
+def outsideEntryHomeViews(request):
+    key_list = ["entry_set","entryurl","ENTRYSTATUS_END"]
+    context = getStorageHomeContext(request,OutsideStandardEntry,OutsideEntrySearchForm,STORAGESTATUS_KEEPER,"outside/entryconfirm",key_list,"entry_time")
+    return render(request,"storage/outside/outsideentryhome.html",context)
+
+def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list,order_field):
+    if request.method == "POST":
+        search_form = _SearchForm(request.POST)
+        if search_form.is_valid():
+            obj_set = get_weld_filter(_Model,search_form.cleaned_data)
+        else:
+            print search_form.errors
+    else:
+        obj_set = _Model.objects.filter(entry_status=default_status)
+        search_form = _SearchForm()
+    obj_set = obj_set.order_by(order_field)
+    context = {
+            key_list[0]:obj_set,
+            "search_form":search_form,
+            key_list[1]:url,
+            key_list[2]:STORAGESTATUS_END,
+            }
+    return context
+
+def outsideEntryConfirmViews(request,eid):
+    entryurl = "outside/entryhome"
+    context = getEntryConfirmContext(eid,OutsideStandardEntry,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,entryurl)
+    return render(request,"storage/outside/entryconfirm.html",context)
+
+def getEntryConfirmContext(eid,_Model,_Inform,_Reform,entryurl):
+    entry_obj = _Model.objects.get(id = eid)
+    inform = _Inform(instance = entry_obj)
+    reform = _Reform(instance = entry_obj)
+    is_show = entry_obj.entry_status == STORAGESTATUS_KEEPER
+    entry_set = OutsideStandardItem.objects.filter(entry = entry_obj)
+    context = {
+        "inform":inform,
+        "reform":reform,
+        "entry_obj":entry_obj,
+        "entryhomeurl":"outside/entryhome",
+        "is_show":is_show,
+        "entry_set":entry_set,
+    }
+    return context
+def StoreThreadViews(request):
+    items_set = WeldStoreThread.objects.all()
+    entry_form = ThreadEntryItemsForm()
+    if request.method == "POST":
+        search_form = ThreadSearchForm(request.POST)
+        if search_form.is_valid():
+            items_set = get_weld_filter(WeldStoreThread,search_form.cleaned_data)
+    else:
+        search_form = ThreadSearchForm()
+    context = {
+        "items_set":items_set,
+        "entry_form":entry_form,
+        "search_form":search_form,
+    }
+    return render(request,"storage/storethread/storethread.html",context)
+
+def outsideApplyCardHomeViews(request):
+    applyurl = "outside/applycardconfirm"
+    key_list = ["card_set","applyurl","APPLYSTATUS_END"]
+    context = getStorageHomeContext(request,OutsideApplyCard,OutsideApplyCardSearchForm,STORAGESTATUS_KEEPER,applyurl,key_list,"date")
+    return render(request,"storage/outside/applycardhome.html",context)
+
+def outsideApplyCardConfirmViews(request,cid):
+    url = "outside/applycardhome"
+    default_status = STORAGESTATUS_KEEPER
+    context = getOutsideApplyCardConfirmContext(cid,OutsideApplyCardForm,url,default_status) 
+    return render(request,"storage/outside/applycardconfirm.html",context)
+
+def getOutsideApplyCardConfirmContext(cid,_Inform,url,default_status):
+    applycard = OutsideApplyCard.objects.get(id = cid)
+    inform = _Inform(instance = applycard)
+    is_show = applycard.entry_status == default_status
+    items_set = OutsideApplyCardItem.objects.filter(applycard = applycard,is_past = False)
+    context = {
+        "inform":inform,
+        "applycard":applycard,
+        "entryhomeurl":url,
+        "is_show":is_show,
+        "items_set":items_set,
+    }
+    return context
+
+def outsideAccountHomeViews(request):
+    context = {}
+    return render(request,"storage/outside/accounthome.html",context)
+
+def outsideEntryAccountHomeViews(request):
+    context = {
+        
+    }
+    return render(request,"storage/outside/account/entryhome.html",context)
+
+def outsideApplyCardAccountHomeViews(request):
+    return render(request,"storage/outside/account/applycardhome.html")
