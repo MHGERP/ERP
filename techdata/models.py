@@ -14,8 +14,8 @@ class Processing(models.Model):
     hour = models.FloatField(blank = True, null = True, verbose_name = u"工时")
 
     technical_requirement = models.CharField(blank = True, null = True, max_length = 1000, verbose_name = u"工艺过程及技术要求")
-    operator = models.ForeignKey(User, blank = True, null = True, verbose_name = u"操作者", related_name = "operator")
-    inspector = models.ForeignKey(User, blank = True, null = True, verbose_name = u"检查者", related_name = "inspector")
+    operator = models.ForeignKey(User, blank = True, null = True, verbose_name = u"操作者", related_name = "process_operator")
+    inspector = models.ForeignKey(User, blank = True, null = True, verbose_name = u"检查者", related_name = "process_inspector")
     class Meta:
         verbose_name = u"工序"
         verbose_name_plural = u"工序"
