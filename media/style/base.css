@@ -29,3 +29,6 @@ div#subtable{
     margin-top:20px;
 }
 
+center.WordSection p{
+	margin-bottom: 0px!important;
+}

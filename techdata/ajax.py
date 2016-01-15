@@ -480,3 +480,25 @@ def weldListReviewerConfirm(request, id_work_order):
     order.weldlistpagemark.save()
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
+@dajaxice_register
+def getTransferCard(request, iid):
+    item = Materiel.objects.get(id = iid)
+    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
+        CirculationRoute(materiel_belong = item).save()
+    item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
+    
+    try:
+        process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
+        process_list = []
+        while process:
+            process_list.append(process)
+            process = process.next_processing
+    except:
+        process_list = []
+    
+    context = {
+        "item": item,
+        "process_list": process_list,
+    }
+    html = render_to_string("techdata/widgets/cylider_transfer_card.html", context)
+    return html
