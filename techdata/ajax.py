@@ -466,14 +466,17 @@ def weldListWriterConfirm(request, id_work_order):
         WeldListPageMark(order = order).save()
     order.weldlistpagemark.writer = request.user
     order.weldlistpagemark.save()
-    return unicode(request.user.userinfo)
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
 @dajaxice_register
 def weldListReviewerConfirm(request, id_work_order):
     order = WorkOrder.objects.get(id = id_work_order)
     if WeldListPageMark.objects.filter(order = order).count() == 0:
         WeldListPageMark(order = order).save()
+
+    if order.weldlistpagemark.writer == None:
+        return simplejson.dumps({"ret": False})
     order.weldlistpagemark.reviewer = request.user
     order.weldlistpagemark.save()
-    return unicode(request.user.userinfo)
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
