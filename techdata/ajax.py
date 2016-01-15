@@ -212,6 +212,21 @@ def getDesignBOM(request, id_work_order):
     return html
 
 @dajaxice_register
+def getSingleDesignBOM(request, iid):
+    """
+    mxl
+    """
+    item = Materiel.objects.get(id = iid)
+    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
+        circulationroute(materiel_belong = item).save()
+    item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
+    context = {
+        "item" : item
+    }
+    row_html = render_to_string("techdata/widgets/designBOM_row.html", context)
+    return row_html
+
+@dajaxice_register
 def getDesignBOMForm(request, iid):
     """
     mxl
@@ -433,17 +448,6 @@ def saveDesignBOM(request, iid,  materiel_form, circulationroute_form):
         obj.save()
         ret = {"status" : "ok"}
     else:
-       # for field in materiel_form:
-       #     if field.errors:
-       #
-       #         print field
-       #     for error in field.errors:
-       #         print error
-       # for field in circulationroute_form:
-       #     if field.errors:
-       #         print field
-       #     for error in field.errors:
-       #         print error
         ret = {
             "status" : "fail",
         }
