@@ -1,7 +1,8 @@
 #coding: utf=8
 from const import PROCESSING_CHOICES, CIRCULATION_CHOICES, NONDESTRUCTIVE_INSPECTION_TYPE
 from django.db import models
-from const.models import Materiel, Material
+from const.models import Materiel, Material, WorkOrder
+from django.contrib.auth.models import User
 
 class Processing(models.Model):
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")
@@ -106,4 +107,16 @@ class WeldSeam(models.Model):
         verbose_name_plural = u"焊缝"
     def __unicode__(self):
         return self.materiel_belong.name   
+
+class WeldListPageMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "writer")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "reviewer")
+
+    class Meta:
+        verbose_name = u"焊缝明细签章"
+        verbose_name_plural = u"焊缝明细签章"
+    def __unicode__(self):
+        return self.order.order_index
+
 

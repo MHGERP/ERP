@@ -6,7 +6,11 @@ function refresh() {
     Dajaxice.techdata.getWeldSeamList(refreshCallBack, {"id_work_order": id_work_order, });
 }
 function refreshCallBack(data) {
-    $("#widget-box").html(data);
+    if(data.read_only) {
+        $("#id_save").hide();
+        $("#id_calculate").hide();
+    }
+    $("#widget-box").html(data.html);
 }
 function refreshSingleRow() {
     var iid = $("#card_modal").attr("iid");
@@ -59,3 +63,21 @@ $("#id_goto_prev").click(function() {
     if(!row_prev.html()) alert("本条为第一条！");
     else fill(row_prev.attr("iid"));
 });
+
+$(document).on("click", "#btn_write_confirm", function() {
+    var id_work_order = $("#id_work_order").val();   
+    Dajaxice.techdata.weldListWriterConfirm(writerConfirmCallBack, {"id_work_order": id_work_order})
+});
+function writerConfirmCallBack(data) {
+    $("#btn_write_confirm").removeClass("btn-primary").addClass("btn-warning").html("编制完成");
+    $("#h_writer").html("编制人：" + data);
+}
+
+$(document).on("click", "#btn_review_confirm", function() {
+    var id_work_order = $("#id_work_order").val();   
+    Dajaxice.techdata.weldListReviewerConfirm(reviewerConfirmCallBack, {"id_work_order": id_work_order})
+});
+function reviewerConfirmCallBack(data) {
+    $("#btn_review_confirm").removeClass("btn-primary").addClass("btn-warning").html("审核完成");
+    $("#h_reviewer").html("审核人：" + data);
+}

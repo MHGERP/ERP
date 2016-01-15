@@ -388,7 +388,9 @@ def getWeldSeamList(self, id_work_order):
         "work_order": work_order,
     }
     html = render_to_string("techdata/widgets/weld_list_table.html", context)
-    return html
+    read_only = (work_order.weldlistpagemark.reviewer != None)
+
+    return simplejson.dumps({"html": html, "read_only": read_only})
 
 @dajaxice_register  
 def updateProcessReview(request, iid,processReview_form):
@@ -452,4 +454,22 @@ def saveDesignBOM(request, iid,  materiel_form, circulationroute_form):
         if not circulationroute_form.is_valid():
             ret["circulationroute_error"] = "1"
     return simplejson.dumps(ret)
+
+@dajaxice_register
+def weldListWriterConfirm(request, id_work_order):
+    order = WorkOrder.objects.get(id = id_work_order)
+    if WeldListPageMark.objects.filter(order = order).count() == 0:
+        WeldListPageMark(order = order).save()
+    order.weldlistpagemark.writer = request.user
+    order.weldlistpagemark.save()
+    return unicode(request.user.userinfo)
+
+@dajaxice_register
+def weldListReviewerConfirm(request, id_work_order):
+    order = WorkOrder.objects.get(id = id_work_order)
+    if WeldListPageMark.objects.filter(order = order).count() == 0:
+        WeldListPageMark(order = order).save()
+    order.weldlistpagemark.reviewer = request.user
+    order.weldlistpagemark.save()
+    return unicode(request.user.userinfo)
 
