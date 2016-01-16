@@ -461,6 +461,9 @@ def saveDesignBOM(request, iid,  materiel_form, circulationroute_form):
 
 @dajaxice_register
 def weldListWriterConfirm(request, id_work_order):
+    """
+    JunHU
+    """
     order = WorkOrder.objects.get(id = id_work_order)
     if WeldListPageMark.objects.filter(order = order).count() == 0:
         WeldListPageMark(order = order).save()
@@ -470,6 +473,9 @@ def weldListWriterConfirm(request, id_work_order):
 
 @dajaxice_register
 def weldListReviewerConfirm(request, id_work_order):
+    """
+    JunHU
+    """
     order = WorkOrder.objects.get(id = id_work_order)
     if WeldListPageMark.objects.filter(order = order).count() == 0:
         WeldListPageMark(order = order).save()
@@ -482,6 +488,9 @@ def weldListReviewerConfirm(request, id_work_order):
 
 @dajaxice_register
 def getTransferCard(request, iid):
+    """
+    JunHU
+    """
     item = Materiel.objects.get(id = iid)
     if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
         CirculationRoute(materiel_belong = item).save()
@@ -502,3 +511,13 @@ def getTransferCard(request, iid):
     }
     html = render_to_string("techdata/widgets/cylider_transfer_card.html", context)
     return html
+
+@dajaxice_register
+def saveProcessRequirement(request, pid, content):
+    """
+    JunHU
+    """
+    process = Processing.objects.get(id = pid)
+    process.technical_requirement = content
+    process.save()
+

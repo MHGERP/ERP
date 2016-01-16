@@ -7,3 +7,5 @@ function refresh() {
 function refreshCallBack(data) {
     $("#div_card").html(data);
 }
+
+new AutoSave(".word_textarea", Dajaxice.techdata.saveProcessRequirement).init();
