@@ -71,6 +71,19 @@ def getSingleProcessBOM(request, iid):
     return html
 
 @dajaxice_register  
+def getAuxiliaryMaterielInfo(request, iid):
+    """
+    MH Chen
+    """
+    materiel = Materiel.objects.get(id = iid)
+    form = MaterielForm(instance = materiel)
+    context = {
+        "form": form,
+    }
+    html = render_to_string("techdata/widgets/auxiliary_material_base_info_table.html", context)
+    return html
+
+@dajaxice_register  
 def getMaterielInfo(request, iid):
     """
     JunHU
@@ -81,7 +94,7 @@ def getMaterielInfo(request, iid):
         "form": form,
     }
     html = render_to_string("techdata/widgets/materiel_base_info.html", context)
-    return html 
+    return html  
 
 @dajaxice_register  
 def getTechdataList(request, id_work_order):

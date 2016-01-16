@@ -21,3 +21,18 @@ function func() {
 function tableCallback(data) {
    $("#detail_table").html(data);
 }
+
+
+
+$(document).on("click", ".tr_materiel", function() {
+    var iid = $(this).attr("iid");
+    fill(iid);
+});
+function fill(iid) {
+    $("#card_modal").attr("iid", iid);
+    Dajaxice.techdata.getAuxiliaryMaterielInfo(getInfoCallBack, {"iid": iid});
+    // Dajaxice.techdata.getProcess(getProcessCallBack, {"iid": iid});
+}
+function getInfoCallBack(data) {
+    $("#base-info-area").html(data);
+}
