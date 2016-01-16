@@ -804,3 +804,21 @@ def getOutsideApplyCardConfirmContext(cid,_Inform,url,default_status):
 def outsideAccountHomeViews(request):
     context = {}
     return render(request,"storage/outside/accounthome.html",context)
+
+def outsideEntryAccountHomeViews(request):
+    search_form = OutsideAccountEntrySearchForm()
+    entry_set = OutsideStandardEntry.objects.all()
+    items_set = OutsideStandardItem.objects.filter(entry__in = entry_set)
+    from operator import attrgetter
+    print items_set
+    sorted_items_set = sorted(items_set,key=attrgetter('materiel.order.order_index','specification'))
+    print sorted_items_set
+    context = {
+        "search_form":search_form,
+        "items_set":sorted_items_set,
+    }
+    
+    return render(request,"storage/outside/account/entryhome.html",context)
+
+def outsideApplyCardAccountHomeViews(request):
+    return render(request,"storage/outside/account/applycardhome.html")

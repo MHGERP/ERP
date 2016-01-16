@@ -422,3 +422,12 @@ class OutsideApplyCardForm(ModelForm):
         fields = ("change_code","sample_report","entry_code")
     def __init__(self,*args,**kwargs):
         super(OutsideApplyCardForm,self).__init__(*args,**kwargs)
+
+class OutsideAccountEntrySearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False, widget=forms.TextInput(attrs={'id':'date'}))
+    specification = forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={'id':'specification'}))
+    entry_code = forms.CharField(label=u"入库单编号",required = False, widget=forms.TextInput(attrs={'id':'entry_code'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideAccountEntrySearchForm,self).__init__(*args,**kwargs)
+        for key,val in self.fields.items():
+            val.widget.attrs["class"] = 'span2'

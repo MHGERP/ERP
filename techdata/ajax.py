@@ -225,6 +225,21 @@ def getDesignBOM(request, id_work_order):
     return html
 
 @dajaxice_register
+def getSingleDesignBOM(request, iid):
+    """
+    mxl
+    """
+    item = Materiel.objects.get(id = iid)
+    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
+        circulationroute(materiel_belong = item).save()
+    item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
+    context = {
+        "item" : item
+    }
+    row_html = render_to_string("techdata/widgets/designBOM_row.html", context)
+    return row_html
+
+@dajaxice_register
 def getDesignBOMForm(request, iid):
     """
     mxl
@@ -401,7 +416,9 @@ def getWeldSeamList(self, id_work_order):
         "work_order": work_order,
     }
     html = render_to_string("techdata/widgets/weld_list_table.html", context)
-    return html
+    read_only = (work_order.weldlistpagemark.reviewer != None)
+
+    return simplejson.dumps({"html": html, "read_only": read_only})
 
 @dajaxice_register  
 def updateProcessReview(request, iid,processReview_form):
@@ -444,17 +461,6 @@ def saveDesignBOM(request, iid,  materiel_form, circulationroute_form):
         obj.save()
         ret = {"status" : "ok"}
     else:
-       # for field in materiel_form:
-       #     if field.errors:
-       #
-       #         print field
-       #     for error in field.errors:
-       #         print error
-       # for field in circulationroute_form:
-       #     if field.errors:
-       #         print field
-       #     for error in field.errors:
-       #         print error
         ret = {
             "status" : "fail",
         }
@@ -465,4 +471,66 @@ def saveDesignBOM(request, iid,  materiel_form, circulationroute_form):
         if not circulationroute_form.is_valid():
             ret["circulationroute_error"] = "1"
     return simplejson.dumps(ret)
+
+@dajaxice_register
+def weldListWriterConfirm(request, id_work_order):
+    """
+    JunHU
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if WeldListPageMark.objects.filter(order = order).count() == 0:
+        WeldListPageMark(order = order).save()
+    order.weldlistpagemark.writer = request.user
+    order.weldlistpagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def weldListReviewerConfirm(request, id_work_order):
+    """
+    JunHU
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if WeldListPageMark.objects.filter(order = order).count() == 0:
+        WeldListPageMark(order = order).save()
+
+    if order.weldlistpagemark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.weldlistpagemark.reviewer = request.user
+    order.weldlistpagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def getTransferCard(request, iid):
+    """
+    JunHU
+    """
+    item = Materiel.objects.get(id = iid)
+    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
+        CirculationRoute(materiel_belong = item).save()
+    item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
+    
+    try:
+        process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
+        process_list = []
+        while process:
+            process_list.append(process)
+            process = process.next_processing
+    except:
+        process_list = []
+    
+    context = {
+        "item": item,
+        "process_list": process_list,
+    }
+    html = render_to_string("techdata/widgets/cylider_transfer_card.html", context)
+    return html
+
+@dajaxice_register
+def saveProcessRequirement(request, pid, content):
+    """
+    JunHU
+    """
+    process = Processing.objects.get(id = pid)
+    process.technical_requirement = content
+    process.save()
 
