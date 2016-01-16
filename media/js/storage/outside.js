@@ -30,3 +30,14 @@ function outsideapplycardconfirm_callback(data){
     $("div#applycardbody").html(data.html);
     alert(data.message);
 }
+
+function account_entry_search(){
+    Dajaxice.storage.outsideAccountEntrySearch(accounEntrytSearch_callback,{"form":$("#search_form").serialize()}); 
+};
+
+function accounEntrytSearch_callback(data){
+    $("#entry_main").html(data.html);
+}
+
+
+
