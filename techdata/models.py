@@ -15,7 +15,9 @@ class Processing(models.Model):
 
     technical_requirement = models.CharField(blank = True, null = True, max_length = 1000, verbose_name = u"工艺过程及技术要求")
     operator = models.ForeignKey(User, blank = True, null = True, verbose_name = u"操作者", related_name = "process_operator")
+    #operate_date = models.DateField(blank = True, null = True, verbose_name = u"操作时间")
     inspector = models.ForeignKey(User, blank = True, null = True, verbose_name = u"检查者", related_name = "process_inspector")
+    #inspect_date = models.DateField(blank = True, null = True, verbose_name = u"检查时间")
     class Meta:
         verbose_name = u"工序"
         verbose_name_plural = u"工序"
@@ -115,9 +117,9 @@ class WeldSeam(models.Model):
 class WeldListPageMark(models.Model):
     order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
     writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "weld_list_writer")
-    #write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期", related_name = "weld_list_write_date")
+    #write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
     reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "weld_list_reviewer")
-    #review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期", related_name = "weld_list_review_date")
+    #review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
     class Meta:
         verbose_name = u"焊缝明细签章"
         verbose_name_plural = u"焊缝明细签章"
@@ -138,16 +140,16 @@ class TransferCardMark(models.Model):
     card = models.OneToOneField(TransferCard, verbose_name = u"所属流转卡")
 
     writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "transfercard_writer")
-    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期", related_name = "transfercard_write_date")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
 
     reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "transfercard_reviewer")
-    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期", related_name = "transfercard_review_date")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
 
     proofreader = models.ForeignKey(User, blank = True, null = True, verbose_name = u"校对人", related_name = "transfercard_proofreader")
-    proofread_date = models.DateField(blank = True, null = True, verbose_name = u"校对日期", related_name = "transfercard_proofread_date")
+    proofread_date = models.DateField(blank = True, null = True, verbose_name = u"校对日期")
 
     approver = models.ForeignKey(User, blank = True, null = True, verbose_name = u"批准人", related_name = "transfercard_approver")
-    approve_date = models.DateField(blank = True, null = True, verbose_name = u"批准日期", related_name = "transfercard_approve_date")
+    approve_date = models.DateField(blank = True, null = True, verbose_name = u"批准日期")
 
     class Meta:
         verbose_name = u"流转卡签章"
