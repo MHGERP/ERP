@@ -378,3 +378,11 @@ NONDESTRUCTIVE_INSPECTION_TYPE = (
     (PT, "PT"),
     (VT, "VT"),
 )
+
+CYLIDER_TRANSFER_CARD = "cylider_transfer_card"
+CAP_TRANSFER_CARD = "cap_transfer_card"
+
+TRANSFER_CARD_TYPE_CHOICES = (
+    (CYLIDER_TRANSFER_CARD, u"筒体流转卡"),  
+    (CAP_TRANSFER_CARD, u"封头流转卡"),
+)

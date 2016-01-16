@@ -1,5 +1,5 @@
 #coding: utf=8
-from const import PROCESSING_CHOICES, CIRCULATION_CHOICES, NONDESTRUCTIVE_INSPECTION_TYPE
+from const import PROCESSING_CHOICES, CIRCULATION_CHOICES, NONDESTRUCTIVE_INSPECTION_TYPE, TRANSFER_CARD_TYPE_CHOICES
 from django.db import models
 from const.models import Materiel, Material, WorkOrder
 from django.contrib.auth.models import User
@@ -114,13 +114,43 @@ class WeldSeam(models.Model):
 
 class WeldListPageMark(models.Model):
     order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
-    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "writer")
-    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "reviewer")
-
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "weld_list_writer")
+    #write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期", related_name = "weld_list_write_date")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "weld_list_reviewer")
+    #review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期", related_name = "weld_list_review_date")
     class Meta:
         verbose_name = u"焊缝明细签章"
         verbose_name_plural = u"焊缝明细签章"
     def __unicode__(self):
         return self.order.order_index
 
+class TransferCard(models.Model):
+    materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属零件")
+    card_type = models.CharField(blank = False, max_length = 20, choices = TRANSFER_CARD_TYPE_CHOICES, verbose_name = u"流转卡类型")
 
+    class Meta:
+        verbose_name = u"流转卡"
+        verbose_name_plural = u"流转卡"
+    def __unicode__(self):
+        return self.materiel_belong.name
+
+class TransferCardMark(models.Model):
+    card = models.OneToOneField(TransferCard, verbose_name = u"所属流转卡")
+
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "transfercard_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期", related_name = "transfercard_write_date")
+
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "transfercard_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期", related_name = "transfercard_review_date")
+
+    proofreader = models.ForeignKey(User, blank = True, null = True, verbose_name = u"校对人", related_name = "transfercard_proofreader")
+    proofread_date = models.DateField(blank = True, null = True, verbose_name = u"校对日期", related_name = "transfercard_proofread_date")
+
+    approver = models.ForeignKey(User, blank = True, null = True, verbose_name = u"批准人", related_name = "transfercard_approver")
+    approve_date = models.DateField(blank = True, null = True, verbose_name = u"批准日期", related_name = "transfercard_approve_date")
+
+    class Meta:
+        verbose_name = u"流转卡签章"
+        verbose_name_plural = u"流转卡签章"
+    def __unicode__(self):
+        return unicode(self.card)
