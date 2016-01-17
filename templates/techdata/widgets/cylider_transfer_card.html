@@ -587,8 +587,14 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:14.6pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:16.0pt;
   mso-line-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
-  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p><span class="btn">签字</span></o:p></span></p>
-  </td>
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold' date-fill="#write_date_span">
+	{% if card.transfercardmark.writer %}
+	{{ card.transfercardmark.writer.userinfo }}
+	{% else %}
+	<span class="btn btn-mark" args="{{MARK_WRITE}}">签字</span>
+	{% endif %}
+	</span>
+	</p></td>
   <td width=100 colspan=3 rowspan=2 style='width:75.2pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext 1.5pt;mso-border-left-alt:solid windowtext .5pt;
@@ -596,7 +602,11 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:14.6pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:16.0pt;
   mso-line-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
-  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold' id="write_date_span">
+	{% if card.transfercardmark.writer %}
+	{{ card.transfercardmark.write_date|date:"Y.m.d"}}
+	{% endif %}
+	</span></p>
   </td>
   <td width=100 colspan=5 rowspan=2 style='width:75.25pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -614,8 +624,14 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:14.6pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:16.0pt;
   mso-line-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
-  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p><span class="btn">签字</span></o:p></span></p>
-  </td>
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold' date-fill="#review_date_span">
+	{% if card.transfercardmark.reviewer %}
+	{{ card.transfercardmark.reviewer.userinfo }}
+	{% else %}
+	<span class="btn btn-mark" args="{{MARK_REVIEW}}">签字</span>
+	{% endif %}
+	</span>
+	</p></td>
   <td width=101 colspan=2 rowspan=2 style='width:75.5pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
   mso-border-top-alt:solid windowtext 1.5pt;mso-border-left-alt:solid windowtext .5pt;
@@ -624,7 +640,11 @@
   solid;padding:0cm 5.4pt 0cm 5.4pt;height:14.6pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:16.0pt;
   mso-line-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
-  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold' id="review_date_span">
+	{% if card.transfercardmark.reviewer %}
+	{{ card.transfercardmark.review_date|date:"Y.m.d"}}
+	{% endif %}
+	</span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:23;page-break-inside:avoid;height:14.6pt'>
@@ -728,7 +748,14 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:14.6pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:16.0pt;
   mso-line-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
-  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p><span class="btn">签字</span></o:p></span></p>
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold' date-fill="#proofread_date_span">
+	{% if card.transfercardmark.proofreader %}
+	{{ card.transfercardmark.proofreader.userinfo }}
+	{% else %}
+		<span class="btn btn-mark" args="{{MARK_PROOFREAD}}">签字</span>
+	{% endif %}
+
+	</span></p>
   </td>
   <td width=100 colspan=3 rowspan=2 style='width:75.2pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.5pt;border-right:solid windowtext 1.0pt;
@@ -737,7 +764,11 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:14.6pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:16.0pt;
   mso-line-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
-  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold' id="proofread_date_span">
+	{% if card.transfercardmark.proofreader %}
+	{{ card.transfercardmark.proofread_date|date:"Y.m.d"}}
+	{% endif %}
+	</span></p>
   </td>
   <td width=100 colspan=5 rowspan=2 style='width:75.25pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.5pt;border-right:solid windowtext 1.0pt;
@@ -755,7 +786,14 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:14.6pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:16.0pt;
   mso-line-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
-  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p><span class="btn">签字</span></o:p></span></p>
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold' date-fill="#approve_date_span">
+	{% if card.transfercardmark.approver %}
+	{{ card.transfercardmark.approver.userinfo }}
+	{% else %}
+			<span class="btn btn-mark" args="{{MARK_APPROVE}}">签字</span>
+	{% endif %}
+
+	</span></p>
   </td>
   <td width=101 colspan=2 rowspan=2 style='width:75.5pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.5pt;border-right:solid windowtext 1.5pt;
@@ -763,7 +801,11 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:14.6pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:16.0pt;
   mso-line-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
-  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold' id="approve_date_span">
+	{% if card.transfercardmark.approver %}
+	{{ card.transfercardmark.approve_date|date:"Y.m.d"}}
+	{% endif %}
+	</span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:25;mso-yfti-lastrow:yes;page-break-inside:avoid;
