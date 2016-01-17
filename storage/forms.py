@@ -432,3 +432,14 @@ class OutsideAccountEntrySearchForm(forms.Form):
         super(OutsideAccountEntrySearchForm,self).__init__(*args,**kwargs)
         for key,val in self.fields.items():
             val.widget.attrs["class"] = 'span2'
+
+class OutsideAccountApplyCardSearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False, widget=forms.TextInput(attrs={'id':'date'}))
+    specification = forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={'id':'specification'}))
+    department = forms.CharField(label=u"领用单位",required = False,widget=forms.TextInput(attrs={'id':'department'}))
+    entry_code = forms.CharField(label=u"领用单编号",required = False, widget=forms.TextInput(attrs={'id':'entry_code'}))
+    work_order = forms.CharField(label=u"工作令",required = False, widget=forms.TextInput(attrs={'id':'work_order'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideAccountApplyCardSearchForm,self).__init__(*args,**kwargs)
+        for key,val in self.fields.items():
+            val.widget.attrs["style"] = 'width:120px;'
