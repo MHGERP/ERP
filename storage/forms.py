@@ -427,6 +427,7 @@ class OutsideAccountEntrySearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False, widget=forms.TextInput(attrs={'id':'date'}))
     specification = forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={'id':'specification'}))
     entry_code = forms.CharField(label=u"入库单编号",required = False, widget=forms.TextInput(attrs={'id':'entry_code'}))
+    work_order = forms.CharField(label=u"工作令",required = False, widget=forms.TextInput(attrs={'id':'work_order'}))
     def __init__(self,*args,**kwargs):
         super(OutsideAccountEntrySearchForm,self).__init__(*args,**kwargs)
         for key,val in self.fields.items():
