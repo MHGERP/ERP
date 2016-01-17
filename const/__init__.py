@@ -386,3 +386,10 @@ TRANSFER_CARD_TYPE_CHOICES = (
     (CYLIDER_TRANSFER_CARD, u"筒体流转卡"),  
     (CAP_TRANSFER_CARD, u"封头流转卡"),
 )
+
+
+MARK_WRITE = "mark_write"
+MARK_REVIEW = "mark_review"
+MARK_PROOFREAD = "mark_proofread"
+MARK_APPROVE = "mark_approve"
+
