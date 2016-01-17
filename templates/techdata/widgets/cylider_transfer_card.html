@@ -484,8 +484,8 @@
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:18.0pt'>
   <p class=MsoNormal style='line-height:16.0pt;mso-line-height-rule:exactly'><span
   lang=EN-US style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:
-  bold'><o:p><div class="word_textarea" style="width: 440pt" contenteditable="true" pid="{{process.id}}">{{process.technical_requirement|default_if_none:""}}</div></o:p></span></p>
-  </td>
+  bold'><o:p><div class="word_textarea" style="width: 440pt" contenteditable={% if card.transfercardmark.reviewer %}"false"{% else %}"true"{% endif %} pid="{{process.id}}">{{process.technical_requirement|default_if_none:""}}
+  </div></o:p></span></p></td>
   <td width=66 colspan=4 valign=top style='width:49.85pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
