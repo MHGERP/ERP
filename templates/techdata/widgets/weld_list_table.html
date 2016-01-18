@@ -9,7 +9,7 @@
 		<span id="span_write">
 		编制人：
 		    {% if not work_order.weldlistpagemark.writer %}
-		    <span class="btn btn-small" id="btn_write_confirm">签字</span>
+		    <span class="btn btn-mini btn-primary" id="btn_write_confirm">签字</span>
 		    {% else %}
 		    {{work_order.weldlistpagemark.writer.userinfo}}
 		    {% endif %} 
@@ -18,7 +18,7 @@
 		<span id="span_review">
 		审核人：
 		    {% if not work_order.weldlistpagemark.reviewer %}
-		    <span class="btn btn-small" id="btn_review_confirm">签字</span>
+		    <span class="btn btn-mini btn-primary" id="btn_review_confirm">签字</span>
 		    {% else %}
 		    {{work_order.weldlistpagemark.reviewer.userinfo}}
 		    {% endif %}

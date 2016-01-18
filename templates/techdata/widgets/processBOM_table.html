@@ -7,39 +7,36 @@
 <div class="widget-content nopadding" style="max-height:800px; overflow-y:auto;">
         
 	<div class="dataTables_length">
-		<span class="btn btn-small btn-primary">工艺修改记录</span>
+		<span class="btn btn-primary">工艺修改记录</span>
 
-		<span id="span_write">
 		工艺员：
+		<span id="span_write">
 		    {% if not work_order.processbompagemark.writer %}
-		    <span class="btn btn-small btn-mark" id="btn_write_confirm" args="{{MARK_WRITE}}">签字</span>
+		    <span class="btn btn-mini btn-primary btn-mark" id="btn_write_confirm" args="{{MARK_WRITE}}">签字</span>
 		    {% else %}
 		    {{work_order.processbompagemark.writer.userinfo}}
 		    {% endif %} 
 		</span>
-
-		<span id="span_quota">
 		定额：
+		<span id="span_quota">
 		    {% if not work_order.processbompagemark.quota_agent %}
-		    <span class="btn btn-small btn-mark" id="btn_quota_confirm" args="{{MARK_QUOTA}}">签字</span>
+		    <span class="btn btn-mini btn-primary btn-mark" id="btn_quota_confirm" args="{{MARK_QUOTA}}">签字</span>
 		    {% else %}
 		    {{work_order.processbompagemark.quota_agent.userinfo}}
 		    {% endif %}
 		</span>
-
-		<span id="span_statistic">
 		统计：
+		<span id="span_statistic">
 		    {% if not work_order.processbompagemark.statistician %}
-		    <span class="btn btn-small btn-mark" id="btn_statistic_confirm" args="{{MARK_STATISTIC}}">签字</span>
+		    <span class="btn btn-mini btn-primary btn-mark" id="btn_statistic_confirm" args="{{MARK_STATISTIC}}">签字</span>
 		    {% else %}
 		    {{work_order.processbompagemark.statistician.userinfo}}
 		    {% endif %} 
 		</span>
-
-		<span id="span_proofread">
 		校对：
+		<span id="span_proofread">
 		    {% if not work_order.processbompagemark.proofreader %}
-		    <span class="btn btn-small btn-mark" id="btn_proofread_confirm" args="{{MARK_PROOFREAD}}">签字</span>
+		    <span class="btn btn-mini btn-primary btn-mark" id="btn_proofread_confirm" args="{{MARK_PROOFREAD}}">签字</span>
 		    {% else %}
 		    {{work_order.processbompagemark.proofreader.userinfo}}
 		    {% endif %}
@@ -58,7 +55,6 @@
 				<th>数量</th>
 				<th>材料</th>
 				<th>净重</th>
-                <th>总重</th>
 				<th>消耗</th>
 				<th>传递路线</th>
 				<th>工序</th>
