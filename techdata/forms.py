@@ -19,6 +19,10 @@ class MaterielForm(forms.ModelForm):
             "material": forms.Select(attrs = {"class": "input-medium"}),
             "count": forms.TextInput(attrs = {"class": "input-medium"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium"}),
+            "net_weight": forms.TextInput(attrs = {"class": "input-medium"}),
+            "total_weight": forms.TextInput(attrs = {"class": "input-medium"}),
+            "specification": forms.TextInput(attrs = {"class": "input-medium"}),
+            
         }
 
 class ProcessReviewForm(forms.ModelForm):
