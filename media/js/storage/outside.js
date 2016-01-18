@@ -32,12 +32,17 @@ function outsideapplycardconfirm_callback(data){
 }
 
 function account_entry_search(){
-    Dajaxice.storage.outsideAccountEntrySearch(accounEntrytSearch_callback,{"form":$("#search_form").serialize()}); 
+    Dajaxice.storage.outsideAccountEntrySearch(accounEntrySearch_callback,{"form":$("#search_form").serialize()}); 
 };
 
-function accounEntrytSearch_callback(data){
+function accounEntrySearch_callback(data){
     $("#entry_main").html(data.html);
 }
 
+function account_applycard_search(){
+    Dajaxice.storage.outsideAccountApplyCardSearch(accounApplyCardSearch_callback,{"form":$("#search_form").serialize(),});
+}
 
-
+function accounApplyCardSearch_callback(data){
+    $('#applycard_main').html(data.html);
+}

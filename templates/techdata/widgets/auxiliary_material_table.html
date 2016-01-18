@@ -40,7 +40,7 @@
             </thead>
             <tbody>
                 {% for item in list%}
-                <tr>
+                <tr class="tr_materiel" iid="{{item.id}}" data-toggle="modal" data-target="#card_modal">
                     <td>{{item.id}}</td>
                     <td>{{item.order}}</td>
                     <td>{{item.name}}</td>
