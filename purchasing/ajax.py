@@ -817,7 +817,9 @@ def newOrderSave(request, id, pendingArray):
             conn = MaterielFormConnection.objects.get(materiel = materiel)
         except:
             conn = MaterielFormConnection(materiel = materiel)
+        print type(materiel.count)
         conn.order_form = order_form
+        conn.count=int(materiel.count)-12
         conn.save()
     order_form.establishment_time = cDate_datetime
     order_form.save()
@@ -996,4 +998,19 @@ def materielExecuteInfo(request,form,uid):
     materielexecute_obj = materielexecuteForm.save()
     materielexecute_obj.save()
     print materielexecute_obj
+
+@dajaxice_register
+def OrderFormFinish(request,index):
+    order_form=OrderForm.objects.get(order_id=index)
+    order_form.order_status=OrderFormStatus.objects.get(status=1)
+    order_form.establishment_time=datetime.now()
+    order_form.save()
+    return simplejson.dumps({})
+
+@dajaxice_register
+def saveTechRequire(request,order_id,content):
+    order_form=OrderForm.objects.get(order_id=order_id)
+    order_form.tech_requirement=content
+    order_form.save()
+    return simplejson.dumps({})
 
