@@ -30,15 +30,27 @@
         <td>{{item.number}}</td>
         <td>{{item.entry.entry_code}}</td>
         <td>{{item.entry.entry_time|date:"Y年m月d日"}}</td>
-        <td><a class="btn" href="/storage/outside/entryconfirm/{{item.entry.id}}">查看入库单</a></td>
+        <td><a class="btn" href="/storage/outside/entryconfirm/{{item.entry.id}}?redict_path=outside/account/entryhome">查看入库单</a></td>
     </tr>
     {% endfor %}
 </tbody>
 </table>
+
+<select id="select">
+    <option>First option</option>
+    <option>Second option</option>
+    <option>Third option</option>
+    <option>Fourth option</option>
+    <option>Fifth option</option>
+    <option>Sixth option</option>
+    <option>Seventh option</option>
+    <option>Eighth option</option>
+</select>
 <script>
 $(function(){
         $('#date').datetimepicker({format:"yyyy-mm-dd",minView:2});
-
+        $('#select').select2();
         });
+
 </script>
 </div>
