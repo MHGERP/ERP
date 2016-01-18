@@ -474,11 +474,11 @@ def outsideAccountEntrySearch(request,form):
             items_set = OutsideStandardItem.objects.filter(query_conditions)
         else:
             items_set = OutsideStandardItem.objects.all()
+        items_set = items_set.filter(entry__entry_status == STORAGESTATUS_END)
     context = {
             'items_set':items_set,
             "search_form":form,
         }
-    print form
     html = render_to_string("storage/widgets/account/entryhomemain.html",context)
     return simplejson.dumps({"html":html})
 
@@ -499,10 +499,10 @@ def outsideAccountApplyCardSearch(request,form):
             items_set = OutsideApplyCardItem.objects.filter(query_conditions)
         else:
             items_set = OutsideApplyCardItem.objects.all()
+        items_set.filter(applycard__entry_status = STORAGESTATUS_END)
     context = {
             'items_set':items_set,
             "search_form":form,
         }
-    print form
     html = render_to_string("storage/widgets/account/applycardhomemain.html",context)
     return simplejson.dumps({"html":html})
