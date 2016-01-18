@@ -3,8 +3,8 @@ from const import PROCESSING_CHOICES, CIRCULATION_CHOICES, NONDESTRUCTIVE_INSPEC
 from django.db import models
 from const.models import Materiel, Material, WorkOrder
 from django.contrib.auth.models import User
-from purchasing.models import MaterielExecute
 
+from purchasing.models import MaterielExecute
 import settings
 
 class Processing(models.Model):
@@ -186,9 +186,9 @@ class Program(models.Model):
     execute = models.ForeignKey(MaterielExecute, verbose_name = u"所属执行表")
     program = models.FileField(null = True, blank = True, upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"程序")
     graph = models.FileField(null = True, blank = True, upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"套料图")
-    upload_date = models.DateField(blank = True, null = True, verbose_name = u"上传时间")
+    upload_date = models.DateTimeField(null = True, blank = True, verbose_name = u"上传时间")
     class Meta:
-        verbose_name = u"编程套料"
-        verbose_name_plural = u"编程套料"
+        verbose_name = u"编程套料图"
+        verbose_name_plural = u"编程套料图"
     def __unicode__(self):
-        return unicode(self.excute)
+        return unicode(self.execute)
