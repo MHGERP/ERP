@@ -559,7 +559,7 @@ class WeldStoreThread(models.Model):
         return '%s' % self.specification
 
 class OutsideStandardEntry(StorageEntryBaseA):
-    purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "out_purchaser")
+    purchaser =  models.ForeignKey(User,blank=TrmZ,null=True,verbose_name=u"采购员",related_name = "out_purchaser")
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "out_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "out_keeper") 
     entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=STORAGESTATUS_INSPECTOR,verbose_name=u"入库单状态")

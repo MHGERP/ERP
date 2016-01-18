@@ -39,7 +39,6 @@ def getChoiceList(obj_set,field):
 
 def getDistinctSet(_Model,_FModel,field):
     obj_list = _Model.objects.values(field).distinct()
-    #obj_list = filter(lambda x: x[field] != None,obj_list)
     obj_set = []
     for obj_tmp in obj_list:
         if obj_tmp[field] != None:
