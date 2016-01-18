@@ -13,8 +13,11 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}style/orderform.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="{{ STATIC_URL  }}bootstrap-datepicker/css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
 <div id="search_div">
-	订购单编号: <input type="text" class="input-midium" value="{{order_form.order_id}}" id="index"/> 
-	订购单状态: <input type="text" class="input-midium" value="{{order_form.order_status}}" id="status" args="{{order_form.order_status.status}}"/> 
+	订购单编号: <input type="text" class="input-midium" readonly="true "value="{{order_form.order_id}}" id="index"/> 
+	订购单状态: <input type="text" class="input-midium" readonly="true" value="{{order_form.order_status}}" id="status" args="{{order_form.order_status.status}}"/> 
+    {% if order_form.order_status.status == 0%}
+    <button class="btn btn-primary" style="float:right" href="#tech_requirement" data-toggle="modal">填写技术要求</button>
+    {% endif%}
 </div>
 
 {% if order_form.order_status.status == 1 %}
@@ -33,7 +36,14 @@
 <div class="widget-content" id="item_table">
     
 </div>
-
+<div class="alert alert-info" id="tech_requirement_content">
+    {%if order_form.tech_requirement%}
+    {{order_form.tech_requirement}}
+    {%endif%}
+</div>
+{% if order_form.order_status.status == 0%}
+   <button class="btn btn-primary" id="order_form_finish">完成</button>
+{% endif%}
 {% if order_form.order_status.status == 1 %}
 <span class="btn" id="add_to_bid" data-toggle="modal" data-target="#bid_list">加入标单</span>
 {% endif %}
@@ -56,7 +66,7 @@
   </div>
 </div>
 
-<div id="bid_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="bid_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.8">
   <div class="modal-header">
     <h2 id="myModalLabel">标单</h2>
   </div>
@@ -105,7 +115,19 @@
       </div>
 
 </div>
+<div class="modal fade" id="tech_requirement" modal-size-width="0.6">
+    <div class="modal-header">
+        <h2>订购单技术要求和说明填写</h2>
+    </div>
+    <div class="modal-body">
+         <textarea rows=10 style="width:80%;"id="tech_requirement_textarea" placeholder="在此输入说明和技术要求"></textarea>
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel_change">关闭</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="save_tech_require">保存</button>
+      </div>
 
+</div>
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/orderform.js"></script>
 <script type='text/javascript' src="{{ STATIC_URL }}jquery/jquery.form.js"></script>
 <script type='text/javascript' src="{{ STATIC_URL }}bootstrap-multiselect/bootstrap-multiselect.js"></script>

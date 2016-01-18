@@ -53,27 +53,26 @@ function change_steelEntryItem(itemid){
     $("input#id_remark").val(a.eq(8).text());
 }
 
-function save_steelEntryItem(){
-     Dajaxice.storage.steelEntryItemSave(save_steelEntryItem_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
+function save_steel_entry_item(){
+     Dajaxice.storage.steelEntryItemSave(save_steel_entry_item_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
 }
 
-function save_steelEntryItem_callback(data){
+function save_steel_entry_item_callback(data){
     if(data.flag){
-        $("div#items_table").html(data.html);
         alert(data.message);
     }
     else{
         alert(data.message);
     }
+    location.reload();
 }
 
-function entryconfirm(eid){
-	alert("aaa");
+function steel_entry_confirm(eid){
     var entry_code = $("#input_entry_code").val();
-    Dajaxice.storage.steelEntryConfirm(entry_confirm_callback,{"eid":eid,"entry_code":entry_code}); 
+    Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":eid,"entry_code":entry_code}); 
 }
 
-function entry_confirm_callback(data){
+function steel_entry_confirm_callback(data){
     if(data.flag){
         alert("入库单确认成功");
         window.location.reload();

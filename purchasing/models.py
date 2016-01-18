@@ -16,9 +16,13 @@ def make_uuid():
 
 class OrderForm(models.Model):
     order_id = models.CharField(unique = True, max_length = 20, blank = False, verbose_name = u"订购单编号")
-    create_time = models.DateTimeField(null = True, verbose_name = u"创建日期")
+    create_time = models.DateTimeField(null = True,verbose_name = u"创建日期")
     establishment_time = models.DateTimeField(null = True, verbose_name = u"编制日期")
     order_status = models.ForeignKey(OrderFormStatus, null = False, verbose_name = u"订购单状态")
+    establishment_user=models.ForeignKey(User,verbose_name=u"编制人",related_name="establishment_user",null=True)
+    chief=models.ForeignKey(User,verbose_name=u"外采科长",related_name="chief_user",null=True)
+    approve_user=models.ForeignKey(User,verbose_name=u"审批人",related_name="approve_user",null=True)
+    tech_requirement=models.CharField(max_length=5000,blank=True,null=True)
     class Meta:
         verbose_name = u"订购单"
         verbose_name_plural = u"订购单"
@@ -33,8 +37,8 @@ class BidForm(models.Model):
     approved_time=models.DateTimeField(blank=True,null=True,verbose_name=u"批准日期")
     bid_status=models.ForeignKey(BidFormStatus,null=False,verbose_name=u"标单状态")
     contract_id = models.CharField(max_length=50, blank=True, default=make_uuid, verbose_name=u"合同编号")
-    contract_amount = models.IntegerField(verbose_name=u"合同金额")
-    billing_amount = models.IntegerField(verbose_name=u"开票金额")
+    contract_amount = models.IntegerField(default=0,verbose_name=u"合同金额")
+    billing_amount = models.IntegerField(default=0,verbose_name=u"开票金额")
     class Meta:
         verbose_name = u"标单"
         verbose_name_plural = u"标单"
@@ -233,6 +237,7 @@ class MaterielExecute(models.Model):
     date = models.DateField(blank = False, null = False, verbose_name = u"制表日期")
     materiel_choice = models.CharField(blank=False, max_length = 20, choices=MATERIEL_CHOICE, verbose_name=u"材料选择")
     is_save = models.BooleanField(blank=False, verbose_name=u"是否已保存")
+    tech_requirement=models.CharField(max_length=5000,blank=True,null=True)
     tech_feedback = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"工艺反馈")
     class Meta:
         verbose_name = u"材料执行表"
@@ -289,3 +294,4 @@ class MaterielExecuteDetail(models.Model):
         verbose_name_plural = u"材料执行表详细"
     def __unicode__(self):
         return '%s' % (self.materiel.index)
+
