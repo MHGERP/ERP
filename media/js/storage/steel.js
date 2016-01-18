@@ -68,6 +68,7 @@ function save_steelEntryItem_callback(data){
 }
 
 function entryconfirm(eid){
+	alert("aaa");
     var entry_code = $("#input_entry_code").val();
     Dajaxice.storage.steelEntryConfirm(entry_confirm_callback,{"eid":eid,"entry_code":entry_code}); 
 }
