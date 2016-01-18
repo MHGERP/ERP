@@ -333,7 +333,7 @@ def principalMaterial(request, order):
 @dajaxice_register
 def auxiliaryMaterial(request, order):
     """
-    BinWu
+    BinWu 
     """
     list = Materiel.objects.filter(order = order);
     context = {
