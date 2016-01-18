@@ -269,7 +269,6 @@ def steelEntryConfirm(request,eid,entry_code):
             entry.entry_status = STORAGESTATUS_END
             entry.entry_time = datetime.date.today()
             entry.save()
-            weldStoreItemsCreate(entry)
             flag = True
         else:
             flag = False

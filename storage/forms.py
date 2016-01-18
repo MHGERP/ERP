@@ -115,7 +115,7 @@ class EntryItemsForm(ModelForm):
 
 class SteelEntryItemsForm(ModelForm):
     class Meta:
-        model = SteelMaterialPurchasingEntry
+        model = SteelMaterial
         fields = ("remark",)
         widget = {
             "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
