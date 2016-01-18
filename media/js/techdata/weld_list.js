@@ -71,7 +71,7 @@ $(document).on("click", "#btn_write_confirm", function() {
 function writerConfirmCallBack(data) {
     if(data.ret) {
         $("#btn_write_confirm").removeClass("btn-primary").addClass("btn-warning").html("编制完成");
-        $("#h_writer").html("编制人：" + data.user);
+        $("#span_write").html("编制人：" + data.user);
     }
 }
 
@@ -82,7 +82,7 @@ $(document).on("click", "#btn_review_confirm", function() {
 function reviewerConfirmCallBack(data) {
     if(data.ret) {
         $("#btn_review_confirm").removeClass("btn-primary").addClass("btn-warning").html("审核完成");
-        $("#h_reviewer").html("审核人：" + data.user);
+        $("#span_review").html("审核人：" + data.user);
     }
     else {
         alert("未完成编制，无法审核！");

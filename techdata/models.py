@@ -128,7 +128,7 @@ class WeldListPageMark(models.Model):
 
 class TransferCard(models.Model):
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属零件")
-    card_type = models.CharField(blank = False, max_length = 20, choices = TRANSFER_CARD_TYPE_CHOICES, verbose_name = u"流转卡类型")
+    card_type = models.CharField(blank = False, max_length = 100, choices = TRANSFER_CARD_TYPE_CHOICES, verbose_name = u"流转卡类型")
 
     class Meta:
         verbose_name = u"流转卡"
@@ -156,3 +156,25 @@ class TransferCardMark(models.Model):
         verbose_name_plural = u"流转卡签章"
     def __unicode__(self):
         return unicode(self.card)
+
+
+class ProcessBOMPageMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"工艺员", related_name = "processBOM_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+
+    quota_agent = models.ForeignKey(User, blank = True, null = True, verbose_name = u"定额员", related_name = "processBOM_quota_agent")
+    quota_date = models.DateField(blank = True, null = True, verbose_name = u"定额日期")
+
+    proofreader = models.ForeignKey(User, blank = True, null = True, verbose_name = u"校对人", related_name = "processBOM_proofreader")
+    proofread_date = models.DateField(blank = True, null = True, verbose_name = u"校对日期")
+
+    statistician = models.ForeignKey(User, blank = True, null = True, verbose_name = u"统计员", related_name = "processBOM_statistician")
+    statistic_date = models.DateField(blank = True, null = True, verbose_name = u"统计日期")
+
+    class Meta:
+        verbose_name = u"工艺库签章"
+        verbose_name_plural = u"工艺库签章"
+    def __unicode__(self):
+        return unicode(self.order)

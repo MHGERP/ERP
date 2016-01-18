@@ -16,6 +16,7 @@ RegisterClass = (
     WeldListPageMark,
     TransferCard,
     TransferCardMark,
+    ProcessBOMPageMark,
 )
 
 for item in RegisterClass:
