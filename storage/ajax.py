@@ -457,3 +457,19 @@ def getOutsideApplyCardContext(applycard,inform,url,default_status):
         "items_set":items_set,
     }
     return context
+
+@dajaxice_register
+def getOutsideThreadItems(request):
+    items_set = OutsideStorageList.objects.all()
+    warning_set = []
+    for tmp in items_set:
+        print tmp
+        try:
+            thread = WeldStoreThread.objects.get(specification = tmp.specification)
+            if tmp.number < thread.count:
+                tmp.thread = thread.count
+                warning_set.append(tmp)
+        except Exception,e:
+            print e
+    html = render_to_string("storage/widgets/outsidethread_table.html",{"items_set":warning_set})
+    return simplejson.dumps({"html":html})

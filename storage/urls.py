@@ -199,6 +199,10 @@ urlpatterns = patterns('',
         r'^outside/outsideaccounthome$',
         storage_views.outsideAccountHomeViews,    
     ),
+    url(
+        r'^outside/outsidestorageaccount$',
+        storage_views.outsideStorageAccountViews,
+    ),
 )
 
 

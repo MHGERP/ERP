@@ -30,3 +30,11 @@ function outsideapplycardconfirm_callback(data){
     $("div#applycardbody").html(data.html);
     alert(data.message);
 }
+
+function get_outsidethread(){
+    Dajaxice.storage.getOutsideThreadItems(get_outsidethrea_callback);
+}
+
+function get_outsidethrea_callback(data){
+    $("#item_table").html(data.html);
+}
