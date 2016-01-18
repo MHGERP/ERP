@@ -20,6 +20,7 @@ from techdata.models import *
 from const.models import *
 from const.utils import getMaterialQuerySet
 
+from purchasing.models import MaterielExecute, MaterielExecuteDetail
 import datetime
 
 @dajaxice_register
@@ -47,6 +48,10 @@ def getProcessBOM(request, id_work_order):
     context = {
         "work_order": work_order,
         "BOM": BOM,
+        "MARK_WRITE": MARK_WRITE,
+        "MARK_PROOFREAD": MARK_PROOFREAD,
+        "MARK_STATISTIC": MARK_STATISTIC,
+        "MARK_QUOTA": MARK_QUOTA,
     }
     html = render_to_string("techdata/widgets/processBOM_table.html", context)
     return html
@@ -74,6 +79,22 @@ def getSingleProcessBOM(request, iid):
     return html
 
 @dajaxice_register  
+def getAuxiliaryMaterielInfo(request, iid):
+    """
+    MH Chen
+    """
+    materiel = Materiel.objects.get(id = iid)
+    form = MaterielForm(instance = materiel)
+    context = {
+        "form": form,
+    }
+    auxiliary_materiel_info_html = render_to_string("techdata/widgets/auxiliary_material_base_info_table.html", context)
+    detail_table_html = render_to_string("techdata/widgets/auxiliary_material_type_in.html", context)
+    print auxiliary_materiel_info_html
+    return simplejson.dumps({'auxiliary_materiel_info_html' : auxiliary_materiel_info_html, 'detail_table_html' : detail_table_html})
+
+
+@dajaxice_register  
 def getMaterielInfo(request, iid):
     """
     JunHU
@@ -84,7 +105,7 @@ def getMaterielInfo(request, iid):
         "form": form,
     }
     html = render_to_string("techdata/widgets/materiel_base_info.html", context)
-    return html 
+    return html  
 
 @dajaxice_register  
 def getTechdataList(request, id_work_order):
@@ -275,11 +296,11 @@ def getWeldSeamCard(self, full = False, iid = None):
     return html
 
 @dajaxice_register
-def boxOutBought(request):
+def boxOutBought(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -287,11 +308,11 @@ def boxOutBought(request):
     return html
 
 @dajaxice_register
-def firstFeeding(request):
+def firstFeeding(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -299,11 +320,11 @@ def firstFeeding(request):
     return html
 
 @dajaxice_register
-def principalMaterial(request):
+def principalMaterial(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -311,11 +332,11 @@ def principalMaterial(request):
     return html
 
 @dajaxice_register
-def auxiliaryMaterial(request):
+def auxiliaryMaterial(request, order):
     """
-    BinWu
+    BinWu 
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -323,11 +344,11 @@ def auxiliaryMaterial(request):
     return html
 
 @dajaxice_register
-def weldList(request):
+def weldList(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -335,11 +356,11 @@ def weldList(request):
     return html
 
 @dajaxice_register
-def techBoxWeld(request):
+def techBoxWeld(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -347,11 +368,11 @@ def techBoxWeld(request):
     return html
 
 @dajaxice_register
-def weldQuota(request):
+def weldQuota(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -492,7 +513,52 @@ def weldListReviewerConfirm(request, id_work_order):
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
 @dajaxice_register
-def getTransferCard(request, iid):
+def processBOMMark(request, id_work_order, step):
+    """
+    JunHU
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if step == MARK_WRITE:
+        order.processbompagemark.writer = request.user
+        order.processbompagemark.write_date = datetime.datetime.today()
+        order.processbompagemark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(order.processbompagemark.writer.userinfo),
+        }
+    elif step == MARK_STATISTIC:
+        order.processbompagemark.statistician = request.user
+        order.processbompagemark.statistic_date = datetime.datetime.today()
+        order.processbompagemark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(order.processbompagemark.statistician.userinfo),
+        }
+    elif step == MARK_QUOTA:
+        order.processbompagemark.quota_agent = request.user
+        order.processbompagemark.quota_date = datetime.datetime.today()
+        order.processbompagemark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(order.processbompagemark.quota_agent.userinfo),
+        }
+    elif step == MARK_PROOFREAD:
+        order.processbompagemark.proofreader = request.user
+        order.processbompagemark.proofread_date = datetime.datetime.today()
+        order.processbompagemark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(order.processbompagemark.proofreader.userinfo),
+        }
+    else:
+        context = {
+            "ret": False,
+            "warning": u"后台保存错误"
+        }
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def getTransferCard(request, iid, card_type = None):
     """
     JunHU
     """
@@ -522,18 +588,19 @@ def getTransferCard(request, iid):
     cards = TransferCard.objects.filter(materiel_belong = item)
     if cards:
         context["card"] = cards[0]
-
-    html = render_to_string("techdata/widgets/cylider_transfer_card.html", context)
+        html = render_to_string(CARD_TYPE_TO_HTML[cards[0].card_type], context)
+    else:
+        html = render_to_string(CARD_TYPE_TO_HTML[card_type], context)
     return html
 
 @dajaxice_register
-def transferCardMark(request, iid, step):
+def transferCardMark(request, iid, step, card_type = None):
     """
     JunHU
     """
     def date2str(date):
         return str(date.year) + "." + "%02d" % date.month + "." + str(date.day)
-
+    
     item = Materiel.objects.get(id = iid)
     context = {}
     if step == MARK_WRITE:
@@ -544,7 +611,7 @@ def transferCardMark(request, iid, step):
             }
             return simplejson.dumps(context)
 
-        card = TransferCard(materiel_belong = item)
+        card = TransferCard(materiel_belong = item, card_type = card_type)
         card.save()
         mark = TransferCardMark(card = card)
         mark.save()
@@ -618,6 +685,7 @@ def transferCardMark(request, iid, step):
         }
     return simplejson.dumps(context)
 
+
 @dajaxice_register
 def saveProcessRequirement(request, pid, content):
     """
@@ -627,6 +695,11 @@ def saveProcessRequirement(request, pid, content):
     process.technical_requirement = content
     process.save()
 
-
-
-
+@dajaxice_register
+def getExcuteList(request):
+    execute_list = MaterielExecute.objects.filter(is_save = True)
+    context = {
+        "execute_list": execute_list,
+    }
+    html = render_to_string("techdata/widgets/programme_edit_table.html", context)
+    return html

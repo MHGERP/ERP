@@ -215,18 +215,22 @@ def entryItemSave(request,form,mid):
         "html":html,  
     }
     return simplejson.dumps(data)
+
+@dajaxice_register
 def steelEntryItemSave(request,form,mid):
+    print mid
     item = SteelMaterialPurchasingEntry.objects.get(id = mid)
+    print item
     entry_form = SteelEntryItemsForm(deserialize_form(form),instance = item) 
     pur_entry = item.entry
-    if entry_form.is_valid():
-        entry_form.save()
-        flag = True
-        message = u"修改成功"
-    else:
-        print entry_form.errors
-        flag = False
-        message = u"修改失败"
+    flag = False
+    if pur_entry.auth_status(STORAGESTATUS_KEEPER):
+        if entry_form.is_valid():
+            entry_form.save()
+            flag = True
+            message = u"修改成功"
+        else:
+            message = u"修改失败"
     entry_set = SteelMaterialPurchasingEntry.objects.filter(entry = pur_entry) 
     html = render_to_string("storage/steelmaterial/steelentryconfirm.html",{"entry_set":entry_set})
     data = {
@@ -247,6 +251,24 @@ def entryConfirm(request,eid,entry_code):
             entry.entry_time = datetime.date.today()
             entry.save()
             weldStoreItemsCreate(entry)
+            flag = True
+        else:
+            flag = False
+    except Exception,e:
+        flag = False
+        print e
+    return simplejson.dumps({'flag':flag})
+
+@dajaxice_register
+def steelEntryConfirm(request,eid,entry_code):
+    try:
+        entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
+        if entry.entry_status == STORAGESTATUS_KEEPER:
+            entry.entry_code = entry_code
+            entry.keeper = request.user
+            entry.entry_status = STORAGESTATUS_END
+            entry.entry_time = datetime.date.today()
+            entry.save()
             flag = True
         else:
             flag = False
@@ -459,6 +481,21 @@ def getOutsideApplyCardContext(applycard,inform,url,default_status):
     return context
 
 @dajaxice_register
+def getOutsideThreadItems(request):
+    items_set = OutsideStorageList.objects.all()
+    warning_set = []
+    for tmp in items_set:
+        print tmp
+        try:
+            thread = WeldStoreThread.objects.get(specification = tmp.specification)
+            if tmp.number < thread.count:
+                tmp.thread = thread.count
+                warning_set.append(tmp)
+        except Exception,e:
+            print e
+    html = render_to_string("storage/widgets/outsidethread_table.html",{"items_set":warning_set})
+    return simplejson.dumps({"html":html})
+
 def outsideAccountEntrySearch(request,form):
     form = OutsideAccountEntrySearchForm(deserialize_form(form))
     items_set = {}
