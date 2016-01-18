@@ -5,6 +5,7 @@ from users.models import Title,Authority
 from django.contrib.auth.models import User
 from const.models import Material
 from django.db.models import Q
+from techdata.models import Processing
 
 def getUserByAuthority(authority):
     """
@@ -50,3 +51,21 @@ def getMaterialQuerySet(*categories):
     """
     qset = reduce(lambda x, y: x | y, [Q(categories = cate) for cate in categories]) 
     return Material.objects.filter(qset)
+
+def getProcessList(item):
+    """
+    JunHU
+    summary: get all process of one materiel
+    params: materiel item
+    return: process list
+    """
+    try:
+        process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
+        process_list = []
+        while process:
+            process_list.append(process)
+            process = process.next_processing
+    except:
+        process_list = []
+    return process_list
+

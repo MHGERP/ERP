@@ -388,8 +388,15 @@ TRANSFER_CARD_TYPE_CHOICES = (
 )
 
 
+CARD_TYPE_TO_HTML = {
+    CYLIDER_TRANSFER_CARD: "techdata/widgets/cylider_transfer_card.html",
+    CAP_TRANSFER_CARD: "techdata/widgets/cap_transfer_card.html",
+}
+
 MARK_WRITE = "mark_write"
 MARK_REVIEW = "mark_review"
 MARK_PROOFREAD = "mark_proofread"
 MARK_APPROVE = "mark_approve"
+MARK_QUOTA = "mark_quota"
+MARK_STATISTIC = "mark_statistic"
 
