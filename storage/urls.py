@@ -200,6 +200,10 @@ urlpatterns = patterns('',
         storage_views.outsideAccountHomeViews,    
     ),
     url(
+        r'^outside/outsidestorageaccount$',
+        storage_views.outsideStorageAccountViews,
+       ),
+    url(
         r'^outside/account/entryhome$',
         storage_views.outsideEntryAccountHomeViews,name="outside_account_entryhome"
     ),

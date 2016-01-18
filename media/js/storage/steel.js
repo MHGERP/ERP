@@ -45,3 +45,39 @@ function searchRefundCard_CallBack(data){
 		$(".refund-cards-table").html(data["result_table"]);
 	}
 }
+
+
+function change_steelEntryItem(itemid){
+    mid = itemid;
+    var a = $("tr#"+mid).find("td");
+    $("input#id_remark").val(a.eq(8).text());
+}
+
+function save_steelEntryItem(){
+     Dajaxice.storage.steelEntryItemSave(save_steelEntryItem_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
+}
+
+function save_steelEntryItem_callback(data){
+    if(data.flag){
+        $("div#items_table").html(data.html);
+        alert(data.message);
+    }
+    else{
+        alert(data.message);
+    }
+}
+
+function entryconfirm(eid){
+    var entry_code = $("#input_entry_code").val();
+    Dajaxice.storage.steelEntryConfirm(entry_confirm_callback,{"eid":eid,"entry_code":entry_code}); 
+}
+
+function entry_confirm_callback(data){
+    if(data.flag){
+        alert("入库单确认成功");
+        window.location.reload();
+    }
+    else{
+        alert("入库单确认失败");
+    }
+}

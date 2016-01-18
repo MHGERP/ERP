@@ -116,16 +116,16 @@ def weldEntryHomeViews(request):
 def steelEntryHomeViews(request):
     if request.method == "POST":
         search_form = SteelEntrySearchForm(request.POST)
-        steelentry_set = []
         if search_form.is_valid():
             steelentry_set = get_weld_filter(SteelMaterialPurchasingEntry,search_form.cleaned_data)
         else:
             print search_form.errors
     else:
-        steelentry_set = SteelMaterialPurchasingEntry.objects.all()
+        steelentry_set = SteelMaterialPurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         search_form = SteelEntrySearchForm()
+    steelentry_set = steelentry_set.order_by("-entry_time")
     context = {
-        "entry_set":steelentry_set,
+        "steel_entry_set":steelentry_set,
         "ENTRYSTATUS_END":STORAGESTATUS_END,
         "search_form":search_form,
     }
@@ -147,7 +147,7 @@ def weldEntryConfirmViews(request,eid):
 
 def steelEntryConfirmViews(request,eid):
     entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-    items = SteelMaterial.objects.filter(entry_form = entry)
+    items = entry.steelmaterial_set.all()
     entryitem_form = SteelEntryItemsForm()
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
     context = {
@@ -805,6 +805,20 @@ def outsideAccountHomeViews(request):
     context = {}
     return render(request,"storage/outside/accounthome.html",context)
 
+def outsideStorageAccountViews(request):
+    if request.method == "POST":
+        search_form = OutsideStorageSearchForm(request.POST)
+        if search_form.is_valid():
+            items_set = get_weld_filter(OutsideStorageList,search_form.cleaned_data)
+    else:
+        items_set = OutsideStorageList.objects.order_by('specification')
+        search_form = OutsideStorageSearchForm()
+    items_set = items_set.order_by('specification')
+    context = {
+        "items_set":items_set,
+        "search_form":search_form,
+    }
+    return render(request,"storage/outside/outsidestorageaccount.html",context)
 def outsideEntryAccountHomeViews(request):
     search_form = OutsideAccountEntrySearchForm()
     entry_set = OutsideStandardEntry.objects.all()

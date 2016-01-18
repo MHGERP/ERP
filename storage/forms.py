@@ -423,6 +423,9 @@ class OutsideApplyCardForm(ModelForm):
     def __init__(self,*args,**kwargs):
         super(OutsideApplyCardForm,self).__init__(*args,**kwargs)
 
+class OutsideStorageSearchForm(forms.Form):
+    texture = forms.CharField(label=u'材质',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'texture'}))
+    specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'specification'}))
 class OutsideAccountEntrySearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False, widget=forms.TextInput(attrs={'id':'date'}))
     specification = forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={'id':'specification'}))
