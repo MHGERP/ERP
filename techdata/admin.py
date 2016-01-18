@@ -17,6 +17,7 @@ RegisterClass = (
     TransferCard,
     TransferCardMark,
     ProcessBOMPageMark,
+    Program,
 )
 
 for item in RegisterClass:

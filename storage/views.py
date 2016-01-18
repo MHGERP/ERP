@@ -136,12 +136,14 @@ def weldEntryConfirmViews(request,eid):
     items = WeldMaterialEntryItems.objects.filter(entry = entry)
     entryitem_form = EntryItemsForm()
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
+    redict_path = getUrlByViewMode(request,"/storage/weldentryhome")
 
     context = {
             "entry":entry,
             "entry_set":items,
             "item_form":entryitem_form,
             "is_show":is_show,
+            "redict_path":redict_path,
             }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
@@ -186,6 +188,8 @@ def Weld_Apply_Card_Detail(request):
     context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
     if checkAuthority(STORAGE_KEEPER,request.user):#如果是库管员
         context['apply_card_form']=Commit_ApplyCardForm(instance=apply_card)
+        context['redict_path'] = getUrlByViewMode(request,'/storage/weldapply')
+        print apply_card.status,APPLYCARD_COMMIT
     else:#如果是申请者
         context['apply_card_form']=Apply_ApplyCardForm(instance=apply_card)
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
@@ -740,11 +744,11 @@ def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list
     return context
 
 def outsideEntryConfirmViews(request,eid):
-    entryurl = "outside/entryhome"
-    context = getEntryConfirmContext(eid,OutsideStandardEntry,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,entryurl)
+    entry_url = getUrlByViewMode(request,"outside/entryhome")
+    context = getEntryConfirmContext(eid,OutsideStandardEntry,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,entry_url)
     return render(request,"storage/outside/entryconfirm.html",context)
 
-def getEntryConfirmContext(eid,_Model,_Inform,_Reform,entryurl):
+def getEntryConfirmContext(eid,_Model,_Inform,_Reform,entry_url):
     entry_obj = _Model.objects.get(id = eid)
     inform = _Inform(instance = entry_obj)
     reform = _Reform(instance = entry_obj)
@@ -754,7 +758,7 @@ def getEntryConfirmContext(eid,_Model,_Inform,_Reform,entryurl):
         "inform":inform,
         "reform":reform,
         "entry_obj":entry_obj,
-        "entryhomeurl":"outside/entryhome",
+        "entryhomeurl":entry_url,
         "is_show":is_show,
         "entry_set":entry_set,
     }
@@ -782,8 +786,9 @@ def outsideApplyCardHomeViews(request):
     return render(request,"storage/outside/applycardhome.html",context)
 
 def outsideApplyCardConfirmViews(request,cid):
-    url = "outside/applycardhome"
+    url = getUrlByViewMode(request,"outside/applycardhome")
     default_status = STORAGESTATUS_KEEPER
+    print url
     context = getOutsideApplyCardConfirmContext(cid,OutsideApplyCardForm,url,default_status) 
     return render(request,"storage/outside/applycardconfirm.html",context)
 
@@ -795,7 +800,7 @@ def getOutsideApplyCardConfirmContext(cid,_Inform,url,default_status):
     context = {
         "inform":inform,
         "applycard":applycard,
-        "entryhomeurl":url,
+        "applycardurl":url,
         "is_show":is_show,
         "items_set":items_set,
     }
@@ -821,20 +826,21 @@ def outsideStorageAccountViews(request):
     return render(request,"storage/outside/outsidestorageaccount.html",context)
 def outsideEntryAccountHomeViews(request):
     search_form = OutsideAccountEntrySearchForm()
-    entry_set = OutsideStandardEntry.objects.all()
-    items_set = OutsideStandardItem.objects.filter(entry__in = entry_set,is_past = True)
+    entry_set = OutsideStandardEntry.objects.filter(entry_status = STORAGESTATUS_END)
+    items_set = OutsideStandardItem.objects.filter(entry__in = entry_set)
     from operator import attrgetter
     sorted_items_set = sorted(items_set,key=attrgetter('materiel.order.order_index','specification'))
     context = {
         "search_form":search_form,
         "items_set":sorted_items_set,
+        "STORAGESTATUS_END":STORAGESTATUS_END,
     }
     
     return render(request,"storage/outside/account/entryhome.html",context)
 
 def outsideApplyCardAccountHomeViews(request):
     search_form = OutsideAccountApplyCardSearchForm()
-    card_set = OutsideApplyCard.objects.all()
+    card_set = OutsideApplyCard.objects.filter(entry_status = STORAGESTATUS_END)
     items_set = OutsideApplyCardItem.objects.filter(applycard__in = card_set)
     from operator import attrgetter
     sorted_items_set = sorted(items_set,key=attrgetter('applycard.workorder.order_index','specification'))
