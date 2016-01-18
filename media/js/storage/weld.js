@@ -14,29 +14,15 @@ function save_item(){
     Dajaxice.storage.entryItemSave(save_item_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
 }
 
-function save_steelEntryItem(){
-     Dajaxice.storage.steelEntryItemSave(save_steelEntryItem_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
-}
-
 function save_item_callback(data){
     if(data.flag){
-        $("div#items_table").html(data.html);
+        $("#items_table").html(data.html);
         alert(data.message);
     }
     else{
         alert(data.message);
     }
     
-}
-
-function save_steelEntryItem_callback(data){
-    if(data.flag){
-        $("div#items_table").html(data.html);
-        alert(data.message);
-    }
-    else{
-        alert(data.message);
-    }
 }
 
 function entryconfirm(eid){

@@ -1,6 +1,7 @@
 {% extends "storage/base/steelbase.html" %}
 
 {% block sub_sec %}
+<a href="/storage/steelentryhome">钢材入库管理</a>
 <a href="#" class="current">钢材入库单</a>
 {% endblock %}
 
@@ -57,7 +58,7 @@
             <td>{{item.lot_number}}</td>
             <td>{{item.material}}</td>
             <td>{{item.material_number}}</input></td>
-            <td>{{entry.remark}}</td>
+            <td>{{item.remark}}</td>
             <td>
                 <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_steelEntryItem({{item.id}})">修改</a>
             </td>
