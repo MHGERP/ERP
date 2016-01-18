@@ -3,7 +3,7 @@
 from django import  forms
 from const.models import Materiel
 from techdata.models import *
-from const import PROCESSING_CHOICES
+from const import PROCESSING_CHOICES, TRANSFER_CARD_TYPE_CHOICES
 
 class MaterielForm(forms.ModelForm):
     """
@@ -19,6 +19,10 @@ class MaterielForm(forms.ModelForm):
             "material": forms.Select(attrs = {"class": "input-medium"}),
             "count": forms.TextInput(attrs = {"class": "input-medium"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium"}),
+            "net_weight": forms.TextInput(attrs = {"class": "input-medium"}),
+            "total_weight": forms.TextInput(attrs = {"class": "input-medium"}),
+            "specification": forms.TextInput(attrs = {"class": "input-medium"}),
+            
         }
 
 class ProcessReviewForm(forms.ModelForm):
@@ -114,4 +118,10 @@ class CirculationRouteForm(forms.ModelForm):
                 #print "circulation error"
                 raise forms.ValidationError("流转路线必须连续")
         return cleaned_data
+
+class TransferCardForm(forms.Form):
+    """
+    JunHU
+    """
+    card_type = forms.ChoiceField(choices = TRANSFER_CARD_TYPE_CHOICES, widget = forms.Select(attrs = {'class': 'input'}))
 

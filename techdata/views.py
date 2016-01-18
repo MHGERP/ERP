@@ -10,8 +10,9 @@ import json
 from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
-from techdata.forms import MaterielForm, CirculationRouteForm, ProcessingForm
-
+from techdata.forms import MaterielForm, CirculationRouteForm, ProcessingForm, TransferCardForm
+from const.models import Materiel
+from techdata.models import TransferCard
 from const.forms import WorkOrderForm
 
 def techPreparationPlanViews(request):
@@ -106,6 +107,20 @@ def weldListViews(request):
     }
     return render(request, "techdata/weld_list.html", context)
 
+def transferCardEditViews(request):
+    """
+    JunHU
+    """
+    iid = request.GET.get("iid")
+    context = {
+        "iid": iid,
+    }
+    cards = TransferCard.objects.filter(materiel_belong__id = iid)   
+    if cards.count() == 0:
+        context["form"] = TransferCardForm()
+
+    return render(request, "techdata/transfer_card_edit.html", context)
+
 def weldQuotaViews(request):
     context = {}
     return render(request, "techdata/weld_quota.html", context)
@@ -118,5 +133,9 @@ def programmeEditViews(request):
     return render(request, "techdata/programme_edit.html", context)
 
 def techDetailTableViews(request):
-    context = {}
+    """BinWu"""
+    work_order_form = WorkOrderForm()
+    context = {
+        "form": WorkOrderForm,
+    }
     return render(request, "techdata/detail_table.html", context)

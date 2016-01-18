@@ -791,7 +791,7 @@ def getOutsideApplyCardConfirmContext(cid,_Inform,url,default_status):
     applycard = OutsideApplyCard.objects.get(id = cid)
     inform = _Inform(instance = applycard)
     is_show = applycard.entry_status == default_status
-    items_set = OutsideApplyCardItem.objects.filter(applycard = applycard,is_past = False)
+    items_set = OutsideApplyCardItem.objects.filter(applycard = applycard)
     context = {
         "inform":inform,
         "applycard":applycard,
@@ -805,11 +805,42 @@ def outsideAccountHomeViews(request):
     context = {}
     return render(request,"storage/outside/accounthome.html",context)
 
-def outsideEntryAccountHomeViews(request):
+def outsideStorageAccountViews(request):
+    if request.method == "POST":
+        search_form = OutsideStorageSearchForm(request.POST)
+        if search_form.is_valid():
+            items_set = get_weld_filter(OutsideStorageList,search_form.cleaned_data)
+    else:
+        items_set = OutsideStorageList.objects.order_by('specification')
+        search_form = OutsideStorageSearchForm()
+    items_set = items_set.order_by('specification')
     context = {
-        
+        "items_set":items_set,
+        "search_form":search_form,
     }
+    return render(request,"storage/outside/outsidestorageaccount.html",context)
+def outsideEntryAccountHomeViews(request):
+    search_form = OutsideAccountEntrySearchForm()
+    entry_set = OutsideStandardEntry.objects.all()
+    items_set = OutsideStandardItem.objects.filter(entry__in = entry_set,is_past = True)
+    from operator import attrgetter
+    sorted_items_set = sorted(items_set,key=attrgetter('materiel.order.order_index','specification'))
+    context = {
+        "search_form":search_form,
+        "items_set":sorted_items_set,
+    }
+    
     return render(request,"storage/outside/account/entryhome.html",context)
 
 def outsideApplyCardAccountHomeViews(request):
-    return render(request,"storage/outside/account/applycardhome.html")
+    search_form = OutsideAccountApplyCardSearchForm()
+    card_set = OutsideApplyCard.objects.all()
+    items_set = OutsideApplyCardItem.objects.filter(applycard__in = card_set)
+    from operator import attrgetter
+    sorted_items_set = sorted(items_set,key=attrgetter('applycard.workorder.order_index','specification'))
+    context = {
+        "search_form":search_form,
+        "items_set":sorted_items_set,
+    }
+
+    return render(request,"storage/outside/account/applycardhome.html",context)

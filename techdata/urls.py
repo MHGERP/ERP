@@ -85,4 +85,8 @@ urlpatterns=patterns('',
         r'^techDetailTable$',
         techdata_views.techDetailTableViews,
     ),
+    url(
+        r'^transfer_card_edit$',
+        techdata_views.transferCardEditViews,
+    )
 )

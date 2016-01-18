@@ -201,7 +201,7 @@ class SteelMaterialPurchasingEntry(models.Model):
     purchaser =  models.ForeignKey(User,blank=False,null=False,related_name="steel_purchaser",verbose_name=u"采购员")
     inspector = models.ForeignKey(User,blank=False,null=False,related_name="steel_inspector",verbose_name=u"检验员",)
     keeper = models.ForeignKey(User,blank=False,null=False,related_name = "steel_keeper",verbose_name=u"库管员" ,)
-    remark = models.CharField(max_length=50,blank=True,null=True,verbose_name="备注")
+    
     entry_time = models.DateField(blank=False,null=True,auto_now_add=True,verbose_name=u"入库时间")
     entry_confirm = models.BooleanField(default=False,verbose_name=u"入库单确认")
     #entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES_2,default=0,verbose_name=u"入库单类型")
@@ -225,6 +225,7 @@ class SteelMaterial(models.Model):
     work_order = models.ManyToManyField(WorkOrder,blank=False,null=False,verbose_name=u'工作令')
     steel_type = models.IntegerField(choices=STEEL_TYPE,blank=False,null=False,default=0,verbose_name=u'钢材类型')
     store_room = models.ForeignKey(StoreRoom,blank=False,null=False,verbose_name=u'库房位置')
+    remark = models.CharField(max_length=50,blank=True,null=True,verbose_name="备注")
 
     def __unicode__(self):
         return "%s(%s)"%(self.name,self.specifications)
