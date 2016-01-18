@@ -295,11 +295,11 @@ def getWeldSeamCard(self, full = False, iid = None):
     return html
 
 @dajaxice_register
-def boxOutBought(request):
+def boxOutBought(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -307,11 +307,11 @@ def boxOutBought(request):
     return html
 
 @dajaxice_register
-def firstFeeding(request):
+def firstFeeding(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -319,11 +319,11 @@ def firstFeeding(request):
     return html
 
 @dajaxice_register
-def principalMaterial(request):
+def principalMaterial(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -331,11 +331,11 @@ def principalMaterial(request):
     return html
 
 @dajaxice_register
-def auxiliaryMaterial(request):
+def auxiliaryMaterial(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -343,11 +343,11 @@ def auxiliaryMaterial(request):
     return html
 
 @dajaxice_register
-def weldList(request):
+def weldList(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -355,11 +355,11 @@ def weldList(request):
     return html
 
 @dajaxice_register
-def techBoxWeld(request):
+def techBoxWeld(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -367,11 +367,11 @@ def techBoxWeld(request):
     return html
 
 @dajaxice_register
-def weldQuota(request):
+def weldQuota(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }

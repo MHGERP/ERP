@@ -133,5 +133,9 @@ def programmeEditViews(request):
     return render(request, "techdata/programme_edit.html", context)
 
 def techDetailTableViews(request):
-    context = {}
+    """BinWu"""
+    work_order_form = WorkOrderForm()
+    context = {
+        "form": WorkOrderForm,
+    }
     return render(request, "techdata/detail_table.html", context)
