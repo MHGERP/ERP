@@ -466,14 +466,43 @@ def outsideAccountEntrySearch(request,form):
         conditions=form.cleaned_data
         q1=(conditions['date'] and Q(entry__entry_time = conditions['date'])) or None
         q2=(conditions['specification'] and Q(specification=conditions['specification'])) or None
-        q3=(conditions['entry_code'] and Q(eentry__entry_code=conditions['entry_code'])) or None
-        query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3]))                
-        items_set = OutsideStandardItem.objects.filter(query_conditions)
-    
+        q3=(conditions['entry_code'] and Q(entry__entry_code=conditions['entry_code'])) or None
+        q4=(conditions['work_order'] and Q(materiel__order__order_index =conditions['work_order'])) or None
+        query_set = filter(lambda x:x!=None,[q1,q2,q3,q4]) 
+        if query_set:
+            query_conditions=reduce(lambda x,y:x&y,query_set) 
+            items_set = OutsideStandardItem.objects.filter(query_conditions)
+        else:
+            items_set = OutsideStandardItem.objects.all()
     context = {
             'items_set':items_set,
             "search_form":form,
         }
     print form
     html = render_to_string("storage/widgets/account/entryhomemain.html",context)
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def outsideAccountApplyCardSearch(request,form):
+    form = OutsideAccountApplyCardSearchForm(deserialize_form(form))
+    items_set = {}
+    if form.is_valid():
+        conditions=form.cleaned_data
+        q1=(conditions['date'] and Q(applycard__date = conditions['date'])) or None
+        q2=(conditions['specification'] and Q(specification=conditions['specification'])) or None
+        q3=(conditions['entry_code'] and Q(applycard__entry_code=conditions['entry_code'])) or None
+        q4=(conditions['work_order'] and Q(applycard__workorder__order_index =conditions['work_order'])) or None
+        q5=(conditions['department'] and Q(department =conditions['department'])) or None
+        query_set = filter(lambda x:x!=None,[q1,q2,q3,q4,q5]) 
+        if query_set:
+            query_conditions=reduce(lambda x,y:x&y,query_set) 
+            items_set = OutsideApplyCardItem.objects.filter(query_conditions)
+        else:
+            items_set = OutsideApplyCardItem.objects.all()
+    context = {
+            'items_set':items_set,
+            "search_form":form,
+        }
+    print form
+    html = render_to_string("storage/widgets/account/applycardhomemain.html",context)
     return simplejson.dumps({"html":html})

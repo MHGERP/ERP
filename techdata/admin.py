@@ -14,6 +14,8 @@ RegisterClass = (
     WeldMethod,
     NondestructiveInspection,
     WeldListPageMark,
+    TransferCard,
+    TransferCardMark,
 )
 
 for item in RegisterClass:

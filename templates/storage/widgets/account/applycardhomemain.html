@@ -1,36 +1,38 @@
 <div></div>
-<div class="span8">
+<div class="span12">
     <form class="form-inline" id="search_form" method="post">
         {% csrf_token %}
         {% for field in search_form %}
         {{field.label}}
         {{field}}
         {% endfor %}
-        <button type="button" class="btn btn-success" id="account_entry_btn" onClick="account_entry_search()">检索</button> 
+        <button type="button" class="btn btn-success" id="account_entry_btn" onClick="account_applycard_search()">检索</button> 
     </form>
 </div>
 <br>
-<div class="span8 table_container">
+<div class="span10 table_container">
     <table class="table table-bordered">
         <thead>
             <th>工作令</th>
             <th>名称及规格</th>
-            <th>材质</th>
-            <th>入库数量</th>
-            <th>入库单编号</th>
+            <th>领用单位</th>
+            <th>领用单编号</th>
             <th>日期</th>
+            <th>数量</th>
+            <th>备注</th>
             <th>操作</th>
         </thead>
     </tbody>
     {% for item in items_set %}
     <tr>
-        <td>{{item.materiel.order}}</td>
+        <td>{{item.applycard.workorder.order_index}}</td>
         <td>{{item.specification}}</td>
-        <td>{{item.materiel.material}}</td>
+        <td>{{item.applycard.department}}</td>
+        <td>{{item.applycard.entry_code}}</td>
+        <td>{{item.applycard.date|date:"Y年m月d日"}}</td>
         <td>{{item.number}}</td>
-        <td>{{item.entry.entry_code}}</td>
-        <td>{{item.entry.entry_time|date:"Y年m月d日"}}</td>
-        <td><a class="btn" href="/storage/outside/entryconfirm/{{item.entry.id}}">查看入库单</a></td>
+        <td>{{item.remark}}</td>
+        <td><a class="btn" href="/storage/outside/applycardconfirm/{{item.applycard.id}}">查看领用单</a></td>
     </tr>
     {% endfor %}
 </tbody>
