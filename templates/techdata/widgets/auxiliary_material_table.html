@@ -26,31 +26,34 @@
         <table class="table table-bordered table-striped" >
 
             <thead>
-                <th>序号</th>
-                <th>工作令</th>
-                <th>名称</th>
-                <th>图号</th>
                 <th>票号</th>
-                <th>数量</th>
+                <th>部件图号</th>
+                <th>零件图号</th>
+                <th>材料分类</th>
                 <th>材质</th>
-                <th>外形尺寸</th>
-                <th>毛重（kg）</th>
-                <th>备注</th>
-
+                <th>规格</th>
+                <th>数量</th>
+                <th>净重</th>
+                <th>毛重</th>
+                <th>定额</th>
+                <th>利用率</th>
+                <th>受压标记</th>
             </thead>
             <tbody>
                 {% for item in list%}
                 <tr class="tr_materiel" iid="{{item.id}}" data-toggle="modal" data-target="#card_modal">
-                    <td>{{item.id}}</td>
-                    <td>{{item.order}}</td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.schematic_index}}</td>
                     <td>{{item.index}}</td>
-                    <td>{{item.count}}</td>
+                    <td>{{item.parent_schematic_index}}</td>
+                    <td>{{item.schematic_index}}</td>
+                    <td>{{item.material.categories}}</td>
                     <td>{{item.material}}</td>
-                    <td>?不明?</td>
+                    <td>{{item.specification}}</td>
+                    <td>{{item.count}}</td>
+                    <td>{{item.net_weight}}</td>
+                    <td>{{item.total_weight}}</td>
                     <td>{{item.total_weight}}</td>
                     <td>{{item.remark}}</td>
+                    <td>△</td>
                 </tr>
                 {% endfor %}
             </tbody>
