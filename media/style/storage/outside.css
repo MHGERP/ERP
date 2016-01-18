@@ -3,7 +3,6 @@
 }
 div#applyform_div .control-label {
     width:100px!important;
-    text-align:left!important;
 }
 form .e3 {
     width:33.3%;
@@ -28,3 +27,14 @@ div#remark label{
     width:100px!important;
 }
 
+div.table_container{
+    margin-top:10px;
+}
+
+div.main_container{
+    margin-top:0px!important;
+}
+
+div#entryform .control-label {
+    width:100px!important;
+}

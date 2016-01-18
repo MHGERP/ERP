@@ -10,6 +10,7 @@ from django.utils import simplejson
 from django.db.models import Q
 from django.contrib.auth.models import User
 
+from const import *
 from backend.utility import getContext
 from const.models import *
 from forms import MaterielForm
@@ -18,6 +19,8 @@ from techdata.forms import *
 from techdata.models import *
 from const.models import *
 from const.utils import getMaterialQuerySet
+
+import datetime
 
 @dajaxice_register
 def getProcessBOM(request, id_work_order):
@@ -44,6 +47,10 @@ def getProcessBOM(request, id_work_order):
     context = {
         "work_order": work_order,
         "BOM": BOM,
+        "MARK_WRITE": MARK_WRITE,
+        "MARK_PROOFREAD": MARK_PROOFREAD,
+        "MARK_STATISTIC": MARK_STATISTIC,
+        "MARK_QUOTA": MARK_QUOTA,
     }
     html = render_to_string("techdata/widgets/processBOM_table.html", context)
     return html
@@ -71,6 +78,22 @@ def getSingleProcessBOM(request, iid):
     return html
 
 @dajaxice_register  
+def getAuxiliaryMaterielInfo(request, iid):
+    """
+    MH Chen
+    """
+    materiel = Materiel.objects.get(id = iid)
+    form = MaterielForm(instance = materiel)
+    context = {
+        "form": form,
+    }
+    auxiliary_materiel_info_html = render_to_string("techdata/widgets/auxiliary_material_base_info_table.html", context)
+    detail_table_html = render_to_string("techdata/widgets/auxiliary_material_type_in.html", context)
+    print auxiliary_materiel_info_html
+    return simplejson.dumps({'auxiliary_materiel_info_html' : auxiliary_materiel_info_html, 'detail_table_html' : detail_table_html})
+
+
+@dajaxice_register  
 def getMaterielInfo(request, iid):
     """
     JunHU
@@ -81,7 +104,7 @@ def getMaterielInfo(request, iid):
         "form": form,
     }
     html = render_to_string("techdata/widgets/materiel_base_info.html", context)
-    return html 
+    return html  
 
 @dajaxice_register  
 def getTechdataList(request, id_work_order):
@@ -212,6 +235,21 @@ def getDesignBOM(request, id_work_order):
     return html
 
 @dajaxice_register
+def getSingleDesignBOM(request, iid):
+    """
+    mxl
+    """
+    item = Materiel.objects.get(id = iid)
+    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
+        circulationroute(materiel_belong = item).save()
+    item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
+    context = {
+        "item" : item
+    }
+    row_html = render_to_string("techdata/widgets/designBOM_row.html", context)
+    return row_html
+
+@dajaxice_register
 def getDesignBOMForm(request, iid):
     """
     mxl
@@ -257,11 +295,11 @@ def getWeldSeamCard(self, full = False, iid = None):
     return html
 
 @dajaxice_register
-def boxOutBought(request):
+def boxOutBought(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -269,11 +307,11 @@ def boxOutBought(request):
     return html
 
 @dajaxice_register
-def firstFeeding(request):
+def firstFeeding(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -281,11 +319,11 @@ def firstFeeding(request):
     return html
 
 @dajaxice_register
-def principalMaterial(request):
+def principalMaterial(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -293,11 +331,11 @@ def principalMaterial(request):
     return html
 
 @dajaxice_register
-def auxiliaryMaterial(request):
+def auxiliaryMaterial(request, order):
     """
-    BinWu
+    BinWu 
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -305,11 +343,11 @@ def auxiliaryMaterial(request):
     return html
 
 @dajaxice_register
-def weldList(request):
+def weldList(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -317,11 +355,11 @@ def weldList(request):
     return html
 
 @dajaxice_register
-def techBoxWeld(request):
+def techBoxWeld(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -329,11 +367,11 @@ def techBoxWeld(request):
     return html
 
 @dajaxice_register
-def weldQuota(request):
+def weldQuota(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.all();
+    list = Materiel.objects.filter(order = order);
     context = {
         "list" : list,
     }
@@ -388,7 +426,9 @@ def getWeldSeamList(self, id_work_order):
         "work_order": work_order,
     }
     html = render_to_string("techdata/widgets/weld_list_table.html", context)
-    return html
+    read_only = (work_order.weldlistpagemark.reviewer != None)
+
+    return simplejson.dumps({"html": html, "read_only": read_only})
 
 @dajaxice_register  
 def updateProcessReview(request, iid,processReview_form):
@@ -431,17 +471,6 @@ def saveDesignBOM(request, iid,  materiel_form, circulationroute_form):
         obj.save()
         ret = {"status" : "ok"}
     else:
-       # for field in materiel_form:
-       #     if field.errors:
-       #
-       #         print field
-       #     for error in field.errors:
-       #         print error
-       # for field in circulationroute_form:
-       #     if field.errors:
-       #         print field
-       #     for error in field.errors:
-       #         print error
         ret = {
             "status" : "fail",
         }
@@ -452,4 +481,216 @@ def saveDesignBOM(request, iid,  materiel_form, circulationroute_form):
         if not circulationroute_form.is_valid():
             ret["circulationroute_error"] = "1"
     return simplejson.dumps(ret)
+
+@dajaxice_register
+def weldListWriterConfirm(request, id_work_order):
+    """
+    JunHU
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if WeldListPageMark.objects.filter(order = order).count() == 0:
+        WeldListPageMark(order = order).save()
+    order.weldlistpagemark.writer = request.user
+    order.weldlistpagemark.write_date = datetime.datetime.today()
+    order.weldlistpagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def weldListReviewerConfirm(request, id_work_order):
+    """
+    JunHU
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if WeldListPageMark.objects.filter(order = order).count() == 0:
+        WeldListPageMark(order = order).save()
+
+    if order.weldlistpagemark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.weldlistpagemark.reviewer = request.user
+    order.weldlistpagemark.reviewe_date = datetime.datetime.today()
+    order.weldlistpagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def processBOMMark(request, id_work_order, step):
+    """
+    JunHU
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if step == MARK_WRITE:
+        order.processbommark.writer = request.user
+        order.processbommark.write_date = datetime.datetime.today()
+        order.processbommark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicde(order.processbommark.writer.userinfo),
+        }
+    elif step == MARK_STATISTIC:
+        order.processbommark.statistician = request.user
+        order,processbommark.statistic_date = datetime.datetime.today()
+        context = {
+            "ret": True,
+            "mark_user": unicde(order.processbommark.statistician.userinfo),
+        }
+    elif step == MARK_QUOTA:
+        order.processbommark.quota_agent = request.user
+        order,processbommark.quota_date = datetime.datetime.today()
+        context = {
+            "ret": True,
+            "mark_user": unicde(order.processbommark.quota_agent.userinfo),
+        }
+    elif step == MARK_PROOFREAD:
+        order.processbommark.proofreader = request.user
+        order,processbommark.proofread_date = datetime.datetime.today()
+        context = {
+            "ret": True,
+            "mark_user": unicde(order.processbommark.proofreader.userinfo),
+        }
+    else:
+        context = {
+            "ret": False,
+            "warning": u"后台保存错误"
+        }
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def getTransferCard(request, iid, card_type = None):
+    """
+    JunHU
+    """
+    item = Materiel.objects.get(id = iid)
+    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
+        CirculationRoute(materiel_belong = item).save()
+    item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
+    
+    try:
+        process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
+        process_list = []
+        while process:
+            process_list.append(process)
+            process = process.next_processing
+    except:
+        process_list = []
+    
+    context = {
+        "item": item,
+        "process_list": process_list,
+        "MARK_WRITE": MARK_WRITE,
+        "MARK_REVIEW": MARK_REVIEW,
+        "MARK_PROOFREAD": MARK_PROOFREAD,
+        "MARK_APPROVE": MARK_APPROVE,
+    }
+
+    cards = TransferCard.objects.filter(materiel_belong = item)
+    if cards:
+        context["card"] = cards[0]
+        html = render_to_string(CARD_TYPE_TO_HTML[cards[0].card_type], context)
+    else:
+        html = render_to_string(CARD_TYPE_TO_HTML[card_type], context)
+    return html
+
+@dajaxice_register
+def transferCardMark(request, iid, step, card_type = None):
+    """
+    JunHU
+    """
+    def date2str(date):
+        return str(date.year) + "." + "%02d" % date.month + "." + str(date.day)
+    
+    item = Materiel.objects.get(id = iid)
+    context = {}
+    if step == MARK_WRITE:
+        if TransferCard.objects.filter(materiel_belong = item).count() > 0:
+            context = {
+                "ret": False,
+                "warning": u"已为该零件创建流转卡",
+            }
+            return simplejson.dumps(context)
+
+        card = TransferCard(materiel_belong = item, card_type = card_type)
+        card.save()
+        mark = TransferCardMark(card = card)
+        mark.save()
+        card.transfercardmark.writer = request.user
+        card.transfercardmark.write_date = datetime.datetime.today()
+        card.transfercardmark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(card.transfercardmark.writer.userinfo),
+            "mark_date": date2str(card.transfercardmark.write_date)
+        }
+        print context
+    elif step == MARK_PROOFREAD:
+        cards = TransferCard.objects.filter(materiel_belong = item)
+        if cards.count() == 0 or cards[0].transfercardmark.writer == None:
+            context = {
+                "ret": False,
+                "warning": u"该流转卡还未完成编制",
+            }
+            return simplejson.dumps(context)
+
+        card = cards[0]
+        card.transfercardmark.proofreader = request.user
+        card.transfercardmark.proofread_date = datetime.datetime.today()
+        card.transfercardmark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(card.transfercardmark.proofreader.userinfo),
+            "mark_date": date2str(card.transfercardmark.proofread_date)
+        }
+    elif step == MARK_REVIEW:
+        cards = TransferCard.objects.filter(materiel_belong = item)
+        if cards.count() == 0 or cards[0].transfercardmark.proofreader == None:
+            context = {
+                "ret": False,
+                "warning": u"该流转卡还未完成校对",
+            }
+            return simplejson.dumps(context)
+
+        card = cards[0]
+        card.transfercardmark.reviewer = request.user
+        card.transfercardmark.review_date = datetime.datetime.today()
+        card.transfercardmark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(card.transfercardmark.reviewer.userinfo),
+            "mark_date": date2str(card.transfercardmark.review_date)
+        }
+    elif step == MARK_APPROVE:
+        cards = TransferCard.objects.filter(materiel_belong = item)
+        if cards.count() == 0 or cards[0].transfercardmark.reviewer == None:
+            context = {
+                "ret": False,
+                "warning": u"该流转卡还未完成审核",
+            }
+            return simplejson.dumps(context)
+
+        card = cards[0]
+        card.transfercardmark.approver = request.user
+        card.transfercardmark.approve_date = datetime.datetime.today()
+        card.transfercardmark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(card.transfercardmark.approver.userinfo),
+            "mark_date": date2str(card.transfercardmark.approve_date)
+        }
+    else:
+        context = {
+            "ret": False,
+            "warning": u"后台保存出错",
+        }
+    return simplejson.dumps(context)
+
+
+@dajaxice_register
+def saveProcessRequirement(request, pid, content):
+    """
+    JunHU
+    """
+    process = Processing.objects.get(id = pid)
+    process.technical_requirement = content
+    process.save()
+
+
+
 

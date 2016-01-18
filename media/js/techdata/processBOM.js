@@ -108,3 +108,25 @@ $("#id_goto_prev").click(function() {
     if(!row_prev.html()) alert("本条为第一条！");
     else fill(row_prev.attr("iid"));
 });
+
+$(document).on("click", ".btn_edit_transfer_card", function() {
+    var iid = $(this).parent().parent().attr("iid");
+    location.href = "/techdata/transfer_card_edit?iid=" + iid;
+});
+
+var mark_span;
+
+$(document).on("click", ".btn-mark", function() {
+    mark_span = $(this).parent();
+    var id_work_order = $("#id_work_order").val();
+    var step = $(this).attr("args");
+    Dajaxice.techdata.processBOMMark(markCallBack, {"id_work_order": id_work_order, "step": step, });
+});
+function markCallBack(data) {
+    if(data.ret) {
+        mark_span.html(data.mark_user);
+    }
+    else {
+        alert(data.warning);
+    }
+}
