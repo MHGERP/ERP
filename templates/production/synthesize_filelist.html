@@ -8,13 +8,12 @@
 {% block inner_content%}
 <link rel="stylesheet" href="{{STATIC_URL }}style/synthesize_filelist.css" type="text/css" 
 media="screen" />
-<div id="search-div">
-	<form class="form-inline">
-	    工作令:
-	    {{orderIndexForm.order_index}}
-        <button type="button" class="btn btn-primary">检索</button>
-	</form>
-</div>
-{%include "production/synthesize_detail_filelist.html"%}
+<form class="form-search ">
+   &nbsp&nbsp&nbsp&nbsp<font size="4px"><b>工作令</b>&nbsp&nbsp</font>
+   {{workOrderForm.work_order}}
+   
+    <span class="btn" id="order_search">检索</span> 
+</form>
+<div class="widget-content" id="widget-content"></div>
 <script type='text/javascript' src="{{STATIC_URL}}js/production/synthesize_filelist.js"></script>
 {% endblock%}

@@ -19,9 +19,13 @@
     <td>{{record.index}}</td>
     <td>{{record.apply_item.name}}</td>
     <td>{{record.apply_quantity}}</td>
-    <td>{{record.create_time}}</td>
-    <td>{{record.applicant}}</td>
-    <td><a href="/storage/auxiliarytools/apply?index={{record.index}}"><button type="button" class="btn btn-primary">处理申请</button></a></td>
+    <td>{{record.create_time|date:"Y年m月d日"}}</td>
+    <td>{{record.applicant.userinfo.name}}</td>
+    <td>
+        {% if STORAGE_KEEPER %}
+        <a href="/storage/auxiliarytools/apply?index={{record.index}}"><button type="button" class="btn btn-primary">处理申请</button></a>
+        {% endif %}
+    </td>
     </tr>
     {% endfor %}
 </table>

@@ -31,7 +31,7 @@
         {% for ref_obj in refund_set %}
         <tr>
             <td>{{ref_obj.department}}</td>
-            <td>{{ref_obj.date|date:"Ymd"}}</td>
+            <td>{{ref_obj.date|date:"Y年m月d日"}}</td>
             <td>{{ref_obj.code}}</td>
             <td>{{ref_obj.work_order}}</td>
             <td>{{ref_obj.keeper.userinfo}}</td>

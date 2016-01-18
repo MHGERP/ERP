@@ -20,7 +20,7 @@ from django.db import transaction
 
 from users.decorators import authority_required
 from users import *
-
+from storage.forms import EntryTypeForm
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -174,12 +174,14 @@ def arrivalInspectionViews(request):
     return render(request,"purchasing/purchasing_arrival.html",context)
 
 def arrivalCheckViews(request,bid):
-    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid)
+    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid,check_pass=False)
     is_show = BidForm.objects.filter(bid_id = bid , bid_status__part_status = BIDFORM_PART_STATUS_CHECK).count() > 0
+    entrytypeform = EntryTypeForm()
     context = {
         "cargo_set":cargo_set,
         "bid":bid,
         "is_show":is_show,
+        "entrytype":entrytypeform,
     }
     return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 
@@ -391,8 +393,6 @@ def statusChangeHistoryViews(request,bid):
     for obj in statuschange_set:
         try: 
             obj.reason = obj.statuschangereason
-            print obj.change_time
-            print obj.reason
         except Exception,e:
             pass
     context = {

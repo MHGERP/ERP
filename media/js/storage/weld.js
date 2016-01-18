@@ -10,39 +10,19 @@ function change_item(itemid){
     $("input#id_price").val(a.eq(11).text());
 }
 
-function change_steelEntryItem(itemid){
-    mid = itemid;
-    var a = $("tr#"+mid).find("td");
-    $("input#id_remark").val(a.eq(8).text());
-}
-
 function save_item(){
     Dajaxice.storage.entryItemSave(save_item_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
 }
 
-function save_steelEntryItem(){
-     Dajaxice.storage.steelEntryItemSave(save_steelEntryItem_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
-}
-
 function save_item_callback(data){
     if(data.flag){
-        $("div#items_table").html(data.html);
+        $("#items_table").html(data.html);
         alert(data.message);
     }
     else{
         alert(data.message);
     }
     
-}
-
-function save_steelEntryItem_callback(data){
-    if(data.flag){
-        $("div#items_table").html(data.html);
-        alert(data.message);
-    }
-    else{
-        alert(data.message);
-    }
 }
 
 function entryconfirm(eid){
@@ -74,4 +54,22 @@ function get_thread(){
 
 function get_thread_callback(data){
    $("#item_table").html(data.html); 
+}
+ 
+
+function humi_change_save(hid){
+    Dajaxice.storage.humiChangeSave(humi_change_save_callback,{"hidform":$("#humiture_form").serialize(),"hid":hid});
+}
+
+function humi_change_save_callback(data){
+    alert(data.message)
+}
+
+function bake_save(bid){
+    Dajaxice.storage.bakeSave(bake_save_callback,{"bakeform":$("#weldbake_form").serialize(),"bid":bid});
+}
+
+function bake_save_callback(data){
+    $("#bake_div").html(data.html);
+    alert(data.message);
 }

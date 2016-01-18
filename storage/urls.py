@@ -81,7 +81,7 @@ urlpatterns = patterns('',
         storage_views.weldRefundViews,
     ),
     url(
-        r'^weldbakeDetail/(?P<index>\w+)$',
+        r'^weldbakeDetail/$',
         storage_views.weldbakeDetail,
     ),
     url( 
@@ -171,6 +171,44 @@ urlpatterns = patterns('',
         r'^weldstorageaccount$',
         storage_views.weldStorageAccountHomeViews,
     ),
+    url(
+        r'^outsidehome$',
+        storage_views.outsideHomeViews,
+    ),
+    url(
+        r'^outside/entryhome$',
+        storage_views.outsideEntryHomeViews,    
+    ),
+    url(
+        r'^outside/entryconfirm/(?P<eid>\w+)$',
+        storage_views.outsideEntryConfirmViews,    
+    ),
+    url(
+        r'^storethread$',
+        storage_views.StoreThreadViews,
+    ),
+    url(
+        r'^outside/applycardhome$',
+        storage_views.outsideApplyCardHomeViews,    
+    ),
+    url(
+        r'^outside/applycardconfirm/(?P<cid>\w+)$',
+        storage_views.outsideApplyCardConfirmViews,    
+    ),
+    url(
+        r'^outside/account/home$',
+        storage_views.outsideAccountHomeViews,    
+    ),
+    url(
+        r'^outside/outsidestorageaccount$',
+        storage_views.outsideStorageAccountViews,
+       ),
+    url(
+        r'^outside/account/entryhome$',
+        storage_views.outsideEntryAccountHomeViews,name="outside_account_entryhome"
+    ),
+    url(
+        r'^outside/account/applycardhome$',
+        storage_views.outsideApplyCardAccountHomeViews,name="outside_account_applycardhome"
+    ),
 )
-
-

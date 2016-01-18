@@ -17,8 +17,8 @@ urlpatterns=patterns('',
         techdata_views.techFileDirectoryViews,
     ),
     url(
-        r'^designLibEdit$',
-        techdata_views.designLibEditViews,
+        r'^designBOM$',
+        techdata_views.designBOMViews,
     ),
     url(
         r'^connectionOrientationEdit$',
@@ -81,4 +81,12 @@ urlpatterns=patterns('',
         r'^techBoxOutbought$',
         techdata_views.techBoxOutboughtViews,
     ),
+    url(
+        r'^techDetailTable$',
+        techdata_views.techDetailTableViews,
+    ),
+    url(
+        r'^transfer_card_edit$',
+        techdata_views.transferCardEditViews,
+    )
 )

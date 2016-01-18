@@ -12,32 +12,32 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
 <div style="width:80%">
    <h3 style="text-align:center">辅助材料入库</h3>
-    <form id="detail_form" action="/storage/auxiliarytools/entry" method="POST">
+    <form id="detail_form" method="POST">
         {% csrf_token %}
         <table class="table table-hover table-bordered">
         <tr>
-            <td>材料名称:</td>
-            <td>{{entry_form.name}}</td>
-            <td>类别:</td>
-            <td>{{entry_form.model}}</td>
+            <th>序号</th>
+            <th>名称</th>
+            <th>类别</th>
+            <th>计量单位</th>
+            <th>数量</th>
+            <th>厂家</th>
         </tr>
+        {% for object in sub_objects %}
         <tr>
-            <td>计量单位:</td>
-            <td>{{entry_form.measurement_unit}}</td>
-            <td>数量:</td>
-            <td>{{entry_form.quantity}}</td>
+            <td>{{forloop.counter}}</td>
+            <td>{{object.auxiliary_tool.name}}</td>
+            <td>{{object.auxiliary_tool.get_model_display}}</td>
+            <td>{{object.auxiliary_tool.measurement_unit}}</td>
+            <td>{{object.quantity}}</td>
+            <td>{{object.auxiliary_tool.manufacturer}}</td>
         </tr>
-        <tr>
-            <td>单价:</td>
-            <td>{{entry_form.unit_price}}</td>
-            <td>厂家:</td>
-            <td>{{entry_form.manufacturer}}</td>
-        </tr>
+        {% endfor %}
         </table>
-        <input type="hidden" name="object_id" value="{{object_id}}">
+        <input type="hidden" name="object_id" value="{{object.id}}">
 
     <div class="row-fluid" style="text-align:center">
-    <button type="submit" id="confirm" class="btn btn-primary">确认</button>
+    <button type="submit" id="confirm" class="btn btn-primary">入库单确认</button>
     </div>
 </form>
 </div>

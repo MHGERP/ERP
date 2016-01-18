@@ -1,8 +1,3 @@
-.storage-icon{
-    height:80px;
-    width:80px;
-}
-
 div#storage-weld-menu{
     font-size:30px;
 }
@@ -14,20 +9,11 @@ div#storage-weld-menu a{
     width:140px;
 }
 
-div.e3{
-    width:50%;
-    float:left;
-    word-wrap:break-word;
-    margin-bottom:20px;
-}
-div.icon-text{
-    float:left;
+.bakeform-btn{
+    width:100px;
+    margin-right:20px;
 }
 
-.fix_th{
-    line-height:3.5!important;
-}
-
-.search-in{
-    width:150px;
+form#weldbake_form .bl{
+    width:120px;
 }

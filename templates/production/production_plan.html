@@ -1,0 +1,79 @@
+{% extends "production/base/none_nav_base.html"%}
+{% block title%}
+<h1>生产计划</h1>
+{% endblock%}
+{% block sub_ref %}
+<a href="#" class="current">生产计划</a>
+{% endblock %}
+{% block inner_content%}
+<link rel="stylesheet" href="{{ STATIC_URL }}style/man_hour_summarize.css" type="text/css" media="screen" />
+<div id="search-div" style="margin-bottom:10px;">
+        <form class="form-inline">
+            工作令:
+            {{orderIndexForm.order_index}}
+            状态：
+            <select>
+              <option>必保</option>
+              <option>在制</option>
+            </select>
+            工部：
+            <select>
+              <option>备料工部</option>
+              <option>装备工部</option>
+              <option>综合工部</option>
+            </select>
+            <button type="button" class="btn btn-primary">检索</button>
+            <button type="button" class="btn btn-primary">导出</button>
+        </form>
+</div>
+
+<a class="btn btn-primary" data-toggle="modal" data-target="#production_plan_modal">添加生产计划</a>
+{%include "production/widgets/production_plan_table.html"%}
+
+<div id="production_plan_modal" class="modal hide dade" modal-size-width="0.8">
+    <div class="modal-header">
+        <h2>生产计划选择</h2>
+    </div>
+    <div class="modal-body">
+        <div class="form-inline">
+            <label>工作令</label>
+            <input type="text">
+            <button class="btn btn-primary">检索</button>
+        </div>
+        {% include "production/widgets/production_plan_select_table.html"%}
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success bid-btn-open" data-dismiss="modal" data-target="#bid_modal">确认</button>
+        <button class="btn" data-dismiss="modal" >关闭</button>
+    </div>
+</div>
+
+<div id="production_plan_modify_modal" class="modal hide dade" modal-size-width="0.8">
+  <div class="modal-header">
+    <h2>生产计划修改</h2>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="control-group">
+        <label>状态</label>
+        <select>
+          <option>必保</option>
+          <option>在制</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>计划年月</label>
+        <input type="text">
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success bid-btn-open" data-dismiss="modal" data-target="#bid_modal">确认</button>
+    <button class="btn" data-dismiss="modal" >关闭</button>
+  </div>
+</div>
+
+
+<script type='text/javascript' src="{{STATIC_URL}}js/production/man_hour_summarize.js"></script>
+{% endblock%}

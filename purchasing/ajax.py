@@ -18,7 +18,8 @@ from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm,
 from django.db.models import Q
 from datetime import datetime
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
-
+from storage.models import WeldMaterialEntry,WeldMaterialEntryItems
+from storage.forms import EntryTypeForm 
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
     bidform_processing=BidForm.objects.filter(bid_id__contains=bidid)
@@ -41,58 +42,58 @@ def checkArrival(request,aid,cid):
     arrivalfield = ARRIVAL_CHECK_FIELDS[cid]
     cargo_obj = ArrivalInspection.objects.get(id = aid)
     val = getattr(cargo_obj,arrivalfield)
-    bidform = cargo_obj.bidform
-    if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
-        val = not val
-        setattr(cargo_obj,arrivalfield,val)
-        cargo_obj.save()
-        val = getattr(cargo_obj,arrivalfield)
-        message = u"状态修改成功"
-        isOk = True
+    if not cargo_obj.check_pass:
+        if not val:
+            setattr(cargo_obj,arrivalfield,not val)
+            cargo_obj.save()
+            message = u"状态修改成功"
+            isOk = True
     else:
-        message = u"状态修改失败，入库单已经存在"
+        message = u"状态修改失败"
         isOk = False
+    isForbiden = cargo_obj.material_confirm and cargo_obj.soft_confirm and cargo_obj.inspect_confirm
     data = {
-        "flag":val, 
         "message":message,
         'isOk':isOk,
+        "isForbiden":isForbiden,
+        "aid":aid,
     }
     return simplejson.dumps(data)
 
-@dajaxice_register
-@transaction.commit_manually
-def genEntry(request,bid,selected):
-    print selected
-    flag = False
-    message = ""
-    try:
-        bidform = BidForm.objects.get(bid_id = bid)
-        user = request.user
-        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
-            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
-            purchasingentry.save()
-            goNextStatus(bidform,request.user)
-            flag = True
-        else:
-            message = u"入库单已经存在，请勿重复提交"
-    except Exception, e:
-        transaction.rollback()
-        print e
-
-    flag = flag and isAllChecked(bid,purchasingentry)
-    if flag:
-        transaction.commit()
-        message = u"入库单生成成功"
-    else:
-        transaction.rollback()
-        if message =="":
-            message = u"入库单生成失败，有未确认的项，请仔细检查"
-    
-    data = {
-        'flag':flag,
-        'message':message,
-    }
-    return simplejson.dumps(data)
+#@dajaxice_register
+#@transaction.commit_manually
+#def genEntry(request,bid,selected):
+#    print selected
+#    flag = False
+#    message = ""
+#    try:
+#        bidform = BidForm.objects.get(bid_id = bid)
+#        user = request.user
+#        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
+#            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
+#            purchasingentry.save()
+#            goNextStatus(bidform,request.user)
+#            flag = True
+#        else:
+#            message = u"入库单已经存在，请勿重复提交"
+#    except Exception, e:
+#        transaction.rollback()
+#        print e
+#
+#    flag = flag and isAllChecked(bid,purchasingentry)
+#    if flag:
+#        transaction.commit()
+#        message = u"入库单生成成功"
+#    else:
+#        transaction.rollback()
+#        if message =="":
+#            message = u"入库单生成失败，有未确认的项，请仔细检查"
+#    
+#    data = {
+#        'flag':flag,
+#        'message':message,
+#    }
+#    return simplejson.dumps(data)
 
 @dajaxice_register
 def SupplierUpdate(request,supplier_id):
@@ -1014,3 +1015,52 @@ def saveTechRequire(request,order_id,content):
     order_form.save()
     return simplejson.dumps({})
 
+def selectEntryType(request,bid,selected,selectentryform):
+    entrytypedict = dict(list(STORAGE_ENTRY_TYPECHOICES))
+    selectform = EntryTypeForm(deserialize_form(selectentryform))
+    if selectform.is_valid() :
+        selectvalue = selectform.cleaned_data["entry_type"]
+        items_set = getArrivalInspections(selected) 
+        html = render_to_string("purchasing/addentryitems.html",{"items":items_set,"entrytype":entrytypedict[int(selectvalue)]})
+        return simplejson.dumps({"html":html,"items_set":selected,"selectvalue":selectvalue,"bid":bid})
+
+@dajaxice_register
+def genEntry(request,items_set,selectvalue,bid):
+    entrymodel,entryitemmodel = getEntryDataModel(selectvalue)
+    items_set = getArrivalInspections(items_set) 
+    try:
+        bidform = BidForm.objects.get(bid_id = bid)
+        entry_obj = entrymodel(purchaser = request.user , bidform = bidform)
+        entry_obj.save()
+        for item in items_set:
+            entryitem_obj = entryitemmodel(material = item.material,entry = entry_obj)
+            entryitem_obj.save()
+            item.check_pass = True
+            item.save()
+        isOk = True
+    except Exception,e:
+        isOk = False
+        print e
+    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid,check_pass = False)
+    html = render_to_string("purchasing/widgets/arrivalinspection_table.html",{"cargo_set":cargo_set})
+    return simplejson.dumps({"html":html,"isOk":isOk})
+
+
+def getArrivalInspections(selected_id_set):
+    items_set = []
+    for itemid in selected_id_set:
+        try:
+            item = ArrivalInspection.objects.get(id=itemid)
+            items_set.append(item)
+        except Exception,e:
+            print e
+    return items_set
+
+
+def getEntryDataModel(selectvalue):
+    selectvalue = int(selectvalue)
+    if selectvalue == STORAGE_ENTRY_TYPE_WELD:
+        print selectvalue
+        entrymodel = WeldMaterialEntry 
+        entryitemmodel = WeldMaterialEntryItems
+    return entrymodel,entryitemmodel

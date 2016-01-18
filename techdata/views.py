@@ -10,14 +10,23 @@ import json
 from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
-
+from techdata.forms import MaterielForm, CirculationRouteForm, ProcessingForm, TransferCardForm
+from const.models import Materiel
+from techdata.models import TransferCard
+from const.forms import WorkOrderForm
 
 def techPreparationPlanViews(request):
     context = {}
     return render(request, "techdata/tech_preparation_plan.html", context)
 
 def processExaminationViews(request):
-    context = {}
+    """
+    MH Chen
+    """
+    form = WorkOrderForm()
+    context = {
+            "form": form,
+    }
     return render(request, "techdata/process_examinationViews.html", context)
 
 def techFileDirectoryViews(request):
@@ -48,9 +57,17 @@ def techBoxOutboughtViews(request):
     context = {}
     return render(request, "techdata/tech_box_outbought.html", context)
 
-def designLibEditViews(request):
-    context = {}
-    return render(request, "techdata/design_lib_edit.html", context)
+def designBOMViews(request):
+    """
+    mxl
+    """
+    #materiel_form = MaterielForm()
+    #circulationroute_form = CirculationRouteForm()
+    work_order_form = WorkOrderForm()
+    context = {
+        "work_order_form" : work_order_form
+    }
+    return render(request, "techdata/designBOM.html", context)
 
 def connectionOrientationEditViews(request):
     context = {}
@@ -69,12 +86,40 @@ def auxiliaryMaterialViews(request):
     return render(request, "techdata/auxiliary_material.html", context)
 
 def processBOMViews(request):
-    context = {}
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    process_form = ProcessingForm()
+    context = {
+        "form": work_order_form,
+        "process_form": process_form,
+    }
     return render(request, "techdata/processBOM.html", context)
 
 def weldListViews(request):
-    context = {}
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "form": WorkOrderForm,
+    }
     return render(request, "techdata/weld_list.html", context)
+
+def transferCardEditViews(request):
+    """
+    JunHU
+    """
+    iid = request.GET.get("iid")
+    context = {
+        "iid": iid,
+    }
+    cards = TransferCard.objects.filter(materiel_belong__id = iid)   
+    if cards.count() == 0:
+        context["form"] = TransferCardForm()
+
+    return render(request, "techdata/transfer_card_edit.html", context)
 
 def weldQuotaViews(request):
     context = {}
@@ -86,3 +131,11 @@ def weldEditViews(request):
 def programmeEditViews(request):
     context = {}
     return render(request, "techdata/programme_edit.html", context)
+
+def techDetailTableViews(request):
+    """BinWu"""
+    work_order_form = WorkOrderForm()
+    context = {
+        "form": WorkOrderForm,
+    }
+    return render(request, "techdata/detail_table.html", context)

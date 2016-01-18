@@ -1,0 +1,30 @@
+.storage-icon{
+    height:80px;
+    width:80px;
+}
+
+.search-in{
+    width:150px;
+}
+
+div.e3{
+    width:50%;
+    float:left;
+    word-wrap:break-word;
+    margin-bottom:20px;
+}
+div.icon-text{
+    float:left;
+}
+
+.fix_th{
+    line-height:3.5!important;
+}
+
+div#storage-menu{
+    font-size:30px;
+}
+div#storage-menu a{
+    vertical-align:text-bottom;
+}
+

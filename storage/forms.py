@@ -4,11 +4,11 @@ from django import  forms
 from django.forms import ModelForm
 from storage.models import *
 from const.models import Materiel
-from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES,STEEL_TYPE,STEEL
+from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES,STEEL_TYPE,STEEL,STORAGE_ENTRY_TYPECHOICES
 from django.contrib.auth.models import User
 from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
-from const.utils import getChoiceList
+from const.utils import getChoiceList,getDistinctSet
 
 DEPARTMENT_CHOICES=(
         (u' ',u'------'),
@@ -115,7 +115,7 @@ class EntryItemsForm(ModelForm):
 
 class SteelEntryItemsForm(ModelForm):
     class Meta:
-        model = SteelMaterialPurchasingEntry
+        model = SteelMaterial
         fields = ("remark",)
         widget = {
             "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
@@ -124,10 +124,10 @@ class SteelEntryItemsForm(ModelForm):
 class HumRecordForm(ModelForm):
     class Meta: 
         model = WeldingMaterialHumitureRecord 
+        exclude = ("storeMan","id")
         #fields = ("storeRoom","storeMan","demandTemp","demandHumidity","actualTemperature1","actualHumidity1","actualTemperature2","actualHumidity12","remark")
         widgets = {
             "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
-       #     "storeRoom":forms.Select(attrs={"class":"form-control"}),
        #     "storeMan":forms.TextInput(attrs={"class":"form-control"}),
        #     "demandTemp":forms.TextInput(attrs={"class":"form-control"}),
         }
@@ -147,6 +147,7 @@ class HumSearchForm(forms.Form):
 class BakeRecordForm(ModelForm):
     class Meta:
         model = WeldingMaterialBakeRecord
+        exclude = ("storeMan",)
         widgets = { 
             "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
             "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"date"}),
@@ -156,14 +157,22 @@ class BakeRecordForm(ModelForm):
             "timeforremainheat":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"timeforremainheat"}),
             "usetime":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"usetime"}),
         }
+    def __init__(self,*args,**kwargs):
+        super(BakeRecordForm,self).__init__(*args,**kwargs)
+        engineers = getUserByAuthority(STORAGE_KEEPER)
+        engin_tuple = tuple([ (user.id,user.userinfo) for user in engineers ]) 
+        self.fields["weldengineer"].choices = engin_tuple
 
 class BakeSearchForm(forms.Form):
     date = forms.DateField(label = u"日期",required = False, widget = forms.TextInput(attrs={'class':'form-controli span2','id':'date'}))
     standardnum = forms.CharField(label = u"标准号",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'standardnum'}))
-    weldengineer = forms.CharField(label = u"焊接工程师",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'weldengineer'}))
-    storeMan = forms.CharField(label = u"库管员",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'storeMan'}))
+    weldengineer = forms.ChoiceField(label = u"焊接工程师",required = False, widget = forms.Select(attrs={"class":'form-control span2','id':'weldengineer'}))
+    storeMan = forms.ChoiceField(label = u"库管员",required = False, widget = forms.Select(attrs={"class":'form-control span2','id':'storeMan'}))
     def __init__(self,*args,**kwargs):
         super(BakeSearchForm,self).__init__(*args,**kwargs)
+        print  getChoiceList(getUserByAuthority(STORAGE_KEEPER),"userinfo")
+        self.fields["weldengineer"].choices = getChoiceList(getUserByAuthority(STORAGE_KEEPER),"userinfo")
+        self.fields["storeMan"].choices =  getChoiceList(getUserByAuthority(STORAGE_KEEPER),"userinfo")
 
 class ApplyRefundSearchForm(forms.Form):
     order_index = forms.CharField(label = u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'order_index'}))
@@ -172,11 +181,13 @@ class ApplyRefundSearchForm(forms.Form):
 class EntrySearchForm(forms.Form):
     entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_time'}))
     purchaser = forms.ChoiceField(label=u"采购员",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'purchaser'}))
-    work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'work_order'}))
+    entry_code=forms.CharField(label=u'入库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'entry_code'}))
     def __init__(self,*args,**kwargs):
         super(EntrySearchForm,self).__init__(*args,**kwargs)
-        users = User.objects.all()
+        users = getUserByAuthority(STORAGE_KEEPER)
         self.fields["purchaser"].choices = getChoiceList(users,"userinfo")
+
+
 
 class SteelEntrySearchForm(forms.Form):
     entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_time'}))
@@ -229,6 +240,7 @@ class AuxiliaryToolsCardCommitForm(ModelForm):
                 'apply_total':forms.HiddenInput(),
                 'actual_total':forms.HiddenInput(),
                 'status':forms.HiddenInput(),
+                'applicant':forms.HiddenInput(),
                 }
 class AuxiliaryToolsCardApplyForm(ModelForm):
     class Meta:
@@ -270,6 +282,28 @@ class AuxiliaryToolsApplyCardSearchForm(forms.Form):
     apply_item=forms.CharField(label=u'申请物资',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'apply_item'}))
     applicant=forms.CharField(label=u'领用人',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'applicant'}))
     index=forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'index'}))
+
+
+class AuxiliaryEntrySearchForm(forms.Form):
+    create_time = forms.DateField(label=u"日期", required=False,
+                                  widget=forms.TextInput(attrs={
+                                          'class': 'form-control search-query',
+                                          'readonly': 'readonly',
+                                          'id': 'entry_time'}))
+    purchaser = forms.ChoiceField(label=u"采购员", required=False,
+                                  widget=forms.Select(attrs={
+                                          "class": 'form-control search-query',
+                                          'id': 'purchaser'}))
+    status = forms.CharField(label=u'入库单编号', required=False,
+                             widget=forms.TextInput(attrs={
+                                     'class': 'form-control search-query',
+                                     'id': 'entry_code'}))
+
+    def __init__(self, *args, **kwargs):
+        super(AuxiliaryEntrySearchForm, self).__init__(*args, **kwargs)
+        users = User.objects.all()
+        self.fields["purchaser"].choices = getChoiceList(users, "userinfo")
+
 
 class SteelRefundSearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
@@ -326,4 +360,89 @@ class SteelLedgerSearchForm(forms.Form):
         return_choice = [(-1,""),(False,'未退库'),(True,'退库过')]
         # self.fields['is_returned'].choices=return_choice
 
+class EntryTypeForm(forms.Form):
+    entry_type=forms.ChoiceField(label=u'入库单类型',choices=STORAGE_ENTRY_TYPECHOICES,required=True,widget=forms.Select(attrs={'class':'form-control span2','id':'work_order'}))
 
+class OutsideEntrySearchForm(EntrySearchForm):
+    def __init__(self,*args,**kwargs):
+        super(OutsideEntrySearchForm,self).__init__(*args,**kwargs)
+
+class StorageEntryAForm(forms.Form):
+    change_code = forms.CharField(label=u"修改号",required=False,widget=forms.TextInput())
+    sample_report = forms.CharField(label=u"样表",required=False,widget=forms.TextInput())
+    entry_code = forms.CharField(label=u"单据编号",required=False,widget=forms.TextInput())
+    source = forms.CharField(label=u"货物来源",required=False,widget=forms.TextInput())
+    change_code = forms.CharField(label=u"检查记录表编号",required=False,widget=forms.TextInput())
+    change_code = forms.CharField(label=u"订购单编号",required=False,widget=forms.TextInput())
+    remark = forms.CharField(label=u"备注",required=False,widget=forms.Textarea(attrs={"cols":80,"rows":4,"style":"max-height:50px;overflow:auto"}))
+
+class StorageOutsideEntryInfoForm(ModelForm):
+    class Meta:
+        model = OutsideStandardEntry
+        exclude = ("id","entry_status","purchaser","inspector","keeper","remark")
+
+class StorageOutsideEntryRemarkForm(ModelForm):
+    class Meta:
+        model = OutsideStandardEntry
+        fields = ("remark",)
+        widgets = {
+            "remark":forms.Textarea(attrs={"rows":"10","cols":"40","style":"max-height:80px;overflow-y:auto"}),
+        }
+class ThreadEntryItemsForm(ModelForm):
+    class Meta:
+        model = WeldStoreThread
+        fields = ("specification","count",)
+        widget = {
+            "specification": forms.TextInput(attrs={'class':"form-control span1"}),
+            "count": forms.TextInput(attrs={'class':"form_control span2"}),
+        }
+
+class ThreadSearchForm(ModelForm):
+        class Meta:
+            model = WeldStoreThread
+            fields = ("specification",)
+            widget = {
+                "specification": forms.TextInput(attrs={'class':"form-control span1"}),
+            }
+class OutsideApplyCardSearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
+    workorder = forms.ChoiceField(label=u"工作令",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'workorder'}))
+    proposer=forms.ChoiceField(label=u"领用人",required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'proposer'})) 
+    entry_code = forms.CharField(label=u"工作令",required=False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_code'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideApplyCardSearchForm,self).__init__(*args,**kwargs)
+        workorders = getDistinctSet(OutsideApplyCard,WorkOrder,'workorder')
+        proposers = getDistinctSet(OutsideApplyCard,User,'proposer')
+        self.fields['workorder'].choices = getChoiceList(workorders,'order_index')
+        self.fields['proposer'].choices = getChoiceList(proposers,'userinfo')
+
+class OutsideApplyCardForm(ModelForm):
+    class Meta:
+        model = OutsideApplyCard
+        fields = ("change_code","sample_report","entry_code")
+    def __init__(self,*args,**kwargs):
+        super(OutsideApplyCardForm,self).__init__(*args,**kwargs)
+
+class OutsideStorageSearchForm(forms.Form):
+    texture = forms.CharField(label=u'材质',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'texture'}))
+    specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'specification'}))
+class OutsideAccountEntrySearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False, widget=forms.TextInput(attrs={'id':'date'}))
+    specification = forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={'id':'specification'}))
+    entry_code = forms.CharField(label=u"入库单编号",required = False, widget=forms.TextInput(attrs={'id':'entry_code'}))
+    work_order = forms.CharField(label=u"工作令",required = False, widget=forms.TextInput(attrs={'id':'work_order'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideAccountEntrySearchForm,self).__init__(*args,**kwargs)
+        for key,val in self.fields.items():
+            val.widget.attrs["class"] = 'span2'
+
+class OutsideAccountApplyCardSearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False, widget=forms.TextInput(attrs={'id':'date'}))
+    specification = forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={'id':'specification'}))
+    department = forms.CharField(label=u"领用单位",required = False,widget=forms.TextInput(attrs={'id':'department'}))
+    entry_code = forms.CharField(label=u"领用单编号",required = False, widget=forms.TextInput(attrs={'id':'entry_code'}))
+    work_order = forms.CharField(label=u"工作令",required = False, widget=forms.TextInput(attrs={'id':'work_order'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideAccountApplyCardSearchForm,self).__init__(*args,**kwargs)
+        for key,val in self.fields.items():
+            val.widget.attrs["style"] = 'width:120px;'

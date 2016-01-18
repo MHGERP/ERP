@@ -11,26 +11,25 @@ function search_purchasing_callback(data){
 
 var btn;
 
-$("table[name='confirm']").find("button").bind("click",function(){
+$("table[name='confirm']").find("button").live("click",function(){
     var cid=$(this).attr("cid");
     var aid=$(this).parents("tr").attr("aid");
     btn = $(this);
+    if(btn.attr("Class").replace(" ","") == "btn"){
     Dajaxice.purchasing.checkArrival(check_arrival_callback,{'aid':aid,'cid':cid});
+    }
 })
 
 function check_arrival_callback(data){
     if(data.isOk){
-        if(data.flag){
         btn.removeClass().addClass("btn btn-success");
-        }
-        else{
-            btn.removeClass().addClass("btn");
-        }
         alert(data.message);
     }
     else
         alert(data.message);
-    window.location.reload();
+    if(data.isForbiden){
+        $("[aid="+data.aid +"]").find("input").eq(0).attr("disabled",false);
+    }
 }
 
 function gen_entry(bid){
@@ -153,5 +152,50 @@ function delete_item_callback(data){
     }
     else{
         alert("删除失败");
+    }
+}
+
+function select_entry_type(bid){
+    btn = $(this);
+    var box=$("#arrivalinspection_table").find(".arrival_checkbox");
+    var selected=new Array();
+    for(var i=0;i<box.length;++i)
+    {
+        if(box[i].checked){
+            var val=box[i].parentNode.parentNode.getAttribute('aid');
+            selected.push(val);
+        }
+    }
+    if(selected.length==0){
+        alert("没有选择入库材料信息!");
+        return false;
+    }
+    Dajaxice.purchasing.selectEntryType(select_entry_type_callback,{"bid":bid,"selected":selected,"selectentryform":$("#selectentryform").serialize()});
+
+}
+
+
+var items_set;
+var selectvalue;
+var bid;
+function select_entry_type_callback(data){
+    $("#additemstable").html(data.html); 
+    items_set = data.items_set;
+    selectvalue = data.selectvalue;
+    bid = data.bid;
+    $('#myModal').modal('show');
+}
+
+function save_entry_items(){
+    Dajaxice.purchasing.genEntry(save_entry_items_callback,{"items_set":items_set,"selectvalue":selectvalue,"bid":bid});
+}
+
+function save_entry_items_callback(data){
+    if(data.isOk){
+        $("#arrInsTable").html(data.html);
+        alert("入库单创建成功，请完善信息后确认");
+    }
+    else{
+        alert("入库单创建失败");
     }
 }

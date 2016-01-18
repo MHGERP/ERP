@@ -16,7 +16,7 @@
     {{field.label}}
     {{field}}
     {% endfor %}
-    <button class="btn btn-primary">检索</button> 
+    <button class="btn btn-success">检索</button> 
 </form>
 <br>
 <table class="table table-bordered">
@@ -36,11 +36,11 @@
             <td>{{item.brand}}</td>
             <td>{{item.specification}}</td>
             <td>{{item.entry_item.material.count}}</td>
-            <td>{{item.entry_time}}</td>
+            <td>{{item.entry_time|date:"Y年m月d日"}}</td>
             <td>{{item.charge_number}}</td>
             <td>{{item.material_id}}</td>
             <td>{{item.factory}}</td>
-            <td><a href="/storage/weldentryconfirm/{{item.entry_item.entry.id}}" class="btn">查看入库单</a></td>
+            <td><a href="/storage/weldentryconfirm/{{item.entry_item.entry.id}}?redict_path=/storage/weldentryaccount" class="btn">查看入库单</a></td>
         </tr>
         {% endfor %}
     </tbody>
