@@ -3,15 +3,49 @@
 	<h5>工作令：{{work_order.order_index}}</h5>
 	<h5>产品名称：{{work_order.product_name}}</h5>
 	<h5>单位：公斤</h5>
-	<h5>编制人：</h5>
-	<h5>审核人：</h5>
 </div>
 <div class="widget-content nopadding" style="max-height:800px; overflow-y:auto;">
         
 	<div class="dataTables_length">
-		<span class="btn btn-small btn-primary">完成</span>
-		<span class="btn btn-small btn-primary">审核</span>
 		<span class="btn btn-small btn-primary">工艺修改记录</span>
+
+		<span id="span_write">
+		工艺员：
+		    {% if not work_order.processbompagemark.writer %}
+		    <span class="btn btn-small btn-mark" id="btn_write_confirm" args="{{MARK_WRITE}}">签字</span>
+		    {% else %}
+		    {{work_order.processbompagemark.writer.userinfo}}
+		    {% endif %} 
+		</span>
+
+		<span id="span_quota">
+		定额：
+		    {% if not work_order.processbompagemark.quota_agent %}
+		    <span class="btn btn-small btn-mark" id="btn_quota_confirm" args="{{MARK_QUOTA}}">签字</span>
+		    {% else %}
+		    {{work_order.processbompagemark.quota_agent.userinfo}}
+		    {% endif %}
+		</span>
+
+		<span id="span_statistic">
+		统计：
+		    {% if not work_order.processbompagemark.statistician %}
+		    <span class="btn btn-small btn-mark" id="btn_statistic_confirm" args="{{MARK_STATISTIC}}">签字</span>
+		    {% else %}
+		    {{work_order.processbompagemark.statistician.userinfo}}
+		    {% endif %} 
+		</span>
+
+		<span id="span_proofread">
+		校对：
+		    {% if not work_order.processbompagemark.proofreader %}
+		    <span class="btn btn-small btn-mark" id="btn_proofread_confirm" args="{{MARK_PROOFREAD}}">签字</span>
+		    {% else %}
+		    {{work_order.processbompagemark.proofreader.userinfo}}
+		    {% endif %}
+		</span>
+
+
 	</div>
 	<table class="table table-bordered table-striped">
 		<thead>
