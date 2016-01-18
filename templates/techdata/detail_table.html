@@ -10,27 +10,27 @@
 
 {% block inner_content%}
 <div>
-    <span>
-        <form class="form-search ">
-            <select onchange="func()" class="input-medium search-query">
-                <option value="0" selected="selected">表单选择</option>
-                <option value="1">先投件明细</option>
-                <option value="2">主材定额明细</option>
-                <option value="3">辅材定额明细</option>
-                <option value="4">焊缝明细</option>
-                <option value="5">焊材定额</option>
-                <option value="6">装箱焊材消耗定额</option>
-                <option value="7">装箱外购件明细</option>
-            </select>
-            <select class="input-medium search-query" id="search_pending_order">
-                <option value="0" selected="selected">工作令</option>
-                <option style="width:200px">1</option>
-                <option style="width:200px">2</option>
-                <option style="width:200px">3</option>
-                <option style="width:200px">4</option>
-                <option style="width:200px">5</option>
-            </select>
-        </span>
+    <form class="form-search ">
+        <select onchange="func()" class="input-medium search-query">
+            <option value="0" selected="selected">表单选择</option>
+            <option value="1">先投件明细</option>
+            <option value="2">主材定额明细</option>
+            <option value="3">辅材定额明细</option>
+            <option value="4">焊缝明细</option>
+            <option value="5">焊材定额</option>
+            <option value="6">装箱焊材消耗定额</option>
+            <option value="7">装箱外购件明细</option>
+        </select>
+        
+        {{ form.work_order }}
+        <!--<select class="input-medium search-query" id="search_pending_order">
+            <option value="0" selected="selected">工作令</option>
+            <option style="width:200px">1</option>
+            <option style="width:200px">2</option>
+            <option style="width:200px">3</option>
+            <option style="width:200px">4</option>
+            <option style="width:200px">5</option>
+        </select>-->
         <span class="btn" id="order_search">检索</span> 
     </form>
 </div>
