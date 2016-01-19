@@ -70,7 +70,7 @@ urlpatterns=patterns('',
         purchasing_views.processFollowAdd,
      ),
     url(
-        r'^materielExecuteDetail/(\d+)/(\d+)?$',
+        r'^materielExecuteDetail/(\d+)/(\d+)/(\d+)?$',
         purchasing_views.materielExecuteDetailViews,
     ),
     url(
