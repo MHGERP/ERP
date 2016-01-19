@@ -12,7 +12,7 @@ from django.db import transaction
 from const.models import WorkOrder, Materiel
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect,HttpResponse
-from django.db.models import Q
+from django.db.models import Q,F
 from datetime import datetime
 from storage.models import *
 from storage.forms import *
@@ -123,6 +123,83 @@ def Auxiliary_Detail_Query(request,id):
     return HttpResponse(simplejson.dumps(context))
 
 
+@dajaxice_register
+def Auxiliary_Tools_Entry(request, object_id):
+    object_id = int(object_id)
+    # object_id = int(request.POST['object_id'])
+    auxiliary_card_list = AuxiliaryToolEntryCardList.objects.get(id=object_id)
+    auxiliarytools = AuxiliaryToolEntryCard.objects.filter( card_list__id=object_id)
+    for at in auxiliarytools:
+        if at.quantity < 0:
+            msg = '[ERROR]Auxiliary tools entry quantity error'
+            return HttpResponse(msg)
+        at.auxiliary_tool.quantity = F('quantity')+at.quantity
+    for at in auxiliarytools:
+        at.auxiliary_tool.save()
+    auxiliary_card_list.status = STORAGESTATUS_END
+    auxiliary_card_list.keeper = request.user
+    auxiliary_card_list.save()
+    return HttpResponse('Success')
+
+@dajaxice_register
+def Auxiliary_Tools_Apply_Create(request,data):
+    ins=None
+    form_data = deserialize_form(data)
+    apply_card=AuxiliaryToolsCardCommitForm(form_data,instance=ins)
+    save_ins=apply_card.save(commit=False)
+    save_ins.applicant=request.user
+    save_ins.status=AUXILIARY_TOOL_APPLY_CARD_APPLYED
+    save_ins.save()
+    return HttpResponse('[SUCCESS] create apply card succeed')
+
+
+@dajaxice_register
+def Auxiliary_Tools_Apply_Commit(request,data):
+    form_data = deserialize_form(data)
+    ins_index=int(form_data['index'])
+    if ins_index!=0:
+        try:
+            ins=AuxiliaryToolApplyCard.objects.get(index=ins_index)
+        except:
+            return HttpResponse('[ERROR] no such instance')
+    else:
+        Auxiliary_Tools_Apply_Create(request,data)
+    apply_card=AuxiliaryToolsCardCommitForm(form_data,instance=ins)
+    if apply_card.is_valid():
+        save_ins=apply_card.save(commit=False)
+        if ins_index!=0:
+            save_ins.commit_user=request.user
+        else:
+            save_ins.applicant=request.user
+        if save_ins.actual_item.quantity < save_ins.actual_quantity:
+            return HttpResponse("[ERROR] quantity error")
+        save_ins.actual_total=save_ins.actual_item.unit_price*save_ins.actual_quantity
+        print save_ins.actual_quantity
+        save_ins.actual_item.quantity-=save_ins.actual_quantity
+        save_ins.actual_item.save()
+        save_ins.status=AUXILIARY_TOOL_APPLY_CARD_COMMITED
+        save_ins.save()
+    else:
+        print apply_card.errors
+    return HttpResponse('[SUCCESS] commit apply card succeed')
+
+@dajaxice_register
+def Auxiliary_Tools_Entry(request,data):
+    form_data = deserialize_form(data)
+    object_id = int(form_data['object_id'])
+    auxiliary_card_list = AuxiliaryToolEntryCardList.objects.get(id=object_id)
+    auxiliarytools = AuxiliaryToolEntryCard.objects.filter(card_list__id=object_id)
+    for at in auxiliarytools:
+        if at.quantity<0:
+            return HttpResponse('[ERROR]Auxiliary tools entry quantity error')
+        at.auxiliary_tool.quantity=F('quantity')+at.quantity
+    for at in auxiliarytools:
+        at.auxiliary_tool.save()
+    auxiliary_card_list.status=STORAGESTATUS_END
+    auxiliary_card_list.keeper=request.user
+    auxiliary_card_list.save()
+    return HttpResponse('[SUCCESS] entry succeed')
+ 
 
 @dajaxice_register
 def Search_Auxiliary_Tools_Records(request,data,search_type):
@@ -134,7 +211,7 @@ def Search_Auxiliary_Tools_Records(request,data,search_type):
             context['rets'] = get_weld_filter(AuxiliaryTool,conditions)
             return render_to_string('storage/auxiliarytools/inventory_table.html',context)
         else:
-#            if search_type=='entry':
+            #            if search_type=='entry':
 #                q1=(conditions['date'] and Q(create_time=conditions['date'])) or None
 #                q2=(conditions['name'] and Q(auxiliary_tool__name=conditions['name'])) or None
 #                q3=(conditions['model'] and Q(auxiliary_tool__model=conditions['model'])) or None
@@ -181,7 +258,7 @@ def weldhum_insert(request,hum_params):
     else:
         flag = False
         message = u"录入失败"
-     
+
     html = render_to_string("storage/widgets/humiture_form.html",{"form":form,})
     data = {
         "flag":flag,
@@ -191,7 +268,7 @@ def weldhum_insert(request,hum_params):
     return simplejson.dumps(data)
 """
 
-    
+
 @dajaxice_register
 def entryItemSave(request,form,mid):
     item = WeldMaterialEntryItems.objects.get(id = mid)
@@ -210,10 +287,10 @@ def entryItemSave(request,form,mid):
     entry_set = WeldMaterialEntryItems.objects.filter(entry = pur_entry) 
     html = render_to_string("storage/widgets/weldentrytable.html",{"entry_set":entry_set})
     data = {
-        "flag":flag,
-        "message":message,
-        "html":html,  
-    }
+            "flag":flag,
+            "message":message,
+            "html":html,  
+           }
     return simplejson.dumps(data)
 def steelEntryItemSave(request,form,mid):
     item = SteelMaterialPurchasingEntry.objects.get(id = mid)
@@ -230,10 +307,10 @@ def steelEntryItemSave(request,form,mid):
     entry_set = SteelMaterialPurchasingEntry.objects.filter(entry = pur_entry) 
     html = render_to_string("storage/steelmaterial/steelentryconfirm.html",{"entry_set":entry_set})
     data = {
-        "flag":flag,
-        "message":message,
-        "html":html,  
-    }
+            "flag":flag,
+            "message":message,
+            "html":html,  
+           }
     return simplejson.dumps(data)
 
 @dajaxice_register
@@ -282,18 +359,18 @@ def storeThreadSave(request,form,mid):
     entry_form = ThreadEntryItemsForm(deserialize_form(form),instance = item)
     flag = False
     if entry_form.is_valid():
-            entry_form.save()
-            flag = True
-            message = u"修改成功"
+        entry_form.save()
+        flag = True
+        message = u"修改成功"
     else:
-            message = u"修改失败"
+        message = u"修改失败"
     items_set = WeldStoreThread.objects.all();
     html = render_to_string("storage/widgets/storethread_table.html",{"items_set":items_set})
     data = {
-        "flag":flag,
-        "message":message,
-        "html":html,
-    }
+            "flag":flag,
+            "message":message,
+            "html":html,
+           }
     return simplejson.dumps(data)
 
 @dajaxice_register
@@ -305,10 +382,10 @@ def storeThreadDelete(request,mid):
     items_set = WeldStoreThread.objects.all();
     html = render_to_string("storage/widgets/storethread_table.html",{"items_set":items_set})
     data = {
-        "flag":flag,
-        "message":message,
-        "html":html,
-    }
+            "flag":flag,
+            "message":message,
+            "html":html,
+           }
     return simplejson.dumps(data)
 
 @dajaxice_register
@@ -330,10 +407,10 @@ def storeThreadAdd(request,form):
     items_set = WeldStoreThread.objects.all();
     html = render_to_string("storage/widgets/storethread_table.html",{"items_set":items_set})
     data = {
-        "flag":flag,
-        "message":message,
-        "html":html,
-    }
+            "flag":flag,
+            "message":message,
+            "html":html,
+           }
     return simplejson.dumps(data)
 
 def humiChangeSave(request,hidform,hid):
@@ -365,9 +442,9 @@ def bakeSave(request,bakeform,bid=None):
     else:
         message = u"录入失败"
     context = {
-        "form":form,
-        "weldbake":weldbake,
-    }
+               "form":form,
+               "weldbake":weldbake,
+              }
     html = render_to_string("storage/widgets/bake_form.html",context)
     return simplejson.dumps({"html":html,"message":message})
 
@@ -450,10 +527,10 @@ def getOutsideApplyCardContext(applycard,inform,url,default_status):
     is_show = applycard.entry_status == default_status
     items_set = OutsideApplyCardItem.objects.filter(applycard = applycard,is_past=False)
     context = {
-        "inform":inform,
-        "applycard":applycard,
-        "applycardurl":url,
-        "is_show":is_show,
-        "items_set":items_set,
-    }
+               "inform":inform,
+               "applycard":applycard,
+               "applycardurl":url,
+               "is_show":is_show,
+               "items_set":items_set,
+              }
     return context

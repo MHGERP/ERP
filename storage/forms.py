@@ -274,7 +274,7 @@ class AuxiliaryToolsForm(ModelForm):
 class AuxiliaryToolsSearchForm(forms.Form):
     date=forms.DateField(label=u'日期',required=False,widget=forms.TextInput(attrs={'readonly':'readonly','class':'form-control search-query','id':'date'}))
     name=forms.CharField(label=u'名称',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'name'}))
-    model=forms.CharField(label=u'类别',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'model'}))
+    model=forms.ChoiceField(label=u'类别',choices=AUXILIARY_TOOLS_MODELS_CHOICES,required=False,widget=forms.Select(attrs={'class':'form-control search-query','id':'model'}))
     manufacturer=forms.CharField(label=u'厂家',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'manufacturer'}))
 
 class AuxiliaryToolsApplyCardSearchForm(forms.Form):
