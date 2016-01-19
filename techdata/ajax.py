@@ -20,6 +20,7 @@ from techdata.models import *
 from const.models import *
 from const.utils import getMaterialQuerySet
 
+from purchasing.models import MaterielExecute, MaterielExecuteDetail
 import datetime
 
 @dajaxice_register
@@ -694,6 +695,11 @@ def saveProcessRequirement(request, pid, content):
     process.technical_requirement = content
     process.save()
 
-
-
-
+@dajaxice_register
+def getExcuteList(request):
+    execute_list = MaterielExecute.objects.filter(is_save = True)
+    context = {
+        "execute_list": execute_list,
+    }
+    html = render_to_string("techdata/widgets/programme_edit_table.html", context)
+    return html
