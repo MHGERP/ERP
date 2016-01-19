@@ -1,5 +1,5 @@
 <div></div>
-<div class="span8">
+<div class="span10">
     <form class="form-inline" id="search_form" method="post">
         {% csrf_token %}
         {% for field in search_form %}
@@ -10,7 +10,7 @@
     </form>
 </div>
 <br>
-<div class="span8 table_container">
+<div class="span10 table_container">
     <table class="table table-bordered">
         <thead>
             <th>工作令</th>
@@ -35,22 +35,9 @@
     {% endfor %}
 </tbody>
 </table>
-
-<select id="select">
-    <option>First option</option>
-    <option>Second option</option>
-    <option>Third option</option>
-    <option>Fourth option</option>
-    <option>Fifth option</option>
-    <option>Sixth option</option>
-    <option>Seventh option</option>
-    <option>Eighth option</option>
-</select>
 <script>
 $(function(){
         $('#date').datetimepicker({format:"yyyy-mm-dd",minView:2});
-        $('#select').select2();
-        });
-
+        })
 </script>
 </div>
