@@ -34,7 +34,6 @@ $(document).on("click", ".tr_materiel", function() {
 
 function fill(iid) {
     $("#card_modal").attr("iid", iid);
-    alert(iid);
     Dajaxice.techdata.getAuxiliaryMaterielInfo(getInfoCallBack, {"iid": iid,
                                                                  "categories":categories});
 }
