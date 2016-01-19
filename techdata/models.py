@@ -194,7 +194,6 @@ class Program(models.Model):
     def __unicode__(self):
         return self.name
 
-<<<<<<< HEAD
 class HeatTreatmentTechCard(models.Model):
     file_index = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"文件编号")
     writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "heattreatcard_writer")
@@ -236,6 +235,7 @@ class HeatTreatmentArrangement(models.Model):
         verbose_name_plural = u"热处理测温点布置"
     def __unicode__(self):
         return "RR02-" + self.file_index
+
 class BoxOutBoughtMark(models.Model):
     order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
     writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "box_outbought_writer")
