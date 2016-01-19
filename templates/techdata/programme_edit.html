@@ -13,5 +13,50 @@
 <div class="widget-content">
 	
 </div>
+<div class="modal hide fade"  id="feedback_info">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>编辑工艺反馈信息</h3>
+    </div>
+    <div class="modal-body">
+        <form class="well form" id="feedback_form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="add-on">反馈详情：</label>
+                {{ form.feedback }}
+            </div>
+            <div class="form-group">
+                是否需要重新作材料执行：
+                {{ form.need_correct }}    
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal" >关闭</a>
+        <a class="btn btn-primary" data-dismiss="modal" 
+            id="feedback_save">确认</a>
+    </div>
+</div>
+
+<div class="modal hide fade"  id="program_upload">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>编程套料文件上传</h3>
+    </div>
+    <div class="modal-body">
+        <form method="POST" action="" class="form-inline" enctype="multipart/form-data" id="upload_form">
+            {% csrf_token%}
+            <input type="text" style="display:none;" name="execute_id" id="id_execute_input">
+            <input type='file' class='filestyle' name='program_file' data-ButtonName='btn btn-primary'  data-buttonBefore='true' data-buttonText='浏览..' id="filestyle_input">
+        </form>
+    </div>
+    <div class="modal-footer">
+		<span class="btn btn-primary" id="btn-upload" data-dismiss="modal">上传</span>
+        <a class="btn" data-dismiss="modal">关闭</a>
+    </div>
+</div>
+
+
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/programme_edit.js"></script>
+<script type='text/javascript' src="{{ STATIC_URL  }}jquery/jquery.form.js"></script>
 {% endblock%}

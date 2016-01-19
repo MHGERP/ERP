@@ -19,7 +19,8 @@ from django.db.models import Q
 from datetime import datetime
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
 from storage.models import WeldMaterialEntry,WeldMaterialEntryItems
-from storage.forms import EntryTypeForm 
+from storage.forms import EntryTypeForm
+
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
     bidform_processing=BidForm.objects.filter(bid_id__contains=bidid)
