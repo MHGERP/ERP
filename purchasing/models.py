@@ -23,6 +23,7 @@ class OrderForm(models.Model):
     chief=models.ForeignKey(User,verbose_name=u"外采科长",related_name="chief_user",null=True)
     approve_user=models.ForeignKey(User,verbose_name=u"审批人",related_name="approve_user",null=True)
     tech_requirement=models.CharField(max_length=5000,blank=True,null=True)
+    order_mod=models.IntegerField(default=0,verbose_name=u"标单类型")
     class Meta:
         verbose_name = u"订购单"
         verbose_name_plural = u"订购单"

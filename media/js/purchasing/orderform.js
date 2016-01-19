@@ -126,9 +126,13 @@ $("#save_tech_require").click(function(){
     var content=$("#tech_requirement_textarea").val();
     var order_id=$("#index").val();
     Dajaxice.purchasing.saveTechRequire(function(data){
-    $("#tech_requirement_content").html(content.toString());
+    $("#tech_requirement_content").text(content);
     },{
         "order_id":order_id,
         "content":content
     });
+});
+
+$("#tech_add").click(function(){
+    $("#tech_requirement_textarea").val($("#tech_requirement_content").text());
 });

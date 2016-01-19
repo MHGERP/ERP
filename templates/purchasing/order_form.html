@@ -16,7 +16,7 @@
 	订购单编号: <input type="text" class="input-midium" readonly="true "value="{{order_form.order_id}}" id="index"/> 
 	订购单状态: <input type="text" class="input-midium" readonly="true" value="{{order_form.order_status}}" id="status" args="{{order_form.order_status.status}}"/> 
     {% if order_form.order_status.status == 0%}
-    <button class="btn btn-primary" style="float:right" href="#tech_requirement" data-toggle="modal">填写技术要求</button>
+    <button class="btn btn-primary" id="tech_add" style="float:right" href="#tech_requirement" data-toggle="modal">填写技术要求</button>
     {% endif%}
 </div>
 
@@ -37,9 +37,11 @@
     
 </div>
 <div class="alert alert-info" id="tech_requirement_content">
+    <p id="tech_requirement_content"> 
     {%if order_form.tech_requirement%}
-    {{order_form.tech_requirement}}
+    {{order_form.tech_requirement|safe}}
     {%endif%}
+    </p>
 </div>
 {% if order_form.order_status.status == 0%}
    <button class="btn btn-primary" id="order_form_finish">完成</button>

@@ -28,12 +28,12 @@
                 {% for item in materielexecute_detail_set %}
                 <tr id="{{item.id}}">
                     <td>{{item.materiel.order.order_index}}</td>
-                    <td>{{item.materiel.material.name}}</td>
+                    <td>{{item.materiel.name}}</td>
                     <td></td> 
-                    <td></td>
-                    <td></td>
+                    <td>{{item.materiel.material.material_id}}</td>
+                    <td>{{item.materiel.specification}}</td>
                     <td>{{item.materiel.count}}</td> 
-                    <td></td>
+                    <td>{{item.material.status}}</td>
                     <td></td>
                     <td></td> 
                     <td>{{item.recheck}}</td>
