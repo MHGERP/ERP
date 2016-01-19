@@ -83,7 +83,10 @@ def principalMaterialViews(request):
     return render(request, "techdata/principal_material.html", context)
 
 def auxiliaryMaterialViews(request):
-    context = {}
+    categories_form = CategoriesForm()
+    context = {
+            "categories_form":categories_form
+    }
     return render(request, "techdata/auxiliary_material.html", context)
 
 def processBOMViews(request):
