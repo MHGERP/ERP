@@ -15,14 +15,14 @@ $(document).ready(function(){
 		alert("退库成功");
 	});
 	$(".apply-card-ensure-btn").click(function(){
-		alert("领用成功");
+        var form_code =$("table").attr("iid");
+        Dajaxice.storage.steelApplyEnsure(steelApplyEnsureCallBack,{'form_code':form_code});
 	});
 });
 
-
-$(".apply-card-ensure-btn").click(function(){
-    alert("领用成功");
-});
+function steelApplyEnsureCallBack(data){
+    
+}
 
 function searchSteelLedger_CallBack(data){
 	if(data["message"]=="error"){
