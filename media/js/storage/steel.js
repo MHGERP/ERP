@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    alert("ddddd");
 	$(".apply-card-search-btn").click(function(){
 		form=$(".apply-card-search-form").serialize(true);
 		Dajaxice.storage.searchApplyCard(searchApplyCard_CallBack,{'form':form});
@@ -16,14 +15,14 @@ $(document).ready(function(){
 		alert("退库成功");
 	});
 	$(".apply-card-ensure-btn").click(function(){
-		alert("领用成功");
+        var form_code =$("table").attr("iid");
+        Dajaxice.storage.steelApplyEnsure(steelApplyEnsureCallBack,{'form_code':form_code});
 	});
 });
 
-alert("helloSS");
-$(".apply-card-ensure-btn").click(function(){
-    alert("领用成功");
-});
+function steelApplyEnsureCallBack(data){
+    
+}
 
 function searchSteelLedger_CallBack(data){
 	if(data["message"]=="error"){
