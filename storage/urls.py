@@ -36,18 +36,18 @@ urlpatterns = patterns('',
         r'^weldentryhome$',
         storage_views.weldEntryHomeViews,
     ),
-    url(
-        r'^steelentryhome$',
-        storage_views.steelEntryHomeViews,
-    ),
+    # url(
+    #     r'^steelentryhome$',
+    #     storage_views.steelEntryHomeViews,
+    # ),
     url(
         r'^weldentryconfirm/(?P<eid>\w+)$',
         storage_views.weldEntryConfirmViews,
     ),
-    url(
-        r'^steelentryconfirm/(?P<eid>\d+)$',
-        storage_views.steelEntryConfirmViews,
-    ),
+    # url(
+    #     r'^steelentryconfirm/(?P<eid>\d+)$',
+    #     storage_views.steelEntryConfirmViews,
+    # ),
     url(
         r'^weldapply$',
         storage_views.Weld_Apply_Card_List,
