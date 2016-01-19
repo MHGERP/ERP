@@ -78,19 +78,23 @@ def getSingleProcessBOM(request, iid):
     return html
 
 @dajaxice_register  
-def getAuxiliaryMaterielInfo(request, iid):
+def getAuxiliaryMaterielInfo(request, iid,categories):
     """
     MH Chen
     """
     materiel = Materiel.objects.get(id = iid)
     form = MaterielForm(instance = materiel)
+    categories_form = CategoriesForm(initial={"categorie_type":categories})
+    if materiel.net_weight != None and materiel.quota != None:
+        user_ratio = round(materiel.net_weight/materiel.quota,5)
     context = {
+        "categories_form":categories_form,
         "form": form,
+        "categories":categories,
+        "user_ratio":user_ratio,
     }
-    auxiliary_materiel_info_html = render_to_string("techdata/widgets/auxiliary_material_base_info_table.html", context)
-    detail_table_html = render_to_string("techdata/widgets/auxiliary_material_type_in.html", context)
-    print auxiliary_materiel_info_html
-    return simplejson.dumps({'auxiliary_materiel_info_html' : auxiliary_materiel_info_html, 'detail_table_html' : detail_table_html})
+    html = render_to_string("techdata/widgets/auxiliary_material_type_in.html", context)
+    return html
 
 
 @dajaxice_register  
@@ -333,9 +337,13 @@ def principalMaterial(request, order):
 @dajaxice_register
 def auxiliaryMaterial(request, order):
     """
-    BinWu 
+    MH Chen 
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
+    for item in list:
+        item.realname = item.material.get_categories_display()
+        if item.net_weight != None and item.quota != None:
+            item.user_ratio = round(item.net_weight / item.quota, 5)
     context = {
         "list" : list,
     }
@@ -691,6 +699,24 @@ def saveProcessRequirement(request, pid, content):
     process.technical_requirement = content
     process.save()
 
+@dajaxice_register
+def saveAuxiliaryMaterielInfo(request, iid,categories,auxiliary_material_form):
+    """
+    MH Chen
+    """
+    materiel = Materiel.objects.get(id = iid)
+    material = materiel.material
+    print material.categories
+    print categories
+    material.categories = categories
+    material.save()
+    auxiliary_material_form = MaterielForm(deserialize_form(auxiliary_material_form),instance = materiel)
+    
+    if auxiliary_material_form.is_valid():
+        auxiliary_material_form.save()
+        return  "ok"
+    else:
+        return "fail"
 
 
 

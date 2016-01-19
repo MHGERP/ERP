@@ -3,7 +3,7 @@
 from django import  forms
 from const.models import Materiel
 from techdata.models import *
-from const import PROCESSING_CHOICES, TRANSFER_CARD_TYPE_CHOICES
+from const import PROCESSING_CHOICES, TRANSFER_CARD_TYPE_CHOICES,MATERIAL_CATEGORY_CHOICES
 
 class MaterielForm(forms.ModelForm):
     """
@@ -11,7 +11,7 @@ class MaterielForm(forms.ModelForm):
     """
     class Meta:
         model = Materiel
-        exclude = ("id", "order")
+        exclude = ("id", "order","parent_schematic_index")
         widgets = {
             "name": forms.TextInput(attrs = {"class": "input-medium"}),
             "index": forms.TextInput(attrs = {"class": "input-small"}),
@@ -22,6 +22,8 @@ class MaterielForm(forms.ModelForm):
             "net_weight": forms.TextInput(attrs = {"class": "input-medium"}),
             "total_weight": forms.TextInput(attrs = {"class": "input-medium"}),
             "specification": forms.TextInput(attrs = {"class": "input-medium"}),
+            "quota_coefficient": forms.TextInput(attrs = {"class": "input-medium"}),
+            "quota": forms.TextInput(attrs = {"class": "input-medium"}),
             
         }
 
@@ -124,4 +126,10 @@ class TransferCardForm(forms.Form):
     JunHU
     """
     card_type = forms.ChoiceField(choices = TRANSFER_CARD_TYPE_CHOICES, widget = forms.Select(attrs = {'class': 'input'}))
+
+class CategoriesForm(forms.Form):
+    """
+    MH Chen
+    """
+    categorie_type = forms.ChoiceField(choices = MATERIAL_CATEGORY_CHOICES, widget = forms.Select(attrs = {'class': 'input'}))
 

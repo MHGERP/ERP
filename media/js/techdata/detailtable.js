@@ -24,38 +24,52 @@ function tableCallback(data) {
    $("#detail_table").html(data);
 }
 
-
-
+var iid;
+var categories;
 $(document).on("click", ".tr_materiel", function() {
-    var iid = $(this).attr("iid");
+    iid = $(this).attr("iid");
+    categories = $(this).attr("cid");
     fill(iid);
 });
 
 function fill(iid) {
     $("#card_modal").attr("iid", iid);
-    Dajaxice.techdata.getAuxiliaryMaterielInfo(getInfoCallBack, {"iid": iid});
+    alert(iid);
+    Dajaxice.techdata.getAuxiliaryMaterielInfo(getInfoCallBack, {"iid": iid,
+                                                                 "categories":categories});
 }
 
 function getInfoCallBack(data) {
-    $("#base-info-area").html(data.auxiliary_materiel_info_html);
-    $("#type_in").html(data.detail_table_html);
+    $("#type_in").html(data);
 }
 
 $(document).on("click","#id_success",function(){
-    $("#id_quota").val($("#id_total_weight").val()*$("#id_factor").val());
+    $("#id_quota").val(($("#id_total_weight").val()*$("#id_quota_coefficient").val()).toFixed(6));
+    $("#use_ratio").val(($("#id_net_weight").val()/$("#id_quota").val()).toFixed(5));
+
 });
 
-// $(document).on("click","#id_confirm",function(){
-    
-//     Dajaxice.techdata.saveAuxiliaryMaterielInfo(saveAuxiliaryMaterielInfoCallBack, {"iid": iid});
-// });
-// function saveAuxiliaryMaterielInfoCallBack(){
-
-// }
+ $(document).on("click","#id_confirm",function(){
+   var categorie = $("#id_categorie_type").val();
+    Dajaxice.techdata.saveAuxiliaryMaterielInfo(saveAuxiliaryMaterielInfoCallBack, {"iid": iid,
+                                                                                    "categories":categorie,
+                                                                                    "auxiliary_material_form":$("#auxiliary_material_form").serialize()});
+ });
+ function saveAuxiliaryMaterielInfoCallBack(data){
+    if(data == "ok") {
+        alert("修改成功！");
+        var order = $('#id_work_order').val();
+         Dajaxice.techdata.auxiliaryMaterial(tableCallback, {"order" : order});               
+    }
+    else {
+        alert("修改失败！");
+    }
+ }
 $("#id_goto_next").click(function(){
    var cur_iid = $("#card_modal").attr("iid");
    var row = $("tr[iid='" + cur_iid + "']");
    var row_next = row.next(".tr_materiel");
+   categories = $(row_next).attr("cid");
    if(!row_next.html()) alert("本条为最后一条");
    else fill(row_next.attr("iid"));
 });
@@ -64,6 +78,7 @@ $("#id_goto_prev").click(function(){
    var cur_iid = $("#card_modal").attr("iid");
    var row = $("tr[iid='" + cur_iid + "']");
    var row_prev = row.prev(".tr_materiel");
+   categories = $(row_prev).attr("cid");
    if(!row_prev.html()) alert("本条为第一条");
    else fill(row_prev.attr("iid"));
 });
