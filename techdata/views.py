@@ -160,3 +160,10 @@ def techDetailTableViews(request):
         "form": WorkOrderForm,
     }
     return render(request, "techdata/detail_table.html", context)
+
+def heatTreatmentTechCardEditViews(request):
+    """
+    JunHU
+    """
+    context = {}
+    return render(request, "techdata/heat_treatment_tech_card_edit.html", context)
