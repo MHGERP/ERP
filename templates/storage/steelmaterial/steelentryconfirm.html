@@ -1,6 +1,7 @@
 {% extends "storage/base/steelbase.html" %}
 
 {% block sub_sec %}
+<a href="/storage/steelentryhome">钢材入库管理</a>
 <a href="#" class="current">钢材入库单</a>
 {% endblock %}
 
@@ -57,7 +58,7 @@
             <td>{{item.lot_number}}</td>
             <td>{{item.material}}</td>
             <td>{{item.material_number}}</input></td>
-            <td>{{entry.remark}}</td>
+            <!-- <td>{{item.remark}}</td> -->
             <td>
                 <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_steelEntryItem({{item.id}})">修改</a>
             </td>
@@ -78,7 +79,7 @@
     </div>
     <center style="margin:110px;">
     {% if is_show %}
-    <button  id="entry_confirm"  class="btn btn-primary" type="button" onclick="entryconfirm({{entry.id}});">入库单确认</button>
+    <button  id="entry_confirm"  class="btn btn-primary" type="button" onclick="steel_entry_confirm({{entry.id}});">入库单确认</button>
     {% else %}
         <a style="width:10%;height:20px;" class="btn btn-primary" type="button" href="/storage/steelentryhome">返回</a>
     {% endif %}
@@ -103,7 +104,7 @@
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-        <button class="btn btn-primary" data-dismiss="modal" onclick="save_steelEntryItem();">保存</button>
+        <button class="btn btn-primary" data-dismiss="modal" onclick="save_steel_entry_item();">保存</button>
     </div>
 </div>
 {% endblock %}

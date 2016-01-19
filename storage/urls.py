@@ -36,18 +36,18 @@ urlpatterns = patterns('',
         r'^weldentryhome$',
         storage_views.weldEntryHomeViews,
     ),
-    url(
-        r'^steelentryhome$',
-        storage_views.steelEntryHomeViews,
-    ),
+    # url(
+    #     r'^steelentryhome$',
+    #     storage_views.steelEntryHomeViews,
+    # ),
     url(
         r'^weldentryconfirm/(?P<eid>\w+)$',
         storage_views.weldEntryConfirmViews,
     ),
-    url(
-        r'^steelentryconfirm/(?P<eid>\d+)$',
-        storage_views.steelEntryConfirmViews,
-    ),
+    # url(
+    #     r'^steelentryconfirm/(?P<eid>\d+)$',
+    #     storage_views.steelEntryConfirmViews,
+    # ),
     url(
         r'^weldapply$',
         storage_views.Weld_Apply_Card_List,
@@ -199,6 +199,10 @@ urlpatterns = patterns('',
         r'^outside/account/home$',
         storage_views.outsideAccountHomeViews,    
     ),
+    url(
+        r'^outside/outsidestorageaccount$',
+        storage_views.outsideStorageAccountViews,
+       ),
     url(
         r'^outside/account/entryhome$',
         storage_views.outsideEntryAccountHomeViews,name="outside_account_entryhome"

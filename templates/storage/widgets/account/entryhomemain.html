@@ -1,5 +1,5 @@
 <div></div>
-<div class="span8">
+<div class="span10">
     <form class="form-inline" id="search_form" method="post">
         {% csrf_token %}
         {% for field in search_form %}
@@ -10,7 +10,7 @@
     </form>
 </div>
 <br>
-<div class="span8 table_container">
+<div class="span10 table_container">
     <table class="table table-bordered">
         <thead>
             <th>工作令</th>
@@ -30,7 +30,7 @@
         <td>{{item.number}}</td>
         <td>{{item.entry.entry_code}}</td>
         <td>{{item.entry.entry_time|date:"Y年m月d日"}}</td>
-        <td><a class="btn" href="/storage/outside/entryconfirm/{{item.entry.id}}">查看入库单</a></td>
+        <td><a class="btn" href="/storage/outside/entryconfirm/{{item.entry.id}}?redict_path=outside/account/entryhome">查看入库单</a></td>
     </tr>
     {% endfor %}
 </tbody>
@@ -38,7 +38,6 @@
 <script>
 $(function(){
         $('#date').datetimepicker({format:"yyyy-mm-dd",minView:2});
-
-        });
+        })
 </script>
 </div>

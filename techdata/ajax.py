@@ -20,6 +20,7 @@ from techdata.models import *
 from const.models import *
 from const.utils import getMaterialQuerySet
 
+from purchasing.models import MaterielExecute, MaterielExecuteDetail
 import datetime
 
 @dajaxice_register
@@ -333,7 +334,7 @@ def principalMaterial(request, order):
 @dajaxice_register
 def auxiliaryMaterial(request, order):
     """
-    BinWu
+    BinWu 
     """
     list = Materiel.objects.filter(order = order);
     context = {
@@ -518,33 +519,36 @@ def processBOMMark(request, id_work_order, step):
     """
     order = WorkOrder.objects.get(id = id_work_order)
     if step == MARK_WRITE:
-        order.processbommark.writer = request.user
-        order.processbommark.write_date = datetime.datetime.today()
-        order.processbommark.save()
+        order.processbompagemark.writer = request.user
+        order.processbompagemark.write_date = datetime.datetime.today()
+        order.processbompagemark.save()
         context = {
             "ret": True,
-            "mark_user": unicde(order.processbommark.writer.userinfo),
+            "mark_user": unicode(order.processbompagemark.writer.userinfo),
         }
     elif step == MARK_STATISTIC:
-        order.processbommark.statistician = request.user
-        order,processbommark.statistic_date = datetime.datetime.today()
+        order.processbompagemark.statistician = request.user
+        order.processbompagemark.statistic_date = datetime.datetime.today()
+        order.processbompagemark.save()
         context = {
             "ret": True,
-            "mark_user": unicde(order.processbommark.statistician.userinfo),
+            "mark_user": unicode(order.processbompagemark.statistician.userinfo),
         }
     elif step == MARK_QUOTA:
-        order.processbommark.quota_agent = request.user
-        order,processbommark.quota_date = datetime.datetime.today()
+        order.processbompagemark.quota_agent = request.user
+        order.processbompagemark.quota_date = datetime.datetime.today()
+        order.processbompagemark.save()
         context = {
             "ret": True,
-            "mark_user": unicde(order.processbommark.quota_agent.userinfo),
+            "mark_user": unicode(order.processbompagemark.quota_agent.userinfo),
         }
     elif step == MARK_PROOFREAD:
-        order.processbommark.proofreader = request.user
-        order,processbommark.proofread_date = datetime.datetime.today()
+        order.processbompagemark.proofreader = request.user
+        order.processbompagemark.proofread_date = datetime.datetime.today()
+        order.processbompagemark.save()
         context = {
             "ret": True,
-            "mark_user": unicde(order.processbommark.proofreader.userinfo),
+            "mark_user": unicode(order.processbompagemark.proofreader.userinfo),
         }
     else:
         context = {
@@ -691,6 +695,11 @@ def saveProcessRequirement(request, pid, content):
     process.technical_requirement = content
     process.save()
 
-
-
-
+@dajaxice_register
+def getExcuteList(request):
+    execute_list = MaterielExecute.objects.filter(is_save = True)
+    context = {
+        "execute_list": execute_list,
+    }
+    html = render_to_string("techdata/widgets/programme_edit_table.html", context)
+    return html

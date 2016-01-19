@@ -48,7 +48,7 @@
     {% if is_show %}
     <button  id="entry_confirm" style="width:15%;height:30px;" class="btn btn-primary" type="button" onclick="entryconfirm({{entry.id}});">入库单确认</button>
     {% else %}
-        <a style="width:15%;height:20px;" class="btn btn-primary" type="button" href="/storage/weldentryhome">返回</a>
+    <a style="width:15%;height:20px;" class="btn btn-primary" type="button" href="{{redict_path}}">返回</a>
     {% endif %}
     </center>
 </form>
