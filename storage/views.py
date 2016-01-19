@@ -748,7 +748,7 @@ def outsideApplyCardHomeViews(request):
 def outsideApplyCardConfirmViews(request,cid):
     url = getUrlByViewMode(request,"outside/applycardhome")
     default_status = STORAGESTATUS_KEEPER
-    print url
+
     context = getOutsideApplyCardConfirmContext(cid,OutsideApplyCardForm,url,default_status) 
     return render(request,"storage/outside/applycardconfirm.html",context)
 
