@@ -74,6 +74,10 @@ def saveEntry(obj,role,user,status):
     obj.save()
 
 class EntryObject(object):
+    """
+    author:shenlian
+    func:entry obj for entry save form and items
+    """
     context = {}
     flag = False
     def __init__(self,status_list,_Model,eid):

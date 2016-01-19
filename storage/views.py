@@ -408,8 +408,8 @@ def weldRefundViews(request):
             refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data)
     else:
         search_form = RefundSearchForm()
-        #refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
-        refund_set = WeldRefund.objects.all()
+        refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
+        #refund_set = WeldRefund.objects.all()
     context = {
             "search_form":search_form,
             "refund_set":refund_set,

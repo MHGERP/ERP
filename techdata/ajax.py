@@ -28,6 +28,7 @@ def getProcessBOM(request, id_work_order):
     """
     JunHU
     """
+    print "hhh"
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
     for item in BOM:
@@ -39,6 +40,7 @@ def getProcessBOM(request, id_work_order):
             process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
             process_list = []
             while process:
+                print process
                 process_list.append(process)
                 process = process.next_processing
         except:
