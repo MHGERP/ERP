@@ -54,3 +54,6 @@ nosetests.xml
 .orig
 *#
 */migrations/
+
+# Mac OS finder files
+.DS_Store

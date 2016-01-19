@@ -124,24 +124,6 @@ def Auxiliary_Detail_Query(request,id):
 
 
 @dajaxice_register
-def Auxiliary_Tools_Entry(request, object_id):
-    object_id = int(object_id)
-    # object_id = int(request.POST['object_id'])
-    auxiliary_card_list = AuxiliaryToolEntryCardList.objects.get(id=object_id)
-    auxiliarytools = AuxiliaryToolEntryCard.objects.filter( card_list__id=object_id)
-    for at in auxiliarytools:
-        if at.quantity < 0:
-            msg = '[ERROR]Auxiliary tools entry quantity error'
-            return HttpResponse(msg)
-        at.auxiliary_tool.quantity = F('quantity')+at.quantity
-    for at in auxiliarytools:
-        at.auxiliary_tool.save()
-    auxiliary_card_list.status = STORAGESTATUS_END
-    auxiliary_card_list.keeper = request.user
-    auxiliary_card_list.save()
-    return HttpResponse('Success')
-
-@dajaxice_register
 def Auxiliary_Tools_Apply_Create(request,data):
     ins=None
     form_data = deserialize_form(data)
