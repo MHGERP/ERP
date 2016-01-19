@@ -321,11 +321,12 @@ def processFollowAdd(request):
         return HttpResponse(json.dumps({'status':status,"form_html":form_html}),content_type="application/json")
 
     
-def materielExecuteDetailViews(request, choice, *mid):
+def materielExecuteDetailViews(request, choice, source, *mid):
     """
     mxl
     summary : click into add or view html
-    params : choice : main or support detail
+    params : choice : view(0) or add(1) detail
+             source : click source , from techdata or purchasing(use in view ,where choice = 1)
              mid : option param, the materielexecute id
     """
     if choice == "0":
@@ -340,7 +341,8 @@ def materielExecuteDetailViews(request, choice, *mid):
             "materielexecute_detail_set" : materielexecute_detail_set,
             "choice" : materiel_choice,
             "MAIN_MATERIEL" : MAIN_MATERIEL,
-            "executeForm" : executeForm
+            "executeForm" : executeForm,
+            "source" : source
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_view.html", context)
     else:
@@ -372,7 +374,8 @@ def materielExecuteDetailViews(request, choice, *mid):
             "choice" : materiel_choice,
             "MAIN_MATERIEL" : MAIN_MATERIEL,
             "MaterielExecuteForm" : executeForm,
-            "materiels":materiels
+            "materiels":materiels,
+            "source" : source,
            # "MainMaterielExecuteDetailForm" : detailForm
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_add.html", context)

@@ -238,7 +238,6 @@ class MaterielExecute(models.Model):
     date = models.DateField(blank = False, null = False, verbose_name = u"制表日期")
     materiel_choice = models.CharField(blank=False, max_length = 20, choices=MATERIEL_CHOICE, verbose_name=u"材料选择")
     is_save = models.BooleanField(blank=False, verbose_name=u"是否已保存")
-    tech_requirement=models.CharField(max_length=5000,blank=True,null=True)
     tech_feedback = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"工艺反馈")
     class Meta:
         verbose_name = u"材料执行表"
@@ -295,3 +294,4 @@ class MaterielExecuteDetail(models.Model):
         verbose_name_plural = u"材料执行表详细"
     def __unicode__(self):
         return '%s' % (self.materiel.index)
+

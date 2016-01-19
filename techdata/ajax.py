@@ -697,9 +697,44 @@ def saveProcessRequirement(request, pid, content):
 
 @dajaxice_register
 def getExcuteList(request):
+    """
+    JunHU
+    """
     execute_list = MaterielExecute.objects.filter(is_save = True)
+    for execute in execute_list:
+        execute.program_list = Program.objects.filter(execute = execute)
     context = {
         "execute_list": execute_list,
     }
     html = render_to_string("techdata/widgets/programme_edit_table.html", context)
     return html
+
+@dajaxice_register
+def removeProgram(request, pid):
+    """
+    JunHU
+    """
+    try:
+        program = Program.objects.get(id = pid)
+        program.delete()
+        return simplejson.dumps({"ret": True})
+    except:
+        return simplejson.dumps({"ret": False})
+
+@dajaxice_register
+def saveProgramFeedback(request, iid, form):
+    """
+    JunHU
+    """
+    execute = MaterielExecute.objects.get(id = iid)
+    form = ProgramFeedbackForm(deserialize_form(form))
+    if form.is_valid():
+        need_correct = form.cleaned_data["need_correct"]
+        feedback = form.cleaned_data["feedback"]
+        execute.is_save = (not need_correct)
+        execute.tech_feedback = feedback
+        execute.save()
+        return simplejson.dumps({"ret": True, })
+    else:
+        return simplejson.dumps({"ret": False, })
+

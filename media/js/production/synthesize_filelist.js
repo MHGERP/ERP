@@ -12,7 +12,10 @@ $("#order_search").click(function(){
 	refresh();
 })
 
-$(document).on("click",".check",function(){
-	if(confirm("确定进行确认吗？"))
-		$(this).addClass("btn-primary");
+$(document).on("click",".confirm",function(){
+    if(confirm("是否进行确认？")){
+        var id = $(this).attr("id");
+        var workorder_id = $(this).parent().parent().children(":first").html();
+        Dajaxice.production.changeFileList(getFileListCallBack,{"id":id,"workorder_id":workorder_id});
+    }
 })

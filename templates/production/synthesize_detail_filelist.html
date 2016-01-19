@@ -1,42 +1,69 @@
 <table class="table table-bordered table-striped">
     <thead>
-    	<tr>
-    		<th>工作令</th>
-    		<th>简图</th>
-    		<th>试压工艺</th>
-    		<th>工艺库</th>
-    		<th>产品图</th>
-    		<th>装箱图</th>
-    		<th>唛头</th>
-    		<th>装箱单</th>
-    		<th>涂装明细</th>
+        <tr>
+            <th>工作令</th>
+            <th>简图</th>
+            <th>试压工艺</th>
+            <th>工艺库</th>
+            <th>产品图</th>
+            <th>装箱图</th>
+            <th>唛头</th>
+            <th>装箱单</th>
+            <th>涂装明细</th>
     	</tr>
     </thead>
-    <tr>
-    	<td>{{workorder.order_index}}</td>
-    	<td>
-    		<button class="btn check">确认</button>
-    	</td>
-    	<td>
-    		<button class="btn check">确认</button>
-    	</td>
-    	<td>
-    		<button class="btn check">确认</button>
-    	</td>
-    	<td>
-    		<button class="btn check">确认</button>
-    	</td>
-    	<td>
-    		<button class="btn check">确认</button>
-    	</td>
-    	<td>
-    		<button class="btn check">确认</button>
-    	</td>
-    	<td>
-    		<button class="btn check">确认</button>
-    	</td>
-    	<td>
-    		<button class="btn check">确认</button>
-    	</td>
-    </tr>
+    <tbody>
+        {%for item in workorder%}
+        <tr>
+            <td>{{item.workorder_id}}</td>
+            {%if not item.sketch%}
+            <td><button class="btn confirm" id="sketch">确认</button></td>
+            {%else%}
+            <td><button class="btn btn-success" uid=>已确认</button></td>
+            {%endif%}
+
+            {%if not item.pressure_test%}
+            <td><button class="btn confirm" id="pressure_test">确认</button></td>
+            {%else%}
+            <td><button class="btn btn-success">已确认</button></td>
+            {%endif%}
+
+            {%if not item.craph%}
+            <td><button class="btn confirm" id="craph">确认</button></td>
+            {%else%}
+            <td><button class="btn btn-success">已确认</button></td>
+            {%endif%}
+
+            {%if not item.product%}
+            <td><button class="btn confirm" id="product">确认</button></td>
+            {%else%}
+            <td><button class="btn btn-success">已确认</button></td>
+            {%endif%}
+
+            {%if not item.encasement_graph%}
+            <td><button class="btn confirm" id="encasement_graph">确认</button></td>
+            {%else%}
+            <td><button class="btn btn-success">已确认</button></td>
+            {%endif%}
+
+            {%if not item.mark%}
+            <td><button class="btn confirm" id="mark">确认</button></td>
+            {%else%}
+            <td><button class="btn btn-success">已确认</button></td>
+            {%endif%}
+
+            {%if not item.encasement_list%}
+            <td><button class="btn confirm" id="encasement_list">确认</button></td>
+            {%else%}
+            <td><button class="btn btn-success">已确认</button></td>
+            {%endif%}
+
+            {%if not item.coating_detail%}
+            <td><button class="btn confirm" id="coating_detail">确认</button></td>
+            {%else%}
+            <td><button class="btn btn-success">已确认</button></td>
+            {%endif%}
+        </tr>
+        {%endfor%}
+    </tbody>
 </table>
