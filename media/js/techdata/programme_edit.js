@@ -43,3 +43,20 @@ $("#btn-upload").click(function() {
         }
     });
 })
+
+$(document).on("click", ".btn-feedback", function() {
+    $("#feedback_save").attr("args", $(this).parent().parent().attr("iid"));
+})
+$("#feedback_save").click(function() {
+    var iid = $(this).attr("args");
+    Dajaxice.techdata.saveProgramFeedback(saveFeedbackCallBack, {"form": $("#feedback_form").serialize(), "iid": iid});
+});
+
+function saveFeedbackCallBack(data) {
+    if(data.ret) {
+        refresh();
+    }
+    else {
+        alert("保存失败，请重试");
+    }
+}

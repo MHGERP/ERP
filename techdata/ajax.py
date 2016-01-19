@@ -721,3 +721,20 @@ def removeProgram(request, pid):
     except:
         return simplejson.dumps({"ret": False})
 
+@dajaxice_register
+def saveProgramFeedback(request, iid, form):
+    """
+    JunHU
+    """
+    execute = MaterielExecute.objects.get(id = iid)
+    form = ProgramFeedbackForm(deserialize_form(form))
+    if form.is_valid():
+        need_correct = form.cleaned_data["need_correct"]
+        feedback = form.cleaned_data["feedback"]
+        execute.is_save = (not need_correct)
+        execute.tech_feedback = feedback
+        execute.save()
+        return simplejson.dumps({"ret": True, })
+    else:
+        return simplejson.dumps({"ret": False, })
+

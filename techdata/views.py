@@ -10,7 +10,7 @@ import json, datetime
 from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
-from techdata.forms import MaterielForm, CirculationRouteForm, ProcessingForm, TransferCardForm
+from techdata.forms import *
 from const.models import Materiel
 from techdata.models import TransferCard, Program
 from purchasing.models import MaterielExecute
@@ -130,7 +130,9 @@ def weldEditViews(request):
     return render(request, "techdata/weld_edit.html", context)
 
 def programmeEditViews(request):
+    form = ProgramFeedbackForm()
     context = {
+        "form": form,
     }
     return render(request, "techdata/programme_edit.html", context)
 

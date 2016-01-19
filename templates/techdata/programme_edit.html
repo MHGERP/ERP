@@ -19,22 +19,22 @@
         <h3>编辑工艺反馈信息</h3>
     </div>
     <div class="modal-body">
-        <form class="well form" id="supplier_info_form" method="POST" action="">
+        <form class="well form" id="feedback_form">
             {% csrf_token %}
             <div class="form-group">
-                <label class="add-on">供应商编号</label>
-                {{supplier_form.supplier_id}}    
+                <label class="add-on">反馈详情：</label>
+                {{ form.feedback }}
             </div>
             <div class="form-group">
-                <label class="add-on">供应商名称</label>
-                {{ supplier_form.supplier_name }}
+                是否需要重新作材料执行：
+                {{ form.need_correct }}    
             </div>
-        </form><!--end school_email_send_form-->
+        </form>
     </div>
     <div class="modal-footer">
         <a class="btn" data-dismiss="modal" >关闭</a>
         <a class="btn btn-primary" data-dismiss="modal" 
-            id="add_or_update_supplier">保存更新</a>
+            id="feedback_save">确认</a>
     </div>
 </div>
 
@@ -51,11 +51,12 @@
         </form>
     </div>
     <div class="modal-footer">
-		<span class="btn btn-primary" id="btn-upload">上传</span>
+		<span class="btn btn-primary" id="btn-upload" data-dismiss="modal">上传</span>
         <a class="btn" data-dismiss="modal">关闭</a>
     </div>
 </div>
 
 
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/programme_edit.js"></script>
+<script type='text/javascript' src="{{ STATIC_URL  }}jquery/jquery.form.js"></script>
 {% endblock%}
