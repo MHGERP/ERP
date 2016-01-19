@@ -300,9 +300,11 @@ def boxOutBought(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    work_order = WorkOrder.objects.get(id = order)
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
+        "work_order" : work_order,
     }
     html = render_to_string("techdata/widgets/tech_box_outbought_table.html", context)
     return html
@@ -312,7 +314,7 @@ def firstFeeding(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -324,7 +326,7 @@ def principalMaterial(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -336,7 +338,7 @@ def auxiliaryMaterial(request, order):
     """
     BinWu 
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -348,7 +350,7 @@ def weldList(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -360,7 +362,7 @@ def techBoxWeld(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -372,7 +374,7 @@ def weldQuota(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -510,6 +512,36 @@ def weldListReviewerConfirm(request, id_work_order):
     order.weldlistpagemark.reviewer = request.user
     order.weldlistpagemark.reviewe_date = datetime.datetime.today()
     order.weldlistpagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def boxOutBoughtWriteConfirm(request, id_work_order):
+    """
+    BinWu
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if BoxOutBoughtMark.objects.filter(order = order).count() == 0:
+        BoxOutBoughtMark(order = order).save()
+    order.boxoutboughtmark.writer = request.user
+    order.boxoutboughtmark.write_date = datetime.datetime.today()
+    order.boxoutboughtmark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+
+@dajaxice_register
+def boxOutBoughtReviewConfirm(request, id_work_order):
+    """
+    BinWu
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if BoxOutBoughtMark.objects.filter(order = order).count() == 0:
+        BoxOutBoughtMark(order = order).save()
+
+    if order.boxoutboughtmark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.boxoutboughtmark.reviewer = request.user
+    order.boxoutboughtmark.review_date = datetime.datetime.today()
+    order.boxoutboughtmark.save()
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
 @dajaxice_register
@@ -697,9 +729,44 @@ def saveProcessRequirement(request, pid, content):
 
 @dajaxice_register
 def getExcuteList(request):
+    """
+    JunHU
+    """
     execute_list = MaterielExecute.objects.filter(is_save = True)
+    for execute in execute_list:
+        execute.program_list = Program.objects.filter(execute = execute)
     context = {
         "execute_list": execute_list,
     }
     html = render_to_string("techdata/widgets/programme_edit_table.html", context)
     return html
+
+@dajaxice_register
+def removeProgram(request, pid):
+    """
+    JunHU
+    """
+    try:
+        program = Program.objects.get(id = pid)
+        program.delete()
+        return simplejson.dumps({"ret": True})
+    except:
+        return simplejson.dumps({"ret": False})
+
+@dajaxice_register
+def saveProgramFeedback(request, iid, form):
+    """
+    JunHU
+    """
+    execute = MaterielExecute.objects.get(id = iid)
+    form = ProgramFeedbackForm(deserialize_form(form))
+    if form.is_valid():
+        need_correct = form.cleaned_data["need_correct"]
+        feedback = form.cleaned_data["feedback"]
+        execute.is_save = (not need_correct)
+        execute.tech_feedback = feedback
+        execute.save()
+        return simplejson.dumps({"ret": True, })
+    else:
+        return simplejson.dumps({"ret": False, })
+

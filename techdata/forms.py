@@ -125,3 +125,9 @@ class TransferCardForm(forms.Form):
     """
     card_type = forms.ChoiceField(choices = TRANSFER_CARD_TYPE_CHOICES, widget = forms.Select(attrs = {'class': 'input'}))
 
+class ProgramFeedbackForm(forms.Form):
+    """
+    JunHU
+    """
+    need_correct = forms.BooleanField(required = False, widget = forms.CheckboxInput())
+    feedback = forms.CharField(required = True, widget = forms.Textarea(attrs = {"rows": "5", "cols": "50"}))

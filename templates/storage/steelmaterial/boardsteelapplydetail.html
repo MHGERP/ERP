@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block sub_sec %}
-<a href="#" class="current">领用单详情</a>
+<a href="/storage/steelapply">钢材领用</a>
+<a href="#" class="current">板材领用单详情</a>
 {% endblock %}
 
 {% block inner_content %}
@@ -16,7 +17,7 @@
     <span class="span3">日期: {{common_Info.date|date:"Ymd"}}</span>
     <span class="span3">编号: {{common_Info.form_code}}</span>
 </div>
-<table class="table table-bordered">
+<table class="table table-bordered" iid="{{common_Info.form_code}}">
     <thead>
         <th>名称</th>
         <th>材质</th>
@@ -25,7 +26,6 @@
         <th>状态</th>
         <th>数量</th>
         <th>重量</th>
-        <th>入库编号</th>
         <th>备注</th>
     </thead>
     <tbody>
@@ -38,7 +38,6 @@
             <td>{{card.status}}</td>
             <td>{{card.quantity}}</td>
             <td>{{card.weight}}</td>
-            <td>{{card.steel_material.entry_form.form_code}}</td>
             <td>{{card.remark}}</td>
         </tr>
         {% endfor %}

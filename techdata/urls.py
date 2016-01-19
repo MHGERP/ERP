@@ -88,5 +88,9 @@ urlpatterns=patterns('',
     url(
         r'^transfer_card_edit$',
         techdata_views.transferCardEditViews,
+    ),
+    url(
+        r'^programadd',
+        techdata_views.programAdd,
     )
 )

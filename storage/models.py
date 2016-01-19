@@ -200,7 +200,7 @@ class SteelMaterialPurchasingEntry(models.Model):
     keeper = models.ForeignKey(User,blank=False,null=False,related_name = "steel_keeper",verbose_name=u"库管员" ,)
     entry_time = models.DateField(blank=False,null=True,auto_now_add=True,verbose_name=u"入库时间")
     entry_confirm = models.BooleanField(default=False,verbose_name=u"入库单确认")
-    #entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES_2,default=0,verbose_name=u"入库单类型")
+    steel_type = models.IntegerField(choices = ENTRYTYPE_CHOICES_2,default=0,verbose_name=u"入库单类型")
     entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=0,verbose_name=u"入库单状态")
     def __unicode__(self):
         return str(self.form_code)
@@ -286,7 +286,7 @@ class CommonSteelMaterialApplyCardInfo(models.Model):
     remarkment = models.CharField(blank=True,null=True,max_length=100,verbose_name=u'备注')
 
     def __unicode__(self):
-        return str(self.form_code)
+        return self.form_code
 
     class Meta:
         verbose_name=u"钢材领用单"
@@ -319,7 +319,7 @@ class BarSteelMaterialApplyCardContent(models.Model):
     remark = models.CharField(max_length=100,blank=True,null=True,verbose_name=u"备注")
 
     def __unicode__(self):
-        return self.card_info
+        return str(self.card_info)
 
     class Meta:
         verbose_name=u"型材领用单详细信息"
