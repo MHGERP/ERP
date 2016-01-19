@@ -34,7 +34,7 @@ class ApplyCardForm(ModelForm):
 
     class Meta:
         model=WeldingMaterialApplyCard
-        exclude=[]
+        exclude=['storelist']
         
         widgets={
                 'workorder':forms.TextInput(attrs={'class':'form-control','style':'width:60%'}),
@@ -84,7 +84,7 @@ class Apply_ApplyCardForm(ApplyCardForm):
 class Commit_ApplyCardForm(ApplyCardForm):
     class Meta(ApplyCardForm.Meta):
         widgets={
-                'workorder':forms.TextInput(attrs={'class':'form-control','style':'width:60%','readonly':''}),
+                'workorder':forms.Select(attrs={'class':'form-control','style':'span2','disabled':'disabled'}),
                 'weld_bead_number':forms.TextInput(attrs={'class':'form-control span2','readonly':''}), 
                 'weld_material_number':forms.TextInput(attrs={'class':'form-control','readonly':''}),
                 'model':forms.TextInput(attrs={'class':'form-control','readonly':''}),

@@ -54,7 +54,7 @@ class Materiel(models.Model):
     press=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"受压")
     recheck=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"复验")
     detection_level=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"探伤级别")
-
+    
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"

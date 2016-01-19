@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.db import transaction 
 from const.models import WorkOrder, Materiel
 from const.forms import InventoryTypeForm
+from const import *
 from django.http import HttpResponseRedirect,HttpResponse
 from django.db.models import Q,F
 from datetime import datetime
@@ -89,6 +90,41 @@ def searchSteelLedger(request,form):
         message = "errors"
     context["message"]=message
     return simplejson.dumps(context)
+
+@dajaxice_register
+def steelApplyEnsure(request,form_code):
+    """
+    Author:Rosen
+    Summay:钢材领用确认
+    Params:钢材领用单编号
+    return:提示信息
+    """
+    common_steelapply = CommonSteelMaterialApplyCardInfo.objects.get(form_code=form_code)
+    if common_steelapply.steel_type==BOARD_STEEL:message=boardSteelApplyEnsure(request,common_steelapply)
+    if common_steelapply.steel_type==BAR_STEEL:message=barSteelApplyEnsure(request,common_steelapply)
+    return message
+
+def boardSteelApplyEnsure(request,common_card):
+    """
+    Author:Rosen
+    Summay:板材领用确认
+    Params:领用单表头
+    return:提示信息
+    """
+    steel_set = common_card.boardsteelmaterialapplycardcontent_set.all()
+    for steel in steel_set:
+        quantity_ledger=steel.steel_material.boardsteelmaterialledger.quantity
+        quantity_need=steel.quantity
+        if quantity_need > quantity_ledger:return u"%s(%s)库存不足"%(steel.steel_material.name,steel.steel_material.specification)
+    for steel in steel_set:
+        ledger = steel.steel_material.boardsteelmaterialledger
+        ledger.quantity=ledger.quantity - steel.quantity
+        ledger.save()
+        steel.apply_confirm = True
+        steel.save()
+
+    
+
 
 @dajaxice_register
 def Search_History_Apply_Records(request,data):
@@ -599,3 +635,36 @@ def outsideAccountApplyCardSearch(request,form):
         }
     html = render_to_string("storage/widgets/account/applycardhomemain.html",context)
     return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def weldMaterialStorageItems(request,specification):
+    item_set = WeldStoreList.objects.filter(specification = specification,count__gt = 0).order_by('entry_time')
+    html = render_to_string("storage/weldapply/itemlist.html",{"item_set":item_set})
+    return simplejson.dumps({'html':html})
+
+@dajaxice_register
+def weldMaterialApply(request,itemid,form,index):
+    storageitem = WeldStoreList.objects.get(id = itemid)
+    applycard = WeldingMaterialApplyCard.objects.get(index=index)
+    form = Apply_ApplyCardForm(deserialize_form(form),instance=applycard)
+    if form.is_valid():
+        if storageitem.count >= form.cleaned_data["actual_quantity"]:
+            applycard.storelist = storageitem
+            applycard.save()
+            storageitem.count -= form.cleaned_data["actual_quantity"]
+            storageitem.save()
+            form.save()
+            applycard.status = APPLYCARD_COMMIT
+            applycard.save()
+            message = u"领用单确认成功"
+            flag = True
+        else:
+            message = u"领用确认失败，所选库存材料数量不足"
+            flag = False
+    else:
+        message = u"领用单确认失败，数据未填写完整"
+        flag = False
+        print form.errors
+    return simplejson.dumps({'message':message,'flag':flag})
+
+    

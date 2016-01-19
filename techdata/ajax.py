@@ -28,6 +28,7 @@ def getProcessBOM(request, id_work_order):
     """
     JunHU
     """
+    print "hhh"
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
     for item in BOM:
@@ -39,6 +40,7 @@ def getProcessBOM(request, id_work_order):
             process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
             process_list = []
             while process:
+                print process
                 process_list.append(process)
                 process = process.next_processing
         except:
@@ -79,19 +81,23 @@ def getSingleProcessBOM(request, iid):
     return html
 
 @dajaxice_register  
-def getAuxiliaryMaterielInfo(request, iid):
+def getAuxiliaryMaterielInfo(request, iid,categories):
     """
     MH Chen
     """
     materiel = Materiel.objects.get(id = iid)
     form = MaterielForm(instance = materiel)
+    categories_form = CategoriesForm(initial={"categorie_type":categories})
+    if materiel.net_weight != None and materiel.quota != None:
+        user_ratio = round(materiel.net_weight/materiel.quota,5)
     context = {
+        "categories_form":categories_form,
         "form": form,
+        "categories":categories,
+        "user_ratio":user_ratio,
     }
-    auxiliary_materiel_info_html = render_to_string("techdata/widgets/auxiliary_material_base_info_table.html", context)
-    detail_table_html = render_to_string("techdata/widgets/auxiliary_material_type_in.html", context)
-    print auxiliary_materiel_info_html
-    return simplejson.dumps({'auxiliary_materiel_info_html' : auxiliary_materiel_info_html, 'detail_table_html' : detail_table_html})
+    html = render_to_string("techdata/widgets/auxiliary_material_type_in.html", context)
+    return html
 
 
 @dajaxice_register  
@@ -300,9 +306,11 @@ def boxOutBought(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    work_order = WorkOrder.objects.get(id = order)
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
+        "work_order" : work_order,
     }
     html = render_to_string("techdata/widgets/tech_box_outbought_table.html", context)
     return html
@@ -312,7 +320,7 @@ def firstFeeding(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -324,7 +332,7 @@ def principalMaterial(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -334,9 +342,13 @@ def principalMaterial(request, order):
 @dajaxice_register
 def auxiliaryMaterial(request, order):
     """
-    BinWu 
+    MH Chen 
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
+    for item in list:
+        item.realname = item.material.get_categories_display()
+        if item.net_weight != None and item.quota != None:
+            item.user_ratio = round(item.net_weight / item.quota, 5)
     context = {
         "list" : list,
     }
@@ -348,7 +360,7 @@ def weldList(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -360,7 +372,7 @@ def techBoxWeld(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -372,7 +384,7 @@ def weldQuota(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -510,6 +522,36 @@ def weldListReviewerConfirm(request, id_work_order):
     order.weldlistpagemark.reviewer = request.user
     order.weldlistpagemark.reviewe_date = datetime.datetime.today()
     order.weldlistpagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def boxOutBoughtWriteConfirm(request, id_work_order):
+    """
+    BinWu
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if BoxOutBoughtMark.objects.filter(order = order).count() == 0:
+        BoxOutBoughtMark(order = order).save()
+    order.boxoutboughtmark.writer = request.user
+    order.boxoutboughtmark.write_date = datetime.datetime.today()
+    order.boxoutboughtmark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+
+@dajaxice_register
+def boxOutBoughtReviewConfirm(request, id_work_order):
+    """
+    BinWu
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if BoxOutBoughtMark.objects.filter(order = order).count() == 0:
+        BoxOutBoughtMark(order = order).save()
+
+    if order.boxoutboughtmark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.boxoutboughtmark.reviewer = request.user
+    order.boxoutboughtmark.review_date = datetime.datetime.today()
+    order.boxoutboughtmark.save()
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
 @dajaxice_register
@@ -696,6 +738,23 @@ def saveProcessRequirement(request, pid, content):
     process.save()
 
 @dajaxice_register
+def saveAuxiliaryMaterielInfo(request, iid,categories,auxiliary_material_form):
+    """
+    MH Chen
+    """
+    materiel = Materiel.objects.get(id = iid)
+    material = materiel.material
+    print material.categories
+    print categories
+    material.categories = categories
+    material.save()
+    auxiliary_material_form = MaterielForm(deserialize_form(auxiliary_material_form),instance = materiel)
+    
+    if auxiliary_material_form.is_valid():
+        auxiliary_material_form.save()
+        return  "ok"
+    else:
+        return "fail"
 def getExcuteList(request):
     """
     JunHU
