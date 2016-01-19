@@ -184,11 +184,13 @@ class ProcessBOMPageMark(models.Model):
 
 class Program(models.Model):
     execute = models.ForeignKey(MaterielExecute, verbose_name = u"所属执行表")
-    program = models.FileField(null = True, blank = True, upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"程序")
-    graph = models.FileField(null = True, blank = True, upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"套料图")
+    name = models.CharField(max_length = 100, blank = False, verbose_name = u"文件名称")
+    file_obj = models.FileField(upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"程序")
     upload_date = models.DateTimeField(null = True, blank = True, verbose_name = u"上传时间")
+    file_size = models.CharField(max_length = 50, blank = True, null = True, default = None, verbose_name = "文件大小")
+    file_type = models.CharField(max_length = 50, blank = True, null = True, default = None, verbose_name = "文件类型")
     class Meta:
         verbose_name = u"编程套料图"
         verbose_name_plural = u"编程套料图"
     def __unicode__(self):
-        return unicode(self.execute)
+        return self.name

@@ -2,6 +2,7 @@
 from django.db import models
 from const.models import WorkOrder
 
+
 class SynthesizeFileListStatus(models.Model):
     workorder_id = models.ForeignKey(WorkOrder)
     sketch = models.BooleanField(default = False)
@@ -16,4 +17,4 @@ class SynthesizeFileListStatus(models.Model):
         verbose_name = u"综合工部"
         verbose_name_plural = u"综合工部"
     def __unicode__(self):
-        return self.workorder_id
+        return "%s" % self.workorder_id

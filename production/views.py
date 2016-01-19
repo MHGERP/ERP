@@ -22,7 +22,9 @@ def materielUseViews(request):
 
 def synthesizeFileListViews(request):
     workOrderForm = WorkOrderForm();
-    context={"workOrderForm":workOrderForm}
+    context={
+        "workOrderForm":workOrderForm,
+    }
     return render(request,"production/synthesize_filelist.html",context)
 
 def man_hour_summarizeViews(request):
