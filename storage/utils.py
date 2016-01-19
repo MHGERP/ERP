@@ -137,3 +137,10 @@ def updateStorageLits(items_set,_StorageModel):
             isOk = False
             print e
     return isOk
+
+
+def getUrlByViewMode(request,entry_url):
+    redict_path = request.GET.get("redict_path",None)
+    if redict_path:
+        entry_url = redict_path
+    return entry_url

@@ -40,7 +40,7 @@
             <td>{{item.charge_number}}</td>
             <td>{{item.material_id}}</td>
             <td>{{item.factory}}</td>
-            <td><a href="/storage/weldentryconfirm/{{item.entry_item.entry.id}}" class="btn">查看入库单</a></td>
+            <td><a href="/storage/weldentryconfirm/{{item.entry_item.entry.id}}?redict_path=/storage/weldentryaccount" class="btn">查看入库单</a></td>
         </tr>
         {% endfor %}
     </tbody>

@@ -1,6 +1,7 @@
 # coding: UTF-8
 from django.shortcuts import render
 from production.forms import *
+from const.forms import WorkOrderForm
 
 def taskAllocationViews(request):
     context={
@@ -18,9 +19,12 @@ def taskConfirmViews(request):
 def materielUseViews(request):
     context={}
     return render(request,"production/materiel_use.html",context)
+
 def synthesizeFileListViews(request):
-    orderIndexForm = OrderIndexForm();
-    context={"orderIndexForm":orderIndexForm}
+    workOrderForm = WorkOrderForm();
+    context={
+        "workOrderForm":workOrderForm,
+    }
     return render(request,"production/synthesize_filelist.html",context)
 
 def man_hour_summarizeViews(request):

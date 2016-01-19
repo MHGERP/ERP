@@ -13,10 +13,14 @@ function refreshCallBack(data) {
 //    Dajaxice.techdata.getDesignBOMForm(getDesignBOMFormCallback, {});
 //});
 
-$(document).on("click", "#designBOM_table tbody tr", function(){
-    var iid = $(this).attr("iid");
+function fill(iid) {
     $("#designBOM_edit_modal").attr("iid", iid);
     Dajaxice.techdata.getDesignBOMForm(getDesignBOMFormCallback, {"iid" : iid});
+}
+
+$(document).on("click", "#designBOM_table tbody tr", function(){
+    var iid = $(this).attr("iid");
+    fill(iid);
 });
 
 function getDesignBOMFormCallback(data) {
@@ -36,8 +40,20 @@ $(document).on("click","#save_desginBOM_btn", function(){
                                     });
 });
 
+function refreshSingleRow() {
+    var iid = $("#designBOM_edit_modal").attr("iid");
+    Dajaxice.techdata.getSingleDesignBOM(refreshSingleRowCallBack, {"iid" : iid})
+}
+
+function refreshSingleRowCallBack(data) {
+    var cur_iid = $("#designBOM_edit_modal").attr("iid");
+    var row = $("tr[iid='"+ cur_iid +"']");
+    row.html(data);
+}
+
 function saveDesignBOMCallback(data) {
     if(data.status == "ok") {
+        refreshSingleRow();
         alert("修改成功！");
     }
     else {
@@ -47,3 +63,20 @@ function saveDesignBOMCallback(data) {
             alert("#materiel_div").html(data.html);
     }
 }
+
+$("#id_goto_next").click(function(){
+   var cur_iid = $("#designBOM_edit_modal").attr("iid");
+   var row = $("tr[iid='" + cur_iid + "']");
+   var row_next = row.next(".designBOM_row");
+   if(!row_next.html()) alert("本条为最后一条");
+   else fill(row_next.attr("iid"));
+});
+
+$("#id_goto_prev").click(function(){
+   var cur_iid = $("#designBOM_edit_modal").attr("iid");
+   var row = $("tr[iid='" + cur_iid + "']");
+   var row_prev = row.prev(".designBOM_row");
+   if(!row_prev.html()) alert("本条为第一条");
+   else fill(row_prev.attr("iid"));
+});
+

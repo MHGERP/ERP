@@ -3,13 +3,26 @@
 	<h5>工作令：{{work_order.order_index}}</h5>
 	<h5>产品名称：{{work_order.product_name}}</h5>
 	<h5>单位：公斤</h5>
-	<h5>编制人：</h5>
-	<h5>审核人：</h5>
 </div>
 <div class="widget-content nopadding" style="max-height:800px; overflow-y:auto;">
     <div class="dataTables_length">
-        <span class="btn btn-small btn-primary">完成</span>
-        <span class="btn btn-small btn-primary">审核</span>
+		<span id="span_write">
+		编制人：
+		    {% if not work_order.weldlistpagemark.writer %}
+		    <span class="btn btn-mini btn-primary" id="btn_write_confirm">签字</span>
+		    {% else %}
+		    {{work_order.weldlistpagemark.writer.userinfo}}
+		    {% endif %} 
+		</span>
+
+		<span id="span_review">
+		审核人：
+		    {% if not work_order.weldlistpagemark.reviewer %}
+		    <span class="btn btn-mini btn-primary" id="btn_review_confirm">签字</span>
+		    {% else %}
+		    {{work_order.weldlistpagemark.reviewer.userinfo}}
+		    {% endif %}
+		</span>
     </div>
     <table class="table table-bordered table-striped" >
         <thead>

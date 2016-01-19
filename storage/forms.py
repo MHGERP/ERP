@@ -113,13 +113,13 @@ class EntryItemsForm(ModelForm):
             "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
         }
 
-class SteelEntryItemsForm(ModelForm):
-    class Meta:
-        model = SteelMaterialPurchasingEntry
-        fields = ("remark",)
-        widget = {
-            "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
-        }
+# class SteelEntryItemsForm(ModelForm):
+#     class Meta:
+#         model = SteelMaterial
+#         fields = ("remark",)
+#         widget = {
+#             "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
+#         }
 
 class HumRecordForm(ModelForm):
     class Meta: 
@@ -397,6 +397,13 @@ class ThreadEntryItemsForm(ModelForm):
             "count": forms.TextInput(attrs={'class':"form_control span2"}),
         }
 
+class ThreadSearchForm(ModelForm):
+        class Meta:
+            model = WeldStoreThread
+            fields = ("specification",)
+            widget = {
+                "specification": forms.TextInput(attrs={'class':"form-control span1"}),
+            }
 class OutsideApplyCardSearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
     workorder = forms.ChoiceField(label=u"工作令",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'workorder'}))
@@ -415,3 +422,27 @@ class OutsideApplyCardForm(ModelForm):
         fields = ("change_code","sample_report","entry_code")
     def __init__(self,*args,**kwargs):
         super(OutsideApplyCardForm,self).__init__(*args,**kwargs)
+
+class OutsideStorageSearchForm(forms.Form):
+    texture = forms.CharField(label=u'材质',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'texture'}))
+    specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'specification'}))
+class OutsideAccountEntrySearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False, widget=forms.TextInput(attrs={'id':'date'}))
+    specification = forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={'id':'specification'}))
+    entry_code = forms.CharField(label=u"入库单编号",required = False, widget=forms.TextInput(attrs={'id':'entry_code'}))
+    work_order = forms.CharField(label=u"工作令",required = False, widget=forms.TextInput(attrs={'id':'work_order'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideAccountEntrySearchForm,self).__init__(*args,**kwargs)
+        for key,val in self.fields.items():
+            val.widget.attrs["class"] = 'span2'
+
+class OutsideAccountApplyCardSearchForm(forms.Form):
+    date = forms.DateField(label=u"日期",required = False, widget=forms.TextInput(attrs={'id':'date'}))
+    specification = forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={'id':'specification'}))
+    department = forms.CharField(label=u"领用单位",required = False,widget=forms.TextInput(attrs={'id':'department'}))
+    entry_code = forms.CharField(label=u"领用单编号",required = False, widget=forms.TextInput(attrs={'id':'entry_code'}))
+    work_order = forms.CharField(label=u"工作令",required = False, widget=forms.TextInput(attrs={'id':'work_order'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideAccountApplyCardSearchForm,self).__init__(*args,**kwargs)
+        for key,val in self.fields.items():
+            val.widget.attrs["style"] = 'width:120px;'
