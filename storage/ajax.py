@@ -506,7 +506,7 @@ def outsideApplyCardConfirm(request,form,aid):
     if form.is_valid():
         form.save()
         saveRolers(applycard,"keeper",request.user)
-        items_set = OutsideApplyCardItem.objects.filter(applycard = applycard,is_past = False)
+        items_set = OutsideApplyCardItem.objects.filter(applycard = applycard)
         isOk = updateStorageLits(items_set,OutsideStorageList)
         if isOk:
             message = u"确认成功"
@@ -524,7 +524,7 @@ def outsideApplyCardConfirm(request,form,aid):
 
 def getOutsideApplyCardContext(applycard,inform,url,default_status):
     is_show = applycard.entry_status == default_status
-    items_set = OutsideApplyCardItem.objects.filter(applycard = applycard,is_past=False)
+    items_set = OutsideApplyCardItem.objects.filter(applycard = applycard)
     context = {
                "inform":inform,
                "applycard":applycard,
