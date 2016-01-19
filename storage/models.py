@@ -286,7 +286,7 @@ class CommonSteelMaterialApplyCardInfo(models.Model):
     remarkment = models.CharField(blank=True,null=True,max_length=100,verbose_name=u'备注')
 
     def __unicode__(self):
-        return str(self.form_code)
+        return self.form_code
 
     class Meta:
         verbose_name=u"钢材领用单"
@@ -319,7 +319,7 @@ class BarSteelMaterialApplyCardContent(models.Model):
     remark = models.CharField(max_length=100,blank=True,null=True,verbose_name=u"备注")
 
     def __unicode__(self):
-        return self.card_info
+        return str(self.card_info)
 
     class Meta:
         verbose_name=u"型材领用单详细信息"
