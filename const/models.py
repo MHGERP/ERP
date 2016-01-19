@@ -15,7 +15,7 @@ class WorkOrder(models.Model):
         return self.order_index
 
 class Material(models.Model):
-    name = models.CharField(blank = False, max_length = 50, verbose_name = u"材料名称")
+    name = models.CharField(blank = False, max_length = 50, verbose_name = u"材质名称")
     material_id= models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"材质编号") 
     categories =  models.CharField(blank = True, null = True , choices = MATERIAL_CATEGORY_CHOICES, max_length = 20, verbose_name = u"材料类别")
     class Meta:
@@ -42,7 +42,9 @@ class Materiel(models.Model):
     name = models.CharField(blank = False, max_length = 20, verbose_name = u"名称")
     count = models.CharField(blank = True, max_length = 20, null = True, verbose_name = u"数量")
     net_weight = models.FloatField(blank = True, null = True, verbose_name = u"净重")
-    total_weight = models.FloatField(blank = True, null = True, verbose_name = u"总重")
+    total_weight = models.FloatField(blank = True, null = True, verbose_name = u"毛重")
+    quota = models.FloatField(blank = True, null = True, verbose_name = u"定额")
+    quota_coefficient = models.FloatField(blank = True, null = True, verbose_name = u"定额系数")
     inventory_type = models.ForeignKey(InventoryType, blank = True, null = True, verbose_name = u"明细表归属")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
     specification = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"规格")

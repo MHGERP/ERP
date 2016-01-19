@@ -1,33 +1,20 @@
 <table class="table table-bordered table-striped" style="width:60%;">
 	
 	<thead>
-		<th>材料执行表编号
-		</th>
-		<th>操作
-		</th>
-		<th>添加套料图
-		</th>
+		<th>材料执行表编号</th>
+		<th>操作</th>
+		<th>添加套料图</th>
 	</thead> 
 	<tbody>
-	<tr>
-		<td>	
-		</td>
-		<td><span class="btn" id="order_search" style="float:left;margin-left:50px;">查看</span>
-		</td>
-		<td>
-			<span class="btn" id="order_search" style="float:left;margin-left:50px;">套料图</span>
-			<span class="btn" id="order_search" style="float:left;margin-left:50px;">程序</span>
-		</td>
-	</tr> 
-	<tr>
-		<td>	
-		</td>
-		<td><span class="btn" id="order_search" style="float:left;margin-left:50px;">查看</span>
-		</td>
-		<td>
-			<span class="btn" id="order_search" style="float:left;margin-left:50px;">套料图</span>
-			<span class="btn" id="order_search" style="float:left;margin-left:50px;">程序</span>
-		</td>
-	</tr> 
+	{% for item in execute_list %}
+		<tr>
+			<td>{{item.document_number}}</td>
+			<td><span class="btn btn-small">查看</span></td>
+			<td>
+				<span class="btn btn-small">套料图</span>
+				<span class="btn btn-small">程序</span>
+			</td>
+		</tr> 
+	{% endfor %}
 	</tbody>
 </table>
