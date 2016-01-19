@@ -1,0 +1,20 @@
+<table class="table table-bordered">
+ <thead>
+        <th>材质</th>
+        <th>规格</th>
+        <th>库存数量</th>
+        <th>安全量</th>
+        <th>单位</th>
+    </thead>
+    </tbody>
+        {% for item in items_set %}
+        <tr>
+            <td>{{item.texture}}</td>
+            <td>{{item.specification}}</td>
+            <td>{{item.number}}</td>
+            <td>{{item.thread}}</td>
+            <td>{{item.unit}}</td> 
+        </tr>
+        {% endfor %}
+    </tbody>
+</table

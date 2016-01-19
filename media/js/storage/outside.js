@@ -31,6 +31,14 @@ function outsideapplycardconfirm_callback(data){
     alert(data.message);
 }
 
+function get_outsidethread(){
+    Dajaxice.storage.getOutsideThreadItems(get_outsidethrea_callback);
+}
+
+function get_outsidethrea_callback(data){
+    $("#item_table").html(data.html);
+}
+
 function account_entry_search(){
     Dajaxice.storage.outsideAccountEntrySearch(accounEntrySearch_callback,{"form":$("#search_form").serialize()}); 
 };

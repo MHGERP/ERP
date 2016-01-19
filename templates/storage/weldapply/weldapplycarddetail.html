@@ -63,7 +63,11 @@
         <div class="span3">
             <label>发料人:<strong>{{apply_card.commit_user.userinfo}}</strong></label>
         </div>
+        {% ifequal apply_card.status APPLYCARD_COMMIT %}
+        <a type="button" href="{{redict_path}}" class="btn btn-primary">返回</a>
+        {% else %}
         <button type="submit" id="confirm" class="btn btn-primary">确认</button>
+        {% endifequal %}
     </div>
 </form>
 

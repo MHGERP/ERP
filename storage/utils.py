@@ -122,19 +122,27 @@ def setObjAttr(obj,field,value):
     obj.save()
 
 def updateStorageLits(items_set,_StorageModel):
-    isOk = True 
+    isOk = True
+    exist_items = []
     for item in items_set:
         try:
             storageItem = _StorageModel.objects.get(specification = item.specification)
             if storageItem.number >= item.number:
                 storageItem.number -= item.number
-                item.is_past = True
-                item.save()
-                storageItem.save()
+                exist_items.append(storageItem)
             else:
                 isOk = False
+                break
         except Exception,e:
-            isOk = False
             print e
+    if isOk:
+        for item in exist_items:
+            item.save()
     return isOk
 
+
+def getUrlByViewMode(request,entry_url):
+    redict_path = request.GET.get("redict_path",None)
+    if redict_path:
+        entry_url = redict_path
+    return entry_url

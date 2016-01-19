@@ -10,7 +10,7 @@
 
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
-   <h3 style="text-align:center">辅助材料领用卡</h3>
+   <h3 style="text-align:center">辅助工具领用卡</h3>
     <form id="detail_form" method="POST">
         {% csrf_token %}
         {% include 'storage/auxiliarytools/auxiliarytoolsapply_table.html' %}

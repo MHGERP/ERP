@@ -4,6 +4,9 @@ from django.db import models
 from const.models import Materiel, Material, WorkOrder
 from django.contrib.auth.models import User
 
+from purchasing.models import MaterielExecute
+import settings
+
 class Processing(models.Model):
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")
     name = models.CharField(blank = False, choices = PROCESSING_CHOICES, max_length = 10, verbose_name = u"工序名")
@@ -178,3 +181,28 @@ class ProcessBOMPageMark(models.Model):
         verbose_name_plural = u"工艺库签章"
     def __unicode__(self):
         return unicode(self.order)
+
+class Program(models.Model):
+    execute = models.ForeignKey(MaterielExecute, verbose_name = u"所属执行表")
+    name = models.CharField(max_length = 100, blank = False, verbose_name = u"文件名称")
+    file_obj = models.FileField(upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"程序")
+    upload_date = models.DateTimeField(null = True, blank = True, verbose_name = u"上传时间")
+    file_size = models.CharField(max_length = 50, blank = True, null = True, default = None, verbose_name = "文件大小")
+    file_type = models.CharField(max_length = 50, blank = True, null = True, default = None, verbose_name = "文件类型")
+    class Meta:
+        verbose_name = u"编程套料图"
+        verbose_name_plural = u"编程套料图"
+    def __unicode__(self):
+        return self.name
+
+class BoxOutBoughtMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "box_outbought_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "box_outbought_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"装箱外构件明细签章"
+        verbose_name_plural = u"装箱外构件明细签章"
+    def __unicode__(self):
+        return self.order.order_index

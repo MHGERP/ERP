@@ -110,3 +110,25 @@ function Order_Callback(data){
     $("#order_info_modal").modal('hide');
     refresh();
 }
+
+$("#order_form_finish").click(function(){
+    var index = $("#index").val();
+    Dajaxice.purchasing.OrderFormFinish(function(data){
+        window.location.reload();
+
+    },{
+        "index":index
+    });
+
+});
+
+$("#save_tech_require").click(function(){
+    var content=$("#tech_requirement_textarea").val();
+    var order_id=$("#index").val();
+    Dajaxice.purchasing.saveTechRequire(function(data){
+    $("#tech_requirement_content").html(content.toString());
+    },{
+        "order_id":order_id,
+        "content":content
+    });
+});

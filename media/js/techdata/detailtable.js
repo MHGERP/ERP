@@ -82,3 +82,21 @@ $("#id_goto_prev").click(function(){
    if(!row_prev.html()) alert("本条为第一条");
    else fill(row_prev.attr("iid"));
 });
+
+$(document).on("click", "#btn_write_confirm", function() {
+    var order = $('#id_work_order').val();
+    Dajaxice.techdata.boxOutBoughtWriteConfirm(writeConfirmCallback, {"id_work_order" : order});
+});
+
+function writeConfirmCallback(data) {
+    $("#span_write").html("编制人：" + data.user);
+}
+
+$(document).on("click", "#btn_review_confirm", function() {
+    var order = $('#id_work_order').val();
+    Dajaxice.techdata.boxOutBoughtReviewConfirm(reviewConfirmCallback, {"id_work_order" : order});
+});
+
+function reviewConfirmCallback(data) {
+    $("#span_review").html("审核人：" + data.user);
+}
