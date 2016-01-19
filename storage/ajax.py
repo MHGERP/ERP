@@ -18,7 +18,7 @@ from storage.models import *
 from storage.forms import *
 from storage.utils import *
 from django.shortcuts import render
-
+from operator import attrgetter
 @dajaxice_register
 def get_apply_card_detail(request,apply_card_index):
     context={}
@@ -524,7 +524,7 @@ def outsideAccountApplyCardSearch(request,form):
         q1=(conditions['date'] and Q(applycard__date = conditions['date'])) or None
         q2=(conditions['specification'] and Q(specification=conditions['specification'])) or None
         q3=(conditions['entry_code'] and Q(applycard__entry_code=conditions['entry_code'])) or None
-        q4=(conditions['work_order'] and Q(applycard__workorder__order_index =conditions['work_order'])) or None
+        q4=(conditions['work_order'] and Q(applycard__workorder =conditions['work_order'])) or None
         q5=(conditions['department'] and Q(department =conditions['department'])) or None
         query_set = filter(lambda x:x!=None,[q1,q2,q3,q4,q5]) 
         if query_set:
@@ -533,8 +533,9 @@ def outsideAccountApplyCardSearch(request,form):
         else:
             items_set = OutsideApplyCardItem.objects.all()
         items_set.filter(applycard__entry_status = STORAGESTATUS_END)
+        sorted_items_set = sorted(items_set,key=attrgetter('applycard.workorder.order_index','specification'))
     context = {
-            'items_set':items_set,
+            'items_set':sorted_items_set,
             "search_form":form,
         }
     html = render_to_string("storage/widgets/account/applycardhomemain.html",context)
