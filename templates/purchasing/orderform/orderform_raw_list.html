@@ -32,12 +32,15 @@
 			<td>{{item.index}}</td>
         	<td>{{item.name}}</th>
             <td>{{item.material.name}}</td>
-			<td></td>
+            <td>{{item.press}}</td>
 			<td>{{item.specification}}</td>
             <td>{{item.materielformconnection.count}}</td>
-			<td></td>
-            <td></td>
-            <td></td>
+            <td>{{item.materielformconnection.purchasing}}</td>
+            <td>{{item.recheck}}</td>
+            <td>{{item.detection_level}}</td>
+            <td>{{item.status}}</td>
+            <td>{{item.standard}}</td>
+            <td>{{item.remark}}</td>
 			<td>{{item.status}}</td>
             {% if not can_choose %}
 			<td>
@@ -47,21 +50,25 @@
 		</tr>
 		{% endfor %}
 		{% for item in items %}
-		<tr>	
+		<tr mod="0">	
 			{% if can_choose %}
 			<td>{% if item.can_choose %}
-			<input type="checkbox" class="checkbox"  args="{{item.id}}">
+			<input type="checkbox" class="checkbox" args="{{item.id}}">
 			{% endif %}</td> {% endif %}
 			<td>{{item.index}}</td>
-        		<td>{{item.order.order_index}}</th>
-			<td>{{item.name}}</td>
-			<td>{{item.schematic_index}}</td>
-			<td>{{item.material}}</td>
-			<td></td>
-			<td>{{item.materielformconnection.count}}</td>
-			<td></td>
+        	<td>{{item.name}}</th>
+            <td>{{item.material.name}}</td>
+            <td>{{item.press}}</td>
+			<td>{{item.specification}}</td>
+            <td>{{item.materielformconnection.count}}</td>
+            <td>{{item.materielformconnection.purchasing}}</td>
+            <td>{{item.recheck}}</td>
+            <td>{{item.detection_level}}</td>
+            <td>{{item.status}}</td>
+            <td>{{item.standard}}</td>
+            <td>{{item.remark}}</td>
 			<td>{{item.status}}</td>
-			{% if not can_choose %}
+            {% if not can_choose %}
 			<td>
 				<button class="btn btn-primary" id="edit" uid={{item.id}}>修改</button>
 			</td>

@@ -93,8 +93,17 @@ function deleteCallBack(data) {
 
 $(document).on("click","#edit",function(){
     uid = $(this).attr("uid");
+    $("#order_info_modal").modal();
+    var tr=$(this).closest("tr");
+    if($(tr).attr("mod")=="0"){
+        $("#count").val($(tr).children("td:eq(5)").html());
+        $("#purchasing").val($(tr).children("td:eq(6)").html());
+    }
+    else{
+        $("#count").val($(tr).children("td:eq(6)"));
+    }
     // order_uid = $(this).parent().parent();
-    Dajaxice.purchasing.GetOrderInfoForm(Edit_Order_Callback,{'uid':uid});
+   // Dajaxice.purchasing.GetOrderInfoForm(Edit_Order_Callback,{'uid':uid});
 });
 function Edit_Order_Callback(data){
     $("#order_info_modal").modal();
@@ -102,9 +111,10 @@ function Edit_Order_Callback(data){
 }
 
 $("#order_info_modal #save_order").click(function(){
-    var name = $("#material").val();
+    //var name = $("#material").val();
     var count =  $("#count").val();
-    Dajaxice.purchasing.OrderInfo(Order_Callback,{'form':$("#edit_order_form").serialize(true),'uid':uid,'count':count,'name':name})
+    var purchasing=$("#purchasing").val();
+    Dajaxice.purchasing.OrderInfo(Order_Callback,{'uid':uid,'count':count,'purchasing':purchasing});
 });
 function Order_Callback(data){
     $("#order_info_modal").modal('hide');

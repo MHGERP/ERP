@@ -107,7 +107,19 @@
         <form class="form-inline well" id="edit_order_form">
           {% csrf_token %}
           <div class="row" id="order_form_div">
-            
+              <div class="span4">
+                  <div class="form-inline div_margin">
+                      <label class="span1 label_margin">数量(个)</label>
+                      <input class="form-control" maxlength="20" type="text" id="count">
+                  </div>
+                  
+                  <div class="form-inline div_margin"{% if order_form.order_mod == 1 %}style="display:none" {% endif%}>
+                      <label class="span1 label_margin">采购(kg)</label>
+                      <input class="form-control" maxlength="20" type="text" id="purchasing" value=0>
+                  </div>
+                  
+                 
+              </div>
           </div>
         </form>
       </div>
