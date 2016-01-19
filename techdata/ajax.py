@@ -300,9 +300,11 @@ def boxOutBought(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    work_order = WorkOrder.objects.get(id = order)
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
+        "work_order" : work_order,
     }
     html = render_to_string("techdata/widgets/tech_box_outbought_table.html", context)
     return html
@@ -312,7 +314,7 @@ def firstFeeding(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -324,7 +326,7 @@ def principalMaterial(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -336,7 +338,7 @@ def auxiliaryMaterial(request, order):
     """
     BinWu 
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -348,7 +350,7 @@ def weldList(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -360,7 +362,7 @@ def techBoxWeld(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -372,7 +374,7 @@ def weldQuota(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -510,6 +512,36 @@ def weldListReviewerConfirm(request, id_work_order):
     order.weldlistpagemark.reviewer = request.user
     order.weldlistpagemark.reviewe_date = datetime.datetime.today()
     order.weldlistpagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def boxOutBoughtWriteConfirm(request, id_work_order):
+    """
+    BinWu
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if BoxOutBoughtMark.objects.filter(order = order).count() == 0:
+        BoxOutBoughtMark(order = order).save()
+    order.boxoutboughtmark.writer = request.user
+    order.boxoutboughtmark.write_date = datetime.datetime.today()
+    order.boxoutboughtmark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+
+@dajaxice_register
+def boxOutBoughtReviewConfirm(request, id_work_order):
+    """
+    BinWu
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if BoxOutBoughtMark.objects.filter(order = order).count() == 0:
+        BoxOutBoughtMark(order = order).save()
+
+    if order.boxoutboughtmark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.boxoutboughtmark.reviewer = request.user
+    order.boxoutboughtmark.review_date = datetime.datetime.today()
+    order.boxoutboughtmark.save()
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
 @dajaxice_register
