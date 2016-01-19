@@ -51,7 +51,7 @@ class Materiel(models.Model):
     standard = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"标准") 
     unit = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"单位") 
     status = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"状态") 
-
+    
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"

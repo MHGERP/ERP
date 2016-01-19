@@ -200,7 +200,7 @@ class SteelMaterialPurchasingEntry(models.Model):
     keeper = models.ForeignKey(User,blank=False,null=False,related_name = "steel_keeper",verbose_name=u"库管员" ,)
     entry_time = models.DateField(blank=False,null=True,auto_now_add=True,verbose_name=u"入库时间")
     entry_confirm = models.BooleanField(default=False,verbose_name=u"入库单确认")
-    #entry_type = models.IntegerField(choices = ENTRYTYPE_CHOICES_2,default=0,verbose_name=u"入库单类型")
+    steel_type = models.IntegerField(choices = ENTRYTYPE_CHOICES_2,default=0,verbose_name=u"入库单类型")
     entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=0,verbose_name=u"入库单状态")
     def __unicode__(self):
         return str(self.form_code)
