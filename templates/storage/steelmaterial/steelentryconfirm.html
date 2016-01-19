@@ -43,13 +43,14 @@
             <th>批号</th>
             <th>材质</th>
             <th>材质编号</th>
+            <th>数量</th>
             <th>备注</th>
             <th>操作</th>
         </tr>
     </thead>
     <tbody>
-        {% for item in entry_set %}
-        <tr id="{{item.id}}">
+<!--         {% for item in entry_set %} -->
+       <!--  <tr id="{{item.id}}">
             <td>{{forloop.counter}}</td>
             <td>{{item.show_workorder}}</td>
             <td>{{item.name}}</td>
@@ -57,13 +58,14 @@
             <td>{{item.batch_number}}</td>
             <td>{{item.lot_number}}</td>
             <td>{{item.material}}</td>
-            <td>{{item.material_number}}</input></td>
-            <!-- <td>{{item.remark}}</td> -->
-            <td>
+            <td>{{item.quantity}}</td> -->
+            <!-- <td>{{item.material_number}}</input></td>
+            <td>{{item.remark}}</td> -->
+            <!-- <td>
                 <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_steelEntryItem({{item.id}})">修改</a>
             </td>
-        </tr>
-        {%endfor%}
+        </tr> -->
+       <!--  {%endfor%} -->
     </tbody>
 </table>
     <div class="control-group span12" style="margin-top:50px;">

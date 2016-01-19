@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    alert("ddddd");
 	$(".apply-card-search-btn").click(function(){
 		form=$(".apply-card-search-form").serialize(true);
 		Dajaxice.storage.searchApplyCard(searchApplyCard_CallBack,{'form':form});
@@ -20,7 +19,7 @@ $(document).ready(function(){
 	});
 });
 
-alert("helloSS");
+
 $(".apply-card-ensure-btn").click(function(){
     alert("领用成功");
 });
