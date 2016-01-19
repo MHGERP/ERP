@@ -13,5 +13,52 @@
 <div class="widget-content">
 	
 </div>
+<div class="modal hide fade"  id="feedback_info">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>编辑工艺反馈信息</h3>
+    </div>
+    <div class="modal-body">
+        <form class="well form" id="supplier_info_form" method="POST" action="">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="add-on">供应商编号</label>
+                {{supplier_form.supplier_id}}    
+            </div>
+            <div class="form-group">
+                <label class="add-on">供应商名称</label>
+                {{ supplier_form.supplier_name }}
+            </div>
+        </form><!--end school_email_send_form-->
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal" >关闭</a>
+        <a class="btn btn-primary" data-dismiss="modal" 
+            id="add_or_update_supplier">保存更新</a>
+    </div>
+</div>
+
+<div class="modal hide fade"  id="program_upload">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>编程套料文件上传</h3>
+    </div>
+    <div class="modal-body">
+        <div id="file_table">
+            {%include "purchasing/supplier/supplier_file_table.html"%}
+        </div>
+        <form method="POST" action="" class="form-inline" enctype="multipart/form-data">
+            {% csrf_token%}
+            <input type="text" style="display:none;" name="supplier_id" id="id_supplier_input">
+            <input type='file'class='filestyle' name='supplier_file' data-ButtonName='btn btn-primary'  data-buttonBefore='true' data-buttonText='浏览..' id="filestyle_input">
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal">关闭</a>
+    </div>
+</div>
+
+
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/programme_edit.js"></script>
 {% endblock%}
