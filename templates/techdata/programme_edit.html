@@ -44,17 +44,14 @@
         <h3>编程套料文件上传</h3>
     </div>
     <div class="modal-body">
-        <div id="file_table">
-            {%include "purchasing/supplier/supplier_file_table.html"%}
-        </div>
-        <form method="POST" action="" class="form-inline" enctype="multipart/form-data">
+        <form method="POST" action="" class="form-inline" enctype="multipart/form-data" id="upload_form">
             {% csrf_token%}
-            <input type="text" style="display:none;" name="supplier_id" id="id_supplier_input">
-            <input type='file'class='filestyle' name='supplier_file' data-ButtonName='btn btn-primary'  data-buttonBefore='true' data-buttonText='浏览..' id="filestyle_input">
-
+            <input type="text" style="display:none;" name="execute_id" id="id_execute_input">
+            <input type='file' class='filestyle' name='program_file' data-ButtonName='btn btn-primary'  data-buttonBefore='true' data-buttonText='浏览..' id="filestyle_input">
         </form>
     </div>
     <div class="modal-footer">
+		<span class="btn btn-primary" id="btn-upload">上传</span>
         <a class="btn" data-dismiss="modal">关闭</a>
     </div>
 </div>

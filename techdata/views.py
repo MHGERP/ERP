@@ -6,13 +6,14 @@ from django.views.decorators import csrf
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect,HttpResponse
-import json
+import json, datetime
 from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
 from techdata.forms import MaterielForm, CirculationRouteForm, ProcessingForm, TransferCardForm
 from const.models import Materiel
-from techdata.models import TransferCard
+from techdata.models import TransferCard, Program
+from purchasing.models import MaterielExecute
 from const.forms import WorkOrderForm
 
 def techPreparationPlanViews(request):
@@ -129,8 +130,26 @@ def weldEditViews(request):
     return render(request, "techdata/weld_edit.html", context)
 
 def programmeEditViews(request):
-    context = {}
+    context = {
+    }
     return render(request, "techdata/programme_edit.html", context)
+
+def programAdd(request):
+    if request.is_ajax():
+        if request.FILES['program_file'].size > 10*1024*1024:
+            file_upload_error = 2
+        else:
+            execute_id = request.POST['execute_id']
+            execute = MaterielExecute.objects.get(id = execute_id)
+            file = Program()
+            file.execute = execute
+            file.file_obj = request.FILES['program_file']
+            file.file_size = str(int(request.FILES['program_file'].size) / 1000) + "kb"
+            file.name = request.FILES['program_file'].name
+            file.upload_time = datetime.datetime.now()
+            file.save()
+            file_upload_error = 1
+        return HttpResponse(json.dumps({"file_upload_error": file_upload_error, }))
 
 def techDetailTableViews(request):
     """BinWu"""
