@@ -103,6 +103,28 @@ def steelApplyEnsure(request,form_code):
     if common_steelapply.steel_type==BOARD_STEEL:message=boardSteelApplyEnsure(request,common_steelapply)
     if common_steelapply.steel_type==BAR_STEEL:message=barSteelApplyEnsure(request,common_steelapply)
     return message
+def barSteelApplyEnsure(request,common_card):
+    """
+    Author:Rosen
+    Summay:型材领用确认
+    Params:领用单表头
+    return:提示信息
+    """
+    steel_set = common_card.barsteelmaterialapplycardcontent_set.all()
+    for steel in steel_set:
+        quantity_ledger = steel.steel_material.barsteelmaterialledger.quantity
+        quantity_need = steel.quantity
+        if quantity_need > quantity_ledger:return u"%s(%s)库存不足"%(steel.steel_material.name,steel.steel_material.specifications) 
+
+    for steel in steel_set:
+        ledger = steel.steel_material.barsteelmaterialledger
+        ledger.quantity = ledger.quantity - steel.quantity
+        ledger.save()
+
+    common_card.apply_confirm=True
+    common_card.save()
+
+    return u"领用成功"
 
 def boardSteelApplyEnsure(request,common_card):
     """
@@ -115,13 +137,17 @@ def boardSteelApplyEnsure(request,common_card):
     for steel in steel_set:
         quantity_ledger=steel.steel_material.boardsteelmaterialledger.quantity
         quantity_need=steel.quantity
-        if quantity_need > quantity_ledger:return u"%s(%s)库存不足"%(steel.steel_material.name,steel.steel_material.specification)
+        if quantity_need > quantity_ledger:return u"%s(%s)库存不足"%(steel.steel_material.name,steel.steel_material.specifications)
     for steel in steel_set:
         ledger = steel.steel_material.boardsteelmaterialledger
         ledger.quantity=ledger.quantity - steel.quantity
         ledger.save()
-        steel.apply_confirm = True
-        steel.save()
+
+    common_card.apply_confirm = True
+    common_card.save()
+
+    return u"领用成功"
+
 
     
 
