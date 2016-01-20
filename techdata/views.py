@@ -6,13 +6,14 @@ from django.views.decorators import csrf
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect,HttpResponse
-import json
+import json, datetime
 from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
-from techdata.forms import MaterielForm, CirculationRouteForm, ProcessingForm, TransferCardForm
+from techdata.forms import *
 from const.models import Materiel
-from techdata.models import TransferCard
+from techdata.models import TransferCard, Program
+from purchasing.models import MaterielExecute
 from const.forms import WorkOrderForm
 
 def techPreparationPlanViews(request):
@@ -82,7 +83,10 @@ def principalMaterialViews(request):
     return render(request, "techdata/principal_material.html", context)
 
 def auxiliaryMaterialViews(request):
-    context = {}
+    categories_form = CategoriesForm()
+    context = {
+            "categories_form":categories_form
+    }
     return render(request, "techdata/auxiliary_material.html", context)
 
 def processBOMViews(request):
@@ -129,13 +133,43 @@ def weldEditViews(request):
     return render(request, "techdata/weld_edit.html", context)
 
 def programmeEditViews(request):
-    context = {}
+    form = ProgramFeedbackForm()
+    context = {
+        "form": form,
+    }
     return render(request, "techdata/programme_edit.html", context)
+
+def programAdd(request):
+    if request.is_ajax():
+        if request.FILES['program_file'].size > 10*1024*1024:
+            file_upload_error = 2
+        else:
+            execute_id = request.POST['execute_id']
+            execute = MaterielExecute.objects.get(id = execute_id)
+            file = Program()
+            file.execute = execute
+            file.file_obj = request.FILES['program_file']
+            file.file_size = str(int(request.FILES['program_file'].size) / 1000) + "kb"
+            file.name = request.FILES['program_file'].name
+            file.upload_time = datetime.datetime.now()
+            file.save()
+            file_upload_error = 1
+        return HttpResponse(json.dumps({"file_upload_error": file_upload_error, }))
 
 def techDetailTableViews(request):
     """BinWu"""
     work_order_form = WorkOrderForm()
     context = {
-        "form": WorkOrderForm,
+        "form": work_order_form,
     }
     return render(request, "techdata/detail_table.html", context)
+
+def heatTreatmentTechCardEditViews(request):
+    """
+    JunHU
+    """
+    card_id = request.GET.get("card_id");
+    context = {
+        "card_id": card_id,
+    }
+    return render(request, "techdata/heat_treatment_tech_card_edit.html", context)

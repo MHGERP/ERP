@@ -41,19 +41,19 @@
             </thead>
             <tbody>
                 {% for item in list%}
-                <tr class="tr_materiel" iid="{{item.id}}" data-toggle="modal" data-target="#card_modal">
-                    <td>{{item.index}}</td>
-                    <td>{{item.parent_schematic_index}}</td>
-                    <td>{{item.schematic_index}}</td>
-                    <td>{{item.material.categories}}</td>
-                    <td>{{item.material}}</td>
-                    <td>{{item.specification}}</td>
-                    <td>{{item.count}}</td>
-                    <td>{{item.net_weight}}</td>
-                    <td>{{item.total_weight}}</td>
-                    <td>{{item.total_weight}}</td>
-                    <td>{{item.remark}}</td>
-                    <td>△</td>
+                <tr class="tr_materiel" iid="{{item.id}}" data-toggle="modal" data-target="#card_modal" cid="{{item.material.categories}}">
+                    <td >{{item.index}}</td>
+                    <td >{{item.parent_schematic_index}}</td>
+                    <td >{{item.schematic_index}}</td>
+                    <td >{{item.material.get_categories_display}}</td>
+                    <td >{{item.material}}</td>
+                    <td >{{item.specification}}</td>
+                    <td >{{item.count}}</td>
+                    <td >{{item.net_weight}}</td>
+                    <td >{{item.total_weight}}</td>
+                    <td >{{item.quota}}</td>
+                    <td >{{item.user_ratio}}</td>   
+                    <td >△</td>
                 </tr>
                 {% endfor %}
             </tbody>

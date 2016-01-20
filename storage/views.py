@@ -113,23 +113,23 @@ def weldEntryHomeViews(request):
             }
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
-# def steelEntryHomeViews(request):
-#     if request.method == "POST":
-#         search_form = SteelEntrySearchForm(request.POST)
-#         if search_form.is_valid():
-#             steelentry_set = get_weld_filter(SteelMaterialPurchasingEntry,search_form.cleaned_data)
-#         else:
-#             print search_form.errors
-#     else:
-#         steelentry_set = SteelMaterialPurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
-#         search_form = SteelEntrySearchForm()
-#     steelentry_set = steelentry_set.order_by("-entry_time")
-#     context = {
-#         "steel_entry_set":steelentry_set,
-#         "ENTRYSTATUS_END":STORAGESTATUS_END,
-#         "search_form":search_form,
-#     }
-#     return render(request,"storage/steelmaterial/steelentryhome.html",context)
+def steelEntryHomeViews(request):
+    if request.method == "POST":
+        search_form = SteelEntrySearchForm(request.POST)
+        if search_form.is_valid():
+            steelentry_set = get_weld_filter(SteelMaterialPurchasingEntry,search_form.cleaned_data)
+        else:
+            print search_form.errors
+    else:
+        steelentry_set = SteelMaterialPurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
+        search_form = SteelEntrySearchForm()
+    steelentry_set = steelentry_set.order_by("-entry_time")
+    context = {
+        "steel_entry_set":steelentry_set,
+        "ENTRYSTATUS_END":STORAGESTATUS_END,
+        "search_form":search_form,
+    }
+    return render(request,"storage/steelmaterial/steelentryhome.html",context)
 
 def weldEntryConfirmViews(request,eid):
     entry = WeldMaterialEntry.objects.get(id = eid)
@@ -147,18 +147,18 @@ def weldEntryConfirmViews(request,eid):
             }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
-# def steelEntryConfirmViews(request,eid):
-#     entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-#     items = entry.steelmaterial_set.all()
-#     # entryitem_form = SteelEntryItemsForm()
-#     is_show = entry.entry_status == STORAGESTATUS_KEEPER
-#     context = {
-#             "entry":entry,
-#             "entry_set":items,
-#             "item_form":entryitem_form,
-#             "is_show":is_show,
-#             }
-#     return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
+def steelEntryConfirmViews(request,eid):
+    entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
+    # items = entry.steelmaterial_set.all()
+    # entryitem_form = SteelEntryItemsForm()
+    is_show = entry.entry_status == STORAGESTATUS_KEEPER
+    context = {
+            "entry":entry,
+            # "entry_set":items,
+            # "item_form":entryitem_form,
+            "is_show":is_show,
+            }
+    return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
     
 def Weld_Apply_Card_List(request):
     """
@@ -408,8 +408,8 @@ def weldRefundViews(request):
             refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data)
     else:
         search_form = RefundSearchForm()
-        #refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
-        refund_set = WeldRefund.objects.all()
+        refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
+        #refund_set = WeldRefund.objects.all()
     context = {
             "search_form":search_form,
             "refund_set":refund_set,
@@ -420,18 +420,7 @@ def weldRefundViews(request):
 def weldRefundDetailViews(request,rid):
     ref_obj = WeldRefund.objects.get(id = rid)
     is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
-    if request.method == "POST":
-        reform = WeldRefundForm(request.POST,instance = ref_obj)
-        if reform.is_valid():
-            reform.save()
-            ref_obj.keeper = request.user
-            ref_obj.weldrefund_status = STORAGESTATUS_END
-            ref_obj.save()
-            return HttpResponseRedirect("/storage/weldrefund")
-        else:
-            print reform.errors
-    else:
-        reform = WeldRefundForm(instance = ref_obj) 
+    reform = WeldRefundForm(instance = ref_obj) 
     context = {
             "reform":reform,
             "ref_obj":ref_obj,
@@ -476,36 +465,20 @@ def AuxiliaryToolsEntryListView(request):
 def AuxiliaryToolsEntryView(request):
     """
     Time1ess
-    summary: Confirm auxiliary tools entry
-    params: id(GET,POST)
+    summary: return auxiliary tools entry confirm page
+    params: id(GET)
     return: NULL
     """
     context = {}
-    if request.method == 'POST':
-        object_id = int(request.POST['object_id'])
-        auxiliary_card_list = AuxiliaryToolEntryCardList.objects.get(id=object_id)
-        auxiliarytools = AuxiliaryToolEntryCard.objects.filter(card_list__id=object_id)
-        for at in auxiliarytools:
-            if at.quantity<0:
-                print '[ERROR]Auxiliary tools entry quantity error'
-                return HttpResponseRedirect('/storage/auxiliarytools/entrylist')
-            at.auxiliary_tool.quantity=F('quantity')+at.quantity
-        for at in auxiliarytools:
-            at.auxiliary_tool.save()
-        auxiliary_card_list.status=STORAGESTATUS_END
-        auxiliary_card_list.keeper=request.user
-        auxiliary_card_list.save()
-        return HttpResponseRedirect('/storage/auxiliarytools/entrylist')
-    else:
-        object_id = int(request.GET['id'])
-        auxiliary_tool_card_list = AuxiliaryToolEntryCardList.objects.get(
-            id=object_id)
-        context['object'] = auxiliary_tool_card_list
-        context['sub_objects'] = AuxiliaryToolEntryCard.objects.filter(
-            card_list=auxiliary_tool_card_list)
-        return render(request,
-                      'storage/auxiliarytools/auxiliarytoolsentry.html',
-                      context)
+    object_id = int(request.GET['id'])
+    auxiliary_tool_card_list = AuxiliaryToolEntryCardList.objects.get(
+        id=object_id)
+    context['object'] = auxiliary_tool_card_list
+    context['sub_objects'] = AuxiliaryToolEntryCard.objects.filter(
+        card_list=auxiliary_tool_card_list)
+    return render(request,
+                  'storage/auxiliarytools/auxiliarytoolsentry.html',
+                  context)
 
 def AuxiliaryToolsApplyListView(request):
     """
@@ -525,47 +498,23 @@ def AuxiliaryToolsApplyListView(request):
 def AuxiliaryToolsApplyView(request):
     """
     Time1ess
-    summary: Handle auxiliary tool apply
-    params: index(GET,POST)
+    summary: Render auxiliary tool apply and commit page
+    params: index(GET)
     return: NULL
     """
     context={}
-    if request.method=='GET':
-        ins_index=int(request.GET['index']) 
-        ins=AuxiliaryToolApplyCard.objects.get(index=ins_index) if ins_index!=0 else None
+    ins_index=int(request.GET['index']) 
+    ins=AuxiliaryToolApplyCard.objects.get(index=ins_index) if ins_index!=0 else None
 
-        if checkAuthority(STORAGE_KEEPER,request.user):
-            context['instance']=ins
-            context['storage_keeper']=True
-            context['apply_form']=AuxiliaryToolsCardCommitForm(instance=ins)
-        else:
-            context['storage_keeper']=False
-            context['apply_form']=AuxiliaryToolsCardApplyForm()
-
-        return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
+    if checkAuthority(STORAGE_KEEPER,request.user):
+        context['instance']=ins
+        context['storage_keeper']=True
+        context['apply_form']=AuxiliaryToolsCardCommitForm(instance=ins)
     else:
-        ins_index=int(request.POST['index'])
-        if ins_index!=0:
-            ins=AuxiliaryToolApplyCard.objects.get(index=ins_index)
-        else:
-            ins=None
-        apply_card=AuxiliaryToolsCardCommitForm(request.POST,instance=ins)
-        if apply_card.is_valid():
-            save_ins=apply_card.save(commit=False)
-            print 'BEFORE----------'
-            print '[APPLICANT]:',save_ins.applicant
-            print '[COMMITER]',save_ins.commit_user
-            if ins_index!=0:
-                save_ins.commit_user=request.user
-            else:
-                save_ins.applicant=request.user
-            print 'AFTER----------'
-            print '[APPLICANT]',save_ins.applicant
-            print '[COMMITER]',save_ins.commit_user
-            save_ins.save()
-        else:
-            print apply_card.errors
-        return AuxiliaryToolsApplyListView(request)
+        context['storage_keeper']=False
+        context['apply_form']=AuxiliaryToolsCardApplyForm()
+
+    return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
 
 def AuxiliaryToolsLedgerView(request):
     """
@@ -788,7 +737,7 @@ def outsideApplyCardHomeViews(request):
 def outsideApplyCardConfirmViews(request,cid):
     url = getUrlByViewMode(request,"outside/applycardhome")
     default_status = STORAGESTATUS_KEEPER
-    print url
+
     context = getOutsideApplyCardConfirmContext(cid,OutsideApplyCardForm,url,default_status) 
     return render(request,"storage/outside/applycardconfirm.html",context)
 

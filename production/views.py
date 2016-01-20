@@ -47,6 +47,6 @@ def production_planViews(request):
     return render(request,"production/production_plan.html",context)
 
 def ledgerViews(request):
-    orderIndexForm = OrderIndexForm();
+    orderIndexForm = OrderIndexForm()
     context={"orderIndexForm":orderIndexForm}
     return render(request,"production/ledger.html",context)

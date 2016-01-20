@@ -5,9 +5,11 @@ from const.models import WorkOrder
 from datetime import *
 from techdata.models import Processing
 
+
+
+
 class OrderIndexForm(forms.Form):
     order_index = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'form-control input-medium'}))
-    
     def __init__(self, *args, **kwargs):
         super(OrderIndexForm, self).__init__(*args, **kwargs)
         ORDER_INDEX_CHOICES = tuple((item.order_index,item.order_index) for item in WorkOrder.objects.all())
