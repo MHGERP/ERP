@@ -88,18 +88,12 @@ def getAuxiliaryMaterielInfo(request, iid,categories):
     materiel = Materiel.objects.get(id = iid)
     form = AuxiliaryMaterielForm(instance = materiel)
     categories_form = CategoriesForm(initial={"categorie_type":categories})
-    print 99999999999999999999999999999999999999
     try:
+        user_ratio = 0
         if materiel.net_weight != None and materiel.quota != None:
             user_ratio = round(materiel.net_weight/materiel.quota,5)
-            print 11111111111111111111111111111111
-            print user_ratio
-            print 222222222222222222222222222222222
     except:
-        user_ratio = 0
-        print 444444444444444444444444444
-        print user_ratio
-        print 33333333333333333333333333
+        pass
     context = {
         "categories_form":categories_form,
         "form": form,
@@ -356,13 +350,7 @@ def auxiliaryMaterial(request, order):
     list = Materiel.objects.filter(order = order)
     for item in list:
         try:
-            if item.material.categories!= None:
-                item.realname = item.material.get_categories_display()
-        except:
-            item.realname = None
-        try:
-            if item.net_weight != None and item.quota != None:
-                item.user_ratio = round(item.net_weight / item.quota, 5)
+            item.user_ratio = round(item.net_weight / item.quota, 5)
         except:
             item.user_ratio = 0
     context = {
