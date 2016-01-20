@@ -53,4 +53,23 @@ $(document).ready(function(){
     );
     }
     });
+
+    $("#refund_confirm").click(function(){
+        var rid = $(this).attr("rid");
+        $('#receipts_time').attr('disabled',false); 
+        $('#id_receipts_code').attr('disabled',false); 
+        Dajaxice.storage.weldRefundCommit(weldrefundcommit_callback,{'rid':rid,'form':$("#detail_form").serialize()})
+    })
+
+    function weldrefundcommit_callback(data){
+        $('#receipts_time').attr('disabled',true); 
+        $('#id_receipts_code').attr('disabled',true); alert(data.message)
+        if(data.is_show)
+        {
+            $("#confirm").attr('disabled','disabled');
+            $("#confirm").hide();
+            $("#confirm").after('<a type="button" href="/storage/weldapply" class="btn btn-primary">返回</a>');
+        }
+    }
+
 });

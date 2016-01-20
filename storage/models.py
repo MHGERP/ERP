@@ -92,7 +92,7 @@ class ApplyCardBase(models.Model):
         abstract = True
 
 class WeldMaterialEntry(models.Model):
-    entry_time = models.DateField(blank=False, null=True,verbose_name=u"入库时间")
+    entry_time = models.DateField(blank=False, null=True,auto_now_add=True,verbose_name=u"入库时间")
     purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "purchaser")
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "keeper")
