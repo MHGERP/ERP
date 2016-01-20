@@ -667,4 +667,28 @@ def weldMaterialApply(request,itemid,form,index):
         print form.errors
     return simplejson.dumps({'message':message,'flag':flag})
 
-    
+@dajaxice_register
+def weldRefundCommit(request,rid,form):
+    ref_obj = WeldRefund.objects.get(id = rid)
+    is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
+    reform = WeldRefundForm(deserialize_form(form),instance = ref_obj)
+    if reform.is_valid():
+        reform.save()
+        storageitem = ref_obj.receipts_code.storelist
+        storageitem.count += ref_obj.refund_count
+        storageitem.save()
+        ref_obj.refund_status = STORAGESTATUS_END
+        message = u"退库成功，信息已记录"
+    else:
+        message = u"退库失败，退库单信息未填写完整"
+        print reform.errors
+        
+    return simplejson.dumps({"is_show":is_show,"message":message})
+
+
+
+
+
+
+
+
