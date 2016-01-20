@@ -11,17 +11,31 @@ $(document).ready(function(){
 		form=$(".ledger-search-form").serialize(true);
 		Dajaxice.storage.searchSteelLedger(searchSteelLedger_CallBack,{'form':form});
 	});
+    //var material_number_list = new Array();
 	$(".refund-card-ensure-btn").click(function(){
-		alert("退库成功");
+        //$("tr.everyReturn").each(function(i){
+        //    material_number_list.push($(this).attr("matnum"));
+        //})
+		//alert(material_number_list);
+
+        var form_code = $("table").attr("fc");
+        Dajaxice.storage.steelRefundEnsure(steelRefundEnsureCallBack, {'form_code':form_code});
 	});
 	$(".apply-card-ensure-btn").click(function(){
         var form_code =$("table").attr("iid");
+        alert(form_code);
         Dajaxice.storage.steelApplyEnsure(steelApplyEnsureCallBack,{'form_code':form_code});
 	});
 });
 
+function steelRefundEnsureCallBack(data) {
+    alert(data);
+    window.location.reload();
+}
+
 function steelApplyEnsureCallBack(data){
-    
+    alert(data);
+    window.location.reload();
 }
 
 function searchSteelLedger_CallBack(data){

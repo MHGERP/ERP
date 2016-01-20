@@ -42,6 +42,23 @@ def steelRefundViews(request):
     }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
+def steelrefunddetailViews(request,typeid,rid):
+    typeid=int(typeid)
+    common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
+    if typeid:
+        return_cards = common_Info.barsteelmaterialreturncardcontent_set.all()
+    else:
+        return_cards = common_Info.boardsteelmaterialreturncardcontent_set.all()
+    context={
+        'return_cards':return_cards,
+        'common_Info':common_Info,
+    }
+    if typeid==1:
+        return render(request,"storage/steelmaterial/barsteelrefunddetail.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelrefunddetail.html",context)
+
+
 def steelApplyViews(request):
     search_form = SteelRefundSearchForm()
     apply_cards = CommonSteelMaterialApplyCardInfo.objects.all()
@@ -75,23 +92,6 @@ def steelLedgerViews(request):
         "steel_set":steel_set,
     }
     return render(request,"storage/steelmaterial/steelledger.html",context)
-
-
-def steelrefunddetailViews(request,typeid,rid):
-    typeid=int(typeid)
-    common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
-    if typeid:
-        return_cards = common_Info.barsteelmaterialreturncardcontent_set.all()
-    else:
-        return_cards = common_Info.boardsteelmaterialreturncardcontent_set.all()
-    context={
-        'return_cards':return_cards,
-        'common_Info':common_Info,
-    }
-    if typeid==1:
-        return render(request,"storage/steelmaterial/barsteelrefunddetail.html",context)
-    else:
-        return render(request,"storage/steelmaterial/boardsteelrefunddetail.html",context)
     
 def weldEntryHomeViews(request):
     if request.method == "POST":
@@ -415,8 +415,8 @@ def weldRefundViews(request):
             refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data)
     else:
         search_form = RefundSearchForm()
-        #refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
-        refund_set = WeldRefund.objects.all()
+        refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
+        #refund_set = WeldRefund.objects.all()
     context = {
             "search_form":search_form,
             "refund_set":refund_set,
@@ -427,18 +427,7 @@ def weldRefundViews(request):
 def weldRefundDetailViews(request,rid):
     ref_obj = WeldRefund.objects.get(id = rid)
     is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
-    if request.method == "POST":
-        reform = WeldRefundForm(request.POST,instance = ref_obj)
-        if reform.is_valid():
-            reform.save()
-            ref_obj.keeper = request.user
-            ref_obj.weldrefund_status = STORAGESTATUS_END
-            ref_obj.save()
-            return HttpResponseRedirect("/storage/weldrefund")
-        else:
-            print reform.errors
-    else:
-        reform = WeldRefundForm(instance = ref_obj) 
+    reform = WeldRefundForm(instance = ref_obj) 
     context = {
             "reform":reform,
             "ref_obj":ref_obj,

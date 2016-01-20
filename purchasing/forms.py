@@ -64,7 +64,7 @@ class ProcessFollowingForm(ModelForm):
 class MaterielExecuteForm(ModelForm):
     class Meta:
         model = MaterielExecute
-        exclude = {'id', 'document_lister', 'date', 'is_save'}
+        exclude = {'id', 'document_lister', 'date', 'is_save','tech_feedback','tech_requirement'}
         widgets = {
             'materiel_choice' : forms.Select(attrs={"id" : "materiel_choice_select"})
         }
@@ -133,9 +133,9 @@ class OrderInfoForm(ModelForm):
 class MeterielExcecuteForm(ModelForm):
     class Meta:
         model = MaterielExecuteDetail
-        fields = {'recheck','quota','part','oddments','remark',}
+        fields = {'batch_number','quota','part','oddments','remark',}
         widgets = {
-            'recheck':forms.Select(choices=RECHECK_CHOICE, attrs={'class':'form-control','id':'recheck'}),
+            'batch_number':forms.TextInput(attrs={'class':'form-control','id':'batch_number'}),
             'quota':forms.TextInput(attrs={'class':'form-control','id':'quota'}),
             'part':forms.TextInput(attrs={'class':'form-control','id':'part'}),
             'oddments':forms.TextInput(attrs={'class':'form-control','id':'oddments'}),

@@ -1,0 +1,24 @@
+<table class="table table-bordered">
+    <thead>
+        <th><input type="RADIO" disabled="disabled"/></th>
+        <th>牌号</th>
+        <th>规格</th>
+        <th>入库时间</th>
+        <th>数量</th>
+        <th>材料批号</th>
+        <th>材质编号</th>
+    </thead>
+    <tbody>
+        {% for item in item_set%}
+        <tr id="{{item.id}}">
+            <td><input type="RADIO" name="item" value="{{item.id}}"/></td>
+            <td>{{item.brand}}</td>
+            <td>{{item.specification}}</td>
+            <td>{{item.entry_time|date:'Y年m月d日'}}</td>
+            <td>{{item.count}}</td>
+            <td>{{charge_number}}</td>
+            <td>{{material_id}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

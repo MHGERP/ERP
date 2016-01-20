@@ -83,7 +83,10 @@ def principalMaterialViews(request):
     return render(request, "techdata/principal_material.html", context)
 
 def auxiliaryMaterialViews(request):
-    context = {}
+    categories_form = CategoriesForm()
+    context = {
+            "categories_form":categories_form
+    }
     return render(request, "techdata/auxiliary_material.html", context)
 
 def processBOMViews(request):
@@ -157,6 +160,16 @@ def techDetailTableViews(request):
     """BinWu"""
     work_order_form = WorkOrderForm()
     context = {
-        "form": WorkOrderForm,
+        "form": work_order_form,
     }
     return render(request, "techdata/detail_table.html", context)
+
+def heatTreatmentTechCardEditViews(request):
+    """
+    JunHU
+    """
+    card_id = request.GET.get("card_id");
+    context = {
+        "card_id": card_id,
+    }
+    return render(request, "techdata/heat_treatment_tech_card_edit.html", context)

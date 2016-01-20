@@ -103,6 +103,28 @@ def steelApplyEnsure(request,form_code):
     if common_steelapply.steel_type==BOARD_STEEL:message=boardSteelApplyEnsure(request,common_steelapply)
     if common_steelapply.steel_type==BAR_STEEL:message=barSteelApplyEnsure(request,common_steelapply)
     return message
+def barSteelApplyEnsure(request,common_card):
+    """
+    Author:Rosen
+    Summay:型材领用确认
+    Params:领用单表头
+    return:提示信息
+    """
+    steel_set = common_card.barsteelmaterialapplycardcontent_set.all()
+    for steel in steel_set:
+        quantity_ledger = steel.steel_material.barsteelmaterialledger.quantity
+        quantity_need = steel.quantity
+        if quantity_need > quantity_ledger:return u"%s(%s)库存不足"%(steel.steel_material.name,steel.steel_material.specifications) 
+
+    for steel in steel_set:
+        ledger = steel.steel_material.barsteelmaterialledger
+        ledger.quantity = ledger.quantity - steel.quantity
+        ledger.save()
+
+    common_card.apply_confirm=True
+    common_card.save()
+
+    return u"领用成功"
 
 def boardSteelApplyEnsure(request,common_card):
     """
@@ -115,14 +137,68 @@ def boardSteelApplyEnsure(request,common_card):
     for steel in steel_set:
         quantity_ledger=steel.steel_material.boardsteelmaterialledger.quantity
         quantity_need=steel.quantity
-        if quantity_need > quantity_ledger:return u"%s(%s)库存不足"%(steel.steel_material.name,steel.steel_material.specification)
+        if quantity_need > quantity_ledger:return u"%s(%s)库存不足"%(steel.steel_material.name,steel.steel_material.specifications)
     for steel in steel_set:
         ledger = steel.steel_material.boardsteelmaterialledger
         ledger.quantity=ledger.quantity - steel.quantity
         ledger.save()
-        steel.apply_confirm = True
-        steel.save()
 
+    common_card.apply_confirm = True
+    common_card.save()
+
+    return u"领用成功"
+
+
+@dajaxice_register
+def steelRefundEnsure(request,form_code):
+    """
+    kad
+    """
+    common_refund = CommonSteelMaterialReturnCardInfo.objects.get(form_code = form_code)
+    if common_refund.steel_type == BOARD_STEEL:
+        message = boardSteelRefundEnsure(request, common_refund)
+    elif common_refund.steel_type == BAR_STEEL:
+        message = barSteelRefundEnsure(request, common_refund)
+    return message
+
+def boardSteelRefundEnsure(request, common_refund):
+    """
+    kad
+    """
+    refund_set = common_refund.boardsteelmaterialreturncardcontent_set.all()
+    for refund in refund_set:
+        refund_quantity = refund.quantity
+        refund_matnum = refund.steel_material.material_number
+        ledger = SteelMaterial.objects.get(material_number = refund_matnum)
+        ledger_quantity = ledger.boardsteelmaterialledger.quantity
+        ledger_quantity += refund_quantity
+        ledger.boardsteelmaterialledger.quantity = ledger_quantity
+        ledger.boardsteelmaterialledger.save()
+        ledger_returntime = ledger.return_time
+        ledger_returntime += 1
+        ledger.return_time = ledger_returntime
+        ledger.save()
+    common_refund.return_confirm = True
+    common_refund.save()
+    return u"退库成功"
+
+def barSteelRefundEnsure(request, common_refund):
+    """
+    kad
+    """
+    refund_set = common_refund.barsteelmaterialreturncardcontent_set.all()
+    for refund in refund_set:
+        refund_quantity = refund.quantity
+        refund_matnum = refund.steel_material.material_number
+        ledger = SteelMaterial.objects.get(material_number = refund_matnum)
+        ledger_quantity = SteelMaterial.barsteelmaterialledger.quantity
+        ledger_quantity += refund_quantity
+        ledger_returntime = ledger.return_time
+        ledger_returntime += 1
+        ledger.save()
+    common_refund.return_confirm = True
+    common_refund.save()
+    return u"退库成功"
     
 
 
@@ -644,3 +720,60 @@ def outsideAccountApplyCardSearch(request,form):
         }
     html = render_to_string("storage/widgets/account/applycardhomemain.html",context)
     return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def weldMaterialStorageItems(request,specification):
+    item_set = WeldStoreList.objects.filter(specification = specification,count__gt = 0).order_by('entry_time')
+    html = render_to_string("storage/weldapply/itemlist.html",{"item_set":item_set})
+    return simplejson.dumps({'html':html})
+
+@dajaxice_register
+def weldMaterialApply(request,itemid,form,index):
+    storageitem = WeldStoreList.objects.get(id = itemid)
+    applycard = WeldingMaterialApplyCard.objects.get(index=index)
+    form = Apply_ApplyCardForm(deserialize_form(form),instance=applycard)
+    if form.is_valid():
+        if storageitem.count >= form.cleaned_data["actual_quantity"]:
+            applycard.storelist = storageitem
+            applycard.save()
+            storageitem.count -= form.cleaned_data["actual_quantity"]
+            storageitem.save()
+            form.save()
+            applycard.status = APPLYCARD_COMMIT
+            applycard.save()
+            message = u"领用单确认成功"
+            flag = True
+        else:
+            message = u"领用确认失败，所选库存材料数量不足"
+            flag = False
+    else:
+        message = u"领用单确认失败，数据未填写完整"
+        flag = False
+        print form.errors
+    return simplejson.dumps({'message':message,'flag':flag})
+
+@dajaxice_register
+def weldRefundCommit(request,rid,form):
+    ref_obj = WeldRefund.objects.get(id = rid)
+    is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
+    reform = WeldRefundForm(deserialize_form(form),instance = ref_obj)
+    if reform.is_valid():
+        reform.save()
+        storageitem = ref_obj.receipts_code.storelist
+        storageitem.count += ref_obj.refund_count
+        storageitem.save()
+        ref_obj.refund_status = STORAGESTATUS_END
+        message = u"退库成功，信息已记录"
+    else:
+        message = u"退库失败，退库单信息未填写完整"
+        print reform.errors
+        
+    return simplejson.dumps({"is_show":is_show,"message":message})
+
+
+
+
+
+
+
+

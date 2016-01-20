@@ -92,5 +92,9 @@ urlpatterns=patterns('',
     url(
         r'^programadd',
         techdata_views.programAdd,
-    )
+    ),
+    url(
+        r'^heatTreatmentTechCardEdit',
+        techdata_views.heatTreatmentTechCardEditViews,
+    ),
 )
