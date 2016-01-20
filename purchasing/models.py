@@ -2,17 +2,12 @@
 from const import *
 import datetime
 from django.db import models
+from const.utility import make_uuid
+
 from const.models import BidFormStatus,Materiel,Material, WorkOrder, OrderFormStatus, ImplementClassChoices
 from django.contrib.auth.models import User
 import settings
 # Create your models here.
-
-import uuid
-def make_uuid():
-    """
-    make uuid
-    """
-    return str(uuid.uuid4())
 
 class OrderForm(models.Model):
     order_id = models.CharField(unique = True, max_length = 20, blank = False, verbose_name = u"订购单编号")
