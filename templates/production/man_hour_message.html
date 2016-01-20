@@ -1,26 +1,20 @@
 {% extends "production/base/none_nav_base.html"%}
 {% block title%}
-<h1>台帐查询</h1>
+<h1>工时信息查询</h1>
 {% endblock%}
 {% block sub_ref %}
-<a href="#" class="current">台帐查询</a>
+<a href="#" class="current">工时信息查询</a>
 {% endblock %}
 {% block inner_content%}
-<link rel="stylesheet" href="{{ STATIC_URL }}style/man_hour_summarize.css" type="text/css" media="screen" />
-<div id="search-div" style="margin-bottom:10px;">
-  <form class="form-inline">
-    工作令:
-    {{orderIndexForm.order_index}}
-    编号：
-    <input type="text" class="input-small search-query">
-    部件图号：
-    <input type="text" class="input-small search-query">
-    <button type="button" class="btn btn-primary">检索</button>
+<div id="search-div">
+	<form class="form-inline">
+	  {{hourMessageSearchForm}}
+    <button type="button" class="btn btn-primary" id="btn-search">检索</button>
     <button type="button" class="btn btn-primary">导出</button>
-  </form>
+	</form>
 </div>
 
-{%include "production/widgets/ledger_table.html"%}
+<div class="widget-content" id="widget-content"></div>
 
 <div id="hour_summarize_modal" class="modal hide fade"　 modal-size-width="0.5">
   <div class="modal-header">
@@ -50,5 +44,5 @@
   </div>
 </div>
 
-
+<script type='text/javascript' src="{{STATIC_URL}}js/production/man_hour_message.js"></script>
 {% endblock%}
