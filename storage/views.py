@@ -113,23 +113,23 @@ def weldEntryHomeViews(request):
             }
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
-# def steelEntryHomeViews(request):
-#     if request.method == "POST":
-#         search_form = SteelEntrySearchForm(request.POST)
-#         if search_form.is_valid():
-#             steelentry_set = get_weld_filter(SteelMaterialPurchasingEntry,search_form.cleaned_data)
-#         else:
-#             print search_form.errors
-#     else:
-#         steelentry_set = SteelMaterialPurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
-#         search_form = SteelEntrySearchForm()
-#     steelentry_set = steelentry_set.order_by("-entry_time")
-#     context = {
-#         "steel_entry_set":steelentry_set,
-#         "ENTRYSTATUS_END":STORAGESTATUS_END,
-#         "search_form":search_form,
-#     }
-#     return render(request,"storage/steelmaterial/steelentryhome.html",context)
+def steelEntryHomeViews(request):
+    if request.method == "POST":
+        search_form = SteelEntrySearchForm(request.POST)
+        if search_form.is_valid():
+            steelentry_set = get_weld_filter(SteelMaterialPurchasingEntry,search_form.cleaned_data)
+        else:
+            print search_form.errors
+    else:
+        steelentry_set = SteelMaterialPurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
+        search_form = SteelEntrySearchForm()
+    steelentry_set = steelentry_set.order_by("-entry_time")
+    context = {
+        "steel_entry_set":steelentry_set,
+        "ENTRYSTATUS_END":STORAGESTATUS_END,
+        "search_form":search_form,
+    }
+    return render(request,"storage/steelmaterial/steelentryhome.html",context)
 
 def weldEntryConfirmViews(request,eid):
     entry = WeldMaterialEntry.objects.get(id = eid)
@@ -147,18 +147,18 @@ def weldEntryConfirmViews(request,eid):
             }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
-# def steelEntryConfirmViews(request,eid):
-#     entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-#     items = entry.steelmaterial_set.all()
-#     # entryitem_form = SteelEntryItemsForm()
-#     is_show = entry.entry_status == STORAGESTATUS_KEEPER
-#     context = {
-#             "entry":entry,
-#             "entry_set":items,
-#             "item_form":entryitem_form,
-#             "is_show":is_show,
-#             }
-#     return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
+def steelEntryConfirmViews(request,eid):
+    entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
+    # items = entry.steelmaterial_set.all()
+    # entryitem_form = SteelEntryItemsForm()
+    is_show = entry.entry_status == STORAGESTATUS_KEEPER
+    context = {
+            "entry":entry,
+            # "entry_set":items,
+            # "item_form":entryitem_form,
+            "is_show":is_show,
+            }
+    return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
     
 def Weld_Apply_Card_List(request):
     """
@@ -408,8 +408,8 @@ def weldRefundViews(request):
             refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data)
     else:
         search_form = RefundSearchForm()
-        #refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
-        refund_set = WeldRefund.objects.all()
+        refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
+        #refund_set = WeldRefund.objects.all()
     context = {
             "search_form":search_form,
             "refund_set":refund_set,
@@ -420,18 +420,7 @@ def weldRefundViews(request):
 def weldRefundDetailViews(request,rid):
     ref_obj = WeldRefund.objects.get(id = rid)
     is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
-    if request.method == "POST":
-        reform = WeldRefundForm(request.POST,instance = ref_obj)
-        if reform.is_valid():
-            reform.save()
-            ref_obj.keeper = request.user
-            ref_obj.weldrefund_status = STORAGESTATUS_END
-            ref_obj.save()
-            return HttpResponseRedirect("/storage/weldrefund")
-        else:
-            print reform.errors
-    else:
-        reform = WeldRefundForm(instance = ref_obj) 
+    reform = WeldRefundForm(instance = ref_obj) 
     context = {
             "reform":reform,
             "ref_obj":ref_obj,

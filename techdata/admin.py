@@ -18,6 +18,10 @@ RegisterClass = (
     TransferCardMark,
     ProcessBOMPageMark,
     Program,
+    HeatTreatmentTechCard,
+    HeatTreatmentArrangement,
+    HeatTreatmentMateriel,
+    DesignBOMMark,
 )
 
 for item in RegisterClass:

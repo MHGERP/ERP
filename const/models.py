@@ -50,8 +50,11 @@ class Materiel(models.Model):
     specification = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"规格")
     standard = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"标准") 
     unit = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"单位") 
-    status = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"状态") 
-
+    status = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"状态")
+    press=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"受压")
+    recheck=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"复验")
+    detection_level=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"探伤级别")
+    
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"

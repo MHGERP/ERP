@@ -23,6 +23,7 @@ class OrderForm(models.Model):
     chief=models.ForeignKey(User,verbose_name=u"外采科长",related_name="chief_user",null=True)
     approve_user=models.ForeignKey(User,verbose_name=u"审批人",related_name="approve_user",null=True)
     tech_requirement=models.CharField(max_length=5000,blank=True,null=True)
+    order_mod=models.IntegerField(default=0,verbose_name=u"标单类型")
     class Meta:
         verbose_name = u"订购单"
         verbose_name_plural = u"订购单"
@@ -80,6 +81,7 @@ class MaterielFormConnection(models.Model):
     order_form = models.ForeignKey(OrderForm, blank = True, null = True, verbose_name = u"订购单")
     bid_form = models.ForeignKey(BidForm, blank = True, null = True, verbose_name = u"标单")
     count = models.CharField(blank = True, null = True, max_length = 20, verbose_name = u"需求数量")
+    purchasing = models.CharField(blank = True, null = True, max_length = 20, verbose_name = u"采购")
     class Meta:
         verbose_name = u"物料——采购——关联表"
         verbose_name_plural = u"物料——采购——关联表"
@@ -283,7 +285,7 @@ class StatusChangeReason(models.Model):
 class MaterielExecuteDetail(models.Model):
     materiel_execute = models.ForeignKey(MaterielExecute, null = True, blank = True, verbose_name = u"材料执行")
     materiel=models.ForeignKey(Materiel,verbose_name=u"物料")
-    recheck = models.BooleanField(default = False, verbose_name = u"复验")
+    batch_number = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"出厂批号")
     quota = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"定额")
     part = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"零件")
     oddments = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"余料")

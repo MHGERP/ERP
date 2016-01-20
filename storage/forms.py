@@ -34,7 +34,7 @@ class ApplyCardForm(ModelForm):
 
     class Meta:
         model=WeldingMaterialApplyCard
-        exclude=[]
+        exclude=['storelist']
         
         widgets={
                 'workorder':forms.TextInput(attrs={'class':'form-control','style':'width:60%'}),
@@ -84,7 +84,7 @@ class Apply_ApplyCardForm(ApplyCardForm):
 class Commit_ApplyCardForm(ApplyCardForm):
     class Meta(ApplyCardForm.Meta):
         widgets={
-                'workorder':forms.TextInput(attrs={'class':'form-control','style':'width:60%','readonly':''}),
+                'workorder':forms.Select(attrs={'class':'form-control','style':'span2','disabled':'disabled'}),
                 'weld_bead_number':forms.TextInput(attrs={'class':'form-control span2','readonly':''}), 
                 'weld_material_number':forms.TextInput(attrs={'class':'form-control','readonly':''}),
                 'model':forms.TextInput(attrs={'class':'form-control','readonly':''}),
@@ -217,11 +217,11 @@ class WeldRefundForm(ModelForm):
         exclude = ('department','date','code','id','refunder','keeper','weldrefund_status',)
         widgets = {
             'work_order':forms.HiddenInput(),
-            'receipts_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"receipts_time","class":"span2"}),
-            'receipts_code': forms.Select(attrs={'class':"span2"}),                      
-            'specification': forms.TextInput(attrs={'class':"span2"}),                      
-            'refund_weight': forms.TextInput(attrs={'class':"span1"}),                      
-            'refund_count': forms.TextInput(attrs={'class':"span1"}),                      
+            'receipts_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"receipts_time","class":"span2","disabled":True}),
+            'receipts_code': forms.Select(attrs={'class':"span2","disabled":True}),                      
+            'specification': forms.TextInput(attrs={'class':"span2","readonly":True}),                      
+            'refund_weight': forms.TextInput(attrs={'class':"span1","readonly":True}),                      
+            'refund_count': forms.TextInput(attrs={'class':"span1","readonly":True}),                      
             'refund_status': forms.TextInput(attrs={'class':"span2"}),                      
         }
 
