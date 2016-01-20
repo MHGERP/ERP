@@ -104,7 +104,7 @@ def weldListViews(request):
     """
     work_order_form = WorkOrderForm()
     context = {
-        "form": WorkOrderForm,
+        "form": work_order_form,
     }
     return render(request, "techdata/weld_list.html", context)
 
@@ -157,6 +157,6 @@ def techDetailTableViews(request):
     """BinWu"""
     work_order_form = WorkOrderForm()
     context = {
-        "form": WorkOrderForm,
+        "form": work_order_form,
     }
     return render(request, "techdata/detail_table.html", context)
