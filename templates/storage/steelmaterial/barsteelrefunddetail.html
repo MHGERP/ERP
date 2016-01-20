@@ -10,6 +10,7 @@
 {% endblock%}
 
 {% block sub_sec %}
+<a href="/storage/steelrefund">钢材退库</a>
 <a href="/storage/weldrefund" class="current">退库单详情</a>
 {% endblock %}
 
@@ -20,7 +21,7 @@
     <button type="button" class="btn btn-primary">日期: {{common_Info.date|date:"Ymd"}}</button>
     <button type="button" class="btn btn-primary">编号: {{common_Info.form_code}}</button> 
 </div>
-<table class="table table-bordered">
+<table class="table table-bordered" fc="{{common_Info.form_code}}">
     <thead>
         <th>名称</th>
         <th>材质</th>
