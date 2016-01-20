@@ -160,7 +160,7 @@ def techDetailTableViews(request):
     """BinWu"""
     work_order_form = WorkOrderForm()
     context = {
-        "form": WorkOrderForm,
+        "form": work_order_form,
     }
     return render(request, "techdata/detail_table.html", context)
 
@@ -168,5 +168,8 @@ def heatTreatmentTechCardEditViews(request):
     """
     JunHU
     """
-    context = {}
+    card_id = request.GET.get("card_id");
+    context = {
+        "card_id": card_id,
+    }
     return render(request, "techdata/heat_treatment_tech_card_edit.html", context)

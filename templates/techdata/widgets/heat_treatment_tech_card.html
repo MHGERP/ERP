@@ -217,7 +217,7 @@ lang=EN-US><span style='mso-spacerun:yes'>&nbsp; </span></span>工<span
 lang=EN-US><span style='mso-spacerun:yes'>&nbsp; </span></span>艺<span
 lang=EN-US><span style='mso-spacerun:yes'>&nbsp; </span></span>卡</span></b>
 <u><span style='font-family:宋体'>文件编号：<span lang=EN-US>RR01-<span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u>
+style='mso-spacerun:yes' id="span-fileindex">{{card.file_index|default_if_none:"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"}} </span></span></span></u>
 </center>
 
 <div align=center>
@@ -360,8 +360,7 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u
   </td>
  </tr>
  
- 
- </tr>
+ {% for item in card.heattreatmentmateriel_set.all %}
  
  <tr style='mso-yfti-irow:5;height:31.25pt'>
   <td width=45 style='width:33.75pt;border-top:none;border-left:solid windowtext 1.5pt;
@@ -370,7 +369,7 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u
   mso-border-left-alt:solid windowtext 1.5pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:31.25pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='font-family:宋体'>5<o:p></o:p></span></p>
+  style='font-family:宋体'>{{forloop.counter}}</span></p>
   </td>
   <td width=81 colspan=2 style='width:60.9pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -378,14 +377,14 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u
   mso-border-alt:solid windowtext .75pt;padding:0cm 5.4pt 0cm 5.4pt;height:
   31.25pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='font-family:宋体'><o:p>&nbsp;</o:p></span></p>
+  style='font-family:宋体'><o:p>{{item.materiel.order}}</o:p></span></p>
   </td>
   <td width=95 style='width:71.5pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
   solid windowtext .75pt;mso-border-left-alt:solid windowtext .75pt;mso-border-alt:
   solid windowtext .75pt;padding:0cm 5.4pt 0cm 5.4pt;height:31.25pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:10.5pt;font-family:宋体'><o:p>&nbsp;</o:p></span></p>
+  style='mso-bidi-font-size:10.5pt;font-family:宋体'><o:p>{{item.materiel.schematic_index}}</o:p></span></p>
   </td>
   <td width=82 colspan=3 style='width:61.85pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -393,7 +392,7 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u
   mso-border-alt:solid windowtext .75pt;padding:0cm 5.4pt 0cm 5.4pt;height:
   31.25pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:10.5pt;font-family:宋体'><o:p>&nbsp;</o:p></span></p>
+  style='mso-bidi-font-size:10.5pt;font-family:宋体'><o:p>{{item.materiel.name}}</o:p></span></p>
   </td>
   <td width=92 colspan=2 style='width:68.95pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -401,7 +400,7 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u
   mso-border-alt:solid windowtext .75pt;padding:0cm 5.4pt 0cm 5.4pt;height:
   31.25pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='font-family:宋体'><o:p>&nbsp;</o:p></span></p>
+  style='font-family:宋体'><o:p>{{item.materiel.material}}</o:p></span></p>
   </td>
   <td width=82 colspan=2 style='width:61.8pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -417,14 +416,14 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u
   mso-border-alt:solid windowtext .75pt;padding:0cm 5.4pt 0cm 5.4pt;height:
   31.25pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='font-family:宋体'><o:p>&nbsp;</o:p></span></p>
+  style='font-family:宋体'><o:p>{{item.max_heattreat_thin}}</o:p></span></p>
   </td>
   <td width=45 style='width:33.6pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
   solid windowtext .75pt;mso-border-left-alt:solid windowtext .75pt;mso-border-alt:
   solid windowtext .75pt;padding:0cm 5.4pt 0cm 5.4pt;height:31.25pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='font-family:宋体'><o:p>&nbsp;</o:p></span></p>
+  style='font-family:宋体'><o:p>{{item.materiel.count}}</o:p></span></p>
   </td>
   <td width=66 style='width:49.65pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -432,7 +431,7 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u
   mso-border-alt:solid windowtext .75pt;mso-border-right-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:31.25pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='font-family:宋体'><o:p>&nbsp;</o:p></span></p>
+  style='font-family:宋体'><o:p>{{item.materiel.net_weight}}</o:p></span></p>
   </td>
   <td width=62 style='width:46.5pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:double windowtext 1.5pt;mso-border-top-alt:
@@ -441,7 +440,7 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u
   mso-border-right-alt:double 1.5pt;mso-border-color-alt:windowtext;padding:
   0cm 5.4pt 0cm 5.4pt;height:31.25pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='font-family:宋体'><o:p>&nbsp;</o:p></span></p>
+  style='font-family:宋体'><o:p>{{item.materiel.remark}}</o:p></span></p>
   </td>
   <td width=132 style='width:98.8pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -469,6 +468,9 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u
   style='font-family:宋体'><o:p>&nbsp;</o:p></span></p>
   </td>
  </tr>
+
+{% endfor %}
+
  <tr style='mso-yfti-irow:6;page-break-inside:avoid;height:204.75pt'>
   <td width=620 colspan=14 valign=top style='width:465.1pt;border-top:none;
   border-left:solid windowtext 1.5pt;border-bottom:solid windowtext 1.0pt;
@@ -567,8 +569,14 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u
   mso-border-top-alt:solid windowtext .75pt;mso-border-left-alt:solid windowtext .75pt;
   mso-border-alt:solid windowtext .75pt;padding:0cm 5.4pt 0cm 5.4pt;height:
   15.0pt'>
-  <p class=MsoNormal style='line-height:120%'><span lang=EN-US
-  style='font-family:宋体'><o:p>&nbsp;</o:p></span></p>
+  <center class=MsoNormal style='line-height:120%'><span lang=EN-US
+  style='font-family:宋体'>
+	{% if card.writer %}
+	{{ card.writer.userinfo }}
+	{% else %}
+	<span class="btn btn-mark" args="{{MARK_WRITE}}">签字</span>
+	{% endif %}
+  </span></center>
   </td>
   <td width=388 colspan=9 style='width:291.1pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -655,8 +663,14 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span></u
   mso-border-top-alt:solid windowtext .75pt;mso-border-left-alt:solid windowtext .75pt;
   mso-border-alt:solid windowtext .75pt;mso-border-bottom-alt:solid windowtext 1.5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:15.6pt'>
-  <p class=MsoNormal style='line-height:120%'><span lang=EN-US
-  style='font-family:宋体'><o:p>&nbsp;</o:p></span></p>
+  <center class=MsoNormal style='line-height:120%'><span lang=EN-US
+  style='font-family:宋体'>
+	{% if card.reviewer %}
+	{{ card.reviewer.userinfo }}
+	{% else %}
+	<span class="btn btn-mark" args="{{MARK_REVIEW}}">签字</span>
+	{% endif %}
+  </span></center>
   </td>
   <td width=54 style='width:40.5pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:

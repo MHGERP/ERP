@@ -205,19 +205,20 @@ class HeatTreatmentTechCard(models.Model):
         verbose_name = u"热处理工艺卡"
         verbose_name_plural = u"热处理工艺卡"
     def __unicode__(self):
-        return "RR01-" + self.file_index
+        return "RR01-" + str(self.file_index)
 
 class HeatTreatmentMateriel(models.Model):
     materiel = models.ForeignKey(Materiel, verbose_name = u"零件")
+    max_heattreat_thin = models.CharField(max_length = 20, null = True, blank = True, verbose_name  = u"最大热处理厚度")
     heat_test = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"热处理检验")
-    operator = models.ForeignKey(User, verbose_name = u"操作者")
+    operator = models.ForeignKey(User, blank = True, null = True, verbose_name = u"操作者")
     test_result = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"检验结果")
     card_belong = models.ForeignKey(HeatTreatmentTechCard, null = True, blank = True, verbose_name = u"所属工艺卡")
     class Meta:
         verbose_name = u"热处理件"
         verbose_name_plural = u"热处理件"
     def __unicode__(self):
-        return unicode(Materiel)
+        return unicode(self.materiel)
 
 class HeatTreatmentArrangement(models.Model):
     file_index = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"文件编号")
@@ -234,7 +235,7 @@ class HeatTreatmentArrangement(models.Model):
         verbose_name = u"热处理测温点布置"
         verbose_name_plural = u"热处理测温点布置"
     def __unicode__(self):
-        return "RR02-" + self.file_index
+        return "RR02-" + str(self.file_index)
 
 class BoxOutBoughtMark(models.Model):
     order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")

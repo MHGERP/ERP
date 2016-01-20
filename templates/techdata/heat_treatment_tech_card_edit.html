@@ -5,13 +5,14 @@
 {% endblock %}
 
 {% block sub_ref %}
+<a href="/techdata/techHotDeel" class="tip-bottom" data-original-title="热处理列表">热处理列表</a>
 <a href="#" class="current">热处理工艺卡编辑</a>
 {% endblock %}
 
 {% block inner_content%}
 
-<div class="widget-content">
-	{% include "techdata/widgets/heat_treatment_tech_card.html" %}
+<div class="widget-content" card_id="{{card_id}}">
+	
 </div>
 
 
