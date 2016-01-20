@@ -60,6 +60,9 @@ def getProcessBOM(request, id_work_order):
 
 @dajaxice_register
 def getSingleProcessBOM(request, iid):
+    """
+    JunHU
+    """
     item = Materiel.objects.get(id = iid)
     if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
         CirculationRoute(materiel_belong = item).save()
