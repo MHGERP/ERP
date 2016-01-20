@@ -17,12 +17,12 @@
              <td><input type="checkbox" class="checkbox" args="{{item.id}}"></td>
              <td>{{item.materiel.order.order_index}}</td>
              <td>{{item.materiel.material.name}}</td>
-             <td></td>
-             <td></td>
-             <td>{{item.count}}</td>
-             <td></td>
-             <td></td>
-             <td></td>
+             <td>{{item.materiel.material.material_id}}</td>
+             <td>{{item.materiel.specification}}</td>
+             <td>{{item.materiel.count}}</td>
+             <td>{{item.materiel.status}}</td>
+             <td>{{item.materiel.press}}</td>
+             <td>{{item.materiel.detection_level}}</td>
         </tr>
         {% endfor%}
     </tbody>

@@ -826,8 +826,8 @@ def newOrderSave(request, id, pendingArray):
     order_form = OrderForm.objects.get(id = id)
     for id in pendingArray:
         materiel = Materiel.objects.get(id = id)
-        if materiel.inventory_type.id <= 2:
-            addToExecute(materiel)
+        #if materiel.inventory_type.id <= 2:
+        #    addToExecute(materiel)
         try:
             conn = MaterielFormConnection.objects.get(materiel = materiel)
         except:
@@ -1034,6 +1034,13 @@ def saveTechRequire(request,order_id,content):
     order_form.save()
     return simplejson.dumps({})
 
+@dajaxice_register
+def saveExecuteTechRequire(request,execute_id,content):
+    materiel_execute=MaterielExecute.objects.get(document_number=execute_id)
+    materiel_execute.tech_requirement=content
+    materiel_execute.save()
+    return simplejson.dumps({})
+
 def selectEntryType(request,bid,selected,selectentryform):
     entrytypedict = dict(list(STORAGE_ENTRY_TYPECHOICES))
     selectform = EntryTypeForm(deserialize_form(selectentryform))
@@ -1083,3 +1090,38 @@ def getEntryDataModel(selectvalue):
         entrymodel = WeldMaterialEntry 
         entryitemmodel = WeldMaterialEntryItems
     return entrymodel,entryitemmodel
+
+
+@dajaxice_register
+def orderformToExecute(request,orderform_id):
+    executeForm=MaterielExecuteForm()
+    html=render_to_string("purchasing/materielexecute/widget/materielexecute_view_form.html",{"executeForm":executeForm})
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+#@transaction.commit_manually
+def saveOrderformExecute(request,orderform_id,form):
+    orderform=OrderForm.objects.get(order_id=orderform_id)
+    materielExecuteForm=MaterielExecuteForm(deserialize_form(form))
+    print materielExecuteForm
+    if materielExecuteForm.is_valid():
+        try:
+            materielexecute = MaterielExecute();
+            materielexecute.document_number = materielExecuteForm.cleaned_data["document_number"]
+            materielexecute.materiel_choice = materielExecuteForm.cleaned_data["materiel_choice"]
+            materielexecute.document_lister = request.user
+            materielexecute.date = datetime.today()
+            materielexecute.is_save = False
+            materielexecute.save()
+            for item in orderform.materielformconnection_set.all():
+                materiel=item.materiel
+                materielexecutedetail=MaterielExecuteDetail(materiel_execute=materielexecute,materiel=materiel)
+                materielexecutedetail.save()
+                ret={'status':'0','message':u"材料执行表保存成功！"}
+        except:
+            transaction.rollback()
+            ret={'status':'1','message':u"材料执行表保存失败！"}
+    else:
+        print "sss"
+        ret={'status':'1','message':u'材料执行保存失败!'}
+    return simplejson.dumps(ret)

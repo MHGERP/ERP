@@ -342,7 +342,8 @@ def materielExecuteDetailViews(request, choice, source, *mid):
             "choice" : materiel_choice,
             "MAIN_MATERIEL" : MAIN_MATERIEL,
             "executeForm" : executeForm,
-            "source" : source
+            "source" : source,
+            "materielexecute":materielexecute
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_view.html", context)
     else:
@@ -356,13 +357,14 @@ def materielExecuteDetailViews(request, choice, source, *mid):
             materiel_choice = materielexecute.materiel_choice
             executeForm = MaterielExecuteForm(instance = materielexecute)
             materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
-
+            tech_requirement=materielexecute.tech_requirement
             
 
         except:
             executeForm = MaterielExecuteForm()
             materiel_choice=MAIN_MATERIEL
             materielexecute_detail_set=None
+            tech_requirement=""
             
         if materiel_choice==MAIN_MATERIEL:
             type=1
@@ -376,6 +378,7 @@ def materielExecuteDetailViews(request, choice, source, *mid):
             "MaterielExecuteForm" : executeForm,
             "materiels":materiels,
             "source" : source,
+            "tech_requirement":tech_requirement
            # "MainMaterielExecuteDetailForm" : detailForm
         }
         return render(request, "purchasing/materielexecute/materielexecute_detail_add.html", context)

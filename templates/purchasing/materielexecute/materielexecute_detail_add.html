@@ -6,7 +6,8 @@
 {% block form_button %}
     <button style="margin-left:20px" class="btn btn-success"  id="add-btn">保存</button>
     <hr>
-	<a href="#add-detail-modal" style="margin-left:20px" class="btn btn-primary" role="button" id="add-detail-btn" data-toggle="modal">填写材料执行详细表</a>
+	<a href="#add-detail-modal" style="margin-left:20px" class="btn btn-primary" role="button" id="add-detail-btn" data-toggle="modal">选择材料执行详细</a>
+    <button class="btn btn-primary" id="tech_add"  href="#tech_requirement" data-toggle="modal">填写技术要求</button>
 {% endblock %}
 
 {% block add_modal %}
@@ -36,9 +37,25 @@
 	    	<button class="btn btn-primary" id="submit-btn">保存</button>
 	  	</div>
 	</div>
+<div class="modal fade" id="tech_requirement" modal-size-width="0.6">
+    <div class="modal-header">
+        <h2>订购单技术要求和说明填写</h2>
+    </div>
+    <div class="modal-body">
+         <textarea rows=10 style="width:80%;"id="tech_requirement_textarea" placeholder="在此输入说明和技术要求"></textarea>
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel_change">关闭</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="save_tech_require">保存</button>
+      </div>
+
+</div>
 {% endblock %}
 
 {% block commit_button %}
+<div class="alert alert-info" >
+    <textarea id="tech_requirement_content" rows="10" readonly=true style="border:0;background-color:transparent;width:100%;" >{{tech_requirement}}</textarea>
+</div>
 	<div class="subbtn">
 		<a class="btn btn-success btn-block" role="button" id="commit-btn">提交</a>
 	</div>
