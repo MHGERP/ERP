@@ -19,7 +19,6 @@ $(document).ready(function(){
 		//alert(material_number_list);
 
         var form_code = $("table").attr("fc");
-        alert(form_code);
         Dajaxice.storage.steelRefundEnsure(steelRefundEnsureCallBack, {'form_code':form_code});
 	});
 	$(".apply-card-ensure-btn").click(function(){
@@ -30,7 +29,6 @@ $(document).ready(function(){
 });
 
 function steelRefundEnsureCallBack(data) {
-    alert("kad");
     alert(data);
     window.location.reload();
 }
