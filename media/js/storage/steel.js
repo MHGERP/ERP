@@ -66,24 +66,30 @@ function searchRefundCard_CallBack(data){
 }
 
 
-function change_steelEntryItem(itemid){
+function change_remark(itemid){
     mid = itemid;
     var a = $("tr#"+mid).find("td");
-    $("input#id_remark").val(a.eq(8).text());
+    $("#id_remark").val(a.eq(12).text());
+/*    $("#id_storeRoonSelect").attr("disabled",true);*/
 }
 
-function save_steel_entry_item(){
-     Dajaxice.storage.steelEntryItemSave(save_steel_entry_item_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
+function save_remark(typeid){
+	var remark = $("#id_remark").val();
+	typeid = typeid;
+/*	alert(typeid);
+	alert(remark);
+	alert(mid);*/
+    Dajaxice.storage.saveRemark(save_remark_callback,{"remark":remark, "mid":mid, "typeid":typeid});
 }
 
-function save_steel_entry_item_callback(data){
+function save_remark_callback(data){
     if(data.flag){
+    	$("#items_table").html(data.html);
         alert(data.message);
     }
     else{
         alert(data.message);
     }
-    location.reload();
 }
 
 function steel_entry_confirm(eid){

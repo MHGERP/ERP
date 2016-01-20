@@ -32,6 +32,8 @@ Registers = (
     OutsideStorageList,
     OutsideApplyCard,
     OutsideApplyCardItem,
+    BoardSteelMaterialPurchasingEntry,
+    BarSteelMaterialPurchasingEntry,
 )
 
 for reg in Registers:

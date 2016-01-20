@@ -1,0 +1,77 @@
+{% extends "storage/base/steelbase.html" %}
+
+{% block sub_sec %}
+<a href="/storage/steelentryhome">钢材入库管理</a>
+<a href="#" class="current">型材入库单</a>
+{% endblock %}
+
+{% block title %}
+<h1>型材入库单</h1>
+{% endblock %}
+
+{% block inner_content %}
+<form class="form form-inline" method="post">
+    {% csrf_token%}
+    <div class="row" style="margin-bottom:20px;">
+        <div class="span3">
+            <label class="hz-align">货物来源：</label>
+            <strong>{{entry.material_source}}</strong>
+        </div>
+        <div class="span3">
+            <label class="hz-align">入库时间：</label>
+            <strong>{{entry.entry_time|date:"Ymd"}}</strong>
+        </div>
+        <div class="span4">
+            <label class="hz-align">入库单编号：</label>
+            {% if is_show %}
+            <div class="controls-group" style="display:inline" id="entry_code">
+                <input type="text" id = "input_entry_code" class="span2" value="{{entry.form_code}}"></input>
+            </div>
+            {% else %}
+            <strong>{{entry.form_code}}</strong>
+            {% endif %}
+        </div>
+    </div>
+    <div id="items_table">
+        {% include "storage/widgets/barmaterialentrytable.html" %}
+    </div>
+    <div class="control-group span12" style="margin-top:50px;">
+        <div class="rows span4 purcher">
+            采购员：<strong>{{entry.purchaser.userinfo}}</strong>
+        </div>
+        <div class="span4 purcher">
+            检查员：<strong>{{entry.inspector.userinfo}}</strong>
+        </div>
+        <div class="span4 purcher">
+            库管员：<strong>{{entry.keeper.userinfo}}</strong>
+        </div>
+    </div>
+    <center style="margin:110px;">
+    {% if is_show %}
+    <button  id="entry_confirm"  class="btn btn-primary" type="button" onclick="steel_entry_confirm({{entry.id}});">入库单确认</button>
+    {% else %}
+        <a style="width:10%;height:20px;" class="btn btn-primary" type="button" href="/storage/steelentryhome">返回</a>
+    {% endif %}
+    </center>
+</form>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">添加</h3>
+    </div>
+    <div class="modal-body">
+        <form id="entry_item_form" action="" class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label">备注</label>
+                <div class="controls">
+                    <input type="text" value="" id="id_remark">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" data-dismiss="modal" onclick="save_remark({{entry.steel_type}});">保存</button>
+    </div>
+</div>
+{% endblock %}
