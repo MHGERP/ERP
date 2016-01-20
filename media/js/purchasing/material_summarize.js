@@ -45,7 +45,7 @@ function choose_Inventorytype_callback(data){
         item.html(data.new_order_form_html);
         $("#add_to_order").show();
         $("#add_to_bid").hide();
-        Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{});
+        Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{"order_type":val});
     }
 }
 
@@ -102,14 +102,14 @@ $(document).on("click",".btn-open",function(){
 
 //new purchase button
 $(document).on("click","#new_purchase_btn",function(){
-    Dajaxice.purchasing.newOrderCreate(getOrderCallBack, {});
+    Dajaxice.purchasing.newOrderCreate(getOrderCallBack, {"select_type":$("#id_inventory_type").val()});
 });
 
 function getOrderCallBack(data){
     $("input#order_number").val(data.order_id);
     $("div.table-div").html(data.html);
     $("#new_order_modal").attr("args", data.id);
-    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{});
+    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{"order_type":$("#id_inventory_type").val()});
 }
 
 //selectall
@@ -138,14 +138,15 @@ $("#btn-delete").click(function(){
     
 });
 function deleteCallBack(){
-    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack, {});
+    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack, {"order_type":$("#id_inventory_type".val())});
 }
 
 
 
 $(document).on("click","#new_bid_btn",function(){
+    pendingArray.clear();
     Dajaxice.purchasing.newBidCreate(getBidCallBack, {});
-})
+});
 
 function getBidCallBack(data) {
     $("input#bid_id").val(data.bid_id);

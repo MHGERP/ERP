@@ -131,7 +131,7 @@ class CategoriesForm(forms.Form):
     """
     MH Chen
     """
-    categorie_type = forms.ChoiceField(choices = MATERIAL_CATEGORY_CHOICES, widget = forms.Select(attrs = {'class': 'input'}))
+    categorie_type = forms.ChoiceField(choices = MATERIAL_CATEGORY_CHOICES, widget = forms.Select(attrs = {'class': 'input',"disabled":'disabled'}))
 
 class ProgramFeedbackForm(forms.Form):
     """
@@ -140,3 +140,24 @@ class ProgramFeedbackForm(forms.Form):
     need_correct = forms.BooleanField(required = False, widget = forms.CheckboxInput())
     feedback = forms.CharField(required = True, widget = forms.Textarea(attrs = {"rows": "5", "cols": "50"}))
 
+class AuxiliaryMaterielForm(forms.ModelForm):
+    """
+    MH Chen
+    """
+    class Meta:
+        model = Materiel
+        exclude = ("id", "order","parent_schematic_index")
+        widgets = {
+            "name": forms.TextInput(attrs = {"class": "input-medium","readonly":'readonly'}),
+            "index": forms.TextInput(attrs = {"class": "input-small","readonly":'readonly'}),
+            "schematic_index": forms.TextInput(attrs = {"class": "input-medium","readonly":'readonly'}),
+            "material": forms.Select(attrs = {"class": "input-medium","disabled":'disabled'}),
+            "count": forms.TextInput(attrs = {"class": "input-medium","readonly":'readonly'}),
+            "remark": forms.TextInput(attrs = {"class": "input-medium","readonly":'readonly'}),
+            "net_weight": forms.TextInput(attrs = {"class": "input-medium","readonly":'readonly'}),
+            "total_weight": forms.TextInput(attrs = {"class": "input-medium","readonly":'readonly'}),
+            "specification": forms.TextInput(attrs = {"class": "input-medium","readonly":'readonly'}),
+            "quota_coefficient": forms.TextInput(attrs = {"class": "input-medium"}),
+            "quota": forms.TextInput(attrs = {"class": "input-medium"}),
+            
+        }

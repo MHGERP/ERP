@@ -28,6 +28,7 @@ def getProcessBOM(request, id_work_order):
     """
     JunHU
     """
+    print "hhh"
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
     for item in BOM:
@@ -39,6 +40,7 @@ def getProcessBOM(request, id_work_order):
             process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
             process_list = []
             while process:
+                print process
                 process_list.append(process)
                 process = process.next_processing
         except:
@@ -84,14 +86,17 @@ def getAuxiliaryMaterielInfo(request, iid,categories):
     MH Chen
     """
     materiel = Materiel.objects.get(id = iid)
-    form = MaterielForm(instance = materiel)
+    form = AuxiliaryMaterielForm(instance = materiel)
     categories_form = CategoriesForm(initial={"categorie_type":categories})
-    if materiel.net_weight != None and materiel.quota != None:
-        user_ratio = round(materiel.net_weight/materiel.quota,5)
+    try:
+        user_ratio = 0
+        if materiel.net_weight != None and materiel.quota != None:
+            user_ratio = round(materiel.net_weight/materiel.quota,5)
+    except:
+        pass
     context = {
         "categories_form":categories_form,
         "form": form,
-        "categories":categories,
         "user_ratio":user_ratio,
     }
     html = render_to_string("techdata/widgets/auxiliary_material_type_in.html", context)
@@ -344,9 +349,10 @@ def auxiliaryMaterial(request, order):
     """
     list = Materiel.objects.filter(order = order)
     for item in list:
-        item.realname = item.material.get_categories_display()
-        if item.net_weight != None and item.quota != None:
+        try:
             item.user_ratio = round(item.net_weight / item.quota, 5)
+        except:
+            item.user_ratio = 0
     context = {
         "list" : list,
     }
@@ -900,3 +906,32 @@ def heatTreatCardMark(request, card_id, step):
         }
     return simplejson.dumps(context)
 
+@dajaxice_register
+def designBOMWriterConfirm(request, id_work_order):
+    """
+    mxl
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if DesignBOMMark.objects.filter(order = order).count() == 0:
+        DesignBOMMark(order = order).save()
+    order.designbommark.writer = request.user
+    order.designbommark.write_date = datetime.datetime.today()
+    order.designbommark.save()
+    return simplejson.dumps({"ret" : True, "user" : unicode(request.user.userinfo)})
+
+
+@dajaxice_register
+def designBOMReviewerConfirm(request, id_work_order):
+    """
+    mxl
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if DesignBOMMark.objects.filter(order = order).count() == 0:
+        DesignBOMMark(order = order).save()
+
+    if order.designbommark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.designbommark.reviewer = request.user
+    order.designbommark.reviewe_date = datetime.datetime.today()
+    order.designbommark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})

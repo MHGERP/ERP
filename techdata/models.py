@@ -248,3 +248,16 @@ class BoxOutBoughtMark(models.Model):
         verbose_name_plural = u"装箱外构件明细签章"
     def __unicode__(self):
         return self.order.order_index
+
+
+class DesignBOMMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "designBOM_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "designBOM_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"设计库签章"
+        verbose_name_plural = u"设计库签章"
+    def __unicode__(self):
+        return self.order.order_index

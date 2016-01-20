@@ -42,7 +42,7 @@
 		</tr>
 		{% endfor %}
 		{% for item in items %}
-		<tr>	
+		<tr mod="1">	
 			{% if can_choose %}
 			<td>{% if item.can_choose %}
 			<input type="checkbox" class="checkbox"  args="{{item.id}}">
