@@ -311,24 +311,33 @@ def entryItemSave(request,form,mid):
            }
     return simplejson.dumps(data)
 
-# @dajaxice_register
-# def steelEntryItemSave(request,form,mid):
-#     item = SteelMaterial.objects.get(id = mid)
-#     entry_form = SteelEntryItemsForm(deserialize_form(form),instance = item) 
-#     pur_entry = item.entry_form
-#     flag = False
-#     if pur_entry.entry_status == STORAGESTATUS_KEEPER:
-#         if entry_form.is_valid():
-#             entry_form.save()
-#             flag = True
-#             message = u"修改成功"
-#         else:
-#             message = u"修改失败"
-#     data = {
-#         "flag":flag,
-#         "message":message,
-#     }
-#     return simplejson.dumps(data)
+@dajaxice_register
+def saveRemark(request,remark,mid,typeid):
+    if typeid:
+        items = BoardSteelMaterialPurchasingEntry.objects.filter(id = mid)
+        pur_entry = BoardSteelMaterialPurchasingEntry.objects.all()
+    else:
+        pur_entry = BarSteelMaterialPurchasingEntry.objects.all()
+        items = BarSteelMaterialPurchasingEntry.objects.filter(id = mid)
+    flag = False
+    for item in items:
+        if item.card_info.entry_status == STORAGESTATUS_KEEPER:
+            item.remark = remark
+            item.save()
+            flag = True
+            message = u"修改成功"
+        else:
+            message = u"修改失败，入库单已确认过"
+    if typeid:
+        html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
+    else:
+        html = render_to_string("storage/widgets/barmaterialentrytable.html",{"entry_set":pur_entry})
+    data = {
+        "flag":flag,
+        "message":message,
+        "html":html,
+    }
+    return simplejson.dumps(data)
 
 @dajaxice_register
 def entryConfirm(request,eid,entry_code):
