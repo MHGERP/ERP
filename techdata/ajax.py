@@ -86,14 +86,23 @@ def getAuxiliaryMaterielInfo(request, iid,categories):
     MH Chen
     """
     materiel = Materiel.objects.get(id = iid)
-    form = MaterielForm(instance = materiel)
+    form = AuxiliaryMaterielForm(instance = materiel)
     categories_form = CategoriesForm(initial={"categorie_type":categories})
-    if materiel.net_weight != None and materiel.quota != None:
-        user_ratio = round(materiel.net_weight/materiel.quota,5)
+    print 99999999999999999999999999999999999999
+    try:
+        if materiel.net_weight != None and materiel.quota != None:
+            user_ratio = round(materiel.net_weight/materiel.quota,5)
+            print 11111111111111111111111111111111
+            print user_ratio
+            print 222222222222222222222222222222222
+    except:
+        user_ratio = 0
+        print 444444444444444444444444444
+        print user_ratio
+        print 33333333333333333333333333
     context = {
         "categories_form":categories_form,
         "form": form,
-        "categories":categories,
         "user_ratio":user_ratio,
     }
     html = render_to_string("techdata/widgets/auxiliary_material_type_in.html", context)
@@ -346,9 +355,16 @@ def auxiliaryMaterial(request, order):
     """
     list = Materiel.objects.filter(order = order)
     for item in list:
-        item.realname = item.material.get_categories_display()
-        if item.net_weight != None and item.quota != None:
-            item.user_ratio = round(item.net_weight / item.quota, 5)
+        try:
+            if item.material.categories!= None:
+                item.realname = item.material.get_categories_display()
+        except:
+            item.realname = None
+        try:
+            if item.net_weight != None and item.quota != None:
+                item.user_ratio = round(item.net_weight / item.quota, 5)
+        except:
+            item.user_ratio = 0
     context = {
         "list" : list,
     }
@@ -797,3 +813,32 @@ def saveProgramFeedback(request, iid, form):
     else:
         return simplejson.dumps({"ret": False, })
 
+@dajaxice_register
+def designBOMWriterConfirm(request, id_work_order):
+    """
+    mxl
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if DesignBOMMark.objects.filter(order = order).count() == 0:
+        DesignBOMMark(order = order).save()
+    order.designbommark.writer = request.user
+    order.designbommark.write_date = datetime.datetime.today()
+    order.designbommark.save()
+    return simplejson.dumps({"ret" : True, "user" : unicode(request.user.userinfo)})
+
+
+@dajaxice_register
+def designBOMReviewerConfirm(request, id_work_order):
+    """
+    mxl
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if DesignBOMMark.objects.filter(order = order).count() == 0:
+        DesignBOMMark(order = order).save()
+
+    if order.designbommark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.designbommark.reviewer = request.user
+    order.designbommark.reviewe_date = datetime.datetime.today()
+    order.designbommark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})

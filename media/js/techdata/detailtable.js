@@ -50,6 +50,7 @@ $(document).on("click","#id_success",function(){
 
  $(document).on("click","#id_confirm",function(){
    var categorie = $("#id_categorie_type").val();
+   
     Dajaxice.techdata.saveAuxiliaryMaterielInfo(saveAuxiliaryMaterielInfoCallBack, {"iid": iid,
                                                                                     "categories":categorie,
                                                                                     "auxiliary_material_form":$("#auxiliary_material_form").serialize()});
