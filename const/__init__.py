@@ -399,3 +399,7 @@ MARK_APPROVE = "mark_approve"
 MARK_QUOTA = "mark_quota"
 MARK_STATISTIC = "mark_statistic"
 
+PRODUCTION_PLAN_STAUTS_CHOICES = (
+    (1, u"必保"),
+    (2, u"在制"),
+)
