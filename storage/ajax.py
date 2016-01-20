@@ -635,3 +635,36 @@ def outsideAccountApplyCardSearch(request,form):
         }
     html = render_to_string("storage/widgets/account/applycardhomemain.html",context)
     return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def weldMaterialStorageItems(request,specification):
+    item_set = WeldStoreList.objects.filter(specification = specification,count__gt = 0).order_by('entry_time')
+    html = render_to_string("storage/weldapply/itemlist.html",{"item_set":item_set})
+    return simplejson.dumps({'html':html})
+
+@dajaxice_register
+def weldMaterialApply(request,itemid,form,index):
+    storageitem = WeldStoreList.objects.get(id = itemid)
+    applycard = WeldingMaterialApplyCard.objects.get(index=index)
+    form = Apply_ApplyCardForm(deserialize_form(form),instance=applycard)
+    if form.is_valid():
+        if storageitem.count >= form.cleaned_data["actual_quantity"]:
+            applycard.storelist = storageitem
+            applycard.save()
+            storageitem.count -= form.cleaned_data["actual_quantity"]
+            storageitem.save()
+            form.save()
+            applycard.status = APPLYCARD_COMMIT
+            applycard.save()
+            message = u"领用单确认成功"
+            flag = True
+        else:
+            message = u"领用确认失败，所选库存材料数量不足"
+            flag = False
+    else:
+        message = u"领用单确认失败，数据未填写完整"
+        flag = False
+        print form.errors
+    return simplejson.dumps({'message':message,'flag':flag})
+
+    
