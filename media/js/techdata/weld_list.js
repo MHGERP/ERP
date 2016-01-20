@@ -10,6 +10,10 @@ function refreshCallBack(data) {
         $("#id_save").hide();
         $("#id_calculate").hide();
     }
+    else {
+        $("#id_save").show();
+        $("#id_calculate").show();
+    }
     $("#widget-box").html(data.html);
 }
 function refreshSingleRow() {
