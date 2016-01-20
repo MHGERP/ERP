@@ -21,6 +21,10 @@ urlpatterns=patterns('',
         production_views.synthesizeFileListViews,
     ),
     url(
+        r'^man_hour_message$',
+        production_views.man_hour_messageViews,
+    ),
+    url(
         r'^man_hour_summarize$',
         production_views.man_hour_summarizeViews,
     ),

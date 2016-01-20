@@ -27,9 +27,18 @@ def synthesizeFileListViews(request):
     }
     return render(request,"production/synthesize_filelist.html",context)
 
+def man_hour_messageViews(request):
+    hourMessageSearchForm = HourMessageSearchForm()
+    context={
+        "hourMessageSearchForm":hourMessageSearchForm
+    }
+    return render(request,"production/man_hour_message.html",context)
+
 def man_hour_summarizeViews(request):
-    orderIndexForm = OrderIndexForm();
-    context={"orderIndexForm":orderIndexForm}
+    dateForm = DateForm();
+    context={
+        "dateForm":dateForm
+    }
     return render(request,"production/man_hour_summarize.html",context)
 
 def production_planViews(request):
@@ -38,6 +47,6 @@ def production_planViews(request):
     return render(request,"production/production_plan.html",context)
 
 def ledgerViews(request):
-    orderIndexForm = OrderIndexForm();
+    orderIndexForm = OrderIndexForm()
     context={"orderIndexForm":orderIndexForm}
     return render(request,"production/ledger.html",context)

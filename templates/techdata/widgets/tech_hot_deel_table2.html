@@ -6,21 +6,21 @@
             <th>操作</th>
         </tr>
     </thead>
-    <tr>
-        <td>RR01-09055</td>
-        <td>已完成</td>
-        <td>
-            <button class="bnt">
-                查看
-            </button>
-        </td>
-    </tr>
-    <tr>
-        <td>待定</td>
-        <td>待审核</td>
-        <td>
-            <button class="bnt">
-                查看
-            </button>
-        </td>
+	<tbody>
+		{% for card in card_list %}
+		<tr iid="{{card.id}}">
+		    <td>{% if card.file_index %} {{card}} {% else %} 待定 {% endif %}</td>
+		    <td>
+				{% if card.reviewer %} 审核完成
+				{% elif card.writer %} 编制完成
+				{% else %} 未编制
+				{% endif %}
+			</td>
+		    <td>
+		        <a class="btn btn-small" href="/techdata/heatTreatmentTechCardEdit?card_id={{card.id}}">查看</a>
+		        <button class="btn btn-small btn-danger delete_card">删除</button>
+		    </td>
+		</tr>
+		{% endfor %}
+	<tbody>
 </table>
