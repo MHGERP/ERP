@@ -191,10 +191,13 @@ def barSteelRefundEnsure(request, common_refund):
         refund_quantity = refund.quantity
         refund_matnum = refund.steel_material.material_number
         ledger = SteelMaterial.objects.get(material_number = refund_matnum)
-        ledger_quantity = SteelMaterial.barsteelmaterialledger.quantity
+        ledger_quantity = ledger.barsteelmaterialledger.quantity
         ledger_quantity += refund_quantity
+        ledger.barsteelmaterialledger.quantity = ledger_quantity
+        ledger.barsteelmaterialledger.save()
         ledger_returntime = ledger.return_time
         ledger_returntime += 1
+        ledger.return_time = ledger_returntime
         ledger.save()
     common_refund.return_confirm = True
     common_refund.save()
