@@ -420,18 +420,7 @@ def weldRefundViews(request):
 def weldRefundDetailViews(request,rid):
     ref_obj = WeldRefund.objects.get(id = rid)
     is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
-    if request.method == "POST":
-        reform = WeldRefundForm(request.POST,instance = ref_obj)
-        if reform.is_valid():
-            reform.save()
-            ref_obj.keeper = request.user
-            ref_obj.weldrefund_status = STORAGESTATUS_END
-            ref_obj.save()
-            return HttpResponseRedirect("/storage/weldrefund")
-        else:
-            print reform.errors
-    else:
-        reform = WeldRefundForm(instance = ref_obj) 
+    reform = WeldRefundForm(instance = ref_obj) 
     context = {
             "reform":reform,
             "ref_obj":ref_obj,
