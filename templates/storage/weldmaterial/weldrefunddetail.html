@@ -47,20 +47,20 @@
             {% include "storage/weldmaterial/weldrefunddetail_change_table.html" %}
         </tr>
         <tr>
-            <td colspan="10" style="text-align:left">备注:1.以上前六项为领用人填写;2.后二项为发料人填写。</td>
+            <td colspan="10" style="text-align:left">备注:1.以上前六项为领用人填写;2.后一项为发料人填写。</td>
         </tr>
     </table>
     <div class="row-fluid" style="text-align:center">
-        <div class="span3">
+        <div class="span6">
             <label>退库人:<strong>{{ref_obj.refunder.userinfo}}</strong></label>
         </div>
-        <div class="span3">
+        <div class="span6">
             <label>库管人:<strong>{{ref_obj.keeper.userinfo}}</strong></label>
         </div>
     </div>
     <center>
     {% if is_show %}
-    <button type="submit" id="confirm" class="btn btn-info">确认</button>
+    <button  id="refund_confirm" type="button" class="btn btn-info" rid="{{ref_obj.id}}">确认</button>
     {% else %}
     <a class="btn btn-info" href="/storage/weldrefund">返回</a>
     {% endif %}

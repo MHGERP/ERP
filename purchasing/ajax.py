@@ -1056,7 +1056,7 @@ def genEntry(request,items_set,selectvalue,bid):
     items_set = getArrivalInspections(items_set) 
     try:
         bidform = BidForm.objects.get(bid_id = bid)
-        entry_obj = entrymodel(purchaser = request.user , bidform = bidform)
+        entry_obj = entrymodel(purchaser = request.user , bidform = bidform,entry_status=STORAGESTATUS_KEEPER)
         entry_obj.save()
         for item in items_set:
             entryitem_obj = entryitemmodel(material = item.material,entry = entry_obj)

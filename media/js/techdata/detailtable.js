@@ -50,6 +50,8 @@ $(document).on("click","#id_success",function(){
 
  $(document).on("click","#id_confirm",function(){
    var categorie = $("#id_categorie_type").val();
+   $('#id_categorie_type').attr('disabled',false);
+   $('#id_material').attr('disabled',false);
     Dajaxice.techdata.saveAuxiliaryMaterielInfo(saveAuxiliaryMaterielInfoCallBack, {"iid": iid,
                                                                                     "categories":categorie,
                                                                                     "auxiliary_material_form":$("#auxiliary_material_form").serialize()});
@@ -57,6 +59,8 @@ $(document).on("click","#id_success",function(){
  function saveAuxiliaryMaterielInfoCallBack(data){
     if(data == "ok") {
         alert("修改成功！");
+        $('#id_categorie_type').attr('disabled',true);
+        $('#id_material').attr('disabled',true);
         var order = $('#id_work_order').val();
          Dajaxice.techdata.auxiliaryMaterial(tableCallback, {"order" : order});               
     }

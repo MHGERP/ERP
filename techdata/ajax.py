@@ -60,6 +60,9 @@ def getProcessBOM(request, id_work_order):
 
 @dajaxice_register
 def getSingleProcessBOM(request, iid):
+    """
+    JunHU
+    """
     item = Materiel.objects.get(id = iid)
     if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
         CirculationRoute(materiel_belong = item).save()
@@ -86,14 +89,17 @@ def getAuxiliaryMaterielInfo(request, iid,categories):
     MH Chen
     """
     materiel = Materiel.objects.get(id = iid)
-    form = MaterielForm(instance = materiel)
+    form = AuxiliaryMaterielForm(instance = materiel)
     categories_form = CategoriesForm(initial={"categorie_type":categories})
-    if materiel.net_weight != None and materiel.quota != None:
-        user_ratio = round(materiel.net_weight/materiel.quota,5)
+    try:
+        user_ratio = 0
+        if materiel.net_weight != None and materiel.quota != None:
+            user_ratio = round(materiel.net_weight/materiel.quota,5)
+    except:
+        pass
     context = {
         "categories_form":categories_form,
         "form": form,
-        "categories":categories,
         "user_ratio":user_ratio,
     }
     html = render_to_string("techdata/widgets/auxiliary_material_type_in.html", context)
@@ -346,9 +352,10 @@ def auxiliaryMaterial(request, order):
     """
     list = Materiel.objects.filter(order = order)
     for item in list:
-        item.realname = item.material.get_categories_display()
-        if item.net_weight != None and item.quota != None:
+        try:
             item.user_ratio = round(item.net_weight / item.quota, 5)
+        except:
+            item.user_ratio = 0
     context = {
         "list" : list,
     }
@@ -755,6 +762,8 @@ def saveAuxiliaryMaterielInfo(request, iid,categories,auxiliary_material_form):
         return  "ok"
     else:
         return "fail"
+
+@dajaxice_register
 def getExcuteList(request):
     """
     JunHU
@@ -797,3 +806,135 @@ def saveProgramFeedback(request, iid, form):
     else:
         return simplejson.dumps({"ret": False, })
 
+@dajaxice_register
+def getHeatTreatMaterielList(request):
+    """
+    JunHU
+    """
+    item_list = HeatTreatmentMateriel.objects.filter(card_belong = None);
+    context = {
+        "item_list": item_list,
+    }
+    html = render_to_string("techdata/widgets/tech_hot_deel_table1.html", context)
+    return html
+
+@dajaxice_register
+def getHeatTreatCardList(request):
+    """
+    JunHU
+    """
+    card_list = HeatTreatmentTechCard.objects.all()
+    context = {
+        "card_list": card_list,
+    }
+    html = render_to_string("techdata/widgets/tech_hot_deel_table2.html", context)
+    return html
+
+@dajaxice_register
+def deleteHeatTreatCard(request, card_id):
+    """
+    JunHU
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    for item in HeatTreatmentMateriel.objects.filter(card_belong = card):
+        item.card_belong = None
+        item.save()
+    card.delete()
+
+@dajaxice_register
+def createNewHeatTreatCard(request, selected_item):
+    """
+    JunHU
+    """
+    if not selected_item: 
+        return
+    card = HeatTreatmentTechCard()
+    card.save()
+    HeatTreatmentArrangement(card_belong = card).save()
+    for item_id in selected_item:
+        if not item_id: continue
+        item = HeatTreatmentMateriel.objects.get(id = item_id)
+        item.card_belong = card
+        item.save()
+
+@dajaxice_register
+def getHeatTreatCardDetail(request, card_id):
+    """
+    JunHU
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    context = {
+        "card": card,
+        "STATIC_URL": settings.STATIC_URL,
+        "MARK_WRITE": MARK_WRITE,
+        "MARK_REVIEW": MARK_REVIEW,
+    }
+    html = render_to_string("techdata/widgets/heat_treatment_tech_card.html", context)
+    return html
+
+@dajaxice_register
+def heatTreatCardMark(request, card_id, step):
+    """
+    JunHU
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    if step == MARK_WRITE:
+        card.writer = request.user
+        card.write_date = datetime.datetime.today()
+        card.file_index = "%06d" % (card.id) # 暂定
+        card.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(card.writer.userinfo),
+            "file_index": card.file_index,
+        }
+    elif step == MARK_REVIEW:
+        if card.writer == None:
+            context = {
+                "ret": False,
+                "warning": u"工艺卡还未完成编制",
+            }
+            return simplejson.dumps(context)
+        card.reviewer = request.user
+        card.review_date = datetime.datetime.today()
+        card.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(card.reviewer.userinfo),
+        }
+    else:
+        context = {
+            "ret": False,
+            "warning": u"后台保存错误"
+        }
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def designBOMWriterConfirm(request, id_work_order):
+    """
+    mxl
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if DesignBOMMark.objects.filter(order = order).count() == 0:
+        DesignBOMMark(order = order).save()
+    order.designbommark.writer = request.user
+    order.designbommark.write_date = datetime.datetime.today()
+    order.designbommark.save()
+    return simplejson.dumps({"ret" : True, "user" : unicode(request.user.userinfo)})
+
+
+@dajaxice_register
+def designBOMReviewerConfirm(request, id_work_order):
+    """
+    mxl
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if DesignBOMMark.objects.filter(order = order).count() == 0:
+        DesignBOMMark(order = order).save()
+
+    if order.designbommark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.designbommark.reviewer = request.user
+    order.designbommark.reviewe_date = datetime.datetime.today()
+    order.designbommark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})

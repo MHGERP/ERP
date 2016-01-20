@@ -92,7 +92,7 @@ class ApplyCardBase(models.Model):
         abstract = True
 
 class WeldMaterialEntry(models.Model):
-    entry_time = models.DateField(blank=False, null=True,verbose_name=u"入库时间")
+    entry_time = models.DateField(blank=False, null=True,auto_now_add=True,verbose_name=u"入库时间")
     purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "purchaser")
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "keeper")
@@ -422,7 +422,7 @@ class CommonSteelMaterialReturnCardInfo(models.Model):
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u'检查员',related_name="steel_return_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员",related_name="steel_return_keeper")
     return_confirm = models.BooleanField(default=False,verbose_name=u'退库单确认')
-    steel_type = models.IntegerField(choices=STEEL_TYPE,default=0,verbose_name=u'钢材类型')
+    steel_type = models.IntegerField(choices=STEEL_TYPE,default=0,verbose_name=u'钢材类型')#1:bar 0:board
 
     def __unicode__(self):
         return str(self.form_code)

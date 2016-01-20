@@ -15,10 +15,10 @@
 
 {% block inner_content %}
 <h3 class="table-title">型材退库单</h3>
-<div class="return_card_header row">
-    <span class="span4">工作令: {{common_Info.work_order}}</span>
-    <span class="span4">日期: {{common_Info.date|date:"Ymd"}}</span>
-    <span class="span4">编号: {{common_Info.form_code}}</span>
+<div class="control-group">
+    <button type="button" class="btn btn-primary">工作令: {{common_Info.work_order}}</button>
+    <button type="button" class="btn btn-primary">日期: {{common_Info.date|date:"Ymd"}}</button>
+    <button type="button" class="btn btn-primary">编号: {{common_Info.form_code}}</button> 
 </div>
 <table class="table table-bordered">
     <thead>
