@@ -801,3 +801,32 @@ def saveProgramFeedback(request, iid, form):
     else:
         return simplejson.dumps({"ret": False, })
 
+@dajaxice_register
+def designBOMWriterConfirm(request, id_work_order):
+    """
+    mxl
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if DesignBOMMark.objects.filter(order = order).count() == 0:
+        DesignBOMMark(order = order).save()
+    order.designbommark.writer = request.user
+    order.designbommark.write_date = datetime.datetime.today()
+    order.designbommark.save()
+    return simplejson.dumps({"ret" : True, "user" : unicode(request.user.userinfo)})
+
+
+@dajaxice_register
+def designBOMReviewerConfirm(request, id_work_order):
+    """
+    mxl
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if DesignBOMMark.objects.filter(order = order).count() == 0:
+        DesignBOMMark(order = order).save()
+
+    if order.designbommark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.designbommark.reviewer = request.user
+    order.designbommark.reviewe_date = datetime.datetime.today()
+    order.designbommark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
