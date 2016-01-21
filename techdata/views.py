@@ -173,3 +173,13 @@ def heatTreatmentTechCardEditViews(request):
         "card_id": card_id,
     }
     return render(request, "techdata/heat_treatment_tech_card_edit.html", context)
+
+def heatPoint(request):
+    """
+    BinWu
+    """
+    card_id = request.GET.get("card_id")
+    context = {
+        "card_id" : card_id,
+    }
+    return render(request, "techdata/heat_point.html",context)

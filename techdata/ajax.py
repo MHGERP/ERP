@@ -953,3 +953,24 @@ def designBOMReviewerConfirm(request, id_work_order):
     order.designbommark.reviewe_date = datetime.datetime.today()
     order.designbommark.save()
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def getHeatPointDetail(request, card_id):
+    """
+    BinWu
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    context = {
+        "card": card,
+        "STATIC_URL": settings.STATIC_URL,
+        "MARK_WRITE": MARK_WRITE,
+        "MARK_REVIEW": MARK_REVIEW,
+        "HEATTREATMENTCARD_ATTR_TEM_START": HEATTREATMENTCARD_ATTR_TEM_START,
+        "HEATTREATMENTCARD_ATTR_TEM_END": HEATTREATMENTCARD_ATTR_TEM_END,
+        "HEATTREATMENTCARD_ATTR_TEM_TOP": HEATTREATMENTCARD_ATTR_TEM_TOP,
+        "HEATTREATMENTCARD_ATTR_TEM_UP_SPEED": HEATTREATMENTCARD_ATTR_TEM_UP_SPEED,
+        "HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED": HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED,
+        "HEATTREATMENTCARD_ATTR_TEM_TIME": HEATTREATMENTCARD_ATTR_TEM_TIME,
+    }
+    html = render_to_string("techdata/widgets/heat_point_graph.html", context)
+    return html
