@@ -96,10 +96,9 @@ ul
 <p class=MsoNormal style='text-indent:18.0pt'><span lang=EN-US
 style='font-family:宋体'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span><b><span style='font-size:18.0pt;font-family:华文中宋'>热 处 理 测 温 点 布 置 示 意 图</span></b><b><span
-lang=EN-US style='font-size:16.0pt;font-family:华文中宋'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></b><u><span style='font-size:10.5pt;font-family:宋体'>文件编号：<span
-lang=EN-US>RR02-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span></u></p>
+lang=EN-US style='font-size:16.0pt;font-family:华文中宋'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></b><u><span style='font-size:10.5pt;font-family:宋体'>文件编号：<span id="bianhao"
+lang=EN-US>RR02-{{card.heattreatmentarrangement.file_index}}</span></u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
 
 <div align=center>
 
@@ -306,8 +305,25 @@ lang=EN-US>RR02-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs
   <td width=195 colspan=3 rowspan=2 style='width:145.9pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:15.0pt'>
-  <p class=MsoNormal style='line-height:120%'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
+<!-- ____________________________________________________________________________________________________________________________ -->
+    <center class=MsoNormal style='line-height:100%'>
+      <span lang=EN-US
+      style='font-family:宋体'>
+    	{% if card.heattreatmentarrangement.writer %}
+    	{{ card.heattreatmentarrangement.writer.userinfo }}
+    	{% else %}
+    	<span class="btn btn-mark" id="writer">签字</span>
+    	{% endif %}
+      </span>
+    </center>
+
+
+
+
+
+
+
+
   </td>
   <td width=432 colspan=8 style='width:324.05pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -363,8 +379,30 @@ lang=EN-US>RR02-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs
   <td width=195 colspan=3 rowspan=2 style='width:145.9pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.5pt;border-right:solid windowtext 1.0pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:15.6pt'>
-  <p class=MsoNormal style='line-height:120%'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
+<!-- ____________________________________________________________________________________________________________________________ -->
+  <center class=MsoNormal style='line-height:100%'>
+    <span lang=EN-US
+    style='font-family:宋体'>
+  	{% if card.heattreatmentarrangement.reviewer %}
+  	{{ card.heattreatmentarrangement.reviewer.userinfo }}
+  	{% else %}
+  	<span class="btn btn-mark" id="reviewer">签字</span>
+  	{% endif %}
+    </span>
+  </center>
+
+
+
+
+
+
+
+
+
+
+
+
+
   </td>
   <td width=54 style='width:40.5pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;

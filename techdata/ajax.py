@@ -974,3 +974,35 @@ def getHeatPointDetail(request, card_id):
     }
     html = render_to_string("techdata/widgets/heat_point_graph.html", context)
     return html
+
+@dajaxice_register
+def heatTreatmentArrangementWrite(request, card_id):
+    """
+    BinWu
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
+        HeatTreatmentArrangement(card_belong = card).save()
+    card.heattreatmentarrangement.writer = request.user
+    card.heattreatmentarrangement.file_index = "%06d" % (card.heattreatmentarrangement.id)
+    card.heattreatmentarrangement.write_date = datetime.datetime.today()
+    card.heattreatmentarrangement.save()
+    context = {
+        "writer" : unicode(request.user.userinfo),
+        "bianhao" : card.heattreatmentarrangement.file_index,
+    }
+    return simplejson.dumps(context)
+
+@dajaxice_register 
+def heatTreatmentArrangementReview(request, card_id):
+    """
+    BinWu
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
+        return simplejson.dumps({"res" : False, })
+    else:
+        card.heattreatmentarrangement.reviewer = request.user
+        card.heattreatmentarrangement.review_date = datetime.datetime.today()
+        card.heattreatmentarrangement.save()
+        return simplejson.dumps({"res" : True, "reviewer" : unicode(request.user.userinfo)})
