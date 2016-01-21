@@ -37,9 +37,9 @@
             <td>{{entry.inspector.userinfo}}</td>
             <td>
                 {% ifequal entry.entry_status  ENTRYSTATUS_END %}
-                <a class="btn" href="/storage/steelentryconfirm/{{entry.id}}">查看</a>
+                <a class="btn" href="/storage/steelentryconfirm/{{entry.id}}/{{entry.steel_type}}">查看</a>
                 {% else %}
-                <a class="btn btn-warning" href="/storage/steelentryconfirm/{{entry.id}}">待处理</a>
+                <a class="btn btn-warning" href="/storage/steelentryconfirm/{{entry.id}}/{{entry.steel_type}}">待处理</a>
                 {% endifequal %}
             </td>
         </tr>
