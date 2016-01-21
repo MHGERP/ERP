@@ -161,3 +161,15 @@ class AuxiliaryMaterielForm(forms.ModelForm):
             "quota": forms.TextInput(attrs = {"class": "input-medium"}),
             
         }
+
+class TechPreparationPlanForm(forms.ModelForm):
+    """
+    mxl
+    """
+    class Meta:
+        model = TechPlan
+        exclude = {"id", "order"}
+        #planCompleteDate = forms.DateField(label = u"计划完成日期", required = True, widget = forms.TextInput(attrs = {'class' : 'form-control', 'id' : 'date'}))
+        widgets = {
+            "planCompleteDate" : forms.TextInput(attrs = {'class' : 'form-control', 'id' : 'date'})
+        }

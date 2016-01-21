@@ -17,7 +17,8 @@ from purchasing.models import MaterielExecute
 from const.forms import WorkOrderForm
 
 def techPreparationPlanViews(request):
-    context = {}
+    work_order_form = WorkOrderForm()
+    context = {"work_order_form" : work_order_form}
     return render(request, "techdata/tech_preparation_plan.html", context)
 
 def processExaminationViews(request):
@@ -41,7 +42,6 @@ def techInstallWeldViews(request):
 def techHotDeelViews(request):
     context = {}
     return render(request, "techdata/tech_hot_deel.html", context)
-
 def techTestPresureViews(request):
     context = {}
     return render(request, "techdata/tech_test_presure.html", context)

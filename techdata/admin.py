@@ -19,6 +19,7 @@ RegisterClass = (
     ProcessBOMPageMark,
     Program,
     DesignBOMMark,
+    TechPlan,
 )
 
 for item in RegisterClass:
