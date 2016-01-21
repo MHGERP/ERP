@@ -18,6 +18,9 @@ RegisterClass = (
     TransferCardMark,
     ProcessBOMPageMark,
     Program,
+    HeatTreatmentTechCard,
+    HeatTreatmentArrangement,
+    HeatTreatmentMateriel,
     DesignBOMMark,
     TechPlan,
 )

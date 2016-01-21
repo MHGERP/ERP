@@ -42,6 +42,23 @@ def steelRefundViews(request):
     }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
+def steelrefunddetailViews(request,typeid,rid):
+    typeid=int(typeid)
+    common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
+    if typeid:
+        return_cards = common_Info.barsteelmaterialreturncardcontent_set.all()
+    else:
+        return_cards = common_Info.boardsteelmaterialreturncardcontent_set.all()
+    context={
+        'return_cards':return_cards,
+        'common_Info':common_Info,
+    }
+    if typeid==1:
+        return render(request,"storage/steelmaterial/barsteelrefunddetail.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelrefunddetail.html",context)
+
+
 def steelApplyViews(request):
     search_form = SteelRefundSearchForm()
     apply_cards = CommonSteelMaterialApplyCardInfo.objects.all()
@@ -75,23 +92,6 @@ def steelLedgerViews(request):
         "steel_set":steel_set,
     }
     return render(request,"storage/steelmaterial/steelledger.html",context)
-
-
-def steelrefunddetailViews(request,typeid,rid):
-    typeid=int(typeid)
-    common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
-    if typeid:
-        return_cards = common_Info.barsteelmaterialreturncardcontent_set.all()
-    else:
-        return_cards = common_Info.boardsteelmaterialreturncardcontent_set.all()
-    context={
-        'return_cards':return_cards,
-        'common_Info':common_Info,
-    }
-    if typeid==1:
-        return render(request,"storage/steelmaterial/barsteelrefunddetail.html",context)
-    else:
-        return render(request,"storage/steelmaterial/boardsteelrefunddetail.html",context)
     
 def weldEntryHomeViews(request):
     if request.method == "POST":
@@ -147,18 +147,25 @@ def weldEntryConfirmViews(request,eid):
             }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
-def steelEntryConfirmViews(request,eid):
+def steelEntryConfirmViews(request,eid,typeid):
+    typeid = int(typeid)
     entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-    # items = entry.steelmaterial_set.all()
-    # entryitem_form = SteelEntryItemsForm()
+    print entry
+    if typeid:
+        items = entry.boardsteelmaterialpurchasingentry_set.all()
+    else:
+        items = entry.barsteelmaterialpurchasingentry_set.all()
+        print items
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
     context = {
             "entry":entry,
-            # "entry_set":items,
-            # "item_form":entryitem_form,
+            "entry_set":items,
             "is_show":is_show,
             }
-    return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
+    if typeid:
+        return render(request,"storage/steelmaterial/boardsteelmaterialentryconfirm.html",context)
+    else:
+        return render(request,"storage/steelmaterial/barsteelmaterialentryconfirm.html",context)
     
 def Weld_Apply_Card_List(request):
     """
@@ -420,18 +427,7 @@ def weldRefundViews(request):
 def weldRefundDetailViews(request,rid):
     ref_obj = WeldRefund.objects.get(id = rid)
     is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
-    if request.method == "POST":
-        reform = WeldRefundForm(request.POST,instance = ref_obj)
-        if reform.is_valid():
-            reform.save()
-            ref_obj.keeper = request.user
-            ref_obj.weldrefund_status = STORAGESTATUS_END
-            ref_obj.save()
-            return HttpResponseRedirect("/storage/weldrefund")
-        else:
-            print reform.errors
-    else:
-        reform = WeldRefundForm(instance = ref_obj) 
+    reform = WeldRefundForm(instance = ref_obj) 
     context = {
             "reform":reform,
             "ref_obj":ref_obj,
@@ -705,12 +701,13 @@ def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list
 
 def outsideEntryConfirmViews(request,eid):
     entry_url = getUrlByViewMode(request,"outside/entryhome")
-    context = getEntryConfirmContext(eid,OutsideStandardEntry,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,entry_url)
+    context = getEntryConfirmContext(request,eid,OutsideStandardEntry,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,entry_url)
     return render(request,"storage/outside/entryconfirm.html",context)
 
-def getEntryConfirmContext(eid,_Model,_Inform,_Reform,entry_url):
+def getEntryConfirmContext(request,eid,_Model,_Inform,_Reform,entry_url):
     entry_obj = _Model.objects.get(id = eid)
     inform = _Inform(instance = entry_obj)
+    print "dadsa"
     reform = _Reform(instance = entry_obj)
     is_show = entry_obj.entry_status == STORAGESTATUS_KEEPER
     entry_set = OutsideStandardItem.objects.filter(entry = entry_obj)

@@ -2,17 +2,12 @@
 from const import *
 import datetime
 from django.db import models
+from const.utility import make_uuid
+
 from const.models import BidFormStatus,Materiel,Material, WorkOrder, OrderFormStatus, ImplementClassChoices
 from django.contrib.auth.models import User
 import settings
 # Create your models here.
-
-import uuid
-def make_uuid():
-    """
-    make uuid
-    """
-    return str(uuid.uuid4())
 
 class OrderForm(models.Model):
     order_id = models.CharField(unique = True, max_length = 20, blank = False, verbose_name = u"订购单编号")
@@ -22,7 +17,7 @@ class OrderForm(models.Model):
     establishment_user=models.ForeignKey(User,verbose_name=u"编制人",related_name="establishment_user",null=True)
     chief=models.ForeignKey(User,verbose_name=u"外采科长",related_name="chief_user",null=True)
     approve_user=models.ForeignKey(User,verbose_name=u"审批人",related_name="approve_user",null=True)
-    tech_requirement=models.CharField(max_length=5000,blank=True,null=True)
+    tech_requirement=models.TextField(max_length=5000,blank=True,null=True)
     order_mod=models.IntegerField(default=0,verbose_name=u"标单类型")
     class Meta:
         verbose_name = u"订购单"
@@ -240,6 +235,7 @@ class MaterielExecute(models.Model):
     materiel_choice = models.CharField(blank=False, max_length = 20, choices=MATERIEL_CHOICE, verbose_name=u"材料选择")
     is_save = models.BooleanField(blank=False, verbose_name=u"是否已保存")
     tech_feedback = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"工艺反馈")
+    tech_requirement=models.CharField(max_length=5000,blank=True,null=True)
     class Meta:
         verbose_name = u"材料执行表"
         verbose_name_plural = u"材料执行表"

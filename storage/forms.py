@@ -113,14 +113,6 @@ class EntryItemsForm(ModelForm):
             "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
         }
 
-# class SteelEntryItemsForm(ModelForm):
-#     class Meta:
-#         model = SteelMaterial
-#         fields = ("remark",)
-#         widget = {
-#             "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
-#         }
-
 class HumRecordForm(ModelForm):
     class Meta: 
         model = WeldingMaterialHumitureRecord 
@@ -217,11 +209,11 @@ class WeldRefundForm(ModelForm):
         exclude = ('department','date','code','id','refunder','keeper','weldrefund_status',)
         widgets = {
             'work_order':forms.HiddenInput(),
-            'receipts_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"receipts_time","class":"span2"}),
-            'receipts_code': forms.Select(attrs={'class':"span2"}),                      
-            'specification': forms.TextInput(attrs={'class':"span2"}),                      
-            'refund_weight': forms.TextInput(attrs={'class':"span1"}),                      
-            'refund_count': forms.TextInput(attrs={'class':"span1"}),                      
+            'receipts_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"receipts_time","class":"span2","disabled":True}),
+            'receipts_code': forms.Select(attrs={'class':"span2","disabled":True}),                      
+            'specification': forms.TextInput(attrs={'class':"span2","readonly":True}),                      
+            'refund_weight': forms.TextInput(attrs={'class':"span1","readonly":True}),                      
+            'refund_count': forms.TextInput(attrs={'class':"span1","readonly":True}),                      
             'refund_status': forms.TextInput(attrs={'class':"span2"}),                      
         }
 
@@ -379,7 +371,12 @@ class StorageEntryAForm(forms.Form):
 class StorageOutsideEntryInfoForm(ModelForm):
     class Meta:
         model = OutsideStandardEntry
-        exclude = ("id","entry_status","purchaser","inspector","keeper","remark")
+        exclude = ("id","entry_status","purchaser","inspector","keeper","remark","bidform")
+    def __init__(self,*args,**kwargs):
+        super(StorageOutsideEntryInfoForm,self).__init__(*args,**kwargs)
+        for k,v in self.fields.items():
+            v.widget.attrs["readonly"] = True
+        self.fields["entry_code"].widget.attrs.pop("readonly")
 
 class StorageOutsideEntryRemarkForm(ModelForm):
     class Meta:

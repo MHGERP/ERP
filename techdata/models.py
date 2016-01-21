@@ -132,7 +132,6 @@ class WeldListPageMark(models.Model):
 class TransferCard(models.Model):
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属零件")
     card_type = models.CharField(blank = False, max_length = 100, choices = TRANSFER_CARD_TYPE_CHOICES, verbose_name = u"流转卡类型")
-
     class Meta:
         verbose_name = u"流转卡"
         verbose_name_plural = u"流转卡"
@@ -194,6 +193,57 @@ class Program(models.Model):
         verbose_name_plural = u"编程套料图"
     def __unicode__(self):
         return self.name
+
+class HeatTreatmentTechCard(models.Model):
+    file_index = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"文件编号")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "heattreatcard_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "heattreatcard_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+
+    temperature_start = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"进炉温度")
+    temperature_end = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"出炉温度")
+    temperature_top = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"最高温度")
+    temperature_up_speed = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"升温速率")
+    temperature_down_speed = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"降温速率")
+    time = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"保温时间")
+
+    class Meta:
+        verbose_name = u"热处理工艺卡"
+        verbose_name_plural = u"热处理工艺卡"
+    def __unicode__(self):
+        return "RR01-" + str(self.file_index)
+
+class HeatTreatmentMateriel(models.Model):
+    materiel = models.ForeignKey(Materiel, verbose_name = u"零件")
+    max_heattreat_thin = models.CharField(max_length = 20, null = True, blank = True, verbose_name  = u"最大热处理厚度")
+    heat_test = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"热处理检验")
+    operator = models.ForeignKey(User, blank = True, null = True, verbose_name = u"操作者")
+    test_result = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"检验结果")
+    card_belong = models.ForeignKey(HeatTreatmentTechCard, null = True, blank = True, verbose_name = u"所属工艺卡")
+    class Meta:
+        verbose_name = u"热处理件"
+        verbose_name_plural = u"热处理件"
+    def __unicode__(self):
+        return unicode(self.materiel)
+
+class HeatTreatmentArrangement(models.Model):
+    file_index = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"文件编号")
+    card_belong = models.OneToOneField(HeatTreatmentTechCard, verbose_name = u"所属工艺卡")
+
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "heattreatarrange_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "heattreatarrange_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    
+    file_obj = models.FileField(upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"布置图")
+    class Meta:
+        verbose_name = u"热处理测温点布置"
+        verbose_name_plural = u"热处理测温点布置"
+    def __unicode__(self):
+        return "RR02-" + str(self.file_index)
 
 class BoxOutBoughtMark(models.Model):
     order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")

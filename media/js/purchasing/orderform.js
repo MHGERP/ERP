@@ -136,7 +136,7 @@ $("#save_tech_require").click(function(){
     var content=$("#tech_requirement_textarea").val();
     var order_id=$("#index").val();
     Dajaxice.purchasing.saveTechRequire(function(data){
-    $("#tech_requirement_content").text(content);
+    $("#tech_requirement_content").val(content);
     },{
         "order_id":order_id,
         "content":content
@@ -144,5 +144,27 @@ $("#save_tech_require").click(function(){
 });
 
 $("#tech_add").click(function(){
-    $("#tech_requirement_textarea").val($("#tech_requirement_content").text());
+    $("#tech_requirement_textarea").val($("#tech_requirement_content").val());
+});
+
+$("#generate_execute").click(function(){
+    Dajaxice.purchasing.orderformToExecute(function(data){
+        $("#execute_form").html(data.html);
+    },{
+            "orderform_id":$("#index").val()
+        });
+});
+
+$("#save_materiel_execute").click(function(){
+    form=$("#execute_form").children("form");
+    Dajaxice.purchasing.saveOrderformExecute(function(data){
+        alert(data.message);
+        if(data.status=='0'){
+            $("#add_to_execute").modal('hide');
+        }
+    },{
+
+            "orderform_id":$("#index").val(),
+            'form':$(form).serialize(true)
+    });
 });
