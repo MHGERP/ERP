@@ -955,6 +955,55 @@ def designBOMReviewerConfirm(request, id_work_order):
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
 @dajaxice_register
+def getTechPreparationPlan(request, id_work_order):
+    """
+    mxl
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    tech_plan = TechPlan.objects.filter(order = work_order)
+    context = {
+        "work_order" : work_order,
+        "tech_plan" : tech_plan,
+    }
+    html = render_to_string("techdata/widgets/tech_preparation_plan_table.html", context)
+    return html
+
+@dajaxice_register
+def getTechPlanForm(request, iid):
+    """
+    mxl
+    """
+    if iid == -1:
+        form = TechPreparationPlanForm()
+    else:
+        techplan = TechPlan.objects.get(id = iid)
+        form = TechPreparationPlanForm(instance = techplan)
+    form_html = render_to_string("techdata/widgets/tech_preparation_plan_form.html", {"form" : form})
+    return form_html
+
+@dajaxice_register
+def saveTechPlan(request, id_work_order, tech_preparation_plan_form, addOrUpdate, iid):
+    """
+    mxl
+    """
+    if addOrUpdate == "add":
+        tech_preparation_plan_form =  TechPreparationPlanForm(deserialize_form(tech_preparation_plan_form))    
+        order = WorkOrder.objects.get(id = id_work_order)
+        if tech_preparation_plan_form.is_valid():
+            techplan = tech_preparation_plan_form.save(commit=False)
+            techplan.order = order
+            techplan.save()
+            return simplejson.dumps({"ret" : "ok"})
+    else:
+        techplan = TechPlan.objects.get(id = iid)
+        tech_preparation_plan_form =  TechPreparationPlanForm(deserialize_form(tech_preparation_plan_form), instance = techplan)
+        if tech_preparation_plan_form.is_valid():
+            techplan.save()
+            return simplejson.dumps({"ret" : "ok"}) 
+    form_html = render_to_string("techdata/widgets/tech_preparation_plan_form.html", {"form" : tech_preparation_plan_form})
+    return simplejson.dumps({"ret" : "false", "form_html" : form_html})
+
+@dajaxice_register
 def getHeatPointDetail(request, card_id):
     """
     BinWu

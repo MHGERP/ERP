@@ -11,27 +11,28 @@
 {% block inner_content%}
 <form class="form-search ">
     工作令:
-    <select class="input-medium search-query" id="search_pending_order">
-        <option style="width:200px">03014001B</option>
-        <option style="width:200px">2</option>
-        <option style="width:200px">3</option>
-        <option style="width:200px">4</option>
-        <option style="width:200px">5</option>
-    </select>
+    {{ work_order_form.work_order }}
     <span class="btn" id="order_search">检索</span>
+    <span class="btn btn-success" style="float:right" id="add_tech_plan">新增技术准备计划</span>
+    <!--input type="text" class="form-control span2" id="datetest"-->
 </form>
-<div class="widget-box">
-    <div class="widget-title">
-        <span class="icon"><i class="icon-th"></i></span>
-        <h5>工作令:03014001B</h5>
-        <h5>产品名称：第一中温变换炉</h5>
-        <h5>编制人：</h5>
-        <h5>审核人：</h5>
-    </div>
-
-    <div class="widget-content nopadding">
-        {% include "techdata/widgets/tech_preparation_plan_table.html" %}
-    </div>
+<div class="widget-box" id="widget-box">
 </div>
 
+<div id="techPlan_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.5">
+  <div class="modal-header">
+    <h2 id="groupLabel">新增技术准备计划</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+		<form id="tech_preparation_plan_form" class="form-horizontal">
+		</form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" id="id_save">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+<script type="text/javascript" src={{STATIC_URL}}js/techdata/tech_preparation_plan.js></script>
 {% endblock%}
