@@ -64,7 +64,7 @@ class ProcessFollowingForm(ModelForm):
 class MaterielExecuteForm(ModelForm):
     class Meta:
         model = MaterielExecute
-        exclude = {'id', 'document_lister', 'date', 'is_save'}
+        exclude = {'id', 'document_lister', 'date', 'is_save','tech_feedback','tech_requirement'}
         widgets = {
             'materiel_choice' : forms.Select(attrs={"id" : "materiel_choice_select"})
         }

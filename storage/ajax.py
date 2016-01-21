@@ -149,6 +149,59 @@ def boardSteelApplyEnsure(request,common_card):
     return u"领用成功"
 
 
+@dajaxice_register
+def steelRefundEnsure(request,form_code):
+    """
+    kad
+    """
+    common_refund = CommonSteelMaterialReturnCardInfo.objects.get(form_code = form_code)
+    if common_refund.steel_type == BOARD_STEEL:
+        message = boardSteelRefundEnsure(request, common_refund)
+    elif common_refund.steel_type == BAR_STEEL:
+        message = barSteelRefundEnsure(request, common_refund)
+    return message
+
+def boardSteelRefundEnsure(request, common_refund):
+    """
+    kad
+    """
+    refund_set = common_refund.boardsteelmaterialreturncardcontent_set.all()
+    for refund in refund_set:
+        refund_quantity = refund.quantity
+        refund_matnum = refund.steel_material.material_number
+        ledger = SteelMaterial.objects.get(material_number = refund_matnum)
+        ledger_quantity = ledger.boardsteelmaterialledger.quantity
+        ledger_quantity += refund_quantity
+        ledger.boardsteelmaterialledger.quantity = ledger_quantity
+        ledger.boardsteelmaterialledger.save()
+        ledger_returntime = ledger.return_time
+        ledger_returntime += 1
+        ledger.return_time = ledger_returntime
+        ledger.save()
+    common_refund.return_confirm = True
+    common_refund.save()
+    return u"退库成功"
+
+def barSteelRefundEnsure(request, common_refund):
+    """
+    kad
+    """
+    refund_set = common_refund.barsteelmaterialreturncardcontent_set.all()
+    for refund in refund_set:
+        refund_quantity = refund.quantity
+        refund_matnum = refund.steel_material.material_number
+        ledger = SteelMaterial.objects.get(material_number = refund_matnum)
+        ledger_quantity = ledger.barsteelmaterialledger.quantity
+        ledger_quantity += refund_quantity
+        ledger.barsteelmaterialledger.quantity = ledger_quantity
+        ledger.barsteelmaterialledger.save()
+        ledger_returntime = ledger.return_time
+        ledger_returntime += 1
+        ledger.return_time = ledger_returntime
+        ledger.save()
+    common_refund.return_confirm = True
+    common_refund.save()
+    return u"退库成功"
     
 
 
@@ -337,24 +390,33 @@ def entryItemSave(request,form,mid):
            }
     return simplejson.dumps(data)
 
-# @dajaxice_register
-# def steelEntryItemSave(request,form,mid):
-#     item = SteelMaterial.objects.get(id = mid)
-#     entry_form = SteelEntryItemsForm(deserialize_form(form),instance = item) 
-#     pur_entry = item.entry_form
-#     flag = False
-#     if pur_entry.entry_status == STORAGESTATUS_KEEPER:
-#         if entry_form.is_valid():
-#             entry_form.save()
-#             flag = True
-#             message = u"修改成功"
-#         else:
-#             message = u"修改失败"
-#     data = {
-#         "flag":flag,
-#         "message":message,
-#     }
-#     return simplejson.dumps(data)
+@dajaxice_register
+def saveRemark(request,remark,mid,typeid):
+    if typeid:
+        items = BoardSteelMaterialPurchasingEntry.objects.filter(id = mid)
+        pur_entry = BoardSteelMaterialPurchasingEntry.objects.all()
+    else:
+        pur_entry = BarSteelMaterialPurchasingEntry.objects.all()
+        items = BarSteelMaterialPurchasingEntry.objects.filter(id = mid)
+    flag = False
+    for item in items:
+        if item.card_info.entry_status == STORAGESTATUS_KEEPER:
+            item.remark = remark
+            item.save()
+            flag = True
+            message = u"修改成功"
+        else:
+            message = u"修改失败，入库单已确认过"
+    if typeid:
+        html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
+    else:
+        html = render_to_string("storage/widgets/barmaterialentrytable.html",{"entry_set":pur_entry})
+    data = {
+        "flag":flag,
+        "message":message,
+        "html":html,
+    }
+    return simplejson.dumps(data)
 
 @dajaxice_register
 def entryConfirm(request,eid,entry_code):

@@ -1,7 +1,8 @@
 # coding: UTF-8
+from const import *
 from django.db import models
 from const.models import WorkOrder
-
+from const.utility import make_uuid
 
 class SynthesizeFileListStatus(models.Model):
     workorder_id = models.ForeignKey(WorkOrder)
@@ -18,3 +19,16 @@ class SynthesizeFileListStatus(models.Model):
         verbose_name_plural = u"综合工部"
     def __unicode__(self):
         return "%s" % self.workorder_id
+
+
+class ProductionPlan(models.Model):
+    workorder_id = models.ForeignKey(WorkOrder)
+    plan_id = models.CharField(max_length=50, blank=True, default=make_uuid, verbose_name=u"生产计划编号")
+    status = models.IntegerField(blank = False, choices = PRODUCTION_PLAN_STAUTS_CHOICES, verbose_name=u"生产计划状态")
+    plan_date = models.DateField(blank = True, verbose_name = u"计划年月")
+
+    class Meta:
+        verbose_name = u"生产计划"
+        verbose_name_plural = u"生产计划"
+    def __unicode__(self):
+        return "%s" % self.plan_id

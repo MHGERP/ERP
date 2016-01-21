@@ -1,8 +1,8 @@
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped" id="production_plan_table">
   <thead>
     <tr>
       <th>工作令</th>
-      <th>用户</th>
+      <th>客户名称</th>
       <th>交货期</th>
       <th>产品名称</th>
       <th>数量(台/套)</th>
@@ -14,20 +14,23 @@
       <th>操作</th>
     </tr>
   </thead>
+  {% for item in productionPlans %}
   <tr>
-    <td>20150001</td>
-    <td>太重滨海</td>
-    <td>2016-10</td>
-    <td>煤锁</td>
-    <td>3</td>
-    <td>99.54</td>
-    <td>23.46</td>
-    <td>天津</td>
-    <td>在制</td>
-    <td>2015-4</td>
+    <td>{{item.workorder_id}}</td>
+    <td>{{item.workorder_id.client_name}}</td>
+    <td></td>
+    <td>{{item.workorder_id.product_name}}</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>{{item.get_status_display}}</td>
+    <td>{{item.plan_date|date:"Y-M"}}</td>
     <td>
       <a class="btn btn-primary" id="hour-summarize-btn" data-toggle="modal" data-target="#production_plan_modify_modal">修改</a>
       <button class="btn btn-primary" id="hour-summarize-btn">删除</button>
     </td>
+
   </tr>
+  {% endfor %}
 </table>
