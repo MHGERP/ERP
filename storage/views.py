@@ -42,6 +42,23 @@ def steelRefundViews(request):
     }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
+def steelrefunddetailViews(request,typeid,rid):
+    typeid=int(typeid)
+    common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
+    if typeid:
+        return_cards = common_Info.barsteelmaterialreturncardcontent_set.all()
+    else:
+        return_cards = common_Info.boardsteelmaterialreturncardcontent_set.all()
+    context={
+        'return_cards':return_cards,
+        'common_Info':common_Info,
+    }
+    if typeid==1:
+        return render(request,"storage/steelmaterial/barsteelrefunddetail.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelrefunddetail.html",context)
+
+
 def steelApplyViews(request):
     search_form = SteelRefundSearchForm()
     apply_cards = CommonSteelMaterialApplyCardInfo.objects.all()
@@ -75,23 +92,6 @@ def steelLedgerViews(request):
         "steel_set":steel_set,
     }
     return render(request,"storage/steelmaterial/steelledger.html",context)
-
-
-def steelrefunddetailViews(request,typeid,rid):
-    typeid=int(typeid)
-    common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
-    if typeid:
-        return_cards = common_Info.barsteelmaterialreturncardcontent_set.all()
-    else:
-        return_cards = common_Info.boardsteelmaterialreturncardcontent_set.all()
-    context={
-        'return_cards':return_cards,
-        'common_Info':common_Info,
-    }
-    if typeid==1:
-        return render(request,"storage/steelmaterial/barsteelrefunddetail.html",context)
-    else:
-        return render(request,"storage/steelmaterial/boardsteelrefunddetail.html",context)
     
 def weldEntryHomeViews(request):
     if request.method == "POST":
@@ -147,18 +147,25 @@ def weldEntryConfirmViews(request,eid):
             }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
-def steelEntryConfirmViews(request,eid):
+def steelEntryConfirmViews(request,eid,typeid):
+    typeid = int(typeid)
     entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-    # items = entry.steelmaterial_set.all()
-    # entryitem_form = SteelEntryItemsForm()
+    print entry
+    if typeid:
+        items = entry.boardsteelmaterialpurchasingentry_set.all()
+    else:
+        items = entry.barsteelmaterialpurchasingentry_set.all()
+        print items
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
     context = {
             "entry":entry,
-            # "entry_set":items,
-            # "item_form":entryitem_form,
+            "entry_set":items,
             "is_show":is_show,
             }
-    return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
+    if typeid:
+        return render(request,"storage/steelmaterial/boardsteelmaterialentryconfirm.html",context)
+    else:
+        return render(request,"storage/steelmaterial/barsteelmaterialentryconfirm.html",context)
     
 def Weld_Apply_Card_List(request):
     """

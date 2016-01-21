@@ -201,6 +201,14 @@ class HeatTreatmentTechCard(models.Model):
 
     reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "heattreatcard_reviewer")
     review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+
+    temperature_start = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"进炉温度")
+    temperature_end = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"出炉温度")
+    temperature_top = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"最高温度")
+    temperature_up_speed = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"升温速率")
+    temperature_down_speed = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"降温速率")
+    time = models.CharField(max_length = 20, null = True, blank = True, verbose_name = u"保温时间")
+
     class Meta:
         verbose_name = u"热处理工艺卡"
         verbose_name_plural = u"热处理工艺卡"

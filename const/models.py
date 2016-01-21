@@ -90,4 +90,3 @@ class ImplementClassChoices(models.Model):
     def __unicode__(self):
         return self.get_category_display()
 
-
