@@ -486,7 +486,18 @@ style='mso-spacerun:yes' id="span-fileindex">{{card.file_index|default_if_none:"
    </tr>
    <tr>
     <td></td>
-    <td><img width=464 height=177 src="{{STATIC_URL}}img/heat_treat_show.gif" v:shapes="Line_x0020_6 Line_x0020_7 Line_x0020_8 Line_x0020_9 Line_x0020_10 Text_x0020_Box_x0020_11 Text_x0020_Box_x0020_12 Line_x0020_13 Line_x0020_14 Text_x0020_Box_x0020_16 Text_x0020_Box_x0020_17 Text_x0020_Box_x0020_18 Text_x0020_Box_x0020_19 Text_x0020_Box_x0020_20"></td>
+    <td>
+		<div id="img_edit">
+			<div id="c_img" style="position: absolute;"><img width=464 height=177 src="{{STATIC_URL}}img/heat_treat_show.png"></div>
+			<div id="c_top" args="{{HEATTREATMENTCARD_ATTR_TEM_TOP}}" class="word_textarea" contenteditable={% if card.reviewer %}"false"{% else %}"true"{% endif %} style="position: absolute; margin: 38px 0 0 205px; z-index:0">{{card.temperature_top|default_if_none:""}}</div>
+			<div id="c_time" args="{{HEATTREATMENTCARD_ATTR_TEM_TIME}}" class="word_textarea" contenteditable={% if card.reviewer %}"false"{% else %}"true"{% endif %} style="position: absolute; margin: 105px 0 0 190px; z-index:0">{{card.time|default_if_none:""}}</div>
+			<div id="c_up" args="{{HEATTREATMENTCARD_ATTR_TEM_UP_SPEED}}" class="word_textarea" contenteditable={% if card.reviewer %}"false"{% else %}"true"{% endif %} style="position: absolute; margin: 73px 0 0 74px; z-index:0" >{{card.temperature_up_speed|default_if_none:""}}</div>
+			<div id="c_start" args="{{HEATTREATMENTCARD_ATTR_TEM_START}}" class="word_textarea" contenteditable={% if card.reviewer %}"false"{% else %}"true"{% endif %} style="position: absolute; margin: 120px 0 0 85px; z-index:0">{{card.temperature_start|default_if_none:""}}</div>
+			<div id="c_end" args="{{HEATTREATMENTCARD_ATTR_TEM_END}}" class="word_textarea" contenteditable={% if card.reviewer %}"false"{% else %}"true"{% endif %} style="position: absolute; margin: 120px 0 0 373px; z-index:0">{{card.temperature_end|default_if_none:""}}</div>
+			<div id="c_down" args="{{HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED}}" class="word_textarea" contenteditable={% if card.reviewer %}"false"{% else %}"true"{% endif %} style="position: absolute; margin: 67px 0 0 365px; z-index:0">{{card.temperature_down_speed|default_if_none:""}}</div>
+
+		</div>
+	</td>
    </tr>
   </table>
   </span><![endif]><span lang=EN-US style='font-family:宋体'><o:p>&nbsp;</o:p></span></p>
