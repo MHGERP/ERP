@@ -10,7 +10,7 @@ class WorkOrderForm(forms.Form):
     JunHU
     summary: store all work orders
     """
-    work_order = forms.ChoiceField(widget = forms.Select(attrs = {"class": "form-control input"}))
+    work_order = forms.ChoiceField(label=u"工作令", widget = forms.Select(attrs = {"class": "form-control input"}))
     def __init__(self, *args, **kwargs):
         super(WorkOrderForm, self).__init__(*args, **kwargs)
         WORKORDER_CHOICES = tuple((item.id, item) for item in WorkOrder.objects.all())

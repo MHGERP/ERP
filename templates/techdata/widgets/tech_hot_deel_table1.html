@@ -1,47 +1,41 @@
-<table class="table table-bordered table-striped" style="width:60%">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>
-                <label class="checkbox">
-                    <input type="checkbox" value="">全选
-                </label>
+                <input type="checkbox" value="" id="select_all">
             </th>
             <th>序号</th>
             <th>工作令</th>
             <th>图号</th>
             <th>名称</th>
-            <th>钢号</th>
-            <th>外形尺寸(mm)</th>
-            <th>件数</th>
+			<th>规格</th>
+            <th>材质</th>
+            <th>阶段状态</th>
+            <th>最大热处理厚度（mm）</th>
+			<th>数量</th>
+			<th>件重</th>
+			<th>备注</th>
         </tr>
     </thead>
-    <tr>
-        <td>
-            <label class="checkbox">
-                <input type="checkbox" value="">
-            </label>
-        </td>
-        <td>1</td>
-        <td>0308006B-2A</td>
-        <td>R59.138-1.01.00</td>
-        <td>煤锁壳体</td>
-        <td>Q345R</td>
-        <td>D2530X70-5050</td>
-        <td>1</td>
-    </tr>
-    <tr>
-        <td>
-            <label class="checkbox">
-                <input type="checkbox" value="">
-            </label>
-        </td>
-        <td>2</td>
-        <td>0308004A-1</td>
-        <td>R59.138-1.01.00</td>
-        <td>炉体下锥</td>
-        <td>Q345R</td>
-        <td>D4000X50</td>
-        <td>1</td>
-    </tr>
+	<tbody>
+		{% for item in item_list %}
+		<tr>
+		    <td>
+	            <input type="checkbox" args="{{item.id}}">
+		    </td>
+		    <td>{{forloop.counter}}</td>
+		    <td>{{item.materiel.order}}</td>
+		    <td>{{item.materiel.schematic_index}}</td>
+		    <td>{{item.materiel.name}}</td>
+		    <td>{{item.materiel.specification|default_if_none:""}}</td>
+		    <td>{{item.materiel.material}}</td>	
+		    <td></td>
+			<td>{{item.max_heattreat_thin}}</td>
+			<td>{{item.materiel.count}}</td>
+			<td>{{item.materiel.net_weight}}</td>
+			<td>{{item.materiel.remark}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
 </table>
-<button class="btn">制表</button>
+<button class="btn" id="new_card">创建工艺卡</button>

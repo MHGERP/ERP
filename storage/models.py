@@ -242,7 +242,6 @@ class WeldingMaterialBakeRecord(models.Model):
     class Meta:
         verbose_name=u'焊材烘焙记录卡'
         verbose_name_plural=u'焊材烘焙记录卡'
-        verbose_name_plural=u'焊焊材库温湿度记录卡'    
 
 class SteelMaterialPurchasingEntry(models.Model):
     material_source = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'货物来源')
@@ -419,7 +418,7 @@ class CommonSteelMaterialReturnCardInfo(models.Model):
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u'检查员',related_name="steel_return_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员",related_name="steel_return_keeper")
     return_confirm = models.BooleanField(default=False,verbose_name=u'退库单确认')
-    steel_type = models.IntegerField(choices=STEEL_TYPE,default=0,verbose_name=u'钢材类型')
+    steel_type = models.IntegerField(choices=STEEL_TYPE,default=0,verbose_name=u'钢材类型')#1:bar 0:board
 
     def __unicode__(self):
         return str(self.form_code)

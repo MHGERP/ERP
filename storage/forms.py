@@ -113,14 +113,6 @@ class EntryItemsForm(ModelForm):
             "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
         }
 
-# class SteelEntryItemsForm(ModelForm):
-#     class Meta:
-#         model = SteelMaterial
-#         fields = ("remark",)
-#         widget = {
-#             "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
-#         }
-
 class HumRecordForm(ModelForm):
     class Meta: 
         model = WeldingMaterialHumitureRecord 
