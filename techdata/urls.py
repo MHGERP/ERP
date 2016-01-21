@@ -97,4 +97,8 @@ urlpatterns=patterns('',
         r'^heatTreatmentTechCardEdit',
         techdata_views.heatTreatmentTechCardEditViews,
     ),
+    url(
+        r'^heatPoint',
+        techdata_views.heatPoint,
+    ),
 )

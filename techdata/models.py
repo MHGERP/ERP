@@ -3,7 +3,7 @@ from const import PROCESSING_CHOICES, CIRCULATION_CHOICES, NONDESTRUCTIVE_INSPEC
 from django.db import models
 from const.models import Materiel, Material, WorkOrder
 from django.contrib.auth.models import User
-
+from users.models import Group
 from purchasing.models import MaterielExecute
 import settings
 
@@ -269,3 +269,14 @@ class DesignBOMMark(models.Model):
         verbose_name_plural = u"设计库签章"
     def __unicode__(self):
         return self.order.order_index
+
+class TechPlan(models.Model):
+    order = models.ForeignKey(WorkOrder, verbose_name=u"所属工作令")
+    detail = models.CharField(max_length = 100, blank = True, null = True, verbose_name = u"详细内容")
+    sentDepartment = models.ForeignKey(Group, blank = False, null = False, verbose_name = u"下发部门")
+    planCompleteDate = models.DateField(blank = False, null = False, verbose_name = u"计划完成时间")
+    class Meta:
+        verbose_name = u"技术准备计划"
+        verbose_name_plural = u"技术准备计划"
+    def __unicode__(self):
+        return self.order.order_index + "(%s)" % self.detail
