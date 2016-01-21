@@ -2,10 +2,10 @@
 # coding=utf-8
 
 import datetime
+import const 
 from storage.models import *
 from purchasing.models import *
 from django.db.models import Q
-
 def get_weld_filter(model_type,dict):
     """
     author: Shen Lian
@@ -146,7 +146,69 @@ def updateStorageLits(items_set,_StorageModel):
 
 
 def getUrlByViewMode(request,entry_url):
+    """
+    Author: Shen Lian
+    Func:redict url by request param
+    """
     redict_path = request.GET.get("redict_path",None)
     if redict_path:
         entry_url = redict_path
     return entry_url
+
+class HandleEntry(object):
+    def getEntry(self,user,bidform):
+        pass
+    def getEntryItem(self,materiel,entry):
+        pass
+    def saveEntry(self,items,user,bidform):
+        entry_obj = self.getEntry(user,bidform)
+        entry_obj.save()
+        for item in items:
+            entryitem_obj = self.getEntryItem(item.material,entry_obj)
+            entryitem_obj.save()
+            item.check_pass = True
+            #item.save()
+
+class HandleEntryWeld(HandleEntry):
+    def getEntry(self,user,bidform):
+        return WeldMaterialEntry(purchaser = user , bidform = bidform , entry_status = STORAGESTATUS_PURCHASER)
+    def getEntryItem(self,materiel,entry):
+        return WeldMaterialEntryItems(material = materiel,entry = entry)
+
+class HandleEntryPurchased(HandleEntry):
+    def getEntry(self,user,bidform):
+        return OutsideStandardEntry(purchaser = user,entry_status = STORAGESTATUS_PURCHASER,bidform = bidform)
+    def getEntryItem(self,materiel,entry):
+        return OutsideStandardItem(materiel = materiel,entry = entry,schematic_index=materiel.schematic_index,specification = materiel.specification,number = materiel.count,unit = materiel.unit )
+
+
+from itertools import *
+class AutoGenEntry(object):
+    WELD_TYPE_LIST = [WELD_ROD,WELD_WIRE,WELD_RIBBON,WELD_FLUX]
+    PURCHASED_LIST = [PURCHASED,] 
+    Entry_DICT = {"WELD":HandleEntryWeld,"PURCHASED":HandleEntryPurchased}
+    def key_cmp_func(self,it):
+        categories = it.material.material.categories
+        if categories in self.WELD_TYPE_LIST:
+            return "WELD"
+        if categories in self.PURCHASED_LIST:
+            return "PURCHASED"
+    
+    def group_by(self):
+        sorted_items_set = sorted(self.items_set,key=self.key_cmp_func)
+        item_groupby_dict = {}
+        for label,items in groupby(sorted_items_set,key=self.key_cmp_func):
+            item_groupby_dict[label]=list(items)
+        return item_groupby_dict
+
+    def processEntry(self,groupby_items):
+        for k,v in groupby_items.items():
+            handle = self.Entry_DICT[k]()
+            handle.saveEntry(v,self.user,self.bidform)
+
+    def __init__(self,user,items_set,bidform):
+        self.user = user
+        self.items_set = items_set
+        self.bidform = bidform
+        groupby_items = self.group_by()
+        self.processEntry(groupby_items)

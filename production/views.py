@@ -42,11 +42,9 @@ def man_hour_summarizeViews(request):
     return render(request,"production/man_hour_summarize.html",context)
 
 def production_planViews(request):
-    orderIndexForm = OrderIndexForm();
-    context={"orderIndexForm":orderIndexForm}
+    context={"productionPlanSearchForm":ProductionPlanSearchForm()}
     return render(request,"production/production_plan.html",context)
 
 def ledgerViews(request):
-    orderIndexForm = OrderIndexForm()
-    context={"orderIndexForm":orderIndexForm}
+    context={"ledgerSearchForm":LedgerSearchForm()}
     return render(request,"production/ledger.html",context)

@@ -736,11 +736,11 @@ def transferCardMark(request, iid, step, card_type = None):
 
 
 @dajaxice_register
-def saveProcessRequirement(request, pid, content):
+def saveProcessRequirement(request, id, content):
     """
     JunHU
     """
-    process = Processing.objects.get(id = pid)
+    process = Processing.objects.get(id = id)
     process.technical_requirement = content
     process.save()
 
@@ -868,9 +868,24 @@ def getHeatTreatCardDetail(request, card_id):
         "STATIC_URL": settings.STATIC_URL,
         "MARK_WRITE": MARK_WRITE,
         "MARK_REVIEW": MARK_REVIEW,
+        "HEATTREATMENTCARD_ATTR_TEM_START": HEATTREATMENTCARD_ATTR_TEM_START,
+        "HEATTREATMENTCARD_ATTR_TEM_END": HEATTREATMENTCARD_ATTR_TEM_END,
+        "HEATTREATMENTCARD_ATTR_TEM_TOP": HEATTREATMENTCARD_ATTR_TEM_TOP,
+        "HEATTREATMENTCARD_ATTR_TEM_UP_SPEED": HEATTREATMENTCARD_ATTR_TEM_UP_SPEED,
+        "HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED": HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED,
+        "HEATTREATMENTCARD_ATTR_TEM_TIME": HEATTREATMENTCARD_ATTR_TEM_TIME,
     }
     html = render_to_string("techdata/widgets/heat_treatment_tech_card.html", context)
     return html
+
+@dajaxice_register
+def heatTreatCardVariableSave(request, card_id, attr, content):
+    """
+    JunHU
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    setattr(card, attr, content)
+    card.save()
 
 @dajaxice_register
 def heatTreatCardMark(request, card_id, step):
