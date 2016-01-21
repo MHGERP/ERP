@@ -379,7 +379,12 @@ class StorageEntryAForm(forms.Form):
 class StorageOutsideEntryInfoForm(ModelForm):
     class Meta:
         model = OutsideStandardEntry
-        exclude = ("id","entry_status","purchaser","inspector","keeper","remark")
+        exclude = ("id","entry_status","purchaser","inspector","keeper","remark","bidform")
+    def __init__(self,*args,**kwargs):
+        super(StorageOutsideEntryInfoForm,self).__init__(*args,**kwargs)
+        for k,v in self.fields.items():
+            v.widget.attrs["readonly"] = True
+        self.fields["entry_code"].widget.attrs.pop("readonly")
 
 class StorageOutsideEntryRemarkForm(ModelForm):
     class Meta:
