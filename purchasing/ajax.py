@@ -1022,7 +1022,7 @@ def saveExecuteTechRequire(request,execute_id,content):
     materiel_execute.tech_requirement=content
     materiel_execute.save()
     return simplejson.dumps({})
-
+@dajaxice_register
 def selectEntryType(request,bid,selected,selectentryform):
     entrytypedict = dict(list(STORAGE_ENTRY_TYPECHOICES))
     selectform = EntryTypeForm(deserialize_form(selectentryform))
