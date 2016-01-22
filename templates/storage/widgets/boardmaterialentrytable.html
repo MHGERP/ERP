@@ -12,6 +12,7 @@
             <th>数量</th>
             <th>重量</th>
             <th>单位</th>
+            <th>库房位置</th>
             <th>备注</th>
             <th>操作</th>
         </tr>
@@ -29,10 +30,17 @@
             <td>{{item.steel_material.lot_number}}</td>
             <td>{{item.quantity}}</td>
             <td>{{item.weight}}</td>
-            <td>{{item.weight_management}}</td>
+            <td>{% ifequal item.length_management 0 %}
+                    米
+                {% endifequal %}
+                {% ifequal item.length_management 1 %}
+                    厘米
+                {% endifequal %}
+            </td>
+            <td>{{item.steel_material.store_room.name}}</td>
             <td>{{item.remark}}</td>
             <td>
-                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_remark({{item.id}})">修改</a>
+                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_remark_storeRoom({{item.id}})">库房分配</a>
             </td>
         </tr>
         {%endfor%}

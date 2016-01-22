@@ -274,10 +274,12 @@ class DesignBOMMark(models.Model):
         return self.order.order_index
 
 class TechPlan(models.Model):
-    order = models.ForeignKey(WorkOrder, verbose_name=u"所属工作令")
+    order = models.ForeignKey(WorkOrder, blank = True, null = True, verbose_name=u"所属工作令")
     detail = models.CharField(max_length = 100, blank = True, null = True, verbose_name = u"详细内容")
     sentDepartment = models.ForeignKey(Group, blank = False, null = False, verbose_name = u"下发部门")
     planCompleteDate = models.DateField(blank = False, null = False, verbose_name = u"计划完成时间")
+    month = models.IntegerField(blank = True, null = False, verbose_name = u"所属月份")
+    year = models.IntegerField(blank = True, null = False, verbose_name = u"所属年份")
     class Meta:
         verbose_name = u"技术准备计划"
         verbose_name_plural = u"技术准备计划"

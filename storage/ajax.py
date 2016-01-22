@@ -391,22 +391,28 @@ def entryItemSave(request,form,mid):
     return simplejson.dumps(data)
 
 @dajaxice_register
-def saveRemark(request,remark,mid,typeid):
+def saveRemarkStoreRoom(request,form,mid,typeid):
+    form = steelEntryItemsForm(deserialize_form(form))
     if typeid:
-        items = BoardSteelMaterialPurchasingEntry.objects.filter(id = mid)
+        item = BoardSteelMaterialPurchasingEntry.objects.get(id = mid)
         pur_entry = BoardSteelMaterialPurchasingEntry.objects.all()
     else:
         pur_entry = BarSteelMaterialPurchasingEntry.objects.all()
-        items = BarSteelMaterialPurchasingEntry.objects.filter(id = mid)
+        item = BarSteelMaterialPurchasingEntry.objects.get(id = mid)
     flag = False
-    for item in items:
-        if item.card_info.entry_status == STORAGESTATUS_KEEPER:
-            item.remark = remark
-            item.save()
-            flag = True
-            message = u"修改成功"
-        else:
-            message = u"修改失败，入库单已确认过"
+    if form.is_valid():
+        remark = form.cleaned_data["remark"]
+        storeroomid= form.cleaned_data["store_room"]
+        storeroom = StoreRoom.objects.get(id = storeroomid)
+    if item.card_info.entry_status == STORAGESTATUS_KEEPER:
+        item.remark = remark
+        item.steel_material.store_room = storeroom
+        item.steel_material.save()
+        item.save()
+        flag = True
+        message = u"修改成功"
+    else:
+        message = u"修改失败，入库单已确认过"
     if typeid:
         html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
     else:

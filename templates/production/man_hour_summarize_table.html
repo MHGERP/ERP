@@ -4,16 +4,16 @@
 		<th colspan="2">编号</th>
 	</th>
 	<tr>
-		<td colspan="4">20150001</td>
+		<td colspan="4">{{work_order}}</td>
 		<td colspan="2">1</td>
 	</tr>
 	<tr>
 		<td colspan="2">组号</td>
-		<td colspan="4">1</td>
+		<td colspan="4">{{operator}}</td>
 	</tr>
 	<tr>
 		<td colspan="2">额定工时</td>
-		<td colspan="2">50</td>
+		<td colspan="2">{{summarize}}</td>
 		<td colspan="2">工票员　张三　５月６日</td>
 	</tr>
 	<tr>
@@ -34,38 +34,16 @@
 		<td>完成</td>
 		<td>实作</td>
 	</tr>
+	{%for item in process%}
 	<tr>
-		<td>５月６日</td>
-		<td>张三</td>
-		<td>李四</td>
-		<td>５月６日</td>
+		<td>{{item.operate_date|date:'m-d'}}</td>
+		<td>{{item.operator}}</td>
+		<td></td>
+		<td></td>
 		<td></td>
 		<td></td>
 	</tr>
-	<tr>
-		<td>５月６日</td>
-		<td>张三</td>
-		<td>李四</td>
-		<td>５月６日</td>
-		<td></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>５月６日</td>
-		<td>张三</td>
-		<td>李四</td>
-		<td>５月６日</td>
-		<td></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>５月６日</td>
-		<td>张三</td>
-		<td>李四</td>
-		<td>５月６日</td>
-		<td></td>
-		<td></td>
-	</tr>
+	{%endfor%}
 	<tr>
 		<td colspan="2">统计员</td>
 		<td colspan="4">王五</td>

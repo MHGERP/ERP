@@ -34,16 +34,18 @@
             <td>{{item.steel_material.lot_number}}</td>
             <td>{{item.quantity}}</td>
             <td>{{item.length}}</td>
-            <td>{{item.length_management}}</td>
-            <td><select class="form-control" id="id_storeRoonSelect" >
-                    <option value="1区">1区</option>
-                    <option value="2区">2区</option>
-                    <option value="3区">3区</option>
-                    <option value="4区">4区</option>
-                </select></td>
-            <td id>{{item.remark}}</td>
             <td>
-                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_remark({{item.id}})">修改</a>
+                {% ifequal item.length_management 0 %}
+                    米
+                {% endifequal %}
+                {% ifequal item.length_management 1 %}
+                    厘米
+                {% endifequal %}
+            </td>
+            <td rid={{item.steel_material.store_room.id}}>{{item.steel_material.store_room.name}}</td>
+            <td>{{item.remark}}</td>
+            <td>
+                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_remark_storeRoom({{item.id}})">库房分配</a>
             </td>
         </tr>
         {%endfor%}
