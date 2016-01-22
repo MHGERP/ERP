@@ -34,7 +34,7 @@
                 {% ifequal steel.return_time 0 %}
                     <td>尚未退库</td>
                 {% else %}
-                    <td>{{steel.boardsteelmaterialledger.slice_cad}}</td>
+                    <td><button class="btn btn-primary">下载</button></td>
                 {% endifequal %}
             {% else %}
             <td></td>
