@@ -23,7 +23,6 @@ $(document).ready(function() {
         name = temp.children().eq(0).text();
         position = temp.children().eq(1).text();
         material_type = temp.children().eq(2).attr("mt");
-        alert(name + ", " + position + ", " + material_type);
         $("#sr_form")[0].reset();
         //$(document).getElementById("#sr_form").reset();
         $("#sr_form").find("[name=name]").val(name);
@@ -32,10 +31,8 @@ $(document).ready(function() {
     });
     $("#srSave").click(function() {
         if($(this).attr("mark") == "insert"){
-            alert("kad");
             Dajaxice.storage.storeRoomAdd(storeRoomAddCallBack, {"form": $("#sr_form").serialize()});
         }else if($(this).attr("mark") == "update"){
-            alert(sr_id);
             Dajaxice.storage.storeRoomUpdate(storeRoomUpdateCallBack, {"form":$("#sr_form").serialize(),"sr_id":sr_id});
         }
     });
@@ -54,29 +51,31 @@ function storeRoomSearchCallBack(data){
 
 function storeRoomAddCallBack(data) {
     if(data.flag){
-        alert(data.message);
         $("#room_table").html(data.html);
         $("#myModal").modal('hide');
-    }else{
         alert(data.message);
+    }else{
         $("#myModal").modal('hide');
+        alert(data.message);
     }
 }
 
 function storeRoomUpdateCallBack(data){
     if(data.flag){
-        alert(data.message);
         $("#room_table").html(data.html);
         $("#myModal").modal('hide');
-    }else{
         alert(data.message);
+    }else{
         $("#myModal").modal('hide');
+        alert(data.message);
     }
 }
 
 function storeRoomDeleteCallBack(data){
     if(data.flag){
-        alert(data.message);
+        //alert(data.message);
         $(document).find("tr[sr_id = "+data.sr_id+"]").remove();
+    }else{
+        alert(data.message);
     }
 }
