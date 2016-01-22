@@ -156,12 +156,15 @@ def steelEntryConfirmViews(request,eid,typeid):
         items = entry.boardsteelmaterialpurchasingentry_set.all()
     else:
         items = entry.barsteelmaterialpurchasingentry_set.all()
-        print items
+    store_room =  StoreRoom.objects.all()
+    form = steelEntryItemsForm()
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
     context = {
             "entry":entry,
             "entry_set":items,
             "is_show":is_show,
+            "store_room":store_room,
+            "form":form,
             }
     if typeid:
         return render(request,"storage/steelmaterial/boardsteelmaterialentryconfirm.html",context)

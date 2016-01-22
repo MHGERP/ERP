@@ -16,12 +16,22 @@
 			<tr>
 				<td>{{it.materiel_belong.order}}</td>
 				<td>{{it.materiel_belong.index}}</td>
-				<td>{{it.operator}}</td>
+				<td>{%if not it.operator%}
+						-
+					{%else%}
+						{{it.operator}}
+					{%endif%}
+				</td>
 				<td>{{it.get_name_display}}</td>
 				<td>{{it.hour}}</td>
 				<td></td>
 				<td></td>
-				<td>{{it.operate_date}}</td>
+				<td>{%if not it.operate_date%}
+						-
+					{%else%}
+						{{it.operate_date}}
+					{%endif%}
+				</td>
 			</tr>
 		{%endfor%}
 	{%endfor%}	

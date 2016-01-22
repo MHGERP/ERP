@@ -29,6 +29,9 @@ $(document).on("click", ".btn-mark", function() {
 function markCallBack(data) {
     if(data.ret) {
         $(".form-search").hide();
+        if(data.file_index) {
+            $("#file_index_span").html(data.file_index)
+        }
         click_span.html(data.mark_user);
         $(click_span.attr("date-fill")).html(data.mark_date);
     }
