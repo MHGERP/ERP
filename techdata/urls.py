@@ -101,4 +101,8 @@ urlpatterns=patterns('',
         r'^heatPoint',
         techdata_views.heatPoint,
     ),
+    url(
+        r'^uploadHeatArrangement',
+        techdata_views.uploadHeatArrangement,
+       ),
 )

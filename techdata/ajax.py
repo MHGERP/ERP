@@ -1008,9 +1008,11 @@ def getHeatPointDetail(request, card_id):
     """
     BinWu
     """
+    upload = UploadForm()
     card = HeatTreatmentTechCard.objects.get(id = card_id)
     context = {
         "card": card,
+        "upload" : upload,
         "STATIC_URL": settings.STATIC_URL,
         "MARK_WRITE": MARK_WRITE,
         "MARK_REVIEW": MARK_REVIEW,

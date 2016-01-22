@@ -183,3 +183,21 @@ def heatPoint(request):
         "card_id" : card_id,
     }
     return render(request, "techdata/heat_point.html",context)
+
+def uploadHeatArrangement(request):
+    """
+    BinWu
+    """
+    if request.is_ajax():
+        uf = UploadForm(request.POST, request.FILES)
+        if uf.is_valid():
+            card_id = request.GET.get("card_id")
+            print("lksjdjf:")
+            print(card_id)
+            card = HeatTreatmentTechCard.objects.get(id=card_id)
+            if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
+                HeatTreatmentArrangement(card_belong = card).save()
+            card.heattreatmentarrangement.file_obj = uf.cleaned_data['pic']
+            print(card.heattreatmentarrangement.file_obj.path)
+            card.heattreatmentarrangement.save()
+            return HttpResponse(card.heattreatmentarrangement.file_obj.path)

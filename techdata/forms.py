@@ -173,3 +173,10 @@ class TechPreparationPlanForm(forms.ModelForm):
         widgets = {
             "planCompleteDate" : forms.TextInput(attrs = {'class' : 'form-control', 'id' : 'date'})
         }
+
+class UploadForm(forms.Form):
+    """
+    BinWu
+    """
+    pic = forms.FileField(label="导入图片", required=False,
+                         widget=forms.FileInput())
