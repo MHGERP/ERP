@@ -1,7 +1,6 @@
 #coding: utf=8
-from const import PROCESSING_CHOICES, CIRCULATION_CHOICES, NONDESTRUCTIVE_INSPECTION_TYPE, TRANSFER_CARD_TYPE_CHOICES
 from django.db import models
-from const.models import Materiel, Material, WorkOrder
+from const.models import *
 from django.contrib.auth.models import User
 from users.models import Group
 from purchasing.models import MaterielExecute
@@ -130,13 +129,17 @@ class WeldListPageMark(models.Model):
         return self.order.order_index
 
 class TransferCard(models.Model):
+    file_index = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"文件编号")
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属零件")
     card_type = models.CharField(blank = False, max_length = 100, choices = TRANSFER_CARD_TYPE_CHOICES, verbose_name = u"流转卡类型")
     class Meta:
         verbose_name = u"流转卡"
         verbose_name_plural = u"流转卡"
     def __unicode__(self):
-        return self.materiel_belong.name
+        if self.card_type == CYLIDER_TRANSFER_CARD:
+            return "RH04-" + str(self.file_index)
+        elif self.card_type == CAP_TRANSFER_CARD:
+            return "RH03-" + str(self.file_index)
 
 class TransferCardMark(models.Model):
     card = models.OneToOneField(TransferCard, verbose_name = u"所属流转卡")

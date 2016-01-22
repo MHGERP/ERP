@@ -662,6 +662,8 @@ def transferCardMark(request, iid, step, card_type = None):
 
         card = TransferCard(materiel_belong = item, card_type = card_type)
         card.save()
+        card.file_index = "%06d" % (card.id)
+        card.save()
         mark = TransferCardMark(card = card)
         mark.save()
         card.transfercardmark.writer = request.user
@@ -669,6 +671,7 @@ def transferCardMark(request, iid, step, card_type = None):
         card.transfercardmark.save()
         context = {
             "ret": True,
+            "file_index": unicode(card),
             "mark_user": unicode(card.transfercardmark.writer.userinfo),
             "mark_date": date2str(card.transfercardmark.write_date)
         }
