@@ -202,7 +202,92 @@ def barSteelRefundEnsure(request, common_refund):
     common_refund.return_confirm = True
     common_refund.save()
     return u"退库成功"
-    
+
+@dajaxice_register
+def storeRoomSearch(request, form):
+    """
+    kad
+    """
+    search_form = StoreRoomSearchForm(deserialize_form(form))
+    if search_form.is_valid():
+        room_set = get_weld_filter(StoreRoom,search_form.cleaned_data)
+        html = render_to_string("storage/widgets/storeroom_table.html",{"room_set":room_set})
+    else:
+        print search_form.errors
+    data = {
+        "html":html,
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def storeRoomAdd(request, form):
+    """
+    kad
+    """
+    room_form = StoreRoomForm(deserialize_form(form))
+    if room_form.is_valid():
+        room_form.save()
+        message = u"录入成功"
+        flag = True
+    else: 
+        message = u"录入失败"
+        flag = False
+    room_set = StoreRoom.objects.all().order_by('-id')
+    html = render_to_string("storage/widgets/storeroom_table.html", {"room_set":room_set})
+    data = {
+        "message":message,
+        "html":html,
+        "flag":flag,
+    }
+    return simplejson.dumps(data) 
+
+@dajaxice_register
+def storeRoomUpdate(request, form, sr_id):
+    """
+    kad
+    """
+    room_obj = StoreRoom.objects.get(id = sr_id)
+    room_form = StoreRoomForm(deserialize_form(form), instance = room_obj)
+    if room_form.is_valid():
+        #room_form.save(commit = False)
+        room_form.save()
+        message = u"修改成功"
+        flag = True
+    else:
+        message = u"修改失败"
+        flag = False
+    room_set = StoreRoom.objects.all().order_by('-id')
+    html = render_to_string("storage/widgets/storeroom_table.html", {"room_set":room_set})
+    data = {
+        "message":message,
+        "html":html,
+        "flag":flag,
+    }
+    return simplejson.dumps(data)
+   
+@dajaxice_register
+def storeRoomDelete(request, sr_id):
+    """
+    kad
+    """
+    print "%%%%"
+    print sr_id
+    try:
+        room_obj = StoreRoom.objects.get(id = sr_id)
+        room_obj.delete()
+        message = u"删除成功"
+        flag = True
+    except Exception,e:
+        print e
+        message = u"删除失败"
+        flag = False
+    data = {
+        "message":message,
+        "flag":flag,
+        "sr_id":sr_id,
+    }
+    return simplejson.dumps(data)
+
 
 
 @dajaxice_register

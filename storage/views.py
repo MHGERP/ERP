@@ -4,6 +4,7 @@ import datetime
 from django.shortcuts import render
 
 from const import *
+from const import MATERIAL_TYPE
 from const.forms import InventoryTypeForm
 from const.utils import *
 from datetime import datetime
@@ -807,3 +808,18 @@ def outsideApplyCardAccountHomeViews(request):
     }
 
     return render(request,"storage/outside/account/applycardhome.html",context)
+
+
+def storeRoomManageViews(request):
+    """
+    kad
+    """
+    new_room = StoreRoomForm()
+    room_set = StoreRoom.objects.all().order_by('-id')
+    search_form = StoreRoomSearchForm()
+    context = {
+        "room_set":room_set,
+        "search_form":search_form,
+        "new_room":new_room,
+    }
+    return render(request,"storage/basedata/storeroommanage.html", context)

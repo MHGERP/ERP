@@ -4,7 +4,7 @@ from django import  forms
 from django.forms import ModelForm
 from storage.models import *
 from const.models import Materiel
-from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES,STEEL_TYPE,STEEL,STORAGE_ENTRY_TYPECHOICES
+from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES,STEEL_TYPE,STEEL,STORAGE_ENTRY_TYPECHOICES,MATERIAL_TYPE
 from django.contrib.auth.models import User
 from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
@@ -445,3 +445,33 @@ class OutsideAccountApplyCardSearchForm(forms.Form):
         for key,val in self.fields.items():
             val.widget.attrs["style"] = 'width:120px;'
         self.fields["work_order"].choices = getChoiceList(getDistinctSet(OutsideApplyCard,WorkOrder,'workorder',entry_status=STORAGESTATUS_END),'order_index')
+
+
+class StoreRoomForm(ModelForm):
+    class Meta:
+        model = StoreRoom
+        widget = {
+            "material_type": forms.Select(attrs = {"class":'form-control'}),
+            "name": forms.TextInput(attrs = {"style":"width:220px"}),
+            "position": forms.TextInput(attrs = {"style":"width:220px"}),
+        }
+
+    def __init__(self,*args,**kwargs):
+        super(StoreRoomForm, self).__init__(*args, **kwargs)
+        self.fields["material_type"].choices = MATERIAL_TYPE
+
+
+class StoreRoomSearchForm(forms.Form):
+    name = forms.CharField(label=u"库房名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    position = forms.CharField(label=u"位置",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    material_type = forms.ChoiceField(label=u"材料类型",required = False, widget = forms.Select(attrs={"class":'form-control'}))
+
+    def __init__(self,*args,**kwargs):
+        super(StoreRoomSearchForm, self).__init__(*args, **kwargs)
+        type_list = [(-1, u"---------"),]
+        type_list.extend(list(MATERIAL_TYPE))
+
+        print tuple(type_list)
+        self.fields["material_type"].choices = tuple(type_list)
+
+
