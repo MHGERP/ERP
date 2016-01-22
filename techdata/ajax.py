@@ -353,6 +353,7 @@ def auxiliaryMaterial(request, order):
     """
     MH Chen 
     """
+    work_order = WorkOrder.objects.get(id = order)
     list = Materiel.objects.filter(order = order)
     for item in list:
         try:
@@ -361,6 +362,7 @@ def auxiliaryMaterial(request, order):
             item.user_ratio = 0
     context = {
         "list" : list,
+        "work_order":work_order,
     }
     html = render_to_string("techdata/widgets/auxiliary_material_table.html", context)
     return html
@@ -392,7 +394,7 @@ def techBoxWeld(request, order):
 @dajaxice_register
 def weldQuota(request, order):
     """
-    BinWu
+    MH Chen
     """
     list = Materiel.objects.filter(order = order)
     context = {
@@ -449,6 +451,38 @@ def getWeldSeamList(self, id_work_order):
         "work_order": work_order,
     }
     html = render_to_string("techdata/widgets/weld_list_table.html", context)
+    read_only = (work_order.weldlistpagemark.reviewer != None)
+
+    return simplejson.dumps({"html": html, "read_only": read_only})
+
+@dajaxice_register
+def getWeldSeamWeight(self, id_work_order):
+    """
+    MH Chen
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    weldseam_list = WeldSeam.objects.filter(materiel_belong__order = work_order)
+    dic = {}
+
+    # items = WeldSeam.objects.values('weld_material_1__categories', 'size_1',"weld_material_2__categories","size_1").annotate(Sum('hour'))
+
+    for item1 in weldseam_list:
+        if dic.has_key((item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)):
+            dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)]+= int(item1.weight_1)
+        else:
+                dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)] = int(item1.weight_1)
+    for item2 in weldseam_list:
+        if item2.weld_material_2 != None:
+            if dic.has_key((item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)):
+                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)]+= int(item2.weight_2)
+            else:
+                    dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)] = int(item2.weight_2)
+
+    context = {
+        "work_order":work_order,
+        "dic":dic
+    }
+    html = render_to_string("techdata/widgets/weld_quota_table.html", context)
     read_only = (work_order.weldlistpagemark.reviewer != None)
 
     return simplejson.dumps({"html": html, "read_only": read_only})
@@ -754,8 +788,6 @@ def saveAuxiliaryMaterielInfo(request, iid,categories,auxiliary_material_form):
     """
     materiel = Materiel.objects.get(id = iid)
     material = materiel.material
-    print material.categories
-    print categories
     material.categories = categories
     material.save()
     auxiliary_material_form = MaterielForm(deserialize_form(auxiliary_material_form),instance = materiel)

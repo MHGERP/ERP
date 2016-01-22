@@ -23,7 +23,6 @@ $(document).ready(function(){
 	});
 	$(".apply-card-ensure-btn").click(function(){
         var form_code =$("table").attr("iid");
-        alert(form_code);
         Dajaxice.storage.steelApplyEnsure(steelApplyEnsureCallBack,{'form_code':form_code});
 	});
 });
