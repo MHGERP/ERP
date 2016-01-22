@@ -152,23 +152,21 @@ def steelEntryConfirmViews(request,eid,typeid):
     entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
     print entry
     if typeid:
-        items = entry.boardsteelmaterialpurchasingentry_set.all()
-    else:
         items = entry.barsteelmaterialpurchasingentry_set.all()
-    store_room =  StoreRoom.objects.all()
+    else:
+        items = entry.boardsteelmaterialpurchasingentry_set.all()
     form = steelEntryItemsForm()
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
     context = {
             "entry":entry,
             "entry_set":items,
             "is_show":is_show,
-            "store_room":store_room,
             "form":form,
             }
     if typeid:
-        return render(request,"storage/steelmaterial/boardsteelmaterialentryconfirm.html",context)
-    else:
         return render(request,"storage/steelmaterial/barsteelmaterialentryconfirm.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelmaterialentryconfirm.html",context)
     
 def Weld_Apply_Card_List(request):
     """

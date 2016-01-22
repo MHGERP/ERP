@@ -414,9 +414,9 @@ def saveRemarkStoreRoom(request,form,mid,typeid):
     else:
         message = u"修改失败，入库单已确认过"
     if typeid:
-        html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
-    else:
         html = render_to_string("storage/widgets/barmaterialentrytable.html",{"entry_set":pur_entry})
+    else:
+        html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
     data = {
         "flag":flag,
         "message":message,
