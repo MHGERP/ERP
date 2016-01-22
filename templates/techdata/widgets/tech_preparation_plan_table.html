@@ -1,42 +1,19 @@
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>序号</th>
-            <th>详细内容</th>
-            <th>下发部门</th>
-            <th>计划完成时间</th>
-        </tr>
-    </thead>
-    <tr>
-        <td>1</td>
-        <td>主材定额</td>
-        <td>外协科</td>
-        <td>已完成</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>封头图纸、流转卡。。。</td>
-        <td>生产科</td>
-        <td>7.20</td>
-    </tr>
-    <tr>
-        <td>3</td>
-        <td>流转卡</td>
-        <td>外协料</td>
-        <td>6.20</td>
-    </tr>
-    <tr>
-        <td>4</td>
-        <td>封头图纸</td>
-        <td>生产科</td>
-        <td>3.31</td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td>流转卡</td>
-        <td>生产科</td>
-        <td>2.13</td>
-    </tr>
-    <tr></tr>
-    <tr></tr>
-</table>
+<div class="widget-content nopadding" style="max-height:800px;overflow-y:auto">    
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>详细内容</th>
+                <th>下发部门</th>
+                <th>计划完成时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in tech_plan %}
+            <tr iid="{{item.id}}" class="techPlan_row">
+                {% include "techdata/widgets/tech_preparation_plan_row.html" %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

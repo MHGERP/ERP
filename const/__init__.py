@@ -406,6 +406,9 @@ HEATTREATMENTCARD_ATTR_TEM_UP_SPEED = "temperature_up_speed"
 HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED = "temperature_down_speed"
 HEATTREATMENTCARD_ATTR_TEM_TIME = "time"
 
+
+
+#生产管理
 PRODUCTION_PLAN_STAUTS_CHOICES = (
     (1, u"必保"),
     (2, u"在制"),
