@@ -32,3 +32,19 @@ function heatTreatmentArrangementReviewCallback(data) {
         alert("请先完成:工艺制定");
     }
 }
+$(document).on("click", "#btn-upload", function() {
+    var card_id = $(".widget-content").attr("card_id");
+    $("#upload_form").ajaxSubmit({
+        url: "/techdata/uploadHeatArrangement" + "?card_id=" + card_id,
+        type: "POST",
+        clearForm: true,
+        resetForm: true,
+        error: function(data) {
+            alert("失败");
+        },
+        success: function(data) {
+            //alert(data);
+            $("#mypic").attr("src", data);
+        }
+    });
+});

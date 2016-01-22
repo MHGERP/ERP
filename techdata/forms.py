@@ -168,8 +168,14 @@ class TechPreparationPlanForm(forms.ModelForm):
     """
     class Meta:
         model = TechPlan
-        exclude = {"id", "order"}
-        #planCompleteDate = forms.DateField(label = u"计划完成日期", required = True, widget = forms.TextInput(attrs = {'class' : 'form-control', 'id' : 'date'}))
+        fields = ("detail", "sentDepartment", "planCompleteDate")
         widgets = {
             "planCompleteDate" : forms.TextInput(attrs = {'class' : 'form-control', 'id' : 'date'})
         }
+
+class UploadForm(forms.Form):
+    """
+    BinWu
+    """
+    pic = forms.FileField(label="导入图片", required=False,
+                         widget=forms.FileInput())

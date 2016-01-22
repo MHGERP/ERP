@@ -3,16 +3,39 @@ function registDatepicker() {
         format : 'yyyy-mm-dd',
         autoclose : true,
         minView : 'month',
+        todayBtn : true,
     });
 }
 
+$("#querydate").datetimepicker({
+    format : 'yyyy-m',
+    autoclose : true,
+    startView : 'year',
+    minView : 'year',
+    todayBtn : true,
+});
+
 $(document).ready(refresh);
 $("#order_search").click(refresh);
+
 function refresh() {
     var id_work_order = $("#id_work_order").val();
-    Dajaxice.techdata.getTechPreparationPlan(refreshCallBack, {"id_work_order" : id_work_order});
+    var now = new Date();
+    var month = now.getMonth() + 1;
+    var year = now.getFullYear();
+    $("#querydate").attr("value", year + "-" + month);
+    getTechPlan(month, year, id_work_order);
 }
-function refreshCallBack(data) {
+
+function getTechPlan(month, year, id_work_order) {
+    Dajaxice.techdata.getTechPreparationPlan(getTechPlanCallBack, {
+                                                "id_work_order" : id_work_order,
+                                                "month" : month,
+                                                "year" : year
+    });
+}
+
+function getTechPlanCallBack(data) {
     $("#widget-box").html(data);
 }
 
@@ -41,7 +64,6 @@ $(document).on("click", "#add_tech_plan", function(){
 $(document).on("click", "#id_save", function(){
    var id_work_order =  $("#id_work_order").val();
    var iid = $("#techPlan_modal").attr("iid");
-   //alert(id_work_order);
    var addOrUpdate = $("#techPlan_modal").attr("addOrUpdate");
    Dajaxice.techdata.saveTechPlan(saveTechPlanCallBack, {
        "id_work_order" : id_work_order,
@@ -65,4 +87,12 @@ function saveTechPlanCallBack(data) {
 $(document).on("click", ".techPlan_row", function(){
     var iid = $(this).attr("iid");
     fill(iid);
+});
+
+$(document).on("click", "#date_search", function(){
+    var querydate = $("#querydate").val();
+    var month = querydate.split("-")[1];
+    var year = querydate.split("-")[0];
+    var id_work_order = $("#id_work_order").val();
+    getTechPlan(month, year, id_work_order);
 });

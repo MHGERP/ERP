@@ -91,6 +91,22 @@ ul
 
 <body lang=ZH-CN style='text-justify-trim:punctuation'>
 
+  <div class="modal hide fade"  id="program_upload">
+      <div class="modal-header">
+          <a class="close" data-dismiss="modal">×</a>
+          <h3>编程套料文件上传</h3>
+      </div>
+      <div class="modal-body">
+          <form method="POST" action="" class="form-inline" enctype="multipart/form-data" id="upload_form">
+              {{upload.as_p}}
+          </form>
+      </div>
+      <div class="modal-footer">
+  		<span class="btn btn-primary" id="btn-upload" data-dismiss="modal">上传</span>
+          <a class="btn" data-dismiss="modal">关闭</a>
+      </div>
+  </div>
+
 <div class=WordSection1 style='layout-grid:15.6pt'>
 
 <p class=MsoNormal style='text-indent:18.0pt'><span lang=EN-US
@@ -230,40 +246,31 @@ lang=EN-US>RR02-{{card.heattreatmentarrangement.file_index}}</span></u>&nbsp;&nb
   <td width=736 colspan=13 valign=top style='width:552.3pt;border-top:none;
   border-left:solid windowtext 1.5pt;border-bottom:solid windowtext 1.0pt;
   border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:282.65pt'>
-  <p class=MsoNormal><span style='font-family:宋体'>热电偶布置图示：</span></p>
-  <p class=MsoNormal><span lang=EN-US style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span lang=EN-US
-  style='font-family:宋体'>&nbsp;</span></p>
-  <p class=MsoNormal style='text-indent:426.0pt'><span style='font-family:宋体'>注：热电偶布置点<span
-  lang=EN-US><img width=25 height=25 id="Picture1"
-  src="{{STATIC_URL}}img/heat_point.png"></span></span></p>
+  <p class=MsoNormal><span style='font-family:宋体'>热电偶布置图示：</span> <span align="right" style='font-family:宋体'>注：热电偶布置点<span
+  lang=EN-US><img width=25 height=25 id="Picture1"src="{{STATIC_URL}}img/heat_point.png"></span></span></p>
+  <p align=center>
+  <img align="center" id="mypic" src="{{card.heattreatmentarrangement.file_obj.path}}" style="width:500px;height:350px">
+  </p>
+  <p align="center">
+  <span class="btn btn-primary btn-small btn-upload" href="#program_upload" data-toggle="modal">上传</span>
+  </p>
   </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <td width=290 colspan=3 rowspan=5 valign=top style='width:217.6pt;border-top:
   none;border-left:none;border-bottom:solid windowtext 1.5pt;border-right:solid windowtext 1.5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:282.65pt'>
