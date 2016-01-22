@@ -11,6 +11,7 @@ function change_item(itemid){
 }
 
 function save_item(){
+    alert(mid);
     Dajaxice.storage.entryItemSave(save_item_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
 }
 

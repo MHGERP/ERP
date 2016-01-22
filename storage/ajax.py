@@ -392,6 +392,7 @@ def entryItemSave(request,form,mid):
 
 @dajaxice_register
 def saveRemarkStoreRoom(request,form,mid,typeid):
+    print "lllll"
     form = steelEntryItemsForm(deserialize_form(form))
     if typeid:
         item = BoardSteelMaterialPurchasingEntry.objects.get(id = mid)
