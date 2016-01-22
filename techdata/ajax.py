@@ -244,8 +244,11 @@ def getDesignBOM(request, id_work_order):
         "work_order" : work_order,
         "BOM" : BOM,
     }
+    if DesignBOMMark.objects.filter(order = work_order).count() == 0:
+        DesignBOMMark(order = work_order).save()
+    read_only = (work_order.designbommark.reviewer != None)
     html = render_to_string("techdata/widgets/designBOM_table.html", context)
-    return html
+    return simplejson.dumps({"read_only" : read_only, "html" : html})
 
 @dajaxice_register
 def getSingleDesignBOM(request, iid):
@@ -950,7 +953,7 @@ def designBOMReviewerConfirm(request, id_work_order):
     if order.designbommark.writer == None:
         return simplejson.dumps({"ret": False})
     order.designbommark.reviewer = request.user
-    order.designbommark.reviewe_date = datetime.datetime.today()
+    order.designbommark.review_date = datetime.datetime.today()
     order.designbommark.save()
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
