@@ -162,6 +162,9 @@ def contractFinanceViews(request):
 
 @csrf.csrf_protect
 def arrivalInspectionViews(request):
+    """
+    shen Lian
+    """
     if request.method == "POST":
         bid_id = request.POST["bidform_search"]
         bidFormSet = BidForm.objects.filter(bid_id = bid_id)
@@ -174,6 +177,9 @@ def arrivalInspectionViews(request):
     return render(request,"purchasing/purchasing_arrival.html",context)
 
 def arrivalCheckViews(request,bid):
+    """
+    shen Lian
+    """
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid,check_pass=False)
     is_show = BidForm.objects.filter(bid_id = bid , bid_status__part_status = BIDFORM_PART_STATUS_CHECK).count() > 0
     entrytypeform = EntryTypeForm()

@@ -6,7 +6,8 @@
 
 {% block sub_ref %}
 <a href="/techdata/techHotDeel" class="tip-bottom" data-original-title="热处理列表">热处理列表</a>
-<a href="#" class="current">热处理工艺卡编辑</a>
+<a href="#" class="tip-bottom">热处理工艺卡编辑</a>
+<a href="#" class="current">热处理测温点布置示意图</a>
 {% endblock %}
 
 {% block inner_content%}
@@ -16,5 +17,5 @@
 </div>
 
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/auto_save.js"></script>
-<script type='text/javascript' src="{{STATIC_URL}}js/techdata/heat_treatment_tech_card_edit.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/techdata/heat_point.js"></script>
 {% endblock%}

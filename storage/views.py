@@ -704,12 +704,13 @@ def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list
 
 def outsideEntryConfirmViews(request,eid):
     entry_url = getUrlByViewMode(request,"outside/entryhome")
-    context = getEntryConfirmContext(eid,OutsideStandardEntry,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,entry_url)
+    context = getEntryConfirmContext(request,eid,OutsideStandardEntry,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,entry_url)
     return render(request,"storage/outside/entryconfirm.html",context)
 
-def getEntryConfirmContext(eid,_Model,_Inform,_Reform,entry_url):
+def getEntryConfirmContext(request,eid,_Model,_Inform,_Reform,entry_url):
     entry_obj = _Model.objects.get(id = eid)
     inform = _Inform(instance = entry_obj)
+    print "dadsa"
     reform = _Reform(instance = entry_obj)
     is_show = entry_obj.entry_status == STORAGESTATUS_KEEPER
     entry_set = OutsideStandardItem.objects.filter(entry = entry_obj)

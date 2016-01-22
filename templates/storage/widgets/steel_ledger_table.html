@@ -13,7 +13,11 @@
         {% for steel in steel_set %}
         <tr>
             <td>{{steel.name}}</td>
+            {% ifequal steel.steel_type 0 %}
+            <td>板材</td>
+            {% else %}
             <td>型材</td>
+            {% endifequal %}
             <td>{{steel.specifications}}</td>
             <td>{{steel.material_number}}</td>
 
