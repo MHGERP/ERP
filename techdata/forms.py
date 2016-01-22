@@ -161,3 +161,21 @@ class AuxiliaryMaterielForm(forms.ModelForm):
             "quota": forms.TextInput(attrs = {"class": "input-medium"}),
             
         }
+
+class TechPreparationPlanForm(forms.ModelForm):
+    """
+    mxl
+    """
+    class Meta:
+        model = TechPlan
+        fields = ("detail", "sentDepartment", "planCompleteDate")
+        widgets = {
+            "planCompleteDate" : forms.TextInput(attrs = {'class' : 'form-control', 'id' : 'date'})
+        }
+
+class UploadForm(forms.Form):
+    """
+    BinWu
+    """
+    pic = forms.FileField(label="导入图片", required=False,
+                         widget=forms.FileInput())

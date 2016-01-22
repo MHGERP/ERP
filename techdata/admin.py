@@ -22,6 +22,7 @@ RegisterClass = (
     HeatTreatmentArrangement,
     HeatTreatmentMateriel,
     DesignBOMMark,
+    TechPlan,
 )
 
 for item in RegisterClass:

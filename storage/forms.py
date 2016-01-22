@@ -191,8 +191,16 @@ class SteelEntrySearchForm(forms.Form):
         users = User.objects.all()
         self.fields["purchaser"].choices = getChoiceList(users,"userinfo")
 
+class steelEntryItemsForm(forms.Form):
+    remark = forms.CharField(label=u'备注',required=False,widget=forms.TextInput(attrs={'class':'form-control span2',}))
+    store_room = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'form-control input-medium span3'}),label = u"库房位置")
+    def __init__(self, *args, **kwargs):
+        super(steelEntryItemsForm, self).__init__(*args, **kwargs)
+        STORE_ROOM_CHOICES = tuple([(item.id,item.name) for item in StoreRoom.objects.all()])
+        self.fields["store_room"].choices = STORE_ROOM_CHOICES 
+
 class RefundSearchForm(forms.Form):
-    date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
+    date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date',}))
     department = forms.ChoiceField(label=u"退库单位",choices = STORAGEDEPARTMENT_CHOICES,required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'department'}))
     code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'code'}))
     work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'work_order'}))
@@ -371,7 +379,12 @@ class StorageEntryAForm(forms.Form):
 class StorageOutsideEntryInfoForm(ModelForm):
     class Meta:
         model = OutsideStandardEntry
-        exclude = ("id","entry_status","purchaser","inspector","keeper","remark")
+        exclude = ("id","entry_status","purchaser","inspector","keeper","remark","bidform")
+    def __init__(self,*args,**kwargs):
+        super(StorageOutsideEntryInfoForm,self).__init__(*args,**kwargs)
+        for k,v in self.fields.items():
+            v.widget.attrs["readonly"] = True
+        self.fields["entry_code"].widget.attrs.pop("readonly")
 
 class StorageOutsideEntryRemarkForm(ModelForm):
     class Meta:

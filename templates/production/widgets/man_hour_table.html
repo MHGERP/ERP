@@ -1,0 +1,21 @@
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>工作令</th>
+            <th>操作员</th>
+            <th>日期</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    {%for item in process%}
+    <tr>
+        <td>{{item.materiel_belong.order}}</td>
+        <td>{{item.operator}}</td>
+        <td>{{item.operate_date|date:"Y-m"}}</td>
+        <td>
+            <button type="button" class="btn btn-primary" id="summarize-ticket">工时汇总票</button>
+            <button type="button" class="btn btn-primary" id="part-ticket">备料零件工时票</button>
+        </td>
+    </tr>
+    {%endfor%}
+</table>
