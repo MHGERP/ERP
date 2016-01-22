@@ -36,7 +36,8 @@ for item in items:
 
 select = {'month': connection.ops.date_trunc_sql('month', 'operate_date')}
 items = Processing.objects.extra(select=select).values('materiel_belong__order', 'operator', 'month').annotate(Sum('hour'))
-
+values('materiel_belong', 'operator', 'month').annotate(Sum('hour'))
+Processing.objects.filter(Q)
 print items.count()
 for item in items:
     print item
