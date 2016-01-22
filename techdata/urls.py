@@ -86,7 +86,7 @@ urlpatterns=patterns('',
         techdata_views.techDetailTableViews,
     ),
     url(
-        r'^transfer_card_edit$',
+        r'^transferCardEdit$',
         techdata_views.transferCardEditViews,
     ),
     url(
@@ -101,4 +101,8 @@ urlpatterns=patterns('',
         r'^heatPoint',
         techdata_views.heatPoint,
     ),
+    url(
+        r'^uploadHeatArrangement',
+        techdata_views.uploadHeatArrangement,
+       ),
 )

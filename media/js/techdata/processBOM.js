@@ -111,7 +111,7 @@ $("#id_goto_prev").click(function() {
 
 $(document).on("click", ".btn_edit_transfer_card", function() {
     var iid = $(this).parent().parent().attr("iid");
-    location.href = "/techdata/transfer_card_edit?iid=" + iid;
+    location.href = "/techdata/transferCardEdit?iid=" + iid;
 });
 
 var mark_span;
