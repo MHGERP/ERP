@@ -12,9 +12,11 @@
 <form class="form-search ">
     工作令:
     {{ work_order_form.work_order }}
-    <span class="btn" id="order_search">检索</span>
+    <span class="btn" id="order_search" style="margin-right:120px">检索</span>
     <span class="btn btn-success" style="float:right" id="add_tech_plan">新增技术准备计划</span>
-    <!--input type="text" class="form-control span2" id="datetest"-->
+    
+    <input type="text" class="form-control input-small" id="querydate" readonly="readonly">
+    <span class="btn btn-primary" id="date_search">历史月份检索</span>
 </form>
 <div class="widget-box" id="widget-box">
 </div>

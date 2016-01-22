@@ -955,12 +955,12 @@ def designBOMReviewerConfirm(request, id_work_order):
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
 @dajaxice_register
-def getTechPreparationPlan(request, id_work_order):
+def getTechPreparationPlan(request, id_work_order, month, year):
     """
     mxl
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
-    tech_plan = TechPlan.objects.filter(order = work_order)
+    tech_plan = TechPlan.objects.filter(order = work_order).filter(month = month).filter(year = year)
     context = {
         "work_order" : work_order,
         "tech_plan" : tech_plan,
@@ -992,13 +992,20 @@ def saveTechPlan(request, id_work_order, tech_preparation_plan_form, addOrUpdate
         if tech_preparation_plan_form.is_valid():
             techplan = tech_preparation_plan_form.save(commit=False)
             techplan.order = order
+            curDate = datetime.datetime.today()
+            techplan.month = curDate.month
+            techplan.year = curDate.year
             techplan.save()
             return simplejson.dumps({"ret" : "ok"})
+        else:
+            for f in tech_preparation_plan_form.fields:
+                if tech_preparation_plan_form[f].errors:
+                    print tech_preparation_plan_form[f]
     else:
         techplan = TechPlan.objects.get(id = iid)
         tech_preparation_plan_form =  TechPreparationPlanForm(deserialize_form(tech_preparation_plan_form), instance = techplan)
         if tech_preparation_plan_form.is_valid():
-            techplan.save()
+            tech_preparation_plan_form.save()
             return simplejson.dumps({"ret" : "ok"}) 
     form_html = render_to_string("techdata/widgets/tech_preparation_plan_form.html", {"form" : tech_preparation_plan_form})
     return simplejson.dumps({"ret" : "false", "form_html" : form_html})
