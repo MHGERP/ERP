@@ -12,8 +12,8 @@ from const.forms import WorkOrderForm
 class ProductionPlanForm(ModelForm):
     class Meta:
         model = ProductionPlan
-        exclude = ('plan_id', )
-
+        exclude = ('plan_idcba', )
+        
 class ProductionPlanSearchForm(WorkOrderForm):
     status = forms.ChoiceField(label=u"状态", choices=PRODUCTION_PLAN_STAUTS_CHOICES)
     plan_date = forms.ChoiceField(label=u"计划年月")

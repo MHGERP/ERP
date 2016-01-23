@@ -23,7 +23,7 @@ function refresh() {
     var now = new Date();
     var month = now.getMonth() + 1;
     var year = now.getFullYear();
-    //alert(month + " " + year);
+    $("#querydate").attr("value", year + "-" + month);
     getTechPlan(month, year, id_work_order);
 }
 
@@ -90,11 +90,9 @@ $(document).on("click", ".techPlan_row", function(){
 });
 
 $(document).on("click", "#date_search", function(){
-    //alert($("#querydate").val());
     var querydate = $("#querydate").val();
     var month = querydate.split("-")[1];
     var year = querydate.split("-")[0];
-    //alert(month + " " + year);
     var id_work_order = $("#id_work_order").val();
     getTechPlan(month, year, id_work_order);
 });

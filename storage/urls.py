@@ -214,4 +214,8 @@ urlpatterns = patterns('',
     url(
         r'^basedatamanage$',direct_to_template,{"template":"storage/basedata/basedatahome.html"}
     ),
+    url(
+        r'^storeroommanage$',
+        storage_views.storeRoomManageViews,
+    ),
 )

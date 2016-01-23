@@ -27,7 +27,7 @@ def get_weld_filter(model_type,dict):
         qset = reduce(lambda x,y:x & y ,qset)
         res_set = model_type.objects.filter(qset)
     else:
-        res_set = model_type.objects.all()
+        res_set = model_type.objects.all().order_by('-id')
     return res_set
 
 def weldStoreItemsCreate(entry):

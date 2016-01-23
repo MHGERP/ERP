@@ -244,8 +244,11 @@ def getDesignBOM(request, id_work_order):
         "work_order" : work_order,
         "BOM" : BOM,
     }
+    if DesignBOMMark.objects.filter(order = work_order).count() == 0:
+        DesignBOMMark(order = work_order).save()
+    read_only = (work_order.designbommark.reviewer != None)
     html = render_to_string("techdata/widgets/designBOM_table.html", context)
-    return html
+    return simplejson.dumps({"read_only" : read_only, "html" : html})
 
 @dajaxice_register
 def getSingleDesignBOM(request, iid):
@@ -694,6 +697,8 @@ def transferCardMark(request, iid, step, card_type = None):
 
         card = TransferCard(materiel_belong = item, card_type = card_type)
         card.save()
+        card.file_index = "%06d" % (card.id)
+        card.save()
         mark = TransferCardMark(card = card)
         mark.save()
         card.transfercardmark.writer = request.user
@@ -701,6 +706,7 @@ def transferCardMark(request, iid, step, card_type = None):
         card.transfercardmark.save()
         context = {
             "ret": True,
+            "file_index": unicode(card),
             "mark_user": unicode(card.transfercardmark.writer.userinfo),
             "mark_date": date2str(card.transfercardmark.write_date)
         }
@@ -980,7 +986,7 @@ def designBOMReviewerConfirm(request, id_work_order):
     if order.designbommark.writer == None:
         return simplejson.dumps({"ret": False})
     order.designbommark.reviewer = request.user
-    order.designbommark.reviewe_date = datetime.datetime.today()
+    order.designbommark.review_date = datetime.datetime.today()
     order.designbommark.save()
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
@@ -1069,13 +1075,16 @@ def heatTreatmentArrangementWrite(request, card_id):
     BinWu
     """
     card = HeatTreatmentTechCard.objects.get(id = card_id)
+    print("here")
     if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
-        HeatTreatmentArrangement(card_belong = card).save()
+        return simplejson.dumps({"res" : False})
+    print("here")
     card.heattreatmentarrangement.writer = request.user
     card.heattreatmentarrangement.file_index = "%06d" % (card.heattreatmentarrangement.id)
     card.heattreatmentarrangement.write_date = datetime.datetime.today()
     card.heattreatmentarrangement.save()
     context = {
+        "res" : True,
         "writer" : unicode(request.user.userinfo),
         "bianhao" : card.heattreatmentarrangement.file_index,
     }
@@ -1087,7 +1096,7 @@ def heatTreatmentArrangementReview(request, card_id):
     BinWu
     """
     card = HeatTreatmentTechCard.objects.get(id = card_id)
-    if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
+    if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0 or not card.heattreatmentarrangement.writer:
         return simplejson.dumps({"res" : False, })
     else:
         card.heattreatmentarrangement.reviewer = request.user

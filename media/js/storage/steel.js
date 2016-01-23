@@ -23,7 +23,6 @@ $(document).ready(function(){
 	});
 	$(".apply-card-ensure-btn").click(function(){
         var form_code =$("table").attr("iid");
-        alert(form_code);
         Dajaxice.storage.steelApplyEnsure(steelApplyEnsureCallBack,{'form_code':form_code});
 	});
 });
@@ -65,16 +64,15 @@ function searchRefundCard_CallBack(data){
 	}
 }
 
-
+var mid;
 function change_remark_storeRoom(itemid){
-    var mid = itemid;
+    mid = itemid;
     var a = $("tr#"+mid).find("td");
     $("#id_remark").val(a.eq(12).text());
 }
 
 function save_remark_storeRoom(typeid){
 	var typeid = typeid;
-	$("id_store_room").attr("disabled","disabled");
     Dajaxice.storage.saveRemarkStoreRoom(save_remark_storeRoom_callback,{
     	"form":$("#entry_item_form").serialize(),
 		"typeid":typeid,
