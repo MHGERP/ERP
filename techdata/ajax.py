@@ -1132,18 +1132,3 @@ def weldQuotaReviewerConfirm(request, id_work_order):
     order.weldquotapagemark.reviewe_date = datetime.datetime.today()
     order.weldquotapagemark.save()
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
-@dajaxice_register
-def weldListReviewerConfirm(request, id_work_order):
-    """
-    JunHU
-    """
-    order = WorkOrder.objects.get(id = id_work_order)
-    if WeldListPageMark.objects.filter(order = order).count() == 0:
-        WeldListPageMark(order = order).save()
-
-    if order.weldlistpagemark.writer == None:
-        return simplejson.dumps({"ret": False})
-    order.weldlistpagemark.reviewer = request.user
-    order.weldlistpagemark.reviewe_date = datetime.datetime.today()
-    order.weldlistpagemark.save()
-    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
