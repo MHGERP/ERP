@@ -10,13 +10,7 @@ from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
 from const.utils import getChoiceList,getDistinctSet
 
-DEPARTMENT_CHOICES=(
-        (u' ',u'------'),
-        (u'部门A',u'部门A'),
-        (u'部门B',u'部门B'),
-        (u'部门C',u'部门C'),
-        (u'部门D',u'部门D'),
-        )
+DEPARTMENT_CHOICES=STORAGEDEPARTMENT_CHOICES
 
 class ApplyCardHistorySearchForm(forms.Form):
     date=forms.DateField(label=u'日期',required=False,widget=forms.TextInput(attrs={'readonly':'readonly','class':'form-control search-query','id':'date'}))
@@ -405,7 +399,7 @@ class OutsideApplyCardSearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
     workorder = forms.ChoiceField(label=u"工作令",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'workorder'}))
     proposer=forms.ChoiceField(label=u"领用人",required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'proposer'})) 
-    entry_code = forms.CharField(label=u"工作令",required=False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_code'}))
+    entry_code = forms.CharField(label=u"领用单号",required=False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_code'}))
     def __init__(self,*args,**kwargs):
         super(OutsideApplyCardSearchForm,self).__init__(*args,**kwargs)
         workorders = getDistinctSet(OutsideApplyCard,WorkOrder,'workorder')

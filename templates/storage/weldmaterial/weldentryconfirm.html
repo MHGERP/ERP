@@ -11,15 +11,11 @@
 <form class="form form-inline" method="post">
     {% csrf_token%}
     <div class="row" style="margin-bottom:20px;">
-        <div class="span3">
-            <label class="hz-align">工作令：</label>
-            <strong>{{entry.work_order}}</strong>
-        </div>
-        <div class="span3">
+        <div class="span6">
             <label class="hz-align">入库时间：</label>
             <strong>{{entry.entry_time|date:"Y年m月d日"}}</strong>
         </div>
-        <div class="span4">
+        <div class="span6">
             <label class="hz-align">单据编号：</label>
             {% if is_show %}
             <div class="controls-group" style="display:inline" id="entry_code">

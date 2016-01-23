@@ -176,7 +176,7 @@ def Weld_Apply_Card_List(request):
     """
     context={}
     context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
-    weld_apply_cards=WeldingMaterialApplyCard.objects.all().order_by('create_time')
+    weld_apply_cards=WeldingMaterialApplyCard.objects.all().order_by('-create_time')
     context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
