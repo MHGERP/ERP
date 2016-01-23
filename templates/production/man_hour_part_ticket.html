@@ -1,0 +1,28 @@
+<table class="table table-bordered table-striped">
+	<tr>
+		<td colspan="4">工作令</td>
+		<td colspan="2">组号</td>
+		<td colspan="2">编号</td>
+	</tr>
+	<tr>
+		<td colspan="4">{{work_order}}</td>
+		<td colspan="2">{{operator}}</td>
+		<td colspan="2">1</td>
+	</tr>
+	<tr>
+		<td>票号</td>
+		<td>工时</td>
+		<td>票号</td>
+		<td>工时</td>
+		<td>票号</td>
+		<td>工时</td>
+		<td>票号</td>
+		<td>工时</td>
+	</tr>
+	{%for item in process%}
+	{% cycle '<tr>' '' '' ''%}
+	    <td>{{item.materiel_belong.index}}</td>
+	    <td>{{item.hour}}</td>
+	{% cycle '' '' '' '</tr>'%}
+	{%endfor%}
+</table>

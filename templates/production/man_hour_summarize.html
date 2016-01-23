@@ -14,4 +14,37 @@
 </div>
 
 <div class="widget-content" id="widget-content"></div>
+
+<!-- <div class="widget-content" id="hour-table"></div> -->
+
+<div id="summarize_ticket_modal" class="modal hide fade"　 modal-size-width="0.5">
+  <div class="modal-header">
+    <h2 id="myModalLabel">工时汇总表</h2>
+  </div>
+
+  <div class="modal-body">
+    <!-- {%include "production/man_hour_summarize_table.html"%} -->
+    <div class="widget-content" id="summarize-ticket-table"></div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+<div id="part_ticket_modal" class="modal hide fade"　 modal-size-width="0.6">
+  <div class="modal-header">
+    <h2 id="myModalLabel">备料零件工时表</h2>
+  </div>
+
+  <div class="modal-body">
+    <div class="widget-content" id="part-ticket-table"></div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+<script type='text/javascript' src="{{STATIC_URL}}js/production/man_hour_summarize.js"></script>
 {% endblock%}

@@ -26,3 +26,12 @@ function markCallBack(data) {
         alert(data.warning);
     }
 }
+
+function save_func(callback, thisElement) {
+    var attr = thisElement.attr("args");
+    var card_id = $(".widget-content").attr("card_id");
+    var content = thisElement.html();
+    Dajaxice.techdata.heatTreatCardVariableSave(function() {}, {"attr": attr, "card_id": card_id, "content": content});
+    callback();
+}
+new AutoSave(".word_textarea", save_func, 500).init();

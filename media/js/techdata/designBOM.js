@@ -5,7 +5,13 @@ function refresh() {
     Dajaxice.techdata.getDesignBOM(refreshCallBack, {"id_work_order" : id_work_order, });
 }
 function refreshCallBack(data) {
-    $("#widget-box").html(data);
+    if(data.read_only) {
+        $("#save_desginBOM_btn").hide();
+    }
+    else {
+        $("#save_desginBOM_btn").show();
+    }
+    $("#widget-box").html(data.html);
 }
 
 //$("#designBOM_table tbody tr").click(function(){

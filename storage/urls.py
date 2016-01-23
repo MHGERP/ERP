@@ -2,7 +2,7 @@
 # coding=utf-8
 from django.conf.urls import patterns, include, url
 from storage import views as storage_views
-
+from django.views.generic.simple import direct_to_template
 urlpatterns = patterns('',
     url(
         r'^weldmaterialhome$',
@@ -210,5 +210,12 @@ urlpatterns = patterns('',
     url(
         r'^outside/account/applycardhome$',
         storage_views.outsideApplyCardAccountHomeViews,name="outside_account_applycardhome"
+    ),
+    url(
+        r'^basedatamanage$',direct_to_template,{"template":"storage/basedata/basedatahome.html"}
+    ),
+    url(
+        r'^storeroommanage$',
+        storage_views.storeRoomManageViews,
     ),
 )

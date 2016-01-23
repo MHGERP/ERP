@@ -23,7 +23,6 @@ $(document).ready(function(){
 	});
 	$(".apply-card-ensure-btn").click(function(){
         var form_code =$("table").attr("iid");
-        alert(form_code);
         Dajaxice.storage.steelApplyEnsure(steelApplyEnsureCallBack,{'form_code':form_code});
 	});
 });
@@ -65,24 +64,23 @@ function searchRefundCard_CallBack(data){
 	}
 }
 
-
-function change_remark(itemid){
+var mid;
+function change_remark_storeRoom(itemid){
     mid = itemid;
     var a = $("tr#"+mid).find("td");
     $("#id_remark").val(a.eq(12).text());
-/*    $("#id_storeRoonSelect").attr("disabled",true);*/
 }
 
-function save_remark(typeid){
-	var remark = $("#id_remark").val();
-	typeid = typeid;
-/*	alert(typeid);
-	alert(remark);
-	alert(mid);*/
-    Dajaxice.storage.saveRemark(save_remark_callback,{"remark":remark, "mid":mid, "typeid":typeid});
+function save_remark_storeRoom(typeid){
+	var typeid = typeid;
+    Dajaxice.storage.saveRemarkStoreRoom(save_remark_storeRoom_callback,{
+    	"form":$("#entry_item_form").serialize(),
+		"typeid":typeid,
+		"mid":mid,
+    });
 }
 
-function save_remark_callback(data){
+function save_remark_storeRoom_callback(data){
     if(data.flag){
     	$("#items_table").html(data.html);
         alert(data.message);
@@ -94,8 +92,14 @@ function save_remark_callback(data){
 
 function steel_entry_confirm(eid){
     var entry_code = $("#input_entry_code").val();
+    alert("库房一旦分配便不可更改!");
     Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":eid,"entry_code":entry_code}); 
 }
+$(document).ready(function(){
+	if($("#entry_item_form").attr("iid")=="False"){
+		$("#id_store_room").attr("disabled","disabled");
+	};
+});
 
 function steel_entry_confirm_callback(data){
     if(data.flag){
