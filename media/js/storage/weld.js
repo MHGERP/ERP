@@ -9,9 +9,7 @@ function change_item(itemid){
     $("input#id_date").val(a.eq(10).text());
     $("input#id_price").val(a.eq(11).text());
 }
-
 function save_item(){
-    alert(mid);
     Dajaxice.storage.entryItemSave(save_item_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
 }
 

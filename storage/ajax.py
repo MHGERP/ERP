@@ -475,28 +475,35 @@ def entryItemSave(request,form,mid):
 
 @dajaxice_register
 def saveRemarkStoreRoom(request,form,mid,typeid):
-    print "lllll"
     form = steelEntryItemsForm(deserialize_form(form))
-def saveRemark(request,remark,mid,typeid):
     if typeid:
-        items = BoardSteelMaterialPurchasingEntry.objects.filter(id = mid)
-        pur_entry = BoardSteelMaterialPurchasingEntry.objects.all()
-    else:
+        item = BarSteelMaterialPurchasingEntry.objects.get(id = mid)
         pur_entry = BarSteelMaterialPurchasingEntry.objects.all()
-        items = BarSteelMaterialPurchasingEntry.objects.filter(id = mid)
-    flag = False
-    for item in items:
-        if item.card_info.entry_status == STORAGESTATUS_KEEPER:
-            item.remark = remark
-            item.save()
-            flag = True
-            message = u"修改成功"
-        else:
-            message = u"修改失败，入库单已确认过"
-    if typeid:
-        html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
     else:
+        pur_entry = BoardSteelMaterialPurchasingEntry.objects.all()
+        item = BoardSteelMaterialPurchasingEntry.objects.get(id = mid)
+    flag = False
+    if form.is_valid():
+        remark = form.cleaned_data['remark']
+        storeroom_id = form.cleaned_data['store_room']
+        store_room = StoreRoom.objects.get(id = storeroom_id)
+        print remark
+        print store_room
+    if item.card_info.entry_status == STORAGESTATUS_KEEPER:
+        print remark
+        print store_room
+        item.remark = remark
+        item.save()
+        item.steel_material.store_room = store_room
+        item.steel_material.save()
+        flag = True
+        message = u"修改成功"
+    else:
+        message = u"修改失败，入库单已确认过"
+    if typeid:
         html = render_to_string("storage/widgets/barmaterialentrytable.html",{"entry_set":pur_entry})
+    else:
+        html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
     data = {
         "flag":flag,
         "message":message,
