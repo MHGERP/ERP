@@ -246,14 +246,17 @@ lang=EN-US>RR02-{{card.heattreatmentarrangement.file_index}}</span></u>&nbsp;&nb
   <td width=736 colspan=13 valign=top style='width:552.3pt;border-top:none;
   border-left:solid windowtext 1.5pt;border-bottom:solid windowtext 1.0pt;
   border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:282.65pt'>
-  <p class=MsoNormal><span style='font-family:宋体'>热电偶布置图示：</span> <span align="right" style='font-family:宋体'>注：热电偶布置点<span
-  lang=EN-US><img width=25 height=25 id="Picture1"src="{{STATIC_URL}}img/heat_point.png"></span></span></p>
+  <p class=MsoNormal><span style='font-family:宋体'>热电偶布置图示：</span> </p>
   <p align=center>
   <img align="center" id="mypic" src="{{card.heattreatmentarrangement.file_obj.path}}" style="width:500px;height:350px">
   </p>
-  <p align="center">
+  {% if not card.heattreatmentarrangement.reviewer %}
+  <p align="center" id="bnt_upload">
   <span class="btn btn-primary btn-small btn-upload" href="#program_upload" data-toggle="modal">上传</span>
   </p>
+  {% endif %}
+  <p align="right"><span align="right" style='font-family:宋体'>注：热电偶布置点<span
+  lang=EN-US><img width=25 height=25 id="Picture1"src="{{STATIC_URL}}img/heat_point.png"></span></span></p>
   </td>
 
 

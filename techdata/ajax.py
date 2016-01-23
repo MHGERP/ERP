@@ -1077,13 +1077,16 @@ def heatTreatmentArrangementWrite(request, card_id):
     BinWu
     """
     card = HeatTreatmentTechCard.objects.get(id = card_id)
+    print("here")
     if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
-        HeatTreatmentArrangement(card_belong = card).save()
+        return simplejson.dumps({"res" : False})
+    print("here")
     card.heattreatmentarrangement.writer = request.user
     card.heattreatmentarrangement.file_index = "%06d" % (card.heattreatmentarrangement.id)
     card.heattreatmentarrangement.write_date = datetime.datetime.today()
     card.heattreatmentarrangement.save()
     context = {
+        "res" : True,
         "writer" : unicode(request.user.userinfo),
         "bianhao" : card.heattreatmentarrangement.file_index,
     }
@@ -1095,7 +1098,7 @@ def heatTreatmentArrangementReview(request, card_id):
     BinWu
     """
     card = HeatTreatmentTechCard.objects.get(id = card_id)
-    if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
+    if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0 or not card.heattreatmentarrangement.writer:
         return simplejson.dumps({"res" : False, })
     else:
         card.heattreatmentarrangement.reviewer = request.user
