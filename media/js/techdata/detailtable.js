@@ -12,8 +12,8 @@ $(document).on("click", "#order_search", function(){
         Dajaxice.techdata.auxiliaryMaterial(tableCallback, {"order" : order});
     else if (s == "4")
         Dajaxice.techdata.weldList(tableCallback, {"order" : order});
-    else if (s == "5")
-        Dajaxice.techdata.weldQuota(tableCallback, {"order": order});
+    // else if (s == "5")
+    //     Dajaxice.techdata.weldQuota(tableCallback, {"order": order});
     else if (s == "6")
         Dajaxice.techdata.techBoxWeld(tableCallback, {"order" : order});
     else if (s == "7")

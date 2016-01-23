@@ -23,7 +23,6 @@ $(document).ready(function(){
 	});
 	$(".apply-card-ensure-btn").click(function(){
         var form_code =$("table").attr("iid");
-        alert(form_code);
         Dajaxice.storage.steelApplyEnsure(steelApplyEnsureCallBack,{'form_code':form_code});
 	});
 });
@@ -64,6 +63,7 @@ function searchRefundCard_CallBack(data){
 		$(".refund-cards-table").html(data["result_table"]);
 	}
 }
+
 var mid;
 function change_remark_storeRoom(itemid){
     mid = itemid;

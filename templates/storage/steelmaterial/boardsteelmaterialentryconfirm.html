@@ -48,7 +48,7 @@
     </div>
     <center style="margin:110px;">
     {% if is_show %}
-        <button  id="entry_confirm"  class="btn btn-primary" type="button" onclick="steel_entry_confirm({{entry.id}},is_show);">入库单确认</button>
+        <button  id="entry_confirm"  class="btn btn-primary" type="button" onclick="steel_entry_confirm({{entry.id}});">入库单确认</button>
     {% else %}
         <a style="width:10%;height:20px;" class="btn btn-primary" type="button" href="/storage/steelentryhome">返回</a>
     {% endif %}

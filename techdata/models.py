@@ -1,7 +1,6 @@
 #coding: utf=8
-from const import PROCESSING_CHOICES, CIRCULATION_CHOICES, NONDESTRUCTIVE_INSPECTION_TYPE, TRANSFER_CARD_TYPE_CHOICES
 from django.db import models
-from const.models import Materiel, Material, WorkOrder
+from const.models import *
 from django.contrib.auth.models import User
 from users.models import Group
 from purchasing.models import MaterielExecute
@@ -130,13 +129,17 @@ class WeldListPageMark(models.Model):
         return self.order.order_index
 
 class TransferCard(models.Model):
+    file_index = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"文件编号")
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属零件")
     card_type = models.CharField(blank = False, max_length = 100, choices = TRANSFER_CARD_TYPE_CHOICES, verbose_name = u"流转卡类型")
     class Meta:
         verbose_name = u"流转卡"
         verbose_name_plural = u"流转卡"
     def __unicode__(self):
-        return self.materiel_belong.name
+        if self.card_type == CYLIDER_TRANSFER_CARD:
+            return "RH04-" + str(self.file_index)
+        elif self.card_type == CAP_TRANSFER_CARD:
+            return "RH03-" + str(self.file_index)
 
 class TransferCardMark(models.Model):
     card = models.OneToOneField(TransferCard, verbose_name = u"所属流转卡")
@@ -271,10 +274,12 @@ class DesignBOMMark(models.Model):
         return self.order.order_index
 
 class TechPlan(models.Model):
-    order = models.ForeignKey(WorkOrder, verbose_name=u"所属工作令")
+    order = models.ForeignKey(WorkOrder, blank = True, null = True, verbose_name=u"所属工作令")
     detail = models.CharField(max_length = 100, blank = True, null = True, verbose_name = u"详细内容")
     sentDepartment = models.ForeignKey(Group, blank = False, null = False, verbose_name = u"下发部门")
     planCompleteDate = models.DateField(blank = False, null = False, verbose_name = u"计划完成时间")
+    month = models.IntegerField(blank = True, null = False, verbose_name = u"所属月份")
+    year = models.IntegerField(blank = True, null = False, verbose_name = u"所属年份")
     class Meta:
         verbose_name = u"技术准备计划"
         verbose_name_plural = u"技术准备计划"
