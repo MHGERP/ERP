@@ -17,7 +17,8 @@ from purchasing.models import MaterielExecute
 from const.forms import WorkOrderForm
 
 def techPreparationPlanViews(request):
-    context = {}
+    work_order_form = WorkOrderForm()
+    context = {"work_order_form" : work_order_form}
     return render(request, "techdata/tech_preparation_plan.html", context)
 
 def processExaminationViews(request):
@@ -41,7 +42,6 @@ def techInstallWeldViews(request):
 def techHotDeelViews(request):
     context = {}
     return render(request, "techdata/tech_hot_deel.html", context)
-
 def techTestPresureViews(request):
     context = {}
     return render(request, "techdata/tech_test_presure.html", context)
@@ -107,7 +107,7 @@ def weldListViews(request):
     """
     work_order_form = WorkOrderForm()
     context = {
-        "form": WorkOrderForm,
+        "form": work_order_form,
     }
     return render(request, "techdata/weld_list.html", context)
 
@@ -173,3 +173,31 @@ def heatTreatmentTechCardEditViews(request):
         "card_id": card_id,
     }
     return render(request, "techdata/heat_treatment_tech_card_edit.html", context)
+
+def heatPoint(request):
+    """
+    BinWu
+    """
+    card_id = request.GET.get("card_id")
+    context = {
+        "card_id" : card_id,
+    }
+    return render(request, "techdata/heat_point.html",context)
+
+def uploadHeatArrangement(request):
+    """
+    BinWu
+    """
+    if request.is_ajax():
+        uf = UploadForm(request.POST, request.FILES)
+        if uf.is_valid():
+            card_id = request.GET.get("card_id")
+            print("lksjdjf:")
+            print(card_id)
+            card = HeatTreatmentTechCard.objects.get(id=card_id)
+            if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
+                HeatTreatmentArrangement(card_belong = card).save()
+            card.heattreatmentarrangement.file_obj = uf.cleaned_data['pic']
+            print(card.heattreatmentarrangement.file_obj.path)
+            card.heattreatmentarrangement.save()
+            return HttpResponse(card.heattreatmentarrangement.file_obj.path)
