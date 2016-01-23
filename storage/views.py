@@ -4,6 +4,7 @@ import datetime
 from django.shortcuts import render
 
 from const import *
+from const import MATERIAL_TYPE
 from const.forms import InventoryTypeForm
 from const.utils import *
 from datetime import datetime
@@ -150,25 +151,22 @@ def weldEntryConfirmViews(request,eid):
 def steelEntryConfirmViews(request,eid,typeid):
     typeid = int(typeid)
     entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-    print entry
     if typeid:
-        items = entry.boardsteelmaterialpurchasingentry_set.all()
-    else:
         items = entry.barsteelmaterialpurchasingentry_set.all()
-    store_room =  StoreRoom.objects.all()
+    else:
+        items = entry.boardsteelmaterialpurchasingentry_set.all()
     form = steelEntryItemsForm()
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
     context = {
             "entry":entry,
             "entry_set":items,
             "is_show":is_show,
-            "store_room":store_room,
             "form":form,
             }
     if typeid:
-        return render(request,"storage/steelmaterial/boardsteelmaterialentryconfirm.html",context)
-    else:
         return render(request,"storage/steelmaterial/barsteelmaterialentryconfirm.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelmaterialentryconfirm.html",context)
     
 def Weld_Apply_Card_List(request):
     """
@@ -810,3 +808,18 @@ def outsideApplyCardAccountHomeViews(request):
     }
 
     return render(request,"storage/outside/account/applycardhome.html",context)
+
+
+def storeRoomManageViews(request):
+    """
+    kad
+    """
+    new_room = StoreRoomForm()
+    room_set = StoreRoom.objects.all().order_by('-id')
+    search_form = StoreRoomSearchForm()
+    context = {
+        "room_set":room_set,
+        "search_form":search_form,
+        "new_room":new_room,
+    }
+    return render(request,"storage/basedata/storeroommanage.html", context)
