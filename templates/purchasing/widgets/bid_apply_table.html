@@ -33,15 +33,17 @@
         <td>拟投标单位</td>
         <td>供方代码</td>
         <td>认定业务范围</td>
-      </tr>
-      <tr>
+    </tr>
+    {% for item in supplier_set%}
+    <tr>
+      <td>{{item.supplier.supplier_name}}</td>
+      <td>{{item.supplier.supplier_id}}</td>
         <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+    </tr>
+    {% endfor%}
       {% for item in bidComments%}
       <tr>
-        <td>{{item.user}}</td>
+        <td>{{item.user.userinfo}}</td>
         <td colspan="2"> {{item.comment}}</td>
       </tr>
       {% endfor%}

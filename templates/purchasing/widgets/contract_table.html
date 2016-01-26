@@ -16,8 +16,8 @@
   <tbody>
   {%for item in bidForms %}
     <tr>
+      <td>{{ forloop.counter }}</td>
       <td>{{ item.bid_id }}</td>
-      <td>{{ item.contract_id }}</td>
       <td>{{ item.supplier_select }}</td>
       <td></td>
       <td>{{ item.contract_amount }}</td>

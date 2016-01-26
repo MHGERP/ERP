@@ -1056,7 +1056,7 @@ def genEntry(request,items_set,selectvalue,bid):
     items_set = getArrivalInspections(items_set) 
     try:
         bidform = BidForm.objects.get(bid_id = bid)
-        entry_obj = entrymodel(purchaser = request.user , bidform = bidform,entry_status=STORAGESTATUS_KEEPER)
+        entry_obj = entrymodel(purchaser = request.user , bidform = bidform)
         entry_obj.save()
         for item in items_set:
             entryitem_obj = entryitemmodel(material = item.material,entry = entry_obj)
@@ -1113,6 +1113,8 @@ def saveOrderformExecute(request,orderform_id,form):
             materielexecute.date = datetime.today()
             materielexecute.is_save = False
             materielexecute.save()
+            orderform.meterielexecute=materielexecute
+            orderform.save()
             for item in orderform.materielformconnection_set.all():
                 materiel=item.materiel
                 materielexecutedetail=MaterielExecuteDetail(materiel_execute=materielexecute,materiel=materiel)

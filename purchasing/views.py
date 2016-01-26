@@ -148,6 +148,7 @@ def bidTrackingViews(request, bid_id):
                "bidform": bidform,
                "BIDFORM_PART_STATUS_INVITE_BID_APPLY": BIDFORM_PART_STATUS_INVITE_BID_APPLY,
                "BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED": BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED,
+               "supplier_set":bidform.supplierselect_set.all()
              }
     return render(request, "purchasing/bid_track.html", context)
 
