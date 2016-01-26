@@ -11,7 +11,6 @@ from const import STORAGEDEPARTMENT_CHOICES,STORAGESTATUS_KEEPER,REFUNDSTATUS_CH
 from const import LENGHT_MANAGEMENT,WEIGHT_MANAGEMENT,AREA_MANAGEMENT,STEEL_TYPE,MATERIAL_TYPE
 from purchasing.models import BidForm
 from random import randint
-from storage.utils import get_today
 # Create your models here.
 
 
@@ -21,9 +20,8 @@ class StorageEntryBaseA(models.Model):
     entry_code = models.CharField(verbose_name=u"单据编号",max_length=20,unique=True)
     source  = models.CharField(verbose_name=u"货物来源",max_length=20,blank=True,null=True)
     inspection_record = models.CharField(verbose_name=u"检查记录表编号",max_length=20,blank=True,null=True)
-    order_number =  models.CharField(verbose_name=u"订购单编号",max_length=20,blank=True,null=True)
     remark = models.CharField(verbose_name=u"备注",max_length=200,blank=True,null=True)
-    entry_time = models.DateField(verbose_name=u"入库时间",null=True,auto_now=True)
+    entry_time = models.DateField(verbose_name=u"入库时间",null=True,auto_now_add=True)
 
     class Meta:
         verbose_name = u"入库单A"
@@ -123,8 +121,7 @@ class WeldMaterialEntryItems(models.Model):
 
 class WeldStoreListManager(models.Manager):
     def qualified_set(self):
-        print get_today()
-        return self.filter(deadline__gte = get_today()) 
+        return self.filter(deadline__gte = datetime.date.today()) 
 
 class WeldStoreList(models.Model):
     factory = models.CharField(max_length=20,null = True,verbose_name=u"厂家")
@@ -245,7 +242,6 @@ class WeldingMaterialBakeRecord(models.Model):
     class Meta:
         verbose_name=u'焊材烘焙记录卡'
         verbose_name_plural=u'焊材烘焙记录卡'
-        verbose_name_plural=u'焊焊材库温湿度记录卡'    
 
 class SteelMaterialPurchasingEntry(models.Model):
     material_source = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'货物来源')
@@ -586,7 +582,7 @@ class OutsideStandardEntry(StorageEntryBaseA):
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "out_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "out_keeper") 
     entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=STORAGESTATUS_INSPECTOR,verbose_name=u"入库单状态")
-
+    bidform  =  models.ForeignKey(BidForm,verbose_name=u"订购单编号",max_length=20,blank=True,null=True)
     class Meta:
         verbose_name = u"外购件入库单"
         verbose_name_plural = u"外购件入库单"

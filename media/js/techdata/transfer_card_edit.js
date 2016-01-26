@@ -9,7 +9,13 @@ function refreshCallBack(data) {
     $("#div_card").html(data);
 }
 
-new AutoSave(".word_textarea", Dajaxice.techdata.saveProcessRequirement).init();
+function save_func(callback, thisElement) {
+    var id = thisElement.attr("id");
+    var content = thisElement.html();
+    Dajaxice.techdata.saveProcessRequirement(function(){}, {"id": id, "content": content, });
+    callback();
+}
+new AutoSave(".word_textarea", save_func, 1000).init();
 
 var click_span;
 
@@ -23,6 +29,9 @@ $(document).on("click", ".btn-mark", function() {
 function markCallBack(data) {
     if(data.ret) {
         $(".form-search").hide();
+        if(data.file_index) {
+            $("#file_index_span").html(data.file_index)
+        }
         click_span.html(data.mark_user);
         $(click_span.attr("date-fill")).html(data.mark_date);
     }

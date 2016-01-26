@@ -4,6 +4,7 @@ import datetime
 from django.shortcuts import render
 
 from const import *
+from const import MATERIAL_TYPE
 from const.forms import InventoryTypeForm
 from const.utils import *
 from datetime import datetime
@@ -147,18 +148,25 @@ def weldEntryConfirmViews(request,eid):
             }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
-def steelEntryConfirmViews(request,eid):
+def steelEntryConfirmViews(request,eid,typeid):
+    typeid = int(typeid)
     entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-    # items = entry.steelmaterial_set.all()
-    # entryitem_form = SteelEntryItemsForm()
+    if typeid:
+        items = entry.barsteelmaterialpurchasingentry_set.all()
+    else:
+        items = entry.boardsteelmaterialpurchasingentry_set.all()
+    form = steelEntryItemsForm()
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
     context = {
             "entry":entry,
-            # "entry_set":items,
-            # "item_form":entryitem_form,
+            "entry_set":items,
             "is_show":is_show,
+            "form":form,
             }
-    return render(request,"storage/steelmaterial/steelentryconfirm.html",context)
+    if typeid:
+        return render(request,"storage/steelmaterial/barsteelmaterialentryconfirm.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelmaterialentryconfirm.html",context)
     
 def Weld_Apply_Card_List(request):
     """
@@ -694,12 +702,13 @@ def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list
 
 def outsideEntryConfirmViews(request,eid):
     entry_url = getUrlByViewMode(request,"outside/entryhome")
-    context = getEntryConfirmContext(eid,OutsideStandardEntry,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,entry_url)
+    context = getEntryConfirmContext(request,eid,OutsideStandardEntry,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,entry_url)
     return render(request,"storage/outside/entryconfirm.html",context)
 
-def getEntryConfirmContext(eid,_Model,_Inform,_Reform,entry_url):
+def getEntryConfirmContext(request,eid,_Model,_Inform,_Reform,entry_url):
     entry_obj = _Model.objects.get(id = eid)
     inform = _Inform(instance = entry_obj)
+    print "dadsa"
     reform = _Reform(instance = entry_obj)
     is_show = entry_obj.entry_status == STORAGESTATUS_KEEPER
     entry_set = OutsideStandardItem.objects.filter(entry = entry_obj)
@@ -799,3 +808,18 @@ def outsideApplyCardAccountHomeViews(request):
     }
 
     return render(request,"storage/outside/account/applycardhome.html",context)
+
+
+def storeRoomManageViews(request):
+    """
+    kad
+    """
+    new_room = StoreRoomForm()
+    room_set = StoreRoom.objects.all().order_by('-id')
+    search_form = StoreRoomSearchForm()
+    context = {
+        "room_set":room_set,
+        "search_form":search_form,
+        "new_room":new_room,
+    }
+    return render(request,"storage/basedata/storeroommanage.html", context)

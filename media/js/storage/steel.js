@@ -11,15 +11,26 @@ $(document).ready(function(){
 		form=$(".ledger-search-form").serialize(true);
 		Dajaxice.storage.searchSteelLedger(searchSteelLedger_CallBack,{'form':form});
 	});
+    //var material_number_list = new Array();
 	$(".refund-card-ensure-btn").click(function(){
-		alert("退库成功");
+        //$("tr.everyReturn").each(function(i){
+        //    material_number_list.push($(this).attr("matnum"));
+        //})
+		//alert(material_number_list);
+
+        var form_code = $("table").attr("fc");
+        Dajaxice.storage.steelRefundEnsure(steelRefundEnsureCallBack, {'form_code':form_code});
 	});
 	$(".apply-card-ensure-btn").click(function(){
         var form_code =$("table").attr("iid");
-        alert(form_code);
         Dajaxice.storage.steelApplyEnsure(steelApplyEnsureCallBack,{'form_code':form_code});
 	});
 });
+
+function steelRefundEnsureCallBack(data) {
+    alert(data);
+    window.location.reload();
+}
 
 function steelApplyEnsureCallBack(data){
     alert(data);
@@ -53,31 +64,42 @@ function searchRefundCard_CallBack(data){
 	}
 }
 
-
-function change_steelEntryItem(itemid){
+var mid;
+function change_remark_storeRoom(itemid){
     mid = itemid;
     var a = $("tr#"+mid).find("td");
-    $("input#id_remark").val(a.eq(8).text());
+    $("#id_remark").val(a.eq(12).text());
 }
 
-function save_steel_entry_item(){
-     Dajaxice.storage.steelEntryItemSave(save_steel_entry_item_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});
+function save_remark_storeRoom(typeid){
+	var typeid = typeid;
+    Dajaxice.storage.saveRemarkStoreRoom(save_remark_storeRoom_callback,{
+    	"form":$("#entry_item_form").serialize(),
+		"typeid":typeid,
+		"mid":mid,
+    });
 }
 
-function save_steel_entry_item_callback(data){
+function save_remark_storeRoom_callback(data){
     if(data.flag){
+    	$("#items_table").html(data.html);
         alert(data.message);
     }
     else{
         alert(data.message);
     }
-    location.reload();
 }
 
 function steel_entry_confirm(eid){
     var entry_code = $("#input_entry_code").val();
+    alert("库房一旦分配便不可更改!");
     Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":eid,"entry_code":entry_code}); 
 }
+$(document).ready(function(){
+	if($("#entry_item_form").attr("iid")=="False"){
+		$("#id_store_room").attr("disabled","disabled");
+	};
+});
 
 function steel_entry_confirm_callback(data){
     if(data.flag){

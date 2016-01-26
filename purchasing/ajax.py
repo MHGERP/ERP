@@ -20,7 +20,7 @@ from datetime import datetime
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
 from storage.models import WeldMaterialEntry,WeldMaterialEntryItems
 from storage.forms import EntryTypeForm
-
+from storage.utils import AutoGenEntry
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
     bidform_processing=BidForm.objects.filter(bid_id__contains=bidid)
@@ -691,7 +691,6 @@ def getOrderFormItems(request, index, can_choose = False):
     JunHU
     """
     items = Materiel.objects.filter(materielformconnection__order_form__order_id = index)
-    order_form=OrderForm.objects.get(order_id=index)
     for item in items:
         item.can_choose, item.status = (False, u"已加入标单") if (item.materielformconnection.bid_form != None) else (True, u"未加入标单")
 
@@ -699,10 +698,7 @@ def getOrderFormItems(request, index, can_choose = False):
         "items": items,
         "can_choose": can_choose,
     }
-    if order_form.order_mod==1:
-        html = render_to_string("purchasing/orderform/orderform_item_list.html", context)
-    else:
-        html =render_to_string("purchasing/orderform/orderform_raw_list.html",context)
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", context)
     return html
 
 @dajaxice_register
@@ -739,15 +735,11 @@ def getOngoingBidList(request):
     return html
 
 @dajaxice_register
-def getOngoingOrderList(request,order_type):
+def getOngoingOrderList(request):
     """
     Lei
     """
-    if int(order_type) >2 :
-        order_mod=1
-    else:
-        order_mod=0
-    order_form_list = OrderForm.objects.filter(Q(order_status__status = 0)&Q(order_mod=order_mod))
+    order_form_list = OrderForm.objects.filter(Q(order_status__status = 0))
     html = ''.join("<option value='%s'>%s</option>" % (order.id, order) for order in order_form_list)
     return html
 
@@ -773,21 +765,16 @@ def newBidCreate(request):
     return simplejson.dumps(context)
 
 @dajaxice_register
-def newOrderCreate(request,select_type):
+def newOrderCreate(request):
     """
     Lei
     """
     cDate_datetime = datetime.now()
-    if int(select_type) > 2:
-        order_type=1
-    else:
-        order_type=0
     order_status = OrderFormStatus.objects.get(status = 0)
     order_form = OrderForm(
         order_id = "2015%05d" % (getMaxId(OrderForm) + 1),
         create_time = cDate_datetime,
         order_status = order_status,
-        order_mod=order_type
     )
     order_form.save()
     html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
@@ -834,7 +821,7 @@ def newOrderSave(request, id, pendingArray):
             conn = MaterielFormConnection(materiel = materiel)
         print type(materiel.count)
         conn.order_form = order_form
-        conn.count=int(materiel.count)
+        conn.count=int(materiel.count)-12
         conn.save()
     order_form.establishment_time = cDate_datetime
     order_form.save()
@@ -905,7 +892,6 @@ def getOrderForm(request, order_id, pendingArray):
     """
     Lei
     """
-    print pendingArray
     order_form = OrderForm.objects.get(id = order_id)
     items = Materiel.objects.filter(materielformconnection__order_form = order_form)
     for item in items:
@@ -915,10 +901,7 @@ def getOrderForm(request, order_id, pendingArray):
     for item in items_pending:
         item.status = u"待加入"
 
-    if order_form.order_mod == 1:
-        html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items, "can_choose": False, "items_pending": items_pending, })
-    else:
-        html=render_to_string("purchasing/orderform/orderform_raw_list.html",{"items":items,"can_choose":False,"items_pending":items_pending})
+    html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items, "can_choose": False, "items_pending": items_pending, })
     context = {
             "order_id": order_form.order_id,
             "id": order_form.id,
@@ -970,20 +953,19 @@ def GetOrderInfoForm(request,uid):
     return simplejson.dumps({'form':form_html})
 
 @dajaxice_register
-def OrderInfo(request,uid,count,purchasing):
+def OrderInfo(request,form,uid,count,name):
     """
     Lei
     """
     order = Materiel.objects.get(id=uid)
-    #orderForm = OrderInfoForm(deserialize_form(form),instance=order)
-    #order_obj = orderForm.save(commit = False)
+    orderForm = OrderInfoForm(deserialize_form(form),instance=order)
+    order_obj = orderForm.save(commit = False)
     matconnection = order.materielformconnection
     matconnection.count = count
-    matconnection.purchasing=purchasing
     matconnection.save()
-    #material = Material.objects.get(name = name)
-    #order_obj.material = material
-    #order_obj.save()
+    material = Material.objects.get(name = name)
+    order_obj.material = material
+    order_obj.save()
 
 
 def addToExecute(materiel):
@@ -1040,7 +1022,7 @@ def saveExecuteTechRequire(request,execute_id,content):
     materiel_execute.tech_requirement=content
     materiel_execute.save()
     return simplejson.dumps({})
-
+@dajaxice_register
 def selectEntryType(request,bid,selected,selectentryform):
     entrytypedict = dict(list(STORAGE_ENTRY_TYPECHOICES))
     selectform = EntryTypeForm(deserialize_form(selectentryform))
@@ -1063,6 +1045,7 @@ def genEntry(request,items_set,selectvalue,bid):
             entryitem_obj.save()
             item.check_pass = True
             item.save()
+        entry_factory = AutoGenEntry(request.user,items_set,bidform)
         isOk = True
     except Exception,e:
         isOk = False
@@ -1086,7 +1069,6 @@ def getArrivalInspections(selected_id_set):
 def getEntryDataModel(selectvalue):
     selectvalue = int(selectvalue)
     if selectvalue == STORAGE_ENTRY_TYPE_WELD:
-        print selectvalue
         entrymodel = WeldMaterialEntry 
         entryitemmodel = WeldMaterialEntryItems
     return entrymodel,entryitemmodel

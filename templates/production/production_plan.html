@@ -8,23 +8,15 @@
 {% block inner_content%}
 <link rel="stylesheet" href="{{ STATIC_URL }}style/man_hour_summarize.css" type="text/css" media="screen" />
 <div id="search-div" style="margin-bottom:10px;">
-        <form class="form-inline">
-            工作令:
-            {{orderIndexForm.order_index}}
-            状态：
-            <select>
-              <option>必保</option>
-              <option>在制</option>
-            </select>
-            工部：
-            <select>
-              <option>备料工部</option>
-              <option>装备工部</option>
-              <option>综合工部</option>
-            </select>
-            <button type="button" class="btn btn-primary">检索</button>
-            <button type="button" class="btn btn-primary">导出</button>
-        </form>
+  <form class="form-inline">
+    {{productionPlanSearchForm.work_order.label}}:
+    {{productionPlanSearchForm.work_order}}
+    {{productionPlanSearchForm.status.label}}:
+    {{productionPlanSearchForm.status}}
+    {{productionPlanSearchForm.plan_date.label}}:
+    {{productionPlanSearchForm.plan_date}}
+    <button type="button" class="btn btn-primary">检索</button>
+  </form>
 </div>
 
 <a class="btn btn-primary" data-toggle="modal" data-target="#production_plan_modal">添加生产计划</a>

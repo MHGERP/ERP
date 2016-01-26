@@ -1,17 +1,20 @@
-var AutoSave = function(textAreaDiv, ajax_func) {
+var AutoSave = function(textAreaDiv, save_func, timeout) {
+    /*
+     * Author: JunHU
+     * Description: binding the editable div element, auto save the content to save_func timeout sec after "keyup" event
+     * args: textAreaDiv: selector name; save_func: save function support callback; timeout: timeout variable
+     */
     var t;
     var req;
     this.init = function() {
         $(document).on("keyup", textAreaDiv, function() {
-            var content = $(this).html();
-            var pid = $(this).attr("pid");
+            var thisElement = $(this);
             t != null ? clearTimeout(t) : "";
             req != null ? req.abort() : "";
             t = setTimeout(function() {
-                req = ajax_func(function() {req = null;}, {"content": content, "pid": pid, });
+                req = save_func(function() {req = null;}, thisElement);
                 t = null;
-            }, 1000);
+            }, timeout);
         });
     };
 };
-
