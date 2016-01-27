@@ -160,7 +160,7 @@ $("#save_materiel_execute").click(function(){
     Dajaxice.purchasing.saveOrderformExecute(function(data){
         alert(data.message);
         if(data.status=='0'){
-            $("#add_to_execute").modal('hide');
+            window.location.reload();
         }
     },{
 

@@ -9,6 +9,20 @@ from django.contrib.auth.models import User
 import settings
 # Create your models here.
 
+class MaterielExecute(models.Model):
+    document_number = models.CharField(max_length = 100, null = True, blank = False, unique = True, verbose_name = u"单据编号")
+    document_lister = models.ForeignKey(User, blank = False, verbose_name = u"制表人")
+    date = models.DateField(blank = False, null = False, verbose_name = u"制表日期")
+    materiel_choice = models.CharField(blank=False, max_length = 20, choices=MATERIEL_CHOICE, verbose_name=u"材料选择")
+    is_save = models.BooleanField(blank=False, verbose_name=u"是否已保存")
+    tech_feedback = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"工艺反馈")
+    tech_requirement=models.CharField(max_length=5000,blank=True,null=True)
+    class Meta:
+        verbose_name = u"材料执行表"
+        verbose_name_plural = u"材料执行表"
+    def __unicode__(self):
+        return '%s' % self.document_number
+
 class OrderForm(models.Model):
     order_id = models.CharField(unique = True, max_length = 20, blank = False, verbose_name = u"订购单编号")
     create_time = models.DateTimeField(null = True,verbose_name = u"创建日期")
@@ -19,6 +33,7 @@ class OrderForm(models.Model):
     approve_user=models.ForeignKey(User,verbose_name=u"审批人",related_name="approve_user",null=True)
     tech_requirement=models.TextField(max_length=5000,blank=True,null=True)
     order_mod=models.IntegerField(default=0,verbose_name=u"标单类型")
+    meterielexecute=models.ForeignKey(MaterielExecute,blank=True,null=True,verbose_name=u"材料执行表")
     class Meta:
         verbose_name = u"订购单"
         verbose_name_plural = u"订购单"
@@ -228,19 +243,6 @@ class MaterialSubApplyItems(models.Model):
     def __unicode__(self):
         return "%s(%s)" % (self.sub_apply.receipts_code,self.mat_pic_code)
 
-class MaterielExecute(models.Model):
-    document_number = models.CharField(max_length = 100, null = True, blank = False, unique = True, verbose_name = u"单据编号")
-    document_lister = models.ForeignKey(User, blank = False, verbose_name = u"制表人")
-    date = models.DateField(blank = False, null = False, verbose_name = u"制表日期")
-    materiel_choice = models.CharField(blank=False, max_length = 20, choices=MATERIEL_CHOICE, verbose_name=u"材料选择")
-    is_save = models.BooleanField(blank=False, verbose_name=u"是否已保存")
-    tech_feedback = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"工艺反馈")
-    tech_requirement=models.CharField(max_length=5000,blank=True,null=True)
-    class Meta:
-        verbose_name = u"材料执行表"
-        verbose_name_plural = u"材料执行表"
-    def __unicode__(self):
-        return '%s' % self.document_number
 class ProcessFollowingInfo(models.Model):
     bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
     following_date=models.DateField(blank=False,null=False,verbose_name=u"跟踪日期")
