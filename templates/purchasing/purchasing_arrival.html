@@ -10,8 +10,14 @@
 <link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
 <form class="form-search " method="POST" action="">
     {% csrf_token %}
-    <label>标单查询</label>
-    <input type="text"  name="bidform_search" class="input-medium search-query">
+    <label class="control-label">标单查询</label>
+    <select class="form-control span2" style="margin:10px;">
+        <option value="-1">------</option>
+        <option value="1">焊材</option>
+        <option value="2">钢材</option>
+        <option value="3">辅助工具</option>
+        <option value="4">外购件</option>
+    </select>
     <button type="submit" class="btn">查询</button>
 </form>
 <div  id="arrivalIns" class="widget-box">

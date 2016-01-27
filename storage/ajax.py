@@ -517,6 +517,14 @@ def entryConfirm(request,eid,entry_code):
         entry = WeldMaterialEntry.objects.get(id = eid)
         if entry.entry_status == STORAGESTATUS_KEEPER:
             entry.entry_code = entry_code
+            if entry.steel_type == BOARD_STEEL:
+                boardsteel_set = BoardSteelMaterialPurchasingEntry.card_info.objects.get(form_code = entry_code_)
+                boardsteel_set_matnum = boardsteel_set.steel_material.objects.material_number
+                boardsteel_set_
+                boardsteel_quantity = boardsteel_set.quantity
+            elif entry.steel_type == BAR_STEEL:
+                barsteel_set = BarSteelMaterialPurchasingEntry.card_info.objects.get(form_code = entry_code_)
+                barsteel_quantity = barsteel_set.quantity 
             entry.keeper = request.user
             entry.entry_status = STORAGESTATUS_END
             entry.entry_time = datetime.date.today()
@@ -535,8 +543,20 @@ def steelEntryConfirm(request,eid,entry_code):
     try:
         entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
         if entry.entry_status == STORAGESTATUS_KEEPER:
-            entry.entry_code = entry_code
-            entry.keeper = request.user
+            entry.form_code = entry_code
+            steel_entry_set = SteelMaterialPurchasingEntry.objects.get(form_code = entry.form_code)
+            if steel_entry_set.steel_type == BOARD_STEEL:
+                boardsteel_set = steel_entry_set.boardsteelmaterialpurchasingentry_set.all()
+                for boardsteel in boardsteel_set:
+                    ledger = boardsteel.steel_material.boardsteelmaterialledger
+                    ledger.quantity = ledger.quantity + boardsteel.quantity
+                    ledger.save()
+            elif steel_entry_set.steel_type == BAR_STEEL:
+                barsteel_set = steel_entry_set.barsteelmaterialpurchasingentry_set.all()
+                for barsteel in barsteel_set:
+                    ledger = barsteel.steel_material.barsteelmaterialledger
+                    ledger.quantity = ledger.quantity + barsteel.quantity
+                    ledger.save()
             entry.entry_status = STORAGESTATUS_END
             entry.entry_time = datetime.date.today()
             entry.save()
