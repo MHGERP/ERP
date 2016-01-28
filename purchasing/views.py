@@ -164,16 +164,11 @@ def contractFinanceViews(request):
 @csrf.csrf_protect
 def arrivalInspectionViews(request):
     """
-    shen Lian
+    Liu Guochao
     """
-    if request.method == "POST":
-        bid_id = request.POST["bidform_search"]
-        bidFormSet = BidForm.objects.filter(bid_id = bid_id)
-    else:
-        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_STORE)    
     context = {
-        "bidFormSet":bidFormSet,
-        "BIDFORM_PART_STATUS_STORE":BIDFORM_PART_STATUS_STORE,
+        # "bidFormSet":bidFormSet,
+        # "BIDFORM_PART_STATUS_STORE":BIDFORM_PART_STATUS_STORE,
     }
     return render(request,"purchasing/purchasing_arrival.html",context)
 

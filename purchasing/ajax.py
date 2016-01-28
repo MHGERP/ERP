@@ -18,7 +18,7 @@ from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm,
 from django.db.models import Q
 from datetime import datetime
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
-from storage.models import WeldMaterialEntry,WeldMaterialEntryItems
+from storage.models import *
 from storage.forms import EntryTypeForm
 from storage.utils import AutoGenEntry
 @dajaxice_register
@@ -1109,3 +1109,34 @@ def saveOrderformExecute(request,orderform_id,form):
         print "sss"
         ret={'status':'1','message':u'材料执行保存失败!'}
     return simplejson.dumps(ret)
+@dajaxice_register
+def entryConfirmQuery(request,entry_select):
+    #Liuguochao
+    replace_dic = {}
+    filter_dic = {"entry_status":STORAGESTATUS_INSPECTOR}
+    if entry_select == "1":
+        _Model = WeldMaterialEntry
+    elif entry_select == "2":
+        _Model = SteelMaterialPurchasingEntry
+        replace_dic = {"entry_code":"form_code",}
+    elif entry_select == "3":
+        _Model = AuxiliaryToolEntryCardList
+        replace_dic = {"entry_status":"status","entry_time":"create_time","entry_code":"index"}
+        filter_dic = {"status":STORAGESTATUS_INSPECTOR,}
+    elif entry_select == "4":
+        _Model = OutsideStandardEntry
+    html = handleProcess(_Model,filter_dic, replace_dic)
+    data = {
+        "html":html,
+    }
+    return simplejson.dumps(data)
+    
+def handleProcess(_Model,filter_dic,replace_dic = None):
+    entry_set = _Model.objects.filter(**filter_dic)
+    for item in entry_set:
+        if replace_dic != None:
+            for k,v in replace_dic.items():
+                setattr(item,k,getattr(item,v))
+    entry_set.order_by("entry_time")
+    html = render_to_string("purchasing/widgets/purchasing_entry_table.html",{'entry_set':entry_set,"STORAGESTATUS_INSPECTOR":STORAGESTATUS_INSPECTOR})
+    return html

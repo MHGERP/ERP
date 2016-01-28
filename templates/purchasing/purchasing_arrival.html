@@ -1,6 +1,6 @@
 {% extends "purchasing/base/none_nav_base.html"%}
 {% block title %}
-<h1>到货检验</h1>
+<h1>入库确认</h1>
 {% endblock %}
 
 {% block sub_ref %}
@@ -10,50 +10,18 @@
 <link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
 <form class="form-search " method="POST" action="">
     {% csrf_token %}
-    <label class="control-label">标单查询</label>
-    <select class="form-control span2" style="margin:10px;">
+    <label class="control-label">入库单查询</label>
+    <select class="form-control span2" style="margin:10px;" id="entry_select">
         <option value="-1">------</option>
         <option value="1">焊材</option>
         <option value="2">钢材</option>
         <option value="3">辅助工具</option>
         <option value="4">外购件</option>
     </select>
-    <button type="submit" class="btn">查询</button>
+    <button type="button" class="btn" onclick="entry_query()">查询</button>
 </form>
-<div  id="arrivalIns" class="widget-box">
-    <div class="widget-title">
-        <span class="icon">
-            <i class="icon-th"></i>
-        </span>
-        <h5>待确认入库单</h5>
-    </div>
-    <div class="widget-content nopadding">
-        {% if bidFormSet  %}
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>标单编号</th>
-                    <th>标单状态</th>
-                    <th>入库确认</th>
-                </tr>
-            </thead>
-            <tbody>
-                {%for bid in bidFormSet %}
-                <tr>
-                    <td>{{bid.bid_id}}</td>
-                    <td>{{bid.bid_status}}</td>
-                    <td><a type="btn"  {% if bid.bid_status.part_status ==  BIDFORM_PART_STATUS_STORE%} href="{% url mat_entry  bid.bid_id %}" class="btn btn-success" {%else %} class="btn" {% endif %} >入库确认</a></td>
-                </tr>
-                {%endfor%}
-            </tbody>
-        </table>
-        {% else %}
-        <center>
-            <p>没有待确认的入库单</p>
-        </center>
-        {% endif %}
-    </div>
-</div>
+<div id="entry_table">
 
-<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/purchasing_following.js"></script>
+</div>
+<script type="text/javascript" src="{{STATIC_URL}}js/purchasing/arrival_inspection.js"></script>
 {% endblock%}
