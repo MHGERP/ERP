@@ -1112,6 +1112,7 @@ def saveOrderformExecute(request,orderform_id,form):
 @dajaxice_register
 def entryConfirmQuery(request,entry_select):
     #Liuguochao
+    
     replace_dic = {}
     filter_dic = {"entry_status":STORAGESTATUS_INSPECTOR}
     if entry_select == "1":
@@ -1125,18 +1126,20 @@ def entryConfirmQuery(request,entry_select):
         filter_dic = {"status":STORAGESTATUS_INSPECTOR,}
     elif entry_select == "4":
         _Model = OutsideStandardEntry
-    html = handleProcess(_Model,filter_dic, replace_dic)
+    html = handleProcess(_Model,filter_dic,entry_select, replace_dic)
     data = {
         "html":html,
     }
     return simplejson.dumps(data)
     
-def handleProcess(_Model,filter_dic,replace_dic = None):
+def handleProcess(_Model,filter_dic,entry_select,replace_dic = None):
     entry_set = _Model.objects.filter(**filter_dic)
     for item in entry_set:
         if replace_dic != None:
             for k,v in replace_dic.items():
                 setattr(item,k,getattr(item,v))
     entry_set.order_by("entry_time")
-    html = render_to_string("purchasing/widgets/purchasing_entry_table.html",{'entry_set':entry_set,"STORAGESTATUS_INSPECTOR":STORAGESTATUS_INSPECTOR})
+    html = render_to_string("purchasing/widgets/purchasing_entry_table.html",{'entry_set':entry_set,
+                "entryurl":"arrivalInspectionConfirm","STORAGESTATUS_INSPECTOR":STORAGESTATUS_INSPECTOR,
+                "entry_type":entry_select})
     return html

@@ -21,6 +21,7 @@ from django.db import transaction
 from users.decorators import authority_required
 from users import *
 from storage.forms import EntryTypeForm
+from storage.models import *
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -167,25 +168,66 @@ def arrivalInspectionViews(request):
     Liu Guochao
     """
     context = {
-        # "bidFormSet":bidFormSet,
-        # "BIDFORM_PART_STATUS_STORE":BIDFORM_PART_STATUS_STORE,
+
     }
     return render(request,"purchasing/purchasing_arrival.html",context)
-
-def arrivalCheckViews(request,bid):
+def arrivalInspectionConfirmViews(request,entry_typeid,eid,steel_typeid):
     """
-    shen Lian
+    Liu Guochao
     """
-    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid,check_pass=False)
-    is_show = BidForm.objects.filter(bid_id = bid , bid_status__part_status = BIDFORM_PART_STATUS_CHECK).count() > 0
-    entrytypeform = EntryTypeForm()
+    entry = []
+    items = []
+    entry_typeid = int(entry_typeid)
+    if entry_typeid == 1:
+        message = weldMaterialEntryConfirm(request,eid)
+    elif entry_typeid == 2:
+        message = steelMaterialEntryConfirm(request,eid,steel_typeid)
+    elif entry_typeid == 3:
+        message = auxiliaryToolEntryConfirm(request,eid)
+    elif entry_typeid == 4:
+        message = outsideEntryConfirm(request,eid)
+    return message
+def weldMaterialEntryConfirm(request,eid):
+    entry = WeldMaterialEntry.objects.get(id = eid)
+    items = WeldMaterialEntryItems.objects.filter(entry = entry)
     context = {
-        "cargo_set":cargo_set,
-        "bid":bid,
-        "is_show":is_show,
-        "entrytype":entrytypeform,
+            "entry":entry,
+            "entry_set":items,
     }
-    return render(request,"purchasing/purchasing_arrivalcheck.html",context)
+    return render(request,"purchasing/widgets/purchasing_arrivalcheck_weld.html",context)
+def steelMaterialEntryConfirm(request,eid,steel_typeid):
+    entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
+    entry.entry_code = entry.form_code
+    if steel_typeid:
+        items = entry.barsteelmaterialpurchasingentry_set.all()
+    else:
+        items = entry.boardsteelmaterialpurchasingentry_set.all()
+    context = {
+            "entry":entry,
+            "entry_set":items,
+    }
+    if steel_typeid:
+        return render(request,"purchasing/widgets/purchasing_arrivalcheck_bar.html",context)
+    else:
+        return render(request,"purchasing/widgets/purchasing_arrivalcheck_board.html",context)
+def auxiliaryToolEntryConfirm(request,eid):
+    entry = AuxiliaryToolEntryCardList.objects.get(id = eid)
+    entry.entry_code = entry.index
+    entry.entry_status = entry.status
+    items = AuxiliaryToolEntryCard.objects.filter(card_list = entry)
+    context = {
+            "entry":entry,
+            "sub_objects":items,
+    }
+    return render(request,"purchasing/widgets/purchasing_arrivalcheck_auxi.html",context)
+def outsideEntryConfirm(request,eid):
+    entry = OutsideStandardEntry.objects.get(id = eid)
+    items = OutsideStandardItem.objects.filter(entry = entry)
+    context = {
+            "entry":entry,
+            "entry_set":items,
+    }
+    return render(request,"purchasing/widgets/purchasing_arrivalcheck_outside.html",context)
 
 def inventoryTableViews(request):
     order_index = request.GET.get("order_index")
