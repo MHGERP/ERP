@@ -5,9 +5,11 @@ function entry_query(){
 function entry_query_CallBack(data){
 	$("#entry_table").html(data.html);
 }
-function purchasing_entry_confirm(eid){
-	var entry_code = $("#input_entry_code").val();
-	Dajaxice.purchasing.entryInspectionConfirm(entry_inspection_confirm_callback,{"eid":eid,"entry_code":entry_code}); 
+
+function purchasing_entry_confirm(eid,entry_typeid){
+/*	alert(eid);
+	alert(entry_typeid);*/
+	Dajaxice.purchasing.entryInspectionConfirm(entry_inspection_confirm_callback,{"eid":eid,"entry_typeid":entry_typeid}); 
 }
 function entry_inspection_confirm_callback(data){
     if(data.flag){

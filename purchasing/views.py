@@ -179,38 +179,42 @@ def arrivalInspectionConfirmViews(request,entry_typeid,eid,steel_typeid):
     items = []
     entry_typeid = int(entry_typeid)
     if entry_typeid == 1:
-        message = weldMaterialEntryConfirm(request,eid)
+        message = weldMaterialEntryConfirm(request,eid,entry_typeid)
     elif entry_typeid == 2:
-        message = steelMaterialEntryConfirm(request,eid,steel_typeid)
+        message = steelMaterialEntryConfirm(request,eid,steel_typeid,entry_typeid)
     elif entry_typeid == 3:
-        message = auxiliaryToolEntryConfirm(request,eid)
+        message = auxiliaryToolEntryConfirm(request,eid,entry_typeid)
     elif entry_typeid == 4:
-        message = outsideEntryConfirm(request,eid)
+        message = outsideEntryConfirm(request,eid,entry_typeid)
     return message
-def weldMaterialEntryConfirm(request,eid):
+def weldMaterialEntryConfirm(request,eid,entry_typeid):
     entry = WeldMaterialEntry.objects.get(id = eid)
     items = WeldMaterialEntryItems.objects.filter(entry = entry)
     context = {
             "entry":entry,
             "entry_set":items,
+            "entry_type":entry_typeid,
     }
-    return render(request,"purchasing/widgets/purchasing_arrivalcheck_weld.html",context)
-def steelMaterialEntryConfirm(request,eid,steel_typeid):
+    return render(request,"purchasing/widgets/purchasing_arrival_confirm_weld.html",context)
+def steelMaterialEntryConfirm(request,eid,steel_typeid,entry_typeid):
     entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
     entry.entry_code = entry.form_code
-    if steel_typeid:
+    steel_typeid = int(steel_typeid)
+    if steel_typeid == 1:
         items = entry.barsteelmaterialpurchasingentry_set.all()
-    else:
+    elif steel_typeid == 0:
         items = entry.boardsteelmaterialpurchasingentry_set.all()
     context = {
             "entry":entry,
             "entry_set":items,
+            "entry_type":entry_typeid,
     }
+    print steel_typeid
     if steel_typeid:
-        return render(request,"purchasing/widgets/purchasing_arrivalcheck_bar.html",context)
+        return render(request,"purchasing/widgets/purchasing_arrival_confirm_bar.html",context)
     else:
-        return render(request,"purchasing/widgets/purchasing_arrivalcheck_board.html",context)
-def auxiliaryToolEntryConfirm(request,eid):
+        return render(request,"purchasing/widgets/purchasing_arrival_confirm_board.html",context)
+def auxiliaryToolEntryConfirm(request,eid,entry_typeid):
     entry = AuxiliaryToolEntryCardList.objects.get(id = eid)
     entry.entry_code = entry.index
     entry.entry_status = entry.status
@@ -218,16 +222,32 @@ def auxiliaryToolEntryConfirm(request,eid):
     context = {
             "entry":entry,
             "sub_objects":items,
+            "entry_type":entry_typeid,
     }
-    return render(request,"purchasing/widgets/purchasing_arrivalcheck_auxi.html",context)
-def outsideEntryConfirm(request,eid):
+    return render(request,"purchasing/widgets/purchasing_arrival_confirm_auxi.html",context)
+def outsideEntryConfirm(request,eid,entry_typeid):
     entry = OutsideStandardEntry.objects.get(id = eid)
     items = OutsideStandardItem.objects.filter(entry = entry)
     context = {
             "entry":entry,
             "entry_set":items,
+            "entry_type":entry_typeid,
     }
-    return render(request,"purchasing/widgets/purchasing_arrivalcheck_outside.html",context)
+    return render(request,"purchasing/widgets/purchasing_arrival_confirm_outside.html",context)
+def arrivalCheckViews(request,bid):
+    """
+    shen Lian
+    """
+    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid,check_pass=False)
+    is_show = BidForm.objects.filter(bid_id = bid , bid_status__part_status = BIDFORM_PART_STATUS_CHECK).count() > 0
+    entrytypeform = EntryTypeForm()
+    context = {
+        "cargo_set":cargo_set,
+        "bid":bid,
+        "is_show":is_show,
+        "entrytype":entrytypeform,
+    }
+    return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 
 def inventoryTableViews(request):
     order_index = request.GET.get("order_index")
@@ -485,5 +505,36 @@ def statusChangeApplyViews(request,bid):
     revl = render(request,"purchasing/status_change/statuschangeapply.html",context)
     transaction.commit()
     return revl
+
+@csrf.csrf_protect
+def arrivalInspectionViews(request):
+    """
+    shen Lian
+    """
+    if request.method == "POST":
+        bid_id = request.POST["bidform_search"]
+        bidFormSet = BidForm.objects.filter(bid_id = bid_id)
+    else:
+        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_STORE)    
+    context = {
+        "bidFormSet":bidFormSet,
+        "BIDFORM_PART_STATUS_STORE":BIDFORM_PART_STATUS_STORE,
+    }
+    return render(request,"purchasing/purchasing_arrival.html",context)
+
+def arrivalCheckViews(request,bid):
+    """
+    shen Lian
+    """
+    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid,check_pass=False)
+    is_show = BidForm.objects.filter(bid_id = bid , bid_status__part_status = BIDFORM_PART_STATUS_CHECK).count() > 0
+    entrytypeform = EntryTypeForm()
+    context = {
+        "cargo_set":cargo_set,
+        "bid":bid,
+        "is_show":is_show,
+        "entrytype":entrytypeform,
+    }
+    return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 
     

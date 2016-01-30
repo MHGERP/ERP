@@ -517,14 +517,6 @@ def entryConfirm(request,eid,entry_code):
         entry = WeldMaterialEntry.objects.get(id = eid)
         if entry.entry_status == STORAGESTATUS_KEEPER:
             entry.entry_code = entry_code
-            if entry.steel_type == BOARD_STEEL:
-                boardsteel_set = BoardSteelMaterialPurchasingEntry.card_info.objects.get(form_code = entry_code_)
-                boardsteel_set_matnum = boardsteel_set.steel_material.objects.material_number
-                boardsteel_set_
-                boardsteel_quantity = boardsteel_set.quantity
-            elif entry.steel_type == BAR_STEEL:
-                barsteel_set = BarSteelMaterialPurchasingEntry.card_info.objects.get(form_code = entry_code_)
-                barsteel_quantity = barsteel_set.quantity 
             entry.keeper = request.user
             entry.entry_status = STORAGESTATUS_END
             entry.entry_time = datetime.date.today()

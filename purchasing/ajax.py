@@ -1114,7 +1114,7 @@ def entryConfirmQuery(request,entry_select):
     #Liuguochao
     
     replace_dic = {}
-    filter_dic = {"entry_status":STORAGESTATUS_INSPECTOR}
+    filter_dic = {"entry_status":STORAGESTATUS_PURCHASER}
     if entry_select == "1":
         _Model = WeldMaterialEntry
     elif entry_select == "2":
@@ -1123,7 +1123,7 @@ def entryConfirmQuery(request,entry_select):
     elif entry_select == "3":
         _Model = AuxiliaryToolEntryCardList
         replace_dic = {"entry_status":"status","entry_time":"create_time","entry_code":"index"}
-        filter_dic = {"status":STORAGESTATUS_INSPECTOR,}
+        filter_dic = {"status":STORAGESTATUS_PURCHASER,}
     elif entry_select == "4":
         _Model = OutsideStandardEntry
     html = handleProcess(_Model,filter_dic,entry_select, replace_dic)
@@ -1138,8 +1138,36 @@ def handleProcess(_Model,filter_dic,entry_select,replace_dic = None):
         if replace_dic != None:
             for k,v in replace_dic.items():
                 setattr(item,k,getattr(item,v))
-    entry_set.order_by("entry_time")
+    entry_set.order_by("-entry_time")
     html = render_to_string("purchasing/widgets/purchasing_entry_table.html",{'entry_set':entry_set,
-                "entryurl":"arrivalInspectionConfirm","STORAGESTATUS_INSPECTOR":STORAGESTATUS_INSPECTOR,
+                "entryurl":"arrivalInspectionConfirm","STORAGESTATUS_PURCHASER":STORAGESTATUS_PURCHASER,
                 "entry_type":entry_select})
     return html
+@dajaxice_register
+def entryInspectionConfirm(request,eid,entry_typeid):
+    entry_typeid = int(entry_typeid)
+    if entry_typeid == 1:
+        message = handleEntryInspectionConfirm(request,WeldMaterialEntry,eid,entry_typeid)
+    elif entry_typeid == 2:
+        message = handleEntryInspectionConfirm(request,SteelMaterialPurchasingEntry,eid,entry_typeid)
+    elif entry_typeid == 3:
+        message = handleEntryInspectionConfirm(request,AuxiliaryToolEntryCardList,eid,entry_typeid)
+    elif entry_typeid == 4:
+        message = handleEntryInspectionConfirm(request,OutsideStandardEntry,eid,entry_typeid)
+    return message
+def handleEntryInspectionConfirm(request,_Model,eid,entry_typeid):
+    print "aaaaaaaaaaaaaa"
+    print _Model
+    entry = _Model.objects.get(id = eid)
+    status = entry.status if entry_typeid == 3 else entry.entry_status
+    if status == STORAGESTATUS_PURCHASER:
+        if entry_typeid == 3:
+            entry.status = STORAGESTATUS_KEEPER
+        else:
+            entry.entry_status = STORAGESTATUS_KEEPER
+        entry.purchaser = request.user
+        entry.save()
+        flag = True
+    else:
+        flag = False
+    return simplejson.dumps({'flag':flag})    
