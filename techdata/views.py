@@ -36,6 +36,9 @@ def techFileDirectoryViews(request):
     return render(request, "techdata/tech_file_directory.html", context)
 
 def techInstallWeldViews(request):
+    """
+    JunHU
+    """
     context = {}
     return render(request, "techdata/tech_install_weld.html", context)
 
@@ -157,7 +160,9 @@ def programAdd(request):
         return HttpResponse(json.dumps({"file_upload_error": file_upload_error, }))
 
 def techDetailTableViews(request):
-    """BinWu"""
+    """
+    BinWu
+    """
     work_order_form = WorkOrderForm()
     context = {
         "form": work_order_form,
@@ -192,8 +197,6 @@ def uploadHeatArrangement(request):
         uf = UploadForm(request.POST, request.FILES)
         if uf.is_valid():
             card_id = request.GET.get("card_id")
-            print("lksjdjf:")
-            print(card_id)
             card = HeatTreatmentTechCard.objects.get(id=card_id)
             if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
                 HeatTreatmentArrangement(card_belong = card).save()
@@ -201,3 +204,14 @@ def uploadHeatArrangement(request):
             print(card.heattreatmentarrangement.file_obj.path)
             card.heattreatmentarrangement.save()
             return HttpResponse(card.heattreatmentarrangement.file_obj.path)
+
+
+def techInstallWeldCard(request):
+    """
+    JunHU
+    """
+    iid = request.GET.get("iid")
+    context = {
+        "iid": iid,
+    }
+    return render(request, "techdata/tech_install_weld_card.html", context)

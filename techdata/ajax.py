@@ -1075,10 +1075,8 @@ def heatTreatmentArrangementWrite(request, card_id):
     BinWu
     """
     card = HeatTreatmentTechCard.objects.get(id = card_id)
-    print("here")
     if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
         return simplejson.dumps({"res" : False})
-    print("here")
     card.heattreatmentarrangement.writer = request.user
     card.heattreatmentarrangement.file_index = "%06d" % (card.heattreatmentarrangement.id)
     card.heattreatmentarrangement.write_date = datetime.datetime.today()
@@ -1132,3 +1130,24 @@ def weldQuotaReviewerConfirm(request, id_work_order):
     order.weldquotapagemark.reviewe_date = datetime.datetime.today()
     order.weldquotapagemark.save()
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def getInstallWeldList(request):
+    """
+    JunHU
+    """
+    orders = WorkOrder.objects.all()
+    context = {
+        "orders": orders,
+    }
+    html = render_to_string("techdata/widgets/tech_install_weld_table.html", context)
+    return html
+
+@dajaxice_register
+def getTechInstallWeldCard(request, iid):
+    order = WorkOrder.objects.get(id = iid)
+    context = {
+        "order": order,
+    }
+    html = render_to_string("techdata/widgets/tech_install_weld_card.html", context)
+    return html
