@@ -571,6 +571,7 @@ class AuxiliaryToolEntryCard(models.Model):
 class WeldStoreThread(models.Model):
     specification = models.CharField(max_length=50,verbose_name=u"规格")
     count = models.FloatField(verbose_name=u"数量")
+    type=  models.CharField(verbose_name=u"材料种类",choices = MATERIAL_CATEGORY_CHOICES,max_length=20)
     class Meta:
         verbose_name = u"库存安全量"
         verbose_name_plural = u"库存安全量"

@@ -22,7 +22,7 @@
             <td>{{entry.entry_time|date:"Y年m月d日"}}</td>
             <td>{{entry.purchaser.userinfo}}</td>
             <td>{{entry.inspector.userinfo}}</td>
-            <td>{% ifequal entry.entry_status  ENTRYSTATUS_END %}<a class="btn" href="/storage/{{entryurl}}/{{entry.id}}">查看</a>{% else %}<a class="btn btn-warning" href="/storage/{{entryurl}}/{{entry.id}}">待处理</a>{% endifequal %}</td>
+            <td>{% ifequal entry.entry_status  ENTRYSTATUS_END %}<a class="btn" href="{{entryurl}}/{{entry.id}}">查看</a>{% else %}<a class="btn btn-warning" href="{{entryurl}}/{{entry.id}}">待处理</a>{% endifequal %}</td>
         </tr>
         {% endfor %}
     </tbody>
