@@ -5,6 +5,10 @@
 
 {% endblock %}
 
+{% block sub_sec %}
+<a href="/storage/storethread" class="current">库存安全量管理</a>
+{% endblock %}
+
 {% block inner_content %}
 <h3>库存安全量管理</h3>
 <div class="span8">
@@ -17,7 +21,7 @@
         <button class="btn btn-success">检索</button>
         <div>
             <br>
-            <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal2" onclick="add_storeThreadEntry()">新增记录</a>
+            <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal2" onclick="add_storeThreadEntry()">新增安全量</a>
         </div>
         <br>
     </form>

@@ -1,11 +1,11 @@
 {% extends "storage/base/basedatabase.html" %}
 
 {% block title %}
-<h1>库存管理</h1>
+<h1>库房管理</h1>
 {% endblock %}
 
 {% block sub_sec %}
-<a href="/storage/storeroommanage" class="current">库存管理</a>
+<a href="/storage/storeroommanage" class="current">库房管理</a>
 {% endblock %}
 
 {% block inner_content%}
@@ -20,7 +20,7 @@
     </form>
 </div>
 <div class="span8" style="margin-top:20px;margin-bottom:20px">
-    <button type="button" id="insertSR" class="btn btn-primary" href="#myModal" role="button" data-toggle="modal">新增记录</button>
+    <button type="button" id="insertSR" class="btn btn-primary" href="#myModal" role="button" data-toggle="modal">新增库房</button>
 </div>
 <div class="span8" id="room_table">
     {% include "storage/widgets/storeroom_table.html" %} 

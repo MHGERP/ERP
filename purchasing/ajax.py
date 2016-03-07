@@ -1033,18 +1033,10 @@ def selectEntryType(request,bid,selected,selectentryform):
         return simplejson.dumps({"html":html,"items_set":selected,"selectvalue":selectvalue,"bid":bid})
 
 @dajaxice_register
-def genEntry(request,items_set,selectvalue,bid):
-    entrymodel,entryitemmodel = getEntryDataModel(selectvalue)
+def genEntry(request,items_set,bid):
     items_set = getArrivalInspections(items_set) 
     try:
         bidform = BidForm.objects.get(bid_id = bid)
-        entry_obj = entrymodel(purchaser = request.user , bidform = bidform)
-        entry_obj.save()
-        for item in items_set:
-            entryitem_obj = entryitemmodel(material = item.material,entry = entry_obj)
-            entryitem_obj.save()
-            item.check_pass = True
-            item.save()
         entry_factory = AutoGenEntry(request.user,items_set,bidform)
         isOk = True
     except Exception,e:
