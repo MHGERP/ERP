@@ -29,7 +29,7 @@
 			<td>{% if item.can_choose %}
 			<input type="checkbox" class="checkbox" args="{{item.id}}">
 			{% endif %}</td> {% endif %}
-			<td>{{item.index}}</td>
+			<td>{{forloop.counter}}</td>
         	<td>{{item.name}}</th>
             <td>{{item.material.name}}</td>
             <td>{{item.press}}</td>
@@ -55,7 +55,7 @@
 			<td>{% if item.can_choose %}
 			<input type="checkbox" class="checkbox" args="{{item.id}}">
 			{% endif %}</td> {% endif %}
-			<td>{{item.index}}</td>
+			<td>{{forloop.counter}}</td>
         	<td>{{item.name}}</th>
             <td>{{item.material.name}}</td>
             <td>{{item.press}}</td>

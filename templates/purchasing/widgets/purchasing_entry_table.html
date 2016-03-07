@@ -13,14 +13,13 @@
             <td>{{entry.entry_time|date:"Y年m月d日"}}</td>
             <td>{{entry.purchaser.userinfo}}</td>
             <td>{{entry.inspector.userinfo}}</td>
-            <td>{% ifequal entry.entry_status  ENTRYSTATUS_END %}<a class="btn" href="{{entryurl}}/{{entry.id}}">查看</a>{% else %}<a class="btn btn-warning" href="{{entryurl}}/{{entry.id}}">待处理</a>{% endifequal %}</td>
+            <td>{% ifequal entry.entry_status  STORAGESTATUS_PURCHASER %}
+                    <a class="btn btn-warning" href="/purchasing/{{entryurl}}/{{entry_type}}/{{entry.id}}/{{entry.steel_type}}">待处理</a>
+                {% else %}
+                    <a class="btn" href="/purchasing/{{entryurl}}/{{entry_type}}/{{entry.id}}/{{entry.steel_type}}">查看</a>
+                {% endifequal %}
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-<script>
-    $(function(){
-                        $('#entry_time').datetimepicker({format:"yyyy-mm-dd",minView:2});
-                                    
-            });
-</script>

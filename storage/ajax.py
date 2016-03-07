@@ -535,8 +535,20 @@ def steelEntryConfirm(request,eid,entry_code):
     try:
         entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
         if entry.entry_status == STORAGESTATUS_KEEPER:
-            entry.entry_code = entry_code
-            entry.keeper = request.user
+            entry.form_code = entry_code
+            steel_entry_set = SteelMaterialPurchasingEntry.objects.get(form_code = entry.form_code)
+            if steel_entry_set.steel_type == BOARD_STEEL:
+                boardsteel_set = steel_entry_set.boardsteelmaterialpurchasingentry_set.all()
+                for boardsteel in boardsteel_set:
+                    ledger = boardsteel.steel_material.boardsteelmaterialledger
+                    ledger.quantity = ledger.quantity + boardsteel.quantity
+                    ledger.save()
+            elif steel_entry_set.steel_type == BAR_STEEL:
+                barsteel_set = steel_entry_set.barsteelmaterialpurchasingentry_set.all()
+                for barsteel in barsteel_set:
+                    ledger = barsteel.steel_material.barsteelmaterialledger
+                    ledger.quantity = ledger.quantity + barsteel.quantity
+                    ledger.save()
             entry.entry_status = STORAGESTATUS_END
             entry.entry_time = datetime.date.today()
             entry.save()

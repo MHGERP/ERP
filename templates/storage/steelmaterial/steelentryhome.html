@@ -18,34 +18,7 @@
     <button class="btn btn-success">检索</button>
 </form>
 <br />
-<table class="table table-bordered">
-    <thead>
-        <th>日期</th>
-        <th>编号</th>
-        <th>货物来源</th>
-        <th>采购员</th>
-        <th>检查员</th>
-        <th>操作</th>
-    </thead>
-    </tbody>
-        {% for entry in steel_entry_set %}
-        <tr>
-            <td>{{entry.entry_time|date:"Y年m月d日"}}</td>
-            <td>{{entry.form_code}}</td>
-            <td>{{entry.material_source}}</td>
-            <td>{{entry.purchaser.userinfo}}</td>
-            <td>{{entry.inspector.userinfo}}</td>
-            <td>
-                {% ifequal entry.entry_status  ENTRYSTATUS_END %}
-                <a class="btn" href="/storage/steelentryconfirm/{{entry.id}}/{{entry.steel_type}}">查看</a>
-                {% else %}
-                <a class="btn btn-warning" href="/storage/steelentryconfirm/{{entry.id}}/{{entry.steel_type}}">待处理</a>
-                {% endifequal %}
-            </td>
-        </tr>
-        {% endfor %}
-         </tbody>
-</table>
+{% include "storage/widgets/steelmaterialentrytable.html"%}
 </div>
 <script>
     $(function(){

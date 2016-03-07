@@ -18,7 +18,7 @@ from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm,
 from django.db.models import Q
 from datetime import datetime
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
-from storage.models import WeldMaterialEntry,WeldMaterialEntryItems
+from storage.models import *
 from storage.forms import EntryTypeForm
 from storage.utils import AutoGenEntry
 @dajaxice_register
@@ -1038,6 +1038,13 @@ def genEntry(request,items_set,selectvalue,bid):
     items_set = getArrivalInspections(items_set) 
     try:
         bidform = BidForm.objects.get(bid_id = bid)
+        entry_obj = entrymodel(purchaser = request.user , bidform = bidform)
+        entry_obj.save()
+        for item in items_set:
+            entryitem_obj = entryitemmodel(material = item.material,entry = entry_obj)
+            entryitem_obj.save()
+            item.check_pass = True
+            item.save()
         entry_factory = AutoGenEntry(request.user,items_set,bidform)
         isOk = True
     except Exception,e:
@@ -1088,6 +1095,8 @@ def saveOrderformExecute(request,orderform_id,form):
             materielexecute.date = datetime.today()
             materielexecute.is_save = False
             materielexecute.save()
+            orderform.meterielexecute=materielexecute
+            orderform.save()
             for item in orderform.materielformconnection_set.all():
                 materiel=item.materiel
                 materielexecutedetail=MaterielExecuteDetail(materiel_execute=materielexecute,materiel=materiel)
@@ -1100,3 +1109,65 @@ def saveOrderformExecute(request,orderform_id,form):
         print "sss"
         ret={'status':'1','message':u'材料执行保存失败!'}
     return simplejson.dumps(ret)
+@dajaxice_register
+def entryConfirmQuery(request,entry_select):
+    #Liuguochao
+    
+    replace_dic = {}
+    filter_dic = {"entry_status":STORAGESTATUS_PURCHASER}
+    if entry_select == "1":
+        _Model = WeldMaterialEntry
+    elif entry_select == "2":
+        _Model = SteelMaterialPurchasingEntry
+        replace_dic = {"entry_code":"form_code",}
+    elif entry_select == "3":
+        _Model = AuxiliaryToolEntryCardList
+        replace_dic = {"entry_status":"status","entry_time":"create_time","entry_code":"index"}
+        filter_dic = {"status":STORAGESTATUS_PURCHASER,}
+    elif entry_select == "4":
+        _Model = OutsideStandardEntry
+    html = handleProcess(_Model,filter_dic,entry_select, replace_dic)
+    data = {
+        "html":html,
+    }
+    return simplejson.dumps(data)
+    
+def handleProcess(_Model,filter_dic,entry_select,replace_dic = None):
+    entry_set = _Model.objects.filter(**filter_dic)
+    for item in entry_set:
+        if replace_dic != None:
+            for k,v in replace_dic.items():
+                setattr(item,k,getattr(item,v))
+    entry_set.order_by("-entry_time")
+    html = render_to_string("purchasing/widgets/purchasing_entry_table.html",{'entry_set':entry_set,
+                "entryurl":"arrivalInspectionConfirm","STORAGESTATUS_PURCHASER":STORAGESTATUS_PURCHASER,
+                "entry_type":entry_select})
+    return html
+@dajaxice_register
+def entryInspectionConfirm(request,eid,entry_typeid):
+    entry_typeid = int(entry_typeid)
+    if entry_typeid == 1:
+        message = handleEntryInspectionConfirm(request,WeldMaterialEntry,eid,entry_typeid)
+    elif entry_typeid == 2:
+        message = handleEntryInspectionConfirm(request,SteelMaterialPurchasingEntry,eid,entry_typeid)
+    elif entry_typeid == 3:
+        message = handleEntryInspectionConfirm(request,AuxiliaryToolEntryCardList,eid,entry_typeid)
+    elif entry_typeid == 4:
+        message = handleEntryInspectionConfirm(request,OutsideStandardEntry,eid,entry_typeid)
+    return message
+def handleEntryInspectionConfirm(request,_Model,eid,entry_typeid):
+    print "aaaaaaaaaaaaaa"
+    print _Model
+    entry = _Model.objects.get(id = eid)
+    status = entry.status if entry_typeid == 3 else entry.entry_status
+    if status == STORAGESTATUS_PURCHASER:
+        if entry_typeid == 3:
+            entry.status = STORAGESTATUS_KEEPER
+        else:
+            entry.entry_status = STORAGESTATUS_KEEPER
+        entry.purchaser = request.user
+        entry.save()
+        flag = True
+    else:
+        flag = False
+    return simplejson.dumps({'flag':flag})    

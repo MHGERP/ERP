@@ -19,26 +19,6 @@
     {% endfor %}
     <button class="btn btn-primary">检索</button> 
    </form>
-
-   <table class="table table-hover table-bordered">
-   <tr>
-   <th>入库单编号</th>
-   <th>日期</th>
-   <th>采购员</th>
-   <th>检查员</th>
-   <th>操作</th>
-   </tr>
-   {% for item in entry_list %}
-   <tr>
-   <td>{{item.index}}</td>
-   <td>{{item.create_time|date:'Y年m月d日'}}</td>
-   <td>{{item.purchaser.userinfo.name}}</td>
-   <td>{{item.inspector.userinfo.name}}</td>
-   
-   <td><a href="/storage/auxiliarytools/entry?id={{item.id}}"><button type="button" class="btn btn-warning">待处理</button></a></td>
-   </tr>
-
-   {% endfor %}
-   </table>
+{% include "storage/widgets/auxiliarytoolsentrytable.html"%}
 {% endblock%}
 

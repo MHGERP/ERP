@@ -10,7 +10,7 @@
         {% for item in items %}
         <tr>
             <td>{{item.order_id}}</td>
-            <td>{{item.create_time}}</td>
+            <td>{{item.create_time|date:"Y-m-d"}}</td>
             <td>
                 <span class="btn btn-small btn-open" args="{{item.order_id}}">查看</span>
 				{% if item.order_status.status == ORDERFORN_STATUS_BEGIN %}

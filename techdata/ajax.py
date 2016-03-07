@@ -480,12 +480,10 @@ def getWeldSeamWeight(self, id_work_order):
 
     context = {
         "work_order":work_order,
-        "dic":dic
+        "dic":dic,
     }
     html = render_to_string("techdata/widgets/weld_quota_table.html", context)
-    read_only = (work_order.weldlistpagemark.reviewer != None)
-
-    return simplejson.dumps({"html": html, "read_only": read_only})
+    return html
 
 @dajaxice_register  
 def updateProcessReview(request, iid,processReview_form):
@@ -1105,3 +1103,32 @@ def heatTreatmentArrangementReview(request, card_id):
         card.heattreatmentarrangement.review_date = datetime.datetime.today()
         card.heattreatmentarrangement.save()
         return simplejson.dumps({"res" : True, "reviewer" : unicode(request.user.userinfo)})
+
+@dajaxice_register
+def weldQuotaWriterConfirm(request, id_work_order):
+    """
+    MH Chen
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if WeldQuotaPageMark.objects.filter(order = order).count() == 0:
+        WeldQuotaPageMark(order = order).save()
+    order.weldquotapagemark.writer = request.user
+    order.weldquotapagemark.write_date = datetime.datetime.today()
+    order.weldquotapagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def weldQuotaReviewerConfirm(request, id_work_order):
+    """
+    MH Chen
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if WeldQuotaPageMark.objects.filter(order = order).count() == 0:
+        WeldQuotaPageMark(order = order).save()
+    
+    if order.weldquotapagemark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.weldquotapagemark.reviewer = request.user
+    order.weldquotapagemark.reviewe_date = datetime.datetime.today()
+    order.weldquotapagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})

@@ -285,3 +285,15 @@ class TechPlan(models.Model):
         verbose_name_plural = u"技术准备计划"
     def __unicode__(self):
         return self.order.order_index + "(%s)" % self.detail
+
+class WeldQuotaPageMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "weld_quota_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "weld_quota_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"焊材明细签章"
+        verbose_name_plural = u"焊材明细签章"
+    def __unicode__(self):
+        return self.order.order_index

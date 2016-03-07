@@ -44,8 +44,8 @@
 {% endif%}
 {% if order_form.order_status.status == 1 %}
 <span class="btn" id="add_to_bid" data-toggle="modal" data-target="#bid_list">加入标单</span>
-{% if order_form.order_mod == 0%}
-<span class="btn" id="generate_execute" data-toggle="modal" data-target="#add_to_execute">生成材料执行表</span>
+{% if order_form.order_mod == 0 %}
+<button class="btn" id="generate_execute" data-toggle="modal" data-target="#add_to_execute" {% if order_form.meterielexecute%}disabled="disabled"{% endif%}>生成材料执行表</button>
 {% endif%}
 {% endif %}
 
