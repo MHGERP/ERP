@@ -167,7 +167,7 @@ class HandleEntry(object):
             entryitem_obj = self.getEntryItem(item.material,entry_obj)
             entryitem_obj.save()
             item.check_pass = True
-            #item.save()
+            item.save()
 
 class HandleEntryWeld(HandleEntry):
     def getEntry(self,user,bidform):

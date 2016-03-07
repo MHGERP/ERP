@@ -253,10 +253,10 @@ REFUNDSTATUS_CHOICES = (
 
 STORAGEDEPARTMENT_CHOICES=( 
     (-1,u'------'),
-    (1,u'部门A'),
-    (2,u'部门B'),
-    (3,u'部门C'),
-    (4,u'部门D'),
+    (1,u'焊一组'),
+    (2,u'焊二组'),
+    (3,u'焊三组'),
+    (4,u'电焊组'),
 )
 
 AUTH_TYPE_CHOICES = (

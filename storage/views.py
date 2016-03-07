@@ -110,7 +110,7 @@ def weldEntryHomeViews(request):
             "entry_set":weldentry_set,
             "ENTRYSTATUS_END":STORAGESTATUS_END,
             "search_form":search_form,
-            "entryurl":"weldentryconfirm",
+            "entryurl":"storage/weldentryconfirm",
             }
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
@@ -177,7 +177,7 @@ def Weld_Apply_Card_List(request):
     """
     context={}
     context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
-    weld_apply_cards=WeldingMaterialApplyCard.objects.all().order_by('create_time')
+    weld_apply_cards=WeldingMaterialApplyCard.objects.all().order_by('-create_time')
     context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
@@ -678,7 +678,7 @@ def outsideHomeViews(request):
 
 def outsideEntryHomeViews(request):
     key_list = ["entry_set","entryurl","ENTRYSTATUS_END"]
-    context = getStorageHomeContext(request,OutsideStandardEntry,OutsideEntrySearchForm,STORAGESTATUS_KEEPER,"outside/entryconfirm",key_list,"entry_time")
+    context = getStorageHomeContext(request,OutsideStandardEntry,OutsideEntrySearchForm,STORAGESTATUS_KEEPER,"storage/outside/entryconfirm",key_list,"entry_time")
     return render(request,"storage/outside/outsideentryhome.html",context)
 
 def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list,order_field):
@@ -708,7 +708,6 @@ def outsideEntryConfirmViews(request,eid):
 def getEntryConfirmContext(request,eid,_Model,_Inform,_Reform,entry_url):
     entry_obj = _Model.objects.get(id = eid)
     inform = _Inform(instance = entry_obj)
-    print "dadsa"
     reform = _Reform(instance = entry_obj)
     is_show = entry_obj.entry_status == STORAGESTATUS_KEEPER
     entry_set = OutsideStandardItem.objects.filter(entry = entry_obj)
@@ -730,6 +729,7 @@ def StoreThreadViews(request):
             items_set = get_weld_filter(WeldStoreThread,search_form.cleaned_data)
     else:
         search_form = ThreadSearchForm()
+    items_set = items_set.order_by('type','specification')
     context = {
         "items_set":items_set,
         "entry_form":entry_form,
@@ -738,7 +738,7 @@ def StoreThreadViews(request):
     return render(request,"storage/storethread/storethread.html",context)
 
 def outsideApplyCardHomeViews(request):
-    applyurl = "outside/applycardconfirm"
+    applyurl = "storage/outside/applycardconfirm"
     key_list = ["card_set","applyurl","APPLYSTATUS_END"]
     context = getStorageHomeContext(request,OutsideApplyCard,OutsideApplyCardSearchForm,STORAGESTATUS_KEEPER,applyurl,key_list,"date")
     return render(request,"storage/outside/applycardhome.html",context)

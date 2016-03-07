@@ -158,7 +158,7 @@ class ApplyCardItemBase(models.Model):
         abstract = True
 
 class WeldingMaterialApplyCard(models.Model):
-    department=models.CharField(verbose_name=u'领用单位',max_length=20,blank=False)
+    department=models.IntegerField(verbose_name=u'领用单位',choices=STORAGEDEPARTMENT_CHOICES,max_length=20,blank=False)
     index=models.IntegerField(verbose_name=u'编号',blank=False,unique=True)
     create_time=models.DateField(verbose_name=u'填写时间',auto_now_add=True)
     workorder=models.ForeignKey(WorkOrder,verbose_name=u'工作令',blank=False)
@@ -571,6 +571,7 @@ class AuxiliaryToolEntryCard(models.Model):
 class WeldStoreThread(models.Model):
     specification = models.CharField(max_length=50,verbose_name=u"规格")
     count = models.FloatField(verbose_name=u"数量")
+    type=  models.CharField(verbose_name=u"材料种类",choices = MATERIAL_CATEGORY_CHOICES,max_length=20)
     class Meta:
         verbose_name = u"库存安全量"
         verbose_name_plural = u"库存安全量"

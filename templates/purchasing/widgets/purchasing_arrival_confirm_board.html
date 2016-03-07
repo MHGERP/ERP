@@ -1,0 +1,52 @@
+{% extends "purchasing/purchasing_arrival_confirm.html" %}
+
+{% block table_title %}
+<h3 class="table-title" align="center">板材入库单</h3>
+{% endblock %}
+
+{% block entry_table_detail %}
+    <table id="items_table" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>工作令</th>
+                <th>材料名称</th>
+                <th>规格</th>
+                <th>材质</th>
+                <th>材质编号</th>
+                <th>炉号</th>
+                <th>批号</th>
+                <th>数量</th>
+                <th>重量</th>
+                <th>单位</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in entry_set %}
+            <tr id="{{item.id}}">
+                <td>{{forloop.counter}}</td>
+                <td>
+                    {% for workorder in item.steel_material.work_order.all %}
+                        <span>{{workorder}}</span>
+                    {% endfor %}
+                </td>
+                <td>{{item.steel_material.name}}</td>
+                <td>{{item.steel_material.specifications}}</td>
+                <td>{{item.steel_material.material}}</td>
+                <td>{{item.steel_material.material_number}}</input></td>
+                <td>{{item.steel_material.batch_number}}</td>
+                <td>{{item.steel_material.lot_number}}</td>
+                <td id="id_quantity">{{item.quantity}}</td>
+                <td>{{item.weight}}</td>
+                <td>{% ifequal item.weight_management 0 %}
+                        千克
+                    {% endifequal %}
+                    {% ifequal item.weight_management 1 %}
+                        吨
+                    {% endifequal %}
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+{% endblock %}

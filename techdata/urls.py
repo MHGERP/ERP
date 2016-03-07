@@ -104,5 +104,9 @@ urlpatterns=patterns('',
     url(
         r'^uploadHeatArrangement',
         techdata_views.uploadHeatArrangement,
-       ),
+    ),
+    url(
+        r'^techInstallWeldCard',
+        techdata_views.techInstallWeldCard,
+    ),
 )

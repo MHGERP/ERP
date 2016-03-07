@@ -1,0 +1,38 @@
+{% extends "purchasing/purchasing_arrivalcheck.html" %}
+
+{% block table_title %}
+<h3 class="table-title" align="center">外购件入库单</h3>
+{% endblock %}
+
+{% block entry_table_detail %}
+<table id="items_table" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>工作令</th>
+                <th>标准号或图号</th>
+                <th>名称及规格</th>
+                <th>材料牌号</th>
+                <th>炉批号</th>
+                <th>标记号</th>
+                <th>单位</th>
+                <th>数量</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in entry_set %}
+            <tr id="{{item.id}}">
+                <td>{{forloop.counter}}</td>
+                <td>{{item.materiel.order}}</td>
+                <td>{{item.schematic_index}}</td>
+                <td>{{item.specification}}</td>
+                <td>{{item.material_mark|default_if_none:""}}</td>
+                <td>{{item.batch_number|default_if_none:""}}</td>
+                <td>{{item.tag_number|default_if_none:""}}</td>
+                <td>{{item.unit}}</td>
+                <td>{{item.number}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+{% endblock %}
