@@ -10,7 +10,7 @@
 {% block inner_content %}
 <form class="form form-inline" method="post">
     {% csrf_token%}
-    <div class="row" style="margin-bottom:20px;">
+    <div class="row-fluid" style="margin-bottom:20px;">
         <div class="span6">
             <label class="hz-align">入库时间：</label>
             <strong>{{entry.entry_time|date:"Y年m月d日"}}</strong>

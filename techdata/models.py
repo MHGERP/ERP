@@ -297,3 +297,17 @@ class WeldQuotaPageMark(models.Model):
         verbose_name_plural = u"焊材明细签章"
     def __unicode__(self):
         return self.order.order_index
+
+
+class ConnectOrientation(models.Model):
+    order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
+    name = models.CharField(max_length = 100, blank = False, verbose_name = u"文件名称")
+    file_obj = models.FileField(upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"程序")
+    upload_date = models.DateTimeField(null = True, blank = True, verbose_name = u"上传时间")
+    file_size = models.CharField(max_length = 50, blank = True, null = True, default = None, verbose_name = "文件大小")
+    file_type = models.CharField(max_length = 50, blank = True, null = True, default = None, verbose_name = "文件类型")
+    class Meta:
+        verbose_name = u"管口方位图"
+        verbose_name_plural = u"管口方位图"
+    def __unicode__(self):
+        return self.name
