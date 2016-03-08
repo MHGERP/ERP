@@ -1145,6 +1145,9 @@ def getInstallWeldList(request):
 
 @dajaxice_register
 def getTechInstallWeldCard(request, iid):
+    """
+    JunHU
+    """
     order = WorkOrder.objects.get(id = iid)
     context = {
         "order": order,
