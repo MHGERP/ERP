@@ -21,7 +21,6 @@ $("#btn-upload").click(function() {
             
         },
         success: function(data) {
-            alert(data.file_upload_error);
             if(data.file_upload_error == 2) {
                 alert("上传失败，请重试");
             }
