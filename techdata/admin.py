@@ -24,6 +24,7 @@ RegisterClass = (
     DesignBOMMark,
     TechPlan,
     WeldQuotaPageMark,
+    ConnectOrientation,
 )
 
 for item in RegisterClass:
