@@ -1,0 +1,21 @@
+<table class="table table-bordered">
+    <thead>
+        <th>库房名称</th>
+        <th>位置</th>
+        <th>材料类型</th>
+        <th>操作</th>
+    </thead>
+    <tbody>
+        {% for index in room_set %}
+        <tr sr_id="{{index.id}}">
+            <td>{{index.name}}</td>
+            <td>{{index.position}}</td>
+            <td mt = "{{index.material_type}}">{{index.get_material_type_display}}</td>
+            <td>
+                <button type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" id="updateSR">修改</button>
+                <button class="btn btn-primary" id="deleteSR">删除</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

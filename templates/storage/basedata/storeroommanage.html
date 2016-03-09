@@ -1,0 +1,48 @@
+{% extends "storage/base/basedatabase.html" %}
+
+{% block title %}
+<h1>库房管理</h1>
+{% endblock %}
+
+{% block sub_sec %}
+<a href="/storage/storeroommanage" class="current">库房管理</a>
+{% endblock %}
+
+{% block inner_content%}
+<div class="span12">
+    <form class="form-inline" method="" id="sr_searchForm">
+        {% csrf_token %}
+        {% for field in search_form %}
+        {{field.label}}
+        {{field}}
+        {% endfor %}
+        <button type="button" class="btn btn-success" id="searchSR">检索</button>
+    </form>
+</div>
+<div class="span8" style="margin-top:20px;margin-bottom:20px">
+    <button type="button" id="insertSR" class="btn btn-primary" href="#myModal" role="button" data-toggle="modal">新增库房</button>
+</div>
+<div class="span8" id="room_table">
+    {% include "storage/widgets/storeroom_table.html" %} 
+</div>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h3></h3>
+    </div>
+    <div class="modal-body">
+        <form id="sr_form" action="" class="form-horizontal">
+            {% for field in new_room %}
+            <div class="control-group">
+                <label class="control-label">{{field.label}}</label>
+                <div class="controls">{{field}}</div>
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" id="srSave" mark="">保存</button>
+    </div>
+</div>
+{% endblock%}

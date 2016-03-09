@@ -20,6 +20,7 @@ from techdata.models import *
 from const.models import *
 from const.utils import getMaterialQuerySet
 
+from purchasing.models import MaterielExecute, MaterielExecuteDetail
 import datetime
 
 @dajaxice_register
@@ -27,6 +28,7 @@ def getProcessBOM(request, id_work_order):
     """
     JunHU
     """
+    print "hhh"
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
     for item in BOM:
@@ -38,6 +40,7 @@ def getProcessBOM(request, id_work_order):
             process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
             process_list = []
             while process:
+                print process
                 process_list.append(process)
                 process = process.next_processing
         except:
@@ -57,6 +60,9 @@ def getProcessBOM(request, id_work_order):
 
 @dajaxice_register
 def getSingleProcessBOM(request, iid):
+    """
+    JunHU
+    """
     item = Materiel.objects.get(id = iid)
     if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
         CirculationRoute(materiel_belong = item).save()
@@ -78,19 +84,26 @@ def getSingleProcessBOM(request, iid):
     return html
 
 @dajaxice_register  
-def getAuxiliaryMaterielInfo(request, iid):
+def getAuxiliaryMaterielInfo(request, iid,categories):
     """
     MH Chen
     """
     materiel = Materiel.objects.get(id = iid)
-    form = MaterielForm(instance = materiel)
+    form = AuxiliaryMaterielForm(instance = materiel)
+    categories_form = CategoriesForm(initial={"categorie_type":categories})
+    try:
+        user_ratio = 0
+        if materiel.net_weight != None and materiel.quota != None:
+            user_ratio = round(materiel.net_weight/materiel.quota,5)
+    except:
+        pass
     context = {
+        "categories_form":categories_form,
         "form": form,
+        "user_ratio":user_ratio,
     }
-    auxiliary_materiel_info_html = render_to_string("techdata/widgets/auxiliary_material_base_info_table.html", context)
-    detail_table_html = render_to_string("techdata/widgets/auxiliary_material_type_in.html", context)
-    print auxiliary_materiel_info_html
-    return simplejson.dumps({'auxiliary_materiel_info_html' : auxiliary_materiel_info_html, 'detail_table_html' : detail_table_html})
+    html = render_to_string("techdata/widgets/auxiliary_material_type_in.html", context)
+    return html
 
 
 @dajaxice_register  
@@ -231,8 +244,11 @@ def getDesignBOM(request, id_work_order):
         "work_order" : work_order,
         "BOM" : BOM,
     }
+    if DesignBOMMark.objects.filter(order = work_order).count() == 0:
+        DesignBOMMark(order = work_order).save()
+    read_only = (work_order.designbommark.reviewer != None)
     html = render_to_string("techdata/widgets/designBOM_table.html", context)
-    return html
+    return simplejson.dumps({"read_only" : read_only, "html" : html})
 
 @dajaxice_register
 def getSingleDesignBOM(request, iid):
@@ -299,9 +315,11 @@ def boxOutBought(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    work_order = WorkOrder.objects.get(id = order)
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
+        "work_order" : work_order,
     }
     html = render_to_string("techdata/widgets/tech_box_outbought_table.html", context)
     return html
@@ -311,7 +329,7 @@ def firstFeeding(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -323,7 +341,7 @@ def principalMaterial(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -333,11 +351,18 @@ def principalMaterial(request, order):
 @dajaxice_register
 def auxiliaryMaterial(request, order):
     """
-    BinWu 
+    MH Chen 
     """
-    list = Materiel.objects.filter(order = order);
+    work_order = WorkOrder.objects.get(id = order)
+    list = Materiel.objects.filter(order = order)
+    for item in list:
+        try:
+            item.user_ratio = round(item.net_weight / item.quota, 5)
+        except:
+            item.user_ratio = 0
     context = {
         "list" : list,
+        "work_order":work_order,
     }
     html = render_to_string("techdata/widgets/auxiliary_material_table.html", context)
     return html
@@ -347,7 +372,7 @@ def weldList(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -359,7 +384,7 @@ def techBoxWeld(request, order):
     """
     BinWu
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -369,9 +394,9 @@ def techBoxWeld(request, order):
 @dajaxice_register
 def weldQuota(request, order):
     """
-    BinWu
+    MH Chen
     """
-    list = Materiel.objects.filter(order = order);
+    list = Materiel.objects.filter(order = order)
     context = {
         "list" : list,
     }
@@ -429,6 +454,36 @@ def getWeldSeamList(self, id_work_order):
     read_only = (work_order.weldlistpagemark.reviewer != None)
 
     return simplejson.dumps({"html": html, "read_only": read_only})
+
+@dajaxice_register
+def getWeldSeamWeight(self, id_work_order):
+    """
+    MH Chen
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    weldseam_list = WeldSeam.objects.filter(materiel_belong__order = work_order)
+    dic = {}
+
+    # items = WeldSeam.objects.values('weld_material_1__categories', 'size_1',"weld_material_2__categories","size_1").annotate(Sum('hour'))
+
+    for item1 in weldseam_list:
+        if dic.has_key((item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)):
+            dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)]+= int(item1.weight_1)
+        else:
+                dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)] = int(item1.weight_1)
+    for item2 in weldseam_list:
+        if item2.weld_material_2 != None:
+            if dic.has_key((item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)):
+                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)]+= int(item2.weight_2)
+            else:
+                    dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)] = int(item2.weight_2)
+
+    context = {
+        "work_order":work_order,
+        "dic":dic,
+    }
+    html = render_to_string("techdata/widgets/weld_quota_table.html", context)
+    return html
 
 @dajaxice_register  
 def updateProcessReview(request, iid,processReview_form):
@@ -509,6 +564,36 @@ def weldListReviewerConfirm(request, id_work_order):
     order.weldlistpagemark.reviewer = request.user
     order.weldlistpagemark.reviewe_date = datetime.datetime.today()
     order.weldlistpagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def boxOutBoughtWriteConfirm(request, id_work_order):
+    """
+    BinWu
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if BoxOutBoughtMark.objects.filter(order = order).count() == 0:
+        BoxOutBoughtMark(order = order).save()
+    order.boxoutboughtmark.writer = request.user
+    order.boxoutboughtmark.write_date = datetime.datetime.today()
+    order.boxoutboughtmark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+
+@dajaxice_register
+def boxOutBoughtReviewConfirm(request, id_work_order):
+    """
+    BinWu
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if BoxOutBoughtMark.objects.filter(order = order).count() == 0:
+        BoxOutBoughtMark(order = order).save()
+
+    if order.boxoutboughtmark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.boxoutboughtmark.reviewer = request.user
+    order.boxoutboughtmark.review_date = datetime.datetime.today()
+    order.boxoutboughtmark.save()
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
 @dajaxice_register
@@ -612,6 +697,8 @@ def transferCardMark(request, iid, step, card_type = None):
 
         card = TransferCard(materiel_belong = item, card_type = card_type)
         card.save()
+        card.file_index = "%06d" % (card.id)
+        card.save()
         mark = TransferCardMark(card = card)
         mark.save()
         card.transfercardmark.writer = request.user
@@ -619,6 +706,7 @@ def transferCardMark(request, iid, step, card_type = None):
         card.transfercardmark.save()
         context = {
             "ret": True,
+            "file_index": unicode(card),
             "mark_user": unicode(card.transfercardmark.writer.userinfo),
             "mark_date": date2str(card.transfercardmark.write_date)
         }
@@ -686,14 +774,407 @@ def transferCardMark(request, iid, step, card_type = None):
 
 
 @dajaxice_register
-def saveProcessRequirement(request, pid, content):
+def saveProcessRequirement(request, id, content):
     """
     JunHU
     """
-    process = Processing.objects.get(id = pid)
+    process = Processing.objects.get(id = id)
     process.technical_requirement = content
     process.save()
 
+@dajaxice_register
+def saveAuxiliaryMaterielInfo(request, iid,categories,auxiliary_material_form):
+    """
+    MH Chen
+    """
+    materiel = Materiel.objects.get(id = iid)
+    material = materiel.material
+    material.categories = categories
+    material.save()
+    auxiliary_material_form = MaterielForm(deserialize_form(auxiliary_material_form),instance = materiel)
+    
+    if auxiliary_material_form.is_valid():
+        auxiliary_material_form.save()
+        return  "ok"
+    else:
+        return "fail"
+
+@dajaxice_register
+def getExcuteList(request):
+    """
+    JunHU
+    """
+    execute_list = MaterielExecute.objects.filter(is_save = True)
+    for execute in execute_list:
+        execute.program_list = Program.objects.filter(execute = execute)
+    context = {
+        "execute_list": execute_list,
+    }
+    html = render_to_string("techdata/widgets/programme_edit_table.html", context)
+    return html
+
+@dajaxice_register
+def removeProgram(request, pid):
+    """
+    JunHU
+    """
+    try:
+        program = Program.objects.get(id = pid)
+        program.delete()
+        return simplejson.dumps({"ret": True})
+    except:
+        return simplejson.dumps({"ret": False})
+
+@dajaxice_register
+def saveProgramFeedback(request, iid, form):
+    """
+    JunHU
+    """
+    execute = MaterielExecute.objects.get(id = iid)
+    form = ProgramFeedbackForm(deserialize_form(form))
+    if form.is_valid():
+        need_correct = form.cleaned_data["need_correct"]
+        feedback = form.cleaned_data["feedback"]
+        execute.is_save = (not need_correct)
+        execute.tech_feedback = feedback
+        execute.save()
+        return simplejson.dumps({"ret": True, })
+    else:
+        return simplejson.dumps({"ret": False, })
+
+@dajaxice_register
+def getHeatTreatMaterielList(request):
+    """
+    JunHU
+    """
+    item_list = HeatTreatmentMateriel.objects.filter(card_belong = None);
+    context = {
+        "item_list": item_list,
+    }
+    html = render_to_string("techdata/widgets/tech_hot_deel_table1.html", context)
+    return html
+
+@dajaxice_register
+def getHeatTreatCardList(request):
+    """
+    JunHU
+    """
+    card_list = HeatTreatmentTechCard.objects.all()
+    context = {
+        "card_list": card_list,
+    }
+    html = render_to_string("techdata/widgets/tech_hot_deel_table2.html", context)
+    return html
+
+@dajaxice_register
+def deleteHeatTreatCard(request, card_id):
+    """
+    JunHU
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    for item in HeatTreatmentMateriel.objects.filter(card_belong = card):
+        item.card_belong = None
+        item.save()
+    card.delete()
+
+@dajaxice_register
+def createNewHeatTreatCard(request, selected_item):
+    """
+    JunHU
+    """
+    if not selected_item: 
+        return
+    card = HeatTreatmentTechCard()
+    card.save()
+    HeatTreatmentArrangement(card_belong = card).save()
+    for item_id in selected_item:
+        if not item_id: continue
+        item = HeatTreatmentMateriel.objects.get(id = item_id)
+        item.card_belong = card
+        item.save()
+
+@dajaxice_register
+def getHeatTreatCardDetail(request, card_id):
+    """
+    JunHU
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    context = {
+        "card": card,
+        "STATIC_URL": settings.STATIC_URL,
+        "MARK_WRITE": MARK_WRITE,
+        "MARK_REVIEW": MARK_REVIEW,
+        "HEATTREATMENTCARD_ATTR_TEM_START": HEATTREATMENTCARD_ATTR_TEM_START,
+        "HEATTREATMENTCARD_ATTR_TEM_END": HEATTREATMENTCARD_ATTR_TEM_END,
+        "HEATTREATMENTCARD_ATTR_TEM_TOP": HEATTREATMENTCARD_ATTR_TEM_TOP,
+        "HEATTREATMENTCARD_ATTR_TEM_UP_SPEED": HEATTREATMENTCARD_ATTR_TEM_UP_SPEED,
+        "HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED": HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED,
+        "HEATTREATMENTCARD_ATTR_TEM_TIME": HEATTREATMENTCARD_ATTR_TEM_TIME,
+    }
+    html = render_to_string("techdata/widgets/heat_treatment_tech_card.html", context)
+    return html
+
+@dajaxice_register
+def heatTreatCardVariableSave(request, card_id, attr, content):
+    """
+    JunHU
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    setattr(card, attr, content)
+    card.save()
+
+@dajaxice_register
+def heatTreatCardMark(request, card_id, step):
+    """
+    JunHU
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    if step == MARK_WRITE:
+        card.writer = request.user
+        card.write_date = datetime.datetime.today()
+        card.file_index = "%06d" % (card.id) # 暂定
+        card.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(card.writer.userinfo),
+            "file_index": card.file_index,
+        }
+    elif step == MARK_REVIEW:
+        if card.writer == None:
+            context = {
+                "ret": False,
+                "warning": u"工艺卡还未完成编制",
+            }
+            return simplejson.dumps(context)
+        card.reviewer = request.user
+        card.review_date = datetime.datetime.today()
+        card.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(card.reviewer.userinfo),
+        }
+    else:
+        context = {
+            "ret": False,
+            "warning": u"后台保存错误"
+        }
+    return simplejson.dumps(context)
+
+@dajaxice_register
+def designBOMWriterConfirm(request, id_work_order):
+    """
+    mxl
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if DesignBOMMark.objects.filter(order = order).count() == 0:
+        DesignBOMMark(order = order).save()
+    order.designbommark.writer = request.user
+    order.designbommark.write_date = datetime.datetime.today()
+    order.designbommark.save()
+    return simplejson.dumps({"ret" : True, "user" : unicode(request.user.userinfo)})
 
 
+@dajaxice_register
+def designBOMReviewerConfirm(request, id_work_order):
+    """
+    mxl
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if DesignBOMMark.objects.filter(order = order).count() == 0:
+        DesignBOMMark(order = order).save()
 
+    if order.designbommark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.designbommark.reviewer = request.user
+    order.designbommark.review_date = datetime.datetime.today()
+    order.designbommark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def getTechPreparationPlan(request, id_work_order, month, year):
+    """
+    mxl
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    tech_plan = TechPlan.objects.filter(order = work_order).filter(month = month).filter(year = year)
+    context = {
+        "work_order" : work_order,
+        "tech_plan" : tech_plan,
+    }
+    html = render_to_string("techdata/widgets/tech_preparation_plan_table.html", context)
+    return html
+
+@dajaxice_register
+def getTechPlanForm(request, iid):
+    """
+    mxl
+    """
+    if iid == -1:
+        form = TechPreparationPlanForm()
+    else:
+        techplan = TechPlan.objects.get(id = iid)
+        form = TechPreparationPlanForm(instance = techplan)
+    form_html = render_to_string("techdata/widgets/tech_preparation_plan_form.html", {"form" : form})
+    return form_html
+
+@dajaxice_register
+def saveTechPlan(request, id_work_order, tech_preparation_plan_form, addOrUpdate, iid):
+    """
+    mxl
+    """
+    if addOrUpdate == "add":
+        tech_preparation_plan_form =  TechPreparationPlanForm(deserialize_form(tech_preparation_plan_form))    
+        order = WorkOrder.objects.get(id = id_work_order)
+        if tech_preparation_plan_form.is_valid():
+            techplan = tech_preparation_plan_form.save(commit=False)
+            techplan.order = order
+            curDate = datetime.datetime.today()
+            techplan.month = curDate.month
+            techplan.year = curDate.year
+            techplan.save()
+            return simplejson.dumps({"ret" : "ok"})
+        else:
+            for f in tech_preparation_plan_form.fields:
+                if tech_preparation_plan_form[f].errors:
+                    print tech_preparation_plan_form[f]
+    else:
+        techplan = TechPlan.objects.get(id = iid)
+        tech_preparation_plan_form =  TechPreparationPlanForm(deserialize_form(tech_preparation_plan_form), instance = techplan)
+        if tech_preparation_plan_form.is_valid():
+            tech_preparation_plan_form.save()
+            return simplejson.dumps({"ret" : "ok"}) 
+    form_html = render_to_string("techdata/widgets/tech_preparation_plan_form.html", {"form" : tech_preparation_plan_form})
+    return simplejson.dumps({"ret" : "false", "form_html" : form_html})
+
+@dajaxice_register
+def getHeatPointDetail(request, card_id):
+    """
+    BinWu
+    """
+    upload = UploadForm()
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    context = {
+        "card": card,
+        "upload" : upload,
+        "STATIC_URL": settings.STATIC_URL,
+        "MARK_WRITE": MARK_WRITE,
+        "MARK_REVIEW": MARK_REVIEW,
+        "HEATTREATMENTCARD_ATTR_TEM_START": HEATTREATMENTCARD_ATTR_TEM_START,
+        "HEATTREATMENTCARD_ATTR_TEM_END": HEATTREATMENTCARD_ATTR_TEM_END,
+        "HEATTREATMENTCARD_ATTR_TEM_TOP": HEATTREATMENTCARD_ATTR_TEM_TOP,
+        "HEATTREATMENTCARD_ATTR_TEM_UP_SPEED": HEATTREATMENTCARD_ATTR_TEM_UP_SPEED,
+        "HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED": HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED,
+        "HEATTREATMENTCARD_ATTR_TEM_TIME": HEATTREATMENTCARD_ATTR_TEM_TIME,
+    }
+    html = render_to_string("techdata/widgets/heat_point_graph.html", context)
+    return html
+
+@dajaxice_register
+def heatTreatmentArrangementWrite(request, card_id):
+    """
+    BinWu
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
+        return simplejson.dumps({"res" : False})
+    card.heattreatmentarrangement.writer = request.user
+    card.heattreatmentarrangement.file_index = "%06d" % (card.heattreatmentarrangement.id)
+    card.heattreatmentarrangement.write_date = datetime.datetime.today()
+    card.heattreatmentarrangement.save()
+    context = {
+        "res" : True,
+        "writer" : unicode(request.user.userinfo),
+        "bianhao" : card.heattreatmentarrangement.file_index,
+    }
+    return simplejson.dumps(context)
+
+@dajaxice_register 
+def heatTreatmentArrangementReview(request, card_id):
+    """
+    BinWu
+    """
+    card = HeatTreatmentTechCard.objects.get(id = card_id)
+    if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0 or not card.heattreatmentarrangement.writer:
+        return simplejson.dumps({"res" : False, })
+    else:
+        card.heattreatmentarrangement.reviewer = request.user
+        card.heattreatmentarrangement.review_date = datetime.datetime.today()
+        card.heattreatmentarrangement.save()
+        return simplejson.dumps({"res" : True, "reviewer" : unicode(request.user.userinfo)})
+
+@dajaxice_register
+def weldQuotaWriterConfirm(request, id_work_order):
+    """
+    MH Chen
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if WeldQuotaPageMark.objects.filter(order = order).count() == 0:
+        WeldQuotaPageMark(order = order).save()
+    order.weldquotapagemark.writer = request.user
+    order.weldquotapagemark.write_date = datetime.datetime.today()
+    order.weldquotapagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def weldQuotaReviewerConfirm(request, id_work_order):
+    """
+    MH Chen
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    if WeldQuotaPageMark.objects.filter(order = order).count() == 0:
+        WeldQuotaPageMark(order = order).save()
+    
+    if order.weldquotapagemark.writer == None:
+        return simplejson.dumps({"ret": False})
+    order.weldquotapagemark.reviewer = request.user
+    order.weldquotapagemark.reviewe_date = datetime.datetime.today()
+    order.weldquotapagemark.save()
+    return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
+
+@dajaxice_register
+def getInstallWeldList(request):
+    """
+    JunHU
+    """
+    orders = WorkOrder.objects.all()
+    context = {
+        "orders": orders,
+    }
+    html = render_to_string("techdata/widgets/tech_install_weld_table.html", context)
+    return html
+
+@dajaxice_register
+def getTechInstallWeldCard(request, iid):
+    order = WorkOrder.objects.get(id = iid)
+    context = {
+        "order": order,
+    }
+    html = render_to_string("techdata/widgets/tech_install_weld_card.html", context)
+    return html
+
+
+@dajaxice_register
+def getWorkOrderOfConnectList(request):
+    """
+    mxl
+    """
+    work_order_list = WorkOrder.objects.all()
+    for work_order in work_order_list:
+        work_order.connectOrientation_list = ConnectOrientation.objects.filter(order = work_order)
+    context = {
+        "work_order_list": work_order_list,
+    }
+    html = render_to_string("techdata/widgets/connection_orientation_edit_table.html", context)
+    return html
+
+@dajaxice_register
+def removeConnectOrientation(request, pid):
+    """
+    JunHU
+    """
+    try:
+        connect = ConnectOrientation.objects.get(id = pid)
+        connect.delete()
+        return simplejson.dumps({"ret": True})
+    except:
+        return simplejson.dumps({"ret": False})

@@ -11,7 +11,7 @@
         <tr id="{{item.id}}">
             <td>{{forloop.counter}}</td>
             <td>{{item.specification}}</td>
-            <td></td>
+            <td>{{item.get_type_display}}</td>
             <td>{{item.count}}</td>
             <td>
                 <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal1"  onclick="change_storethread({{item.id}})">修改</a>

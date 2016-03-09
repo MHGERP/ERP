@@ -1,0 +1,38 @@
+{% extends "purchasing/purchasing_arrivalcheck.html" %}
+
+{% block table_title %}
+<h3 class="table-title" align="center">焊材入库单</h3>
+{% endblock %}
+
+{% block entry_table_detail %}
+    <table id="items_table" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>名称</th>
+                <th>材质</th>
+                <th>规格</th>
+                <th>数量</th>
+                <th>单位</th>
+                <th>标准</th>
+                <th>状态</th>
+                <th>材质编号</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for item in entry_set %}
+            <tr id="{{item.id}}">
+                <td>{{forloop.counter}}</td>
+                <td>{{item.material}}</td>
+                <td>{{item.material.material}}</td>
+                <td>{{item.material.specification}}</td>
+                <td>{{item.material.count}}</td>
+                <td>{{item.material.unit}}</td>
+                <td>{{item.material.standard}}</input></td>
+                <td>{{item.material.status}}</input></td>
+                <td>{{item.material.material.material_id}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+{% endblock %}

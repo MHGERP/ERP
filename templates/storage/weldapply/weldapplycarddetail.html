@@ -24,7 +24,7 @@
 
     </div>
 </div>
-<form id="detail_form" action="/storage/weldapply/submit" method="POST">
+<form id="detail_form" enctype="multipart/form-data" action="/storage/weldapply/submit" method="POST">
     {% csrf_token %}
     <table class="table table-hover table-bordered">
         <tr>
@@ -63,9 +63,24 @@
         <div class="span3">
             <label>发料人:<strong>{{apply_card.commit_user.userinfo}}</strong></label>
         </div>
-        <button type="submit" id="confirm" class="btn btn-primary">确认</button>
+        {% ifequal apply_card.status APPLYCARD_COMMIT %}
+        <a type="button" href="{{redict_path}}" class="btn btn-primary">返回</a>
+        {% else %}
+        <button type="button" data-toggle="modal" href="#myModal"  id="confirm" class="btn btn-primary">确认</button>
+        {% endifequal %}
     </div>
 </form>
-
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.5">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">选择库存材料</h3>
+    </div>
+    <div class="modal-body" id="itemlist_div">
+        {% include 'storage/weldapply/itemlist.html'%} 
+    </div>
+   <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" id="save_select_item" data-dismiss="modal">保存</button>
+    </div>
+</div>
 {% endblock%}
-

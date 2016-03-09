@@ -5,7 +5,13 @@ function refresh() {
     Dajaxice.techdata.getDesignBOM(refreshCallBack, {"id_work_order" : id_work_order, });
 }
 function refreshCallBack(data) {
-    $("#widget-box").html(data);
+    if(data.read_only) {
+        $("#save_desginBOM_btn").hide();
+    }
+    else {
+        $("#save_desginBOM_btn").show();
+    }
+    $("#widget-box").html(data.html);
 }
 
 //$("#designBOM_table tbody tr").click(function(){
@@ -78,5 +84,29 @@ $("#id_goto_prev").click(function(){
    var row_prev = row.prev(".designBOM_row");
    if(!row_prev.html()) alert("本条为第一条");
    else fill(row_prev.attr("iid"));
-});
+})
 
+$(document).on("click", "#btn_write_confirm", function() {
+    var id_work_order = $("#id_work_order").val();   
+    Dajaxice.techdata.designBOMWriterConfirm(writerConfirmCallBack, {"id_work_order": id_work_order})
+});
+function writerConfirmCallBack(data) {
+    if(data.ret) {
+        $("#btn_write_confirm").removeClass("btn-primary").addClass("btn-warning").html("编制完成");
+        $("#span_write").html("编制人：" + data.user);
+    }
+}
+
+$(document).on("click", "#btn_review_confirm", function() {
+    var id_work_order = $("#id_work_order").val();   
+    Dajaxice.techdata.designBOMReviewerConfirm(reviewerConfirmCallBack, {"id_work_order": id_work_order})
+});
+function reviewerConfirmCallBack(data) {
+    if(data.ret) {
+        $("#btn_review_confirm").removeClass("btn-primary").addClass("btn-warning").html("审核完成");
+        $("#span_review").html("审核人：" + data.user);
+    }
+    else {
+        alert("未完成编制，无法审核！");
+    }
+}

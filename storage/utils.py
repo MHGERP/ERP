@@ -2,10 +2,10 @@
 # coding=utf-8
 
 import datetime
+import const 
 from storage.models import *
 from purchasing.models import *
 from django.db.models import Q
-
 def get_weld_filter(model_type,dict):
     """
     author: Shen Lian
@@ -27,7 +27,7 @@ def get_weld_filter(model_type,dict):
         qset = reduce(lambda x,y:x & y ,qset)
         res_set = model_type.objects.filter(qset)
     else:
-        res_set = model_type.objects.all()
+        res_set = model_type.objects.all().order_by('-id')
     return res_set
 
 def weldStoreItemsCreate(entry):
@@ -74,6 +74,10 @@ def saveEntry(obj,role,user,status):
     obj.save()
 
 class EntryObject(object):
+    """
+    author:shenlian
+    func:entry obj for entry save form and items
+    """
     context = {}
     flag = False
     def __init__(self,status_list,_Model,eid):
@@ -122,19 +126,106 @@ def setObjAttr(obj,field,value):
     obj.save()
 
 def updateStorageLits(items_set,_StorageModel):
-    isOk = True 
+    isOk = True
+    exist_items = []
     for item in items_set:
         try:
             storageItem = _StorageModel.objects.get(specification = item.specification)
             if storageItem.number >= item.number:
                 storageItem.number -= item.number
-                item.is_past = True
-                item.save()
-                storageItem.save()
+                exist_items.append(storageItem)
             else:
                 isOk = False
+                break
         except Exception,e:
-            isOk = False
             print e
+    if isOk:
+        for item in exist_items:
+            item.save()
     return isOk
 
+
+def getUrlByViewMode(request,entry_url):
+    """
+    Author: Shen Lian
+    Func:redict url by request param
+    """
+    redict_path = request.GET.get("redict_path",None)
+    if redict_path:
+        entry_url = redict_path
+    return entry_url
+
+class HandleEntry(object):
+    def getEntry(self,user,bidform):
+        pass
+    def getEntryItem(self,materiel,entry):
+        pass
+    def saveEntry(self,items,user,bidform):
+        entry_obj = self.getEntry(user,bidform)
+        entry_obj.save()
+        for item in items:
+            entryitem_obj = self.getEntryItem(item.material,entry_obj)
+            entryitem_obj.save()
+            item.check_pass = True
+            item.save()
+
+class HandleEntryWeld(HandleEntry):
+    def getEntry(self,user,bidform):
+        return WeldMaterialEntry(purchaser = user , bidform = bidform , entry_status = STORAGESTATUS_PURCHASER)
+    def getEntryItem(self,materiel,entry):
+        return WeldMaterialEntryItems(material = materiel,entry = entry)
+
+class HandleEntryPurchased(HandleEntry):
+    def getEntry(self,user,bidform):
+        return OutsideStandardEntry(purchaser = user,entry_status = STORAGESTATUS_PURCHASER,bidform = bidform)
+    def getEntryItem(self,materiel,entry):
+        return OutsideStandardItem(materiel = materiel,entry = entry,schematic_index=materiel.schematic_index,specification = materiel.specification,number = materiel.count,unit = materiel.unit )
+
+class HandleEntrySteel(HandleEntry):
+    def getEntry(self,user,bidform):
+        pass
+    def getEntryItem(self,materiel,entry):
+        pass
+
+from itertools import *
+class AutoGenEntry(object):
+    Entry_DICT = {"WELD":HandleEntryWeld,"PURCHASED":HandleEntryPurchased}
+    def key_cmp_func(self,it):
+        categories = it.material.material.categories
+        if categories in self.WELD_TYPE_LIST:
+            return "WELD"
+        if categories in self.PURCHASED_TYPE_LIST:
+            return "PURCHASED"
+    
+    def group_by(self):
+        sorted_items_set = sorted(self.items_set,key=self.key_cmp_func)
+        item_groupby_dict = {}
+        for label,items in groupby(sorted_items_set,key=self.key_cmp_func):
+            item_groupby_dict[label]=list(items)
+        return item_groupby_dict
+
+    def processEntry(self,groupby_items):
+        for k,v in groupby_items.items():
+            handle = self.Entry_DICT[k]()
+            handle.saveEntry(v,self.user,self.bidform)
+
+    def __init__(self,user,items_set,bidform):
+        self.user = user
+        self.items_set = items_set
+        self.bidform = bidform
+        groupby_items = self.group_by()
+        self.processEntry(groupby_items)
+
+
+def checkStorage(db_type,sorce=None):
+    DB_MAP = getDbMap(sorce)
+    db_model = DB_MAP[db_type]
+    return db_model
+
+def getDbMap(sorce):
+    DB_MAP = {WELD:WeldStoreList,PROFILE:BarSteelMaterialLedger,SHEET:BoardSteelMaterialLedger,PURCHASED:OutsideStorageList,AUXILIARY_TOOL:AuxiliaryTool}
+    if sorce == "purchaser":    
+        for tp in WELD_TYPE_LIST:
+            if tp in WELD_TYPE_LIST:
+                DB_MAP[tp] = WeldStoreList
+    return DB_MAP

@@ -9,44 +9,78 @@ $('input[id$=time]').datetimepicker({
     minView:'month',
 });
 $(document).ready(function(){
-  $("#inventory_form").submit(function(e){
-    e.preventDefault();
-    var data=$("#inventory_form").serialize();
-    Dajaxice.storage.Search_Auxiliary_Tools_Records(function(data){
-        $('#inventory_table').html(data);
-        $('#date').val('');
-    },
-    {
-        'data':data,
-        'search_type':'inventory',
+    $("#inventory_form").submit(function(e){
+        e.preventDefault();
+        var data=$("#inventory_form").serialize();
+        Dajaxice.storage.Search_Auxiliary_Tools_Records(function(data){
+            $('#inventory_table').html(data);
+            $('#date').val('');
+        },
+        {
+            'data':data,
+            'search_type':'inventory',
+        });
     });
-  });
-  $("#apply_form").submit(function(e){
-    e.preventDefault();
-    var data=$("#apply_form").serialize();
-    Dajaxice.storage.Search_Auxiliary_Tools_Records(function(data){
-        $('#apply_table').html(data);
-        $('#date').val('');
-    },
-    {
-        'data':data,
-        'search_type':'apply',
+    $('#entry_detail_form').submit(function(e){
+        e.preventDefault();
+        var data=$("#entry_detail_form").serialize();
+        Dajaxice.storage.Auxiliary_Tools_Entry(function(msg){
+            alert(msg);
+            msg_type=msg.substr(0,9);
+            if(msg_type=="[SUCCESS]")
+            {
+                $("#confirm").attr('disabled','disabled');
+                $("#confirm").hide();
+                $("#confirm").after('<a type="button" href="/storage/auxiliarytools/entrylist" class="btn btn-primary">返回</a>');
+            }
+        },
+        {
+            'data':data,
+        });
     });
-  });
-  $("#apply_card_form").submit(function(e){
-    e.preventDefault();
-    var data=$("#apply_card_form").serialize();
-    Dajaxice.storage.Search_Auxiliary_Tools_Apply_Card(function(data){
-        $('#apply_card_table').html(data);
-        $('#create_time').val('');
-        $('#apply_item').val('');
-        $('#applicant').val('');
-        $('#index').val('');
-    },
-    {
-        'data':data,
+    $("#detail_form").submit(function(e){
+        e.preventDefault();
+        var data=$("#detail_form").serialize();
+        Dajaxice.storage.Auxiliary_Tools_Apply_Commit(function(msg){
+            alert(msg);
+            msg_type=msg.substr(0,9);
+            if(msg_type=="[SUCCESS]")
+            {
+                $("#confirm").attr('disabled','disabled');
+                $("#confirm").hide();
+                $("#confirm").after('<a type="button" href="/storage/auxiliarytools/applylist" class="btn btn-primary">返回</a>');
+            }
+        },
+        {
+            'data':data,
+        });
     });
-  });  
+    $("#apply_form").submit(function(e){
+        e.preventDefault();
+        var data=$("#apply_form").serialize();
+        Dajaxice.storage.Search_Auxiliary_Tools_Records(function(data){
+            $('#apply_table').html(data);
+            $('#date').val('');
+        },
+        {
+            'data':data,
+            'search_type':'apply',
+        });
+    });
+    $("#apply_card_form").submit(function(e){
+        e.preventDefault();
+        var data=$("#apply_card_form").serialize();
+        Dajaxice.storage.Search_Auxiliary_Tools_Apply_Card(function(data){
+            $('#apply_card_table').html(data);
+            $('#create_time').val('');
+            $('#apply_item').val('');
+            $('#applicant').val('');
+            $('#index').val('');
+        },
+        {
+            'data':data,
+        });
+    });  
 });
 function SetValue(obj,model,measurement_unit,unit_price)
 {

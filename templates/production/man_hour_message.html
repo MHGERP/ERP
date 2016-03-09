@@ -1,0 +1,20 @@
+{% extends "production/base/none_nav_base.html"%}
+{% block title%}
+<h1>工时信息查询</h1>
+{% endblock%}
+{% block sub_ref %}
+<a href="#" class="current">工时信息查询</a>
+{% endblock %}
+{% block inner_content%}
+<div id="search-div">
+	<form class="form-inline">
+	  {{hourMessageSearchForm}}
+    <button type="button" class="btn btn-primary" id="btn-search">检索</button>
+    <button type="button" class="btn btn-primary">导出</button>
+	</form>
+</div>
+
+<div class="widget-content" id="widget-content"></div>
+
+<script type='text/javascript' src="{{STATIC_URL}}js/production/man_hour_message.js"></script>
+{% endblock%}

@@ -6,29 +6,25 @@
 <a href="#" class="current">工时汇总</a>
 {% endblock %}
 {% block inner_content%}
-<link rel="stylesheet" href="{{ STATIC_URL }}style/man_hour_summarize.css" type="text/css" media="screen" />
-<div id="search-div" style="margin-bottom:10px;">
-	<form class="form-inline">
-	    工作令:
-	    {{orderIndexForm.order_index}}
-            组号：
-            <input type="text" class="input-small search-query">
-            员工姓名：
-            <input type="text" class="input-small search-query">
-            <button type="button" class="btn btn-primary">检索</button>
-            <button type="button" class="btn btn-primary">导出</button>
-	</form>
+<div id="search-div">
+  <form class="form-inline">
+    {{dateForm}}
+    <button type="button" class="btn btn-primary" id="btn-search">检索</button>
+  </form>
 </div>
 
-{%include "production/man_hour_summarize_list.html"%}
+<div class="widget-content" id="widget-content"></div>
 
-<div id="hour_summarize_modal" class="modal hide fade"　 modal-size-width="0.5">
+<!-- <div class="widget-content" id="hour-table"></div> -->
+
+<div id="summarize_ticket_modal" class="modal hide fade"　 modal-size-width="0.5">
   <div class="modal-header">
     <h2 id="myModalLabel">工时汇总表</h2>
   </div>
 
   <div class="modal-body">
-    {%include "production/man_hour_summarize_table.html"%}
+    <!-- {%include "production/man_hour_summarize_table.html"%} -->
+    <div class="widget-content" id="summarize-ticket-table"></div>
   </div>
 
   <div class="modal-footer">
@@ -36,13 +32,13 @@
   </div>
 </div>
 
-<div id="hour_detail_modal" class="modal hide fade"　 modal-size-width="0.6">
+<div id="part_ticket_modal" class="modal hide fade"　 modal-size-width="0.6">
   <div class="modal-header">
-    <h2 id="myModalLabel">工时详细表</h2>
+    <h2 id="myModalLabel">备料零件工时表</h2>
   </div>
 
   <div class="modal-body">
-    {%include "production/man_hour_detail_table.html"%}
+    <div class="widget-content" id="part-ticket-table"></div>
   </div>
 
   <div class="modal-footer">

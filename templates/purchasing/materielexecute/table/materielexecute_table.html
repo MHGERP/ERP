@@ -7,7 +7,8 @@
                     <th>编号</th>
                     <th>制表人</th>
                     <th>生成日期</th>
-                    <th>查看</th>
+                    <th>操作</th>
+                    <td>技术反馈</td>
                 </tr>
             </thead>
             <tbody>
@@ -18,12 +19,13 @@
                     <td>{{materielexecute.date|date:"Y-m-d"}}</td> 
                     <td>
                         {% if materielexecute.is_save%}
-                        <a class='btn btn-primary' id ="detail_view" href="materielExecuteDetail/0/{{materielexecute.id}}" >查看</a>
+                        <a class='btn btn-primary' id ="detail_view" href="materielExecuteDetail/0/0/{{materielexecute.id}}" >查看</a>
                         {% else%}
-                        <a class='btn btn-warning' id ="detail_view" href="materielExecuteDetail/1/{{materielexecute.id}}" >编辑</a>
+                        <a class='btn btn-warning' id ="detail_view" href="materielExecuteDetail/1/0/{{materielexecute.id}}" >编辑</a>
                         
                         {% endif%}
                     </td>
+                    <td>{{materielexecute.tech_feedback}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

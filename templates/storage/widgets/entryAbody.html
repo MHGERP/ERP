@@ -33,9 +33,9 @@
                 <td>{{item.materiel.order}}</td>
                 <td>{{item.schematic_index}}</td>
                 <td>{{item.specification}}</td>
-                <td>{{item.material_mark}}</td>
-                <td>{{item.batch_number}}</td>
-                <td>{{item.tag_number}}</td>
+                <td>{{item.material_mark|default_if_none:""}}</td>
+                <td>{{item.batch_number|default_if_none:""}}</td>
+                <td>{{item.tag_number|default_if_none:""}}</td>
                 <td>{{item.unit}}</td>
                 <td>{{item.number}}</td>
             </tr>

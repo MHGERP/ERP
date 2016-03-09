@@ -26,32 +26,26 @@
         <span class="btn" id="order_search">检索</span> 
     </form>
 </div>
-</br>
-</br>
-<div class="widget-content" id="detail_table">
-
+<div class="widget-content nopadding" id="detail_table" >
 </div>
 <div id="card_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.9">
   <div class="modal-header">
     <h2 id="groupLabel">材料信息卡</h2>
   </div>
   <div class="modal-body" style="clear:both;">
-    <h4>原始数据</h4>
-        <div id="base-info-area" class="well">
 
-        </div>
-    <h4>材料定额录入</h4>
-        <div id="type_in" class="well">
-            
+        <div id="type_in" >
+          
         </div>
   </div>
   <div class="modal-footer">
     <button class="btn" id="id_goto_prev" style="float: left">上一条</button>
     <button class="btn" id="id_goto_next" style="float: left">下一条</button>
-    <button class="btn" id="id_success" style="float: left">生成</button>
-    <button class="btn" id="id_confirm" style="float: left">确认</button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" style="float: right">关闭</button>
+    <button class="btn" id="id_confirm" style="float: right">确认</button>
+    <button class="btn" id="id_success" style="float: right">生成</button>
   </div>
 </div>
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/detailtable.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/techdata/weld_quota.js"></script>
 {% endblock%}

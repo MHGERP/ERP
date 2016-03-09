@@ -10,7 +10,8 @@
 {% endblock%}
 
 {% block sub_sec %}
-<a href="/storage/weldrefund" class="current">领用单详情</a>
+<a href="/storage/steelapply">钢材领用</a>
+<a href="/storage/weldrefund" class="current">型材领用单详情</a>
 {% endblock %}
 
 {% block inner_content %}
@@ -21,7 +22,7 @@
     <span class="span3">日期: {{common_Info.date|date:"Ymd"}}</span>
     <span class="span3">编号: {{common_Info.form_code}}</span>
 </div>
-<table class="table table-bordered">
+<table class="table table-bordered" iid="{{common_Info.form_code}}">
     <thead>
         <th>名称</th>
         <th>材质</th>
@@ -55,10 +56,12 @@
         </tr>
     </tbody>
 </table>
-    <div class="card-sure">
+    <center class="card-sure">
         {% ifequal common_Info.apply_confirm 0 %}
-        <button class="apply-card-ensure-btn btn btn-success">确认</button>   
+        <button class="apply-card-ensure-btn btn btn-success">确认</button>
+        {% else %}
+        <a href="/storage/steelapply" class="btn btn-default">返回</a>   
         {% endifequal %}
-    </div>
+    </center>
 </div>
 {% endblock %}

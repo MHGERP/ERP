@@ -1,25 +1,21 @@
 {% extends "storage/base/weldbase.html" %}
 {% block sub_sec %}
-<a href="/storage/weldentryhome">焊接材料入库管理</a>
-<a href="#" class="current">焊接材料入库单</a>
+<a href="/storage/weldentryhome">焊材入库管理</a>
+<a href="#" class="current">焊材入库单</a>
 {% endblock %}
 {% block title %}
-<h1>焊接材料入库单</h1>
+<h1>焊材入库单</h1>
 {% endblock %}
 
 {% block inner_content %}
 <form class="form form-inline" method="post">
     {% csrf_token%}
-    <div class="row" style="margin-bottom:20px;">
-        <div class="span3">
-            <label class="hz-align">工作令：</label>
-            <strong>{{entry.work_order}}</strong>
-        </div>
-        <div class="span3">
+    <div class="row-fluid" style="margin-bottom:20px;">
+        <div class="span6">
             <label class="hz-align">入库时间：</label>
             <strong>{{entry.entry_time|date:"Y年m月d日"}}</strong>
         </div>
-        <div class="span4">
+        <div class="span6">
             <label class="hz-align">单据编号：</label>
             {% if is_show %}
             <div class="controls-group" style="display:inline" id="entry_code">
@@ -48,7 +44,7 @@
     {% if is_show %}
     <button  id="entry_confirm" style="width:15%;height:30px;" class="btn btn-primary" type="button" onclick="entryconfirm({{entry.id}});">入库单确认</button>
     {% else %}
-        <a style="width:15%;height:20px;" class="btn btn-primary" type="button" href="/storage/weldentryhome">返回</a>
+    <a style="width:15%;height:20px;" class="btn btn-primary" type="button" href="{{redict_path}}">返回</a>
     {% endif %}
     </center>
 </form>

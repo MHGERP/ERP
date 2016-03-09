@@ -44,13 +44,11 @@ function gen_entry(bid){
         }
     }
     if(selected.length==0){
-       // $("#info_alert").html("没有选定课程!");
-       // $("#alert_info_modal").modal('show');
         alert("没有选定入库信息!");
         return false;
     }
 
-    Dajaxice.purchasing.genEntry(gen_entry_callback,{'bid':bid,'selected':selected});
+    Dajaxice.purchasing.genEntry(gen_entry_callback,{'items_set':selected,'bid':bid});
 }
 
 function gen_entry_callback(data){
@@ -187,7 +185,7 @@ function select_entry_type_callback(data){
 }
 
 function save_entry_items(){
-    Dajaxice.purchasing.genEntry(save_entry_items_callback,{"items_set":items_set,"selectvalue":selectvalue,"bid":bid});
+    //Dajaxice.purchasing.genEntry(save_entry_items_callback,{"items_set":items_set,"selectvalue":selectvalue,"bid":bid});
 }
 
 function save_entry_items_callback(data){

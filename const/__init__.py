@@ -23,7 +23,6 @@ BIDFORM_PART_STATUS_STORE=120
 BIDFORM_PART_STATUS_COMPLETE=130
 BIDFORM_PART_STATUS_STOP=-1
 
-
 BIDFORM_STATUS_CHOICES=(
 
     (BIDFORM_STATUS_CREATE,u"标单生成"),
@@ -135,50 +134,50 @@ ENTRYTYPE_CHOICES = (
 ENTRYTYPE_BOARD = 0
 ENTRYTYPE_BAR = 1
 
-ENTRYTYPE_CHOICES_2 = {
+ENTRYTYPE_CHOICES_2 = (
     (ENTRYTYPE_BOARD,u"板材"),
     (ENTRYTYPE_BAR,u"型材"),
-}
+)
 
 BOARD_STEEL = 0
 BAR_STEEL = 1
-STEEL_TYPE = {
+STEEL_TYPE = (
     (BOARD_STEEL,u'板材'),
     (BAR_STEEL,u'型材'),
-}
+)
 
 WELDING = 0
 STEEL = 1
 AUXILIARY_TOOL =2
 OUTSIDEBUYING =3
 
-MATERIAL_TYPE={
+MATERIAL_TYPE=(
     (WELDING,u'焊材'),
     (STEEL,u'钢材'),
     (AUXILIARY_TOOL,u'辅助工具'),
     (OUTSIDEBUYING,u'外购件'),
-}
+)
 
 KILOGRAM = 0
 TON = 1
-WEIGHT_MANAGEMENT={
+WEIGHT_MANAGEMENT=(
     (KILOGRAM,u'千克'),
     (TON,u'顿'),
-}
+)
 
 SQUARE_METER = 0
 
-AREA_MANAGEMENT={
+AREA_MANAGEMENT=(
     (SQUARE_METER,u'平方米'),
-}
+)
 
 METER = 0
 CENTIMETER =1
 
-LENGHT_MANAGEMENT={
+LENGHT_MANAGEMENT=(
     (METER,u'米'),
     (CENTIMETER,u"厘米"),
-}
+)
 
 
 
@@ -254,10 +253,10 @@ REFUNDSTATUS_CHOICES = (
 
 STORAGEDEPARTMENT_CHOICES=( 
     (-1,u'------'),
-    (1,u'部门A'),
-    (2,u'部门B'),
-    (3,u'部门C'),
-    (4,u'部门D'),
+    (1,u'焊一组'),
+    (2,u'焊二组'),
+    (3,u'焊三组'),
+    (4,u'电焊组'),
 )
 
 AUTH_TYPE_CHOICES = (
@@ -280,8 +279,6 @@ STORAGE_ENTRY_TYPECHOICES=(
     (0,u"焊材"),
     (1,u"钢材"),
 )
-
-
 
 
 
@@ -349,11 +346,12 @@ WELD_ROD = "weld_rod"
 WELD_WIRE = "weld_wire"
 WELD_RIBBON = "weld_ribbon"
 WELD_FLUX = "weld_flux"
-
+WELD = "weld"
 SHEET = "sheet"
 PROFILE = "profile"
 PURCHASED = "purchased"
 OTHER = "other"
+AUXILIARY_TOOL = "auxiliary_tool"
 MATERIAL_CATEGORY_CHOICES = (
     (WELD_ROD, u"焊条"),
     (WELD_WIRE, u"焊丝"),
@@ -362,8 +360,22 @@ MATERIAL_CATEGORY_CHOICES = (
     (SHEET, u"板材"),
     (PROFILE, u"型材"),
     (PURCHASED, u"外购件"),
+    (AUXILIARY_TOOL,u"辅助工具"),
     (OTHER, u"其他"),
 )
+
+WELD_TYPE_LIST = [WELD_ROD,WELD_WIRE,WELD_RIBBON,WELD_FLUX]
+PURCHASED_TYPE_LIST = [PURCHASED,]
+SHEET_TYPE_LIST = [SHEET,]
+PROFILE_TYPE_LIST = [PROFILE,]
+AUXILIARY_TOOL_TYPE_LIST = [AUXILIARY_TOOL,]
+MATERIEL_TYPE_CHOICES = (
+    (WELD, u"焊材"),
+    (SHEET, u"板材"),
+    (PROFILE, u"型材"),
+    (PURCHASED, u"外购件"),
+    (AUXILIARY_TOOL, u"辅助工具"),
+) 
 
 RT = "RT"
 UT = "UT"
@@ -400,3 +412,17 @@ MARK_APPROVE = "mark_approve"
 MARK_QUOTA = "mark_quota"
 MARK_STATISTIC = "mark_statistic"
 
+HEATTREATMENTCARD_ATTR_TEM_START = "temperature_start"
+HEATTREATMENTCARD_ATTR_TEM_END = "temperature_end"
+HEATTREATMENTCARD_ATTR_TEM_TOP = "temperature_top"
+HEATTREATMENTCARD_ATTR_TEM_UP_SPEED = "temperature_up_speed"
+HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED = "temperature_down_speed"
+HEATTREATMENTCARD_ATTR_TEM_TIME = "time"
+
+
+
+#生产管理
+PRODUCTION_PLAN_STAUTS_CHOICES = (
+    (1, u"必保"),
+    (2, u"在制"),
+)

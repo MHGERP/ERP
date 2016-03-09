@@ -17,6 +17,14 @@ RegisterClass = (
     TransferCard,
     TransferCardMark,
     ProcessBOMPageMark,
+    Program,
+    HeatTreatmentTechCard,
+    HeatTreatmentArrangement,
+    HeatTreatmentMateriel,
+    DesignBOMMark,
+    TechPlan,
+    WeldQuotaPageMark,
+    ConnectOrientation,
 )
 
 for item in RegisterClass:

@@ -6,17 +6,19 @@ from django.views.decorators import csrf
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect,HttpResponse
-import json
+import json, datetime
 from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
-from techdata.forms import MaterielForm, CirculationRouteForm, ProcessingForm, TransferCardForm
+from techdata.forms import *
 from const.models import Materiel
-from techdata.models import TransferCard
+from techdata.models import TransferCard, Program
+from purchasing.models import MaterielExecute
 from const.forms import WorkOrderForm
 
 def techPreparationPlanViews(request):
-    context = {}
+    work_order_form = WorkOrderForm()
+    context = {"work_order_form" : work_order_form}
     return render(request, "techdata/tech_preparation_plan.html", context)
 
 def processExaminationViews(request):
@@ -34,13 +36,15 @@ def techFileDirectoryViews(request):
     return render(request, "techdata/tech_file_directory.html", context)
 
 def techInstallWeldViews(request):
+    """
+    JunHU
+    """
     context = {}
     return render(request, "techdata/tech_install_weld.html", context)
 
 def techHotDeelViews(request):
     context = {}
     return render(request, "techdata/tech_hot_deel.html", context)
-
 def techTestPresureViews(request):
     context = {}
     return render(request, "techdata/tech_test_presure.html", context)
@@ -82,7 +86,10 @@ def principalMaterialViews(request):
     return render(request, "techdata/principal_material.html", context)
 
 def auxiliaryMaterialViews(request):
-    context = {}
+    categories_form = CategoriesForm()
+    context = {
+            "categories_form":categories_form
+    }
     return render(request, "techdata/auxiliary_material.html", context)
 
 def processBOMViews(request):
@@ -103,7 +110,7 @@ def weldListViews(request):
     """
     work_order_form = WorkOrderForm()
     context = {
-        "form": WorkOrderForm,
+        "form": work_order_form,
     }
     return render(request, "techdata/weld_list.html", context)
 
@@ -129,13 +136,107 @@ def weldEditViews(request):
     return render(request, "techdata/weld_edit.html", context)
 
 def programmeEditViews(request):
-    context = {}
+    form = ProgramFeedbackForm()
+    context = {
+        "form": form,
+    }
     return render(request, "techdata/programme_edit.html", context)
 
+def programAdd(request):
+    if request.is_ajax():
+        if request.FILES['program_file'].size > 10*1024*1024:
+            file_upload_error = 2
+        else:
+            execute_id = request.POST['execute_id']
+            execute = MaterielExecute.objects.get(id = execute_id)
+            file = Program()
+            file.execute = execute
+            file.file_obj = request.FILES['program_file']
+            file.file_size = str(int(request.FILES['program_file'].size) / 1000) + "kb"
+            file.name = request.FILES['program_file'].name
+            file.upload_time = datetime.datetime.now()
+            file.save()
+            file_upload_error = 1
+        return HttpResponse(json.dumps({"file_upload_error": file_upload_error, }))
+
 def techDetailTableViews(request):
-    """BinWu"""
+    """
+    BinWu
+    """
     work_order_form = WorkOrderForm()
     context = {
-        "form": WorkOrderForm,
+        "form": work_order_form,
     }
     return render(request, "techdata/detail_table.html", context)
+
+def heatTreatmentTechCardEditViews(request):
+    """
+    JunHU
+    """
+    card_id = request.GET.get("card_id");
+    context = {
+        "card_id": card_id,
+    }
+    return render(request, "techdata/heat_treatment_tech_card_edit.html", context)
+
+def heatPoint(request):
+    """
+    BinWu
+    """
+    card_id = request.GET.get("card_id")
+    context = {
+        "card_id" : card_id,
+    }
+    return render(request, "techdata/heat_point.html",context)
+
+def uploadHeatArrangement(request):
+    """
+    BinWu
+    """
+    if request.is_ajax():
+        uf = UploadForm(request.POST, request.FILES)
+        if uf.is_valid():
+            card_id = request.GET.get("card_id")
+            card = HeatTreatmentTechCard.objects.get(id=card_id)
+            if HeatTreatmentArrangement.objects.filter(card_belong = card).count() == 0:
+                HeatTreatmentArrangement(card_belong = card).save()
+            card.heattreatmentarrangement.file_obj = uf.cleaned_data['pic']
+            print(card.heattreatmentarrangement.file_obj.path)
+            card.heattreatmentarrangement.save()
+            return HttpResponse(card.heattreatmentarrangement.file_obj.path)
+
+
+def techInstallWeldCard(request):
+    """
+    JunHU
+    """
+    iid = request.GET.get("iid")
+    context = {
+        "iid": iid,
+    }
+    return render(request, "techdata/tech_install_weld_card.html", context)
+
+def connectOrientationAdd(request):
+    """
+    mxl
+    """
+    if request.is_ajax():
+        if request.FILES['connectOrientation_file'].size > 10*1024*1024:
+            file_upload_error = 2
+        else:
+            work_order_id = request.POST['work_order_id']
+            print "cao"
+            print work_order_id
+            work_order = WorkOrder.objects.get(id = work_order_id)
+            file = ConnectOrientation()
+            file.order = work_order
+            file.name = request.FILES['connectOrientation_file'].name
+            file.file_obj = request.FILES['connectOrientation_file']
+            file.file_size = str(int(request.FILES['connectOrientation_file'].size) / 1000) + "kb"
+            file.upload_date = datetime.datetime.now()
+            file.save()
+            file_upload_error = 1
+
+        return HttpResponse(json.dumps({'file_upload_error' : file_upload_error}))
+
+

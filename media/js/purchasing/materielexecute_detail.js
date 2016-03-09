@@ -112,3 +112,17 @@ function MaterielExecuteInfo_Callback(data){
   window.location.reload();
 }
 
+$("#save_tech_require").click(function(){
+    var content=$("#tech_requirement_textarea").val();
+    var execute_id=$("#id_document_number").val();
+    Dajaxice.purchasing.saveExecuteTechRequire(function(data){
+    $("#tech_requirement_content").val(content);
+    },{
+        "execute_id":execute_id,
+        "content":content
+    });
+});
+
+$("#tech_add").click(function(){
+    $("#tech_requirement_textarea").val($("#tech_requirement_content").val());
+});

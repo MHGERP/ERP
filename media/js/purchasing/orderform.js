@@ -93,8 +93,17 @@ function deleteCallBack(data) {
 
 $(document).on("click","#edit",function(){
     uid = $(this).attr("uid");
+    $("#order_info_modal").modal();
+    var tr=$(this).closest("tr");
+    if($(tr).attr("mod")=="0"){
+        $("#count").val($(tr).children("td:eq(5)").html());
+        $("#purchasing").val($(tr).children("td:eq(6)").html());
+    }
+    else{
+        $("#count").val($(tr).children("td:eq(6)"));
+    }
     // order_uid = $(this).parent().parent();
-    Dajaxice.purchasing.GetOrderInfoForm(Edit_Order_Callback,{'uid':uid});
+   // Dajaxice.purchasing.GetOrderInfoForm(Edit_Order_Callback,{'uid':uid});
 });
 function Edit_Order_Callback(data){
     $("#order_info_modal").modal();
@@ -102,11 +111,60 @@ function Edit_Order_Callback(data){
 }
 
 $("#order_info_modal #save_order").click(function(){
-    var name = $("#material").val();
+    //var name = $("#material").val();
     var count =  $("#count").val();
-    Dajaxice.purchasing.OrderInfo(Order_Callback,{'form':$("#edit_order_form").serialize(true),'uid':uid,'count':count,'name':name})
+    var purchasing=$("#purchasing").val();
+    Dajaxice.purchasing.OrderInfo(Order_Callback,{'uid':uid,'count':count,'purchasing':purchasing});
 });
 function Order_Callback(data){
     $("#order_info_modal").modal('hide');
     refresh();
 }
+
+$("#order_form_finish").click(function(){
+    var index = $("#index").val();
+    Dajaxice.purchasing.OrderFormFinish(function(data){
+        window.location.reload();
+
+    },{
+        "index":index
+    });
+
+});
+
+$("#save_tech_require").click(function(){
+    var content=$("#tech_requirement_textarea").val();
+    var order_id=$("#index").val();
+    Dajaxice.purchasing.saveTechRequire(function(data){
+    $("#tech_requirement_content").val(content);
+    },{
+        "order_id":order_id,
+        "content":content
+    });
+});
+
+$("#tech_add").click(function(){
+    $("#tech_requirement_textarea").val($("#tech_requirement_content").val());
+});
+
+$("#generate_execute").click(function(){
+    Dajaxice.purchasing.orderformToExecute(function(data){
+        $("#execute_form").html(data.html);
+    },{
+            "orderform_id":$("#index").val()
+        });
+});
+
+$("#save_materiel_execute").click(function(){
+    form=$("#execute_form").children("form");
+    Dajaxice.purchasing.saveOrderformExecute(function(data){
+        alert(data.message);
+        if(data.status=='0'){
+            window.location.reload();
+        }
+    },{
+
+            "orderform_id":$("#index").val(),
+            'form':$(form).serialize(true)
+    });
+});

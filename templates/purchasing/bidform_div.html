@@ -21,10 +21,10 @@
                     <tr>
                         <td>{{item.materiel.name}}</td>
                         <td>{{item.materiel.schematic_index}}</td>
-                        <td></td>
-                        <td></td>
-                        <td>{{item.count}}</td>
-                        <td></td>
+                        <td>{{item.materiel.material.name}}</td>
+                        <td>{{item.materiel.unit}}</td>
+                        <td>{{item.purchasing}}</td>
+                        <td>{{item.materiel.remark}}</td>
                     </tr>
                     {% endfor %}
 

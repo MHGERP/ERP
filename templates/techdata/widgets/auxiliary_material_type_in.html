@@ -1,72 +1,124 @@
-<div class="row-fluid" style="margin-top: 0px">
-    <div class="span3">
-		<div class="input-prepend">
-			<span class="add-on">材料种类</span>
-			<input type="text" class="input-medium" id="material"></input>
+<form class="form" id="auxiliary_material_form">
+	<h4>原始数据</h4>
+	<div class="well">
+		<div class="row-fluid" style="margin-top: 0px">
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">工作票号</span>
+					{{form.index}}
+				</div>
+			</div>
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">图&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp号</span>
+					{{form.schematic_index}}
+				</div>
+			</div>
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">名&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp称</span>
+					{{form.name}}
+				</div>
+			</div>
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">受压标识</span>
+					<input type="text" class="input-small"></input>
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">单部件数</span>
+					<input type="text" class="input-small"></input>
+				</div>
+			</div>
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">材&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp料</span>
+					{{form.material}}
+				</div>
+			</div>
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">总&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp数</span>
+					{{form.count}}
+				</div>
+			</div>
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">备&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp注</span>
+					{{form.remark}}
+				</div>
+			</div>
 		</div>
 	</div>
-    <div class="span3">
-		<div class="input-prepend">
-			<span class="add-on">净&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp重</span>
-			{{form.net_weight}}
-		</div>
-	</div>
-    <div class="span3">
-		<div class="input-prepend">
-			<span class="add-on">利&nbsp&nbsp用&nbsp&nbsp率</span>
-			<input type="text" class="input-medium"></input>
-		</div>
-	</div>
-	<div class="span3">
-		<div class="input-prepend">
-			<span class="add-on">材料规格</span>
-			<input type="text" class="input-medium"></input>
-		</div>
-	</div>
-</div>
-<div class="row-fluid">
-    
-    <div class="span3">
-		<div class="input-prepend">
-			<span class="add-on">毛&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp重</span>
-			{{form.total_weight}}
-		</div>
-	</div>
-	<div class="span3">
-		<div class="input-prepend">
-			<span class="add-on">备&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp注</span>
-			{{form.remark}}
-		</div>
-	</div>
-	<div class="span3">
-		<div class="input-prepend">
-			<span class="add-on">定额系数</span>
-			<input type="text" class="input-medium" id = "id_factor"></input>
-		</div>
-	</div>
-	 <div class="span3">
-		<div class="input-prepend">
-			<span class="add-on">定&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp额</span>
-			<input type="text" class="input-medium" id ="id_quota"></input>
-		</div>
-	</div>
-</div>
-<div class="row-fluid" style="margin-top: 0px">
-    <div class="span3">
-		<div class="input-prepend">
-			<span class="add-on">标准代码</span>
-			<input type="text" class="input-medium"></input>
-			<select class="input-medium search-query"  style="width:50px;">
-                <option value="0" selected="selected" >★</option>
-                <option style="width:200px">1</option>
-                <option style="width:200px">2</option>
-                <option style="width:200px">3</option>
-                <option style="width:200px">4</option>
-                <option style="width:200px">5</option>
-            </select>
-		</div>
-	</div>
-   
-    
-</div>
 
+ <h4>材料定额录入</h4>
+	<div class="well" style="margin-top: 0px">
+	 
+
+
+		<div class="row-fluid" style="margin-top: 0px">
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">材料种类</span>
+					{{categories_form.categorie_type}}
+				</div>
+			</div>
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">净&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp重</span>
+					{{form.net_weight}}
+				</div>
+			</div>
+			<div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">毛&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp重</span>
+					{{form.total_weight}}
+				</div>
+			</div>
+			<div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">材料规格</span>
+					{{form.specification}}
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">定额系数</span>
+					{{form.quota_coefficient}}
+				</div>
+			</div>
+			 <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">定&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp额</span>
+					{{form.quota}}
+				</div>
+			</div>
+		    <div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">利&nbsp&nbsp用&nbsp&nbsp率</span>
+					<input type="text" class="input-medium" id="use_ratio" 
+					value="{{user_ratio}}"></input>
+				</div>
+			</div>
+			<div class="span3">
+				<div class="input-prepend">
+					<span class="add-on">标准代码</span>
+					<input type="text" class="input-medium"></input>
+					<select class="input-medium search-query"  style="width:50px;">
+		                <option value="0" selected="selected" >★</option>
+		                <option style="width:200px">1</option>
+		                <option style="width:200px">2</option>
+		                <option style="width:200px">3</option>
+		                <option style="width:200px">4</option>
+		                <option style="width:200px">5</option>
+		            </select>
+				</div>
+			</div>
+		</div>
+</form>

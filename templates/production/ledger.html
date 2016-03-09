@@ -9,46 +9,18 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}style/man_hour_summarize.css" type="text/css" media="screen" />
 <div id="search-div" style="margin-bottom:10px;">
   <form class="form-inline">
-    工作令:
-    {{orderIndexForm.order_index}}
-    编号：
-    <input type="text" class="input-small search-query">
-    部件图号：
-    <input type="text" class="input-small search-query">
+    {{ledgerSearchForm.work_order.label}}:
+    {{ledgerSearchForm.work_order}}
+    {{ledgerSearchForm.work_index.label}}:
+    {{ledgerSearchForm.work_index}}
+    {{ledgerSearchForm.parent_schematic.label}}:
+    {{ledgerSearchForm.parent_schematic}}
     <button type="button" class="btn btn-primary">检索</button>
-    <button type="button" class="btn btn-primary">导出</button>
   </form>
 </div>
 
-{%include "production/widgets/ledger_table.html"%}
+{% include "techdata/widgets/designBOM_table_list.html" %}
 
-<div id="hour_summarize_modal" class="modal hide fade"　 modal-size-width="0.5">
-  <div class="modal-header">
-    <h2 id="myModalLabel">工时汇总表</h2>
-  </div>
 
-  <div class="modal-body">
-    {%include "production/man_hour_summarize_table.html"%}
-  </div>
-
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-  </div>
-</div>
-
-<div id="hour_detail_modal" class="modal hide fade"　 modal-size-width="0.6">
-  <div class="modal-header">
-    <h2 id="myModalLabel">工时详细表</h2>
-  </div>
-
-  <div class="modal-body">
-    {%include "production/man_hour_detail_table.html"%}
-  </div>
-
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-  </div>
-</div>
-
-<script type='text/javascript' src="{{STATIC_URL}}js/production/man_hour_summarize.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/production/ledger.js"></script>
 {% endblock%}
