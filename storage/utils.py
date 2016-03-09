@@ -181,17 +181,20 @@ class HandleEntryPurchased(HandleEntry):
     def getEntryItem(self,materiel,entry):
         return OutsideStandardItem(materiel = materiel,entry = entry,schematic_index=materiel.schematic_index,specification = materiel.specification,number = materiel.count,unit = materiel.unit )
 
+class HandleEntrySteel(HandleEntry):
+    def getEntry(self,user,bidform):
+        pass
+    def getEntryItem(self,materiel,entry):
+        pass
 
 from itertools import *
 class AutoGenEntry(object):
-    WELD_TYPE_LIST = [WELD_ROD,WELD_WIRE,WELD_RIBBON,WELD_FLUX]
-    PURCHASED_LIST = [PURCHASED,] 
     Entry_DICT = {"WELD":HandleEntryWeld,"PURCHASED":HandleEntryPurchased}
     def key_cmp_func(self,it):
         categories = it.material.material.categories
         if categories in self.WELD_TYPE_LIST:
             return "WELD"
-        if categories in self.PURCHASED_LIST:
+        if categories in self.PURCHASED_TYPE_LIST:
             return "PURCHASED"
     
     def group_by(self):
@@ -212,3 +215,17 @@ class AutoGenEntry(object):
         self.bidform = bidform
         groupby_items = self.group_by()
         self.processEntry(groupby_items)
+
+
+def checkStorage(db_type,sorce=None):
+    DB_MAP = getDbMap(sorce)
+    db_model = DB_MAP[db_type]
+    return db_model
+
+def getDbMap(sorce):
+    DB_MAP = {WELD:WeldStoreList,PROFILE:BarSteelMaterialLedger,SHEET:BoardSteelMaterialLedger,PURCHASED:OutsideStorageList,AUXILIARY_TOOL:AuxiliaryTool}
+    if sorce == "purchaser":    
+        for tp in WELD_TYPE_LIST:
+            if tp in WELD_TYPE_LIST:
+                DB_MAP[tp] = WeldStoreList
+    return DB_MAP
