@@ -806,13 +806,8 @@ def outsideAccountHomeViews(request):
     return render(request,"storage/outside/accounthome.html",context)
 
 def outsideStorageAccountViews(request):
-    if request.method == "POST":
-        search_form = OutsideStorageSearchForm(request.POST)
-        if search_form.is_valid():
-            items_set = get_weld_filter(OutsideStorageList,search_form.cleaned_data)
-    else:
-        items_set = OutsideStorageList.objects.order_by('specification')
-        search_form = OutsideStorageSearchForm()
+    items_set = OutsideStorageList.objects.order_by('specification')
+    search_form = OutsideStorageSearchForm()
     items_set = items_set.order_by('specification')
     context = {
         "items_set":items_set,

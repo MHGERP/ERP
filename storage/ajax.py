@@ -521,3 +521,25 @@ def outsideAccountApplyCardSearch(request,form):
     print form
     html = render_to_string("storage/widgets/account/applycardhomemain.html",context)
     return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def outsideThreadSearch(request,form):
+   form = OutsideStorageSearchForm(deserialize_form(form));
+   items_set = {}
+   if form.is_valid():
+       conditions = form.cleaned_data
+       q1=(conditions['texture'] and Q(texture = conditions['texture'])) or None
+       q2=(conditions['specification'] and Q(specification = conditions['specification'])) or None
+       query_set = filter(lambda x:x!=None,[q1,q2])
+       if query_set:
+           query_conditions = reduce(lambda x,y:x&y,query_set)
+           items_set = OutsideStorageList.objects.filter(query_conditions)
+       else:
+           items_set = OutsideStorageList.objects.all()
+   items_set = items_set.order_by('specification')
+   context = {
+            'items_set':items_set,
+            "search_form":form,
+   }
+   html = render_to_string("storage/widgets/outsidestorage_table.html",context)
+   return simplejson.dumps({"html":html})
