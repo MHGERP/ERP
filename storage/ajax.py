@@ -945,4 +945,3 @@ def getSearchMaterielContext(request,form,is_production = True):
         print materiel_form.errors
     context["is_production"] = is_production
     return context
->>>>>>> f4476abbea3e756edbb1a9687129b0ab2e7c60dc
