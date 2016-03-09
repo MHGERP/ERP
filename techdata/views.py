@@ -215,3 +215,28 @@ def techInstallWeldCard(request):
         "iid": iid,
     }
     return render(request, "techdata/tech_install_weld_card.html", context)
+
+def connectOrientationAdd(request):
+    """
+    mxl
+    """
+    if request.is_ajax():
+        if request.FILES['connectOrientation_file'].size > 10*1024*1024:
+            file_upload_error = 2
+        else:
+            work_order_id = request.POST['work_order_id']
+            print "cao"
+            print work_order_id
+            work_order = WorkOrder.objects.get(id = work_order_id)
+            file = ConnectOrientation()
+            file.order = work_order
+            file.name = request.FILES['connectOrientation_file'].name
+            file.file_obj = request.FILES['connectOrientation_file']
+            file.file_size = str(int(request.FILES['connectOrientation_file'].size) / 1000) + "kb"
+            file.upload_date = datetime.datetime.now()
+            file.save()
+            file_upload_error = 1
+
+        return HttpResponse(json.dumps({'file_upload_error' : file_upload_error}))
+
+
