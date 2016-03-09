@@ -830,7 +830,6 @@ def outsideAccountApplyCardSearch(request,form):
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
-<<<<<<< HEAD
 def outsideThreadSearch(request,form):
    form = OutsideStorageSearchForm(deserialize_form(form));
    items_set = {}
@@ -851,7 +850,6 @@ def outsideThreadSearch(request,form):
    }
    html = render_to_string("storage/widgets/outsidestorage_table.html",context)
    return simplejson.dumps({"html":html})
-=======
 def weldMaterialStorageItems(request,specification):
     item_set = WeldStoreList.objects.filter(specification = specification,count__gt = 0).order_by('entry_time')
     html = render_to_string("storage/weldapply/itemlist.html",{"item_set":item_set})
