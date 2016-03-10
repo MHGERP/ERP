@@ -432,8 +432,7 @@ class OutsideAccountEntrySearchForm(forms.Form):
     work_order = forms.ChoiceField(label=u"工作令",required = False, widget=forms.Select(attrs={'id':'work_order','class':"span2",'select2':'true'}))
     def __init__(self,*args,**kwargs):
         super(OutsideAccountEntrySearchForm,self).__init__(*args,**kwargs)
-        workorders = getDistinctSet(OutsideStandardItem,WorkOrder,'entry')
-        print workorders
+        workorders = getDistinctSet(WorkOrder,WorkOrder,'id')
         self.fields['work_order'].choices = getChoiceList(workorders,'order_index')
 
 class OutsideAccountApplyCardSearchForm(forms.Form):
@@ -473,7 +472,17 @@ class StoreRoomSearchForm(forms.Form):
         type_list = [(-1, u"---------"),]
         type_list.extend(list(MATERIAL_TYPE))
 
-        print tuple(type_list)
         self.fields["material_type"].choices = tuple(type_list)
 
+class CheckMaterielDbForm(forms.Form):
+    db_type = forms.ChoiceField(label=u"材料类型",required = True,choices = MATERIEL_TYPE_CHOICES,widget = forms.Select(attrs={'class':"span2","id":"db_type"}))
+
+class CheckMaterielListForm(forms.Form):
+    materiel_type = forms.ChoiceField(label=u"库存材料",required = False, widget=forms.Select(attrs={'id':'materiel_type','class':"span2",'select2':'true'}))
+    def __init__(self,*args,**kwargs):
+        db_type = kwargs.pop("db_type",WeldStoreList)
+        super(CheckMaterielListForm,self).__init__(*args,**kwargs)
+        if db_type != None:
+            materiels = db_type.objects.all()
+            self.fields['materiel_type'].choices = getChoiceList(materiels,'specification')
 

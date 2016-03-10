@@ -23,6 +23,8 @@ class ProdPlanForm(ModelForm):
         self.fields["plan_date"].choices = PRODUCTION_PLAN_STAUTS_CHOICES
        
 """
+        exclude = ('plan_id', )
+        
 class ProductionPlanSearchForm(WorkOrderForm):
     status = forms.ChoiceField(label=u"状态", choices=PRODUCTION_PLAN_STAUTS_CHOICES)
     plan_date = forms.ChoiceField(label=u"计划年月")

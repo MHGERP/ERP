@@ -109,4 +109,8 @@ urlpatterns=patterns('',
         r'^techInstallWeldCard',
         techdata_views.techInstallWeldCard,
     ),
+    url(
+        r'^connectOrientationAdd',
+        techdata_views.connectOrientationAdd,
+    ),
 )
