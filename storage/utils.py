@@ -6,7 +6,7 @@ import const
 from storage.models import *
 from purchasing.models import *
 from django.db.models import Q
-def get_weld_filter(model_type,dict):
+def get_weld_filter(model_type,dict,replace_dic=None):
     """
     author: Shen Lian
     summary:filter objects by search form
@@ -18,9 +18,12 @@ def get_weld_filter(model_type,dict):
         dict_tmp = {}
         if val == "-1":
             val = ""
+        if replace_dic != None and replace_dic.has_key(key):
+            key = replace_dic[key]
         dict_tmp[key] = val
         q = (val and Q(**dict_tmp)) or None
         filter_list.append(q)
+    
     qset = filter(lambda x : x!= None ,filter_list)
     if qset:
         print qset

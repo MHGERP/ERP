@@ -7,10 +7,13 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from const.models import WorkOrder,Materiel
-from production.models import SynthesizeFileListStatus
+from production.models import *
+from production.forms import *
 from techdata.models import Processing
 from django.db import connection
 from django.db.models import Q,Sum
+from storage.utils import get_weld_filter
+from const.forms import WorkOrderForm
 
 @dajaxice_register
 def getFileList(request, id_work_order):
@@ -149,3 +152,110 @@ def getPartTicket(request, work_order, operator, date):
         "html":html
     }
     return simplejson.dumps(ret)
+
+
+
+@dajaxice_register
+def workorderSearch(request, workSearchText):
+    """
+    kad
+    """
+    workorder_set = WorkOrder.objects.filter(order_index__startswith=workSearchText)
+    html = render_to_string("production/widgets/production_plan_select_table.html",{"workorder_set":workorder_set})
+    data = {
+        "html":html,
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def workorderAdd(request, checkList):
+    """
+    kad
+    """
+    for i in checkList:
+        wo_obj = WorkOrder.objects.get(order_index = i)
+        obj = ProductionPlan(workorder_id = wo_obj)
+        obj.save()
+    prodplan_set = ProductionPlan.objects.all()
+    html = render_to_string("production/widgets/production_plan_table.html", {"prodplan_set":prodplan_set})
+    data = {
+        "html":html,
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def prodplanDelete(request, planid):
+    """
+    kad
+    """
+    try:
+        prodplan_obj = ProductionPlan.objects.get(plan_id = planid)
+        prodplan_obj.delete()
+        flag = True
+    except Exception,e:
+        print e
+        flag = False
+    data = {
+        "flag":flag,
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def prodplanUpdate(request, form, planid):
+    """
+    kad
+    """
+    prodplan_obj = ProductionPlan.objects.get(plan_id = planid)
+    prodplan_form = ProdPlanForm(deserialize_form(form), instance = prodplan_obj)
+    if prodplan_form.is_valid():
+        prodplan_form.save()
+        message = u"修改成功"
+        flag = True
+    else:
+        message = u"修改失败"
+        flag = False
+    prodplan_set = ProductionPlan.objects.all()
+    html = render_to_string("production/widgets/production_plan_table.html", {"prodplan_set":prodplan_set})
+
+    data ={
+        "html":html,
+        "message":message,
+        "flag":flag,
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def prodplanSearch(request, form):
+    """
+    kad
+    """
+    search_form = ProductionPlanSearchForm(deserialize_form(form))
+    if search_form.is_valid():
+        #prodplan_set = get_weld_filter(ProductionPlan, search_form.cleaned_data, {"work_order": "workorder_id"})
+        con = search_form.cleaned_data
+        print con
+
+        q1 = (con["work_order"] and Q(workorder_id = con["work_order"])) or None
+        #q1 = None
+        q2 = (con["status"] and Q(status = con["status"])) or None
+        if con["status"]== "-1":
+            q2 = None
+        year,month = con["plan_date"].split("-")
+        q3 = (con["plan_date"] and Q(plan_date__year = year) & Q(plan_date__month = month)) or None
+        #q3 = None
+        print q3
+        query_set = filter(lambda x:x!=None, [q1,q2,q3])
+        if query_set:
+            query_con = reduce(lambda x,y:x&y, query_set)
+            print query_con
+            prodplan_set = ProductionPlan.objects.filter(query_con)
+        else:
+            prodplan_set = ProductionPlan.objects.all()
+        html = render_to_string("production/widgets/production_plan_table.html",{"prodplan_set":prodplan_set})
+    else:
+        print search_form.errors
+    data = {
+        "html":html,
+    }
+    return simplejson.dumps(data)
+    

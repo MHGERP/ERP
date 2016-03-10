@@ -6,63 +6,70 @@
 <a href="#" class="current">生产计划</a>
 {% endblock %}
 {% block inner_content%}
+<script type="text/javascript" src="{{STATIC_URL}}js/production/production_plan.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
 <link rel="stylesheet" href="{{ STATIC_URL }}style/man_hour_summarize.css" type="text/css" media="screen" />
 <div id="search-div" style="margin-bottom:10px;">
-  <form class="form-inline">
-    {{productionPlanSearchForm.work_order.label}}:
-    {{productionPlanSearchForm.work_order}}
-    {{productionPlanSearchForm.status.label}}:
-    {{productionPlanSearchForm.status}}
-    {{productionPlanSearchForm.plan_date.label}}:
-    {{productionPlanSearchForm.plan_date}}
-    <button type="button" class="btn btn-primary">检索</button>
+  <form class="form-inline" id="pp_searchForm">
+    {% csrf_token %}
+    {% for field in prodplan_search_form %}
+    {{field.label}}
+    {{field}}
+    {% endfor %}
+    <button type="button" class="btn btn-primary" id="prodplan_search_btn">检索</button>
   </form>
 </div>
 
-<a class="btn btn-primary" data-toggle="modal" data-target="#production_plan_modal">添加生产计划</a>
+<a class="btn btn-primary" data-toggle="modal" data-target="#prodplan_modal" style="margin-bottom:10px" id="workadd">添加生产计划</a>
 {%include "production/widgets/production_plan_table.html"%}
 
-<div id="production_plan_modal" class="modal hide dade" modal-size-width="0.8">
+<div id="prodplan_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="prodplan_modalLabel" aria-hidden="true" modal-size-width="0.8">
     <div class="modal-header">
         <h2>生产计划选择</h2>
     </div>
     <div class="modal-body">
-        <div class="form-inline">
-            <label>工作令</label>
-            <input type="text">
-            <button class="btn btn-primary">检索</button>
-        </div>
+        <form class="form-inline" id="wo_searchForm">
+            工作令：<input type="text" id="workSearch">
+            <button class="btn btn-primary" id="workorder_search_btn" type="button">检索</button>
+        </form>
+        <br>
         {% include "production/widgets/production_plan_select_table.html"%}
 
     </div>
     <div class="modal-footer">
-        <button class="btn btn-success bid-btn-open" data-dismiss="modal" data-target="#bid_modal">确认</button>
-        <button class="btn" data-dismiss="modal" >关闭</button>
+        <button class="btn btn-success bid-btn-open" data-dismiss="modal" id="work_confirm_btn">确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
     </div>
 </div>
 
-<div id="production_plan_modify_modal" class="modal hide dade" modal-size-width="0.8">
+<div id="prodplan_modify_modal" class="modal hide fade" role="dialog" aria-labelledby="prodplan_modalLabel" aria-hidden="true">
   <div class="modal-header">
     <h2>生产计划修改</h2>
   </div>
   <div class="modal-body">
-    <form>
-      <div class="control-group">
+    <form id="update_form">
+      <!--<div class="control-group">
         <label>状态</label>
-        <select>
+        <select id="status" name="status">
           <option>必保</option>
           <option>在制</option>
         </select>
       </div>
       <div class="control-group">
         <label>计划年月</label>
-        <input type="text">
-      </div>
+        <input type="text" data-date-format="yyyy-mm-dd" id="plan_date" name="plan_date">
+    </div>-->
+    {% for field in prodplan_form %}
+    <div class="control-group">
+        <label class="control-label">{{field.label}}</label>
+        <div class="controls">{{field}}</div>
+    </div>
+    {% endfor %}
     </form>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-success bid-btn-open" data-dismiss="modal" data-target="#bid_modal">确认</button>
-    <button class="btn" data-dismiss="modal" >关闭</button>
+    <button class="btn btn-success bid-btn-open" data-dismiss="modal" id="prodplan_confirm_btn">确认</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
   </div>
 </div>
 

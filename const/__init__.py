@@ -410,6 +410,7 @@ HEATTREATMENTCARD_ATTR_TEM_TIME = "time"
 
 #生产管理
 PRODUCTION_PLAN_STAUTS_CHOICES = (
+    (-1,u"---------"),
     (1, u"必保"),
     (2, u"在制"),
 )
