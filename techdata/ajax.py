@@ -1151,3 +1151,30 @@ def getTechInstallWeldCard(request, iid):
     }
     html = render_to_string("techdata/widgets/tech_install_weld_card.html", context)
     return html
+
+
+@dajaxice_register
+def getWorkOrderOfConnectList(request):
+    """
+    mxl
+    """
+    work_order_list = WorkOrder.objects.all()
+    for work_order in work_order_list:
+        work_order.connectOrientation_list = ConnectOrientation.objects.filter(order = work_order)
+    context = {
+        "work_order_list": work_order_list,
+    }
+    html = render_to_string("techdata/widgets/connection_orientation_edit_table.html", context)
+    return html
+
+@dajaxice_register
+def removeConnectOrientation(request, pid):
+    """
+    JunHU
+    """
+    try:
+        connect = ConnectOrientation.objects.get(id = pid)
+        connect.delete()
+        return simplejson.dumps({"ret": True})
+    except:
+        return simplejson.dumps({"ret": False})

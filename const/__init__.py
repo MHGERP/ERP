@@ -282,8 +282,6 @@ STORAGE_ENTRY_TYPECHOICES=(
 
 
 
-
-
 #技术资料管理
 H1 = "0"
 J = "2"
@@ -348,11 +346,12 @@ WELD_ROD = "weld_rod"
 WELD_WIRE = "weld_wire"
 WELD_RIBBON = "weld_ribbon"
 WELD_FLUX = "weld_flux"
-
+WELD = "weld"
 SHEET = "sheet"
 PROFILE = "profile"
 PURCHASED = "purchased"
 OTHER = "other"
+AUXILIARY_TOOL = "auxiliary_tool"
 MATERIAL_CATEGORY_CHOICES = (
     (WELD_ROD, u"焊条"),
     (WELD_WIRE, u"焊丝"),
@@ -361,8 +360,22 @@ MATERIAL_CATEGORY_CHOICES = (
     (SHEET, u"板材"),
     (PROFILE, u"型材"),
     (PURCHASED, u"外购件"),
+    (AUXILIARY_TOOL,u"辅助工具"),
     (OTHER, u"其他"),
 )
+
+WELD_TYPE_LIST = [WELD_ROD,WELD_WIRE,WELD_RIBBON,WELD_FLUX]
+PURCHASED_TYPE_LIST = [PURCHASED,]
+SHEET_TYPE_LIST = [SHEET,]
+PROFILE_TYPE_LIST = [PROFILE,]
+AUXILIARY_TOOL_TYPE_LIST = [AUXILIARY_TOOL,]
+MATERIEL_TYPE_CHOICES = (
+    (WELD, u"焊材"),
+    (SHEET, u"板材"),
+    (PROFILE, u"型材"),
+    (PURCHASED, u"外购件"),
+    (AUXILIARY_TOOL, u"辅助工具"),
+) 
 
 RT = "RT"
 UT = "UT"
@@ -410,6 +423,7 @@ HEATTREATMENTCARD_ATTR_TEM_TIME = "time"
 
 #生产管理
 PRODUCTION_PLAN_STAUTS_CHOICES = (
+    (-1,u"---------"),
     (1, u"必保"),
     (2, u"在制"),
 )

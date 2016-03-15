@@ -1,0 +1,9 @@
+<form class="form-inline" id ="search_form">
+{% if is_production %}
+{{check_db_form.db_type.label}}
+{{check_db_form.db_type}}
+{% endif %}
+{{check_materiel_form.materiel_type.label}}
+{{check_materiel_form.materiel_type}}
+<button type="button" id="check_btn">检索</button>
+</form>

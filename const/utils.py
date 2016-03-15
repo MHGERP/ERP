@@ -50,7 +50,10 @@ def getDistinctSet(_Model,_FModel,field,**kwargs):
     obj_set = []
     for obj_tmp in obj_list:
         if obj_tmp[field] != None:
-            obj_set.append(_FModel.objects.get(id = obj_tmp[field]))
+            try:
+                obj_set.append(_FModel.objects.get(id = obj_tmp[field]))
+            except:
+                pass
     return  obj_set
 def getMaterialQuerySet(*categories):
     """

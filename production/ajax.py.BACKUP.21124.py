@@ -12,9 +12,12 @@ from production.forms import *
 from techdata.models import Processing
 from django.db import connection
 from django.db.models import Q,Sum
+<<<<<<< HEAD
 from storage.utils import get_weld_filter
 from const.forms import WorkOrderForm
+=======
 from production.forms import *
+>>>>>>> 6dd482b32ecf4a78197bd95335ad1538ada34630
 
 @dajaxice_register
 def getFileList(request, id_work_order):
@@ -154,6 +157,7 @@ def getPartTicket(request, work_order, operator, date):
     }
     return simplejson.dumps(ret)
 
+<<<<<<< HEAD
 
 
 @dajaxice_register
@@ -260,6 +264,7 @@ def prodplanSearch(request, form):
     }
     return simplejson.dumps(data)
     
+=======
 @dajaxice_register
 def getLedgerList(request, form):
     ledgerform = LedgerSearchForm(deserialize_form(form))
@@ -269,3 +274,4 @@ def getLedgerList(request, form):
         parent_schematic = ledgerform.cleaned_data["parent_schematic"]
         Materiel.objects.filter()
     return simplejson.dumps(ret)
+>>>>>>> 6dd482b32ecf4a78197bd95335ad1538ada34630

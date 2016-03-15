@@ -830,6 +830,26 @@ def outsideAccountApplyCardSearch(request,form):
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
+def outsideThreadSearch(request,form):
+   form = OutsideStorageSearchForm(deserialize_form(form));
+   items_set = {}
+   if form.is_valid():
+       conditions = form.cleaned_data
+       q1=(conditions['texture'] and Q(texture = conditions['texture'])) or None
+       q2=(conditions['specification'] and Q(specification = conditions['specification'])) or None
+       query_set = filter(lambda x:x!=None,[q1,q2])
+       if query_set:
+           query_conditions = reduce(lambda x,y:x&y,query_set)
+           items_set = OutsideStorageList.objects.filter(query_conditions)
+       else:
+           items_set = OutsideStorageList.objects.all()
+   items_set = items_set.order_by('specification')
+   context = {
+            'items_set':items_set,
+            "search_form":form,
+   }
+   html = render_to_string("storage/widgets/outsidestorage_table.html",context)
+   return simplejson.dumps({"html":html})
 def weldMaterialStorageItems(request,specification):
     item_set = WeldStoreList.objects.filter(specification = specification,count__gt = 0).order_by('entry_time')
     html = render_to_string("storage/weldapply/itemlist.html",{"item_set":item_set})
@@ -878,10 +898,50 @@ def weldRefundCommit(request,rid,form):
         
     return simplejson.dumps({"is_show":is_show,"message":message})
 
+@dajaxice_register
+def changeStorageDb(request,db_type,form):
+    db_model = checkStorage(db_type)
+    context = {}
+    context["check_db_form"] = CheckMaterielDbForm(deserialize_form(form))
+    context["check_materiel_form"] = CheckMaterielListForm(db_type = db_model)
+    context["items_set"] = db_model.objects.all()
+    context["is_production"] = True
+    form_html = render_to_string("storage/widgets/checkstorage_search.html",context)
+    table_html = render_to_string("storage/widgets/materiel_table.html",context)
+    return simplejson.dumps({'form_html':form_html,"table_html":table_html})
 
+@dajaxice_register
+def chooseStorageMateriel(request,form,selected):
+    form = CheckMaterielListForm(deserialize_form(form))
+    if form.is_valid():
+        db_type = form.cleaned_data["db_type"]
+        db_model = checkStorage(db_type)
+    try:
+        choosedmateriel = db_model.objects.get(id = selected)
+    except Exception,e:
+        print e
 
+@dajaxice_register
+def searchMateriel(request,form):
+    context = getSearchMaterielContext(request,form)
+    html = render_to_string("storage/widgets/materiel_table.html",context)
+    return simplejson.dumps({"html":html})
 
-
-
-
-
+def getSearchMaterielContext(request,form,is_production = True):
+    db_form = CheckMaterielDbForm(deserialize_form(form))
+    if db_form.is_valid():
+        db_type = db_form.cleaned_data["db_type"]
+        db_model = checkStorage(db_type)
+    materiel_form = CheckMaterielListForm(deserialize_form(form),db_type = db_model)
+    context = {}
+    if materiel_form.is_valid():
+        id = materiel_form.cleaned_data["materiel_type"]
+        try:
+            item = db_model.objects.filter(id = id)
+            context["items_set"] = item
+        except Exception,e:
+            print e
+    else:
+        print materiel_form.errors
+    context["is_production"] = is_production
+    return context

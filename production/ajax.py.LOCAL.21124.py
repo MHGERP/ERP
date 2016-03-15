@@ -14,7 +14,6 @@ from django.db import connection
 from django.db.models import Q,Sum
 from storage.utils import get_weld_filter
 from const.forms import WorkOrderForm
-from production.forms import *
 
 @dajaxice_register
 def getFileList(request, id_work_order):
@@ -260,12 +259,3 @@ def prodplanSearch(request, form):
     }
     return simplejson.dumps(data)
     
-@dajaxice_register
-def getLedgerList(request, form):
-    ledgerform = LedgerSearchForm(deserialize_form(form))
-    if ledgerform.is_valid():
-        work_order = ledgerform.cleaned_data["work_order"]
-        work_index = ledgerform.cleaned_data["work_index"]
-        parent_schematic = ledgerform.cleaned_data["parent_schematic"]
-        Materiel.objects.filter()
-    return simplejson.dumps(ret)
