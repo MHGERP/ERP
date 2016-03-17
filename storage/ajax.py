@@ -835,6 +835,7 @@ def outsideThreadSearch(request,form):
    items_set = {}
    if form.is_valid():
        conditions = form.cleaned_data
+       print conditions
        q1=(conditions['texture'] and Q(texture = conditions['texture'])) or None
        q2=(conditions['specification'] and Q(specification = conditions['specification'])) or None
        query_set = filter(lambda x:x!=None,[q1,q2])

@@ -1,5 +1,6 @@
 # coding: UTF-8
 from const import *
+from production import *
 from django import forms
 from django.forms import ModelForm
 from const.models import WorkOrder
@@ -36,10 +37,16 @@ class OrderIndexForm(forms.Form):
 
 class TaskAllocationSearchForm(forms.Form):
     workorder_choices=tuple([(-1,"------")]+[(item.id,item.order_index) for item in WorkOrder.objects.all()])
-    workorder=forms.ChoiceField(choices=workorder_choices,required=False)
-    identifier=forms.CharField(required=False)
-    processnumber=forms.CharField(required=False)
-    groupnumber=forms.CharField(required=False)
+    workorder=forms.ChoiceField(choices=workorder_choices,required=False, label=u"工作令")
+    identifier=forms.CharField(required=False, label=u"编号")
+    processnumber=forms.CharField(required=False, label=u"工序号")
+    groupnumber=forms.CharField(required=False,label=u"操作组")
+
+class TaskAllocationForm(TaskAllocationSearchForm):
+    task_allocation_status = forms.ChoiceField(choices=TASK_ALLOCATION_STATUS_CHOICES, required=False, label=u"任务分配状态")
+
+class TaskConfirmForm(TaskAllocationSearchForm):
+    task_confirm_status = forms.ChoiceField(choices=TASK_CONFIRM_STATUS_CHOICES, required=False, label=u"任务完成状态")
 
 class DateForm(forms.Form):
     order_index = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
