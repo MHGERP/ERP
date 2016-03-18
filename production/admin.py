@@ -6,6 +6,7 @@ from production.models  import *
 
 RegisterClass = (
     SynthesizeFileListStatus,
+    ProductionPlan,
 )
 for item in RegisterClass:
     admin.site.register(item)

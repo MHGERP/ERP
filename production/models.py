@@ -3,6 +3,7 @@ from const import *
 from django.db import models
 from const.models import WorkOrder
 from const.utility import make_uuid
+import datetime
 
 class SynthesizeFileListStatus(models.Model):
     workorder_id = models.ForeignKey(WorkOrder)
@@ -24,8 +25,8 @@ class SynthesizeFileListStatus(models.Model):
 class ProductionPlan(models.Model):
     workorder_id = models.ForeignKey(WorkOrder)
     plan_id = models.CharField(max_length=50, blank=True, default=make_uuid, verbose_name=u"生产计划编号")
-    status = models.IntegerField(blank = False, choices = PRODUCTION_PLAN_STAUTS_CHOICES, verbose_name=u"生产计划状态")
-    plan_date = models.DateField(blank = True, verbose_name = u"计划年月")
+    status = models.IntegerField(blank = False, choices = PRODUCTION_PLAN_STAUTS_CHOICES, default=2,verbose_name=u"生产计划状态")
+    plan_date = models.DateField(blank = True, default=lambda:datetime.datetime.today(), verbose_name = u"计划年月")
 
     class Meta:
         verbose_name = u"生产计划"

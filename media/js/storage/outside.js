@@ -54,3 +54,11 @@ function account_applycard_search(){
 function accounApplyCardSearch_callback(data){
     $('#applycard_main').html(data.html);
 }
+
+function outside_thread_search(){
+    Dajaxice.storage.outsideThreadSearch(outsideThreadSearch_callback,{"form":$("#search_form").serialize()});
+}
+
+function outsideThreadSearch_callback(data){
+    $('#item_table').html(data.html);
+}
