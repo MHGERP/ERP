@@ -9,7 +9,7 @@ from django.utils import simplejson
 from const.models import WorkOrder,Materiel
 from production.models import *
 from production.forms import *
-from techdata.models import Processing
+from techdata.models import Processing, CirculationRoute
 from django.db import connection
 from django.db.models import Q,Sum
 from storage.utils import get_weld_filter
@@ -399,3 +399,28 @@ def taskConfirmFinish(request, form, mid):
     print datetime.datetime.today()
     item.save()
     return taskConfirmSearch(request, form)
+
+
+@dajaxice_register
+def ledgerSearch(request, form):
+    search_form = LedgerSearchForm(deserialize_form(form))
+    if search_form.is_valid():
+        con = search_form.cleaned_data
+        q1 = (con["work_order"] and Q(order_id = con["work_order"])) or None
+        q2 = (con["work_index"] and Q(index = con["work_index"])) or None
+        q3 = (con["parent_schematic"] and Q(parent_schematic_index = con["parent_schematic"])) or None
+        query_set = filter(lambda x:x!=None, [q1,q2,q3])
+
+        if query_set:
+            query_con = reduce(lambda x,y:x&y, query_set)
+            materiel_list  = Materiel.objects.filter(query_con)
+        else:
+            materiel_list  = Materiel.objects.all()
+        for item in materiel_list:
+            if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
+                CirculationRoute(materiel_belong = item).save()
+            item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
+        html = render_to_string("techdata/widgets/designBOM_table_list.html",{"BOM":materiel_list})
+    else:
+        print search_form.errors
+    return simplejson.dumps({ "html" : html})
