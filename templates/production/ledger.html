@@ -8,7 +8,7 @@
 {% block inner_content%}
 <link rel="stylesheet" href="{{ STATIC_URL }}style/man_hour_summarize.css" type="text/css" media="screen" />
 <div id="search-div" style="margin-bottom:10px;">
-  <form class="form-inline">
+  <form class="form-inline" id="ledgerSearchForm">
     {{ledgerSearchForm.work_order.label}}:
     {{ledgerSearchForm.work_order}}
     {{ledgerSearchForm.work_index.label}}:

@@ -679,6 +679,9 @@ def outsideHomeViews(request):
 def outsideEntryHomeViews(request):
     key_list = ["entry_set","entryurl","ENTRYSTATUS_END"]
     context = getStorageHomeContext(request,OutsideStandardEntry,OutsideEntrySearchForm,STORAGESTATUS_KEEPER,"storage/outside/entryconfirm",key_list,"entry_time")
+    context["check_materiel_form"] = CheckMaterielListForm()
+    context["is_production"] = True
+    context["items_set"] = WeldStoreList.objects.all()
     return render(request,"storage/outside/outsideentryhome.html",context)
 
 def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list,order_field):
@@ -769,13 +772,8 @@ def outsideAccountHomeViews(request):
     return render(request,"storage/outside/accounthome.html",context)
 
 def outsideStorageAccountViews(request):
-    if request.method == "POST":
-        search_form = OutsideStorageSearchForm(request.POST)
-        if search_form.is_valid():
-            items_set = get_weld_filter(OutsideStorageList,search_form.cleaned_data)
-    else:
-        items_set = OutsideStorageList.objects.order_by('specification')
-        search_form = OutsideStorageSearchForm()
+    items_set = OutsideStorageList.objects.order_by('specification')
+    search_form = OutsideStorageSearchForm()
     items_set = items_set.order_by('specification')
     context = {
         "items_set":items_set,

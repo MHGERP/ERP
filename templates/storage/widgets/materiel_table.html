@@ -1,0 +1,20 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            {% if is_production %}
+            <th class="span1">选择</th>
+            {% endif %}
+            <th class="span3">名称</th>
+            <th class="span2">数量</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for item in items_set %}
+        <tr id="{{item.id}}">
+            <td><input type="radio" name="check_radio" iid="{{item.id}}"/></td>
+            <td>{{item.specification}}</td>
+            <td>{{item.count}}</td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>

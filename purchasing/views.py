@@ -8,7 +8,6 @@ from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
 from const.models import WorkOrder, InventoryType, BidFormStatus
 from purchasing.forms import *
-from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators import csrf
 from django.db.models import Q
@@ -22,6 +21,7 @@ from users.decorators import authority_required
 from users import *
 from storage.forms import EntryTypeForm
 from storage.models import *
+from datetime import datetime
 def purchasingFollowingViews(request):
     """
     chousan1989

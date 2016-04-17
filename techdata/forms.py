@@ -8,14 +8,16 @@ from const import PROCESSING_CHOICES, TRANSFER_CARD_TYPE_CHOICES,MATERIAL_CATEGO
 class MaterielForm(forms.ModelForm):
     """
     JunHU
+    parent_schematic_index was exclude from "exclude" 2016.3.18
     """
     class Meta:
         model = Materiel
-        exclude = ("id", "order","parent_schematic_index")
+        exclude = ("id", "order",)
         widgets = {
             "name": forms.TextInput(attrs = {"class": "input-medium"}),
             "index": forms.TextInput(attrs = {"class": "input-small"}),
             "schematic_index": forms.TextInput(attrs = {"class": "input-medium"}),
+            "parent_schematic_index" : forms.TextInput(attrs = {"class" : "input-medium"}),
             "material": forms.Select(attrs = {"class": "input-medium"}),
             "count": forms.TextInput(attrs = {"class": "input-medium"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium"}),
