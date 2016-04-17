@@ -1,0 +1,119 @@
+<form class="form form-horizontal" id="applycardform"  method="post">
+    <div id="applyform_div">
+        <div class="row-fluid">
+            <div class="span4">
+                <div class="control-group ">
+                    <label class="control-label">工作令</label>
+                    <div class="controls">
+                        <input type="text" value="{{applycard.workorder}}" readonly="readonly"/>
+                    </div>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="control-group ">
+                    <label class="control-label">日期</label>
+                    <div class="controls">
+                        <input type="text" value="{{applycard.date|date:'Y年m月d日'}}" readonly="readonly"/>
+                    </div>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="control-group ">
+                    <label class="control-label">领用单位</label>
+                    <div class="controls">
+                        <input type="text" value="{{applycard.department}}" readonly="readonly"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            {% for field in inform %}
+            <div class="span4">
+                <div class="control-group {% if field.errors %} error{% endif %}">
+                    <label class="control-label">{{field.label}}</label>
+                    <div class="controls">
+                        {{field}}
+                    </div>
+                </div>
+                {% if field.errors %}
+                    {{field.errors}}
+                {% endif %}
+            </div> 
+            {% endfor %}
+        </div>
+    </div>
+    <table id="items_table" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>零件图/标准</th>
+                <th>名称及规格</th>
+                <th>材料牌号</th>
+                <th>单位</th>
+                <th>数量</th>
+                <th>标记号</th>
+                <th>备注</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items_set %}
+            <tr id="{{item.id}}">
+                <td>{{forloop.counter}}</td>
+                <td>{{item.schematic_index}}</td>
+                <td>{{item.specification}}</td>
+                <td>{{item.material_mark}}</td>
+                <td>{{item.unit}}</td>
+                <td>{{item.number}}</td>
+                <td>{{item.tag_number}}</td>
+                <td id="{{item.id}}remark">{{item.remark}}</td>
+                <td><a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#cardremark" onclick="change_applycard_remark({{item.id}})">修改</a></td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="control-group span12" style="margin-top:50px;">
+            <div class="rows span3 purcher">
+                领用人：<strong>{{applycard.proposer.userinfo}}</strong>
+            </div>
+            <div class="rows span3 purcher">
+                审核人：<strong>{{applycard.auditor.userinfo}}</strong>
+            </div> <div class="span3 purcher">
+                检查员：<strong>{{applycard.inspector.userinfo}}</strong>
+            </div>
+            <div class="span3 purcher">
+                库管员：<strong>{{applycard.keeper.userinfo}}</strong>
+            </div>
+        </div>
+        <center style="margin:110px;">
+            {% if is_show %}
+            <button  id="applycard_confirm"  class="btn btn-primary" type="button" onclick="outsideapplycardconfirm({{applycard.id}});">入库单确认</button>
+            {% else %}
+            <a style="width:10%;height:20px;" class="btn btn-primary" type="button" href="/storage/{{applycardurl}}">返回</a>
+            {% endif %}
+        </center>
+    </form>
+    <div id="cardremark" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">修改备注</h3>
+        </div>
+        <div class="modal-body">
+            <div class="control-group" id="remark">
+                <label class="control-label">备注</label>
+                <div class="controls">
+                    <input type="text" id="remark_input"/>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+            <button class="btn btn-primary" data-dismiss="modal" onclick="save_remark();">保存</button>
+        </div>
+    </div>
+    <script>
+        $(function(){
+                $("#id_date").datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true});
+                });
+    </script>

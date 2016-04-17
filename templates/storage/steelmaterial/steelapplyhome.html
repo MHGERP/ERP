@@ -1,0 +1,25 @@
+{% extends "storage/base/steelbase.html" %}
+{% block title %}
+<h1>钢材领用</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/steelapply" class="current">钢材领用</a>
+{% endblock %}
+
+{% block inner_content %}
+<h3>领用单管理</h3>
+<form class="form-inline apply-card-search-form">
+    {% for field in search_form %}
+        {{field.label}}
+        {{field}}
+    {% endfor %}
+    <button  type="button" class="btn btn-success apply-card-search-btn">检索</button> 
+</form>
+
+<br>
+<div class="apply-cards-table">
+    {% include "storage/widgets/apply_card_table.html" %}
+</div>
+
+{% endblock %}

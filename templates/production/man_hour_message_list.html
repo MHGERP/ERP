@@ -1,0 +1,38 @@
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>工作令</th>
+			<th>工作票号</th>
+			<th>组号</th>
+			<th>工序</th>
+			<th>工时</th>
+			<th>工票员</th>
+			<th>定额员</th>
+			<th>完工时间</th>
+		</tr>
+	</thead>
+	{%for item in processSet%}
+		{%for it in item%}
+			<tr>
+				<td>{{it.materiel_belong.order}}</td>
+				<td>{{it.materiel_belong.index}}</td>
+				<td>{%if not it.operator%}
+						-
+					{%else%}
+						{{it.operator}}
+					{%endif%}
+				</td>
+				<td>{{it.get_name_display}}</td>
+				<td>{{it.hour}}</td>
+				<td></td>
+				<td></td>
+				<td>{%if not it.operate_date%}
+						-
+					{%else%}
+						{{it.operate_date}}
+					{%endif%}
+				</td>
+			</tr>
+		{%endfor%}
+	{%endfor%}	
+</table>

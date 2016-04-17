@@ -1,0 +1,19 @@
+div#storage-weld-menu{
+    font-size:30px;
+}
+div#storage-weld-menu a{
+    vertical-align:text-bottom;
+}
+
+.bl{
+    width:140px;
+}
+
+.bakeform-btn{
+    width:100px;
+    margin-right:20px;
+}
+
+form#weldbake_form .bl{
+    width:120px;
+}

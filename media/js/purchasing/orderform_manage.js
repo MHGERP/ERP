@@ -23,3 +23,13 @@ $(document).on("click", ".btn-del", function() {
 function deleteCallBack(data) {
     refresh();
 }
+$(document).on("click", ".btn-fns", function() {
+    index = $(this).attr("args");
+    if(confirm("是否确定终止该订购单？"))
+        Dajaxice.purchasing.finishOrderForm(finishCallBack, {"index": index, });
+});
+function finishCallBack(data) {
+    refresh();
+}
+
+

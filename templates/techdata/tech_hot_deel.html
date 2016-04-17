@@ -1,0 +1,21 @@
+{% extends "techdata/base/none_nav_base.html"%}
+
+{% block title %}
+<h1>热处理列表</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">热处理列表</a>
+{% endblock %}
+
+{% block inner_content%}
+<h2>热处理部件等待列表</h2>
+<div class="widget-content" id="widget-content-1">
+    
+</div>
+<h2>热处理工艺卡片列表</h2>
+<div class="widget-content" id="widget-content-2">
+    {% include "techdata/widgets/tech_hot_deel_table2.html" %}
+</div>
+<script type='text/javascript' src="{{STATIC_URL}}js/techdata/tech_hot_deel.js"></script>
+{% endblock%}

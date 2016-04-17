@@ -10,12 +10,15 @@
         {% for item in items %}
         <tr>
             <td>{{item.order_id}}</td>
-            <td>{{item.create_time}}</td>
+            <td>{{item.create_time|date:"Y-m-d"}}</td>
             <td>
                 <span class="btn btn-small btn-open" args="{{item.order_id}}">查看</span>
-				{% if item.order_status.status == 0 %}
+				{% if item.order_status.status == ORDERFORN_STATUS_BEGIN %}
 				<span class="btn btn-small btn-del btn-danger" args="{{item.order_id}}">删除</span>	
 				{% endif %}
+                {% if item.order_status.status == ORDERFORN_STATUS_ESTABLISHMENT %}
+                <span class="btn btn-small btn-fns btn-primary" args="{{item.order_id}}">完成</span>
+                {% endif %}
             </td>
 
         </tr>

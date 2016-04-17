@@ -1,0 +1,81 @@
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+		<tr>
+			{% if can_choose %}
+			<th><input type="checkbox" id="select_all"/></th>
+			{% endif %}
+			<th>序号</th>
+			<th>名称</th>
+			<th>材质</th>
+			<th>质量分类</th>
+			<th>规格</th>
+			<th>数量（个）</th>
+            <th>采购（kg）</th>
+            <th>复验</th>
+            <th>探伤级别</th>
+            <th>交货状态</th>
+            <th>执行标准</th>
+			<th>备注</th>
+			<th>状态</th>
+			{% if not can_choose %}
+			<th>修改</th>
+			{% endif %}
+		</tr>
+  </thead>
+	<tbody>
+		{% for item in items_pending %}
+		<tr class="pendding" args="{{item.id}}">	
+			{% if can_choose %}
+			<td>{% if item.can_choose %}
+			<input type="checkbox" class="checkbox" args="{{item.id}}">
+			{% endif %}</td> {% endif %}
+			<td>{{forloop.counter}}</td>
+        	<td>{{item.name}}</th>
+            <td>{{item.material.name}}</td>
+            <td>{{item.press}}</td>
+			<td>{{item.specification}}</td>
+            <td>{{item.materielformconnection.count}}</td>
+            <td>{{item.materielformconnection.purchasing}}</td>
+            <td>{{item.recheck}}</td>
+            <td>{{item.detection_level}}</td>
+            <td>{{item.status}}</td>
+            <td>{{item.standard}}</td>
+            <td>{{item.remark}}</td>
+			<td>{{item.status}}</td>
+            {% if not can_choose %}
+			<td>
+				<button class="btn btn-primary" uid={{item.id}}>修改</button>
+			</td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+		{% for item in items %}
+		<tr mod="0">	
+			{% if can_choose %}
+			<td>{% if item.can_choose %}
+			<input type="checkbox" class="checkbox" args="{{item.id}}">
+			{% endif %}</td> {% endif %}
+			<td>{{forloop.counter}}</td>
+        	<td>{{item.name}}</th>
+            <td>{{item.material.name}}</td>
+            <td>{{item.press}}</td>
+			<td>{{item.specification}}</td>
+            <td>{{item.materielformconnection.count}}</td>
+            <td>{{item.materielformconnection.purchasing}}</td>
+            <td>{{item.recheck}}</td>
+            <td>{{item.detection_level}}</td>
+            <td>{{item.status}}</td>
+            <td>{{item.standard}}</td>
+            <td>{{item.remark}}</td>
+			<td>{{item.status}}</td>
+            {% if not can_choose %}
+			<td>
+				<button class="btn btn-primary" id="edit" uid={{item.id}}>修改</button>
+			</td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+

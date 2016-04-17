@@ -1,20 +1,30 @@
 {% extends "purchasing/base/none_nav_base.html"%}
-{% block title %}
-	<h1>材料执行表</h1>
-{% endblock %}
-
-{% block sub_ref %}
-    <a href="/purchasing/materielExecute" class="tip-bottom" data-original-title="材料执行清单">材料执行清单</a>
-	<a href="#" class="current">材料执行表</a>
+{% block main_title %}
+<div class="main-title">
+    <div id="content-header"><h1>材料执行表</h1></div>
+    <div id="breadcrumb">
+        <a href="/home" title="首页" class="tip-bottom">首页</a>
+        {% if source == "0" %}
+            <a href="#" title="采购管理" class="tip-botto">采购管理</a>
+            <a href="/purchasing/materielExecute" class="tip-bottom" data-original-title="材料执行清单">材料执行清单</a>
+            <a href="#" class="current">材料执行表</a>
+        {% else %}
+            <a href="#" title="技术资料管理" class="tip-bottom">技术资料管理</a>
+            <a href="/techdata/programmeEdit" title="编程套料编辑" class="tip-bottom">编程套料编辑</a>
+            <a href="#" class="current">材料执行表</a>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
 {% block inner_content%}
 	<link rel="stylesheet" href="{{ STATIC_URL }}style/materiel_execute.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
 	<div style="width:25%">
 		{% block materiel_execute_detail_form%}
 		{% endblock %}
 	</div>
 
-	{% block add_button %}{% endblock %}
+	{% block form_button %}{% endblock %}
 	{% block add_modal %}{% endblock %}
 
 	<div id="materielexecute_detail_table">
@@ -24,6 +34,29 @@
 			{% include "purchasing/materielexecute/table/support_materielexecute_detail_table.html" %}
 		{% endif %}
 	</div>
+
+	{% block commit_button %}{% endblock %}
+
+	<div class="modal  fade" id="materielexecute_modal" modal-size-width="0.6">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="modal_title">材料执行表信息修改</h2>
+      </div>
+      <div class="modal-body" >
+        <form class="form-inline well" id="edit_materielexecute_form">
+          {% csrf_token %}
+          <div class="row" id="materielexecute_div">
+            
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel_change">关闭</button>
+        <button type="button" class="btn btn-primary" data-dismiss="" id="save_materiel_excecute">保存</button>
+      </div>
+
+</div>
 	<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/materielexecute_detail.js"></script>
 	<script type='text/javascript' src="{{STATIC_URL}}js/bootstrap_filestyle.js"></script>
 {% endblock%}

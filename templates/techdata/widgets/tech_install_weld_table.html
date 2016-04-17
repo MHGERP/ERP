@@ -1,0 +1,20 @@
+<table class="table table-bordered table-striped" style="width:60%">
+    <thead>
+        <tr>
+            <th>工作令</th>
+            <th>产品名称</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+	<tbody>
+	{% for order in orders %}
+		<tr>
+		    <td>{{order.order_index}}</td>
+		    <td>{{order.product_name}}</td>
+		    <td>
+		        <a class="btn" href="/techdata/techInstallWeldCard?iid={{order.id}}">编辑</a>
+		    </td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>

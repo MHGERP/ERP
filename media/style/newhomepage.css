@@ -1,0 +1,380 @@
+a, h1, h2, h3 {
+    color: rgb(32, 183, 240);
+    font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, STHeiti, "LiHei Pro Medium", SimSun, SumHei;
+}
+
+.outter_frame {
+    width : 100%;
+    margin : 0 auto;
+    color : #5a5a5a;
+    /*background-color: rgb(248, 248, 248);*/
+}
+
+.news_display_div {
+    display: inline-block;
+}
+
+#show-pictures{
+    height: 300px;
+}
+
+.front-wrap {
+    height: 430px;
+    overflow: hidden;
+    padding: 0 10px;
+    background: #fff;
+    color: #333;
+    border: 1px solid #eaeaea; 
+    /*border: 0px solid #eaeaea;*/
+}
+
+.home-news {
+    margin-left: -10px;
+    float: left;
+    height: 90%;
+    width: 100%;
+    padding: 0;
+    display: inline;
+}
+.width-table{
+    width: 100%;
+    display: table;
+}
+.home-news-important{
+    margin: 0;
+    float: left;
+    height: 100%;
+    width: 100%;
+    padding: 0 1.5%;
+    display: inline;
+
+}
+.home-news h3,
+.home-news small {
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+table.news {
+    width: 100%;
+    height: 200px;
+    display: block;
+    overflow: hidden;
+}
+table.documents {
+    overflow: hidden;
+    table-layout: fixed;
+    width: 100%;
+}
+div.documents-list {
+    height: 100%;
+    overflow: hidden;
+}
+table.documents td {
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+    overflow:hidden;
+}
+.news-body {
+    height: 100%;
+    overflow: hidden;
+}
+
+.news-content {
+    min-height:700px;
+    max-height:800px;
+    overflow-x:hidden;
+    overflow-y:auto;
+}
+
+.home-news-list {
+    float : left;
+    width: 95%;
+}
+
+.home-news-list .newslist-dot {
+    /*border-bottom: #363636 1px dotted;*/
+    line-height: 32px;
+    height: 32px;
+    display: block;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.news-list {
+    margin: 0 auto;
+    height: 100%;
+    width: 50%;
+/* border-right: 1px solid #0064b9; */
+}
+
+.news-list .newslist-dot {
+    /*border-bottom: #363636 1px dotted;*/
+    line-height: 32px;
+    height: 32px;
+    /*display: block;*/
+    font-size: 14px;
+    text-decoration: none;
+}
+
+input[type="text"], input[type="button"] ,input[type="submit"],select{
+    border-radius: 0px;
+}
+.search-input {
+    margin-left: 5px;
+}
+.search-input:hover,
+.search-input:focus,
+.search-input:active {
+    color: rgb(32, 183, 240);
+    text-shadow: none;
+    border-color: rgb(32, 183, 240) !important;
+}
+.search form {
+    margin-top: 5px;
+}
+.search-news {
+    height: 30px;
+    vertical-align:top;
+    background: transparent;
+    border: 1px solid rgb(32, 183, 240);
+    color: rgb(32, 183, 240);
+}
+.search-news:hover,
+.search-news:focus,
+.search-news:active {
+    color: #eee;
+    text-shadow: none;
+    background-color: rgb(32, 183, 240);
+    border-color: rgb(32, 183, 240);
+}
+.usoft-listview-header
+{
+    /* background: url(../images/bg0.png) 0px 0px no-repeat;  */
+    margin: 0px;
+    line-height: 35px;
+    height: 35px;
+}
+.usoft-listview-header div {
+    /* background-color:rgb(245,79,81); */
+    height: 30px;
+    width: 280px;
+    border-left: 10px solid rgb(32, 183, 240);
+    border-top: 5px solid rgb(248,248,248);
+    border-bottom: 5px solid rgb(248,248,248);
+/*    border-top: 5px solid #eeeeee;
+    border-bottom: 5px solid #eeeeee;*/
+}
+
+.usoft-listview-item-date
+{
+    color: #999999;
+    font-weight: normal;
+    font-size: 12px;
+    float: right;
+    text-align: right;
+    padding-right: 0px;
+}
+
+.usoft-listview-basic
+{
+    margin: 0px;
+    line-height: 2em;
+}
+.usoft-listview-basic a {
+    color: rgb(32, 183, 240);
+}
+.usoft-listview-basic li {
+    list-style-type: none;
+}
+.usoft-listview-basic ul,
+.usoft-listview-basic ol {
+    margin-left: 5px;
+}
+.step-links {
+    margin-left: 20px;
+}
+.front-wrap ul
+{
+    /* list-style: url(../images/arrow.gif); */
+    list-style-type: none;
+    margin-left: 5px;
+}
+.usoft-listview-header > div {
+    padding-left: 15px;
+}
+.usoft-listview-header h3 {
+    border-bottom: 1px solid rgb(245,79,81);
+    margin: 0px;
+    float: left;
+    color: rgb(84,128,176);
+    font-size: 15px;
+    line-height: 25px;
+    font-weight: bold;
+}
+.usoft-listview-header small {
+    padding-left: 10px;
+    margin: 0 10px;
+    float: left;
+    color: rgb(84,128,176);
+    border-left: 1px solid rgb(248,248,248);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 100;
+    opacity: 0.8;
+}
+.usoft-listview-more a {
+    float: right;
+    color: rgb(32, 183, 240);
+    font-weight: normal;
+    font-size: 10px;
+    margin: 0px 15px 0px 0px;
+    text-align: right;
+    text-decoration: none;
+}
+.usoft-listview-more a sub {
+    font-size: 20px;
+    vertical-algin: middle;
+    opacity: 0.7;
+}
+.usoft-listview-more h6 a {
+    float: left;
+}
+.news-list-important {
+    margin: 0;
+    height: 100%;
+    padding: 0 15px;
+}
+.news-documents {
+    padding-top: 15px;
+    padding-left: 15px;
+    height: 100% !important;
+}
+.news-body .news-documents {
+    padding-top: 0px;
+}
+.news-main {
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 60%;
+    margin: 0 auto; 
+    background: #fff
+}
+.news-documents table {
+}
+.news-documents a {
+    color: rgb(128,128,128);
+}
+
+#photocontainer{
+    width: 1050px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    background: white;
+}
+
+/*photobanner*/
+
+.photobanner {
+    height: 80px;
+    width: 3280px;
+}
+
+.photobanner img {
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
+.photobanner img:hover {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+    cursor: pointer;
+
+    -webkit-box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+}
+
+.usoft-container-section ul
+{
+    list-style: url(../images/arrow.gif);
+}
+
+/*keyframe animations*/
+.first {
+    -webkit-animation: bannermove 30s linear infinite;
+    -moz-animation: bannermove 30s linear infinite;
+    -ms-animation: bannermove 30s linear infinite;
+    animation: bannermove 30s linear infinite;
+}
+#page-nav a {
+    float: right;
+    margin: 0 20px 20px 0;
+    padding: 0 10px;
+    line-height: 30px;
+}
+
+@keyframes "bannermove" {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
+
+}
+
+@-moz-keyframes bannermove {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
+
+}
+
+@-webkit-keyframes "bannermove" {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
+
+}
+
+@-ms-keyframes "bannermove" {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
+
+}
+
+@-o-keyframes "bannermove" {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: -2125px;
+    }
+
+}
+#myCarousel .carousel-inner{
+    top:-20px;
+}

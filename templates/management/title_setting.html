@@ -1,0 +1,22 @@
+{% extends "management/base/none_nav_base.html"%}
+
+{% block title %}
+<h1>头衔设置（{{setting_user.userinfo.name}}）</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="/management/userManagement" class="tip-bottom" data-original-title="用户管理">用户管理</a>
+<a href="#" class="current">头衔设置</a>
+{% endblock %}
+
+{% block inner_content%}
+
+<form class="form-search" style="width:60%">
+部门：{{group_form.group}}
+</form>
+<br/>
+<div id="widget-content" user_id="{{setting_user.id}}">
+</div>
+<script type='text/javascript' src="{{STATIC_URL}}js/management/title_setting.js"></script>
+
+{% endblock%}

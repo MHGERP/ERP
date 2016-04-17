@@ -24,20 +24,16 @@ urlpatterns=patterns('',
         purchasing_views.supplierManagementViews,
         ),
     url(
-        r'^bidTracking$',
-        purchasing_views.bidTrackingViews,
-        ),
-    url(
-        r'^suppliermanagement$',
-        purchasing_views.supplierManagementViews,
-    ),
-    url(
-        r'^bidTracking$',
+        r'^bidTracking/(?P<bid_id>\w+)/$',
         purchasing_views.bidTrackingViews,
     ),
    url( 
         r'^arrivalInspection$',
         purchasing_views.arrivalInspectionViews,
+    ),
+   url(
+        r'^arrivalInspectionConfirm/(?P<entry_typeid>\d+)/(?P<eid>\d+)/(?P<steel_typeid>\d*)$',
+        purchasing_views.arrivalInspectionConfirmViews,
     ),
     url(
         r'^arrivalCheck/(?P<bid>\w+)/$',purchasing_views.arrivalCheckViews,name='arrivalCheck',                    
@@ -78,7 +74,7 @@ urlpatterns=patterns('',
         purchasing_views.processFollowAdd,
      ),
     url(
-        r'^materielExecuteDetail/(\d+)/(\d+)?$',
+        r'^materielExecuteDetail/(\d+)/(\d+)/(\d+)?$',
         purchasing_views.materielExecuteDetailViews,
     ),
     url(
@@ -92,5 +88,17 @@ urlpatterns=patterns('',
     url(
         r'^statusChange/(?P<bid>\w+)/$',
         purchasing_views.statusChangeApplyViews,name="statuschange",
+       ),
+    url(
+        r'^bidformapprove$',
+        purchasing_views.bidformApproveViews,
+    ),
+    url(
+        r'^bidformapproveid/(?P<bid>\w+)/$',
+        purchasing_views.bidformApproveIDViews,
+    ),
+    url(
+        r'^contractFinance/$',
+        purchasing_views.contractFinanceViews,
     ),
 )

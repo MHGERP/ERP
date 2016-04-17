@@ -1,0 +1,28 @@
+<table class="table table-bordered">
+    <thead>
+        <th>日期</th>
+        <th>编号</th>
+        <th>工作令</th>
+        <th>库管人</th>
+        <th>退料人</th>
+        <th>操作</th>
+    </thead>
+    <tbody>
+        {% for ref_obj in refund_cards %}
+        <tr>
+            <td>{{ref_obj.date|date:"Y年m月d日"}}</td>
+            <td>{{ref_obj.form_code}}</td>
+            <td>{{ref_obj.work_order}}</td>
+            <td>{{ref_obj.keeper.userinfo}}</td>
+            <td>{{ref_obj.returner.userinfo}}</td>
+            <td>
+                {% ifequal ref_obj.return_confirm 1 %}
+                    <a class="btn btn-primary" href="/storage/steelrefunddetail/{{ref_obj.steel_type}}/{{ref_obj.id}}">查看</a>
+                {% else %}
+                    <a class="btn btn-warning" href="/storage/steelrefunddetail/{{ref_obj.steel_type}}/{{ref_obj.id}}">待处理</a>
+                {% endifequal %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

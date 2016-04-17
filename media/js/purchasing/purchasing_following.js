@@ -11,33 +11,55 @@ function search_purchasing_callback(data){
 
 var btn;
 
-$("table[name='confirm']").find("button").bind("click",function(){
+$("table[name='confirm']").find("button").live("click",function(){
     var cid=$(this).attr("cid");
     var aid=$(this).parents("tr").attr("aid");
     btn = $(this);
+    if(btn.attr("Class").replace(" ","") == "btn"){
     Dajaxice.purchasing.checkArrival(check_arrival_callback,{'aid':aid,'cid':cid});
+    }
 })
 
 function check_arrival_callback(data){
-    if(data.flag){
-       btn.removeClass().addClass("btn btn-success");
+    if(data.isOk){
+        btn.removeClass().addClass("btn btn-success");
+        alert(data.message);
     }
-    else{
-        btn.removeClass().addClass("btn");
+    else
+        alert(data.message);
+    if(data.isForbiden){
+        $("[aid="+data.aid +"]").find("input").eq(0).attr("disabled",false);
     }
 }
 
 function gen_entry(bid){
-    Dajaxice.purchasing.genEntry(gen_entry_callback,{'bid':bid});
+    btn = $(this);
+    var box=$("#arrivalinspection_table").find(".arrival_checkbox");
+    var selected=new Array();
+    for(var i=0;i<box.length;++i)
+    {
+        if(box[i].checked){
+            var val=box[i].parentNode.parentNode.getAttribute('aid');
+            selected.push(val);
+        }
+    }
+    if(selected.length==0){
+        alert("没有选定入库信息!");
+        return false;
+    }
+
+    Dajaxice.purchasing.genEntry(gen_entry_callback,{'items_set':selected,'bid':bid});
 }
 
 function gen_entry_callback(data){
-    if(data.flag){
-        alert(data.message);
-    }
-    else{
-        alert(data.message);
-    }
+    // if(data.flag){
+    //    alert(data.message);
+    //    $("#genbtn").remove();
+    // }
+    // else{
+    //    alert(data.message);
+    // }
+    window.location.reload();
 }
 
 function entry_confirm(pid){
@@ -64,6 +86,7 @@ function entry_confirm(pid){
 function entry_confirm_callback(data){
     if(data.flag){
         alert(data.message);
+        $("#entry_confirm").remove();
     }
     else{
         alert(data.message);
@@ -88,12 +111,10 @@ function subitem_save(){
 function subitem_save_callback(data){
     if(data.flag){
         $('#subtable').html(data.html);      
-        $('#myModal').modal('hide');
-        location.reload();
-        alert("添加成功");
+        alert(data.message);
     }
     else{
-        alert("添加失败，有未填写的内容");
+        alert(data.message);
     }
 }
 
@@ -110,9 +131,10 @@ function change_item(id){
     a = $("tr#"+item_id).find("td");
     for(var i = 0 ; i < 8 ; i++){
         var did = 'div#div'+(i+1);
-        var in_obj = $(did).find("input");  
+        var in_obj = $(did).find("input"); 
         in_obj.val(a.eq(i).text());
-    } 
+    }
+    is_add = false;
 }
 
 function delete_item(id){
@@ -123,10 +145,55 @@ function delete_item(id){
 
 function delete_item_callback(data){
     if(data.flag){
-        alert("删除成功");
         $("tr#"+item_id).remove();
+        alert("删除成功");
     }
     else{
         alert("删除失败");
+    }
+}
+
+function select_entry_type(bid){
+    btn = $(this);
+    var box=$("#arrivalinspection_table").find(".arrival_checkbox");
+    var selected=new Array();
+    for(var i=0;i<box.length;++i)
+    {
+        if(box[i].checked){
+            var val=box[i].parentNode.parentNode.getAttribute('aid');
+            selected.push(val);
+        }
+    }
+    if(selected.length==0){
+        alert("没有选择入库材料信息!");
+        return false;
+    }
+    Dajaxice.purchasing.selectEntryType(select_entry_type_callback,{"bid":bid,"selected":selected,"selectentryform":$("#selectentryform").serialize()});
+
+}
+
+
+var items_set;
+var selectvalue;
+var bid;
+function select_entry_type_callback(data){
+    $("#additemstable").html(data.html); 
+    items_set = data.items_set;
+    selectvalue = data.selectvalue;
+    bid = data.bid;
+    $('#myModal').modal('show');
+}
+
+function save_entry_items(){
+    //Dajaxice.purchasing.genEntry(save_entry_items_callback,{"items_set":items_set,"selectvalue":selectvalue,"bid":bid});
+}
+
+function save_entry_items_callback(data){
+    if(data.isOk){
+        $("#arrInsTable").html(data.html);
+        alert("入库单创建成功，请完善信息后确认");
+    }
+    else{
+        alert("入库单创建失败");
     }
 }

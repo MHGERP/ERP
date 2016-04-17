@@ -1,0 +1,74 @@
+<div class="widget-title">
+	<span class="icon"><i class="icon-th"></i></span>
+	<h5>工作令：{{work_order.order_index}}</h5>
+	<h5>产品名称：{{work_order.product_name}}</h5>
+	<h5>单位：公斤</h5>
+</div>
+<div class="widget-content nopadding" style="max-height:800px; overflow-y:auto;">
+        
+	<div class="dataTables_length">
+		<span class="btn btn-primary">工艺修改记录</span>
+
+		工艺员：
+		<span id="span_write">
+		    {% if not work_order.processbompagemark.writer %}
+		    <span class="btn btn-mini btn-primary btn-mark" id="btn_write_confirm" args="{{MARK_WRITE}}">签字</span>
+		    {% else %}
+		    {{work_order.processbompagemark.writer.userinfo}}
+		    {% endif %} 
+		</span>
+		定额：
+		<span id="span_quota">
+		    {% if not work_order.processbompagemark.quota_agent %}
+		    <span class="btn btn-mini btn-primary btn-mark" id="btn_quota_confirm" args="{{MARK_QUOTA}}">签字</span>
+		    {% else %}
+		    {{work_order.processbompagemark.quota_agent.userinfo}}
+		    {% endif %}
+		</span>
+		统计：
+		<span id="span_statistic">
+		    {% if not work_order.processbompagemark.statistician %}
+		    <span class="btn btn-mini btn-primary btn-mark" id="btn_statistic_confirm" args="{{MARK_STATISTIC}}">签字</span>
+		    {% else %}
+		    {{work_order.processbompagemark.statistician.userinfo}}
+		    {% endif %} 
+		</span>
+		校对：
+		<span id="span_proofread">
+		    {% if not work_order.processbompagemark.proofreader %}
+		    <span class="btn btn-mini btn-primary btn-mark" id="btn_proofread_confirm" args="{{MARK_PROOFREAD}}">签字</span>
+		    {% else %}
+		    {{work_order.processbompagemark.proofreader.userinfo}}
+		    {% endif %}
+		</span>
+
+
+	</div>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>工作票号</th>
+				<th>件号</th>
+				<th>图号</th>
+				<th>名称</th>
+	   		    <th>部件图号</th>
+				<th>数量</th>
+				<th>材料</th>
+				<th>净重</th>
+				<th>消耗</th>
+				<th>传递路线</th>
+				<th>工序</th>
+				<th>工时</th>
+				<th>备注</th>
+				<th>流转卡</th>
+			</tr>
+		<thead>
+		<tbody>
+			{% for item in BOM %}
+			<tr iid="{{item.id}}" data-toggle="modal" data-target="#card_modal" class="tr_materiel">
+				{% include "techdata/widgets/processBOM_row.html" %}
+			</tr>				
+			{% endfor %}
+		<tbody>
+	</table>
+</div>

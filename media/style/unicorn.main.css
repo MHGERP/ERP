@@ -196,6 +196,7 @@ a:hover {
 
 /* Content */
 #content {
+    /*background: none repeat scroll 0 0 rgb(248, 248, 248);*/
     background: none repeat scroll 0 0 #eeeeee;
     margin-left: 220px;
     margin-right: 0;
@@ -224,7 +225,7 @@ a:hover {
 
 #content-header h1 {
     color: #555555;
-    font-size: 28px;
+    font-size: 37px;
     font-weight: normal;
     float: left;
     text-shadow: 0 1px 0 #ffffff;
@@ -857,10 +858,12 @@ a:hover {
     padding-left: 20px;
 }
 .panel-left {
-	margin-right: 250px;
+	/*margin-right: 250px;*/
+    margin-right: 40%;
 }
 .panel-right {
-	width: 249px;
+	/*width: 249px;*/
+    width: 40%;
 	background-color: #f2f2f2;
 	border-left: 1px solid #dddddd;
 	position: absolute;
@@ -1095,7 +1098,7 @@ span.icon .checker {
 }
 
 .dataTables_length {
-    color: #878787;
+    color: #333333;
     margin: 7px 5px 0;
     position: absolute;
     right: 2px;

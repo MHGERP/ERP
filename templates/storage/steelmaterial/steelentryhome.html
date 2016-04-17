@@ -1,0 +1,29 @@
+{% extends "storage/base/steelbase.html" %}
+{% block title %}
+<h1>钢材入库管理</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/steelentryhome" class="current">钢材入库管理</a>
+{% endblock %}
+{% block inner_content %}
+<h3>未处理入库单</h3>
+<div class="span10">
+<form class="form-inline" method="post">
+    {% csrf_token %}
+    {% for field in search_form %}
+        {{field.label}}
+        {{field}}
+    {% endfor %}
+    <button class="btn btn-success">检索</button>
+</form>
+<br />
+{% include "storage/widgets/steelmaterialentrytable.html"%}
+</div>
+<script>
+    $(function(){
+                        $('#entry_time').datetimepicker({format:"yyyy-mm-dd",minView:2});
+                                    
+            });
+</script>
+{% endblock %}

@@ -1,0 +1,67 @@
+    <table id="apply_table" class="table table-hover table-bordered">
+        {{apply_form.index}}
+        {{apply_form.apply_total}}
+        {{apply_form.actual_total}}
+        {{apply_form.status}}
+        <tr>
+            <th class="fix_th span1"></th>
+            <th class="fix_th span2">材料名称</th>
+            <th class="fix_th span4">规格</th>
+            <th class="fix_th span1">单位</th>
+            <th class="fix_th span2">数量</th>
+            <th class="fix_th span1">单价</th>
+            <th class="fix_th span1">总价</th>
+        </tr> 
+        {% if storage_keeper %}
+        {{apply_form.apply_quantity}}
+        {{apply_form.apply_item}}
+        {{apply_form.applicant}}
+        <tr>
+        	<td>请领</td>
+        	<td>{{instance.apply_item.name}}</td>
+        	<td>{{instance.apply_item.get_model_display}}</td>
+        	<td>{{instance.apply_item.measurement_unit}}</td>
+        	<td>{{instance.apply_quantity}}</td>
+        	<td>{{instance.apply_item.unit_price}}</td>
+        	<td>{{instance.apply_total}}</td>
+        </tr>
+        <tr>
+        	<td>实发</td>
+        	<td>{{apply_form.actual_item}}</td>
+        	<td>未选择</td>
+        	<td>未选择</td>
+        	<td>{{apply_form.actual_quantity}}</td>
+        	<td>未选择</td>
+        	<td>未选择</td>
+        </tr>
+        <tr>
+        	<td>备注</td>
+        	<td colspan="6" style="text-align:left">{{apply_form.remark}}{{instance.remark}}</td>
+        <tr>
+            <td>主管</td>
+            <td colspan="2">{{instance.commit_user.userinfo.name}}</td>
+            <td>领料</td>
+            <td colspan="3">{{instance.applicant.userinfo.name}}</td>
+        </tr>
+        {% else %}
+        {{apply_form.actual_quantity}}
+        <tr>
+            <td>请领</td>
+            <td>{{apply_form.apply_item}}</td>
+            <td>未选择</td>
+            <td>未选择</td>
+            <td>{{apply_form.apply_quantity}}</td>
+            <td>未选择</td>
+            <td>未选择</td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td colspan="6">{{apply_form.remark}}</td>
+        <tr>
+            <td>主管</td>
+            <td colspan="2"></td>
+            <td>领料</td>
+            <td colspan="3"></td>
+        </tr>
+        {% endif %}
+    </table>

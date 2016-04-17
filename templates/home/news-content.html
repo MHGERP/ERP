@@ -1,0 +1,50 @@
+{% extends base %}
+{% block main_title %}
+<div class="main-title"> 
+    <div id="content-header">
+    	<h1>新闻列表</h1>
+    </div>
+    <div id="breadcrumb">
+    	{% if source == 0 %}
+	        <a href="/home" title="首页" class="tip-bottom">首页</a>
+	        <a href="#" class="current">新闻内容</a>
+	    {% else %}
+	    	<a href="/management" title="管理员" class="tip-bottom">管理员</a>
+	    	<a href="/management/newsManagement" title="新闻管理" class="tip-bottom">新闻管理</a>
+	        <a href="#" class="current">新闻内容</a>
+	    {% endif %}
+    </div>
+</div>
+{%endblock%}
+
+{% block inner_content%}
+<link rel="stylesheet" href="{{STATIC_URL}}style/newhomepage.css" type="text/css" media="screen" />
+<div class="news-body">
+	<div class="news-main" style="">
+		<div>
+			<!-- <h3>{{ news_cate }} <small>{{ news_cate.category }}</small></h3> -->
+			<h2><a href="{{ news.id }}">{{ news.news_title }}</a></h2>
+			<!-- <h6><a href="/news/newslist/news_cate={{ news_cate.category }}"><<更多</a></h6> -->
+			<div class="news-content">
+				<div>
+					{% autoescape off %}
+						{{ news.news_content|safe }}
+					{% endautoescape %}
+					<br>
+					<br>
+					{% if news_docs %}
+					<p>附件：
+						<br>
+						{% for doc in news_docs %}
+							<!-- <a href="{{ doc.news_document.url }}" target="_blank">{{ doc.document_name }}</a></p> -->
+							<span><a href="/news/newslist/{{ doc.id }}/download_news_doc" title="{{news.title}}">{{ doc.document_name|truncatechars:30 }}</a></span>
+							<br>
+						{% endfor %}
+					<br>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock%}

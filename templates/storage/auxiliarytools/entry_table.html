@@ -1,0 +1,27 @@
+<table class="table table-hover table-bordered">
+    <tr>
+        <th>序号</th>
+        <th>入库单编号</th>
+        <th>日期</th>
+        <th>采购员</th>
+        <th>检查员</th>
+        <th>库管员</th>
+        <th></th>
+    </tr>
+    {% if not rets %}
+    <tr>
+    <td colspan="8">未找到相关项</td>
+    </tr>
+    {% endif %}
+    {% for record in rets %}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{record.index}}</td>
+        <td>{{record.create_time|date:"Y年m月d日"}}</td>
+        <td>{{record.purchaser.userinfo.name}}</td>
+        <td>{{record.inspector.userinfo.name}}</td>
+        <td>{{record.keeper.userinfo.name}}</td>
+        <td><a href="entry/entry_card?id={{record.id}}"><button type="button" class="btn btn-primary">查看入库单</button></a></td>
+    </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,40 @@
+{% extends "techdata/base/none_nav_base.html"%}
+
+{% block title %}
+<h1>技术准备计划</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">技术准备计划</a>
+{% endblock %}
+
+{% block inner_content%}
+<form class="form-search ">
+    工作令:
+    {{ work_order_form.work_order }}
+    <!--span class="btn" id="order_search" style="margin-right:120px">检索</span-->
+    <span class="btn btn-success" style="float:right" id="add_tech_plan">新增技术准备计划</span>
+    月份:
+    <input type="text" class="form-control input-small" id="querydate">
+    <span class="btn btn-primary" id="date_search">检索</span>
+</form>
+<div class="widget-box" id="widget-box">
+</div>
+
+<div id="techPlan_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.5">
+  <div class="modal-header">
+    <h2 id="groupLabel">新增技术准备计划</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+		<form id="tech_preparation_plan_form" class="form-horizontal">
+		</form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" id="id_save">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+<script type="text/javascript" src={{STATIC_URL}}js/techdata/tech_preparation_plan.js></script>
+{% endblock%}

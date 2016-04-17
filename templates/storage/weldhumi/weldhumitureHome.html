@@ -1,0 +1,45 @@
+{% extends "storage/base/weldbase.html" %}
+{% block title %}
+<h1>焊材温湿度记录</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/weldhumiture" class="current">焊材温湿度记录</a>
+{% endblock %}
+
+{% block inner_content %}
+<div class="span8">
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        {% for field in search_form %}
+        {{field.label}}
+        {{field}}
+        {% endfor %}
+        <button class="btn btn-success">检索</button> 
+    </form>
+</div>
+<div class="span12" style="margin-top:20px;margin-bottom:20px">
+    <a type="button" class="btn btn-primary" href="weldhumNewRecord">新增记录</a>
+</div>
+<br>
+<div class="span8">
+<table class="table table-bordered">
+    <thead>
+        <th>日期</th>
+        <th>库房</th>
+        <th>库管员</th>
+        <th>操作</th>
+    </thead>
+    <tbody>
+        {% for index in hum_set %}
+        <tr>
+            <td>{{index.date|date:'Y年m月d日'}}</td>
+            <td>{{index.storeRoom}}</td>
+            <td>{{index.storeMan.userinfo}}</td>
+            <td><a class="btn btn-warning" href="/storage/weldhumDetail/{{index.id}}">查看详情</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

@@ -8,6 +8,7 @@
 {% endblock %}
 {% block inner_content%}
 <link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{STATIC_URL}}style/subapply.css" type="text/css" media="screen" />
 <div   class="widget-box">
     <div class="widget-title">
         <span class="icon">
@@ -21,7 +22,17 @@
             {% if subapply_form.errors %}
             <div class="alert alert-error">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>注意!</strong>请确认全部内容填写正确后再提交.
+                <strong>注意!</strong>请确认全部内容填写正确后再提交..
+                {% for field in subapply_form %}
+                {% if field.errors  %}
+                <div class="control" id="error_div1">
+                    <label class="control-label" style="width:100px;">{{field.label}}</label>
+                    <div class="controls " id="error_list" style="margin-left:100px;">
+                    {{field.errors}}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor%}
             </div>
             {% endif %}
             <div class="row">
@@ -72,7 +83,9 @@
             <blockquote>
                 <fieldset>
                     <legend>{{subapply_form.reasons.label}}</legend>
+                    <div class="control-group {% if subapply_form.reasons.errors %} error{% endif %}">
                     {{subapply_form.reasons}}
+                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>{{subapply_form.comments.label}}</legend>
@@ -86,12 +99,14 @@
                 <div class="controls subapply">
                     {{subapply_form.is_approval}}
                 </div>
-            </div>           
+            </div>
+            {% if is_show %}
             <div class="control-group">
                 <div class="subbtn">
                     <button type="submit" class="btn btn-primary btn-block">提交</button>
                 </div>
             </div>
+            {% endif %}
         </form>
 
         <!-- Modal -->

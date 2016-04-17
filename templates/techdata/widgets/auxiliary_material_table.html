@@ -1,0 +1,53 @@
+<div class="widget-box">
+    <div class="widget-title">
+        <span class="icon"><i class="icon-th"></i></span>
+        <h5>工作令：{{work_order.order_index}}</h5>
+        <h5>产品名称：{{work_order.product_name}}</h5>
+        <h5>单位：公斤</h5>
+        <h5>编制人：</h5>
+        <h5>审核人：</h5>
+    </div>
+    <div class="widget-content nopadding">
+        <div class="dataTables_length">
+            <span class="btn btn-small btn-primary">完成</span>
+            <span class="btn btn-small btn-primary">审核</span>
+        </div>
+        <table class="table table-bordered table-striped" >
+
+            <thead>
+                <tr>
+                    <th>票号</th>
+                    <th>部件图号</th>
+                    <th>零件图号</th>
+                    <th>材料分类</th>
+                    <th>材质</th>
+                    <th>规格</th>
+                    <th>数量</th>
+                    <th>净重</th>
+                    <th>毛重</th>
+                    <th>定额</th>
+                    <th>利用率</th>
+                    <th>受压标记</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in list%}
+                <tr class="tr_materiel" iid="{{item.id}}" data-toggle="modal" data-target="#card_modal" cid="{{item.material.categories}}">
+                    <td >{{item.index}}</td>
+                    <td >{{item.parent_schematic_index}}</td>
+                    <td >{{item.schematic_index}}</td>
+                    <td >{{item.material.get_categories_display}}</td>
+                    <td >{{item.material}}</td>
+                    <td >{{item.specification}}</td>
+                    <td >{{item.count}}</td>
+                    <td >{{item.net_weight}}</td>
+                    <td >{{item.total_weight}}</td>
+                    <td >{{item.quota}}</td>
+                    <td >{{item.user_ratio}}</td>   
+                    <td >△</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

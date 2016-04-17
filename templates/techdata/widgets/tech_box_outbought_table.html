@@ -1,0 +1,85 @@
+<!--<div>
+    <table class="table table-bordered table-striped" style="width:60%">
+        <tr>
+            <td>工作令</td>
+            <td></td>
+            <td>产品名称</td>
+            <td></td>
+            <td>产品图号</td>
+        </tr>
+    </table>
+</div>-->
+
+<div class="widget-box">
+    <div class="widget-title">
+        <span class="icon"><i class="icon-th"></i></span>
+        <h5>工作令：{{work_order.order_index}}</h5>
+        <h5>产品名称：{{work_order.product_name}}</h5>
+        <h5>单位：公斤</h5>
+    </div>
+    <div class="widget-content nopadding">
+        <div class="dataTables_length">
+            <span id="span_write">
+                编制人：
+                {% if not work_order.boxoutboughtmark.writer %}
+                <span class="btn btn-mini btn-primary" id="btn_write_confirm">签字</span>
+                {% else %}
+                {{work_order.boxoutboughtmark.writer.userinfo}}
+                {% endif %} 
+            </span>
+
+            <span id="span_review">
+                审核人：
+                {% if not work_order.boxoutboughtmark.reviewer %}
+                <span class="btn btn-mini btn-primary" id="btn_review_confirm">签字</span>
+                {% else %}
+                {{work_order.boxoutboughtmark.reviewer.userinfo}}
+                {% endif %}
+            </span>
+        </div>
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>图号</th>
+                    <th>名称</th>
+                    <th>数量</th>
+                    <th>材料</th>
+                    <th>净重</th>
+                    <th>总重</th>
+                    <th>L1</th>
+                    <th>L2</th>
+                    <th>L3</th>
+                    <th>L4</th>
+                    <th>L5</th>
+                    <th>L6</th>
+                    <th>L7</th>
+                    <th>L8</th>
+                    <th>L9</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            {% for item in list %}
+            <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.schematic_index}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.count}}</td>
+                <td>{{item.material}}</td>
+                <td>{{item.net_weight}}</td>
+                <td>{{item.total_weight}}</td>
+                <td>{{item.circulationroute.L1}}</td>
+                <td>{{item.circulationroute.L2}}</td>
+                <td>{{item.circulationroute.L3}}</td>
+                <td>{{item.circulationroute.L4}}</td>
+                <td>{{item.circulationroute.L5}}</td>
+                <td>{{item.circulationroute.L6}}</td>
+                <td>{{item.circulationroute.L7}}</td>
+                <td>{{item.circulationroute.L8}}</td>
+                <td>{{item.circulationroute.L9}}</td>
+                <td>{{item.remark}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>

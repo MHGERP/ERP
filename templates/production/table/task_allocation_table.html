@@ -1,0 +1,49 @@
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <th>编号</th>
+        <th>工作令</th>
+        <th>工序编号</th>
+        <th>工序</th>
+        <th>工时</th>
+        <th>分配组</th>
+        <th>操作</th>
+    </thead>
+    <tbody>
+        {% for item in items_list2 %}
+        <tr>
+            <td>{{item.materiel_belong.index}}</td>
+            <td>{{item.materiel_belong.order.order_index}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.get_name_display}}</td>
+            <td>{{item.hour}}</td>
+            <td>
+                已分配：{{item.operator.info.name}}
+            </td>
+            <td>
+                <button class="btn btn-primary" type="button" onclick="task_allocation_remove({{item.id}})">撤销</button>
+            
+            </td>
+        </tr>
+        {% endfor %}    
+        {% for item in items_list1 %}
+        <tr>
+            <td>{{item.materiel_belong.index}}</td>
+            <td>{{item.materiel_belong.order.order_index}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.get_name_display}}</td>
+            <td>{{item.hour}}</td>
+            <td>
+                <select id="table_select{{item.id}}">
+                    {% for user in user_list %}
+                    <option value="{{user.user.id}}">{{user}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <button class="btn btn-primary" type="button" onclick="task_allocation_submit({{item.id}})">确认</button>
+            </td>
+        </tr>
+        {% endfor %}   
+    </tbody>
+</table>

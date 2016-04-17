@@ -1,0 +1,74 @@
+{% extends "storage/base/storethreadbase.html" %}
+
+{% block title %}
+<h1>库存安全量管理</h1>
+
+{% endblock %}
+
+{% block sub_sec %}
+<a href="/storage/storethread" class="current">库存安全量管理</a>
+{% endblock %}
+
+{% block inner_content %}
+<h3>库存安全量管理</h3>
+<div class="span8">
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        {% for field in search_form %}
+        {{field.label}}
+        {{field}}
+        {% endfor %}
+        <button class="btn btn-success">检索</button>
+        <a type="button" role="button" data-toggle="modal" class="btn btn-success" href="#myModal2" onclick="add_storeThreadEntry()">新增记录</a>
+    </form>
+    <br />
+</div>
+<div class="span10">
+    <div id="items_table">
+        {% include "storage/widgets/storethread_table.html" %}
+    </div>
+</div>
+<div id="myModal1" class="modal hide fade" tabindex="-1" role="dialog" ariaia-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header"
+        <h3 id="myModal1">库存安全量</h3> 
+    </div>
+    <div class="modal-body">
+        <form id="entry_item_form1" action="" class="form-horizontal">
+            {% for field in entry_form %}
+            <div class="control-group">
+                <label class="control-label">{{field.label_tag}}</label>
+                <div class="controls">
+                    {{field}}
+                </div>
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" data-dismiss="modal" onclick="save_storeThreadEntry();">保存</button>
+    </div>
+</div>
+
+<div id="myModal2" class="modal hide fade" tabindex="-1" role="dialog" ariaia-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header"
+        <h3 id="myModal2">新增安全量</h3> 
+    </div>
+    <div class="modal-body">
+        <form id="entry_item_form2" action="" class="form-horizontal">
+            {% for field in entry_form %}
+            <div class="control-group">
+                <label class="control-label">{{field.label_tag}}</label>
+                <div class="controls">
+                    {{field}}
+                </div>
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" data-dismiss="modal" onclick="add_storeThread();">添加</button>
+    </div>
+</div>
+{% endblock %}

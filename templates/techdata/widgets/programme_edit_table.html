@@ -1,0 +1,33 @@
+<table class="table table-bordered table-striped" style="width:80%;">
+	
+	<thead>
+		<th>材料执行表编号</th>
+		<th>操作</th>
+		<th>文件列表</th>
+		<th>反馈</th>
+	</thead> 
+	<tbody>
+	{% for item in execute_list %}
+		<tr iid="{{item.id}}">
+			<td>{{item.document_number}}</td>
+			<td>
+                <a class="btn btn-small" href="/purchasing/materielExecuteDetail/0/1/{{item.id}}">查看</a>
+				<span class="btn btn-primary btn-small btn-upload" href="#program_upload" data-toggle="modal">上传</span>
+				<span class="btn btn-small btn-feedback" href="#feedback_info" data-toggle="modal">反馈</span>
+			<td>
+				<div class="chzn-container chzn-container-multi">
+					<ul class="chzn-choices" style="border-color: rgba(0, 0, 0, 0); ">
+						{% for program in item.program_list %}
+							<li class="search-choice">
+								<span><a href="{{program.file_obj.url}}">{{program.name|truncatewords:"10"}}</a></span>
+								<span class="search-choice-close" rel="1" pid="{{program.id}}"></span>							
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</td>
+			<td>{{ item.tech_feedback|default_if_none:"" }}</td>
+		</tr> 
+	{% endfor %}
+	</tbody>
+</table>

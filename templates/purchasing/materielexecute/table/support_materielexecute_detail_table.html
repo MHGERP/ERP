@@ -1,5 +1,6 @@
-<div class="widget-box">
 
+<div class="widget-box">
+    
     <div class="widget-content nopadding">
         <table class="table table-bordered table-striped">
             <thead>
@@ -8,31 +9,39 @@
                     <th>材质编号</th>
                     <th>规格</th>
                     <th>数量</th>
-                    <th>交货状态</th>
+                    <th>状态</th>
                     <th>受压</th>
-                    <th>探伤级别</th>
-                    <th>复查</th>
+                    <th>探伤级别</th>      
+                    <th>复探</th>
                     <th>定额</th>
                     <th>零件</th>
                     <th>余料</th>
                     <th>备注</th>
+                    {% if not materielexecute_detail_set.0.materiel_execute.is_save %}
+                    <th>修改</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
-                {% for support_detail in materielexecute_detail_set %}
-                <tr id="{{support_detail.id}}">
-                    <td>{{support_detail.materiel_texture}}</td>
-                    <td>{{support_detail.texture_number}}</td>
-                    <td>{{support_detail.specification}}</td> 
-                    <td>{{support_detail.quantity}}</td>
-                    <td>{{support_detail.delivery_status}}</td>
-                    <td>{{support_detail.press}}</td> 
-                    <td>{{support_detail.crack_rank}}</td>
-                    <td>{{support_detail.recheck}}</td>
-                    <td>{{support_detail.quota}}</td> 
-                    <td>{{support_detail.part}}</td>
-                    <td>{{support_detail.oddments}}</td>
-                    <td>{{support_detail.remark}}</td>
+                {% for item in materielexecute_detail_set %}
+                <tr id="{{item.id}}">
+                    <td>{{item.materiel.material.name}}</td>
+                    <td>{{item.materiel.material.material_id}}</td>
+                    <td>{{item.materiel.specification}}</td>
+                    <td>{{item.materiel.count}}</td> 
+                    <td>{{item.materiel.status}}</td>
+                    <td>{{item.materiel.press}}</td>
+                    <td>{{item.materiel.detection_level}}</td> 
+                    <td>{{item.materiel.recheck}}</td>
+                    <td>{{item.quota}}</td>
+                    <td>{{item.part}}</td>
+                    <td>{{item.oddments}}</td>
+                    <td>{{item.remark}}</td>
+                    {% if not item.materiel_execute.is_save %}
+                    <td>
+                        <button class="btn btn-primary" id="detail_edit" uid={{item.id}}>修改</button>
+                    </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

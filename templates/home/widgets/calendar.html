@@ -1,0 +1,38 @@
+<div class="widget-box widget-calendar" style="margin-top:0!important;height:430px!important">
+	<div class="widget-title">
+		<span class="icon"><i class="icon-calendar"></i></span>
+		<!-- <h5>Calendar</h5> -->
+		<div class="buttons">
+			<a id="add-event" data-toggle="modal" href="#modal-add-event" class="btn btn-success btn-mini"><i class="icon-plus icon-white"></i> 添加新事件</a>
+			<div class="modal hide" id="modal-add-event">
+				 <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h3>添加新事件</h3>
+				</div>
+				<div class="modal-body">
+					<p>输入事件名称:</p>
+					<p><input id="event-name" type="text" /></p>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn" data-dismiss="modal">取消</a>
+					<a href="#" id="add-event-submit" class="btn btn-primary">添加</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="widget-content nopadding">
+		<div class="panel-left">
+			<div id="fullcalendar"></div>
+		</div>
+		<div id="external-events" class="panel-right">
+			<div class="panel-title"><h5>待处理事件</h5></div>
+			<div class="panel-content">
+				<!-- <div class="external-event ui-draggable label label-inverse">My Event 1</div>
+				<div class="external-event ui-draggable label label-inverse">My Event 2</div>
+				<div class="external-event ui-draggable label label-inverse">My Event 3</div>
+				<div class="external-event ui-draggable label label-inverse">My Event 4</div>
+				<div class="external-event ui-draggable label label-inverse">My Event 5</div> -->
+			</div>
+		</div>
+	</div>
+</div>

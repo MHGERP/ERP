@@ -1,0 +1,27 @@
+{% extends "storage/auxiliarytools/home.html" %}
+
+{% block title %}
+<h1>辅助工具出入库明细</h1>
+{% endblock %}
+
+{% block sub_sec %}
+<a href="#" class="current">辅助工具出入库明细</a>
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
+    <form id="entry_apply_detail_form" method="POST" class="form-inline">
+        {% csrf_token %}
+        {{ search_form }}
+
+    <button type="submit" id="confirm" class="btn btn-primary">确认</button>
+    </form>
+    <div id="entry_apply_detail_table" class="row-fluid" style="text-align:center">
+    {% include 'storage/auxiliarytools/entry_apply_detail_table.html' %}
+    </div>
+
+
+
+
+{% endblock%}
+

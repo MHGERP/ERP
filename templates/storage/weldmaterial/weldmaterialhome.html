@@ -1,0 +1,39 @@
+{% extends "storage/base/weldbase.html" %}
+
+{% block title %}
+<h1>焊材库存管理</h1>
+
+{% endblock %}
+
+{% block inner_content%}
+<div class="row span12" id="storage-menu">
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/weldentryhome">焊材入库管理</a>
+    </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/weldapply">焊材领用管理</a>
+    </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/weldhumiture">焊材温湿度记录</a>
+        </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/weldbake">焊材烘焙记录</a>
+    </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/weldrefund">焊材退库管理</a>
+    </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/weldaccounthome">焊材台账</a>
+        </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/weldapplyrefund">焊材发放回收记录</a>
+    </div>
+</div>
+{% endblock%}

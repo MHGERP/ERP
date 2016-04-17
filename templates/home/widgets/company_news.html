@@ -1,0 +1,25 @@
+{% extends "home/widgets/base_new_content.html" %}
+{% block title %}
+公司新闻
+{% endblock %}
+
+{% block title-sub %}
+company news
+{% endblock %}
+
+{% block news-list-items %}
+{% for news in news_company_news_list %}
+<div class="usoft-listview-basic">
+	<ul class="newslist-dot">
+		<li>
+			<span class="usoft-listview-item-date">{{news.news_date|date:"y-m-d"}}</span>
+			<span><a href="/news/newslist/{{ news.id }}/0" title="{{news.title}}">{{ news.news_title|truncatechars:30 }}</a></span>
+		</li>
+	</ul>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block more %}
+<strong><a href="/news/newslist/news_cate={{ news_category_companynews }}">更多More<sub>》</sub></a></strong>
+{% endblock %}

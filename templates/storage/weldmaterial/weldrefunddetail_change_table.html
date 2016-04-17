@@ -1,0 +1,8 @@
+{%for field in reform %}
+{% if field.is_hidden %}
+<td><input value={{ref_obj.work_order}} class="span2" maxlength="50" type="text" readonly=true></td>
+{{field}}
+{% else %}
+<td><div class="control-group {%if field.errors %}error{% endif %}">{{field}}</div></td>
+{% endif %}
+{% endfor %}

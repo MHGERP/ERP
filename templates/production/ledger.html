@@ -1,0 +1,26 @@
+{% extends "production/base/none_nav_base.html"%}
+{% block title%}
+<h1>台帐查询</h1>
+{% endblock%}
+{% block sub_ref %}
+<a href="#" class="current">台帐查询</a>
+{% endblock %}
+{% block inner_content%}
+<link rel="stylesheet" href="{{ STATIC_URL }}style/man_hour_summarize.css" type="text/css" media="screen" />
+<div id="search-div" style="margin-bottom:10px;">
+  <form class="form-inline" id="ledgerSearchForm">
+    {{ledgerSearchForm.work_order.label}}:
+    {{ledgerSearchForm.work_order}}
+    {{ledgerSearchForm.work_index.label}}:
+    {{ledgerSearchForm.work_index}}
+    {{ledgerSearchForm.parent_schematic.label}}:
+    {{ledgerSearchForm.parent_schematic}}
+    <button type="button" class="btn btn-primary">检索</button>
+  </form>
+</div>
+
+{% include "techdata/widgets/designBOM_table_list.html" %}
+
+
+<script type='text/javascript' src="{{STATIC_URL}}js/production/ledger.js"></script>
+{% endblock%}

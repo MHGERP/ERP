@@ -1,0 +1,24 @@
+{% extends "storage/base/weldbase.html" %}
+
+{% block title %}
+<h1>焊材领用卡列表</h1>
+{% endblock %}
+
+{% block sub_sec %}
+<a href="/storage/weldapply" class="current">焊材领用</a>
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldapply.css"/>
+    <h3>领料单管理</h3>
+        <form id="query_form" class="form-inline">
+        {{search_form}}
+        <button type="submit" id="search_submit" class="btn btn-success">搜索</button>
+    </form>
+    <div id="history_table">
+    {% include 'storage/weldapply/history_table.html' %}
+    </div>
+    
+
+{% endblock%}
+

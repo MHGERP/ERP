@@ -11,10 +11,13 @@
 
 {% block inner_content%}
 <link rel="stylesheet" href="{{ STATIC_URL }}style/orderform.css" type="text/css" media="screen" />
-
+<link rel="stylesheet" href="{{ STATIC_URL  }}bootstrap-datepicker/css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
 <div id="search_div">
-	订购单编号: <input type="text" class="input-midium" value="{{order_form.order_id}}" id="index"/> 
-	订购单状态: <input type="text" class="input-midium" value="{{order_form.order_status}}" id="status" args="{{order_form.order_status.status}}"/> 
+    订购单编号: <input type="text" class="input-midium" readonly="true "value="{{order_form.order_id}}" id="index"/> 
+    订购单状态: <input type="text" class="input-midium" readonly="true" value="{{order_form.order_status}}" id="status" args="{{order_form.order_status.status}}"/> 
+    {% if order_form.order_status.status == 0%}
+    <button class="btn btn-primary" id="tech_add" style="float:right" href="#tech_requirement" data-toggle="modal">填写技术要求</button>
+    {% endif%}
 </div>
 
 {% if order_form.order_status.status == 1 %}
@@ -31,58 +34,127 @@
 
 
 <div class="widget-content" id="item_table">
-    
-</div>
 
+</div>
+<div class="alert alert-info" >
+    <textarea id="tech_requirement_content" readonly=true rows="10" style="border:0;background-color:transparent;width:100%;" >{{order_form.tech_requirement}}</textarea>
+</div>
+{% if order_form.order_status.status == 0%}
+<button class="btn btn-primary" id="order_form_finish">完成</button>
+{% endif%}
 {% if order_form.order_status.status == 1 %}
 <span class="btn" id="add_to_bid" data-toggle="modal" data-target="#bid_list">加入标单</span>
+{% if order_form.order_mod == 0 %}
+<button class="btn" id="generate_execute" data-toggle="modal" data-target="#add_to_execute" {% if order_form.meterielexecute%}disabled="disabled"{% endif%}>生成材料执行表</button>
+{% endif%}
 {% endif %}
 
 <div id="bid_list" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <h2 id="myModalLabel">创建中标单</h2>
-  </div>
+    <div class="modal-header">
+        <h2 id="myModalLabel">创建中标单</h2>
+    </div>
 
-  <div class="modal-body">
-    选择要加入的标单：
-    <select class="input-medium search-query bid-select" id="search-query-2">
-    
-    </select>
-  </div>
+    <div class="modal-body">
+        选择要加入的标单：
+        <select class="input-medium search-query bid-select" id="search-query-2">
 
-  <div class="modal-footer">
-    <button class="btn btn-success btn-open" data-dismiss="modal" aria-hidden="true" data-source="#search-query-2" data-toggle="modal" data-target="#bid_modal">确认</button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-  </div>
+        </select>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-success btn-open" data-dismiss="modal" aria-hidden="true" data-source="#search-query-2" data-toggle="modal" data-target="#bid_modal">确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
 </div>
 
-<div id="bid_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <h2 id="myModalLabel">标单</h2>
-  </div>
+<div id="bid_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.8">
+    <div class="modal-header">
+        <h2 id="myModalLabel">标单</h2>
+    </div>
 
-  <div class="modal-body" style="clear:both;">
-    <div class="form-div add">
-      <form class="form-search">
-        <label>标单编号：</label>
-        <input type="text" class="input-medium" id="bid_id">
-      </form>
+    <div class="modal-body" style="clear:both;">
+        <div class="form-div add">
+            <form class="form-search">
+                <label>标单编号：</label>
+                <input type="text" class="input-medium" id="bid_id">
+            </form>
+        </div>
+        <div class="delete-div">
+            <span class="btn" id="order_delete" data-dismiss="modal" aria-hidden="true">删除</span>
+        </div>
+        <div class="table-div">
+        </div>
+        <div class="save-div">
+            <span class="btn add save" id="btn-save" data-dismiss="modal" aria-hidden="true">确认保存</span>
+        </div>
+        <div class="finish-div">
+            <span class="btn add save" id="btn-finish" data-dismiss="modal" aria-hidden="true">完成</span>
+        </div>
     </div>
-    <div class="delete-div">
-      <span class="btn" id="order_delete" data-dismiss="modal" aria-hidden="true">删除</span>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
     </div>
-    <div class="table-div">
+</div>
+
+<div class="modal  fade" id="order_info_modal" modal-size-width="0.8">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2 class="modal-title" id="modal_title">订购单信息修改</h2>
     </div>
-    <div class="save-div">
-      <span class="btn add save" id="btn-save" data-dismiss="modal" aria-hidden="true">确认保存</span>
+    <div class="modal-body" >
+        <form class="form-inline well" id="edit_order_form">
+            {% csrf_token %}
+            <div class="row" id="order_form_div">
+                <div class="span4">
+                    <div class="form-inline div_margin">
+                        <label class="span1 label_margin">数量(个)</label>
+                        <input class="form-control" maxlength="20" type="text" id="count">
+                    </div>
+
+                    <div class="form-inline div_margin"{% if order_form.order_mod == 1 %}style="display:none" {% endif%}>
+                        <label class="span1 label_margin">采购(kg)</label>
+                        <input class="form-control" maxlength="20" type="text" id="purchasing" value=0>
+                    </div>
+
+
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="finish-div">
-      <span class="btn add save" id="btn-finish" data-dismiss="modal" aria-hidden="true">完成</span>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel_change">关闭</button>
+        <button type="button" class="btn btn-primary" data-dismiss="" id="save_order">保存</button>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-  </div>
+
+</div>
+<div class="modal fade" id="tech_requirement" modal-size-width="0.6">
+    <div class="modal-header">
+        <h2>订购单技术要求和说明填写</h2>
+    </div>
+    <div class="modal-body">
+        <textarea rows=10 style="width:80%;"id="tech_requirement_textarea" placeholder="在此输入说明和技术要求"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel_change">关闭</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="save_tech_require">保存</button>
+    </div>
+</div>
+<div class="modal fade" id="add_to_execute" modal-size-width="0.4">
+    <div class="modal-header">
+        <h2>生成材料执行表</h2>
+    </div>
+    <div class="modal-body">
+        <div id="execute_form">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel_change">关闭</button>
+        <button type="button" class="btn btn-primary"  id="save_materiel_execute">保存</button>
+    </div>
 </div>
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/orderform.js"></script>
+<script type='text/javascript' src="{{ STATIC_URL }}jquery/jquery.form.js"></script>
+<script type='text/javascript' src="{{ STATIC_URL }}bootstrap-multiselect/bootstrap-multiselect.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
 {% endblock%}

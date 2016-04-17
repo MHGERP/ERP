@@ -1,0 +1,86 @@
+{% extends "storage/base/weldbase.html" %}
+
+{% block title %}
+<h1>焊材领用卡</h1>
+{% endblock %}
+
+{% block sub_sec %}
+<a href="/storage/weldapply">焊材领用</a>
+<a href="#" class="current">焊材领用卡</a>
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldapply.css"/>
+<h3 style="text-align:center">焊材领用卡</h3>
+<div>
+    <div class="span3">
+        <label>领用单位:<strong>{{apply_card.department}}</strong></label>
+    </div>
+    <div class="span4" style="text-align:center">
+        <label>日期:<strong>{{apply_card.create_time|date:'Y年m月d日'}}</strong></label>
+    </div>
+    <div class="span4" style="float:right;text-align:center">
+        <label>编号:<strong>{{apply_card.index}}</strong></label>
+
+    </div>
+</div>
+<form id="detail_form" enctype="multipart/form-data" action="/storage/weldapply/submit" method="POST">
+    {% csrf_token %}
+    <table class="table table-hover table-bordered">
+        <tr>
+            <th class="fix_th" rowspan="2">工作令</th>
+            <th class="fix_th" rowspan="2">焊缝编号</th>
+            <th class="fix_th" rowspan="2">焊材编号</th>
+            <th class="fix_th" rowspan="2">型号</th>
+            <th class="fix_th" rowspan="2">规格</th>
+            <th colspan="2">领用量</th>
+            <th class="fix_th" rowspan="2">材质编号</th>
+            <th colspan="2">实发量</th>
+        </tr>
+        <tr>
+            <th>重量(Kg)</th>
+            <th>数量</th>
+            <th>重量(Kg)</th>
+            <th>数量</th>
+        </tr>
+        <tr>
+            {% include "storage/weldapply/weldapplycarddetail_change_table.html" %}
+        </tr>
+        <tr>
+            <td colspan="10" style="text-align:left">备注:1.以上前六项为领用人填写;2.后二项为发料人填写。</td>
+        </tr>
+    </table>
+    <div class="row-fluid" style="text-align:center">
+        <div class="span3">
+            <label>领料人:<strong>{{apply_card.applicant.userinfo}}</strong></label>
+        </div>
+        <div class="span3">
+            <label>审核人:<strong>{{apply_card.auditor.userinfo}}</strong></label>
+        </div>
+        <div class="span3">
+            <label>检查员:<strong>{{apply_card.inspector.userinfo}}</strong></label>
+        </div>
+        <div class="span3">
+            <label>发料人:<strong>{{apply_card.commit_user.userinfo}}</strong></label>
+        </div>
+        {% ifequal apply_card.status APPLYCARD_COMMIT %}
+        <a type="button" href="{{redict_path}}" class="btn btn-primary">返回</a>
+        {% else %}
+        <button type="button" data-toggle="modal" href="#myModal"  id="confirm" class="btn btn-primary">确认</button>
+        {% endifequal %}
+    </div>
+</form>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.5">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">选择库存材料</h3>
+    </div>
+    <div class="modal-body" id="itemlist_div">
+        {% include 'storage/weldapply/itemlist.html'%} 
+    </div>
+   <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" id="save_select_item" data-dismiss="modal">保存</button>
+    </div>
+</div>
+{% endblock%}

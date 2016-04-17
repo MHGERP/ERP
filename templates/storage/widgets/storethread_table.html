@@ -1,0 +1,23 @@
+<table id="items_table" class="table table-bordered">
+    <thead>
+        <th>序号</th>
+        <th>规格</th>
+        <th>材料种类</th>
+        <th>安全量</th>
+        <th>操作</th>
+    </thead>
+    <tbody>
+        {% for item in items_set %}
+        <tr id="{{item.id}}">
+            <td>{{forloop.counter}}</td>
+            <td>{{item.specification}}</td>
+            <td>{{item.get_type_display}}</td>
+            <td>{{item.count}}</td>
+            <td>
+                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal1"  onclick="change_storethread({{item.id}})">修改</a>
+                <button class="btn btn-primary" onclick="delete_storeThread({{item.id}})">删除</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

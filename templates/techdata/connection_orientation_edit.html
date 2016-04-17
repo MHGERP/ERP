@@ -1,0 +1,39 @@
+{% extends "techdata/base/none_nav_base.html"%}
+
+{% block title %}
+<h1>管口方位图编辑</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">管口方位图编辑</a>
+{% endblock %}
+
+{% block inner_content%}
+<!--form class="form-search ">
+   工作令:
+   {{ work_order_form.work_order  }}
+   <span class="btn" id="ordersearch">检索</span>
+</form-->
+<div class="widget-content">
+
+</div>
+<div class="modal hide fade"  id="connectOrientation_upload">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>管口方位文件上传</h3>
+    </div>
+    <div class="modal-body">
+        <form method="POST" action="" class="form-inline" enctype="multipart/form-data" id="upload_form">
+            {% csrf_token%}
+            <input type="text" style="display:none;" name="work_order_id" id="id_work_order_input">
+            <input type='file' class='filestyle' name='connectOrientation_file' data-ButtonName='btn btn-primary'  data-buttonBefore='true' data-buttonText='浏览..' id="filestyle_input">
+        </form>
+    </div>
+    <div class="modal-footer">
+		<span class="btn btn-primary" id="btn-upload" data-dismiss="modal">上传</span>
+        <a class="btn" data-dismiss="modal">关闭</a>
+    </div>
+</div>
+<script type='text/javascript' src="{{STATIC_URL}}js/techdata/connectOrientation_edit.js"></script>
+<script type='text/javascript' src="{{ STATIC_URL  }}jquery/jquery.form.js"></script>
+{% endblock%}

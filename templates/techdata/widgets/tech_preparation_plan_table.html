@@ -1,0 +1,19 @@
+<div class="widget-content nopadding" style="max-height:800px;overflow-y:auto">    
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>详细内容</th>
+                <th>下发部门</th>
+                <th>计划完成时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in tech_plan %}
+            <tr iid="{{item.id}}" class="techPlan_row">
+                {% include "techdata/widgets/tech_preparation_plan_row.html" %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

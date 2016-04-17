@@ -1,0 +1,75 @@
+{% extends "storage/base/weldbase.html" %}
+{% block sub_sec %}
+<a href="/storage/weldrefund">焊材退库</a>
+<a href="#" class="current">焊材退库单</a>
+{% endblock %}
+{% block title %}
+<h1>焊材退库单</h1>
+{% endblock %}
+
+{% block inner_content %}
+<h3 style="text-align:center">焊材退库单</h3>
+<div style="margin-bottom:20px" >
+    <div class="span3">
+        <label>领用单位:<strong>{{ref_obj.department}}</strong></label>
+    </div>
+    <div class="span4" style="text-align:center">
+        <label>日期:<strong>{{ref_obj.date|date:'Y年m月d日'}}</strong></label>
+    </div>
+    <div class="span4" style="float:right;text-align:center">
+        <label>编号:<strong>{{ref_obj.code}}</strong></label>
+
+    </div>
+</div>
+<br>
+{% if reform.errors %}
+<div class="alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    退库单确认失败，请确保内容都填写
+</div>
+{% endif %}
+<form id="detail_form"  method="POST">
+    {% csrf_token %}
+    <table class="table table-hover table-bordered">
+        <tr>
+            <th class="fix_th" rowspan="2">工作令</th>
+            <th class="fix_th" rowspan="2">领用时间</th>
+            <th class="fix_th" rowspan="2">领用单编号</th>
+            <th class="fix_th" rowspan="2">型号规格</th>
+            <th colspan="2">退库量</th>
+            <th class="fix_th" rowspan="2">退库状态</th>
+        </tr>
+        <tr>
+            <th>重量(Kg)</th>
+            <th>数量</th>
+        </tr>
+        <tr>
+            {% include "storage/weldmaterial/weldrefunddetail_change_table.html" %}
+        </tr>
+        <tr>
+            <td colspan="10" style="text-align:left">备注:1.以上前六项为领用人填写;2.后一项为发料人填写。</td>
+        </tr>
+    </table>
+    <div class="row-fluid" style="text-align:center">
+        <div class="span6">
+            <label>退库人:<strong>{{ref_obj.refunder.userinfo}}</strong></label>
+        </div>
+        <div class="span6">
+            <label>库管人:<strong>{{ref_obj.keeper.userinfo}}</strong></label>
+        </div>
+    </div>
+    <center>
+    {% if is_show %}
+    <button  id="refund_confirm" type="button" class="btn btn-info" rid="{{ref_obj.id}}">确认</button>
+    {% else %}
+    <a class="btn btn-info" href="/storage/weldrefund">返回</a>
+    {% endif %}
+    </center>
+</form>
+
+<script>
+    $(function(){
+            $('#receipts_time').datetimepicker({format:"yyyy-mm-dd",minView:2});
+            });
+</script>
+{% endblock %}

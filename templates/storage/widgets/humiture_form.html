@@ -1,0 +1,59 @@
+<form class="form-inline well" id="humiture_form" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <div class="row">
+        <div class="span4 control-group {% if form.storeRoom.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.storeRoom.label}}</button>
+            {{form.storeRoom}}
+        </div>
+        <div class="span4 control-group"> 
+            <button type="button" class="btn btn-default bl">库管员</button>
+            <input id="id_demandTemperature" type="text" value="{{humRecordDate.storeMan.userinfo}}" disabled placeholder="自动填写"/>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="span4 control-group {% if form.demandTemperature.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.demandTemperature.label}}</button>
+            {{form.demandTemperature}}
+        </div>
+        <div class="span4 control-group {% if form.demandHumidity.errors %}error{% endif %}"> 
+            <button type="button" class="btn btn-default bl">{{form.demandHumidity.label}}</button>
+            {{form.demandHumidity}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="span4 control-group {% if form.actualTemperature1.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.actualTemperature1.label}}</button>
+            {{form.actualTemperature1}}
+        </div>
+        <div class="span4 control-group {% if form.actualHumidity1.errors %}error{% endif %}"> 
+            <button type="button" class="btn btn-default bl">{{form.actualHumidity1.label}}</button>
+            {{form.actualHumidity1}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="span4 control-group {% if form.actualTemperature2.errors %}error{% endif %}">
+            <button type="button" class="btn btn-default bl">{{form.actualTemperature2.label}}</button>
+            {{form.actualTemperature2}}
+        </div>
+        <div class="span4 control-group {% if form.actualHumidity2.errors %}error{% endif %}"> 
+            <button type="button" class="btn btn-default bl">{{form.actualHumidity2.label}}</button>
+            {{form.actualHumidity2}}
+        </div>
+    </div>
+    <br>
+    <div class="row ">
+        <div class="span12">
+            <button type="button" class="btn btn-default bl">{{form.remark.label}}</button>
+            {{form.remark}}
+        </div>
+    </div>
+    <br>
+    {% if changeEnable %}
+    <button type="button" class="btn btn-success" onclick="humi_change_save({{humRecordDate.id}})">保存修改</button>
+    {% else %}
+    <button type="submit" class="btn btn-success bl" id="btnInsert">录入</button>
+    {% endif %}
+</form>

@@ -1,0 +1,24 @@
+{% extends "storage/auxiliarytools/home.html" %}
+
+{% block title %}
+<h1>辅助工具清单</h1>
+{% endblock %}
+
+{% block sub_sec %}
+<a href="#" class="current">辅助工具清单</a>
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
+   <h3 style="text-align:center">辅助材料清单</h3>
+   <form class="form-inline" method="post">
+    {% csrf_token %}
+    {% for field in search_form %}
+    {{field.label}}
+    {{field}}
+    {% endfor %}
+    <button class="btn btn-primary">检索</button> 
+   </form>
+{% include "storage/widgets/auxiliarytoolsentrytable.html"%}
+{% endblock%}
+

@@ -1,0 +1,67 @@
+{% extends "storage/base/steelbase.html" %}
+
+{% block before_css%}
+{{block.super}}
+<link rel="stylesheet" href="{{STATIC_URL}}style/storage/steelmaterial/barsteel.css" />
+{%endblock%}
+
+{% block title %}
+<h1>钢材领用</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/steelapply">钢材领用</a>
+<a href="/storage/weldrefund" class="current">型材领用单详情</a>
+{% endblock %}
+
+{% block inner_content %}
+<h3 class="table-title">型材领用单</h3>
+<div class="return_card_header row">
+    <span class="span3">领用单位: {{common_Info.department}}</span>
+    <span class="span3">工作令: {{common_Info.work_order}}</span>
+    <span class="span3">日期: {{common_Info.date|date:"Ymd"}}</span>
+    <span class="span3">编号: {{common_Info.form_code}}</span>
+</div>
+<table class="table table-bordered" iid="{{common_Info.form_code}}">
+    <thead>
+        <th>名称</th>
+        <th>材质</th>
+        <th>规格</th>
+        <th>材质编号</th>
+        <th>状态</th>
+        <th>退库长度</th>
+        <th>数量</th>
+        <th>备注</th>
+    </thead>
+    <tbody>
+        {% for card in apply_cards %}
+        <tr>
+            <td>{{card.steel_material.name}}</td>
+            <td>{{card.steel_material.material}}</td>
+            <td>{{card.steel_material.specifications}}</td>
+            <td>{{card.steel_material.material_number}}</td>
+            <td>{{card.status}}</td>
+            <td>{{card.length}}</td>
+            <td>{{card.quantity}}</td>
+            <td>{{card.remark}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>领料人</td>
+            <td colspan="2">{{common_Info.applicant.userinfo.name}}</td>
+            <td>检验员</td>
+            <td colspan="2">{{common_Info.inspector.userinfo.name}}</td>
+            <td>库管员</td>
+            <td colspan="2">{{common_Info.keeper.userinfo.name}}</td>
+        </tr>
+    </tbody>
+</table>
+    <center class="card-sure">
+        {% ifequal common_Info.apply_confirm 0 %}
+        <button class="apply-card-ensure-btn btn btn-success">确认</button>
+        {% else %}
+        <a href="/storage/steelapply" class="btn btn-default">返回</a>   
+        {% endifequal %}
+    </center>
+</div>
+{% endblock %}

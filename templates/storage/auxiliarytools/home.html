@@ -1,0 +1,23 @@
+{% extends "storage/auxiliarytools/base/base.html" %}
+
+{% block title %}
+<h1>辅助工具管理</h1>
+
+{% endblock %}
+
+{% block inner_content%}
+<div class="row span12" id="storage-weld-menu">
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/auxiliarytools/entrylist">辅助工具入库</a>
+    </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/auxiliarytools/ledger">辅助工具台账查看</a>
+    </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/auxiliarytools/applylist">辅助工具领用</a>
+    </div>
+</div>
+{% endblock%}

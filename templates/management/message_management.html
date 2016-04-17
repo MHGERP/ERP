@@ -1,0 +1,68 @@
+{% extends "management/base/none_nav_base.html"%}
+<!--This page is writen by BinWu -->
+{% block title %}
+<h1>消息管理</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">消息管理</a>
+{% endblock %}
+
+{% block inner_content%}
+
+<form class="form-search" style="width:60%">
+你好：{{loguser.username}}
+<span id="loguser" hidden="true">{{loguser.id}}</span>
+<span class="btn btn-primary" id="btn-add" style="float:right" data-toggle="modal" data-target="#save_modal">新消息</span>
+</form>
+<br/>
+<div id="widget-content">
+
+</div>
+
+<div id="save_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="messageLabel"></h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+      <form id="message_form" action="/management/messageManagement" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div>
+              标题: {{messageform.message_title}}
+          </div>
+          <div>
+              {{messageform.message_content}}
+          </div>
+          <div>
+              消息附件: {{messageform.message_document}}
+          </div>
+          <div>
+              发送到群组: {{messageform.message_groups}}
+          </div>
+      </form>
+  </div>
+  <div class="modal-footer">
+      <button class="btn btn-primary" id="message_send" data-dismiss="modal" aria-hidden="true">发送</button>
+      <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+<div id="check_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h2 id="messageLabel"></h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+      <div type="text" id="check_title"></div>
+      <div type="text" id="check_content"></div>
+      <div type="text" id="check_download"></div>
+  </div>
+  <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+
+<script type='text/javascript' src="{{STATIC_URL}}js/management/message_management.js"></script>
+{% endblock%}

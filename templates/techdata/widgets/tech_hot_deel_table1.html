@@ -1,0 +1,41 @@
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                <input type="checkbox" value="" id="select_all">
+            </th>
+            <th>序号</th>
+            <th>工作令</th>
+            <th>图号</th>
+            <th>名称</th>
+			<th>规格</th>
+            <th>材质</th>
+            <th>阶段状态</th>
+            <th>最大热处理厚度（mm）</th>
+			<th>数量</th>
+			<th>件重</th>
+			<th>备注</th>
+        </tr>
+    </thead>
+	<tbody>
+		{% for item in item_list %}
+		<tr>
+		    <td>
+	            <input type="checkbox" args="{{item.id}}">
+		    </td>
+		    <td>{{forloop.counter}}</td>
+		    <td>{{item.materiel.order}}</td>
+		    <td>{{item.materiel.schematic_index}}</td>
+		    <td>{{item.materiel.name}}</td>
+		    <td>{{item.materiel.specification|default_if_none:""}}</td>
+		    <td>{{item.materiel.material}}</td>	
+		    <td></td>
+			<td>{{item.max_heattreat_thin}}</td>
+			<td>{{item.materiel.count}}</td>
+			<td>{{item.materiel.net_weight}}</td>
+			<td>{{item.materiel.remark}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+<button class="btn" id="new_card">创建工艺卡</button>

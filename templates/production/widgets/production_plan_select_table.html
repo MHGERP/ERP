@@ -1,0 +1,34 @@
+<table class="table table=bordered table=striped" id="select_table">
+  <thead>
+    <tr>
+      <th>选择</th>
+      <th>工作令</th>
+      <th>用户</th>
+      <th>交货期</th>
+      <th>产品名称</th>
+      <th>数量(台/套)</th>
+      <th>产值(万元)</th>
+      <th>产量(吨)</th>
+      <th>备注</th>
+      <th>状态</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for index in workorder_set %}
+    <tr>
+      <td><input type="checkbox" ></td>
+      <td>{{index.order_index}}</td>
+      <td>{{index.client_name}}</td>
+      <td></td>
+      <td>{{index.product_name}}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+  </tr>
+  {% endfor %}
+
+
+  </tbody>
+</table>

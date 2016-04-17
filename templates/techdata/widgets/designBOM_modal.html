@@ -1,0 +1,25 @@
+<div class="modal hide fade" id="designBOM_edit_modal" modal-size-width="0.55" tabindex="-1" role="dialog" aria-lableledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h2 class="modal-title" id="modal_title">设计库修改</h2>
+    </div>
+    <div class="modal-body" >
+    <form class="form" id="materiel_form">
+      {% csrf_token %}
+      <div class="well" id="materiel_div">
+            
+      </div>
+    </form>
+    <form class="well" id="circulationroute_form">
+      {% csrf_token %}
+      <div class="" id="circulationroute_div">
+
+      </div>
+    </form>
+    </div>
+    <div class="modal-footer">
+    <button class="btn" id="id_goto_prev" style="float:left">上一条</button>
+    <button class="btn" id="id_goto_next" style="float:left">下一条</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel_change">关闭</button>
+    <button type="button" class="btn btn-primary" id="save_desginBOM_btn">保存</button>
+</div>

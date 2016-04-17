@@ -5,7 +5,7 @@ from django.forms import ModelForm
 from purchasing.models import *
 from const import ORDERFORM_STATUS_CHOICES
 from const.models import Materiel
-from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE
+from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE, RECHECK_CHOICE
 
 class SupplierForm(ModelForm):
     class Meta:
@@ -21,23 +21,28 @@ class OrderFormStatusForm(forms.Form):
     JunHU
     summary: store all step of order form status
     """
-
     status = forms.ChoiceField(choices = ORDERFORM_STATUS_CHOICES, widget = forms.Select(attrs = {'class': 'form-control input'}))
-
 
 
 class BidApplyForm(ModelForm):
     class Meta:
         model = bidApply
-
+        fields = ('apply_company', 'demand_company', 'bid_project', 'bid_date', 'project_category', 'work_order', 'special_model', 'amount', 'core_part')
+        widgets = {
+                   "bid_date": forms.DateInput(attrs={'class':'form-control'}),
+                  }
 
 class QualityPriceCardForm(ModelForm):
     class Meta:
         model = qualityPriceCard
 
+class ContractDetailForm(ModelForm):
+    class Meta:
+        model = ContractDetail
+        fields = ('amount', )
 
 class BidCommentForm(forms.Form):
-    result_choices=(("-1","请审核"),("1","通过"),("0","不通过"))
+    result_choices=(("-1","请审核"),("0","通过"),("1","不通过"))
     judgeresult =forms.ChoiceField(choices=result_choices,required=True, label=u"审核结果",
         widget=forms.Select(attrs={
             'class':'form-control',
@@ -46,23 +51,6 @@ class BidCommentForm(forms.Form):
     reason=forms.CharField(required=False, label=u"审核意见",  widget=forms.Textarea(attrs={'class':'form-control','row':10}))
 
 
-class EntryForm(ModelForm):
-    class Meta:
-        model = PurchasingEntry
-        fields = ('entry_time','receipts_code')
-        widgets = {
-            'entry_time':forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entry_time"}),
-            'receipts_code':forms.TextInput(attrs={"id":"receipts_code"}),
-        }
-    def __init__(self,*args,**kwargs):
-        super(EntryForm,self).__init__(*args,**kwargs)
-        pur_entry = kwargs["instance"]
-        self.fields['purchaser'].widget.attrs["value"] = pur_entry.purchaser.username
-        self.fields['keeper'].widget.attrs["value"] = pur_entry.keeper.username
-        self.fields['inspector'].widget.attrs["value"] = pur_entry.inspector.username
-    purchaser = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'purchaser'}))
-    inspector = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'inspector'}))
-    keeper = forms.CharField(label=u"采购员",widget = forms.TextInput(attrs={'readonly':'readonly','id':'keeper'}))
 class ProcessFollowingForm(ModelForm):
     class Meta:
         model=ProcessFollowingInfo
@@ -70,9 +58,17 @@ class ProcessFollowingForm(ModelForm):
             "following_feedback":forms.Textarea(attrs={"rows":5})
         }
 
-class MaterielChoiceForm(forms.Form):
-    materiel_chice_select = forms.ChoiceField(choices=MATERIEL_CHOICE, required=True, label=u"材料选择", widget = forms.Select(attrs={"id" : "materiel_choice_select"}))
+# class MaterielChoiceForm(forms.Form):
+#     materiel_chice_select = forms.ChoiceField(choices=MATERIEL_CHOICE, required=True, label=u"材料选择", widget = forms.Select(attrs={"id" : "materiel_choice_select"}))
 
+class MaterielExecuteForm(ModelForm):
+    class Meta:
+        model = MaterielExecute
+        exclude = {'id', 'document_lister', 'date', 'is_save','tech_feedback','tech_requirement'}
+        widgets = {
+            'materiel_choice' : forms.Select(attrs={"id" : "materiel_choice_select"})
+        }
+"""
 class MainMaterielExecuteDetailForm(ModelForm):
     class Meta:
         model = MainMaterielExecuteDetail
@@ -88,7 +84,7 @@ class SupportMaterielExecuteDetailForm(ModelForm):
         widgets = {
             'recheck' : forms.RadioSelect(choices = (('0', '未复验'), ('1', '已复验')))
         }
-
+"""
 
 class SubApplyForm(ModelForm):
     class Meta:
@@ -113,7 +109,7 @@ class SubApplyItemForm(ModelForm):
 
 class StatusChangeApplyForm(ModelForm):
     class Meta:
-        model = StatusChange 
+        model = StatusChange
         exclude = ('id','bidform','original_status','change_user','change_time','normal_change')
     def __init__(self,*args,**kwargs):
         bidform = kwargs.pop("bidform",None)
@@ -124,3 +120,24 @@ class StatusChangeApplyForm(ModelForm):
     bidform = forms.CharField(label=u"标单编号",widget = forms.TextInput(attrs={'readonly':'readonly','id':'bidform'}))
     origin_status = forms.CharField(label=u"当前状态",widget=forms.TextInput(attrs={'readonly':'readonly','id':'origin_status'}))
     reason = forms.CharField(label=u"回溯原因",widget=forms.Textarea(attrs={'id':'reason','cols':'80','rows':'5'}))
+
+class OrderInfoForm(ModelForm):
+    class Meta:
+        model = Materiel
+        fields = {'index','name','schematic_index',}
+        widgets = {'index':forms.TextInput(attrs={"class":'form-control',"readonly":'readonly'}),
+                   'name':forms.TextInput(attrs={"class":'form-control'}),
+                   'schematic_index':forms.TextInput(attrs={"class":'form-control'}),
+                   }
+
+class MeterielExcecuteForm(ModelForm):
+    class Meta:
+        model = MaterielExecuteDetail
+        fields = {'batch_number','quota','part','oddments','remark',}
+        widgets = {
+            'batch_number':forms.TextInput(attrs={'class':'form-control','id':'batch_number'}),
+            'quota':forms.TextInput(attrs={'class':'form-control','id':'quota'}),
+            'part':forms.TextInput(attrs={'class':'form-control','id':'part'}),
+            'oddments':forms.TextInput(attrs={'class':'form-control','id':'oddments'}),
+            'remark':forms.TextInput(attrs={'class':'form-control','id':'remark'})
+        }

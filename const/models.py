@@ -15,7 +15,9 @@ class WorkOrder(models.Model):
         return self.order_index
 
 class Material(models.Model):
-    name = models.CharField(blank = False, max_length = 50, verbose_name = u"材料名称")
+    name = models.CharField(blank = False, max_length = 50, verbose_name = u"材质名称")
+    material_id= models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"材质编号") 
+    categories =  models.CharField(blank = True, null = True , choices = MATERIAL_CATEGORY_CHOICES, max_length = 20, verbose_name = u"材料类别")
     class Meta:
         verbose_name = u"材料"
         verbose_name_plural = u"材料"
@@ -32,40 +34,33 @@ class InventoryType(models.Model):
 
 class Materiel(models.Model):
     order = models.ForeignKey(WorkOrder, blank = False, verbose_name = u"所属工作号")
-    index = models.CharField(blank = True, max_length = 20, verbose_name = u"编号")
+    index = models.CharField(blank = True, max_length = 20, verbose_name = u"工作票号")
+
     schematic_index = models.CharField(blank = False, max_length = 50, verbose_name = u"零件图号")
     parent_schematic_index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"部件图号")
-    material = models.ForeignKey(Material, verbose_name = u"材料")
+    material = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"材料")
     name = models.CharField(blank = False, max_length = 20, verbose_name = u"名称")
     count = models.CharField(blank = True, max_length = 20, null = True, verbose_name = u"数量")
     net_weight = models.FloatField(blank = True, null = True, verbose_name = u"净重")
-    total_weight = models.FloatField(blank = True, null = True, verbose_name = u"总重")
-
+    total_weight = models.FloatField(blank = True, null = True, verbose_name = u"毛重")
+    quota = models.FloatField(blank = True, null = True, verbose_name = u"定额")
+    quota_coefficient = models.FloatField(blank = True, null = True, verbose_name = u"定额系数")
     inventory_type = models.ForeignKey(InventoryType, blank = True, null = True, verbose_name = u"明细表归属")
+    remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
+    specification = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"规格")
+    standard = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"标准") 
+    unit = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"单位") 
+    status = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"状态")
+    press=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"受压")
+    recheck=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"复验")
+    detection_level=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"探伤级别")
+    
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"
     def __unicode__(self):
         return self.name
 
-class CirculationName(models.Model):
-    name = models.CharField(blank = False, max_length = 10, verbose_name = u"流转简称")
-    full_name = models.CharField(blank = False, max_length = 10, verbose_name = u"流转名称全称")
-    class Meta:
-        verbose_name = u"流转名称"
-        verbose_name_plural = u"流转名称"
-    def __unicode__(self):
-        return self.full_name
-
-class CirculationRoute(models.Model):
-    materiel_belong = models.ForeignKey(Material, blank = False, verbose_name = u"所属物料")
-    index = models.IntegerField(blank = False, choices = INDEX_LIST, verbose_name = u"流转序号")
-    name = models.ForeignKey(CirculationName, blank = False, verbose_name = u"流转名称")
-    class Meta:
-        verbose_name = u"流转路线"
-        verbose_name_plural = u"流转路线"
-    def __unicode__(self):
-        return self.name
 
 class BidFormStatus(models.Model):
     #status=models.IntegerField(blank=False,unique=True,choices=BIDFORM_STATUS_CHOICES,verbose_name=u"标单状态")
@@ -77,7 +72,6 @@ class BidFormStatus(models.Model):
         verbose_name_plural = u"标单状态"
     def __unicode__(self):
         return self.get_part_status_display()
-
 
 class OrderFormStatus(models.Model):
     status = models.IntegerField(blank = False, choices = ORDERFORM_STATUS_CHOICES, verbose_name = u"订购单状态")
@@ -95,5 +89,4 @@ class ImplementClassChoices(models.Model):
         verbose_name_plural = u"实施类别"
     def __unicode__(self):
         return self.get_category_display()
-
 

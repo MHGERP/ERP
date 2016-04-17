@@ -33,7 +33,7 @@
                     {% if bid.bid_status.main_status > BIDFORM_STATUS_INVITE_BID%}
                     <td><button class="btn btn-success">招标</button></td>
                     {% elif bid.bid_status.main_status == BIDFORM_STATUS_INVITE_BID%}
-                    <td><button class="btn btn-warning">招标</button></td>
+                    <td><a href="/purchasing/bidTracking/{{bid.id}}" class="btn btn-warning">招标</a></td>
                     {% else%}
                     <td><button class="btn">招标</button></td>
                     {%endif%}
@@ -47,7 +47,7 @@
                     {% if bid.bid_status.main_status > BIDFORM_STATUS_CHECK_STORE%}
                     <td><button class="btn btn-success">检验入库</button></td>
                     {% elif bid.bid_status.main_status == BIDFORM_STATUS_CHECK_STORE%}
-                    <td><button class="btn btn-warning">检验入库</button></td>
+                    <td><a href="{% url arrivalCheck bid.bid_id %}" class="btn btn-warning">检验入库</a></td>
                     {% else%}
                     <td><button class="btn">检验入库</button></td>
                     {%endif%}

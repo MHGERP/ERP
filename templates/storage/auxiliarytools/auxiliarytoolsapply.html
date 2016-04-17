@@ -1,0 +1,23 @@
+{% extends "storage/auxiliarytools/home.html" %}
+
+{% block title %}
+<h1>辅助工具出库</h1>
+{% endblock %}
+
+{% block sub_sec %}
+<a href="#" class="current">辅助工具领用</a>
+{% endblock %}
+
+{% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
+   <h3 style="text-align:center">辅助工具领用卡</h3>
+    <form id="detail_form" method="POST">
+        {% csrf_token %}
+        {% include 'storage/auxiliarytools/auxiliarytoolsapply_table.html' %}
+
+    <div class="row-fluid" style="text-align:center">
+    <button type="submit" id="confirm" class="btn btn-primary">确认</button>
+    </div>
+</form>
+{% endblock%}
+

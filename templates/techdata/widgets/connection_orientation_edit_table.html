@@ -1,0 +1,39 @@
+<!--div class="widget-title">
+    <span class="icon"><i class="icon-th"></i></span>
+    <h5>工作令：{{work_order.order_index}}</h5>
+    <h5>产品名称：{{work_order.product_name}}</h5>
+    <h5>单位：公斤</h5>
+</div-->
+<!--div class="widget-content nopadding" style="max-height:800px;overflow-y:auto"-->
+    <table class="table table-bordered table-striped" style="width:80%;">
+        <thead>
+            <td>工作令</td>
+            <td>产品名称</td>
+            <td>操作</td>
+            <td>文件列表</td>
+        </thead>
+        <tbody>
+            {% for item in work_order_list %}
+                <tr iid="{{item.id}}">
+                    <td>{{item.order_index}}</td>
+                    <td>{{item.product_name}}</td>
+                    <td>
+                        <span class="btn btn-small btn-primary btn-upload" href="#connectOrientation_upload" data-toggle="modal">上传</span>
+                    </td>
+                    <td>
+                        <div class="chzn-container chzn-container-multi">
+                            <ul class="chzn-choices" style="border-color: rgba(0, 0, 0, 0); ">
+                                {% for connectOrientation in item.connectOrientation_list %}
+                                    <li class="search-choice">
+                                        <span><a href="{{connectOrientation.file_obj.url}}">{{connectOrientation.name|truncatewords:"10"}}</a></span>
+                                        <span class="search-choice-close" rel="1" pid="{{connectOrientation.id}}"></span>							
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<!--/div-->

@@ -1,0 +1,19 @@
+{% extends "production/base/none_nav_base.html"%}
+{% block title%}
+<h1>综合工部</h1>
+{% endblock%}
+{% block sub_ref %}
+<a href="#" class="current">综合工部</a>
+{% endblock %}
+{% block inner_content%}
+<link rel="stylesheet" href="{{STATIC_URL }}style/synthesize_filelist.css" type="text/css" 
+media="screen" />
+<form class="form-search ">
+   &nbsp&nbsp&nbsp&nbsp<font size="4px"><b>工作令</b>&nbsp&nbsp</font>
+   {{workOrderForm.work_order}}
+   
+    <span class="btn" id="order_search">检索</span> 
+</form>
+<div class="widget-content" id="widget-content"></div>
+<script type='text/javascript' src="{{STATIC_URL}}js/production/synthesize_filelist.js"></script>
+{% endblock%}

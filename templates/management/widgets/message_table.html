@@ -1,0 +1,21 @@
+<!--This page is writen by BinWu -->
+<table class="table table-bordered table-striped" style="width: 60%;">
+    <thead>
+        <tr>
+            <th>消息标题</th>
+            <th>发送时间</th>
+            <th>操作</th>
+
+        </tr>
+    </thead>
+    {% for item in message_list%}
+    <tr iid="{{item.id}}">
+        <td>{{item.title}}</td>
+        <td>{{item.time}}</td>
+        <td>
+            <span class="btn btn-warning btn-small btn-change-name"  data-toggle="modal" data-target="#check_modal">查看</span> 
+            <span class="btn btn-danger btn-small btn-delete">撤销</span>
+        </td>
+    </tr>
+    {% endfor%}
+</table>

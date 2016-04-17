@@ -1,0 +1,42 @@
+<div id="docs-list">
+	<div class="news-documents documents-list">
+		<table class="documents">
+			<colgroup>
+				<col width="5%">
+				<col width="35%">
+				<col width="5%">
+			</colgroup>
+			<tbody>
+				{% for doc in news_list %}
+				<tr class="newslist-dot">
+					<td>
+						{{ doc.list_index }}.
+					</td>
+					<td>
+						<a href="/news/newslist/{{ doc.id }}/download_news_doc" title="{{news.title}}">{{ doc.document_name|truncatechars:30 }}</a>
+					</td>
+					<td>
+						{{ doc.news.news_date|date:"[y-m-d]" }}
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<hr>
+	<div>
+		<span class="step-links">
+	      {% if news_page.has_previous %}
+	      <a href="?news_page={{ news_page.previous_page_number }}" id="news-previous-page" arg="{{news_page.previous_page_number}}">上一页</a>
+	      {% endif %}
+
+	      <span class="current">
+	        第{{ news_page.number }}页，共{{ news_page.paginator.num_pages }}页
+	      </span>
+
+	      {% if news_page.has_next %}
+	      <a href="?news_page={{ news_page.next_page_number }}" id="news-next-page" arg="{{news_page.next_page_number}}">下一页</a>
+	      {% endif %}
+	    </span>
+	</div>
+</div>

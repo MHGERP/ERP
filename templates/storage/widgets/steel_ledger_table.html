@@ -1,0 +1,45 @@
+<table class="table table-bordered">
+    <thead>
+        <th>名称</th>
+        <th>类型</th>
+        <th>规格</th>
+        <th>材质编号</th>
+        <th>数量</th>
+        <th>库房</th>
+        <th>退库次数</th>
+        <th>套料图</th>
+    </thead>
+    <tbody>
+        {% for steel in steel_set %}
+        <tr>
+            <td>{{steel.name}}</td>
+            {% ifequal steel.steel_type 0 %}
+            <td>板材</td>
+            {% else %}
+            <td>型材</td>
+            {% endifequal %}
+            <td>{{steel.specifications}}</td>
+            <td>{{steel.material_number}}</td>
+
+            {% ifequal steel.steel_type 0 %}
+            <td>{{steel.boardsteelmaterialledger.quantity}}</td>
+            {% else %}
+            <td>{{steel.barsteelmaterialledger.quantity}}</td>
+            {% endifequal %}
+
+            <td>{{steel.store_room}}</td>
+            <td>{{steel.return_time}}</td>
+
+            {% ifequal steel.steel_type 0 %}
+                {% ifequal steel.return_time 0 %}
+                    <td>尚未退库</td>
+                {% else %}
+                    <td><button class="btn btn-primary">下载</button></td>
+                {% endifequal %}
+            {% else %}
+            <td></td>
+            {% endifequal %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

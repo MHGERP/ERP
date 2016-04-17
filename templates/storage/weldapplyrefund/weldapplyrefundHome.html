@@ -1,0 +1,40 @@
+{% extends "storage/base/weldbase.html" %}
+{% block title %}
+<h1>焊材发放回收记录</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/weldapplyrefund" class="current">焊材发放回收记录</a>
+{% endblock %}
+
+{% block inner_content %}
+<div class="span12" style="margin-bottom:30px">
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        {% for field in search_form %}
+        {{field.label}}
+        {{field}}
+        {% endfor %}
+        <button class="btn btn-success">检索</button> 
+    </form>
+</div>
+<br>
+<div class="span8">
+<table class="table table-bordered">
+    <thead>
+        <th>工作令</th>
+        <th>产品名称</th>
+        <th>操作</th>
+    </thead>
+    </tbody>
+        {% for i in workorder_set %}
+        <tr>
+            <td>{{i.order_index}}</td>
+            <td>{{i.product_name}}</td>
+            <td><a class="btn btn-warning" href="/storage/weldapplyrefundDetail/{{i.id}}">查看详情</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
