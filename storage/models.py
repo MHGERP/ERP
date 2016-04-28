@@ -175,6 +175,8 @@ class WeldingMaterialApplyCard(models.Model):
     commit_user=models.ForeignKey(User,verbose_name=u'发料人',default=None,blank=True,null=True,related_name="commit_users")
     status=models.IntegerField(verbose_name=u'领用状态',choices=APPLYCARD_STATUS_CHOICES,default=APPLYCARD_APPLY,blank=False)
     storelist = models.ForeignKey(WeldStoreList,null = True,verbose_name=u'库存材料')
+    create_time = models.DateField(verbose_name = u"日期",auto_now_add=True)
+    weld_material_number=models.CharField(verbose_name=u'焊材牌号',max_length=20,blank=False)
     def __unicode__(self):
         return str(self.index)
 
@@ -282,6 +284,12 @@ class SteelMaterial(models.Model):
             work_order_list.append(order.order_index)
         work_order_str = ','.join(work_order_list)
         return work_order_str
+    
+    def show_form_code(self):
+        if self.steel_type == BOARD_STEEL:
+            return self.boardsteelmaterialpurchasingentry_set.all()[0].card_info.form_code
+        else:
+            return self.barsteelmaterialpurchasingentry_set.all()[0].card_info.form_code
 
     class Meta:
         verbose_name=u'钢材参数信息'

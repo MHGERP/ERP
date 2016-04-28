@@ -293,8 +293,11 @@ def Search_History_Apply_Records(request,data):
     context={}
     context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
     form=ApplyCardHistorySearchForm(deserialize_form(data))
+    print form
     if form.is_valid():
         conditions=form.cleaned_data
+        if conditions['department'] == '-1':
+            conditions['department'] = ""
         q1=(conditions['date'] and Q(create_time=conditions['date'])) or None
         q2=(conditions['department'].strip(' ') and Q(department=conditions['department'])) or None
         q3=(conditions['index'] and Q(index=int(conditions['index']))) or None
@@ -478,20 +481,16 @@ def saveRemarkStoreRoom(request,form,mid,typeid):
     form = steelEntryItemsForm(deserialize_form(form))
     if typeid:
         item = BarSteelMaterialPurchasingEntry.objects.get(id = mid)
-        pur_entry = BarSteelMaterialPurchasingEntry.objects.all()
+        pur_entry = item.card_info.barsteelmaterialpurchasingentry_set.all()
     else:
-        pur_entry = BoardSteelMaterialPurchasingEntry.objects.all()
         item = BoardSteelMaterialPurchasingEntry.objects.get(id = mid)
+        pur_entry = item.card_info.boardsteelmaterialpurchasingentry_set.all()
     flag = False
     if form.is_valid():
         remark = form.cleaned_data['remark']
         storeroom_id = form.cleaned_data['store_room']
         store_room = StoreRoom.objects.get(id = storeroom_id)
-        print remark
-        print store_room
     if item.card_info.entry_status == STORAGESTATUS_KEEPER:
-        print remark
-        print store_room
         item.remark = remark
         item.save()
         item.steel_material.store_room = store_room
@@ -641,6 +640,7 @@ def storeThreadAdd(request,form):
            }
     return simplejson.dumps(data)
 
+@dajaxice_register
 def humiChangeSave(request,hidform,hid):
     message = u"修改失败,有未填数据"
     try:
@@ -851,6 +851,8 @@ def outsideThreadSearch(request,form):
    }
    html = render_to_string("storage/widgets/outsidestorage_table.html",context)
    return simplejson.dumps({"html":html})
+
+@dajaxice_register
 def weldMaterialStorageItems(request,specification):
     item_set = WeldStoreList.objects.filter(specification = specification,count__gt = 0).order_by('entry_time')
     html = render_to_string("storage/weldapply/itemlist.html",{"item_set":item_set})
@@ -869,6 +871,7 @@ def weldMaterialApply(request,itemid,form,index):
             storageitem.save()
             form.save()
             applycard.status = APPLYCARD_COMMIT
+            applycard.commit_user = request.user
             applycard.save()
             message = u"领用单确认成功"
             flag = True

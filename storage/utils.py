@@ -36,7 +36,9 @@ def get_weld_filter(model_type,dict,replace_dic=None):
 def weldStoreItemsCreate(entry):
     weld_set = entry.weldmaterialentryitems_set.all()
     for item in weld_set:
-        storeitem = WeldStoreList(entry_time = item.entry.entry_time,specification=item.material.specification,material_id=item.material.material.material_id,count=item.material.count,entry_item = item)
+        entry_time = item.entry.entry_time
+        deadline = entry_time + datetime.timedelta(days = 20)
+        storeitem = WeldStoreList(entry_time = item.entry.entry_time,specification=item.material.specification,material_id=item.material.material.material_id,count=item.material.count,entry_item = item,deadline = deadline)
         storeitem.save()
 
 def storeConsume(applycard):
@@ -133,6 +135,7 @@ def updateStorageLits(items_set,_StorageModel):
     exist_items = []
     for item in items_set:
         try:
+            print item
             storageItem = _StorageModel.objects.get(specification = item.specification)
             if storageItem.number >= item.number:
                 storageItem.number -= item.number
@@ -141,6 +144,8 @@ def updateStorageLits(items_set,_StorageModel):
                 isOk = False
                 break
         except Exception,e:
+            print "------errors----------"
+            isOk = False
             print e
     if isOk:
         for item in exist_items:
@@ -195,9 +200,9 @@ class AutoGenEntry(object):
     Entry_DICT = {"WELD":HandleEntryWeld,"PURCHASED":HandleEntryPurchased}
     def key_cmp_func(self,it):
         categories = it.material.material.categories
-        if categories in self.WELD_TYPE_LIST:
+        if categories in WELD_TYPE_LIST:
             return "WELD"
-        if categories in self.PURCHASED_TYPE_LIST:
+        if categories in PURCHASED_TYPE_LIST:
             return "PURCHASED"
     
     def group_by(self):
