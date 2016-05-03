@@ -1,4 +1,4 @@
-<table class="table table=bordered table=striped">
+<table class="table table=bordered table=striped" id="select_table">
   <thead>
     <tr>
       <th>选择</th>
@@ -14,17 +14,21 @@
     </tr>
   </thead>
   <tbody>
+    {% for index in workorder_set %}
     <tr>
       <td><input type="checkbox" ></td>
-      <td>20150001</td>
-      <td>太重滨海</td>
-      <td>2016-10</td>
-      <td>煤锁</td>
-      <td>3</td>
-      <td>99.54</td>
-      <td>23.46</td>
-      <td>天津</td>
-    </tr>
+      <td>{{index.order_index}}</td>
+      <td>{{index.client_name}}</td>
+      <td></td>
+      <td>{{index.product_name}}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+  </tr>
+  {% endfor %}
+
 
   </tbody>
 </table>

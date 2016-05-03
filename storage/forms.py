@@ -121,7 +121,7 @@ class HumRecordForm(ModelForm):
 class HumSearchForm(forms.Form):
     date = forms.DateField(label = u"日期",required = False, widget = forms.TextInput(attrs={'class':'form-controli span2','id':'date'}))
     storeRoom = forms.ChoiceField(label = u"库房",required = False, widget = forms.Select(attrs={"class":'form-control span2','id':'storeRoom'}))
-    storeMan = forms.CharField(label = u"库管员",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'storeMan'}))
+    storeMan = forms.ChoiceField(label = u"库管员",required = False, widget = forms.Select(attrs={"class":'form-control span2','id':'storeMan'}))
     def __init__(self,*args,**kwargs):
         storeRoom = StoreRoom.objects.all()
         super(HumSearchForm,self).__init__(*args,**kwargs)
@@ -129,6 +129,7 @@ class HumSearchForm(forms.Form):
         for room in storeRoom:
             room_list.append((room.id,room.name))
         self.fields["storeRoom"].choices = tuple(room_list)
+        self.fields["storeMan"].choices =  getChoiceList(getUserByAuthority(STORAGE_KEEPER),"userinfo")
 
 class BakeRecordForm(ModelForm):
     class Meta:

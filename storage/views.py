@@ -62,7 +62,7 @@ def steelrefunddetailViews(request,typeid,rid):
 
 def steelApplyViews(request):
     search_form = SteelRefundSearchForm()
-    apply_cards = CommonSteelMaterialApplyCardInfo.objects.all()
+    apply_cards = CommonSteelMaterialApplyCardInfo.objects.all().order_by("apply_confirm")
     context={
         "search_form":search_form,
         "apply_cards":apply_cards,
@@ -87,7 +87,7 @@ def steelApplyDetailViews(request,typeid,rid):
 
 def steelLedgerViews(request):
     search_form = SteelLedgerSearchForm()
-    steel_set = SteelMaterial.objects.all()
+    steel_set = SteelMaterial.objects.all().order_by("steel_type")
     context={
         "search_form":search_form,
         "steel_set":steel_set,
@@ -105,7 +105,7 @@ def weldEntryHomeViews(request):
     else:
         weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         search_form = EntrySearchForm()
-    weldentry_set = weldentry_set.order_by("-entry_time")
+    weldentry_set = weldentry_set.order_by("-entry_status","-entry_time","-entry_code")
     context = {
             "entry_set":weldentry_set,
             "ENTRYSTATUS_END":STORAGESTATUS_END,
@@ -124,7 +124,7 @@ def steelEntryHomeViews(request):
     else:
         steelentry_set = SteelMaterialPurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         search_form = SteelEntrySearchForm()
-    steelentry_set = steelentry_set.order_by("-entry_time")
+    steelentry_set = steelentry_set.order_by("-entry_status","-entry_time")
     context = {
         "steel_entry_set":steelentry_set,
         "ENTRYSTATUS_END":STORAGESTATUS_END,
@@ -772,13 +772,8 @@ def outsideAccountHomeViews(request):
     return render(request,"storage/outside/accounthome.html",context)
 
 def outsideStorageAccountViews(request):
-    if request.method == "POST":
-        search_form = OutsideStorageSearchForm(request.POST)
-        if search_form.is_valid():
-            items_set = get_weld_filter(OutsideStorageList,search_form.cleaned_data)
-    else:
-        items_set = OutsideStorageList.objects.order_by('specification')
-        search_form = OutsideStorageSearchForm()
+    items_set = OutsideStorageList.objects.order_by('specification')
+    search_form = OutsideStorageSearchForm()
     items_set = items_set.order_by('specification')
     context = {
         "items_set":items_set,

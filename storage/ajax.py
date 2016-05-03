@@ -293,8 +293,11 @@ def Search_History_Apply_Records(request,data):
     context={}
     context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
     form=ApplyCardHistorySearchForm(deserialize_form(data))
+    print form
     if form.is_valid():
         conditions=form.cleaned_data
+        if conditions['department'] == '-1':
+            conditions['department'] = ""
         q1=(conditions['date'] and Q(create_time=conditions['date'])) or None
         q2=(conditions['department'].strip(' ') and Q(department=conditions['department'])) or None
         q3=(conditions['index'] and Q(index=int(conditions['index']))) or None
@@ -480,20 +483,16 @@ def saveRemarkStoreRoom(request,form,mid,typeid):
     form = steelEntryItemsForm(deserialize_form(form))
     if typeid:
         item = BarSteelMaterialPurchasingEntry.objects.get(id = mid)
-        pur_entry = BarSteelMaterialPurchasingEntry.objects.all()
+        pur_entry = item.card_info.barsteelmaterialpurchasingentry_set.all()
     else:
-        pur_entry = BoardSteelMaterialPurchasingEntry.objects.all()
         item = BoardSteelMaterialPurchasingEntry.objects.get(id = mid)
+        pur_entry = item.card_info.boardsteelmaterialpurchasingentry_set.all()
     flag = False
     if form.is_valid():
         remark = form.cleaned_data['remark']
         storeroom_id = form.cleaned_data['store_room']
         store_room = StoreRoom.objects.get(id = storeroom_id)
-        print remark
-        print store_room
     if item.card_info.entry_status == STORAGESTATUS_KEEPER:
-        print remark
-        print store_room
         item.remark = remark
         item.save()
         item.steel_material.store_room = store_room
@@ -643,6 +642,7 @@ def storeThreadAdd(request,form):
            }
     return simplejson.dumps(data)
 
+@dajaxice_register
 def humiChangeSave(request,hidform,hid):
     message = u"修改失败,有未填数据"
     try:
@@ -832,6 +832,29 @@ def outsideAccountApplyCardSearch(request,form):
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
+def outsideThreadSearch(request,form):
+   form = OutsideStorageSearchForm(deserialize_form(form));
+   items_set = {}
+   if form.is_valid():
+       conditions = form.cleaned_data
+       print conditions
+       q1=(conditions['texture'] and Q(texture = conditions['texture'])) or None
+       q2=(conditions['specification'] and Q(specification = conditions['specification'])) or None
+       query_set = filter(lambda x:x!=None,[q1,q2])
+       if query_set:
+           query_conditions = reduce(lambda x,y:x&y,query_set)
+           items_set = OutsideStorageList.objects.filter(query_conditions)
+       else:
+           items_set = OutsideStorageList.objects.all()
+   items_set = items_set.order_by('specification')
+   context = {
+            'items_set':items_set,
+            "search_form":form,
+   }
+   html = render_to_string("storage/widgets/outsidestorage_table.html",context)
+   return simplejson.dumps({"html":html})
+
+@dajaxice_register
 def weldMaterialStorageItems(request,specification):
     item_set = WeldStoreList.objects.filter(specification = specification,count__gt = 0).order_by('entry_time')
     html = render_to_string("storage/weldapply/itemlist.html",{"item_set":item_set})
@@ -850,6 +873,7 @@ def weldMaterialApply(request,itemid,form,index):
             storageitem.save()
             form.save()
             applycard.status = APPLYCARD_COMMIT
+            applycard.commit_user = request.user
             applycard.save()
             message = u"领用单确认成功"
             flag = True
@@ -865,19 +889,22 @@ def weldMaterialApply(request,itemid,form,index):
 @dajaxice_register
 def weldRefundCommit(request,rid,form):
     ref_obj = WeldRefund.objects.get(id = rid)
-    is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
     reform = WeldRefundForm(deserialize_form(form),instance = ref_obj)
     if reform.is_valid():
         reform.save()
         storageitem = ref_obj.receipts_code.storelist
         storageitem.count += ref_obj.refund_count
         storageitem.save()
-        ref_obj.refund_status = STORAGESTATUS_END
+        
+        ref_obj.weldrefund_status = STORAGESTATUS_END
+        ref_obj.save()
         message = u"退库成功，信息已记录"
     else:
         message = u"退库失败，退库单信息未填写完整"
         print reform.errors
         
+    is_show = ref_obj.weldrefund_status == STORAGESTATUS_END
+    print is_show
     return simplejson.dumps({"is_show":is_show,"message":message})
 
 @dajaxice_register
