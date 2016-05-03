@@ -10,12 +10,20 @@
     </tbody>
         {% for item in items_set %}
         <tr>
-            <td>{{item.brand}}</td>
+            <td>P2016040{{forloop.counter}}</td>
             <td>{{item.specification}}</td>
             <td>{{item.count}}</td>
-            <td>{{item.charge_number}}</td>
+            <td>L2016121{{forloop.counter}}</td>
             <td>{{item.material_id}}</td>
-            <td>{{item.factory}}</td>
+            <td>厂家{{forloop.counter}}</td>
+            {% comment %}
+            <td>{{item.brand|default_if_none:""}}</td>
+            <td>{{item.specification}}</td>
+            <td>{{item.count}}</td>
+            <td>{{item.charge_number|default_if_none:""}}</td>
+            <td>{{item.material_id}}</td>
+            <td>{{item.factory|default_if_none:""}}</td>
+            {% endcomment%}
         </tr>
         {% endfor %}
     </tbody>

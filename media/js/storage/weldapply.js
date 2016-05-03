@@ -66,9 +66,9 @@ $(document).ready(function(){
         $('#id_receipts_code').attr('disabled',true); alert(data.message)
         if(data.is_show)
         {
-            $("#confirm").attr('disabled','disabled');
-            $("#confirm").hide();
-            $("#confirm").after('<a type="button" href="/storage/weldapply" class="btn btn-primary">返回</a>');
+            $("#refund_confirm").attr('disabled','disabled');
+            $("#refund_confirm").hide();
+            $("#refund_confirm").after('<a type="button" href="/storage/weldrefund" class="btn btn-info">返回</a>');
         }
     }
 

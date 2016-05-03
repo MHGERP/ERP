@@ -92,8 +92,9 @@ function save_remark_storeRoom_callback(data){
 
 function steel_entry_confirm(eid){
     var entry_code = $("#input_entry_code").val();
-    alert("库房一旦分配便不可更改!");
+    if(confirm("库房一旦分配便不可更改!")){
     Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":eid,"entry_code":entry_code}); 
+    }
 }
 $(document).ready(function(){
 	if($("#entry_item_form").attr("iid")=="False"){
