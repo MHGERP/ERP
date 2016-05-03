@@ -6,16 +6,12 @@ from users.models import Group
 from purchasing.models import MaterielExecute
 import settings
 
-class Processing(models.Model):
-    materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")
+class ProcessingName(models.Model):
     name = models.CharField(blank = False, choices = PROCESSING_CHOICES, max_length = 10, verbose_name = u"工序名")
-    next_processing = models.ForeignKey('self', null = True, blank = True, verbose_name = u"下一工序")
-    is_first_processing = models.BooleanField(blank = False, default = False, verbose_name = u"首道工序")
     instruction = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"说明")
     index = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"工号")
     hour = models.FloatField(blank = True, null = True, verbose_name = u"工时")
 
-    technical_requirement = models.CharField(blank = True, null = True, max_length = 1000, verbose_name = u"工艺过程及技术要求")
     operator = models.ForeignKey(User, blank = True, null = True, verbose_name = u"操作者", related_name = "process_operator")
     operate_date = models.DateField(blank = True, null = True, verbose_name = u"操作时间")
     inspector = models.ForeignKey(User, blank = True, null = True, verbose_name = u"检查者", related_name = "process_inspector")
@@ -26,6 +22,26 @@ class Processing(models.Model):
 
     def __unicode__(self):
         return self.materiel_belong.name + "(%s)" % self.get_name_display()
+
+class Processing(models.Model):
+    materiel_belong = models.OneToOneField(Materiel, blank = False, verbose_name = u"所属物料")
+    LX1 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX1", related_name = "LX1")
+    LX2 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX2", related_name = "LX2")
+    LX3 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX3", related_name = "LX3")
+    LX4 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX4", related_name = "LX4")
+    LX5 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX5", related_name = "LX5")
+    LX6 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX6", related_name = "LX6")
+    LX7 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX7", related_name = "LX7")
+    LX8 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX8", related_name = "LX8")
+    LX9 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX9", related_name = "LX9")
+    LX10 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX10", related_name = "LX10")
+    LX11 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX11", related_name = "LX11")
+    LX12 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX12", related_name = "LX12")
+    class Meta:
+        verbose_name = u"工序路线"
+        verbose_name_plural = u"工序路线"
+    def __unicode__(self):
+        return self.materiel.name
 
 class ProcessReview(models.Model):
     materiel = models.ForeignKey(Materiel, verbose_name = u"零件")

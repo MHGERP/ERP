@@ -39,7 +39,7 @@ class Materiel(models.Model):
     schematic_index = models.CharField(blank = False, max_length = 50, verbose_name = u"零件图号")
     parent_schematic_index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"部件图号")
     material = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"材料")
-    name = models.CharField(blank = False, max_length = 20, verbose_name = u"名称")
+    name = models.CharField(blank = False, max_length = 100, verbose_name = u"名称")
     count = models.CharField(blank = True, max_length = 20, null = True, verbose_name = u"数量")
     net_weight = models.FloatField(blank = True, null = True, verbose_name = u"净重")
     total_weight = models.FloatField(blank = True, null = True, verbose_name = u"毛重")
