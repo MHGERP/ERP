@@ -192,9 +192,9 @@ class AutoGenEntry(object):
     Entry_DICT = {"WELD":HandleEntryWeld,"PURCHASED":HandleEntryPurchased}
     def key_cmp_func(self,it):
         categories = it.material.material.categories
-        if categories in self.WELD_TYPE_LIST:
+        if categories in WELD_TYPE_LIST:
             return "WELD"
-        if categories in self.PURCHASED_TYPE_LIST:
+        if categories in PURCHASED_TYPE_LIST:
             return "PURCHASED"
     
     def group_by(self):

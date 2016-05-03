@@ -453,23 +453,25 @@ def weldhum_insert(request,hum_params):
 def entryItemSave(request,form,mid):
     item = WeldMaterialEntryItems.objects.get(id = mid)
     entry_form = EntryItemsForm(deserialize_form(form),instance = item) 
-    pur_entry = item.entry
+    entry = item.entry
     flag = False
-    if pur_entry.auth_status(STORAGESTATUS_KEEPER):
+    if entry.auth_status(STORAGESTATUS_KEEPER):
         if entry_form.is_valid():
             entry_form.save()
             flag = True
             message = u"修改成功"
         else:
+            print entry_form.errors
             message = u"修改失败"
     else:
         message = u"修改失败，入库单已确认过"
-    entry_set = WeldMaterialEntryItems.objects.filter(entry = pur_entry) 
-    html = render_to_string("storage/widgets/weldentrytable.html",{"entry_set":entry_set})
+    is_show = entry.entry_status == STORAGESTATUS_KEEPER
+    items = WeldMaterialEntryItems.objects.filter(entry = entry)
+    html = render_to_string("storage/wordhtml/weldentryitemstable.html",{"items":items,"is_show":is_show})
     data = {
             "flag":flag,
             "message":message,
-            "html":html,  
+            "html":html,
            }
     return simplejson.dumps(data)
 

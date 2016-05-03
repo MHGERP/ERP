@@ -17,9 +17,10 @@ function refreshSingleCallBack(data) {
     var row = $("tr[iid='" + cur_iid + "']");
     row.html(data);
 }
-$(document).on("click", ".tr_materiel", function() {
+$(document).on("dblclick", ".tr_materiel", function() {
     var iid = $(this).attr("iid");
     fill(iid);
+    $('#card_modal').modal('show')
 });
 
 function fill(iid) {

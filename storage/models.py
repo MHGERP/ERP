@@ -91,10 +91,9 @@ class ApplyCardBase(models.Model):
 
 class WeldMaterialEntry(models.Model):
     entry_time = models.DateField(blank=False, null=True,auto_now_add=True,verbose_name=u"入库时间")
-    purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "purchaser")
-    inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "inspector")
-    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "keeper")
-    bidform = models.ForeignKey(BidForm,verbose_name=u"标单号")
+    purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "weldentry_purchaser")
+    inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "weldentry_inspector")
+    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "weldentry_keeper")
     entry_code = models.CharField(blank = False,null=True ,max_length = 20, verbose_name = u"单据编号",unique = True)
     entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=STORAGESTATUS_PURCHASER,verbose_name=u"入库单状态")
     class Meta:
@@ -110,9 +109,18 @@ class WeldMaterialEntry(models.Model):
 class WeldMaterialEntryItems(models.Model):
     material = models.ForeignKey(Materiel,blank = True , null = True , verbose_name = u"材料")
     remark = models.CharField(max_length = 100, blank = True , default="" , verbose_name = u"备注")
-    date = models.DateField( blank = False ,null = True, verbose_name = u"生产日期")
-    price = models.FloatField( blank = True ,default="0", verbose_name = u"价格")
+    production_date = models.DateField( blank = True ,null = True, verbose_name = u"出厂日期")
+    factory = models.CharField(max_length = 100, blank = True , verbose_name = u"厂家") 
+    price = models.FloatField( blank = True , null = True,verbose_name = u"单价")
+    total_weight = models.FloatField( blank = True , default= 0,verbose_name = u"公斤数") 
+    single_weight = models.FloatField( blank = True , default = 0,verbose_name = u"单件重量")
+    count = models.FloatField( blank = True , default = 0,verbose_name = u"件数")
     entry = models.ForeignKey(WeldMaterialEntry,verbose_name = u"入库单")
+    material_charge_number = models.CharField(max_length = 20, blank = True , verbose_name = u"材料批号") 
+    material_code = models.CharField(max_length = 20, blank = True , verbose_name = u"材质编号")
+    material_mark = models.CharField(max_length = 50, blank = True , verbose_name = u"牌号")
+    model_number = models.CharField(max_length = 50, blank = True , verbose_name = u"型号")
+    specification = models.CharField(max_length = 20, blank = True , verbose_name = u"规格")
     class Meta:
         verbose_name = u"焊材入库材料"
         verbose_name_plural = u"焊材入库材料"
@@ -160,8 +168,10 @@ class ApplyCardItemBase(models.Model):
 class WeldingMaterialApplyCard(models.Model):
     department=models.IntegerField(verbose_name=u'领用单位',choices=STORAGEDEPARTMENT_CHOICES,max_length=20,blank=False)
     index=models.IntegerField(verbose_name=u'编号',blank=False,unique=True)
+    create_time=models.DateField(verbose_name=u'填写时间',auto_now_add=True)
     workorder=models.ForeignKey(WorkOrder,verbose_name=u'工作令',blank=False)
     weld_bead_number=models.CharField(verbose_name=u'焊缝编号',max_length=20,blank=False)
+    weld_material_number=models.CharField(verbose_name=u'焊材标号',max_length=20,blank=False)
     model=models.CharField(verbose_name=u'型号',max_length=20,blank=False)
     standard=models.CharField(verbose_name=u'规格',max_length=20,blank=False)
     apply_weight=models.FloatField(verbose_name=u'领用重量',blank=False)
