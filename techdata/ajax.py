@@ -28,15 +28,10 @@ def getProcessBOM(request, id_work_order):
     """
     JunHU
     """
-    print "hhh"
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
     for item in BOM:
-        if Processing.objects.filter(materiel_belong = item).count() == 0:
-            Processing(materiel_belong = item).save()
-        if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
-            CirculationRoute(materiel_belong = item).save()
-        item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))   
+        item.route = ' '.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))   
         if item.net_weight and item.count:
             item.total_weight = item.net_weight * int(item.count)
     context = {
@@ -58,13 +53,15 @@ def getSingleProcessBOM(request, iid):
     item = Materiel.objects.get(id = iid)
     if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
         CirculationRoute(materiel_belong = item).save()
-    item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
-        
+    item.route = ' '.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
+    if item.net_weight and item.count:
+        item.total_weight = item.net_weight * int(item.count)   
     context = {
         "item": item,
     }
     html = render_to_string("techdata/widgets/processBOM_row.html", context)
-    return html
+    html2 = render_to_string("techdata/widgets/processBOM_row_2.html", context)
+    return simplejson.dumps({"html": html, "html2": html2, })
 
 @dajaxice_register  
 def getAuxiliaryMaterielInfo(request, iid,categories):
@@ -146,71 +143,12 @@ def getProcess(request, iid):
     JunHU
     """
     materiel = Materiel.objects.get(id = iid)
-    try:
-        process = Processing.objects.get(materiel_belong = materiel, is_first_processing = True)  
-        process_list = []
-        while process:
-            process_list.append(process)
-            process = process.next_processing
-    except:
-        process_list = []
-    
-    for process in process_list:
-        process.form = ProcessInfoForm(instance = process)
+    form = ProcessingRouteForm(instance = materiel.processing)
     context = {
-        "process_list": process_list,
+        "form": form,
     }
     html = render_to_string("techdata/widgets/process_table.html", context)
     return html
-
-@dajaxice_register
-def addProcess(request, process_id, iid):
-    """
-    JunHU
-    """
-    materiel = Materiel.objects.get(id = iid)
-    if Processing.objects.filter(materiel_belong = materiel).count() == 0:
-        process = Processing(materiel_belong = materiel, name = process_id, is_first_processing = True)
-        process.save()
-    else:
-        pre_process = Processing.objects.get(materiel_belong = materiel, next_processing = None)
-        process = Processing(materiel_belong = materiel, name = process_id)
-        process.save()
-        pre_process.next_processing = process
-        pre_process.save()
-
-@dajaxice_register
-def deleteProcess(request, pid):
-    """
-    JunHU
-    """
-    process = Processing.objects.get(id = pid)
-    if process.is_first_processing == True:
-        if process.next_processing:
-            process.next_processing.is_first_processing = True
-            process.next_processing.save()
-        process.delete()
-    else:
-        pre_process = Processing.objects.get(next_processing = process)
-        pre_process.next_processing = process.next_processing
-        pre_process.save()
-        process.delete()
-
-@dajaxice_register
-def saveProcessInfo(request, iid, index, hour, instruction):
-    """
-    JunHU
-    """
-    process = Processing.objects.get(id = iid)
-    try:
-        process.index = index
-        process.hour = float(hour)
-        process.instruction = instruction
-        process.save()
-    except:
-        return "fail"
-
-    return "ok"
 
 @dajaxice_register
 def getDesignBOM(request, id_work_order):
@@ -453,13 +391,13 @@ def getWeldSeamWeight(self, id_work_order):
         if dic.has_key((item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)):
             dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)]+= int(item1.weight_1)
         else:
-                dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)] = int(item1.weight_1)
+            dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)] = int(item1.weight_1)
     for item2 in weldseam_list:
         if item2.weld_material_2 != None:
             if dic.has_key((item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)):
                 dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)]+= int(item2.weight_2)
             else:
-                    dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)] = int(item2.weight_2)
+                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)] = int(item2.weight_2)
 
     context = {
         "work_order":work_order,
@@ -518,6 +456,33 @@ def saveDesignBOM(request, iid,  materiel_form, circulationroute_form):
             ret["materiel_error"] = "1"
         if not circulationroute_form.is_valid():
             ret["circulationroute_error"] = "1"
+    return simplejson.dumps(ret)
+
+@dajaxice_register
+def saveProcess(request, iid,  materiel_form, processing_form):
+    """
+    JunHU
+    """
+    materiel = Materiel.objects.get(id = iid)
+    processingroute = Processing.objects.filter(materiel_belong = materiel)[0]
+    materiel_form = MaterielForm(deserialize_form(materiel_form), instance = materiel)
+    processing_form = ProcessingRouteForm(deserialize_form(processing_form), instance = processingroute)
+    if materiel_form.is_valid() and processing_form.is_valid():
+        materiel_form.save()
+        obj = processing_form.save(commit = False)
+        obj.materiel_belong = materiel
+        obj.save()
+        ret = {"status" : "ok"}
+    else:
+        ret = {
+            "status" : "fail",
+        }
+        if not materiel_form.is_valid():
+            html = render_to_string("techdata/widgets/materiel_base_info.html", {"form" : materiel_form})
+            ret["html"] = html
+            ret["materiel_error"] = "1"
+        if not processing_form.is_valid():
+            ret["processing_error"] = "1"
     return simplejson.dumps(ret)
 
 @dajaxice_register

@@ -8,6 +8,8 @@ RegisterClass = (
     CirculationRoute,
     CirculationName,
     ProcessReview,
+    Processing,
+    ProcessingName,
     WeldSeam,
     WeldSeamType,
     WeldMethod,
