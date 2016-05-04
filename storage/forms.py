@@ -102,9 +102,9 @@ class Commit_ApplyCardForm(ApplyCardForm):
 class EntryItemsForm(ModelForm):
     class Meta:
         model = WeldMaterialEntryItems
-        fields = ("remark","date","price")
+        fields = ("remark","production_date","price")
         widget = {
-            "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
+            "production_date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd",})
         }
 
 class HumRecordForm(ModelForm):
@@ -484,6 +484,6 @@ class CheckMaterielListForm(forms.Form):
         db_type = kwargs.pop("db_type",WeldStoreList)
         super(CheckMaterielListForm,self).__init__(*args,**kwargs)
         if db_type != None:
-            materiels = db_type.objects.all()
+            materiels =objects.all()
             self.fields['materiel_type'].choices = getChoiceList(materiels,'specification')
 
