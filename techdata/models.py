@@ -13,7 +13,7 @@ class ProcessingName(models.Model):
         verbose_name_plural = u"工序名称"
 
     def __unicode__(self):
-        return self.materiel_belong.name + "(%s)" % self.get_name_display()
+        return self.get_name_display()
 
 class Processing(models.Model):
     materiel_belong = models.OneToOneField(Materiel, blank = False, verbose_name = u"所属物料")
@@ -30,23 +30,23 @@ class Processing(models.Model):
     GX11 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序11", related_name = "GX11")
     GX12 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序12", related_name = "GX12")
 
-    GS1 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时1", related_name = "GS1")
-    GS2 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时2", related_name = "GS2")
-    GS3 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时3", related_name = "GS3")
-    GS4 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时4", related_name = "GS4")
-    GS5 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时5", related_name = "GS5")
-    GS6 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时6", related_name = "GS6")
-    GS7 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时7", related_name = "GS7")
-    GS8 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时8", related_name = "GS8")
-    GS9 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时9", related_name = "GS9")
-    GS10 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时10", related_name = "GS10")
-    GS11 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时11", related_name = "GS11")
-    GS12 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时12", related_name = "GS12")
+    GS1 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时1")
+    GS2 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时2")
+    GS3 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时3")
+    GS4 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时4")
+    GS5 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时5")
+    GS6 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时6")
+    GS7 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时7")
+    GS8 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时8")
+    GS9 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时9")
+    GS10 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时10")
+    GS11 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时11")
+    GS12 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时12")
     class Meta:
         verbose_name = u"工序路线"
         verbose_name_plural = u"工序路线"
     def __unicode__(self):
-        return self.materiel.name
+        return self.materiel_belong.name
 
 class ProcessReview(models.Model):
     materiel = models.ForeignKey(Materiel, verbose_name = u"零件")
