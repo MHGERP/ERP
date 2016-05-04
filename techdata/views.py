@@ -269,8 +269,10 @@ def BOMadd(request):
                 origin_count = int(main_materiel.count)
                 materiel_list.append(Materiel(order = work_order, 
                                              index = 0, 
+                                             sub_index = 0,
                                              schematic_index = table.cell(2, 1).value,
                                              parent_schematic_index = main_materiel.parent_schematic_index,
+                                             parent_name = main_materiel.parent_name,
                                              name = table.cell(2, 2).value,
                                              count = origin_count,
                                              net_weight = weight,
@@ -279,7 +281,8 @@ def BOMadd(request):
             else:
                 origin_count = 1
                 materiel_list.append(Materiel(order = work_order, 
-                                             index = total, 
+                                             index = total,
+                                             sub_index = 0, 
                                              schematic_index = table.cell(2, 1).value,
                                              name = table.cell(2, 2).value,
                                              count = origin_count, 
@@ -299,8 +302,10 @@ def BOMadd(request):
                         weight = None
                 materiel_list.append(Materiel(order = work_order, 
                                              index = total, 
+                                             sub_index = table.cell(rownum, 0).value,
                                              schematic_index = table.cell(rownum, 1).value,
                                              parent_schematic_index = table.cell(2, 1).value,
+                                             parent_name = table.cell(2, 2).value,
                                              name = table.cell(rownum, 2).value,
                                              count = int(table.cell(rownum, 3).value) * origin_count, 
                                              net_weight = weight,

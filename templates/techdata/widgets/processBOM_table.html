@@ -49,18 +49,18 @@
 			<tr>
 				<th class="fix_th" rowspan="2">票号</th>
 				<th class="fix_th" rowspan="2">件号</th>
-				<th class="fix_th" rowspan="2">图号</th>
-				<th class="fix_th" rowspan="2">名称及规格</th>
+				<th>图号</th>
 				<th class="fix_th" rowspan="2">数量</th>
 
 				<th class="fix_th" rowspan="2">材质</th>
 				<th colspan="2">材料定额</th>
 				<th class="fix_th" rowspan="2">传递路线</th>
 				<th class="fix_th" rowspan="2">代码</th>
-				<th colspan="14">工序和工时定额</th>
+				<th colspan="13">工序和工时定额</th>
 				<th class="fix_th" rowspan="2">流转卡</th>
 			</tr>
 			<tr>
+                <th>名称及规格</th>
 				<th>单重</th>
 				<th>总重</th>	
 				<th>1</th>
@@ -75,14 +75,17 @@
 				<th>10</th>
 				<th>11</th>
 				<th>12</th>
-				<th colspan="2">备注</th>			
+				<th>备注</th>			
 			</tr>
 		<thead>
 		<tbody>
 			{% for item in BOM %}
-			<tr iid="{{item.id}}" data-toggle="modal" data-target="#card_modal" class="tr_materiel">
+			<tr iid="{{item.id}}" class="tr_materiel">
 				{% include "techdata/widgets/processBOM_row.html" %}
-			</tr>				
+			</tr>		
+            <tr iid="{{item.id}}" class="tr_materiel">
+                {% include "techdata/widgets/processBOM_row_2.html" %}
+            </tr>
 			{% endfor %}
 		<tbody>
 	</table>
