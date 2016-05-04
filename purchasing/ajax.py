@@ -3,24 +3,25 @@ from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from purchasing.models import *
-from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderInfoForm, ContractDetailForm, MeterielExcecuteForm
+from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderFormForm, ContractDetailForm, MeterielExcecuteForm
 from const import *
 from purchasing import *
-from const.models import Materiel,OrderFormStatus, BidFormStatus
+from const.models import OrderFormStatus, BidFormStatus
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from django.db import transaction 
-from const.models import WorkOrder, Materiel,Material
+from const.models import WorkOrder,Material
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
 from django.db.models import Q
-from datetime import datetime
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
 from storage.models import *
 from storage.forms import EntryTypeForm
 from storage.utils import AutoGenEntry
+from purchasing.models import MaterielCopy as Materiel
+from datetime import datetime
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
     bidform_processing=BidForm.objects.filter(bid_id__contains=bidid)
@@ -137,7 +138,7 @@ def chooseInventorytype(request,pid,key):
             MaterielFormConnection(materiel = item, count = item.count).save()
         
         if item.inventory_type.id <= 2 :
-            if item.materielexecutedetail_set.count()>0:
+            if item.materielexecutedetail_set.count()>0 or item.materielformconnection.order_form:
                 item.can_choose=False
                 item.status= u"已加入订购单" if (item.materielformconnection.order_form) else u"已加入材料执行"
             else :
@@ -964,8 +965,8 @@ def GetOrderInfoForm(request,uid):
     order = Materiel.objects.get(id=uid)
     count = order.materielformconnection.count
     material = order.material.name
-    orderForm = OrderInfoForm(instance=order)
-    form_html = render_to_string("widgets/order_form.html",{'order_form':orderForm,'count':count,'material':material})
+    orderForm = OrderFormForm(instance=order)
+    form_html = render_to_string("purchasing/orderform/order_form.html",{'order_form':orderForm,'count':count,'material':material})
     return simplejson.dumps({'form':form_html})
 
 @dajaxice_register
@@ -1165,8 +1166,6 @@ def entryInspectionConfirm(request,eid,entry_typeid):
         message = handleEntryInspectionConfirm(request,OutsideStandardEntry,eid,entry_typeid)
     return message
 def handleEntryInspectionConfirm(request,_Model,eid,entry_typeid):
-    print "aaaaaaaaaaaaaa"
-    print _Model
     entry = _Model.objects.get(id = eid)
     status = entry.status if entry_typeid == 3 else entry.entry_status
     if status == STORAGESTATUS_PURCHASER:
@@ -1180,3 +1179,12 @@ def handleEntryInspectionConfirm(request,_Model,eid,entry_typeid):
     else:
         flag = False
     return simplejson.dumps({'flag':flag})    
+
+@dajaxice_register
+def getMergeForm(request,orderid,pendingArray):
+    items_merge = [Materiel.objects.get(id = id) for id in pendingArray]
+    order_form=OrderFormForm()
+    for field in order_form:
+        field.clean("11")
+        print field.value()
+    

@@ -16,7 +16,10 @@
     订购单编号: <input type="text" class="input-midium" readonly="true "value="{{order_form.order_id}}" id="index"/> 
     订购单状态: <input type="text" class="input-midium" readonly="true" value="{{order_form.order_status}}" id="status" args="{{order_form.order_status.status}}"/> 
     {% if order_form.order_status.status == 0%}
-    <button class="btn btn-primary" id="tech_add" style="float:right" href="#tech_requirement" data-toggle="modal">填写技术要求</button>
+    <div style="float:right">
+    <button class="btn btn-primary" id="tech_add"  href="#tech_requirement" data-toggle="modal">填写技术要求</button>
+    <button class="btn btn-primary" id="material_merge" href="#merge_modal" data-toggle="modal">物料合并</button>
+    </div>
     {% endif%}
 </div>
 
@@ -48,6 +51,8 @@
 <button class="btn" id="generate_execute" data-toggle="modal" data-target="#add_to_execute" {% if order_form.meterielexecute%}disabled="disabled"{% endif%}>生成材料执行表</button>
 {% endif%}
 {% endif %}
+
+{%include "purchasing/orderform/merge_modal.html"%}
 
 <div id="bid_list" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
@@ -106,19 +111,6 @@
         <form class="form-inline well" id="edit_order_form">
             {% csrf_token %}
             <div class="row" id="order_form_div">
-                <div class="span4">
-                    <div class="form-inline div_margin">
-                        <label class="span1 label_margin">数量(个)</label>
-                        <input class="form-control" maxlength="20" type="text" id="count">
-                    </div>
-
-                    <div class="form-inline div_margin"{% if order_form.order_mod == 1 %}style="display:none" {% endif%}>
-                        <label class="span1 label_margin">采购(kg)</label>
-                        <input class="form-control" maxlength="20" type="text" id="purchasing" value=0>
-                    </div>
-
-
-                </div>
             </div>
         </form>
     </div>

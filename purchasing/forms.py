@@ -6,6 +6,7 @@ from purchasing.models import *
 from const import ORDERFORM_STATUS_CHOICES
 from const.models import Materiel
 from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE, RECHECK_CHOICE
+from purchasing.models import MaterielCopy
 
 class SupplierForm(ModelForm):
     class Meta:
@@ -141,3 +142,27 @@ class MeterielExcecuteForm(ModelForm):
             'oddments':forms.TextInput(attrs={'class':'form-control','id':'oddments'}),
             'remark':forms.TextInput(attrs={'class':'form-control','id':'remark'})
         }
+
+
+
+class OrderFormForm(ModelForm):
+    class Meta:
+        model=MaterielCopy
+        fields={'index','name','material','specification','press','recheck','remark','standard','detection_level','quota','count','net_weight','total_weight','status'}
+        widgets={
+            'name':forms.TextInput(attrs={'class':'form-control','id':'name'}),
+            'material':forms.Select(attrs={'class':'form-control','id':'material'}),
+            'specification':forms.TextInput(attrs={'class':'form-control','id':'specification'}),
+            'press':forms.TextInput(attrs={'class':'form-control','id':'press'}),
+            'recheck':forms.TextInput(attrs={'class':'form-control','id':'recheck'}),
+            'remark':forms.TextInput(attrs={'class':'form-control','id':'remark'}),
+            'standard':forms.TextInput(attrs={'class':'form-control','id':'standard'}),
+            'detection_level':forms.TextInput(attrs={'class':'form-control','id':'detection_level'}),
+            'quota':forms.TextInput(attrs={'class':'form-control','id':'quota'}),
+            'count':forms.TextInput(attrs={'class':'form-control','id':'count'}),
+            'net_weight':forms.TextInput(attrs={'class':'form-control','id':'net_weight'}),
+            'total_weight':forms.TextInput(attrs={'class':'form-control','id':'total_weight'}),
+            'status':forms.TextInput(attrs={'class':'form-control','id':'status'}),
+            'index':forms.TextInput(attrs={'class':'form-control','id':'index'})
+        }
+
