@@ -107,14 +107,14 @@ $(document).on("click","#edit",function(){
 });
 function Edit_Order_Callback(data){
     $("#order_info_modal").modal();
-    $("#order_form_div").html(data.form);
+    $("#order_form_update").html(data.form);
 }
 
 $("#order_info_modal #save_order").click(function(){
-    //var name = $("#material").val();
-    var count =  $("#count").val();
+    form = $("#edit_order_form").serialize(true);
+    var count =  $("#cnt").val();
     var purchasing=$("#purchasing").val();
-    Dajaxice.purchasing.OrderInfo(Order_Callback,{'uid':uid,'count':count,'purchasing':purchasing});
+    Dajaxice.purchasing.OrderInfo(Order_Callback,{'uid':uid,'form':form,'count':count,'purchasing':purchasing});
 });
 function Order_Callback(data){
     $("#order_info_modal").modal('hide');
@@ -192,7 +192,24 @@ $("#merge_confirm").click(function(){
     Dajaxice.purchasing.MergeMateriel(function(data){
         alert(data.status);
         window.location.reload();
-    }, {"order_id":order_id,"form":form,"pendingArray": pendingArray});
+    }, {"order_id":order_id,"form":form,"pendingArray": pendingArray,"count":$("#cnt").val(),"purchasing":$("#purchasing").val()});
 
 
+});
+
+$("#generate_execute").click(function(){
+    if(confirm("是否确认添加至材料执行?")){ 
+    var selectedArray = Array();
+    $("input.checkbox").each(function(){
+        if(this.checked) selectedArray.push($(this).attr("args"));
+    });
+
+    Dajaxice.purchasing.AddToMaterialExecute(function(data){
+        if(data.message!='')alert(data.message);
+        else window.location.reload();
+    },{
+        "selected":selectedArray
+    });
+
+    }
 });

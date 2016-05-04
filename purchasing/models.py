@@ -10,8 +10,9 @@ import settings
 # Create your models here.
 
 class MaterielCopy(Materiel):
-    relate_material=models.ForeignKey('self',null=True)
-    orgin_materiel=models.ForeignKey(Materiel,null=True,related_name="orgin_materiel")
+    relate_material=models.ForeignKey('self',null=True,blank=True)
+    orgin_materiel=models.ForeignKey(Materiel,null=True,related_name="orgin_materiel",blank=True)
+    work_order=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"工作令号")
 
 class MaterielExecute(models.Model):
     document_number = models.CharField(max_length = 100, null = True, blank = False, unique = True, verbose_name = u"单据编号")
@@ -32,12 +33,14 @@ class OrderForm(models.Model):
     create_time = models.DateTimeField(null = True,verbose_name = u"创建日期")
     establishment_time = models.DateTimeField(null = True, verbose_name = u"编制日期")
     order_status = models.ForeignKey(OrderFormStatus, null = False, verbose_name = u"订购单状态")
-    establishment_user=models.ForeignKey(User,verbose_name=u"编制人",related_name="establishment_user",null=True)
-    chief=models.ForeignKey(User,verbose_name=u"外采科长",related_name="chief_user",null=True)
-    approve_user=models.ForeignKey(User,verbose_name=u"审批人",related_name="approve_user",null=True)
+    establishment_user=models.ForeignKey(User,verbose_name=u"编制人",related_name="establishment_user",null=True,blank=True)
+    chief=models.ForeignKey(User,verbose_name=u"外采科长",related_name="chief_user",null=True,blank=True)
+    approve_user=models.ForeignKey(User,verbose_name=u"审批人",related_name="approve_user",null=True,blank=True)
     tech_requirement=models.TextField(max_length=5000,blank=True,null=True)
     order_mod=models.IntegerField(default=0,verbose_name=u"标单类型")
-    meterielexecute=models.ForeignKey(MaterielExecute,blank=True,null=True,verbose_name=u"材料执行表")
+    work_order=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"工作令号")
+    number=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"编号")
+    revised_id=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"修订号")
     class Meta:
         verbose_name = u"订购单"
         verbose_name_plural = u"订购单"
