@@ -1181,10 +1181,38 @@ def handleEntryInspectionConfirm(request,_Model,eid,entry_typeid):
     return simplejson.dumps({'flag':flag})    
 
 @dajaxice_register
-def getMergeForm(request,orderid,pendingArray):
+def getMergeForm(request,pendingArray):
     items_merge = [Materiel.objects.get(id = id) for id in pendingArray]
     order_form=OrderFormForm()
     for field in order_form:
-        field.clean("11")
-        print field.value()
-    
+        if field.name == "remark":
+            value =""
+            for item in items_merge:
+                value=value+item.index+"#"
+            order_form.initial[field.name]=value
+        else:
+            value=getattr(items_merge[0],field.name)
+            flag=True
+            for item in items_merge:
+                if value != getattr(item,field.name):
+                    flag=False
+            if flag:
+                order_form.initial[field.name]=value
+        
+    form_html = render_to_string("purchasing/orderform/order_form.html",{'order_form':order_form})
+    return simplejson.dumps({'form':form_html})
+
+
+@dajaxice_register
+def MergeMateriel(request,order_id,form,pendingArray):
+    new_form=OrderFormForm(deserialize_form(form))
+    new_materiel=new_form.save();
+    items_materiel= [Materiel.objects.get(id = id) for id in pendingArray]
+    for item in items_materiel:
+        item.relate_material=new_materiel
+        item.materielformconnection.order_form=None
+    order_form=OrderForm.objects.get(order_id=order_id)
+    mfc= MaterielFormConnection(Materiel=new_materiel,order_form=order_form)
+    mfc.save()
+    status=u'合并成功'
+    return simplejson.dumps({'status':status}) 
