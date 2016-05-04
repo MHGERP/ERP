@@ -25,7 +25,7 @@ function fill(iid) {
     Dajaxice.techdata.getDesignBOMForm(getDesignBOMFormCallback, {"iid" : iid});
 }
 
-$(document).on("click", "#designBOM_table tbody tr", function(){
+$(document).on("dblclick", "#designBOM_table tbody tr", function(){
     var iid = $(this).attr("iid");
     fill(iid);
 });

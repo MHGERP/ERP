@@ -33,10 +33,10 @@ class InventoryType(models.Model):
         return self.name
 
 class Materiel(models.Model):
-    order = models.ForeignKey(WorkOrder, blank = False, verbose_name = u"所属工作号")
+    order = models.ForeignKey(WorkOrder, blank = True, null = True, verbose_name = u"所属工作号")
     index = models.CharField(blank = True, max_length = 20, verbose_name = u"工作票号")
-    sub_index = models.CharField(blank = True, max_length = 20, verbose_name = u"部件号")
-    schematic_index = models.CharField(blank = False, max_length = 50, verbose_name = u"图号")
+    sub_index = models.CharField(blank = True, null = True, max_length = 20, verbose_name = u"部件号")
+    schematic_index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"图号")
     parent_schematic_index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"部件图号")
     parent_name = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"部件名称")
     material = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"材料")
