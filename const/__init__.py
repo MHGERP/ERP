@@ -63,11 +63,15 @@ IDENTITYERROR = "登录帐号或密码有错误！"
 
 ORDERFORN_STATUS_BEGIN = 0
 ORDERFORN_STATUS_ESTABLISHMENT = 1
-ORDERFORN_STATUS_FINISH = 2
+ORDERFORN_STATUS_AUDIT = 2
+ORDERFORN_STATUS_APPROVED = 3
+ORDERFORN_STATUS_FINISH= 4
 
 ORDERFORM_STATUS_CHOICES = (
     (ORDERFORN_STATUS_BEGIN, u"创建中订购单"),
     (ORDERFORN_STATUS_ESTABLISHMENT, u"创建完成订购单"),
+    (ORDERFORN_STATUS_AUDIT,u"审核通过订购单"),
+    (ORDERFORN_STATUS_APPROVED,u"批准通过订购单"),
     (ORDERFORN_STATUS_FINISH, u"已终止历史订购单"),
 )
 
@@ -319,6 +323,11 @@ H = "14"
 M = "15"
 L = "16"
 Y = "17"
+G = "18"
+G1 = "19"
+G2 = "20"
+X = "21"
+J = "22"
 
 PROCESSING_CHOICES = (
     (W, "W"),    
@@ -339,6 +348,11 @@ PROCESSING_CHOICES = (
     (M, "M"),
     (L, "L"),
     (Y, "Y"),
+    (G, "G"),
+    (G1, "G1"),
+    (G2, "G2"),
+    (X, "X"),
+    (J, "J"),
 )
 
 

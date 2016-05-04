@@ -113,4 +113,8 @@ urlpatterns=patterns('',
         r'^connectOrientationAdd',
         techdata_views.connectOrientationAdd,
     ),
+    url(
+        r'^BOMadd',
+        techdata_views.BOMadd,
+    ),
 )

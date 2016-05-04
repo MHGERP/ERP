@@ -1,24 +1,6 @@
-<br/>
-<table class="table table-bordered">
-    <thead>
-        <th>工序</th>
-        <th>工号</th>
-        <th>工时</th>
-        <th>说明</th>
-        <th>操作</th>
-    </thead>
-    <tbody>
-        {% for process in process_list %}
-        <tr iid="{{process.id}}">
-            <td>{{process.get_name_display}}</td>
-            <td>{{process.form.index|default_if_none:""}}</td>
-            <td>{{process.form.hour|default_if_none:""}}</td>
-            <td>{{process.form.instruction|default_if_none:""}}</td>
-            <td>
-                <span class="btn btn-small btn-save-process" pid="{{process.id}}">保存</span>
-                <span class="btn btn-danger btn-small btn-del-process" pid="{{process.id}}">删除</span>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% for field in form %}
+<div class="div_margin">
+    <label class="label_margin">{{field.label}}</label>
+    {{field}}
+</div>
+{% endfor %}

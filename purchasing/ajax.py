@@ -130,7 +130,7 @@ def chooseInventorytype(request,pid,key):
         "4": "purchased",
         "5": "forging",
     }
-    items = Materiel.objects.filter(inventory_type__id=pid, materielpurchasingstatus__add_to_detail = True)
+    items = Materiel.objects.filter(inventory_type__id=pid, materielpurchasingstatus__add_to_detail = True,relate_material=None)
     if key:
         items = items.filter(name=key)
     for item in items:
@@ -964,20 +964,21 @@ def GetOrderInfoForm(request,uid):
     """
     order = Materiel.objects.get(id=uid)
     count = order.materielformconnection.count
-    material = order.material.name
+    purchasing=order.materielformconnection.purchasing
     orderForm = OrderFormForm(instance=order)
-    form_html = render_to_string("purchasing/orderform/order_form.html",{'order_form':orderForm,'count':count,'material':material})
+    form_html = render_to_string("purchasing/orderform/order_form.html",{'order_form':orderForm,'count':count,'purchasing':purchasing})
     return simplejson.dumps({'form':form_html})
 
 @dajaxice_register
-def OrderInfo(request,uid,count,purchasing):
+def OrderInfo(request,uid,form,count,purchasing):
     """
     Lei
     """
-    order = Materiel.objects.get(id=uid)
-    #orderForm = OrderInfoForm(deserialize_form(form),instance=order)
+    materiel = Materiel.objects.get(id=uid)
+    materielform = OrderFormForm(deserialize_form(form),instance=materiel)
     #order_obj = orderForm.save(commit = False)
-    matconnection = order.materielformconnection
+    materiel.save()
+    matconnection = materiel.materielformconnection
     matconnection.count = count
     matconnection.purchasing=purchasing
     matconnection.save()
@@ -994,9 +995,14 @@ def addToExecute(materiel):
 
 @dajaxice_register
 def AddToMaterialExecute(request,selected):
-    for item in selected:
+    materiel_set=[Materiel.objects.get(pk=item) for item in selected]
+    for item in materiel_set:
+        if item.materielexecutedetail_set.count()>0:
+            return simplejson.dumps({'message':'所选物料已经添加至材料执行'})
+    for item in materiel_set:
         materiel=Materiel.objects.get(pk=item)
         addToExecute(materiel)
+    return simplejson.dumps({'message':''})
 
 @dajaxice_register
 def GetMeterielExecuteForm(request,uid):
@@ -1181,10 +1187,48 @@ def handleEntryInspectionConfirm(request,_Model,eid,entry_typeid):
     return simplejson.dumps({'flag':flag})    
 
 @dajaxice_register
-def getMergeForm(request,orderid,pendingArray):
+def getMergeForm(request,pendingArray):
     items_merge = [Materiel.objects.get(id = id) for id in pendingArray]
     order_form=OrderFormForm()
     for field in order_form:
-        field.clean("11")
-        print field.value()
-    
+        if field.name == "remark":
+            value =""
+            for item in items_merge:
+                value=value+item.index+"#"
+            order_form.initial[field.name]=value
+        else:
+            value=getattr(items_merge[0],field.name)
+            flag=True
+            for item in items_merge:
+                if value != getattr(item,field.name):
+                    flag=False
+            if flag:
+                order_form.initial[field.name]=value
+    count=0
+    purchasing=0
+    for item in items_merge:
+        count=count+int(item.materielformconnection.count)
+        purchasing=purchasing+float(item.materielformconnection.purchasing)
+        form_html = render_to_string("purchasing/orderform/order_form.html",{'order_form':order_form,'count':count,'purchasing':purchasing})
+    return simplejson.dumps({'form':form_html})
+
+
+@dajaxice_register
+def MergeMateriel(request,order_id,form,pendingArray,count,purchasing):
+    new_form=OrderFormForm(deserialize_form(form))
+    new_materiel=new_form.save(commit=False);
+    items_materiel= [Materiel.objects.get(id = id) for id in pendingArray]
+    new_materiel.inventory_type=items_materiel[0].inventory_type
+    new_materiel.save()
+    for item in items_materiel:
+        item.relate_material=new_materiel
+        item.save()
+        item.materielformconnection.order_form=None
+        item.materielformconnection.count=count
+        item.materielformconnection.purchasing=purchasing
+        item.materielformconnection.save()
+    order_form=OrderForm.objects.get(order_id=order_id)
+    mfc= MaterielFormConnection(materiel=new_materiel,order_form=order_form)
+    mfc.save()
+    status=u'合并成功'
+    return simplejson.dumps({'status':status}) 

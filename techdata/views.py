@@ -6,7 +6,7 @@ from django.views.decorators import csrf
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect,HttpResponse
-import json, datetime
+import json, datetime, xlrd
 from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
@@ -239,4 +239,80 @@ def connectOrientationAdd(request):
 
         return HttpResponse(json.dumps({'file_upload_error' : file_upload_error}))
 
+def BOMadd(request):
+    """
+    JunHU
+    """
+    if request.is_ajax():
+        if request.FILES['BOM_file'].size > 10*1024*1024:
+            file_upload_error = 2
+        else:
+            file = request.FILES['BOM_file']
+            work_order_id = request.POST['work_order_id']
+            work_order = WorkOrder.objects.get(id = work_order_id)
+            book = xlrd.open_workbook(file_contents = file.read())
+            table = book.sheets()[0]
+            total = Materiel.objects.filter(order = work_order).count() + 1
+            materiel_list = []
+            
+            
+            #处理部件
+            try:
+                weight = float(table.cell(2, 5).value)
+            except:
+                try:
+                    weight = float(table.cell(2, 6).value)
+                except:
+                    weight = None
+            if total != 1:
+                main_materiel = Materiel.objects.get(schematic_index = table.cell(2, 1).value)
+                origin_count = int(main_materiel.count)
+                materiel_list.append(Materiel(order = work_order, 
+                                             index = 0, 
+                                             sub_index = 0,
+                                             schematic_index = table.cell(2, 1).value,
+                                             parent_schematic_index = main_materiel.parent_schematic_index,
+                                             parent_name = main_materiel.parent_name,
+                                             name = table.cell(2, 2).value,
+                                             count = origin_count,
+                                             net_weight = weight,
+                                             remark = table.cell(2, 8).value,
+                                    ))
+            else:
+                origin_count = 1
+                materiel_list.append(Materiel(order = work_order, 
+                                             index = total,
+                                             sub_index = 0, 
+                                             schematic_index = table.cell(2, 1).value,
+                                             name = table.cell(2, 2).value,
+                                             count = origin_count, 
+                                             net_weight = weight,
+                                             remark = table.cell(2, 8).value,
+                                    ))
+                total += 1#产品总部件需要分配票号
+
+            #处理零件
+            for rownum in xrange(4, table.nrows):
+                try:
+                    weight = float(table.cell(rownum, 5).value)
+                except:
+                    try:
+                        weight = float(table.cell(rownum, 6).value)
+                    except:
+                        weight = None
+                materiel_list.append(Materiel(order = work_order, 
+                                             index = total, 
+                                             sub_index = int(table.cell(rownum, 0).value),
+                                             schematic_index = table.cell(rownum, 1).value,
+                                             parent_schematic_index = table.cell(2, 1).value,
+                                             parent_name = table.cell(2, 2).value,
+                                             name = table.cell(rownum, 2).value,
+                                             count = int(table.cell(rownum, 3).value) * origin_count, 
+                                             net_weight = weight,
+                                             remark = table.cell(rownum, 8).value
+                                    ))
+                total += 1
+            Materiel.objects.bulk_create(materiel_list)
+            file_upload_error = 1
+        return HttpResponse(json.dumps({'file_upload_error' : file_upload_error}))
 

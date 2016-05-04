@@ -14,19 +14,17 @@ class MaterielForm(forms.ModelForm):
         model = Materiel
         exclude = ("id", "order",)
         widgets = {
-            "name": forms.TextInput(attrs = {"class": "input-medium"}),
-            "index": forms.TextInput(attrs = {"class": "input-small"}),
-            "schematic_index": forms.TextInput(attrs = {"class": "input-medium"}),
+            "name": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "sub_index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "schematic_index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "parent_schematic_index" : forms.TextInput(attrs = {"class" : "input-medium"}),
-            "material": forms.Select(attrs = {"class": "input-medium"}),
-            "count": forms.TextInput(attrs = {"class": "input-medium"}),
-            "remark": forms.TextInput(attrs = {"class": "input-medium"}),
-            "net_weight": forms.TextInput(attrs = {"class": "input-medium"}),
-            "total_weight": forms.TextInput(attrs = {"class": "input-medium"}),
+            "material": forms.Select(attrs = {"class": "input-medium", "readonly": "true"}),
+            "count": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "remark": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "net_weight": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "total_weight": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "specification": forms.TextInput(attrs = {"class": "input-medium"}),
-            "quota_coefficient": forms.TextInput(attrs = {"class": "input-medium"}),
-            "quota": forms.TextInput(attrs = {"class": "input-medium"}),
-            
         }
 
 class ProcessReviewForm(forms.ModelForm):
@@ -75,6 +73,38 @@ class WeldSeamForm(forms.ModelForm):
             "heat_treatment_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
             "pressure_test_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
         }
+
+class ProcessingRouteForm(forms.ModelForm):
+    """
+    JunHU
+    """
+    class Meta:
+        model = Processing
+        exclude = ('materiel_belong', 'GS1', 'GS2', 'GS3', 'GS4', 
+                  'GS5', 'GS6', 'GS7', 'GS8', 'GS9', 'GS10', 
+                  'GS11', 'GS12') 
+        widgets = {
+            "GX1" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX2" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX3" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX4" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX5" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX6" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX7" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX8" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX9" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX10" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX11" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX12" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+        }
+    def clean(self):
+        cleaned_data = super(ProcessingRouteForm, self).clean()
+        for i in range(2, 13):
+            curfield = "GX%d" % i
+            prevfield = "GX%d" % (i - 1)
+            if cleaned_data.get(curfield) != None and cleaned_data.get(prevfield) == None:
+                raise forms.ValidationError("工序路线必须连续")
+        return cleaned_data
 
 class ProcessInfoForm(forms.ModelForm):
     """

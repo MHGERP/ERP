@@ -48,7 +48,7 @@
 {% if order_form.order_status.status == 1 %}
 <span class="btn" id="add_to_bid" data-toggle="modal" data-target="#bid_list">加入标单</span>
 {% if order_form.order_mod == 0 %}
-<button class="btn" id="generate_execute" data-toggle="modal" data-target="#add_to_execute" {% if order_form.meterielexecute%}disabled="disabled"{% endif%}>生成材料执行表</button>
+<button class="btn" id="generate_execute" >添加到材料执行</button>
 {% endif%}
 {% endif %}
 
@@ -110,7 +110,7 @@
     <div class="modal-body" >
         <form class="form-inline well" id="edit_order_form">
             {% csrf_token %}
-            <div class="row" id="order_form_div">
+            <div  class="row" id="order_form_update">
             </div>
         </form>
     </div>
@@ -130,19 +130,6 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel_change">关闭</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" id="save_tech_require">保存</button>
-    </div>
-</div>
-<div class="modal fade" id="add_to_execute" modal-size-width="0.4">
-    <div class="modal-header">
-        <h2>生成材料执行表</h2>
-    </div>
-    <div class="modal-body">
-        <div id="execute_form">
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel_change">关闭</button>
-        <button type="button" class="btn btn-primary"  id="save_materiel_execute">保存</button>
     </div>
 </div>
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/orderform.js"></script>
