@@ -97,15 +97,49 @@ function reviewerConfirmCallBack(data) {
     }
 }
 
+function clearCheckBox() {
+    var index;
+    for(var i = 0; i < jointArray.length; ++i) {
+        index = jointArray[i];
+        $(":checkbox[arg='"+index+"']:first").attr("checked", false);
+    }
+}
+
+$("#test").click(function(){
+    clearCheckBox();
+});
+
 $("#joint_btn").click(function(){
-//    alert("cao");
    jointArray = Array();
    var method = null, thin1 = null, thin2 = null;
+   var child;
    $("input.checkbox").each(function(){
         if(this.checked) {
-            alert("hh");
-            alert($(this).parent().parent().children().eq(5).text());
-//            jointArray.push($(this).attr("arg"));
+            //alert($(this).parent().parent().children().eq(5).text());
+            child = $(this).parent().parent().children();
+            if(method == null) {
+                method = child.eq(5).text();
+                thin1 = child.eq(6).text();
+                thin2 = child.eq(7).text();
+            }
+            else if(method != child.eq(5).text() || thin1 != child.eq(6).text() || thin2 != child.eq(7).text()) {
+                alert("所选焊缝不能合并");
+                jointArray = Array();
+                clearCheckBox();
+                return;
+            }
+            jointArray.push($(this).attr("arg"));
          }
    });
+    /*Dajaxice.techdata.addToJointDetail(
+        add_to_jointdetail_callback, 
+        {
+            "id_work_order" : $("#id_work_order".val(),
+            "jointArray" : jointArray,
+        }
+    );*/
 });
+
+function add_to_jointdetail_callback(data) {
+    
+}

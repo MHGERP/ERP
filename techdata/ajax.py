@@ -1178,3 +1178,19 @@ def removeConnectOrientation(request, pid):
         return simplejson.dumps({"ret": True})
     except:
         return simplejson.dumps({"ret": False})
+
+#@dajaxice_register
+#def addToJointDetail(request, id_work_order, jointArray):
+#    """
+#    mxl
+#    """
+#    workorder = WorkOrder.objects.get(id = id_work_order)
+#    if WeldJointTech.objects.filter(order = workorder).count == 0:
+#        weld_joint = WeldJointTech(order = workorder).save()
+#    else:
+#        weld_joint = WeldJointTech.objects.filter(order = workorder)[0]
+#    weld_joint_detail = WeldJointTechDetail(weld_joint = weld_joint)
+#    for id in jointArray:
+#        weldseam = WeldSeam.objects.get(id = id)
+#        weld_joint_detail.specification = weldseam
+#            
