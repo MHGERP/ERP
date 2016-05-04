@@ -32,21 +32,13 @@ def getProcessBOM(request, id_work_order):
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
     for item in BOM:
+        if Processing.objects.filter(materiel_belong = item).count() == 0:
+            Processing(materiel_belong = item).save()
         if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
             CirculationRoute(materiel_belong = item).save()
-        item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
-        
-        try:
-            process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
-            process_list = []
-            while process:
-                print process
-                process_list.append(process)
-                process = process.next_processing
-        except:
-            process_list = []
-        item.processRoute = '.'.join(process.get_name_display() for process in process_list)
-
+        item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))   
+        if item.net_weight and item.count:
+            item.total_weight = item.net_weight * int(item.count)
     context = {
         "work_order": work_order,
         "BOM": BOM,
@@ -68,15 +60,6 @@ def getSingleProcessBOM(request, iid):
         CirculationRoute(materiel_belong = item).save()
     item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
         
-    try:
-        process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
-        process_list = []
-        while process:
-            process_list.append(process)
-            process = process.next_processing
-    except:
-        process_list = []
-    item.processRoute = '.'.join(process.get_name_display() for process in process_list)
     context = {
         "item": item,
     }
@@ -1145,6 +1128,9 @@ def getInstallWeldList(request):
 
 @dajaxice_register
 def getTechInstallWeldCard(request, iid):
+    """
+    JunHU
+    """
     order = WorkOrder.objects.get(id = iid)
     context = {
         "order": order,

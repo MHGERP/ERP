@@ -2,6 +2,7 @@ $(document).ready(refresh);
 $("#order_search").click(refresh);
 function refresh() {
     var id_work_order = $("#id_work_order").val();
+    $("#work_order").val(id_work_order);
     Dajaxice.techdata.getDesignBOM(refreshCallBack, {"id_work_order" : id_work_order, });
 }
 function refreshCallBack(data) {
@@ -24,7 +25,7 @@ function fill(iid) {
     Dajaxice.techdata.getDesignBOMForm(getDesignBOMFormCallback, {"iid" : iid});
 }
 
-$(document).on("click", "#designBOM_table tbody tr", function(){
+$(document).on("dblclick", "#designBOM_table tbody tr", function(){
     var iid = $(this).attr("iid");
     fill(iid);
 });
@@ -110,3 +111,25 @@ function reviewerConfirmCallBack(data) {
         alert("未完成编制，无法审核！");
     }
 }
+
+
+
+$("#btn-upload").click(function() {
+    $("#upload_form").ajaxSubmit({
+        url: "/techdata/BOMadd",
+        type: "POST",
+        clearForm: true,
+        resetForm: true,
+        error: function(data) {
+            
+        },
+        success: function(data) {
+            if(data.file_upload_error == 2) {
+                alert("上传失败，请重试");
+            }
+            else {
+                refresh();
+            }
+        }
+    });
+})

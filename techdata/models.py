@@ -6,26 +6,47 @@ from users.models import Group
 from purchasing.models import MaterielExecute
 import settings
 
-class Processing(models.Model):
-    materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")
-    name = models.CharField(blank = False, choices = PROCESSING_CHOICES, max_length = 10, verbose_name = u"工序名")
-    next_processing = models.ForeignKey('self', null = True, blank = True, verbose_name = u"下一工序")
-    is_first_processing = models.BooleanField(blank = False, default = False, verbose_name = u"首道工序")
-    instruction = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"说明")
-    index = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"工号")
-    hour = models.FloatField(blank = True, null = True, verbose_name = u"工时")
-
-    technical_requirement = models.CharField(blank = True, null = True, max_length = 1000, verbose_name = u"工艺过程及技术要求")
-    operator = models.ForeignKey(User, blank = True, null = True, verbose_name = u"操作者", related_name = "process_operator")
-    operate_date = models.DateField(blank = True, null = True, verbose_name = u"操作时间")
-    inspector = models.ForeignKey(User, blank = True, null = True, verbose_name = u"检查者", related_name = "process_inspector")
-    inspect_date = models.DateField(blank = True, null = True, verbose_name = u"检查时间")
+class ProcessingName(models.Model):
+    name = models.CharField(blank = False, choices = PROCESSING_CHOICES, max_length = 10, verbose_name = u"工序简称")
     class Meta:
-        verbose_name = u"工序"
-        verbose_name_plural = u"工序"
+        verbose_name = u"工序名称"
+        verbose_name_plural = u"工序名称"
 
     def __unicode__(self):
-        return self.materiel_belong.name + "(%s)" % self.get_name_display()
+        return self.get_name_display()
+
+class Processing(models.Model):
+    materiel_belong = models.OneToOneField(Materiel, blank = False, verbose_name = u"所属物料")
+    GX1 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序1", related_name = "GX1")
+    GX2 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序2", related_name = "GX2")
+    GX3 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序3", related_name = "GX3")
+    GX4 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序4", related_name = "GX4")
+    GX5 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序5", related_name = "GX5")
+    GX6 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序6", related_name = "GX6")
+    GX7 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序7", related_name = "GX7")
+    GX8 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序8", related_name = "GX8")
+    GX9 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序9", related_name = "GX9")
+    GX10 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序10", related_name ="GX10")
+    GX11 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序11", related_name = "GX11")
+    GX12 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序12", related_name = "GX12")
+
+    GS1 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时1")
+    GS2 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时2")
+    GS3 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时3")
+    GS4 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时4")
+    GS5 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时5")
+    GS6 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时6")
+    GS7 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时7")
+    GS8 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时8")
+    GS9 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时9")
+    GS10 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时10")
+    GS11 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时11")
+    GS12 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时12")
+    class Meta:
+        verbose_name = u"工序路线"
+        verbose_name_plural = u"工序路线"
+    def __unicode__(self):
+        return self.materiel_belong.name
 
 class ProcessReview(models.Model):
     materiel = models.ForeignKey(Materiel, verbose_name = u"零件")
@@ -105,7 +126,20 @@ class ProcedureQualificationIndex(models.Model):
     def __unicode__(self):
         return self.name
 
-class WeldJointTeach(models.Model):
+class WeldJointTech(models.Model):
+    order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
+    index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"编号")
+    remark = models.CharField(blank = True, max_length = 200, verbose_name = u"备注")
+    checker = models.ForeignKey(User, verbose_name = u"审核人", related_name = "weldjoint_checker")
+    approver = models.ForeignKey(User, verbose_name = u"批准人", related_name = "weldjoint_approver")
+    class Meta:
+        verbose_name = u"焊接接头工艺分析表"
+        verbose_name_plural = u"焊接接头工艺分析表"
+    def __unicode__(self):
+        return self.index
+
+class WeldJointTechDetail(models.Model):
+    weld_joint = models.ForeignKey(WeldJointTech, verbose_name = u"焊接接头工艺分析表")
     joint_index = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"接头编号")
     bm_texture = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材材质")
     bm_specification = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材规格")
@@ -113,8 +147,8 @@ class WeldJointTeach(models.Model):
     weld_certification = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目", related_name = "weld_certification")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
     class Meta:
-        verbose_name = u"焊接接头工艺分析表"
-        verbose_name_plural = u"焊接接头工艺分析表"
+        verbose_name = u"焊接接头"
+        verbose_name_plural = u"焊接接头"
     def __unicode__(self):
         return self.joint_index
 
@@ -134,7 +168,7 @@ class WeldSeam(models.Model):
     weight_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"重量2")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
     
-    weld_joint = models.ForeignKey(WeldJointTeach, blank = True, null = True, verbose_name = u"焊接接头", related_name = "weld_joint")
+    weld_joint_detail = models.ForeignKey(WeldJointTechDetail, blank = True, null = True, verbose_name = u"焊接接头", related_name = "weld_joint_detail")
     groove_inspction = models.ManyToManyField(NondestructiveInspection, blank = True, null = True, verbose_name = u"坡口探伤", related_name = "groove_inspction")
     welded_status_inspection = models.ManyToManyField(NondestructiveInspection, blank = True, null = True, verbose_name = u"焊态探伤", related_name = "welded_status_inspection")
     heat_treatment_inspection = models.ManyToManyField(NondestructiveInspection, blank = True, null = True, verbose_name = u"热处理后探伤", related_name = "heat_treatment_inspection")

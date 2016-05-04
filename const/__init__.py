@@ -319,6 +319,11 @@ H = "14"
 M = "15"
 L = "16"
 Y = "17"
+G = "18"
+G1 = "19"
+G2 = "20"
+X = "21"
+J = "22"
 
 PROCESSING_CHOICES = (
     (W, "W"),    
@@ -339,6 +344,11 @@ PROCESSING_CHOICES = (
     (M, "M"),
     (L, "L"),
     (Y, "Y"),
+    (G, "G"),
+    (G1, "G1"),
+    (G2, "G2"),
+    (X, "X"),
+    (J, "J"),
 )
 
 
@@ -430,10 +440,10 @@ PRODUCTION_PLAN_STAUTS_CHOICES = (
 
 #焊缝焊接接头  焊工持证项目
 SMAW_Fell = "SMAW-Fell-5FG-12/60-Fef3J"
-TEST = "test"
+GMAW_Fell = "GMAW-Fell-3G-14-FefS-11/15"
 WELD_CERTIFICATION = (
     (SMAW_Fell, "SMAW-Fell-5FG-12/60-Fef3J"),
-    (TEST, "test")
+    (GMAW_Fell, "GMAW-Fell-3G-14-FefS-11/15")
 )
 #焊接工艺评定编号
 RH24_13_09 = "RH24-13-09"

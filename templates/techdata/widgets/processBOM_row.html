@@ -1,14 +1,24 @@
-<td>{{item.index}}</td>
-<td></td>
+<td rowspan="2" style="vertical-align: middle">{{item.index}}</td>
+<td rowspan="2" style="vertical-align: middle">{{item.sub_index}}</td>
 <td>{{item.schematic_index}}</td>
-<td>{{item.name}}</td>
-<td>{{item.parent_schematic_index|default_if_none:""}}</td>				
-<td>{{item.count|default_if_none:""}}</td>
-<td>{{item.material|default_if_none:""}}</td>
-<td>{{item.net_weight|default_if_none:""}}</td>
+<td rowspan="2" style="vertical-align: middle">{{item.count|default_if_none:""}}</td>
+<td rowspan="2" style="vertical-align: middle">{{item.material|default_if_none:""}}</td>
+<td rowspan="2" style="vertical-align: middle">{{item.net_weight|default_if_none:""}}</td>
+<td rowspan="2" style="vertical-align: middle">{{item.total_weight|default_if_none:""}}</td>
+<td rowspan="2" style="vertical-align: middle">{{item.route}}</td>
+<td rowspan="2"></td>
 <td></td>
-<td>{{item.route}}</td>
-<td>{{item.processRoute}}</td>
 <td></td>
-<td>{{item.remark|default_if_none:""}}</td>
-<td><span class="btn btn_edit_transfer_card">编辑</span></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+
+<td rowspan="2" style="vertical-align: middle">{{item.remark|default_if_none:""}}</td>
+<td rowspan="2" style="vertical-align: middle"><span class="btn btn-mini btn_edit_transfer_card">编辑</span></td>

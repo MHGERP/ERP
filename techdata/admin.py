@@ -5,7 +5,6 @@ from django.contrib import admin
 from techdata.models  import *
 
 RegisterClass = (
-    Processing,
     CirculationRoute,
     CirculationName,
     ProcessReview,
@@ -25,6 +24,10 @@ RegisterClass = (
     TechPlan,
     WeldQuotaPageMark,
     ConnectOrientation,
+    WeldCertification,
+    ProcedureQualificationIndex,
+    WeldJointTech,
+    WeldJointTechDetail,
 )
 
 for item in RegisterClass:

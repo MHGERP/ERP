@@ -3,8 +3,6 @@
     <h5>工作令：{{work_order.order_index}}</h5>
     <h5>产品名称：{{work_order.product_name}}</h5>
     <h5>单位：公斤</h5>
-    <h5>编制人：</h5>
-    <h5>审核人：</h5>
 </div>
 <div class="widget-content nopadding" style="max-height:800px; overflow-y:auto;">
     <div class="dataTables_length">
@@ -24,7 +22,7 @@
             {{work_order.designbommark.reviewer.userinfo}}
             {% endif %}
         </span>
-        <span class="btn btn-small btn-primary">设计修改记录</span>
+        <span class="btn btn-small btn-primary" href="#BOM_upload" data-toggle="modal">导入</span>
     </div>
     {% include "techdata/widgets/designBOM_table_list.html" %}
 </div>
