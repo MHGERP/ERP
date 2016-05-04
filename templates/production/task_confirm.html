@@ -6,18 +6,17 @@
 <a href="#" class="current">生产任务完成</a>
 {% endblock %}
 {% block inner_content%}
+<script type="text/javascript" src="{{STATIC_URL}}js/production/task.js"></script>
 <div class="form-inline" style="padding:20px; margin-bottom:20px;">
-    <label>工作令</label>
-    {{taskallocationform.workorder}}
-    <label>编号</label>
-    {{taskallocationform.identifier}}
-    <label>工序号</label>
-    {{taskallocationform.processnumber}}
-    <label>组号</label>
-    {{taskallocationform.groupnumber}}
-    <button class="btn btn-primary">检索</button>
+    <form id="search_form">
+        {% for field in taskallocationform %}
+        {{field.label}}
+        {{field}}
+        {% endfor %}
+        <button class="btn btn-primary" type="button" onclick="task_confirm_search()">检索</button>
+    </form>
 </div>
-<div style="margin-top:20px">
+<div style="margin-top:20px" id="item_table">
 {% include "production/table/task_confirm_table.html"%}
 </div>
 {% endblock%}

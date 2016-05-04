@@ -1,3 +1,7 @@
+<td>
+    {% if item.weld_joint == None %}<input type="checkbox" class="checkbox" arg="{{item.id}}">
+    {% else %}已添加{% endif %}
+</td>
 <td>{{item.materiel_belong.schematic_index}}</td>
 <td>{{item.weld_index}}</td>
 <td>{{item.materiel_belong.index}}</td>

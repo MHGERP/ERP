@@ -427,3 +427,16 @@ PRODUCTION_PLAN_STAUTS_CHOICES = (
     (1, u"必保"),
     (2, u"在制"),
 )
+
+#焊缝焊接接头  焊工持证项目
+SMAW_Fell = "SMAW-Fell-5FG-12/60-Fef3J"
+TEST = "test"
+WELD_CERTIFICATION = (
+    (SMAW_Fell, "SMAW-Fell-5FG-12/60-Fef3J"),
+    (TEST, "test")
+)
+#焊接工艺评定编号
+RH24_13_09 = "RH24-13-09"
+PROCEDURE_QUALIFICATION_INDEX = (
+    (RH24_13_09, "RH-13-09"),
+)
