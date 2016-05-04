@@ -250,10 +250,6 @@ def BOMadd(request):
             file = request.FILES['BOM_file']
             work_order_id = request.POST['work_order_id']
             work_order = WorkOrder.objects.get(id = work_order_id)
-            for item in Materiel.objects.filter(order = work_order):
-                item.delete()
-            print "delete complete"
-            return
             book = xlrd.open_workbook(file_contents = file.read())
             table = book.sheets()[0]
             total = Materiel.objects.filter(order = work_order).count() + 1
@@ -262,10 +258,10 @@ def BOMadd(request):
             
             #处理部件
             try:
-                weight = float(table.cell(2, 5))
+                weight = float(table.cell(2, 5).value)
             except:
                 try:
-                    weight = float(table.cell(2, 6))
+                    weight = float(table.cell(2, 6).value)
                 except:
                     weight = None
             if total != 1:
@@ -295,10 +291,10 @@ def BOMadd(request):
             #处理零件
             for rownum in xrange(4, table.nrows):
                 try:
-                    weight = float(table.cell(rownum, 5))
+                    weight = float(table.cell(rownum, 5).value)
                 except:
                     try:
-                        weight = float(table.cell(rownum, 6))
+                        weight = float(table.cell(rownum, 6).value)
                     except:
                         weight = None
                 materiel_list.append(Materiel(order = work_order, 
@@ -311,7 +307,6 @@ def BOMadd(request):
                                              remark = table.cell(rownum, 8).value
                                     ))
                 total += 1
-            
             Materiel.objects.bulk_create(materiel_list)
             file_upload_error = 1
         return HttpResponse(json.dumps({'file_upload_error' : file_upload_error}))

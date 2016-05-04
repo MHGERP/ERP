@@ -7,36 +7,41 @@ from purchasing.models import MaterielExecute
 import settings
 
 class ProcessingName(models.Model):
-    name = models.CharField(blank = False, choices = PROCESSING_CHOICES, max_length = 10, verbose_name = u"工序名")
-    instruction = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"说明")
-    index = models.CharField(blank = True, null = True, max_length = 10, verbose_name = u"工号")
-    hour = models.FloatField(blank = True, null = True, verbose_name = u"工时")
-
-    operator = models.ForeignKey(User, blank = True, null = True, verbose_name = u"操作者", related_name = "process_operator")
-    operate_date = models.DateField(blank = True, null = True, verbose_name = u"操作时间")
-    inspector = models.ForeignKey(User, blank = True, null = True, verbose_name = u"检查者", related_name = "process_inspector")
-    inspect_date = models.DateField(blank = True, null = True, verbose_name = u"检查时间")
+    name = models.CharField(blank = False, choices = PROCESSING_CHOICES, max_length = 10, verbose_name = u"工序简称")
     class Meta:
-        verbose_name = u"工序"
-        verbose_name_plural = u"工序"
+        verbose_name = u"工序名称"
+        verbose_name_plural = u"工序名称"
 
     def __unicode__(self):
         return self.materiel_belong.name + "(%s)" % self.get_name_display()
 
 class Processing(models.Model):
     materiel_belong = models.OneToOneField(Materiel, blank = False, verbose_name = u"所属物料")
-    LX1 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX1", related_name = "LX1")
-    LX2 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX2", related_name = "LX2")
-    LX3 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX3", related_name = "LX3")
-    LX4 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX4", related_name = "LX4")
-    LX5 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX5", related_name = "LX5")
-    LX6 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX6", related_name = "LX6")
-    LX7 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX7", related_name = "LX7")
-    LX8 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX8", related_name = "LX8")
-    LX9 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX9", related_name = "LX9")
-    LX10 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX10", related_name = "LX10")
-    LX11 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX11", related_name = "LX11")
-    LX12 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"LX12", related_name = "LX12")
+    GX1 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序1", related_name = "GX1")
+    GX2 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序2", related_name = "GX2")
+    GX3 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序3", related_name = "GX3")
+    GX4 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序4", related_name = "GX4")
+    GX5 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序5", related_name = "GX5")
+    GX6 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序6", related_name = "GX6")
+    GX7 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序7", related_name = "GX7")
+    GX8 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序8", related_name = "GX8")
+    GX9 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序9", related_name = "GX9")
+    GX10 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序10", related_name ="GX10")
+    GX11 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序11", related_name = "GX11")
+    GX12 = models.ForeignKey(ProcessingName, blank = True, null = True, verbose_name = u"工序12", related_name = "GX12")
+
+    GS1 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时1", related_name = "GS1")
+    GS2 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时2", related_name = "GS2")
+    GS3 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时3", related_name = "GS3")
+    GS4 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时4", related_name = "GS4")
+    GS5 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时5", related_name = "GS5")
+    GS6 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时6", related_name = "GS6")
+    GS7 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时7", related_name = "GS7")
+    GS8 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时8", related_name = "GS8")
+    GS9 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时9", related_name = "GS9")
+    GS10 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时10", related_name = "GS10")
+    GS11 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时11", related_name = "GS11")
+    GS12 = models.CharField(max_length = 20, blank = True, null = True, verbose_name = u"工时12", related_name = "GS12")
     class Meta:
         verbose_name = u"工序路线"
         verbose_name_plural = u"工序路线"
