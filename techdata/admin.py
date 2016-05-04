@@ -24,6 +24,10 @@ RegisterClass = (
     TechPlan,
     WeldQuotaPageMark,
     ConnectOrientation,
+    WeldCertification,
+    ProcedureQualificationIndex,
+    WeldJointTech,
+    WeldJointTechDetail,
 )
 
 for item in RegisterClass:
