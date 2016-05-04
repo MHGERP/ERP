@@ -25,7 +25,7 @@ function getItemsCallBack(data) {
 $("#btn-save").click(function() {
     var id = $("#bid_modal").attr("args");
     if(confirm("是否确认保存？")) {
-        Dajaxice.purchasing.newBidSave(saveCallBack, {"id": id, "pendingArray": pendingArray, });
+        Dajaxice.purchasing.newBidSave(saveCallBack, {"id": id, "pendingArray": pendingArray});
         return true;
     }
     return false;
@@ -50,7 +50,7 @@ $(".btn-open").click(function() {
         pendingArray = Array();
     }
     var id = $($(this).attr("data-source")).val(); // datatable index not bid_id
-    Dajaxice.purchasing.getBidForm(getBidCallBack, {"bid_id": id, "pendingArray": pendingArray, })
+    Dajaxice.purchasing.getBidForm(getBidCallBack, {"bid_id": id, "pendingArray": pendingArray});
 });
 
 $("#new_purchase_btn").click(function() {
@@ -94,16 +94,16 @@ function deleteCallBack(data) {
 $(document).on("click","#edit",function(){
     uid = $(this).attr("uid");
     $("#order_info_modal").modal();
-    var tr=$(this).closest("tr");
-    if($(tr).attr("mod")=="0"){
-        $("#count").val($(tr).children("td:eq(5)").html());
-        $("#purchasing").val($(tr).children("td:eq(6)").html());
-    }
-    else{
-        $("#count").val($(tr).children("td:eq(6)"));
-    }
+  //  var tr=$(this).closest("tr");
+   // if($(tr).attr("mod")=="0"){
+   //    $("#count").val($(tr).children("td:eq(5)").html());
+   //   $("#purchasing").val($(tr).children("td:eq(6)").html());
+   // }
+   // else{
+   //     $("#count").val($(tr).children("td:eq(6)"));
+   // }
     // order_uid = $(this).parent().parent();
-   // Dajaxice.purchasing.GetOrderInfoForm(Edit_Order_Callback,{'uid':uid});
+    Dajaxice.purchasing.GetOrderInfoForm(Edit_Order_Callback,{'uid':uid});
 });
 function Edit_Order_Callback(data){
     $("#order_info_modal").modal();
@@ -167,4 +167,15 @@ $("#save_materiel_execute").click(function(){
             "orderform_id":$("#index").val(),
             'form':$(form).serialize(true)
     });
+});
+
+
+$("#material_merge").click(function(){
+    pendingArray = Array();
+    $("input.checkbox").each(function() {
+        if(this.checked) pendingArray.push($(this).attr("args"));
+    });
+    order_id=$("#index").val();
+    Dajaxice.purchasing.getMergeForm(function(data){}, {"orderid": order_id, "pendingArray": pendingArray});
+    
 });

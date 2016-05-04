@@ -294,3 +294,7 @@ class MaterielExecuteDetail(models.Model):
     def __unicode__(self):
         return '%s' % (self.materiel.index)
 
+
+class MaterielCopy(Materiel):
+    relate_material=models.ForeignKey('self',null=True)
+
