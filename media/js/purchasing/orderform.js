@@ -175,7 +175,24 @@ $("#material_merge").click(function(){
     $("input.checkbox").each(function() {
         if(this.checked) pendingArray.push($(this).attr("args"));
     });
-    order_id=$("#index").val();
-    Dajaxice.purchasing.getMergeForm(function(data){}, {"orderid": order_id, "pendingArray": pendingArray});
+    if(pendingArray.length==0){
+        alert("没有选中对象！");
+        return false;
+    }
+    Dajaxice.purchasing.getMergeForm(function(data){
+        $("#merge_form_div").html(data.form);
+    }, {"pendingArray": pendingArray});
     
+});
+
+$("#merge_confirm").click(function(){
+    
+    order_id=$("#index").val();
+    form=$("#merge_form_div").serialize(true);
+    Dajaxice.purchasing.MergeMateriel(function(data){
+        alert(data.status);
+        window.location.reload();
+    }, {"order_id":order_id,"form":form,"pendingArray": pendingArray});
+
+
 });
