@@ -76,6 +76,48 @@ class WeldSeamForm(forms.ModelForm):
             "pressure_test_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
         }
 
+class ProcessingRouteForm(forms.ModelForm):
+    """
+    mxl
+    """
+    class Meta:
+        model = Processing
+        exclude = ('materiel_belong')
+        widgets = {
+            "GX1" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX2" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX3" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX4" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX5" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX6" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX7" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX8" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX9" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX10" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX11" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX12" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS1" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS2" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS3" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS4" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS5" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS6" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS7" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS8" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS9" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS10" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS11" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GS12" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+        }
+    def clean(self):
+        cleaned_data = super(CirculationRouteForm, self).clean()
+        for i in range(2, 13):
+            curfield = "GX%d" % i
+            prevfield = "GX%d" % (i - 1)
+            if cleaned_data.get(curfield) != None and cleaned_data.get(prevfield) == None:
+                raise forms.ValidationError("工序路线必须连续")
+        return cleaned_data
+
 class ProcessInfoForm(forms.ModelForm):
     """
     JunHU

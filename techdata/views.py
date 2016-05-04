@@ -302,7 +302,7 @@ def BOMadd(request):
                         weight = None
                 materiel_list.append(Materiel(order = work_order, 
                                              index = total, 
-                                             sub_index = table.cell(rownum, 0).value,
+                                             sub_index = int(table.cell(rownum, 0).value),
                                              schematic_index = table.cell(rownum, 1).value,
                                              parent_schematic_index = table.cell(2, 1).value,
                                              parent_name = table.cell(2, 2).value,
