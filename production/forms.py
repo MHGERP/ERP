@@ -44,8 +44,8 @@ class ProductionPlanSearchForm(WorkOrderForm):
 
 
 class LedgerSearchForm(WorkOrderProductionForm):
-    work_index = forms.CharField(required=False, label=u"工作票号")
-    parent_schematic_index = forms.CharField(required=False, label=u"部件图号")
+    index__contains = forms.CharField(required=False, label=u"工作票号")
+    parent_schematic_index__contains = forms.CharField(required=False, label=u"部件图号")
 
 
 class OrderIndexForm(forms.Form):
