@@ -6,13 +6,15 @@
             <th>操作</th>
         </tr>
     </thead>
-    <tr>
-        <td>0308006-B</td>
-        <td>煤锁</td>
-        <td>
-            <button class="bnt">
-                编辑
-            </button>
-        </td>
-    </tr>
+	<tbody>
+	{% for order in orders %}
+		<tr>
+		    <td>{{order.order_index}}</td>
+		    <td>{{order.product_name}}</td>
+		    <td>
+		        <a class="btn" href="/techdata/techInstallWeldCard?iid={{order.id}}">编辑</a>
+		    </td>
+		</tr>
+	{% endfor %}
+	</tbody>
 </table>

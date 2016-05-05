@@ -12,6 +12,7 @@
             <th>数量</th>
             <th>重量</th>
             <th>单位</th>
+            <th>库房位置</th>
             <th>备注</th>
             <th>操作</th>
         </tr>
@@ -20,19 +21,30 @@
         {% for item in entry_set %}
         <tr id="{{item.id}}">
             <td>{{forloop.counter}}</td>
-            <td>{{item.steel_material.work_order}}</td>
+            <td>
+                {% for workorder in item.steel_material.work_order.all %}
+                    <span>{{workorder}}</span>
+                {% endfor %}
+            </td>
             <td>{{item.steel_material.name}}</td>
             <td>{{item.steel_material.specifications}}</td>
             <td>{{item.steel_material.material}}</td>
             <td>{{item.steel_material.material_number}}</input></td>
             <td>{{item.steel_material.batch_number}}</td>
             <td>{{item.steel_material.lot_number}}</td>
-            <td>{{item.quantity}}</td>
+            <td id="id_quantity">{{item.quantity}}</td>
             <td>{{item.weight}}</td>
-            <td>{{item.weight_management}}</td>
+            <td>{% ifequal item.weight_management 0 %}
+                    千克
+                {% endifequal %}
+                {% ifequal item.weight_management 1 %}
+                    吨
+                {% endifequal %}
+            </td>
+            <td rid={{item.steel_material.store_room.id}}>{{item.steel_material.store_room.name}}</td>
             <td>{{item.remark}}</td>
             <td>
-                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_remark({{item.id}})">修改</a>
+                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_remark_storeRoom({{item.id}})">库房分配</a>
             </td>
         </tr>
         {%endfor%}

@@ -13,9 +13,14 @@ $(document).on("click", "#writer", function() {
 });
 
 function heatTreatmentArrangementWriteCallback(data) {
-    $("#bianhao").html("RR02-"+data.bianhao);
-    $("#writer").removeClass();
-    $("#writer").html(data.writer);
+    if (data.res) {
+        $("#bianhao").html("RR02-"+data.bianhao);
+        $("#writer").removeClass();
+        $("#writer").html(data.writer);
+    }
+    else {
+        alert("请先完成：布置图上传");
+    }
 }
 
 $(document).on("click", "#reviewer", function() {
@@ -27,8 +32,25 @@ function heatTreatmentArrangementReviewCallback(data) {
     if (data.res) {
         $("#reviewer").removeClass();
         $("#reviewer").html(data.reviewer);
+        $("#bnt_upload").html("");
     }
     else {
-        alert("请先完成:工艺制定");
+        alert("请先完成：工艺制定");
     }
 }
+$(document).on("click", "#btn-upload", function() {
+    var card_id = $(".widget-content").attr("card_id");
+    $("#upload_form").ajaxSubmit({
+        url: "/techdata/uploadHeatArrangement" + "?card_id=" + card_id,
+        type: "POST",
+        clearForm: true,
+        resetForm: true,
+        error: function(data) {
+            alert("失败");
+        },
+        success: function(data) {
+            //alert(data);
+            $("#mypic").attr("src", data);
+        }
+    });
+});

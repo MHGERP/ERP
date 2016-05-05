@@ -6,18 +6,19 @@
 {% endblock %}
 
 {% block title %}
-<h1>型材入库单</h1>
+<h1>钢材入库</h1>
 {% endblock %}
 
 {% block inner_content %}
+<h3 class="table-title">型材入库单</h3>
 <form class="form form-inline" method="post">
     {% csrf_token%}
-    <div class="row" style="margin-bottom:20px;">
-        <div class="span3">
+    <div class="row" style="margin-bottom:10px;">
+        <div class="span4">
             <label class="hz-align">货物来源：</label>
             <strong>{{entry.material_source}}</strong>
         </div>
-        <div class="span3">
+        <div class="span4">
             <label class="hz-align">入库时间：</label>
             <strong>{{entry.entry_time|date:"Ymd"}}</strong>
         </div>
@@ -35,7 +36,7 @@
     <div id="items_table">
         {% include "storage/widgets/barmaterialentrytable.html" %}
     </div>
-    <div class="control-group span12" style="margin-top:50px;">
+    <div class="control-group span12" style="margin-top:10px;">
         <div class="rows span4 purcher">
             采购员：<strong>{{entry.purchaser.userinfo}}</strong>
         </div>
@@ -46,9 +47,9 @@
             库管员：<strong>{{entry.keeper.userinfo}}</strong>
         </div>
     </div>
-    <center style="margin:110px;">
+    <center style="margin:80px;">
     {% if is_show %}
-    <button  id="entry_confirm"  class="btn btn-primary" type="button" onclick="steel_entry_confirm({{entry.id}});">入库单确认</button>
+        <button  id="entry_confirm"  class="btn btn-primary" type="button" onclick="steel_entry_confirm({{entry.id}});">入库单确认</button>
     {% else %}
         <a style="width:10%;height:20px;" class="btn btn-primary" type="button" href="/storage/steelentryhome">返回</a>
     {% endif %}
@@ -60,18 +61,20 @@
         <h3 id="myModalLabel">添加</h3>
     </div>
     <div class="modal-body">
-        <form id="entry_item_form" action="" class="form-horizontal">
+        <form id="entry_item_form" action="" class="form-horizontal" iid={{is_show}}>
             <div class="control-group">
-                <label class="control-label">备注</label>
-                <div class="controls">
-                    <input type="text" value="" id="id_remark">
-                </div>
+                {% for field in form%}
+                    <label class="control-label">{{field.label}}</label>
+                    <div class="controls">
+                        {{field}}
+                    </div>
+                {% endfor %}               
             </div>
         </form>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-        <button class="btn btn-primary" data-dismiss="modal" onclick="save_remark({{entry.steel_type}});">保存</button>
+        <button class="btn btn-primary" data-dismiss="modal" onclick="save_remark_storeRoom({{entry.steel_type}});">保存</button>
     </div>
 </div>
 {% endblock %}

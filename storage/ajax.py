@@ -202,7 +202,90 @@ def barSteelRefundEnsure(request, common_refund):
     common_refund.return_confirm = True
     common_refund.save()
     return u"退库成功"
-    
+
+@dajaxice_register
+def storeRoomSearch(request, form):
+    """
+    kad
+    """
+    search_form = StoreRoomSearchForm(deserialize_form(form))
+    if search_form.is_valid():
+        room_set = get_weld_filter(StoreRoom,search_form.cleaned_data)
+        html = render_to_string("storage/widgets/storeroom_table.html",{"room_set":room_set})
+    else:
+        print search_form.errors
+    data = {
+        "html":html,
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def storeRoomAdd(request, form):
+    """
+    kad
+    """
+    room_form = StoreRoomForm(deserialize_form(form))
+    if room_form.is_valid():
+        room_form.save()
+        message = u"录入成功"
+        flag = True
+    else: 
+        message = u"录入失败"
+        flag = False
+    room_set = StoreRoom.objects.all().order_by('-id')
+    html = render_to_string("storage/widgets/storeroom_table.html", {"room_set":room_set})
+    data = {
+        "message":message,
+        "html":html,
+        "flag":flag,
+    }
+    return simplejson.dumps(data) 
+
+@dajaxice_register
+def storeRoomUpdate(request, form, sr_id):
+    """
+    kad
+    """
+    room_obj = StoreRoom.objects.get(id = sr_id)
+    room_form = StoreRoomForm(deserialize_form(form), instance = room_obj)
+    if room_form.is_valid():
+        #room_form.save(commit = False)
+        room_form.save()
+        message = u"修改成功"
+        flag = True
+    else:
+        message = u"修改失败"
+        flag = False
+    room_set = StoreRoom.objects.all().order_by('-id')
+    html = render_to_string("storage/widgets/storeroom_table.html", {"room_set":room_set})
+    data = {
+        "message":message,
+        "html":html,
+        "flag":flag,
+    }
+    return simplejson.dumps(data)
+   
+@dajaxice_register
+def storeRoomDelete(request, sr_id):
+    """
+    kad
+    """
+    try:
+        room_obj = StoreRoom.objects.get(id = sr_id)
+        room_obj.delete()
+        message = u"删除成功"
+        flag = True
+    except Exception,e:
+        print e
+        message = u"删除失败"
+        flag = False
+    data = {
+        "message":message,
+        "flag":flag,
+        "sr_id":sr_id,
+    }
+    return simplejson.dumps(data)
+
 
 
 @dajaxice_register
@@ -210,8 +293,11 @@ def Search_History_Apply_Records(request,data):
     context={}
     context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
     form=ApplyCardHistorySearchForm(deserialize_form(data))
+    print form
     if form.is_valid():
         conditions=form.cleaned_data
+        if conditions['department'] == '-1':
+            conditions['department'] = ""
         q1=(conditions['date'] and Q(create_time=conditions['date'])) or None
         q2=(conditions['department'].strip(' ') and Q(department=conditions['department'])) or None
         q3=(conditions['index'] and Q(index=int(conditions['index']))) or None
@@ -370,47 +456,55 @@ def weldhum_insert(request,hum_params):
 def entryItemSave(request,form,mid):
     item = WeldMaterialEntryItems.objects.get(id = mid)
     entry_form = EntryItemsForm(deserialize_form(form),instance = item) 
-    pur_entry = item.entry
+    entry = item.entry
     flag = False
-    if pur_entry.auth_status(STORAGESTATUS_KEEPER):
+    if entry.auth_status(STORAGESTATUS_KEEPER):
         if entry_form.is_valid():
             entry_form.save()
             flag = True
             message = u"修改成功"
         else:
+            print entry_form.errors
             message = u"修改失败"
     else:
         message = u"修改失败，入库单已确认过"
-    entry_set = WeldMaterialEntryItems.objects.filter(entry = pur_entry) 
-    html = render_to_string("storage/widgets/weldentrytable.html",{"entry_set":entry_set})
+    is_show = entry.entry_status == STORAGESTATUS_KEEPER
+    items = WeldMaterialEntryItems.objects.filter(entry = entry)
+    html = render_to_string("storage/wordhtml/weldentryitemstable.html",{"items":items,"is_show":is_show})
     data = {
             "flag":flag,
             "message":message,
-            "html":html,  
+            "html":html,
            }
     return simplejson.dumps(data)
 
 @dajaxice_register
-def saveRemark(request,remark,mid,typeid):
+def saveRemarkStoreRoom(request,form,mid,typeid):
+    form = steelEntryItemsForm(deserialize_form(form))
     if typeid:
-        items = BoardSteelMaterialPurchasingEntry.objects.filter(id = mid)
-        pur_entry = BoardSteelMaterialPurchasingEntry.objects.all()
+        item = BarSteelMaterialPurchasingEntry.objects.get(id = mid)
+        pur_entry = item.card_info.barsteelmaterialpurchasingentry_set.all()
     else:
-        pur_entry = BarSteelMaterialPurchasingEntry.objects.all()
-        items = BarSteelMaterialPurchasingEntry.objects.filter(id = mid)
+        item = BoardSteelMaterialPurchasingEntry.objects.get(id = mid)
+        pur_entry = item.card_info.boardsteelmaterialpurchasingentry_set.all()
     flag = False
-    for item in items:
-        if item.card_info.entry_status == STORAGESTATUS_KEEPER:
-            item.remark = remark
-            item.save()
-            flag = True
-            message = u"修改成功"
-        else:
-            message = u"修改失败，入库单已确认过"
-    if typeid:
-        html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
+    if form.is_valid():
+        remark = form.cleaned_data['remark']
+        storeroom_id = form.cleaned_data['store_room']
+        store_room = StoreRoom.objects.get(id = storeroom_id)
+    if item.card_info.entry_status == STORAGESTATUS_KEEPER:
+        item.remark = remark
+        item.save()
+        item.steel_material.store_room = store_room
+        item.steel_material.save()
+        flag = True
+        message = u"修改成功"
     else:
+        message = u"修改失败，入库单已确认过"
+    if typeid:
         html = render_to_string("storage/widgets/barmaterialentrytable.html",{"entry_set":pur_entry})
+    else:
+        html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
     data = {
         "flag":flag,
         "message":message,
@@ -442,8 +536,20 @@ def steelEntryConfirm(request,eid,entry_code):
     try:
         entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
         if entry.entry_status == STORAGESTATUS_KEEPER:
-            entry.entry_code = entry_code
-            entry.keeper = request.user
+            entry.form_code = entry_code
+            steel_entry_set = SteelMaterialPurchasingEntry.objects.get(form_code = entry.form_code)
+            if steel_entry_set.steel_type == BOARD_STEEL:
+                boardsteel_set = steel_entry_set.boardsteelmaterialpurchasingentry_set.all()
+                for boardsteel in boardsteel_set:
+                    ledger = boardsteel.steel_material.boardsteelmaterialledger
+                    ledger.quantity = ledger.quantity + boardsteel.quantity
+                    ledger.save()
+            elif steel_entry_set.steel_type == BAR_STEEL:
+                barsteel_set = steel_entry_set.barsteelmaterialpurchasingentry_set.all()
+                for barsteel in barsteel_set:
+                    ledger = barsteel.steel_material.barsteelmaterialledger
+                    ledger.quantity = ledger.quantity + barsteel.quantity
+                    ledger.save()
             entry.entry_status = STORAGESTATUS_END
             entry.entry_time = datetime.date.today()
             entry.save()
@@ -536,6 +642,7 @@ def storeThreadAdd(request,form):
            }
     return simplejson.dumps(data)
 
+@dajaxice_register
 def humiChangeSave(request,hidform,hid):
     message = u"修改失败,有未填数据"
     try:
@@ -725,6 +832,29 @@ def outsideAccountApplyCardSearch(request,form):
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
+def outsideThreadSearch(request,form):
+   form = OutsideStorageSearchForm(deserialize_form(form));
+   items_set = {}
+   if form.is_valid():
+       conditions = form.cleaned_data
+       print conditions
+       q1=(conditions['texture'] and Q(texture = conditions['texture'])) or None
+       q2=(conditions['specification'] and Q(specification = conditions['specification'])) or None
+       query_set = filter(lambda x:x!=None,[q1,q2])
+       if query_set:
+           query_conditions = reduce(lambda x,y:x&y,query_set)
+           items_set = OutsideStorageList.objects.filter(query_conditions)
+       else:
+           items_set = OutsideStorageList.objects.all()
+   items_set = items_set.order_by('specification')
+   context = {
+            'items_set':items_set,
+            "search_form":form,
+   }
+   html = render_to_string("storage/widgets/outsidestorage_table.html",context)
+   return simplejson.dumps({"html":html})
+
+@dajaxice_register
 def weldMaterialStorageItems(request,specification):
     item_set = WeldStoreList.objects.filter(specification = specification,count__gt = 0).order_by('entry_time')
     html = render_to_string("storage/weldapply/itemlist.html",{"item_set":item_set})
@@ -743,6 +873,7 @@ def weldMaterialApply(request,itemid,form,index):
             storageitem.save()
             form.save()
             applycard.status = APPLYCARD_COMMIT
+            applycard.commit_user = request.user
             applycard.save()
             message = u"领用单确认成功"
             flag = True
@@ -758,25 +889,68 @@ def weldMaterialApply(request,itemid,form,index):
 @dajaxice_register
 def weldRefundCommit(request,rid,form):
     ref_obj = WeldRefund.objects.get(id = rid)
-    is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
     reform = WeldRefundForm(deserialize_form(form),instance = ref_obj)
     if reform.is_valid():
         reform.save()
         storageitem = ref_obj.receipts_code.storelist
         storageitem.count += ref_obj.refund_count
         storageitem.save()
-        ref_obj.refund_status = STORAGESTATUS_END
+        
+        ref_obj.weldrefund_status = STORAGESTATUS_END
+        ref_obj.save()
         message = u"退库成功，信息已记录"
     else:
         message = u"退库失败，退库单信息未填写完整"
         print reform.errors
         
+    is_show = ref_obj.weldrefund_status == STORAGESTATUS_END
+    print is_show
     return simplejson.dumps({"is_show":is_show,"message":message})
 
+@dajaxice_register
+def changeStorageDb(request,db_type,form):
+    db_model = checkStorage(db_type)
+    context = {}
+    context["check_db_form"] = CheckMaterielDbForm(deserialize_form(form))
+    context["check_materiel_form"] = CheckMaterielListForm(db_type = db_model)
+    context["items_set"] = db_model.objects.all()
+    context["is_production"] = True
+    form_html = render_to_string("storage/widgets/checkstorage_search.html",context)
+    table_html = render_to_string("storage/widgets/materiel_table.html",context)
+    return simplejson.dumps({'form_html':form_html,"table_html":table_html})
 
+@dajaxice_register
+def chooseStorageMateriel(request,form,selected):
+    form = CheckMaterielListForm(deserialize_form(form))
+    if form.is_valid():
+        db_type = form.cleaned_data["db_type"]
+        db_model = checkStorage(db_type)
+    try:
+        choosedmateriel = db_model.objects.get(id = selected)
+    except Exception,e:
+        print e
 
+@dajaxice_register
+def searchMateriel(request,form):
+    context = getSearchMaterielContext(request,form)
+    html = render_to_string("storage/widgets/materiel_table.html",context)
+    return simplejson.dumps({"html":html})
 
-
-
-
-
+def getSearchMaterielContext(request,form,is_production = True):
+    db_form = CheckMaterielDbForm(deserialize_form(form))
+    if db_form.is_valid():
+        db_type = db_form.cleaned_data["db_type"]
+        db_model = checkStorage(db_type)
+    materiel_form = CheckMaterielListForm(deserialize_form(form),db_type = db_model)
+    context = {}
+    if materiel_form.is_valid():
+        id = materiel_form.cleaned_data["materiel_type"]
+        try:
+            item = db_model.objects.filter(id = id)
+            context["items_set"] = item
+        except Exception,e:
+            print e
+    else:
+        print materiel_form.errors
+    context["is_production"] = is_production
+    return context

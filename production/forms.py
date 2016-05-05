@@ -1,5 +1,6 @@
 # coding: UTF-8
 from const import *
+from production import *
 from django import forms
 from django.forms import ModelForm
 from const.models import WorkOrder
@@ -9,22 +10,42 @@ from production.models import ProductionPlan
 from techdata.models import Processing
 from const.forms import WorkOrderForm
 
-class ProductionPlanForm(ModelForm):
+class WorkOrderProductionForm(forms.Form):
+    """
+    LiuYe
+    summary: store all work orders
+    """
+    order = forms.ChoiceField(label=u"工作令", widget = forms.Select(attrs = {"class": "form-control input"}))
+    def __init__(self, *args, **kwargs):
+         super(WorkOrderProductionForm, self).__init__(*args, **kwargs)
+         WORKORDER_CHOICES = tuple((item.id, item) for item in WorkOrder.objects.all())
+         self.fields["order"].choices = WORKORDER_CHOICES
+
+class ProdPlanForm(ModelForm):
     class Meta:
         model = ProductionPlan
-        exclude = ('plan_id', )
-
+        exclude = ("workorder_id","plan_id",)
+        widgets = {
+            "plan_date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"plan_date"}),
+            "status":forms.Select(attrs={"class":"form-control"}),
+        }
+    def __init__(self, *args, **kwargs):
+        super(ProdPlanForm,self).__init__(*args,**kwargs)
+        self.fields["plan_date"].choices = PRODUCTION_PLAN_STAUTS_CHOICES
+       
 class ProductionPlanSearchForm(WorkOrderForm):
-    status = forms.ChoiceField(label=u"状态", choices=PRODUCTION_PLAN_STAUTS_CHOICES)
-    plan_date = forms.ChoiceField(label=u"计划年月")
+    status = forms.ChoiceField(label = u"状态", required = False, choices=PRODUCTION_PLAN_STAUTS_CHOICES)
+    plan_date = forms.ChoiceField(label = u"计划年月", required = False)
     def __init__(self, *args, **kwargs):
         super(ProductionPlanSearchForm, self).__init__(*args, **kwargs)
-        DATE_CHOICE = tuple(("%s-%s"%(item.year,item.month),"%s-%s"%(item.year,item.month)) for item in ProductionPlan.objects.dates('plan_date', 'month').distinct())
+        DATE_CHOICE = tuple(("%s-%02d"%(item.year,int(item.month)),"%s-%02d"%(item.year,int(item.month))) for item in ProductionPlan.objects.dates('plan_date', 'month').distinct())
         self.fields["plan_date"].choices = DATE_CHOICE
 
-class LedgerSearchForm(WorkOrderForm):
-    work_index = forms.CharField(required=False, label=u"工作票号")
-    parent_schematic = forms.CharField(required=False, label=u"部件图号")
+
+
+class LedgerSearchForm(WorkOrderProductionForm):
+    index__contains = forms.CharField(required=False, label=u"工作票号")
+    parent_schematic_index__contains = forms.CharField(required=False, label=u"部件图号")
 
 
 class OrderIndexForm(forms.Form):
@@ -36,10 +57,16 @@ class OrderIndexForm(forms.Form):
 
 class TaskAllocationSearchForm(forms.Form):
     workorder_choices=tuple([(-1,"------")]+[(item.id,item.order_index) for item in WorkOrder.objects.all()])
-    workorder=forms.ChoiceField(choices=workorder_choices,required=False)
-    identifier=forms.CharField(required=False)
-    processnumber=forms.CharField(required=False)
-    groupnumber=forms.CharField(required=False)
+    workorder=forms.ChoiceField(choices=workorder_choices,required=False, label=u"工作令")
+    identifier=forms.CharField(required=False, label=u"编号")
+    processnumber=forms.CharField(required=False, label=u"工序号")
+    groupnumber=forms.CharField(required=False,label=u"操作组")
+
+class TaskAllocationForm(TaskAllocationSearchForm):
+    task_allocation_status = forms.ChoiceField(choices=TASK_ALLOCATION_STATUS_CHOICES, required=False, label=u"任务分配状态")
+
+class TaskConfirmForm(TaskAllocationSearchForm):
+    task_confirm_status = forms.ChoiceField(choices=TASK_CONFIRM_STATUS_CHOICES, required=False, label=u"任务完成状态")
 
 class DateForm(forms.Form):
     order_index = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
@@ -62,3 +89,7 @@ class HourMessageSearchForm(forms.Form):
         super(HourMessageSearchForm, self).__init__(*args, **kwargs)
         ORDER_INDEX_CHOICES = tuple((item.order_index,item.order_index) for item in WorkOrder.objects.all())
         self.fields["order_index"].choices = ORDER_INDEX_CHOICES
+
+
+
+

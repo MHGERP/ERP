@@ -1,6 +1,6 @@
 <input type="hidden" id="status" value="{{apply_card.status}}">
 {% if apply_card.status != APPLYCARD_COMMIT %}
-
+{% comment %}
 	{% if user.is_superuser %} <!--申请表单-->
 		{% for item in apply_card_form %}
 
@@ -17,12 +17,27 @@
 			{% if item.is_hidden %}
 			{{item}}
 			{% else %}
-			<td>{{item}}</td>
+            <td>{{item}}{{item.label}}</td>
 			{% endif %}
 		{% endfor %}
 	{% endif %}
 
-
+{% endcomment %}
+{% for item in apply_card_form %}
+{% if item.is_hidden %}
+{{item}}
+{% endif %}
+{% endfor %}
+<td>{{apply_card_form.workorder}}</td>
+<td>{{apply_card_form.weld_bead_number}}</td>
+<td>{{apply_card_form.weld_material_number}}</td>
+<td>{{apply_card_form.model}}</td>
+<td>{{apply_card_form.standard}}</td>
+<td>{{apply_card_form.apply_weight}}</td>
+<td>{{apply_card_form.apply_quantity}}</td>
+<td>{{apply_card_form.material_number}}</td>
+<td>{{apply_card_form.actual_weight}}</td>
+<td>{{apply_card_form.actual_quantity}}</td>
 {% else %} <!--完成状态表单-->
 
 <td>{{apply_card.workorder}}</td>

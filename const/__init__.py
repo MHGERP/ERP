@@ -63,11 +63,15 @@ IDENTITYERROR = "登录帐号或密码有错误！"
 
 ORDERFORN_STATUS_BEGIN = 0
 ORDERFORN_STATUS_ESTABLISHMENT = 1
-ORDERFORN_STATUS_FINISH = 2
+ORDERFORN_STATUS_AUDIT = 2
+ORDERFORN_STATUS_APPROVED = 3
+ORDERFORN_STATUS_FINISH= 4
 
 ORDERFORM_STATUS_CHOICES = (
     (ORDERFORN_STATUS_BEGIN, u"创建中订购单"),
     (ORDERFORN_STATUS_ESTABLISHMENT, u"创建完成订购单"),
+    (ORDERFORN_STATUS_AUDIT,u"审核通过订购单"),
+    (ORDERFORN_STATUS_APPROVED,u"批准通过订购单"),
     (ORDERFORN_STATUS_FINISH, u"已终止历史订购单"),
 )
 
@@ -134,50 +138,50 @@ ENTRYTYPE_CHOICES = (
 ENTRYTYPE_BOARD = 0
 ENTRYTYPE_BAR = 1
 
-ENTRYTYPE_CHOICES_2 = {
+ENTRYTYPE_CHOICES_2 = (
     (ENTRYTYPE_BOARD,u"板材"),
     (ENTRYTYPE_BAR,u"型材"),
-}
+)
 
 BOARD_STEEL = 0
 BAR_STEEL = 1
-STEEL_TYPE = {
+STEEL_TYPE = (
     (BOARD_STEEL,u'板材'),
     (BAR_STEEL,u'型材'),
-}
+)
 
 WELDING = 0
 STEEL = 1
 AUXILIARY_TOOL =2
 OUTSIDEBUYING =3
 
-MATERIAL_TYPE={
+MATERIAL_TYPE=(
     (WELDING,u'焊材'),
     (STEEL,u'钢材'),
     (AUXILIARY_TOOL,u'辅助工具'),
     (OUTSIDEBUYING,u'外购件'),
-}
+)
 
 KILOGRAM = 0
 TON = 1
-WEIGHT_MANAGEMENT={
+WEIGHT_MANAGEMENT=(
     (KILOGRAM,u'千克'),
     (TON,u'顿'),
-}
+)
 
 SQUARE_METER = 0
 
-AREA_MANAGEMENT={
+AREA_MANAGEMENT=(
     (SQUARE_METER,u'平方米'),
-}
+)
 
 METER = 0
 CENTIMETER =1
 
-LENGHT_MANAGEMENT={
+LENGHT_MANAGEMENT=(
     (METER,u'米'),
     (CENTIMETER,u"厘米"),
-}
+)
 
 
 
@@ -253,10 +257,10 @@ REFUNDSTATUS_CHOICES = (
 
 STORAGEDEPARTMENT_CHOICES=( 
     (-1,u'------'),
-    (1,u'部门A'),
-    (2,u'部门B'),
-    (3,u'部门C'),
-    (4,u'部门D'),
+    (1,u'焊一组'),
+    (2,u'焊二组'),
+    (3,u'焊三组'),
+    (4,u'电焊组'),
 )
 
 AUTH_TYPE_CHOICES = (
@@ -279,8 +283,6 @@ STORAGE_ENTRY_TYPECHOICES=(
     (0,u"焊材"),
     (1,u"钢材"),
 )
-
-
 
 
 
@@ -321,7 +323,12 @@ H = "14"
 M = "15"
 L = "16"
 Y = "17"
-
+G = "18"
+G1 = "19"
+G2 = "20"
+X = "21"
+J = "22"
+DY = "23"
 PROCESSING_CHOICES = (
     (W, "W"),    
     (W1, "W1"),
@@ -341,6 +348,12 @@ PROCESSING_CHOICES = (
     (M, "M"),
     (L, "L"),
     (Y, "Y"),
+    (G, "G"),
+    (G1, "G1"),
+    (G2, "G2"),
+    (X, "X"),
+    (J, "J"),
+    (DY, "DY"),
 )
 
 
@@ -348,11 +361,12 @@ WELD_ROD = "weld_rod"
 WELD_WIRE = "weld_wire"
 WELD_RIBBON = "weld_ribbon"
 WELD_FLUX = "weld_flux"
-
+WELD = "weld"
 SHEET = "sheet"
 PROFILE = "profile"
 PURCHASED = "purchased"
 OTHER = "other"
+AUXILIARY_TOOL = "auxiliary_tool"
 MATERIAL_CATEGORY_CHOICES = (
     (WELD_ROD, u"焊条"),
     (WELD_WIRE, u"焊丝"),
@@ -361,8 +375,22 @@ MATERIAL_CATEGORY_CHOICES = (
     (SHEET, u"板材"),
     (PROFILE, u"型材"),
     (PURCHASED, u"外购件"),
+    (AUXILIARY_TOOL,u"辅助工具"),
     (OTHER, u"其他"),
 )
+
+WELD_TYPE_LIST = [WELD_ROD,WELD_WIRE,WELD_RIBBON,WELD_FLUX]
+PURCHASED_TYPE_LIST = [PURCHASED,]
+SHEET_TYPE_LIST = [SHEET,]
+PROFILE_TYPE_LIST = [PROFILE,]
+AUXILIARY_TOOL_TYPE_LIST = [AUXILIARY_TOOL,]
+MATERIEL_TYPE_CHOICES = (
+    (WELD, u"焊材"),
+    (SHEET, u"板材"),
+    (PROFILE, u"型材"),
+    (PURCHASED, u"外购件"),
+    (AUXILIARY_TOOL, u"辅助工具"),
+) 
 
 RT = "RT"
 UT = "UT"
@@ -406,10 +434,36 @@ HEATTREATMENTCARD_ATTR_TEM_UP_SPEED = "temperature_up_speed"
 HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED = "temperature_down_speed"
 HEATTREATMENTCARD_ATTR_TEM_TIME = "time"
 
+FLUSH_WELD = "FLUSH_WELD"
+HORIZONTAL_WELD = "HORIZONTAL_WELD"
+OVERHEAD_WELD = "OVERHEAD_WELD"
+VERTICAL_WELD = "VERTICAL_WELD"
+WIDE_WELD = "WIDE_WELD"
 
+WELD_POSITION_CHOICES = (
+    (FLUSH_WELD, u"平焊"),
+    (HORIZONTAL_WELD, u"横焊"),
+    (OVERHEAD_WELD, u"仰焊"),
+    (VERTICAL_WELD, u"立向上焊"),
+    (WIDE_WELD, u"全位置焊")
+)
 
 #生产管理
 PRODUCTION_PLAN_STAUTS_CHOICES = (
+    (-1,u"---------"),
     (1, u"必保"),
     (2, u"在制"),
+)
+
+#焊缝焊接接头  焊工持证项目
+SMAW_Fell = "SMAW-Fell-5FG-12/60-Fef3J"
+GMAW_Fell = "GMAW-Fell-3G-14-FefS-11/15"
+WELD_CERTIFICATION = (
+    (SMAW_Fell, "SMAW-Fell-5FG-12/60-Fef3J"),
+    (GMAW_Fell, "GMAW-Fell-3G-14-FefS-11/15")
+)
+#焊接工艺评定编号
+RH24_13_09 = "RH24-13-09"
+PROCEDURE_QUALIFICATION_INDEX = (
+    (RH24_13_09, "RH-13-09"),
 )

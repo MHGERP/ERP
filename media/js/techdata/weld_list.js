@@ -1,7 +1,10 @@
+var jointArray = Array();
+
 $(document).ready(refresh);
 $("#order_search").click(refresh);
 
 function refresh() {
+   // alert("我要刷新了！");
     var id_work_order = $("#id_work_order").val();
     Dajaxice.techdata.getWeldSeamList(refreshCallBack, {"id_work_order": id_work_order, });
 }
@@ -25,9 +28,12 @@ function refreshSingleCallBack(data) {
     var row = $("tr[iid='" + cur_iid + "']");
     row.html(data);
 }
-$(document).on("click", ".tr_materiel", function() {
-    var iid = $(this).attr("iid");
-    fill(iid);
+$(document).on("dblclick", ".tr_materiel td", function() {
+    if($(this).index() != 0) {
+        var iid = $(this).parent().attr("iid");
+        fill(iid);
+        $("#card_modal").modal();
+    }
 });
 
 function fill(iid) {
@@ -74,7 +80,6 @@ $(document).on("click", "#btn_write_confirm", function() {
 });
 function writerConfirmCallBack(data) {
     if(data.ret) {
-        $("#btn_write_confirm").removeClass("btn-primary").addClass("btn-warning").html("编制完成");
         $("#span_write").html("编制人：" + data.user);
     }
 }
@@ -85,10 +90,22 @@ $(document).on("click", "#btn_review_confirm", function() {
 });
 function reviewerConfirmCallBack(data) {
     if(data.ret) {
-        $("#btn_review_confirm").removeClass("btn-primary").addClass("btn-warning").html("审核完成");
         $("#span_review").html("审核人：" + data.user);
     }
     else {
         alert("未完成编制，无法审核！");
     }
 }
+
+$("#joint_btn").click(function(){
+//    alert("cao");
+   jointArray = Array();
+   var method = null, thin1 = null, thin2 = null;
+   $("input.checkbox").each(function(){
+        if(this.checked) {
+            alert("hh");
+            alert($(this).parent().parent().children().eq(5).text());
+//            jointArray.push($(this).attr("arg"));
+         }
+   });
+});

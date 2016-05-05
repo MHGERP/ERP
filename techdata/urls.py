@@ -101,4 +101,20 @@ urlpatterns=patterns('',
         r'^heatPoint',
         techdata_views.heatPoint,
     ),
+    url(
+        r'^uploadHeatArrangement',
+        techdata_views.uploadHeatArrangement,
+    ),
+    url(
+        r'^techInstallWeldCard',
+        techdata_views.techInstallWeldCard,
+    ),
+    url(
+        r'^connectOrientationAdd',
+        techdata_views.connectOrientationAdd,
+    ),
+    url(
+        r'^BOMadd',
+        techdata_views.BOMadd,
+    ),
 )

@@ -17,9 +17,9 @@
 {% block inner_content %}
 <h3 class="table-title">型材退库单</h3>
 <div class="control-group">
-    <button type="button" class="btn btn-primary">工作令: {{common_Info.work_order}}</button>
-    <button type="button" class="btn btn-primary">日期: {{common_Info.date|date:"Ymd"}}</button>
-    <button type="button" class="btn btn-primary">编号: {{common_Info.form_code}}</button> 
+    <button type="button" class="btn btn-default">工作令: {{common_Info.work_order}}</button>
+    <button type="button" class="btn btn-default">日期: {{common_Info.date|date:"Ymd"}}</button>
+    <button type="button" class="btn btn-default">编号: {{common_Info.form_code}}</button> 
 </div>
 <table class="table table-bordered" fc="{{common_Info.form_code}}">
     <thead>
@@ -55,10 +55,9 @@
         </tr>
     </tbody>
 </table>
-    <div class="card-sure">
+    <center class="card-sure">
         {% ifequal common_Info.return_confirm 0 %}
         <button class="refund-card-ensure-btn btn btn-success">确认</button>   
         {% endifequal %}
-    </div>
-</div>
+    </center>
 {% endblock %}

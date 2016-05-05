@@ -6,7 +6,7 @@ import const
 from storage.models import *
 from purchasing.models import *
 from django.db.models import Q
-def get_weld_filter(model_type,dict):
+def get_weld_filter(model_type,dict,replace_dic=None):
     """
     author: Shen Lian
     summary:filter objects by search form
@@ -18,22 +18,27 @@ def get_weld_filter(model_type,dict):
         dict_tmp = {}
         if val == "-1":
             val = ""
+        if replace_dic != None and replace_dic.has_key(key):
+            key = replace_dic[key]
         dict_tmp[key] = val
         q = (val and Q(**dict_tmp)) or None
         filter_list.append(q)
+    
     qset = filter(lambda x : x!= None ,filter_list)
     if qset:
         print qset
         qset = reduce(lambda x,y:x & y ,qset)
         res_set = model_type.objects.filter(qset)
     else:
-        res_set = model_type.objects.all()
+        res_set = model_type.objects.all().order_by('-id')
     return res_set
 
 def weldStoreItemsCreate(entry):
     weld_set = entry.weldmaterialentryitems_set.all()
     for item in weld_set:
-        storeitem = WeldStoreList(entry_time = item.entry.entry_time,specification=item.material.specification,material_id=item.material.material.material_id,count=item.material.count,entry_item = item)
+        entry_time = item.entry.entry_time
+        deadline = entry_time + datetime.timedelta(days = 20)
+        storeitem = WeldStoreList(entry_time = item.entry.entry_time,specification=item.material.specification,material_id=item.material.material.material_id,count=item.material.count,entry_item = item,deadline = deadline)
         storeitem.save()
 
 def storeConsume(applycard):
@@ -130,6 +135,7 @@ def updateStorageLits(items_set,_StorageModel):
     exist_items = []
     for item in items_set:
         try:
+            print item
             storageItem = _StorageModel.objects.get(specification = item.specification)
             if storageItem.number >= item.number:
                 storageItem.number -= item.number
@@ -138,6 +144,8 @@ def updateStorageLits(items_set,_StorageModel):
                 isOk = False
                 break
         except Exception,e:
+            print "------errors----------"
+            isOk = False
             print e
     if isOk:
         for item in exist_items:
@@ -167,7 +175,7 @@ class HandleEntry(object):
             entryitem_obj = self.getEntryItem(item.material,entry_obj)
             entryitem_obj.save()
             item.check_pass = True
-            #item.save()
+            item.save()
 
 class HandleEntryWeld(HandleEntry):
     def getEntry(self,user,bidform):
@@ -181,17 +189,20 @@ class HandleEntryPurchased(HandleEntry):
     def getEntryItem(self,materiel,entry):
         return OutsideStandardItem(materiel = materiel,entry = entry,schematic_index=materiel.schematic_index,specification = materiel.specification,number = materiel.count,unit = materiel.unit )
 
+class HandleEntrySteel(HandleEntry):
+    def getEntry(self,user,bidform):
+        pass
+    def getEntryItem(self,materiel,entry):
+        pass
 
 from itertools import *
 class AutoGenEntry(object):
-    WELD_TYPE_LIST = [WELD_ROD,WELD_WIRE,WELD_RIBBON,WELD_FLUX]
-    PURCHASED_LIST = [PURCHASED,] 
     Entry_DICT = {"WELD":HandleEntryWeld,"PURCHASED":HandleEntryPurchased}
     def key_cmp_func(self,it):
         categories = it.material.material.categories
-        if categories in self.WELD_TYPE_LIST:
+        if categories in WELD_TYPE_LIST:
             return "WELD"
-        if categories in self.PURCHASED_LIST:
+        if categories in PURCHASED_TYPE_LIST:
             return "PURCHASED"
     
     def group_by(self):
@@ -212,3 +223,17 @@ class AutoGenEntry(object):
         self.bidform = bidform
         groupby_items = self.group_by()
         self.processEntry(groupby_items)
+
+
+def checkStorage(db_type,sorce=None):
+    DB_MAP = getDbMap(sorce)
+    db_model = DB_MAP[db_type]
+    return db_model
+
+def getDbMap(sorce):
+    DB_MAP = {WELD:WeldStoreList,PROFILE:BarSteelMaterialLedger,SHEET:BoardSteelMaterialLedger,PURCHASED:OutsideStorageList,AUXILIARY_TOOL:AuxiliaryTool}
+    if sorce == "purchaser":    
+        for tp in WELD_TYPE_LIST:
+            if tp in WELD_TYPE_LIST:
+                DB_MAP[tp] = WeldStoreList
+    return DB_MAP

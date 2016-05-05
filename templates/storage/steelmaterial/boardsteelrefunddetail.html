@@ -17,9 +17,9 @@
 {% block inner_content %}
 <h3 class="table-title">板材退库单</h3>
 <div class="control-group">
-    <button type="button" class="btn btn-primary">工作令: {{common_Info.work_order}}</button>
-    <button type="button" class="btn btn-primary">日期: {{common_Info.date|date:"Ymd"}}</button>
-    <button type="button" class="btn btn-primary">编号: {{common_Info.form_code}}</button> 
+    <button type="button" class="btn btn-default">工作令: {{common_Info.work_order}}</button>
+    <button type="button" class="btn btn-default">日期: {{common_Info.date|date:"Ymd"}}</button>
+    <button type="button" class="btn btn-default">编号: {{common_Info.form_code}}</button> 
 </div>
 <table class="table table-bordered" fc="{{common_Info.form_code}}">
     <thead>
@@ -30,7 +30,7 @@
         <th>状态</th>
         <th>数量</th>
         <th>重量</th>
-        <th>入库编号</th>
+        <th>入库单编号</th>
         <th>备注</th>
     </thead>
     <tbody>
@@ -43,15 +43,14 @@
             <td>{{card.status}}</td>
             <td>{{card.quantity}}</td>
             <td>{{card.weight}}</td>
-            <td></td>
-            <!-- <td>{{card.steel_material.entry_form.form_code}}</td> -->
+            <td>{{card.steel_material.show_form_code}}</td>
             <td>{{card.remark}}</td>
         </tr>
         <tr>
             <td>套料图</td>
-            <td colspan="7">{{card.graph}}</td>
-            <td>
-                <button class="btn btn-primary">下载</button>
+            <td colspan="6">{{card.graph}}</td>
+            <td colspan="2">
+                <a class="btn btn-primary" href="{{card.graph}}">下载</a>
             </td>
         </tr>
         {% endfor %}
@@ -70,5 +69,4 @@
         <button class="refund-card-ensure-btn btn btn-success">确认</button>   
         {% endifequal %}
     </center>
-</div>
 {% endblock %}

@@ -1,196 +1,49 @@
-<!-- <form class="form-search ">
-    工作令: 
-    <select class="input-medium search-query" id="search_pending_order">
-        <option style="width:200px">03015001B</option>
-        <option style="width:200px">2</option>
-        <option style="width:200px">3</option>
-        <option style="width:200px">4</option>
-        <option style="width:200px">5</option>
-    </select>
-    <span class="btn" id="order_search">检索</span> 
-</form> -->
-
-
 <div class="widget-box">
     <div class="widget-title">
         <span class="icon"><i class="icon-th"></i></span>
-        <h5>工作令：03015001B</h5>
-        <h5>产品名称：第一中温变换炉</h5>
-        <h5>编制人：</h5>
-        <h5>审核人：</h5>
+        <h5>工作令：{{work_order.order_index}}</h5>
+        <h5>产品名称：{{work_order.product_name}}</h5>
     </div>
-    <div class="widget-content nopadding">
+    <div class="widget-content nopadding" style="max-height:800px; overflow-y:auto;">
         <div class="dataTables_length">
-            <span class="btn btn-small btn-primary">完成</span>
-            <span class="btn btn-small btn-primary">审核</span>
-            <span class="btn btn-small btn-primary">工艺修改记录</span>
-        </div>
+        <span id="span_write">
+        编制人：
+            {% if not work_order.weldquotapagemark.writer %}
+            <span class="btn btn-mini btn-primary" id="btn_weld_quota_write_confirm">签字</span>
+            {% else %}
+            {{work_order.weldquotapagemark.writer.userinfo}}
+            {% endif %} 
+        </span>
+
+        <span id="span_review">
+        审核人：
+            {% if not work_order.weldquotapagemark.reviewer %}
+            <span class="btn btn-mini btn-primary" id="btn_weld_quota_review_confirm">签字</span>
+            {% else %}
+            {{work_order.weldquotapagemark.reviewer.userinfo}}
+            {% endif %}
+        </span>
+    </div>
         <table class="table table-bordered table-striped" >
-            <thead>
-                <tr>
+            <tr>
                     <th>焊条</th>
                     <th>焊丝</th>
                     <th>焊带</th>
                     <th>焊剂</th>
                     <th>规格</th>
-                    <th>定额（kg）</th>
-                    <th>备注</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> H309L-15 </td>
-                    <td>  </td>
-                    <td> 0.5x60 </td>
-                    <td> 2355 </td>
-                    <td> 
-                    </td>
-                </tr>
-                <tr>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> H347-15 </td>
-                    <td>  </td>
-                    <td> 0.5x60 </td>
-                    <td> 2355 </td>
-                    <td> 
-                    </td>
-                </tr>
-                <tr>
-                    <td>  </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> SJ15B </td>
-                    <td>  </td>
-                    <td> 3532.5 </td>
-                    <td> 
-                    </td>
-                </tr>
-                <tr>
-                    <td>  </td>
-                    <td> E347LT1-1 </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> （φ1.2） </td>
-                    <td> 771.93 </td>
-                    <td> 
-                    </td>
-                </tr>
-                <tr>
-                    <td>  </td>
-                    <td> E309LT1-1 </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> （φ1.2） </td>
-                    <td> 622.5 </td>
-                    <td> 
-                    </td>
-                </tr>
-                <tr>
-                    <td>  </td>
-                    <td> ER50-6 </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> （φ1.2） </td>
-                    <td> 23 </td>
-                    <td> 
-                    </td>
-                </tr>
-                <tr>
-                    <td>  </td>
-                    <td> E309LMoT1-1 </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> （φ1.2） </td>
-                    <td> 11.74 </td>
-                    <td> 
-                    </td>
-                </tr>
-                <tr>
-                    <td>  </td>
-                    <td> H08Mn2SiA </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> （φ1.2） </td>
-                    <td> 98 </td>
-                    <td> 
-                    </td>
-                </tr>
-                <tr>
-                    <td>  </td>
-                    <td> H08CrMoA2) </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> (φ4.0) </td>
-                    <td> 995.6 </td>
-                    <td> 
-                    </td>
-                </tr>
-                <tr>
-                    <td> R3072)3) </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> (φ4.0) </td>
-                    <td> 1493 </td>
-                    <td> 
-                    </td>
-                </tr>
-                <tr>
-                    <td>  </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> SJ1012) </td>
-                    <td>  </td>
-                    <td> 1109.5 </td>
-                    <td> 
-                    </td>
-                </tr>
-                <tr>
-                    <td> T Phoenix Cr1Mo SC2)3) </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> (φ4.0) </td>
-                    <td> 49.5 </td>
-                    <td> 已提
-                    </td>
-                </tr>
-                <tr>
-                    <td>  </td>
-                    <td> T Union SA Cr1Mo SC2) </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> (φ3.0) </td>
-                    <td> 229.334 </td>
-                    <td> 已提
-                    </td>
-                </tr>
-                <tr>
-                    <td>  </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> UV420TTR2) </td>
-                    <td>  </td>
-                    <td> 277.5 </td>
-                    <td> 已提
-                    </td>
-                </tr>
-                <tr>
-                    <td> ENi6625 </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td> (φ4.0) </td>
-                    <td> 25 </td>
-                    <td> 
-                    </td>
-                </tr>
-
-            </tbody>
+                    <th>定额</th>
+            </tr>
+           {% for item,value in dic.items%}
+            <tr class="tr_weldseam" >
+                
+                <td id="id_weld_rod">{% if item.2 == "weld_rod" %}{{item.0}}{% endif %}</td>
+                <td id="id_weld_wire">{% if item.2 == "weld_wire" %}{{item.0}}{% endif %}</td>
+                <td id="id_weld_ribbon">{% if item.2 == "weld_ribbon" %}{{item.0}}{% endif %}</td>
+                <td id="id_weld_flux">{% if item.2 == "weld_flux" %}{{item.0}}{% endif %}</td>
+                <td >{{item.1}}</td>
+                <td>{{value}}</td>
+            </tr>
+            {% endfor %}
         </table>
     </div>
 </div>

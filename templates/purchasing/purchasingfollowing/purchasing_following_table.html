@@ -52,8 +52,8 @@
                     <td><button class="btn">检验入库</button></td>
                     {%endif%}
                     <td>{{bid.bid_status}}</td>
-                    <td><button class="btn">查看</button></td>
-                    <td><button class="btn">填写</button></td>
+                    <td><a href="/purchasing/statusChangeHistory/{{bid.id}}" class="btn">查看</a></td>
+                    <td><a href="/purchasing/statusChange/{{bid.id}}"class="btn">填写</a></td>
                 </tr>
                 {%endfor%}
             </tbody>

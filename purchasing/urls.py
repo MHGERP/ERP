@@ -31,6 +31,10 @@ urlpatterns=patterns('',
         r'^arrivalInspection$',
         purchasing_views.arrivalInspectionViews,
     ),
+   url(
+        r'^arrivalInspectionConfirm/(?P<entry_typeid>\d+)/(?P<eid>\d+)/(?P<steel_typeid>\d*)$',
+        purchasing_views.arrivalInspectionConfirmViews,
+    ),
     url(
         r'^arrivalCheck/(?P<bid>\w+)/$',purchasing_views.arrivalCheckViews,name='arrivalCheck',                    
     ),

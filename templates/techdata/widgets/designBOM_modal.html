@@ -1,7 +1,7 @@
-<div class="modal hide fade" id="designBOM_edit_modal" modal-size-width="0.75" tabindex="-1" role="dialog" aria-lableledby="myModalLabel" aria-hidden="true">
+<div class="modal hide fade" id="designBOM_edit_modal" modal-size-width="0.55" tabindex="-1" role="dialog" aria-lableledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h2 class="modal-title" id="modal_title">设计库修改</h2>
+    <h2 class="modal-title" id="modal_title">材料信息卡</h2>
     </div>
     <div class="modal-body" >
     <form class="form" id="materiel_form">
@@ -12,6 +12,11 @@
     </form>
     <form class="well" id="circulationroute_form">
       {% csrf_token %}
+      <div>
+        <b>请输入流转路线并使用分号;分割（如：H1;J;ZM）:</b>
+        <textarea  style="resize:none"id ="id_rounte"></textarea>
+        <button type="button" class="btn" id="quick_edit" >快速编辑</button>
+      </div>
       <div class="" id="circulationroute_div">
 
       </div>

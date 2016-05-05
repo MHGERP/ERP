@@ -1,33 +1,24 @@
 {% extends "storage/base/weldbase.html" %}
 {% block sub_sec %}
-<a href="/storage/weldentryhome">焊接材料入库管理</a>
-<a href="#" class="current">焊接材料入库单</a>
+<a href="/storage/weldentryhome">焊材入库管理</a>
+<a href="#" class="current">焊材入库单</a>
 {% endblock %}
 {% block title %}
-<h1>焊接材料入库单</h1>
+<h1>焊材入库单</h1>
 {% endblock %}
 
 {% block inner_content %}
+{% comment %}
 <form class="form form-inline" method="post">
     {% csrf_token%}
-    <div class="row" style="margin-bottom:20px;">
-        <div class="span3">
-            <label class="hz-align">工作令：</label>
-            <strong>{{entry.work_order}}</strong>
-        </div>
-        <div class="span3">
+    <div class="row-fluid" style="margin-bottom:20px;">
+        <div class="span6">
             <label class="hz-align">入库时间：</label>
             <strong>{{entry.entry_time|date:"Y年m月d日"}}</strong>
         </div>
-        <div class="span4">
+        <div class="span6">
             <label class="hz-align">单据编号：</label>
-            {% if is_show %}
-            <div class="controls-group" style="display:inline" id="entry_code">
-                <input type="text" id = "input_entry_code" class="span2" value="{{entry.entry_code}}"></input>
-            </div>
-            {% else %}
             <strong>{{entry.entry_code}}</strong>
-            {% endif %}
         </div>
     </div>
     <div id = "items_table">
@@ -52,6 +43,8 @@
     {% endif %}
     </center>
 </form>
+{% endcomment %}
+{% include "storage/wordhtml/weldentry.html" %}
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -76,8 +69,7 @@
 </div>
 <script>
     $(function(){
-            $('#entry_time').datetimepicker({format: "yyyy-mm-dd",minView:2,autoclose:true});
-            $('#id_date').datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true});
+            $('#id_production_date').datetimepicker({format: "yyyy-mm-dd",minView:2,autoclose:true});
             });
 </script>
 {% endblock %}

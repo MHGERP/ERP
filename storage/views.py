@@ -4,6 +4,7 @@ import datetime
 from django.shortcuts import render
 
 from const import *
+from const import MATERIAL_TYPE
 from const.forms import InventoryTypeForm
 from const.utils import *
 from datetime import datetime
@@ -61,7 +62,7 @@ def steelrefunddetailViews(request,typeid,rid):
 
 def steelApplyViews(request):
     search_form = SteelRefundSearchForm()
-    apply_cards = CommonSteelMaterialApplyCardInfo.objects.all()
+    apply_cards = CommonSteelMaterialApplyCardInfo.objects.all().order_by("apply_confirm")
     context={
         "search_form":search_form,
         "apply_cards":apply_cards,
@@ -86,7 +87,7 @@ def steelApplyDetailViews(request,typeid,rid):
 
 def steelLedgerViews(request):
     search_form = SteelLedgerSearchForm()
-    steel_set = SteelMaterial.objects.all()
+    steel_set = SteelMaterial.objects.all().order_by("steel_type")
     context={
         "search_form":search_form,
         "steel_set":steel_set,
@@ -104,12 +105,12 @@ def weldEntryHomeViews(request):
     else:
         weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         search_form = EntrySearchForm()
-    weldentry_set = weldentry_set.order_by("-entry_time")
+    weldentry_set = weldentry_set.order_by("-entry_status","-entry_time","-entry_code")
     context = {
             "entry_set":weldentry_set,
             "ENTRYSTATUS_END":STORAGESTATUS_END,
             "search_form":search_form,
-            "entryurl":"weldentryconfirm",
+            "entryurl":"storage/weldentryconfirm",
             }
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
@@ -123,7 +124,7 @@ def steelEntryHomeViews(request):
     else:
         steelentry_set = SteelMaterialPurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         search_form = SteelEntrySearchForm()
-    steelentry_set = steelentry_set.order_by("-entry_time")
+    steelentry_set = steelentry_set.order_by("-entry_status","-entry_time")
     context = {
         "steel_entry_set":steelentry_set,
         "ENTRYSTATUS_END":STORAGESTATUS_END,
@@ -140,7 +141,7 @@ def weldEntryConfirmViews(request,eid):
 
     context = {
             "entry":entry,
-            "entry_set":items,
+            "items":items,
             "item_form":entryitem_form,
             "is_show":is_show,
             "redict_path":redict_path,
@@ -150,22 +151,22 @@ def weldEntryConfirmViews(request,eid):
 def steelEntryConfirmViews(request,eid,typeid):
     typeid = int(typeid)
     entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-    print entry
     if typeid:
-        items = entry.boardsteelmaterialpurchasingentry_set.all()
-    else:
         items = entry.barsteelmaterialpurchasingentry_set.all()
-        print items
+    else:
+        items = entry.boardsteelmaterialpurchasingentry_set.all()
+    form = steelEntryItemsForm()
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
     context = {
             "entry":entry,
             "entry_set":items,
             "is_show":is_show,
+            "form":form,
             }
     if typeid:
-        return render(request,"storage/steelmaterial/boardsteelmaterialentryconfirm.html",context)
-    else:
         return render(request,"storage/steelmaterial/barsteelmaterialentryconfirm.html",context)
+    else:
+        return render(request,"storage/steelmaterial/boardsteelmaterialentryconfirm.html",context)
     
 def Weld_Apply_Card_List(request):
     """
@@ -176,7 +177,7 @@ def Weld_Apply_Card_List(request):
     """
     context={}
     context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
-    weld_apply_cards=WeldingMaterialApplyCard.objects.all().order_by('create_time')
+    weld_apply_cards=WeldingMaterialApplyCard.objects.all().order_by('-create_time')
     context['weld_apply_cards']=weld_apply_cards
     context['search_form']=ApplyCardHistorySearchForm()
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
@@ -677,7 +678,10 @@ def outsideHomeViews(request):
 
 def outsideEntryHomeViews(request):
     key_list = ["entry_set","entryurl","ENTRYSTATUS_END"]
-    context = getStorageHomeContext(request,OutsideStandardEntry,OutsideEntrySearchForm,STORAGESTATUS_KEEPER,"outside/entryconfirm",key_list,"entry_time")
+    context = getStorageHomeContext(request,OutsideStandardEntry,OutsideEntrySearchForm,STORAGESTATUS_KEEPER,"storage/outside/entryconfirm",key_list,"entry_time")
+    context["check_materiel_form"] = CheckMaterielListForm()
+    context["is_production"] = True
+    context["items_set"] = WeldStoreList.objects.all()
     return render(request,"storage/outside/outsideentryhome.html",context)
 
 def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list,order_field):
@@ -707,7 +711,6 @@ def outsideEntryConfirmViews(request,eid):
 def getEntryConfirmContext(request,eid,_Model,_Inform,_Reform,entry_url):
     entry_obj = _Model.objects.get(id = eid)
     inform = _Inform(instance = entry_obj)
-    print "dadsa"
     reform = _Reform(instance = entry_obj)
     is_show = entry_obj.entry_status == STORAGESTATUS_KEEPER
     entry_set = OutsideStandardItem.objects.filter(entry = entry_obj)
@@ -729,6 +732,7 @@ def StoreThreadViews(request):
             items_set = get_weld_filter(WeldStoreThread,search_form.cleaned_data)
     else:
         search_form = ThreadSearchForm()
+    items_set = items_set.order_by('type','specification')
     context = {
         "items_set":items_set,
         "entry_form":entry_form,
@@ -737,7 +741,7 @@ def StoreThreadViews(request):
     return render(request,"storage/storethread/storethread.html",context)
 
 def outsideApplyCardHomeViews(request):
-    applyurl = "outside/applycardconfirm"
+    applyurl = "storage/outside/applycardconfirm"
     key_list = ["card_set","applyurl","APPLYSTATUS_END"]
     context = getStorageHomeContext(request,OutsideApplyCard,OutsideApplyCardSearchForm,STORAGESTATUS_KEEPER,applyurl,key_list,"date")
     return render(request,"storage/outside/applycardhome.html",context)
@@ -768,13 +772,8 @@ def outsideAccountHomeViews(request):
     return render(request,"storage/outside/accounthome.html",context)
 
 def outsideStorageAccountViews(request):
-    if request.method == "POST":
-        search_form = OutsideStorageSearchForm(request.POST)
-        if search_form.is_valid():
-            items_set = get_weld_filter(OutsideStorageList,search_form.cleaned_data)
-    else:
-        items_set = OutsideStorageList.objects.order_by('specification')
-        search_form = OutsideStorageSearchForm()
+    items_set = OutsideStorageList.objects.order_by('specification')
+    search_form = OutsideStorageSearchForm()
     items_set = items_set.order_by('specification')
     context = {
         "items_set":items_set,
@@ -807,3 +806,18 @@ def outsideApplyCardAccountHomeViews(request):
     }
 
     return render(request,"storage/outside/account/applycardhome.html",context)
+
+
+def storeRoomManageViews(request):
+    """
+    kad
+    """
+    new_room = StoreRoomForm()
+    room_set = StoreRoom.objects.all().order_by('-id')
+    search_form = StoreRoomSearchForm()
+    context = {
+        "room_set":room_set,
+        "search_form":search_form,
+        "new_room":new_room,
+    }
+    return render(request,"storage/basedata/storeroommanage.html", context)

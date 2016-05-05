@@ -1,9 +1,7 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
 		<tr>
-			{% if can_choose %}
 			<th><input type="checkbox" id="select_all"/></th>
-			{% endif %}
 			<th>序号</th>
 			<th>名称</th>
 			<th>材质</th>
@@ -25,11 +23,10 @@
 	<tbody>
 		{% for item in items_pending %}
 		<tr class="pendding" args="{{item.id}}">	
-			{% if can_choose %}
 			<td>{% if item.can_choose %}
 			<input type="checkbox" class="checkbox" args="{{item.id}}">
-			{% endif %}</td> {% endif %}
-			<td>{{item.index}}</td>
+            {% endif %}</td> 
+			<td>{{forloop.counter}}</td>
         	<td>{{item.name}}</th>
             <td>{{item.material.name}}</td>
             <td>{{item.press}}</td>
@@ -51,11 +48,10 @@
 		{% endfor %}
 		{% for item in items %}
 		<tr mod="0">	
-			{% if can_choose %}
 			<td>{% if item.can_choose %}
 			<input type="checkbox" class="checkbox" args="{{item.id}}">
-			{% endif %}</td> {% endif %}
-			<td>{{item.index}}</td>
+			{% endif %}</td> 
+			<td>{{forloop.counter}}</td>
         	<td>{{item.name}}</th>
             <td>{{item.material.name}}</td>
             <td>{{item.press}}</td>

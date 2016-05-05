@@ -8,23 +8,23 @@ from const import PROCESSING_CHOICES, TRANSFER_CARD_TYPE_CHOICES,MATERIAL_CATEGO
 class MaterielForm(forms.ModelForm):
     """
     JunHU
+    parent_schematic_index was exclude from "exclude" 2016.3.18
     """
     class Meta:
         model = Materiel
-        exclude = ("id", "order","parent_schematic_index")
+        exclude = ("id", "order",)
         widgets = {
-            "name": forms.TextInput(attrs = {"class": "input-medium"}),
-            "index": forms.TextInput(attrs = {"class": "input-small"}),
-            "schematic_index": forms.TextInput(attrs = {"class": "input-medium"}),
-            "material": forms.Select(attrs = {"class": "input-medium"}),
-            "count": forms.TextInput(attrs = {"class": "input-medium"}),
-            "remark": forms.TextInput(attrs = {"class": "input-medium"}),
-            "net_weight": forms.TextInput(attrs = {"class": "input-medium"}),
-            "total_weight": forms.TextInput(attrs = {"class": "input-medium"}),
+            "name": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "sub_index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "schematic_index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "parent_schematic_index" : forms.TextInput(attrs = {"class" : "input-medium"}),
+            "material": forms.Select(attrs = {"class": "input-medium", "readonly": "true"}),
+            "count": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "remark": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "net_weight": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
+            "total_weight": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "specification": forms.TextInput(attrs = {"class": "input-medium"}),
-            "quota_coefficient": forms.TextInput(attrs = {"class": "input-medium"}),
-            "quota": forms.TextInput(attrs = {"class": "input-medium"}),
-            
         }
 
 class ProcessReviewForm(forms.ModelForm):
@@ -56,6 +56,8 @@ class WeldSeamForm(forms.ModelForm):
         exclude = ('materiel_belong',)
         widgets = {
             "weld_index": forms.TextInput(attrs = {"class": "input-small"}),
+            "base_metal_1": forms.TextInput(attrs = {"class": "input-small"}),
+            "base_metal_2": forms.TextInput(attrs = {"class": "input-small"}),
             "base_metal_thin_1": forms.TextInput(attrs = {"class": "input-small"}),
             "base_metal_thin_2": forms.TextInput(attrs = {"class": "input-small"}),
             "length": forms.TextInput(attrs = {"class": "input-small"}),
@@ -63,8 +65,10 @@ class WeldSeamForm(forms.ModelForm):
             "weight_2": forms.TextInput(attrs = {"class": "input-small"}),
             "weld_material_1": forms.Select(attrs = {"class": "input-small"}),
             "weld_material_2": forms.Select(attrs = {"class": "input-small"}),
-            "weld_method": forms.Select(attrs = {"class": "input-small"}),
+            "weld_method_1": forms.Select(attrs = {"class": "input-small"}),
+            "weld_method_2": forms.Select(attrs = {"class": "input-small"}),
             "weldseam_type": forms.Select(attrs = {"class": "input-small"}),
+            "weld_position": forms.Select(attrs = {"class": "input-small"}),
             "size_1": forms.TextInput(attrs = {"class": "input-small"}),
             "size_2": forms.TextInput(attrs = {"class": "input-small"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium"}),
@@ -73,6 +77,38 @@ class WeldSeamForm(forms.ModelForm):
             "heat_treatment_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
             "pressure_test_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
         }
+
+class ProcessingRouteForm(forms.ModelForm):
+    """
+    JunHU
+    """
+    class Meta:
+        model = Processing
+        exclude = ('materiel_belong', 'GS1', 'GS2', 'GS3', 'GS4', 
+                  'GS5', 'GS6', 'GS7', 'GS8', 'GS9', 'GS10', 
+                  'GS11', 'GS12') 
+        widgets = {
+            "GX1" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX2" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX3" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX4" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX5" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX6" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX7" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX8" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX9" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX10" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX11" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+            "GX12" : forms.Select(attrs = {"class" : "form-control input-mini"}),
+        }
+    def clean(self):
+        cleaned_data = super(ProcessingRouteForm, self).clean()
+        for i in range(2, 13):
+            curfield = "GX%d" % i
+            prevfield = "GX%d" % (i - 1)
+            if cleaned_data.get(curfield) != None and cleaned_data.get(prevfield) == None:
+                raise forms.ValidationError("工序路线必须连续")
+        return cleaned_data
 
 class ProcessInfoForm(forms.ModelForm):
     """
@@ -168,8 +204,14 @@ class TechPreparationPlanForm(forms.ModelForm):
     """
     class Meta:
         model = TechPlan
-        exclude = {"id", "order"}
-        #planCompleteDate = forms.DateField(label = u"计划完成日期", required = True, widget = forms.TextInput(attrs = {'class' : 'form-control', 'id' : 'date'}))
+        fields = ("detail", "sentDepartment", "planCompleteDate")
         widgets = {
             "planCompleteDate" : forms.TextInput(attrs = {'class' : 'form-control', 'id' : 'date'})
         }
+
+class UploadForm(forms.Form):
+    """
+    BinWu
+    """
+    pic = forms.FileField(label="导入图片", required=False,
+                         widget=forms.FileInput())

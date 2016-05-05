@@ -1,12 +1,3 @@
-<form class="form-inline" method="post">
-    {% csrf_token %}
-    {% for field in search_form %}
-    {{field.label}}
-    {{field}}
-    {% endfor %}
-    <button class="btn btn-success">检索</button> 
-</form>
-<br>
 <table class="table table-bordered">
     <thead>
         <th>入库单编号</th>
@@ -22,7 +13,7 @@
             <td>{{entry.entry_time|date:"Y年m月d日"}}</td>
             <td>{{entry.purchaser.userinfo}}</td>
             <td>{{entry.inspector.userinfo}}</td>
-            <td>{% ifequal entry.entry_status  ENTRYSTATUS_END %}<a class="btn" href="/storage/{{entryurl}}/{{entry.id}}">查看</a>{% else %}<a class="btn btn-warning" href="/storage/{{entryurl}}/{{entry.id}}">待处理</a>{% endifequal %}</td>
+            <td>{% ifequal entry.entry_status  ENTRYSTATUS_END %}<a class="btn" href="/{{entryurl}}/{{entry.id}}">查看</a>{% else %}<a class="btn btn-warning" href="/{{entryurl}}/{{entry.id}}">待处理</a>{% endifequal %}</td>
         </tr>
         {% endfor %}
     </tbody>

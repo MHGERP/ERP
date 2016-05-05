@@ -4,18 +4,18 @@
 {% endblock %}
 
 {% block sub_sec %}
-<a href="/storage/outside/outsideaccounthome">外购件台账</a>
+<a href="/storage/outside/account/home">外购件台账</a>
 <a href="/storage/outside/outsidestorageaccount" class="current">外购件库存台账</a>
 {% endblock %}
 {% block inner_content %}
 <h3>外购件库存台账</h3>
-<form class="form-inline" method="post">
+<form class="form-inline" method="post" id="search_form">
     {% csrf_token %}
     {% for field in search_form %}
     {{field.label}}
     {{field}}
     {% endfor %}
-    <button class="btn btn-success" type="submit">检索</button>
+    <button class="btn btn-success" type="button" onclick="outside_thread_search()">检索</button>
     <button class="btn btn-success" type="button" onclick="get_outsidethread()">需采购</button>
 </form>
 <br />

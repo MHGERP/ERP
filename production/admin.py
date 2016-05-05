@@ -6,6 +6,9 @@ from production.models  import *
 
 RegisterClass = (
     SynthesizeFileListStatus,
+    ProductionPlan,
+    ProductionWorkGroup,
+    ProcessDetail,
 )
 for item in RegisterClass:
     admin.site.register(item)
