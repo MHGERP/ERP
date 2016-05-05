@@ -111,19 +111,23 @@ $("#test").click(function(){
 
 $("#joint_btn").click(function(){
    jointArray = Array();
-   var method = null, thin1 = null, thin2 = null;
+   var method1 = "", method2 = "", thin1 = "", thin2 = "", texture1 = "", texture2 = "";
    var child;
+   var err = false;
    $("input.checkbox").each(function(){
         if(this.checked) {
-            //alert($(this).parent().parent().children().eq(5).text());
             child = $(this).parent().parent().children();
-            if(method == null) {
-                method = child.eq(5).text();
-                thin1 = child.eq(6).text();
-                thin2 = child.eq(7).text();
+            if(method1 == "") {
+                method1 = child.eq(5).text();
+                method2 = child.eq(6).text();
+                thin1 = child.eq(7).text();
+                thin2 = child.eq(9).text();
+                texture1 = child.eq(8).text();
+                texture2 = child.eq(10).text();
             }
-            else if(method != child.eq(5).text() || thin1 != child.eq(6).text() || thin2 != child.eq(7).text()) {
+            else if(method1 != child.eq(5).text() || method2 != child.eq(6).text() || thin1 != child.eq(7).text() || thin2 != child.eq(9).text() || texture1 != child.eq(8).text() || texture2 != child.eq(10).text()) {
                 alert("所选焊缝不能合并");
+                err = true;
                 jointArray = Array();
                 clearCheckBox();
                 return;
@@ -131,21 +135,25 @@ $("#joint_btn").click(function(){
             jointArray.push($(this).attr("arg"));
         }
     });
-    Dajaxice.techdata.getWeldJointDetailForm(function(data) {
-        $("#weldjoint_detail_form").html(data);
-        $("#weldjoint_detail_modal").modal();
-    },
-    {
-        "weld_method": method,
-        "bm_specification_1" : thin1,
-        "bm_specification_2" : thin2,
-    });
+    if(jointArray.length == 0) {
+        alert("请选择！");
+        return;
+    }
+    if(err == false) {
+        Dajaxice.techdata.getWeldJointDetailForm(function(data) {
+            $("#weldjoint_detail_form").html(data);
+            $("#weldjoint_detail_modal").modal();
+        },
+        {
+            "weld_method": method1,
+            "bm_specification_1" : thin1,
+            "bm_specification_2" : thin2,
+            "bm_texture_1" : texture1,
+            "bm_texture_2" : texture2,
+        });
+    }
 });
 
-/*function getWeldJointForm_Callbcak(data) {
-    $("#weldjoint_detail_form").html(data);
-
-}*/
 
 /*function save_jointdetail() {
     Dajaxice.techdata.addToJointDetail(

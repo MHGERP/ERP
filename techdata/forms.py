@@ -89,8 +89,8 @@ class WeldJointTechDetailForm(forms.ModelForm):
             "bm_specification_2" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),
             "weld_method" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),
             "procedureQualification_index" : forms.Select(attrs = {"class" : "input-small"}),
-            "weld_certification" : forms.SelectMultiple(attrs = {"class" : "input-small"}),
-            "remark" : forms.TextInput(attrs = {"class" : "input-medium"}),
+            "weld_certification" : forms.SelectMultiple(attrs = {"class" : "input-xlarge"}),
+            "remark" : forms.TextInput(attrs = {"class" : "input-xxlarge"}),
         }
 
 class ProcessingRouteForm(forms.ModelForm):
