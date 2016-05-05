@@ -12,6 +12,7 @@ RegisterClass = (
     ProcessingName,
     WeldSeam,
     WeldSeamType,
+    WeldPositionType,
     WeldMethod,
     NondestructiveInspection,
     WeldListPageMark,
