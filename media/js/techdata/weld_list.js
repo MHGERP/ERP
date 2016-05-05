@@ -129,17 +129,35 @@ $("#joint_btn").click(function(){
                 return;
             }
             jointArray.push($(this).attr("arg"));
-         }
-   });
-    /*Dajaxice.techdata.addToJointDetail(
+        }
+    });
+    Dajaxice.techdata.getWeldJointDetailForm(function(data) {
+        $("#weldjoint_detail_form").html(data);
+        $("#weldjoint_detail_modal").modal();
+    },
+    {
+        "weld_method": method,
+        "bm_specification_1" : thin1,
+        "bm_specification_2" : thin2,
+    });
+});
+
+/*function getWeldJointForm_Callbcak(data) {
+    $("#weldjoint_detail_form").html(data);
+
+}*/
+
+/*function save_jointdetail() {
+    Dajaxice.techdata.addToJointDetail(
         add_to_jointdetail_callback, 
         {
             "id_work_order" : $("#id_work_order".val(),
             "jointArray" : jointArray,
         }
-    );*/
-});
+    }
+}
+
 
 function add_to_jointdetail_callback(data) {
     
-}
+}*/

@@ -445,12 +445,16 @@ PRODUCTION_PLAN_STAUTS_CHOICES = (
 #焊缝焊接接头  焊工持证项目
 SMAW_Fell = "SMAW-Fell-5FG-12/60-Fef3J"
 GMAW_Fell = "GMAW-Fell-3G-14-FefS-11/15"
+SAW_1G_07 = "SAW-1G07/09/19"
 WELD_CERTIFICATION = (
     (SMAW_Fell, "SMAW-Fell-5FG-12/60-Fef3J"),
-    (GMAW_Fell, "GMAW-Fell-3G-14-FefS-11/15")
+    (GMAW_Fell, "GMAW-Fell-3G-14-FefS-11/15"),
+    (SAW_1G_07, "SAW-1G-07/09/19"),
 )
 #焊接工艺评定编号
 RH24_13_09 = "RH24-13-09"
+RH24_13_36 = "RH24-13-36"
 PROCEDURE_QUALIFICATION_INDEX = (
-    (RH24_13_09, "RH-13-09"),
+    (RH24_13_09, "RH24-13-09"),
+    (RH24_13_36, "RH24-13-36"),
 )

@@ -1130,6 +1130,22 @@ def removeConnectOrientation(request, pid):
     except:
         return simplejson.dumps({"ret": False})
 
+@dajaxice_register
+def getWeldJointDetailForm(request, weld_method, bm_specification_1, bm_specification_2, iid = None):
+    if iid:
+        weld_joint_detail = WeldJointTechDetail.objects.get(id = iid)
+        weld_joint_detail_form = WeldJointTechDetailForm(instance = weld_joint_detail)
+    else:
+        weld_joint_detail_form = WeldJointTechDetailForm()
+        weld_joint_detail_form.fields["weld_method"] = weld_method
+        weld_joint_detail_form.fields["bm_specification_1"] = bm_specification_1
+        weld_joint_detail_form.fields["bm_specification_2"] = bm_specification_2
+    context = {
+        "form" : weld_joint_detail_form
+    }
+    return render_to_string("techdata/widgets/weldjoint_detail.html", context)
+
+
 #@dajaxice_register
 #def addToJointDetail(request, id_work_order, jointArray):
 #    """
@@ -1144,4 +1160,5 @@ def removeConnectOrientation(request, pid):
 #    for id in jointArray:
 #        weldseam = WeldSeam.objects.get(id = id)
 #        weld_joint_detail.specification = weldseam
-#            
+#           
+
