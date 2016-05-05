@@ -20,6 +20,7 @@ class ProcessDetail(models.Model):
     materiel_belong = models.ForeignKey(Materiel, blank = False, verbose_name = u"工作票")
     processname = models.ForeignKey(ProcessingName, blank = False, verbose_name = u"工序名称")
     process_id = models.IntegerField(blank=False, verbose_name=u"第几道工序")
+    work_hour = models.IntegerField(blank=False, verbose_name=u"工时")
     productionworkgroup = models.ForeignKey(ProductionWorkGroup, blank = True, verbose_name = u"工作组")
     plan_startdate = models.DateField(blank = True, verbose_name = u"计划开始时间")
     plan_enddate = models.DateField(blank = True, verbose_name = u"计划完成时间")
