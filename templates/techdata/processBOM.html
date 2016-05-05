@@ -49,6 +49,23 @@
   </div>
 </div>
 
+<div id="weldseam_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.65" >
+  <div class="modal-header">
+    <h2 id="groupLabel">材料信息卡</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+	<form class="form" id="weld_seam_card" class="well">
+		
+	</form>
+  </div>
+  <div class="modal-footer">
+	<button class="btn btn-primary">定额计算</button>
+	<button class="btn btn-primary" id="btn_save_weldseam">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/processBOM.js"></script>
 {% endblock%}
 

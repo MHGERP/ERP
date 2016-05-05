@@ -406,10 +406,13 @@ def ledgerSearch(request, form):
     search_form = LedgerSearchForm(deserialize_form(form))
     if search_form.is_valid():
         con = search_form.cleaned_data
+
+        
+
         print con
-        q1 = (con["work_order"] and Q(order_id = con["work_order"])) or None
+        q1 = (con["order"] and Q(order_id = con["order"])) or None
         q2 = (con["work_index"] and Q(index = con["work_index"])) or None
-        q3 = (con["parent_schematic"] and Q(parent_schematic_index = con["parent_schematic"])) or None
+        q3 = (con["parent_schematic_index"] and Q(parent_schematic_index = con["parent_schematic_index"])) or None
         query_set = filter(lambda x:x!=None, [q1,q2,q3])
 
         if query_set:

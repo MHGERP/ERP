@@ -58,26 +58,21 @@ function saveCallback(data) {
        
 }
 
-$("#weldseam_edit").click(function() {
-    Dajaxice.techdata.getWeldSeamCard(getCardCallBack, {}); 
+$(document).on("click", ".btn_open_weld_modal", function() {
+    $("#weldseam_modal").attr("iid", $(this).parent().parent().attr("iid"));
+    Dajaxice.techdata.getWeldSeamCard(getCardCallBack, {});
+    $("#weldseam_modal").modal("show");
 });
 function getCardCallBack(data) {
     $("#weld_seam_card").html(data);
 }
-
-$(document).on("click", "#btn_cancel", function() {
-    $("#weld_seam_card").html("");
-});
-
-
-$(document).on("click", "#btn_weldseam_confirm", function() {
-    var iid = $("#card_modal").attr("iid");
+$("#btn_save_weldseam").click(function() {
+    var iid = $("#weldseam_modal").attr("iid");
     Dajaxice.techdata.addWeldSeam(addWeldSeamCallBack, {"iid": iid, "form": $("#weld_seam_card").serialize()})
 });
 function addWeldSeamCallBack(data) {
     if(data == "ok") {
         alert("焊缝添加成功！");
-        $("#weld_seam_card").html("");
     }
     else {
         $("#weld_seam_card").html(data);
