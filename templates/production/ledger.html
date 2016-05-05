@@ -9,12 +9,10 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}style/man_hour_summarize.css" type="text/css" media="screen" />
 <div id="search-div" style="margin-bottom:10px;">
   <form class="form-inline" id="ledgerSearchForm">
-    {{ledgerSearchForm.work_order.label}}:
-    {{ledgerSearchForm.work_order}}
-    {{ledgerSearchForm.work_index.label}}:
-    {{ledgerSearchForm.work_index}}
-    {{ledgerSearchForm.parent_schematic.label}}:
-    {{ledgerSearchForm.parent_schematic}}
+    {% for field in ledgerSearchForm %}
+        {{field.label}}
+        {{field}}
+    {% endfor %}
     <button type="button" class="btn btn-primary">检索</button>
   </form>
 </div>
