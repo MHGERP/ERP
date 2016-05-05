@@ -10,6 +10,16 @@ from production.models import ProductionPlan
 from techdata.models import Processing
 from const.forms import WorkOrderForm
 
+class WorkOrderForm(forms.Form):
+    """
+    LiuYe
+    summary: store all work orders
+    """
+    order = forms.ChoiceField(label=u"工作令", widget = forms.Select(attrs = {"class": "form-control input"}))
+    # def __init__(self, *args, **kwargs):
+    #     super(WorkOrderForm, self).__init__(*args, **kwargs)
+    #     WORKORDER_CHOICES = tuple((item.id, item) for item in WorkOrder.objects.all())
+    #     self.fields["work_order"].choices = WORKORDER_CHOICES
 
 class ProdPlanForm(ModelForm):
     class Meta:
@@ -52,7 +62,7 @@ class ProductionPlanSearchForm(WorkOrderForm):
 
 class LedgerSearchForm(WorkOrderForm):
     work_index = forms.CharField(required=False, label=u"工作票号")
-    parent_schematic = forms.CharField(required=False, label=u"部件图号")
+    parent_schematic_index = forms.CharField(required=False, label=u"部件图号")
 
 
 class OrderIndexForm(forms.Form):
