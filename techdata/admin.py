@@ -5,12 +5,14 @@ from django.contrib import admin
 from techdata.models  import *
 
 RegisterClass = (
-    Processing,
     CirculationRoute,
     CirculationName,
     ProcessReview,
+    Processing,
+    ProcessingName,
     WeldSeam,
     WeldSeamType,
+    WeldPositionType,
     WeldMethod,
     NondestructiveInspection,
     WeldListPageMark,
@@ -25,6 +27,10 @@ RegisterClass = (
     TechPlan,
     WeldQuotaPageMark,
     ConnectOrientation,
+    WeldCertification,
+    ProcedureQualificationIndex,
+    WeldJointTech,
+    WeldJointTechDetail,
 )
 
 for item in RegisterClass:

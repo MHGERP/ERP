@@ -1,0 +1,54 @@
+
+<div class="span4">
+	<div class="form-inline div_margin">
+	    <label class="span1 label_margin">工作票号</label>
+		{{order_form.index}}
+	</div>
+	<div class="form-inline div_margin">
+	    <label class="span1 label_margin">材质</label>
+		{{order_form.material}}
+	</div>
+	<div class="form-inline div_margin">
+	    <label class="span1 label_margin">规格</label>
+		{{order_form.specification}}
+	</div>
+	<div class="form-inline div_margin">
+	    <label class="span1 label_margin">复验</label>
+		{{order_form.recheck}}
+	</div>
+	<div class="form-inline div_margin">
+	    <label class="span1 label_margin">探伤级别</label>
+		{{order_form.detection_level}}
+	</div>
+	<div class="form-inline div_margin">
+	    <label class="span1 label_margin">执行标准</label>
+		{{order_form.standard}}
+	</div>
+</div>
+<div class="span4">
+    <div class="form-inline div_margin">
+	    <label class="span1 label_margin">名称</label>
+		{{order_form.name}}
+	</div>
+	<div class="form-inline div_margin">
+	    <label class="span1 label_margin">质量分类</label>
+		{{order_form.press}}
+	</div>
+	<div class="form-inline div_margin">
+	    <label class="span1 label_margin">交货状态</label>
+		{{order_form.status}}
+	</div>
+	<div class="form-inline div_margin">
+	    <label class="span1 label_margin">数量</label>
+        <input class="form-control" maxlength="20" type="text" id="cnt" value={{count}}>
+	</div>
+	<div class="form-inline div_margin">
+	    <label class="span1 label_margin">备注</label>
+		{{order_form.remark}}
+	</div>
+    <div class="form-inline div_margin"{% if order_form.order_mod == 1 %}style="display:none" {% endif%}>
+        <label class="span1 label_margin">采购(kg)</label>
+        <input class="form-control" maxlength="20" type="text" id="purchasing" value={{purchasing}}>
+    </div>
+</div>
+

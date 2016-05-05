@@ -6,5 +6,6 @@ south
 django-dajax
 django-dajaxice
 xlwt
+xlrd
 simplejson
 jsonrpclib

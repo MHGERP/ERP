@@ -10,6 +10,16 @@ from production.models import ProductionPlan
 from techdata.models import Processing
 from const.forms import WorkOrderForm
 
+class WorkOrderProductionForm(forms.Form):
+    """
+    LiuYe
+    summary: store all work orders
+    """
+    order = forms.ChoiceField(label=u"工作令", widget = forms.Select(attrs = {"class": "form-control input"}))
+    def __init__(self, *args, **kwargs):
+         super(WorkOrderProductionForm, self).__init__(*args, **kwargs)
+         WORKORDER_CHOICES = tuple((item.id, item) for item in WorkOrder.objects.all())
+         self.fields["order"].choices = WORKORDER_CHOICES
 
 class ProdPlanForm(ModelForm):
     class Meta:
@@ -23,36 +33,19 @@ class ProdPlanForm(ModelForm):
         super(ProdPlanForm,self).__init__(*args,**kwargs)
         self.fields["plan_date"].choices = PRODUCTION_PLAN_STAUTS_CHOICES
        
-"""
-        exclude = ('plan_id', )
-        
-class ProductionPlanSearchForm(WorkOrderForm):
-    status = forms.ChoiceField(label=u"状态", choices=PRODUCTION_PLAN_STAUTS_CHOICES)
-    plan_date = forms.ChoiceField(label=u"计划年月")
-    def __init__(self, *args, **kwargs):
-        super(ProductionPlanSearchForm, self).__init__(*args, **kwargs)
-        DATE_CHOICE = tuple(("%s-%s"%(item.year,item.month),"%s-%s"%(item.year,item.month)) for item in ProductionPlan.objects.dates('plan_date', 'month').distinct())
-        self.fields["plan_date"].choices = DATE_CHOICE
-"""
-
 class ProductionPlanSearchForm(WorkOrderForm):
     status = forms.ChoiceField(label = u"状态", required = False, choices=PRODUCTION_PLAN_STAUTS_CHOICES)
     plan_date = forms.ChoiceField(label = u"计划年月", required = False)
-    
     def __init__(self, *args, **kwargs):
         super(ProductionPlanSearchForm, self).__init__(*args, **kwargs)
-        #status_list = [(-1, u"---------"),]
-        #status_list.extend(list(PRODUCTION_PLAN_STAUTS_CHOICES))
-        #self.fields["status"].choices = tuple(status_list)
-
         DATE_CHOICE = tuple(("%s-%02d"%(item.year,int(item.month)),"%s-%02d"%(item.year,int(item.month))) for item in ProductionPlan.objects.dates('plan_date', 'month').distinct())
         self.fields["plan_date"].choices = DATE_CHOICE
 
 
 
-class LedgerSearchForm(WorkOrderForm):
+class LedgerSearchForm(WorkOrderProductionForm):
     work_index = forms.CharField(required=False, label=u"工作票号")
-    parent_schematic = forms.CharField(required=False, label=u"部件图号")
+    parent_schematic_index = forms.CharField(required=False, label=u"部件图号")
 
 
 class OrderIndexForm(forms.Form):

@@ -14,12 +14,14 @@ function refreshSingleRow() {
 }
 function refreshSingleCallBack(data) {
     var cur_iid = $("#card_modal").attr("iid");
-    var row = $("tr[iid='" + cur_iid + "']");
-    row.html(data);
+    $(".row_1[iid='" + cur_iid + "']").html(data.html);
+    $(".row_2[iid='" + cur_iid + "']").html(data.html2);
+    row.html(data.html);
 }
-$(document).on("click", ".tr_materiel", function() {
+$(document).on("dblclick", ".tr_materiel", function() {
     var iid = $(this).attr("iid");
     fill(iid);
+    $('#card_modal').modal('show')
 });
 
 function fill(iid) {
@@ -31,29 +33,34 @@ function getInfoCallBack(data) {
     $("#base-info-area").html(data);
 }
 function getProcessCallBack(data) {
-    $("#process_table").html(data);
+    $("#processing-area").html(data);
 }
 
-$("#id_add_process").click(function() {
-    var process_id = $("#id_process").val();
+$("#btn_save").click(function() {
     var iid = $("#card_modal").attr("iid");
-    Dajaxice.techdata.addProcess(refreshProcess, {"process_id": process_id, "iid": iid, });
+    var materiel_form = $("#base-info_form").serialize();
+    var processing_form = $("#processing_form").serialize();
+    Dajaxice.techdata.saveProcess(saveCallback, {"iid": iid, 
+                                  "materiel_form": materiel_form,
+                                  "processing_form": processing_form});
 });
-
-$(document).on("click", ".btn-del-process", function() {
-    var pid = $(this).attr("pid");
-    Dajaxice.techdata.deleteProcess(refreshProcess, {"pid": pid});
-});
-
-function refreshProcess() {
-    var iid = $("#card_modal").attr("iid");
-    refreshSingleRow();
-    Dajaxice.techdata.getProcess(getProcessCallBack, {"iid": iid});
+function saveCallback(data) {
+    if(data.status == "ok") {
+        refreshSingleRow();
+        alert("修改成功！");
+    }
+    else {
+        if(data.processing_error == "1")
+            alert("工序路线必须连续");
+        if(data.materiel_error == "1")
+            alert("#materiel_div").html(data.html);
+    }
+       
 }
 
-
-$("#weldseam_edit").click(function() {
-    Dajaxice.techdata.getWeldSeamCard(getCardCallBack, {}); 
+$(document).on("click", ".btn_open_weld_modal", function() {
+    Dajaxice.techdata.getWeldSeamCard(getCardCallBack, {});
+    $("#weldseam_modal").modal("show");
 });
 function getCardCallBack(data) {
     $("#weld_seam_card").html(data);
@@ -78,25 +85,10 @@ function addWeldSeamCallBack(data) {
     }
 }
 
-$(document).on("click", ".btn-save-process", function() {
-    var tr = $(this).parent().parent();
-    var iid = tr.attr("iid");
-    var index = tr.find("input").eq(0).val();
-    var hour = tr.find("input").eq(1).val();
-    var instruction = tr.find("input").eq(2).val();
-    Dajaxice.techdata.saveProcessInfo(saveProcessInfoCallBack, {"iid": iid,
-                                                                "index": index,
-                                                                "hour": hour,
-                                                                "instruction": instruction});
-});
-function saveProcessInfoCallBack(data) {
-    if(data == "ok") alert("保存成功！");
-    else alert("格式有错误！");
-}
 $("#id_goto_next").click(function() {
     var cur_iid = $("#card_modal").attr("iid");
     var row = $("tr[iid='" + cur_iid + "']");
-    var row_next = row.next(".tr_materiel");
+    var row_next = row.next(".row_1");
     if(!row_next.html()) alert("本条为最后一条！");
     else fill(row_next.attr("iid"));
 });
@@ -130,3 +122,22 @@ function markCallBack(data) {
         alert(data.warning);
     }
 }
+
+$(document).on("click", "#quick_edit", function(){
+    var rounte = $(id_rounte).attr("value");
+     a = rounte.split(/[;|；]/);
+     for(var i = 1;i<=12;i++){
+
+     var options = $("#id_GX"+i).children("option");
+ 
+     for (var j = 0; j < options.length; j++) {
+         if (options[j].text == a[i-1]){
+           options[j].selected = true;
+           break;
+           }
+        
+     }
+ }
+
+   
+});

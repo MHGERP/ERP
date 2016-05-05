@@ -63,11 +63,15 @@ IDENTITYERROR = "登录帐号或密码有错误！"
 
 ORDERFORN_STATUS_BEGIN = 0
 ORDERFORN_STATUS_ESTABLISHMENT = 1
-ORDERFORN_STATUS_FINISH = 2
+ORDERFORN_STATUS_AUDIT = 2
+ORDERFORN_STATUS_APPROVED = 3
+ORDERFORN_STATUS_FINISH= 4
 
 ORDERFORM_STATUS_CHOICES = (
     (ORDERFORN_STATUS_BEGIN, u"创建中订购单"),
     (ORDERFORN_STATUS_ESTABLISHMENT, u"创建完成订购单"),
+    (ORDERFORN_STATUS_AUDIT,u"审核通过订购单"),
+    (ORDERFORN_STATUS_APPROVED,u"批准通过订购单"),
     (ORDERFORN_STATUS_FINISH, u"已终止历史订购单"),
 )
 
@@ -319,7 +323,12 @@ H = "14"
 M = "15"
 L = "16"
 Y = "17"
-
+G = "18"
+G1 = "19"
+G2 = "20"
+X = "21"
+J = "22"
+DY = "23"
 PROCESSING_CHOICES = (
     (W, "W"),    
     (W1, "W1"),
@@ -339,6 +348,12 @@ PROCESSING_CHOICES = (
     (M, "M"),
     (L, "L"),
     (Y, "Y"),
+    (G, "G"),
+    (G1, "G1"),
+    (G2, "G2"),
+    (X, "X"),
+    (J, "J"),
+    (DY, "DY"),
 )
 
 
@@ -419,11 +434,36 @@ HEATTREATMENTCARD_ATTR_TEM_UP_SPEED = "temperature_up_speed"
 HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED = "temperature_down_speed"
 HEATTREATMENTCARD_ATTR_TEM_TIME = "time"
 
+FLUSH_WELD = "FLUSH_WELD"
+HORIZONTAL_WELD = "HORIZONTAL_WELD"
+OVERHEAD_WELD = "OVERHEAD_WELD"
+VERTICAL_WELD = "VERTICAL_WELD"
+WIDE_WELD = "WIDE_WELD"
 
+WELD_POSITION_CHOICES = (
+    (FLUSH_WELD, u"平焊"),
+    (HORIZONTAL_WELD, u"横焊"),
+    (OVERHEAD_WELD, u"仰焊"),
+    (VERTICAL_WELD, u"立向上焊"),
+    (WIDE_WELD, u"全位置焊")
+)
 
 #生产管理
 PRODUCTION_PLAN_STAUTS_CHOICES = (
     (-1,u"---------"),
     (1, u"必保"),
     (2, u"在制"),
+)
+
+#焊缝焊接接头  焊工持证项目
+SMAW_Fell = "SMAW-Fell-5FG-12/60-Fef3J"
+GMAW_Fell = "GMAW-Fell-3G-14-FefS-11/15"
+WELD_CERTIFICATION = (
+    (SMAW_Fell, "SMAW-Fell-5FG-12/60-Fef3J"),
+    (GMAW_Fell, "GMAW-Fell-3G-14-FefS-11/15")
+)
+#焊接工艺评定编号
+RH24_13_09 = "RH24-13-09"
+PROCEDURE_QUALIFICATION_INDEX = (
+    (RH24_13_09, "RH-13-09"),
 )

@@ -14,7 +14,7 @@ function refresh(){
     val = $("#id_inventory_type").val();
     key = $("#search_key").val();
     Dajaxice.purchasing.chooseInventorytype(choose_Inventorytype_callback,{
-        "pid":val,  
+        "pid":val,
         "key":key
     });
 }
@@ -59,7 +59,7 @@ $(document).on("click",".btn-danger",function(){
                 {"uid":uid}
             );
     }
- 
+
 });
 function delete_detail_callback(data){
     $(cell).parent().parent().remove();
@@ -88,7 +88,7 @@ $("#btn-finish").click(function(){
     return false;
 });
 function finishCallBack() {
-    refresh();    
+    refresh();
 }
 
 //open button
@@ -116,7 +116,7 @@ function getOrderCallBack(data){
 $(document).on("click", "input#selectall", function(){
     var target = this.checked;
     $("input[type='checkbox']").each(function(){
-        this.checked = target; 
+        this.checked = target;
     });
 });
 
@@ -135,7 +135,7 @@ $("#btn-delete").click(function(){
         return true;
     }
     return false;
-    
+
 });
 function deleteCallBack(){
     Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack, {"order_type":$("#id_inventory_type".val())});
@@ -155,8 +155,8 @@ function getBidCallBack(data) {
     Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
 }
 function getBidListCallBack(data) {
-    $(".bid-select").each(function() { 
-        $(this).html(data);   
+    $(".bid-select").each(function() {
+        $(this).html(data);
     });
 }
 $(document).on("click",".bid-btn-open",function(){
@@ -201,7 +201,7 @@ $("#bid-btn-finish").click(function() {
 });
 
 $("#add_to_execute").click(function(){
-    if(confirm("是否确认添加至材料执行?")){ 
+    if(confirm("是否确认添加至材料执行?")){
     var selectedArray = Array();
     $("input.checkbox").each(function(){
         if(this.checked) selectedArray.push($(this).attr("args"));
@@ -214,15 +214,6 @@ $("#add_to_execute").click(function(){
     }
 });
 function add_to_material_execute_callback(data){
-    refresh();
+    if(data.message!='')alert(data.message);
+    else refresh();
 }
-
-
-
-
-
-
-
-
-
-

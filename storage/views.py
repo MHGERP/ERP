@@ -141,7 +141,7 @@ def weldEntryConfirmViews(request,eid):
 
     context = {
             "entry":entry,
-            "entry_set":items,
+            "items":items,
             "item_form":entryitem_form,
             "is_show":is_show,
             "redict_path":redict_path,
