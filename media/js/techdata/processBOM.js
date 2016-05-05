@@ -121,3 +121,22 @@ function markCallBack(data) {
         alert(data.warning);
     }
 }
+
+$(document).on("click", "#quick_edit", function(){
+    var rounte = $(id_rounte).attr("value");
+     a = rounte.split(/[;|；]/);
+     for(var i = 1;i<=12;i++){
+
+     var options = $("#id_GX"+i).children("option");
+ 
+     for (var j = 0; j < options.length; j++) {
+         if (options[j].text == a[i-1]){
+           options[j].selected = true;
+           break;
+           }
+        
+     }
+ }
+
+   
+});
