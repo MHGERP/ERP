@@ -133,3 +133,21 @@ $("#btn-upload").click(function() {
         }
     });
 })
+
+$(document).on("click", "#quick_edit", function(){
+    var rounte = $(id_rounte).attr("value");
+     a = rounte.split(/[;|；]/);
+     for(var i = 1;i<=10;i++){
+
+     var options = $("#id_L"+i).children("option");
+     for (var j = 0; j < options.length; j++) {
+         if (options[j].text == a[i-1]){
+           options[j].selected = true;
+           break;
+           }
+        
+     }
+ }
+
+   
+});
