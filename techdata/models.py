@@ -152,10 +152,19 @@ class WeldJointTechDetail(models.Model):
     def __unicode__(self):
         return self.joint_index
 
+class WeldPositionType(models.Model):
+    name = models.CharField(max_length = 100, choices = WELD_POSITION_CHOICES, verbose_name = u"焊接位置名")
+    class Meta:
+        verbose_name = u"焊接位置"
+        verbose_name_plural = u"焊接位置"
+    def __unicode__(self):
+        return self.get_name_display()
+
 class WeldSeam(models.Model):
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")
     weld_index = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"焊缝编号")
     weldseam_type = models.ForeignKey(WeldSeamType, verbose_name = u"焊缝类型")
+    weld_position = models.ForeignKey(WeldPositionType, verbose_name = u"焊接位置")
     weld_method_1 = models.ForeignKey(WeldMethod, verbose_name = u"焊接方法1", related_name = "weld_method_1")
     weld_method_2 = models.ForeignKey(WeldMethod, verbose_name = u"焊接方法2", related_name = "weld_method_2")
     base_metal_1 = models.CharField(null = True, blank = True, max_length = 100, verbose_name = "母材材质1")

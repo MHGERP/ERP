@@ -58,8 +58,9 @@ function saveCallback(data) {
        
 }
 
-$("#weldseam_edit").click(function() {
-    Dajaxice.techdata.getWeldSeamCard(getCardCallBack, {}); 
+$(document).on("click", ".btn_open_weld_modal", function() {
+    Dajaxice.techdata.getWeldSeamCard(getCardCallBack, {});
+    $("#weldseam_modal").modal("show");
 });
 function getCardCallBack(data) {
     $("#weld_seam_card").html(data);
