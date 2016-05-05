@@ -22,16 +22,6 @@ items = Processing.objects.dates('operate_date', 'month').distinct()
 for item in items:
     print "%s-%s"%(item.year,item.month)
 
-
-
-
-
-# a = ContractDetail()
-# a.user = User.objects.get(username="123")
-# a.amount = 0
-# a.bidform = BidForm.objects.get(bid_id="111")
-# a.save()
-
 #items = Processing.objects.dates('operate_date', 'month').distinct()
 
 select = {'month': connection.ops.date_trunc_sql('month', 'operate_date')}
