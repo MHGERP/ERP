@@ -214,7 +214,8 @@ $("#add_to_execute").click(function(){
     }
 });
 function add_to_material_execute_callback(data){
-    refresh();
+    if(data.message!='')alert(data.message);
+    else refresh();
 }
 
 
