@@ -6,11 +6,11 @@ from purchasing.models import *
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderInfoForm, ContractDetailForm, MeterielExcecuteForm
 from const import *
 from purchasing import *
-from const.models import Materiel,OrderFormStatus, BidFormStatus
+from const.models import Materiel,OrderFormStatus, BidFormStatus, InventoryType
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
-from django.db import transaction 
+from django.db import transaction
 from const.models import WorkOrder, Materiel,Material
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
@@ -29,7 +29,7 @@ def searchPurchasingFollowing(request,bidid):
         "BIDFORM_STATUS_SELECT_SUPPLIER":BIDFORM_STATUS_SELECT_SUPPLIER,
         "BIDFORM_STATUS_INVITE_BID":BIDFORM_STATUS_INVITE_BID,
         "BIDFORM_STATUS_PROCESS_FOLLOW":BIDFORM_STATUS_PROCESS_FOLLOW,
-        "BIDFORM_STATUS_CHECK_STORE":BIDFORM_STATUS_CHECK_STORE 
+        "BIDFORM_STATUS_CHECK_STORE":BIDFORM_STATUS_CHECK_STORE
     }
     purchasing_html=render_to_string("purchasing/purchasingfollowing/purchasing_following_table.html",context)
     data={
@@ -71,7 +71,7 @@ def checkArrival(request,aid,cid):
 #        bidform = BidForm.objects.get(bid_id = bid)
 #        user = request.user
 #        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
-#            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user) 
+#            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user)
 #            purchasingentry.save()
 #            goNextStatus(bidform,request.user)
 #            flag = True
@@ -89,7 +89,7 @@ def checkArrival(request,aid,cid):
 #        transaction.rollback()
 #        if message =="":
 #            message = u"入库单生成失败，有未确认的项，请仔细检查"
-#    
+#
 #    data = {
 #        'flag':flag,
 #        'message':message,
@@ -135,7 +135,7 @@ def chooseInventorytype(request,pid,key):
     for item in items:
         if MaterielFormConnection.objects.filter(materiel = item).count() == 0:
             MaterielFormConnection(materiel = item, count = item.count).save()
-        
+
         if item.inventory_type.id <= 2 :
             if item.materielexecutedetail_set.count()>0:
                 item.can_choose=False
@@ -191,13 +191,14 @@ def getInventoryTable(request, table_id, order_index):
         "3": "first_feeding",
         "4": "purchased",
         "5": "forging",
+        "6": "weld_material",
     }
     items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
     context = {
         "items": items,
     }
     html = render_to_string("purchasing/inventory_table/%s.html" % id2table[table_id], context)
-    
+
     return html
 
 @dajaxice_register
@@ -217,6 +218,18 @@ def addToDetail(request, table_id, order_index):
             status = MaterielPurchasingStatus(materiel = item, add_to_detail = True)
             status.save()
     return ""
+
+@dajaxice_register
+def addToForeign(requset, index):
+    """
+    BinWu
+    """
+    tmp = InventoryType.objects.get(id = 4)
+    item = Materiel.objects.get(id = index)
+    item.inventory_type = tmp
+    item.save()
+    return ""
+
 
 @dajaxice_register
 def addToDetailSingle(request, index):
@@ -262,14 +275,14 @@ def getOrderFormList(request, statu, key):
     """
     try:
         statu = int(statu) # unicode to integer
-    
+
         items = OrderForm.objects.filter(order_status__status = statu)
         if key:
             items = items.filter(order_id = key)
     except Exception, e:
         print e
     context = {
-        "items": items, 
+        "items": items,
         "ORDERFORN_STATUS_BEGIN": ORDERFORN_STATUS_BEGIN,
         "ORDERFORN_STATUS_ESTABLISHMENT": ORDERFORN_STATUS_ESTABLISHMENT,
     }
@@ -313,7 +326,7 @@ def entryConfirm(request,e_items,pur_entry):
         bidform = pur_obj.bidform
         flag = True
         if bidform.bid_status.part_status != BIDFORM_PART_STATUS_STORE:
-            flag = False 
+            flag = False
             message=u"入库单已经确认过，请勿重复确认"
         if pur_entry["entry_time"] == "":
             flag=False
@@ -669,7 +682,7 @@ def submitStatus(request, bid_id):
     except:
         ret = {'status': '2', 'message': u"申请书不存在"}
     return simplejson.dumps(ret)
-    
+
 
 def AddProcessFollowing(request,bid,process_form):
     process_form=ProcessFollowingForm(deserialize_form(process_form))
@@ -716,7 +729,7 @@ def SelectSubmit(request,bid):
     else:
         status=1
     return simplejson.dumps({"status":status})
-    
+
 
 @dajaxice_register
 def ProcessFollowingSubmit(request,bid):
@@ -728,7 +741,7 @@ def ProcessFollowingSubmit(request,bid):
     else :
         status=1
     return simplejson.dumps({"status":status})
- 
+
 @dajaxice_register
 def getOngoingBidList(request):
     """
@@ -767,7 +780,7 @@ def newBidCreate(request):
     html = render_to_string("purchasing/orderform/orderform_item_list.html", {})
     context = {
         "bid_id": bid_form.bid_id,
-        "id": bid_form.id,      
+        "id": bid_form.id,
         "html": html,
     }
     return simplejson.dumps(context)
@@ -954,7 +967,7 @@ def BidformApprove(request,bid,value,comment):
 
     else:
         status=-1
-    return simplejson.dumps({"status":status})   
+    return simplejson.dumps({"status":status})
 
 @dajaxice_register
 def GetOrderInfoForm(request,uid):
@@ -1045,13 +1058,13 @@ def selectEntryType(request,bid,selected,selectentryform):
     selectform = EntryTypeForm(deserialize_form(selectentryform))
     if selectform.is_valid() :
         selectvalue = selectform.cleaned_data["entry_type"]
-        items_set = getArrivalInspections(selected) 
+        items_set = getArrivalInspections(selected)
         html = render_to_string("purchasing/addentryitems.html",{"items":items_set,"entrytype":entrytypedict[int(selectvalue)]})
         return simplejson.dumps({"html":html,"items_set":selected,"selectvalue":selectvalue,"bid":bid})
 
 @dajaxice_register
 def genEntry(request,items_set,bid):
-    items_set = getArrivalInspections(items_set) 
+    items_set = getArrivalInspections(items_set)
     try:
         bidform = BidForm.objects.get(bid_id = bid)
         entry_factory = AutoGenEntry(request.user,items_set,bidform)
@@ -1078,7 +1091,7 @@ def getArrivalInspections(selected_id_set):
 def getEntryDataModel(selectvalue):
     selectvalue = int(selectvalue)
     if selectvalue == STORAGE_ENTRY_TYPE_WELD:
-        entrymodel = WeldMaterialEntry 
+        entrymodel = WeldMaterialEntry
         entryitemmodel = WeldMaterialEntryItems
     return entrymodel,entryitemmodel
 
@@ -1121,7 +1134,7 @@ def saveOrderformExecute(request,orderform_id,form):
 @dajaxice_register
 def entryConfirmQuery(request,entry_select):
     #Liuguochao
-    
+
     replace_dic = {}
     filter_dic = {"entry_status":STORAGESTATUS_PURCHASER}
     if entry_select == "1":
@@ -1140,7 +1153,7 @@ def entryConfirmQuery(request,entry_select):
         "html":html,
     }
     return simplejson.dumps(data)
-    
+
 def handleProcess(_Model,filter_dic,entry_select,replace_dic = None):
     entry_set = _Model.objects.filter(**filter_dic)
     for item in entry_set:
@@ -1179,4 +1192,4 @@ def handleEntryInspectionConfirm(request,_Model,eid,entry_typeid):
         flag = True
     else:
         flag = False
-    return simplejson.dumps({'flag':flag})    
+    return simplejson.dumps({'flag':flag})
