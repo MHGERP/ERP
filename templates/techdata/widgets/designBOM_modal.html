@@ -12,6 +12,11 @@
     </form>
     <form class="well" id="circulationroute_form">
       {% csrf_token %}
+      <div>
+        <b>请输入流转路线并使用分号;分割（如：H1;J;ZM）:</b>
+        <textarea  style="resize:none"id ="id_rounte"></textarea>
+        <button type="button" class="btn" id="quick_edit" >快速编辑</button>
+      </div>
       <div class="" id="circulationroute_div">
 
       </div>
