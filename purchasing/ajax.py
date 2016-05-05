@@ -698,6 +698,7 @@ def getOrderFormItems(request, index, can_choose = False):
 
     context = {
         "items": items,
+        "order_form":order_form,
         "can_choose": can_choose,
     }
     if order_form.order_mod==1:
@@ -886,11 +887,11 @@ def getBidForm(request, bid_id, pendingArray):
     bid_form = BidForm.objects.get(id = bid_id)
     items = Materiel.objects.filter(materielformconnection__bid_form = bid_form)
     for item in items:
-        item.status = u"已加入"
+        item.order_status = u"已加入"
 
     items_pending = [Materiel.objects.get(id = id) for id in pendingArray]
     for item in items_pending:
-        item.status = u"待加入"
+        item.order_status = u"待加入"
 
     html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items, "can_choose": False, "items_pending": items_pending, })
     context = {
@@ -909,11 +910,11 @@ def getOrderForm(request, order_id, pendingArray):
     order_form = OrderForm.objects.get(id = order_id)
     items = Materiel.objects.filter(materielformconnection__order_form = order_form)
     for item in items:
-        item.status = u"已加入"
+        item.order_status = u"已加入"
 
     items_pending = [Materiel.objects.get(id = id) for id in pendingArray]
     for item in items_pending:
-        item.status = u"待加入"
+        item.order_status = u"待加入"
 
     if order_form.order_mod == 1:
         html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items, "can_choose": False, "items_pending": items_pending, })
@@ -1033,8 +1034,15 @@ def OrderFormFinish(request,index,number,revised_id):
     order_form.establishment_user=request.user
     order_form.number=number
     order_form.revised_id=revised_id
+    items=MaterielCopy.objects.filter(materielformconnection__order_form__order_id=index)
+    work_order=[]
+    for item in items:
+        if item.work_order:
+            item_work=item.work_order.split(',')
+            work_order=work_order+item_work
+    work_order=set(work_order)
+    order_form.work_order=','.join(work_order)
     order_form.save()
-    #items=MaterielCopy.objects.filter(materielformconnection__order_form__order_id=index)
     #html=render_to_string("purchasing/orderform/order_form_raw.html",{'order_form':order_form,'items':items})
     return simplejson.dumps({})
 
@@ -1228,8 +1236,8 @@ def getMergeForm(request,pendingArray):
     count=0
     purchasing=0
     for item in items_merge:
-        count=count+int(item.materielformconnection.count)
-        purchasing=purchasing+float(item.materielformconnection.purchasing)
+        count=count+(int(item.materielformconnection.count) if item.materielformconnection.count else 0)
+        purchasing=purchasing+(float(item.materielformconnection.purchasing) if item.materielformconnection.purchasing else 0)
         form_html = render_to_string("purchasing/orderform/order_form.html",{'order_form':order_form,'count':count,'purchasing':purchasing})
     return simplejson.dumps({'form':form_html})
 
@@ -1241,15 +1249,25 @@ def MergeMateriel(request,order_id,form,pendingArray,count,purchasing):
     items_materiel= [Materiel.objects.get(id = id) for id in pendingArray]
     new_materiel.inventory_type=items_materiel[0].inventory_type
     new_materiel.save()
+    work_order=[]
     for item in items_materiel:
         item.relate_material=new_materiel
         item.save()
         item.materielformconnection.order_form=None
-        item.materielformconnection.count=count
-        item.materielformconnection.purchasing=purchasing
+        #item.materielformconnection.count=count
+        #item.materielformconnection.purchasing=purchasing
         item.materielformconnection.save()
+        if item.work_order:
+            item_work=item.work_order.split(',')
+            print item_work
+            work_order=work_order+item_work
+    work_order=set(work_order)
+    new_materiel.work_order=','.join(work_order)
+    new_materiel.save()
     order_form=OrderForm.objects.get(order_id=order_id)
     mfc= MaterielFormConnection(materiel=new_materiel,order_form=order_form)
+    mfc.count=count
+    mfc.purchasing=purchasing
     mfc.save()
     status=u'合并成功'
     return simplejson.dumps({'status':status}) 
