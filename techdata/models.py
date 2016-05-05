@@ -152,18 +152,32 @@ class WeldJointTechDetail(models.Model):
     def __unicode__(self):
         return self.joint_index
 
+class WeldPositionType(models.Model):
+    name = models.CharField(max_length = 100, choices = WELD_POSITION_CHOICES, verbose_name = u"焊接位置名")
+    class Meta:
+        verbose_name = u"焊接位置"
+        verbose_name_plural = u"焊接位置"
+    def __unicode__(self):
+        return self.get_name_display()
+
 class WeldSeam(models.Model):
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")
     weld_index = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"焊缝编号")
     weldseam_type = models.ForeignKey(WeldSeamType, verbose_name = u"焊缝类型")
-    weld_method = models.ForeignKey(WeldMethod, verbose_name = u"焊接方法")
-    base_metal_thin_1 = models.CharField(blank = False, max_length = 100, verbose_name = u"母材厚度1")
-    base_metal_thin_2 = models.CharField(blank = False, max_length = 100, verbose_name = u"母材厚度2")
+    weld_position = models.ForeignKey(WeldPositionType, verbose_name = u"焊接位置")
+    weld_method_1 = models.ForeignKey(WeldMethod, null = True, blank = True, verbose_name = u"焊接方法1", related_name = "weld_method_1")
+    weld_method_2 = models.ForeignKey(WeldMethod, null = True, blank = True, verbose_name = u"焊接方法2", related_name = "weld_method_2")
+    base_metal_1 = models.CharField(null = True, blank = True, max_length = 100, verbose_name = "母材材质1")
+    base_metal_2 = models.CharField(null = True, blank = True, max_length = 100, verbose_name = "母材材质2")
+    base_metal_thin_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材厚度1")
+    base_metal_thin_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材厚度2")
     length = models.CharField(blank = False, max_length = 100, verbose_name = u"长度")
     weld_material_1 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊材1", related_name = "weld_material_1")
+    thin_1 = models.CharField(max_length = 100, blank = True, null = True, verbose_name = u"焊材厚度1")
     size_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"规格1")
     weight_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"重量1")
     weld_material_2 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊材2", related_name = "weld_material_2")
+    thin_2 = models.CharField(max_length = 100, blank = True, null = True, verbose_name = u"焊材厚度2")
     size_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"规格2")
     weight_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"重量2")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")

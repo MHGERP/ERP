@@ -56,6 +56,9 @@ class Materiel(models.Model):
     recheck=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"复验")
     detection_level=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"探伤级别")
     
+    complete_plandate = models.DateField(blank = True, verbose_name = u"计划完成时间")
+    complete_date = models.DateField(blank = True, verbose_name = u"完成时间")
+    
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"
@@ -90,4 +93,5 @@ class ImplementClassChoices(models.Model):
         verbose_name_plural = u"实施类别"
     def __unicode__(self):
         return self.get_category_display()
+
 

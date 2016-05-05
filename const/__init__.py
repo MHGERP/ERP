@@ -328,7 +328,7 @@ G1 = "19"
 G2 = "20"
 X = "21"
 J = "22"
-
+DY = "23"
 PROCESSING_CHOICES = (
     (W, "W"),    
     (W1, "W1"),
@@ -353,6 +353,7 @@ PROCESSING_CHOICES = (
     (G2, "G2"),
     (X, "X"),
     (J, "J"),
+    (DY, "DY"),
 )
 
 
@@ -433,7 +434,19 @@ HEATTREATMENTCARD_ATTR_TEM_UP_SPEED = "temperature_up_speed"
 HEATTREATMENTCARD_ATTR_TEM_DOWN_SPEED = "temperature_down_speed"
 HEATTREATMENTCARD_ATTR_TEM_TIME = "time"
 
+FLUSH_WELD = "FLUSH_WELD"
+HORIZONTAL_WELD = "HORIZONTAL_WELD"
+OVERHEAD_WELD = "OVERHEAD_WELD"
+VERTICAL_WELD = "VERTICAL_WELD"
+WIDE_WELD = "WIDE_WELD"
 
+WELD_POSITION_CHOICES = (
+    (FLUSH_WELD, u"平焊"),
+    (HORIZONTAL_WELD, u"横焊"),
+    (OVERHEAD_WELD, u"仰焊"),
+    (VERTICAL_WELD, u"立向上焊"),
+    (WIDE_WELD, u"全位置焊")
+)
 
 #生产管理
 PRODUCTION_PLAN_STAUTS_CHOICES = (

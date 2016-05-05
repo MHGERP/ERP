@@ -16,12 +16,19 @@ from storage.utils import get_weld_filter
 from const.forms import WorkOrderForm
 from production.forms import *
 
+def getQ(con):
+    query_set = Q()
+    for k,v in con.items():
+         if len(v) != 0:
+             query_set.add(Q(**{k: v}), Q.AND)
+    return query_set
+
 @dajaxice_register
 def getFileList(request, id_work_order):
     """
     Lei
     """
-    workorder = SynthesizeFileListStatus.objects.filter(workorder_id__id = id_work_order)
+    workorder = SynthesizeFileListStatus.objects.filter(order_id__id = id_work_order)
     context = {
         "workorder":workorder,
     }
@@ -236,7 +243,7 @@ def prodplanSearch(request, form):
         con = search_form.cleaned_data
         print con
 
-        q1 = (con["work_order"] and Q(workorder_id = con["work_order"])) or None
+        q1 = (con["work_order"] and Q(order_id = con["work_order"])) or None
         #q1 = None
         q2 = (con["status"] and Q(status = con["status"])) or None
         if con["status"]== "-1":
@@ -405,17 +412,7 @@ def taskConfirmFinish(request, form, mid):
 def ledgerSearch(request, form):
     search_form = LedgerSearchForm(deserialize_form(form))
     if search_form.is_valid():
-        con = search_form.cleaned_data
-        q1 = (con["work_order"] and Q(order_id = con["work_order"])) or None
-        q2 = (con["work_index"] and Q(index = con["work_index"])) or None
-        q3 = (con["parent_schematic"] and Q(parent_schematic_index = con["parent_schematic"])) or None
-        query_set = filter(lambda x:x!=None, [q1,q2,q3])
-
-        if query_set:
-            query_con = reduce(lambda x,y:x&y, query_set)
-            materiel_list  = Materiel.objects.filter(query_con)
-        else:
-            materiel_list  = Materiel.objects.all()
+        materiel_list  = Materiel.objects.filter(getQ(search_form.cleaned_data))
         for item in materiel_list:
             if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
                 CirculationRoute(materiel_belong = item).save()

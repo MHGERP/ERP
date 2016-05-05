@@ -56,6 +56,8 @@ class WeldSeamForm(forms.ModelForm):
         exclude = ('materiel_belong',)
         widgets = {
             "weld_index": forms.TextInput(attrs = {"class": "input-small"}),
+            "base_metal_1": forms.TextInput(attrs = {"class": "input-small"}),
+            "base_metal_2": forms.TextInput(attrs = {"class": "input-small"}),
             "base_metal_thin_1": forms.TextInput(attrs = {"class": "input-small"}),
             "base_metal_thin_2": forms.TextInput(attrs = {"class": "input-small"}),
             "length": forms.TextInput(attrs = {"class": "input-small"}),
@@ -63,8 +65,10 @@ class WeldSeamForm(forms.ModelForm):
             "weight_2": forms.TextInput(attrs = {"class": "input-small"}),
             "weld_material_1": forms.Select(attrs = {"class": "input-small"}),
             "weld_material_2": forms.Select(attrs = {"class": "input-small"}),
-            "weld_method": forms.Select(attrs = {"class": "input-small"}),
+            "weld_method_1": forms.Select(attrs = {"class": "input-small"}),
+            "weld_method_2": forms.Select(attrs = {"class": "input-small"}),
             "weldseam_type": forms.Select(attrs = {"class": "input-small"}),
+            "weld_position": forms.Select(attrs = {"class": "input-small"}),
             "size_1": forms.TextInput(attrs = {"class": "input-small"}),
             "size_2": forms.TextInput(attrs = {"class": "input-small"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium"}),
