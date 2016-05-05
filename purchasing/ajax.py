@@ -708,7 +708,7 @@ def getOrderFormItems(request, index, can_choose = False):
     items = Materiel.objects.filter(materielformconnection__order_form__order_id = index)
     order_form=OrderForm.objects.get(order_id=index)
     for item in items:
-        item.can_choose, item.status = (False, u"已加入标单") if (item.materielformconnection.bid_form != None) else (True, u"未加入标单")
+        item.can_choose, item.order_status = (False, u"已加入标单") if (item.materielformconnection.bid_form != None) else (True, u"未加入标单")
 
     context = {
         "items": items,
@@ -1042,10 +1042,31 @@ def materielExecuteInfo(request,form,uid):
     print materielexecute_obj
 
 @dajaxice_register
-def OrderFormFinish(request,index):
+def OrderFormFinish(request,index,number,revised_id):
     order_form=OrderForm.objects.get(order_id=index)
     order_form.order_status=OrderFormStatus.objects.get(status=1)
     order_form.establishment_time=datetime.now()
+    order_form.establishment_user=request.user
+    order_form.number=number
+    order_form.revised_id=revised_id
+    order_form.save()
+    #items=MaterielCopy.objects.filter(materielformconnection__order_form__order_id=index)
+    #html=render_to_string("purchasing/orderform/order_form_raw.html",{'order_form':order_form,'items':items})
+    return simplejson.dumps({})
+
+@dajaxice_register
+def OrderFormAudit(request,index):
+    order_form=OrderForm.objects.get(order_id=index)
+    order_form.order_status=OrderFormStatus.objects.get(status=2)
+    order_form.chief=request.user
+    order_form.save()
+    return simplejson.dumps({})
+
+@dajaxice_register
+def OrderFormApprove(request,index):
+    order_form=OrderForm.objects.get(order_id=index)
+    order_form.order_status=OrderFormStatus.objects.get(status=3)
+    order_form.approve_user=request.user
     order_form.save()
     return simplejson.dumps({})
 

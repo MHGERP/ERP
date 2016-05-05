@@ -344,9 +344,15 @@ def orderFormViews(request):
     JunHu
     """
     index = request.GET.get("index")
+    target=request.GET.get("target")
     order_form = OrderForm.objects.get(order_id = index)
+    
+    items=MaterielCopy.objects.filter(materielformconnection__order_form__order_id=index)
+    print target
     context = {
         "order_form": order_form,
+        "items":items,
+        'target':target
     }
     return render(request, "purchasing/order_form.html", context)
 

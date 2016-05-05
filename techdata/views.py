@@ -78,7 +78,13 @@ def connectionOrientationEditViews(request):
     return render(request, "techdata/connection_orientation_edit.html", context)
 
 def firstFeedingViews(request):
-    context = {}
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "work_order_form" : work_order_form
+    }
     return render(request, "techdata/first_feeding.html", context)
 
 def principalMaterialViews(request):
