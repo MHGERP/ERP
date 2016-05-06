@@ -75,9 +75,9 @@ def getHourSummarize(request, work_order, operator, date):
     try:
         year,month = date.split("-")
         if operator:
-            process = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month))
+            process = ProcessDetail.objects.filter(materiel_belong__order__order_index=work_order)
         else:
-            process = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operate_date__year=year)&Q(operate_date__month=month))
+            process = ProcessDetail.objects.filter(materiel_belong__order__order_index=work_order)
         status = 1
     except Exception,e:
         status = 0
@@ -108,7 +108,7 @@ def getSummarizeTicket(request, work_order, operator, date):
     message = ""
     try:
         year,month = date.split("-")
-        process = Processing.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month)).order_by('operate_date')
+        process = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month)).order_by('operate_date')
         summarize = reduce(lambda x,y:x+y.hour,process,0)
         status = 1
     except Exception,e:
@@ -136,7 +136,7 @@ def getPartTicket(request, work_order, operator, date):
     message = ""
     try:
         year,month = date.split("-")
-        process = Processing.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month)).order_by('materiel_belong')
+        process = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month)).order_by('materiel_belong')
         status = 1
     except Exception,e:
         status = 0
