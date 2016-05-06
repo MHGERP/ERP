@@ -130,7 +130,7 @@ def bidTrackingViews(request, bid_id):
     bidComments = BidComment.objects.filter(Q(bid = bidform))
     bidFormStatuss = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
 
-    btn_cnt = 2 if bidform.bid_status.part_status < BIDFORM_PART_STATUS_INVITE_BID_APPLY else 0
+    btn_cnt = 2 if bidform.bid_status.part_status < BIDFORM_PART_STATUS_INVITE_BID_APPLY_SELECT else 0
     btn_color = ["btn-success", "btn-warning", ""]
     bid_status = []
     for status in bidFormStatuss:
@@ -147,8 +147,8 @@ def bidTrackingViews(request, bid_id):
                "bidCommentForm": bidCommentForm,
                "bidComments": bidComments,
                "bidform": bidform,
-               "BIDFORM_PART_STATUS_INVITE_BID_APPLY": BIDFORM_PART_STATUS_INVITE_BID_APPLY,
-               "BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED": BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED,
+              # "BIDFORM_PART_STATUS_INVITE_BID_APPLY_SELECT": BIDFORM_PART_STATUS_INVITE_BID_APPLY_SELECT,
+              # "BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED": BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED,
                "supplier_set":bidform.supplierselect_set.all()
              }
     return render(request, "purchasing/bid_track.html", context)
