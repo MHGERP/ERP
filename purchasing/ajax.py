@@ -1273,3 +1273,14 @@ def MergeMateriel(request,order_id,form,pendingArray,count,purchasing):
     mfc.save()
     status=u'合并成功'
     return simplejson.dumps({'status':status}) 
+
+@dajaxice_register
+def GoToBid(request,index):
+    bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_SELECT_SUPPLLER_APPROVED)
+    bid_form = BidForm(
+        bid_id = "2016%05d" % (getMaxId(BidForm) + 1),
+        bid_status = bid_status,
+    )
+    bid_form.order_form=OrderForm.objects.get(order_id=index)
+    bid_form.save()
+    return simplejson.dumps({})

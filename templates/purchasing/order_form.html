@@ -16,7 +16,7 @@
 {% if order_form.order_status.status == 0  or target == "1" %}
 {%include "purchasing/orderform/order_form_page.html"%}
 {% else%}
-{% include "purchasing/orderform/order_form_raw.html"%}
+{% include "purchasing/orderform/orderform_content.html"%}
 {% endif%}
 </div>
 {%include "purchasing/orderform/merge_modal.html"%}

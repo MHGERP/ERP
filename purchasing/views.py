@@ -69,9 +69,12 @@ def selectSupplierViews(request,bid):
             item.selected=1
         else:
             item.selected=0
+    order_form=bidform.order_form
     context={
         "suppliers":suppliers,
-        "bidform":bidform
+        "bidform":bidform,
+        "order_form":order_form,
+        "items":MaterielCopy.objects.filter(materielformconnection__order_form=order_form)
     }
     return render(request,"purchasing/select_supplier.html",context)
 
