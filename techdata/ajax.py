@@ -39,7 +39,13 @@ def autoSetInventoryLabel(request, id_work_order, inventory_type):
     JunHU
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
-    
+    inventory_type = InventoryType.objects.get(name = inventory_type)
+    if inventory_type == OUT_PURCHASED:
+        for item in Materiel.objects.filter(order = work_order):
+            if item.circulationroute.L1.name != GY: continue
+            if item.inventory_type.filter(name = inventory_type).count() > 0: continue
+            item.inventory_type.add(inventory_type)
+
 @dajaxice_register
 def getProcessBOM(request, id_work_order):
     """

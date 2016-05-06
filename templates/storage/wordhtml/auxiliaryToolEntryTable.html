@@ -1,0 +1,138 @@
+<tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;height:29.65pt'>
+  <td width=142 style='width:106.7pt;border:solid windowtext 1.0pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.65pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>名称</span></p>
+  </td>
+  <td width=96 style='width:72.05pt;border:solid windowtext 1.0pt;border-left:
+  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:29.65pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>规格</span></p>
+  </td>
+  <td width=57 style='width:42.5pt;border:solid windowtext 1.0pt;border-left:
+  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:29.65pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>数量</span></p>
+  </td>
+  <td width=95 style='width:70.9pt;border:solid windowtext 1.0pt;border-left:
+  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:29.65pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>入库时间</span></p>
+  </td>
+  <td width=170 style='width:127.55pt;border:solid windowtext 1.0pt;border-left:
+  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:29.65pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>厂家</span></p>
+  </td>
+  <td width=170 style='width:127.6pt;border:solid windowtext 1.0pt;border-left:
+  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:29.65pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>供货商</span></p>
+  </td>
+  <td width=129 style='width:96.45pt;border:solid windowtext 1.0pt;border-left:
+  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:29.65pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>备注</span></p>
+  </td>
+ </tr>
+ {% for item in items %}
+ <tr style='mso-yfti-irow:1;height:22.05pt' name="entry_item" id="{{item.id}}">
+  <td width=142 style='width:106.7pt;border:solid windowtext 1.0pt;border-top:
+  none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{{item.name}}</o:p></span></p>
+  </td>
+  <td width=96 style='width:72.05pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{{item.specification}}</o:p></span></p>
+  </td>
+  <td width=57 valign=top style='width:42.5pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{{item.count}}</o:p></span></p>
+  </td>
+  <td width=95 style='width:70.9pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{{entry.create_time|date:'Y.m.d'}}</o:p></span></p>
+  </td>
+  <td width=170 style='width:127.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{{item.factory}}</o:p></span></p>
+  </td>
+  <td width=170 style='width:127.6pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{{item.supplier}}</o:p></span></p>
+  </td>
+  <td width=129 style='width:96.45pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{{item.remark}}</o:p></span></p>
+  </td>
+ </tr>
+ {% endfor %}
+ <tr style='mso-yfti-irow:2;mso-yfti-lastrow:yes;height:22.05pt'>
+  <td width=142 style='width:106.7pt;border:solid windowtext 1.0pt;border-top:
+  none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>采购员</span></p>
+  </td>
+  <td width=153 colspan=2 style='width:114.55pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{% ifequal entry.purchaser None%}<span class="btn btn-mark" name="autool" role="purchaser">签字</span>{% else %}{{entry.purchaser.userinfo.name}}{% endifequal %}</o:p></span></p>
+  </td>
+  <td width=95 style='width:70.9pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>检验员</span></p>
+  </td>
+  <td width=170 style='width:127.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{% ifequal entry.inspector None %}<span class="btn btn-mark" name="autool" role="inspector">签字</span>{% else %}{{entry.inspector.userinfo.name}}{% endifequal %}</o:p></span></p>
+  </td>
+  <td width=170 style='width:127.6pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>库管员</span></p>
+  </td>
+  <td width=129 style='width:96.45pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{% ifequal entry.keeper None %}<span class="btn btn-mark" name="autool" role="keeper">签字</span>{% else %}{{entry.keeper.userinfo.name}}{% endifequal %}</o:p></span></p>
+  </td>
+ </tr>

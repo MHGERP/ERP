@@ -9,6 +9,24 @@ $('input[id$=time]').datetimepicker({
     minView:'month',
 });
 $(document).ready(function(){
+    var aid;
+    $(document).on("dblclick", "tr[name='entry_item']", function(){
+        aid = $(this).attr("id");
+        var remark = $(this).find("td").eq(6).children("p").eq(0).text();
+        $("#myModal").modal('show');
+        $("#id_remark").val(remark);
+    });
+    $(document).on("click", "#saveItem", function(){
+        var remark = $("#id_remark").val();
+        Dajaxice.storage.auEntryUpdate(updateCallback, {"aid":aid, "remark":remark});
+    });
+    $(document).on("click", "span[name='autool']", function(){
+       var role = $(this).attr("role");
+       var eid = $("#items_table").attr("eid");
+       if(confirm("请确认所有内容已经填写完毕，签字后不能修改！")){
+           Dajaxice.storage.auToolEntryConfirm(entryConfirmCallback, {"role":role, "eid":eid});
+       }
+    });
     $("#inventory_form").submit(function(e){
         e.preventDefault();
         var data=$("#inventory_form").serialize();
@@ -117,3 +135,15 @@ $('input[type=text]').keyup(function(){
     var unit_price=parseInt(obj.parent().next().html());
     obj.parent().next().next().html(value*unit_price);
 })
+
+
+function updateCallback(data){
+    var aid = data.aid;
+    $("tr[id="+aid+"]").find("td").eq(6).children("p").eq(0).text(data.remark);
+    alert(data.message);
+}
+
+function entryConfirmCallback(data){
+    alert(data.message);
+    $("#items_table").html(data.html);
+}

@@ -1,4 +1,11 @@
 var pendingArray = Array();
+var dic_type = new Array();
+dic_type["main_materiel"] = 1;
+dic_type["auxiliary_materiel"] = 2;
+dic_type["first_feeding"] = 3;
+dic_type["purchased"] = 4;
+dic_type["forging"] = 5;
+dic_type["weld_material"] = 6;
 
 $(document).ready(function(){
  	refresh();
@@ -27,7 +34,8 @@ function getOrderListCallBack(data) {
 
 function choose_Inventorytype_callback(data){
     val = $("#id_inventory_type").val();
-    if(val<=2){
+
+    if(dic_type[val]<=2){
         $("#add_to_execute").show();
     }
     else{
@@ -35,7 +43,7 @@ function choose_Inventorytype_callback(data){
     }
     item = $("#new_purchasing_order");
     $("#inventory_detail_table").html(data.inventory_detail_html);
-    if(val==5){
+    if(dic_type[val]==5){
         item.html(data.new_purchasing_form_html);
         $("#add_to_bid").show();
         $("#add_to_order").hide();
@@ -45,7 +53,7 @@ function choose_Inventorytype_callback(data){
         item.html(data.new_order_form_html);
         $("#add_to_order").show();
         $("#add_to_bid").hide();
-        Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{"order_type":val});
+        Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{"order_type":dic_type[val]});
     }
 }
 
@@ -102,14 +110,14 @@ $(document).on("click",".btn-open",function(){
 
 //new purchase button
 $(document).on("click","#new_purchase_btn",function(){
-    Dajaxice.purchasing.newOrderCreate(getOrderCallBack, {"select_type":$("#id_inventory_type").val()});
+    Dajaxice.purchasing.newOrderCreate(getOrderCallBack, {"select_type":dic_type[$("#id_inventory_type").val()]});
 });
 
 function getOrderCallBack(data){
     $("input#order_number").val(data.order_id);
     $("div.table-div").html(data.html);
     $("#new_order_modal").attr("args", data.id);
-    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{"order_type":$("#id_inventory_type").val()});
+    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{"order_type":dic_type[$("#id_inventory_type").val()]});
 }
 
 //selectall
@@ -138,7 +146,7 @@ $("#btn-delete").click(function(){
 
 });
 function deleteCallBack(){
-    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack, {"order_type":$("#id_inventory_type".val())});
+    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack, {"order_type":dic_type[$("#id_inventory_type".val())]});
 }
 
 

@@ -72,12 +72,9 @@ def man_hour_summarizeViews(request):
     return render(request,"production/man_hour_summarize.html",context)
 
 def production_planViews(request):
-    #prodplan_set = ProductionPlan.objects.all()
-    prodplan_form = ProdPlanForm()
     productionplan_search_form = ProductionPlanSearchForm()
     workorder_search_form = WorkOrderProductionSearchForm()
     context = {
-        "prodplan_form": prodplan_form,
         "productionplan_search_form" : productionplan_search_form,
         "workorder_search_form" : workorder_search_form,
     }
