@@ -150,6 +150,7 @@ class WeldJointTechDetail(models.Model):
     procedureQualification_index = models.ForeignKey(ProcedureQualificationIndex, blank = True, null = True,max_length = 100, verbose_name = u"焊接工艺评定编号")
     weld_certification = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目", related_name = "weld_certification")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
+    is_save = models.BooleanField(default = False, verbose_name = u"是否保存")
     class Meta:
         verbose_name = u"焊接接头"
         verbose_name_plural = u"焊接接头"

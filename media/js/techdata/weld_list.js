@@ -139,7 +139,6 @@ $("#joint_btn").click(function(){
     if(err == false) {
         Dajaxice.techdata.getWeldJointDetailFormAndSave(function(data) {
             if(data.ret == "ok"){
-                clearCheckBox();
                 $("#weldjoint_detail_modal").attr("iid" , data.id);
                 $("#weldjoint_detail_form").html(data.html);
                 $("#weldjoint_detail_modal").modal();
@@ -163,6 +162,7 @@ $("#weld_joint_detail_save").click(function() {
     Dajaxice.techdata.saveJointDetail(
         function(data) {
             alert("添加成功！");
+            clearCheckBox();
             $("#weldjoint_detail_modal").modal("hide");
             $("#id_weld_method_1").attr("disabled", true);
             $("#id_weld_method_2").attr("disabled", true);
@@ -175,10 +175,21 @@ $("#weld_joint_detail_save").click(function() {
     );
 });
 
+$("#weld_joint_detail_dismiss").click(function(){
+    Dajaxice.techdata.dismissWeldJointDetailSave(
+        function(data){
+                $("#weldjoint_detail_modal").modal("hide");
+        },
+        {
+            "iid" : $("#weldjoint_detail_modal").attr("iid"),
+        }
+    );
+});
+
 $("#weldjointTechView").click(function(){
     Dajaxice.techdata.weldJointTechView(
         function(data) {
-
+            
         },
         {
             "id_work_order" : $("#id_work_order").val(),
