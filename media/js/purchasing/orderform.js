@@ -5,10 +5,11 @@ $(document).ready(refresh);
 
 function refresh() {
     var index = $("#index").val();
+    if(!index)return false;
     var can_choose = (1 == $("#status").attr("args"));
     Dajaxice.purchasing.getOrderFormItems(getItemsCallBack, {
         "index": index,
-        "can_choose": can_choose,
+        "can_choose": can_choose
     });
 
     Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
@@ -127,7 +128,9 @@ $("#order_form_finish").click(function(){
         window.location.reload();
 
     },{
-        "index":index
+        "index":index,
+        "number":$("#number").val(),
+        "revised_id":$("#revised_id").val()
     });
 
 });
@@ -213,3 +216,20 @@ $("#generate_execute").click(function(){
 
     }
 });
+
+
+$("#audit_button").click(function(){
+   var index=$("#order_form_id_span").text();
+   Dajaxice.purchasing.OrderFormAudit(function(data){
+        window.location.reload();
+       
+   },{'index':index});
+});
+$("#approve_button").click(function(){
+   var index=$("#order_form_id_span").text();
+   Dajaxice.purchasing.OrderFormApprove(function(data){
+        window.location.reload();
+       
+   },{'index':index});
+});
+

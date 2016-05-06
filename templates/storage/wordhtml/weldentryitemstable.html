@@ -185,10 +185,12 @@
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p></o:p></span></p>
   </td>
-  {% endif %}
+  {%comment%}
     <td>
-        <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="change_item({{item.id}})">修改</a>
+        <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" iid = "{{item.id}}" name="modify_btn">修改</a>
     </td>
+    {% endcomment %}
+    {% endif %}
 </tr>
  {% endfor %}
  <tr style='mso-yfti-irow:6;mso-yfti-lastrow:yes;height:23.85pt'>
@@ -203,7 +205,7 @@
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:23.85pt'>
-  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{{entry.purchaser|default_if_none:""}}</o:p></span></p>
+  <p class=MsoNormal align=center style='text-align:center;margin-top:10px;'>{% ifequal entry.purchaser None %}<span class="btn btn-mark" name="weldentry" role="purchaser">签字</span>{% else %}{{entry.purchaser}}{% endifequal %}</p>
   </td>
   <td width=85 style='width:63.55pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -217,7 +219,7 @@
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:23.85pt'>
-  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>{{entry.inspector|default_if_none:""}}</o:p></span></p>
+  <p class=MsoNormal align=center style='text-align:center;margin-top:10px;'>{% ifequal entry.inspector None %}<span class="btn btn-mark" name="weldentry" role = "inspector">签字</span>{% else %}{{entry.inspector}}{% endifequal %}</p>
   </td>
   <td width=95 style='width:71.6pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
@@ -231,6 +233,21 @@
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:23.85pt'>
-  <p class=MsoNormal align=center style='text-align:center;margin-top:10px;'>{% if is_show %}<span class="btn btn-mark">签字</span>{% else %}{{entry.keeper|default_if_none:""}}{% endif %}</p>
+  <p class=MsoNormal align=center style='text-align:center;margin-top:10px;'>{% ifequal entry.keeper None %}<span class="btn btn-mark" name="weldentry" role="keeper">签字</span>{% else %}{{entry.keeper}}{% endifequal %}</p>
   </td>
+  {% if is_show %}
+  <td colspan=2 style='width:124.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:23.85pt'>
+  <p class=MsoNormal align=center style='text-align:center;margin-top:10px;'>合计：</p>
+  </td>
+
+  <td width=81 style='width:61.0pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.05pt'>
+  <p class=MsoNormal align=center style='text-align:center' id="entry_total_price"></p>
+  </td> 
+  {% endif %}
  </tr>
