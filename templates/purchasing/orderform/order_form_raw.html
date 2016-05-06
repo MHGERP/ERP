@@ -349,6 +349,10 @@
     宋体;mso-font-kerning:0pt'>技术要求：{{order_form.tech_requirement|safe}}</div>
 
 </div>
+
+<!--
+
+如果仍需要需要由订购单生成标单，解开注释就好，点击按钮就可以像从物料汇总那样选了
 {% if order_form.order_status.status == 3 %}
 <form action="/purchasing/orderForm" >
     <input type="hidden" name="index" value="{{order_form.order_id}}"/>
@@ -356,3 +360,5 @@
     <button id='turn_to_add' style="float:right">添加标单</button>
 </form>
 {% endif%}
+-->
+

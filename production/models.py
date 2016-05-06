@@ -13,7 +13,7 @@ class ProductionWorkGroup(models.Model):
         verbose_name = u"生产工作组"
         verbose_name_plural = u"生产工作组"
     def __unicode__(self):
-        return self.get_name_display()
+        return self.name
 
 
 class ProcessDetail(models.Model):
@@ -32,6 +32,7 @@ class ProcessDetail(models.Model):
     class Meta:
         verbose_name = u"工序详细信息"
         verbose_name_plural = u"工序详细信息"
+        unique_together = ("materiel_belong", "process_id")
     def __unicode__(self):
         return u"%s-%d-%s" % (self.materiel_belong, self.process_id, self.processname)
 
@@ -53,7 +54,6 @@ class SynthesizeFileListStatus(models.Model):
 
 
 class ProductionPlan(models.Model):
-    #workorder_id = models.ForeignKey(WorkOrder)
     order = models.ForeignKey(WorkOrder, verbose_name = u"工作令")
     plan_id = models.CharField(max_length=50, blank=True, default=make_uuid, verbose_name=u"生产计划编号")
     status = models.IntegerField(blank = False, choices = PRODUCTION_PLAN_STAUTS_CHOICES, default=2,verbose_name=u"生产计划状态")

@@ -13,7 +13,7 @@
     编号: <input type="text" class="input-midium" {% if order_form.order_status.status != 0 %}readonly="true "{% endif%}value="{{order_form.number}}" id="number"/> 
     采购技术条件号/修订号: <input type="text" class="input-midium"  {% if order_form.order_status.status != 0 %}readonly="true "{% endif%}value="{{order_form.revised_id}}" id="revised_id" /> 
 </div>
-{% if order_form.order_status.status == 3 %}
+{% if order_form.order_status.status == 4%}
 <div id="new_purchasing_order">
     <button type="button" class="btn add" id="new_purchase_btn" data-toggle="modal" data-target="#bid_modal">新建标单</button>
     <form class="form-search">
@@ -35,10 +35,10 @@
 {% if order_form.order_status.status == 0%}
 <button class="btn btn-primary" id="order_form_finish">完成</button>
 {% endif%}
-{% if order_form.order_status.status == 3 %}
+{% if order_form.order_status.status == 4 %}
 <span class="btn" id="add_to_bid" data-toggle="modal" data-target="#bid_list">加入标单</span>
-{% if order_form.order_mod == 0 %}
-<button class="btn" id="generate_execute" >添加到材料执行</button>
 {% endif%}
+{% if order_form.order_mod == 0  and order_form.order_status.status == 3%}
+<button class="btn" id="generate_execute" >添加到材料执行</button>
 {% endif %}
 

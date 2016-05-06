@@ -487,3 +487,23 @@ class CheckMaterielListForm(forms.Form):
             materiels =objects.all()
             self.fields['materiel_type'].choices = getChoiceList(materiels,'specification')
 
+class WeldEntrySearchForm(forms.Form):
+    search_time_start = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
+    search_time_end  = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker', 'date_picker':'true'}))
+    entry_code=forms.CharField(label=u'入库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control date_picker','id':'entry_code'}))
+
+class WeldApplyKeeperForm(ModelForm):
+    class Meta:
+        model = WeldingMaterialApplyCard
+        fields = ("actual_weight","actual_quantity","remark")
+        widgets={
+                'actual_weight':forms.TextInput(attrs={'class':'span2'}),
+                'actual_quantity':forms.TextInput(attrs={'class':'span2'}),
+                'remark':forms.TextInput(attrs={'class':'span2'}),
+        }
+class WeldMaterialSearchForm(forms.Form):
+    material__name = forms.CharField(label=u"名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    material_mark = forms.CharField(label=u"牌号",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    model_number = forms.CharField(label=u"型号",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    specification = forms.CharField(label=u"规格",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    factory = forms.CharField(label=u"厂家",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))

@@ -1,25 +1,29 @@
     <table class="table table-hover table-bordered">
         <tr>
+            <th>工作令</th>
+            <th>焊缝编号</th>
+            <th>焊缝牌号</th>
+            <th>型号</th>
+            <th>规格</th>
             <th>领用单位</th>
             <th>日期</th>
             <th>编号</th>
-            <th>工作令</th>
-            <th>状态</th>
             <th>查看</th>
         </tr>
-        {% for card in weld_apply_cards %}
+        {% for card in apply_cards %}
         <tr>
-            <td>{{card.get_department_display}}</td>
-            <td>{{card.create_time|date:"Y年m月d日"}}</td>
-            <td>{{card.index}}</td>
             <td>{{card.workorder}}</td>
-            <td>
-                {{card.get_status_display}}    
-            </td>
-            {% if card.status == APPLYCARD_COMMIT %}
-            <td><a type="button" class="btn detail" href="/storage/weldapply/detail?index={{card.index}}">详情</a></td>
+            <td>{{card.weld_bead_number}}</td>
+            <td>{{card.material_mark}}</td>
+            <td>{{card.model_number}}</td>
+            <td>{{card.specification}}</td>
+            <td>{{card.department}}</td>
+            <td>{{card.create_time|date:"Y年m月d日"}}</td>
+            <td>{{card.applycard_code}}</td>
+            {% if card.status == APPLYCARD_KEEPER %}
+            <td><a type="button" class="btn detail" href="/storage/weldapply/detail?index={{card.id}}">详情</a></td>
             {% else %}
-            <td><a type="button" class="btn btn-warning detail" href="/storage/weldapply/detail?index={{card.index}}">处理</a></td>
+            <td><a type="button" class="btn btn-warning detail" href="/storage/weldapply/detail?index={{card.id}}">处理</a></td>
             {% endif %}
         {% endfor %}
     </table>
