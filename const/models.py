@@ -25,12 +25,12 @@ class Material(models.Model):
         return self.name
 
 class InventoryType(models.Model):
-    name = models.CharField(blank = False, max_length = 50, verbose_name = u"明细表名称")
+    name = models.CharField(blank = False, max_length = 50, choices = INVENTORY_TYPE, verbose_name = u"明细表名称")
     class Meta:
         verbose_name = u"明细表类别"
         verbose_name_plural = u"明细表类别"
     def __unicode__(self):
-        return self.name
+        return self.get_name_display()
 
 class Materiel(models.Model):
     order = models.ForeignKey(WorkOrder, blank = True, null = True, verbose_name = u"所属工作号")

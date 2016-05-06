@@ -9,15 +9,16 @@
 {% endblock %}
 
 {% block inner_content%}
-<form class="form-search ">
+<form class="form-search" itype={{inventory_type}}>
    工作令: 
    {{ work_order_form.work_order }}
     <span class="btn" id="order_search">检索</span> 
+    <span class="btn btn-success" id="fast_generate">快捷生成</span> 
 </form>
 
 <div class="widget-box" id="widget-box">
 	{% include "techdata/widgets/out_purchased_table.html" %}
 </div>
 
-
+<script type="text/javascript" src="{{STATIC_URL}}js/techdata/outPurchased.js"></script>
 {% endblock%}

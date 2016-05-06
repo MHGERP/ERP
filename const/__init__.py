@@ -100,12 +100,20 @@ RECHECK_CHOICE = (
     (False,u"否"),
 )
 
+MAIN_MATERIEL = "main_materiel"
+AUXILIARY_MATERIEL = "auxiliary_materiel"
+FIRST_FEEDING = "first_feeding"
+OUT_PURCHASED = "out_purchased"
+WELD_MATERIAL = "weld_material"
+COOPERANT = "cooperant"
+
 INVENTORY_TYPE = (
-    (0, u"主材定额"),
-    (1, u"辅料定额"),
-    (2, u"先投件明细"),
-    (3, u"外购件明细"),
-    (4, u"铸锻件明细"),
+    (MAIN_MATERIEL, u"主材定额"),
+    (AUXILIARY_MATERIEL, u"辅料定额"),
+    (FIRST_FEEDING, u"先投件明细"),
+    (OUT_PURCHASED, u"外购件明细"),
+    (WELD_MATERIAL, u"焊材定额"),
+    (COOPERANT, u"工序性外协明细")
 )
 
 SELL_TYPE = (
@@ -489,14 +497,18 @@ PRODUCTION_PLAN_STAUTS_CHOICES = (
 #焊缝焊接接头  焊工持证项目
 SMAW_Fell = "SMAW-Fell-5FG-12/60-Fef3J"
 GMAW_Fell = "GMAW-Fell-3G-14-FefS-11/15"
+SAW_1G_07 = "SAW-1G07/09/19"
 WELD_CERTIFICATION = (
     (SMAW_Fell, "SMAW-Fell-5FG-12/60-Fef3J"),
-    (GMAW_Fell, "GMAW-Fell-3G-14-FefS-11/15")
+    (GMAW_Fell, "GMAW-Fell-3G-14-FefS-11/15"),
+    (SAW_1G_07, "SAW-1G-07/09/19"),
 )
 #焊接工艺评定编号
 RH24_13_09 = "RH24-13-09"
+RH24_13_36 = "RH24-13-36"
 PROCEDURE_QUALIFICATION_INDEX = (
-    (RH24_13_09, "RH-13-09"),
+    (RH24_13_09, "RH24-13-09"),
+    (RH24_13_36, "RH24-13-36"),
 )
 
 

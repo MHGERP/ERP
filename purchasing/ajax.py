@@ -124,12 +124,14 @@ def chooseInventorytype(request,pid,key):
     Lei
     """
     idtable = {
-        "1": "main_materiel",
-        "2": "auxiliary_materiel",
-        "3": "first_feeding",
-        "4": "purchased",
-        "5": "forging",
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        WELD_MATERIAL: "weld_material",
+
     }
+
     items = Materiel.objects.filter(inventory_type__id=pid, materielpurchasingstatus__add_to_detail = True,relate_material=None)
     if key:
         items = items.filter(name=key)
@@ -187,13 +189,14 @@ def getInventoryTable(request, table_id, order_index):
     #dict of table_id to fact table
     #it should be optimized when database scale expand
     id2table = {
-        "1": "main_materiel",
-        "2": "auxiliary_materiel",
-        "3": "first_feeding",
-        "4": "purchased",
-        "5": "forging",
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        WELD_MATERIAL: "weld_material",
+
     }
-    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
+    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__name = table_id)
     context = {
         "items": items,
     }
