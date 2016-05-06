@@ -11,28 +11,16 @@
 			<th>完工时间</th>
 		</tr>
 	</thead>
-	{%for item in processSet%}
-		{%for it in item%}
-			<tr>
-				<td>{{it.materiel_belong.order}}</td>
-				<td>{{it.materiel_belong.index}}</td>
-				<td>{%if not it.operator%}
-						-
-					{%else%}
-						{{it.operator}}
-					{%endif%}
-				</td>
-				<td>{{it.get_name_display}}</td>
-				<td>{{it.hour}}</td>
-				<td></td>
-				<td></td>
-				<td>{%if not it.operate_date%}
-						-
-					{%else%}
-						{{it.operate_date}}
-					{%endif%}
-				</td>
-			</tr>
-		{%endfor%}
+	{%for it in process_detail_list%}
+		<tr>
+			<td>{{it.materiel_belong.order}}</td>
+			<td>{{it.materiel_belong.index}}</td>
+			<td>{{it.productionworkgroup.name|default:""}}</td>
+			<td>{{it.processname}}</td>
+			<td>{{it.work_hour}}</td>
+			<td></td>
+			<td></td>
+			<td>{{it.complete_date|default:""}}</td>
+		</tr>
 	{%endfor%}	
 </table>

@@ -14,8 +14,8 @@
             <th>交货状态</th>
             <th>执行标准</th>
 			<th>备注</th>
-			<th>状态</th>
-			{% if not can_choose %}
+            <th>状态</th>
+			{% if not can_choose and order_form.order_status.status == 0 %}
 			<th>修改</th>
 			{% endif %}
 		</tr>
@@ -38,8 +38,8 @@
             <td>{{item.status}}</td>
             <td>{{item.standard}}</td>
             <td>{{item.remark}}</td>
-			<td>{{item.status}}</td>
-            {% if not can_choose %}
+			<td>{{item.order_status}}</td>
+            {% if  not can_choose and order_form.order_status.status == 0  %}
 			<td>
 				<button class="btn btn-primary" uid={{item.id}}>修改</button>
 			</td>
@@ -63,8 +63,8 @@
             <td>{{item.status}}</td>
             <td>{{item.standard}}</td>
             <td>{{item.remark}}</td>
-			<td>{{item.status}}</td>
-            {% if not can_choose %}
+			<td>{{item.order_status}}</td>
+            {% if not can_choose and order_form.order_status.status == 0  %}
 			<td>
 				<button class="btn btn-primary" id="edit" uid={{item.id}}>修改</button>
 			</td>

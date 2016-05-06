@@ -16,12 +16,19 @@ from storage.utils import get_weld_filter
 from const.forms import WorkOrderForm
 from production.forms import *
 
+def getQ(con):
+    query_set = Q()
+    for k,v in con.items():
+         if len(v) != 0:
+             query_set.add(Q(**{k: v}), Q.AND)
+    return query_set
+
 @dajaxice_register
 def getFileList(request, id_work_order):
     """
     Lei
     """
-    workorder = SynthesizeFileListStatus.objects.filter(workorder_id__id = id_work_order)
+    workorder = SynthesizeFileListStatus.objects.filter(order_id__id = id_work_order)
     context = {
         "workorder":workorder,
     }
@@ -43,25 +50,19 @@ def changeFileList(request, id, workorder_id):
     return html
 
 @dajaxice_register
-def getHourSearch(request, id_work_order, work_ticket, group_num):
+def getHourSearch(request, form):
     """
     Lei
     """
-    if work_ticket:
-        materiel = Materiel.objects.filter(order__order_index=id_work_order,index=work_ticket)
+    hour_message_search_form = HourMessageSearchForm(deserialize_form(form))
+    if hour_message_search_form.is_valid():
+        process_detail_list  = ProcessDetail.objects.filter(getQ(hour_message_search_form.cleaned_data))
     else:
-        materiel = Materiel.objects.filter(order__order_index=id_work_order)
-    processSet = []
-    for item in materiel:
-        if group_num:
-            process = Processing.objects.filter(materiel_belong=item,operator__username=group_num);
-            processSet.append(process)
-        else:
-            process = Processing.objects.filter(materiel_belong=item);
-            processSet.append(process)
+        print hour_message_search_form.errors
     context = {
-        "processSet":processSet
-    }
+            "process_detail_list":process_detail_list
+        }
+
     html = render_to_string("production/man_hour_message_list.html",context)
     return html
 
@@ -74,9 +75,9 @@ def getHourSummarize(request, work_order, operator, date):
     try:
         year,month = date.split("-")
         if operator:
-            process = Processing.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month))
+            process = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month))
         else:
-            process = Processing.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operate_date__year=year)&Q(operate_date__month=month))
+            process = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operate_date__year=year)&Q(operate_date__month=month))
         status = 1
     except Exception,e:
         status = 0
@@ -236,7 +237,7 @@ def prodplanSearch(request, form):
         con = search_form.cleaned_data
         print con
 
-        q1 = (con["work_order"] and Q(workorder_id = con["work_order"])) or None
+        q1 = (con["work_order"] and Q(order_id = con["work_order"])) or None
         #q1 = None
         q2 = (con["status"] and Q(status = con["status"])) or None
         if con["status"]== "-1":
@@ -405,21 +406,7 @@ def taskConfirmFinish(request, form, mid):
 def ledgerSearch(request, form):
     search_form = LedgerSearchForm(deserialize_form(form))
     if search_form.is_valid():
-        con = search_form.cleaned_data
-
-        
-
-        print con
-        q1 = (con["order"] and Q(order_id = con["order"])) or None
-        q2 = (con["work_index"] and Q(index = con["work_index"])) or None
-        q3 = (con["parent_schematic_index"] and Q(parent_schematic_index = con["parent_schematic_index"])) or None
-        query_set = filter(lambda x:x!=None, [q1,q2,q3])
-
-        if query_set:
-            query_con = reduce(lambda x,y:x&y, query_set)
-            materiel_list  = Materiel.objects.filter(query_con)
-        else:
-            materiel_list  = Materiel.objects.all()
+        materiel_list  = Materiel.objects.filter(getQ(search_form.cleaned_data))
         for item in materiel_list:
             if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
                 CirculationRoute(materiel_belong = item).save()
@@ -427,4 +414,23 @@ def ledgerSearch(request, form):
         html = render_to_string("techdata/widgets/designBOM_table_list.html",{"BOM":materiel_list})
     else:
         print search_form.errors
+    return simplejson.dumps({ "html" : html})
+
+@dajaxice_register
+def weldPartOrderInfo(request, iid):
+    """
+    Lei
+    """
+    materielObj = Materiel.objects.get(id = iid)
+    if CirculationRoute.objects.filter(materiel_belong = materielObj).count() == 0:
+        CirculationRoute(materiel_belong = materielObj).save()
+    materielObj.route = '.'.join(getattr(materielObj.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(materielObj.circulationroute, "L%d" % i))
+    materielObj.processDetailObj = ProcessDetail.objects.filter(materiel_belong = materielObj)
+    print "ddddd"
+    print materielObj.route
+    print "ssssss"
+    for item in materielObj.processDetailObj:
+        print item.process_id
+
+    html = render_to_string("production/widgets/weld_part_order_info_table.html",{"materielObj":materielObj})
     return simplejson.dumps({ "html" : html})

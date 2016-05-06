@@ -389,15 +389,15 @@ def getWeldSeamWeight(self, id_work_order):
 
     for item1 in weldseam_list:
         if dic.has_key((item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)):
-            dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)]+= int(item1.weight_1)
+            dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)]+= float(item1.weight_1)
         else:
-            dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)] = int(item1.weight_1)
+            dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)] = float(item1.weight_1)
     for item2 in weldseam_list:
         if item2.weld_material_2 != None:
             if dic.has_key((item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)):
-                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)]+= int(item2.weight_2)
+                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)]+= float(item2.weight_2)
             else:
-                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)] = int(item2.weight_2)
+                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)] = float(item2.weight_2)
 
     context = {
         "work_order":work_order,
