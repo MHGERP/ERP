@@ -509,21 +509,21 @@ Q_NEED_LEAD=14
 Q_COMPREHENSIVE=15
 Q_COMPANY=16
 COMMENT_USER_CHOICE=(
-	(Z_APPLY_OPERATOR,u"申请表经办人")，
-	(Z_APPLY_LEAD,u"申请表申请主管")，
-	(Z_NEED,u"申请表需求单位")，	
-	(Z_CENTRALIZE,u"申请表归口部门")，
-	(Z_LOGISTICAL,u"申请表物流采控")，
-	(Z_COMPANY,u"申请表公司意见")，
-	(G_OPERATOR,u"审核表经办人")，
-	(G_LEAD,u"审核表主管领导")，
-	(G_QUALITY,u"审核表质量部")，
-	(G_ECONOMIC,u"审核表经济运行部")，
-	(G_COMPREHENSIVE,u"审核表综合管理部")，
-	(Q_OPERATOR,u"比质卡经办人")，
-	(Q_NEED_TECH,u"比质卡需求技术")，
-	(Q_NEED_LEAD,u"比质卡需求领导)，
-	(Q_COMPREHENSIVE,u"比质卡综合管理")，
+	(Z_APPLY_OPERATOR,u"申请表经办人"),
+	(Z_APPLY_LEAD,u"申请表申请主管"),
+	(Z_NEED,u"申请表需求单位"),
+	(Z_CENTRALIZE,u"申请表归口部门"),
+	(Z_LOGISTICAL,u"申请表物流采控"),
+	(Z_COMPANY,u"申请表公司意见"),
+	(G_OPERATOR,u"审核表经办人"),
+	(G_LEAD,u"审核表主管领导"),
+	(G_QUALITY,u"审核表质量部"),
+	(G_ECONOMIC,u"审核表经济运行部"),
+	(G_COMPREHENSIVE,u"审核表综合管理部"),
+	(Q_OPERATOR,u"比质卡经办人"),
+	(Q_NEED_TECH,u"比质卡需求技术"),
+	(Q_NEED_LEAD,u"比质卡需求领导"),
+	(Q_COMPREHENSIVE,u"比质卡综合管理"),
 	(Q_COMPANY,u"比质卡公司")
 )
 
