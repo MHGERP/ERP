@@ -129,9 +129,9 @@ class ProcedureQualificationIndex(models.Model):
 class WeldJointTech(models.Model):
     order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
     index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"编号")
-    remark = models.CharField(blank = True, max_length = 200, verbose_name = u"备注")
-    checker = models.ForeignKey(User, verbose_name = u"审核人", related_name = "weldjoint_checker")
-    approver = models.ForeignKey(User, verbose_name = u"批准人", related_name = "weldjoint_approver")
+    remark = models.CharField(blank = True, null = True,  max_length = 200, verbose_name = u"备注")
+    checker = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "weldjoint_checker")
+    approver = models.ForeignKey(User, blank = True, null = True, verbose_name = u"批准人", related_name = "weldjoint_approver")
     class Meta:
         verbose_name = u"焊接接头工艺分析表"
         verbose_name_plural = u"焊接接头工艺分析表"
@@ -145,7 +145,8 @@ class WeldJointTechDetail(models.Model):
     bm_specification_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材规格1")
     bm_texture_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材材质2")
     bm_specification_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name =  u"母材材质2")
-    weld_method = models.ForeignKey(WeldMethod, verbose_name = u"焊接方法")
+    weld_method_1 = models.ForeignKey(WeldMethod,null = True, blank = True, verbose_name = u"焊接方法", related_name = u"joint_weld_method1")
+    weld_method_2 = models.ForeignKey(WeldMethod, null = True, blank = True, verbose_name = u"焊接方法", related_name = u"joint_weld_method2")
     procedureQualification_index = models.ForeignKey(ProcedureQualificationIndex, blank = True, null = True,max_length = 100, verbose_name = u"焊接工艺评定编号")
     weld_certification = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目", related_name = "weld_certification")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
