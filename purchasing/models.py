@@ -32,6 +32,8 @@ class OrderForm(models.Model):
     order_id = models.CharField(unique = True, max_length = 20, blank = False, verbose_name = u"订购单编号")
     create_time = models.DateTimeField(null = True,verbose_name = u"创建日期")
     establishment_time = models.DateTimeField(null = True, verbose_name = u"编制日期")
+    audit_time=models.DateTimeField(blank=True,null=True,verbose_name=u"审核日期")
+    approved_time=models.DateTimeField(blank=True,null=True,verbose_name=u"批准日期")
     order_status = models.ForeignKey(OrderFormStatus, null = False, verbose_name = u"订购单状态")
     establishment_user=models.ForeignKey(User,verbose_name=u"编制人",related_name="establishment_user",null=True,blank=True)
     chief=models.ForeignKey(User,verbose_name=u"外采科长",related_name="chief_user",null=True,blank=True)
@@ -48,6 +50,7 @@ class OrderForm(models.Model):
         return self.order_id
 
 class BidForm(models.Model):
+    order_form=models.ForeignKey(OrderForm,null=True,verbose_name=u'对应订购单')
     bid_id=models.CharField(unique=True,max_length=20,blank=False,verbose_name=u"标单编号")
     create_time=models.DateTimeField(blank=True,null=True,verbose_name=u"创建日期")
     establishment_time=models.DateTimeField(blank=True,null=True,verbose_name=u"编制日期")
@@ -85,8 +88,7 @@ class BidComment(models.Model):
     comment = models.CharField(max_length=400,blank=False,verbose_name=u"审批意见")
     bid = models.ForeignKey(BidForm, blank = False)
     submit_date=models.DateField(blank=True,null=True,default=lambda: datetime.datetime.today(),verbose_name=u"提交日期")
-    result=models.IntegerField(choices=APPROVED_RESULT_CHOICES,verbose_name=u"审批结果")
-    status=models.IntegerField(choices=BIDFORM_STATUS_CHOICES,verbose_name=u"状态")
+    user_title=models.IntegerField(choices=COMMENT_USER_CHOICE,verbose_name=u"审批人属性")
     class Meta:
         verbose_name = u"标单评审意见"
         verbose_name_plural = u"标单评审意见"
@@ -112,7 +114,7 @@ class bidApply(models.Model):
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
     amount = models.IntegerField(verbose_name=u"数量")
-    work_order = models.ForeignKey(WorkOrder,null=False,verbose_name=u"工作令")
+    work_order = models.CharField(max_length=100,null=False,verbose_name=u"工作令")
     bid_project = models.CharField(null=True, max_length=40, verbose_name=u"拟招(议)项目")
     bid_date = models.DateTimeField(null=True, verbose_name=u"拟招(议)标时间")
     special_model = models.CharField(null=True, max_length=40, verbose_name=u"规格、型号")

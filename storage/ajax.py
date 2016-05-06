@@ -470,7 +470,7 @@ def entryItemSave(request,form,mid):
         message = u"修改失败，入库单已确认过"
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
     items = WeldMaterialEntryItems.objects.filter(entry = entry)
-    html = render_to_string("storage/wordhtml/weldentryitemstable.html",{"items":items,"is_show":is_show})
+    html = render_to_string("storage/wordhtml/weldentryitemstable.html",{"items":items,"is_show":is_show,"entry":entry})
     data = {
             "flag":flag,
             "message":message,
@@ -513,23 +513,31 @@ def saveRemarkStoreRoom(request,form,mid,typeid):
     return simplejson.dumps(data)
 
 @dajaxice_register
-def entryConfirm(request,eid,entry_code):
+def entryConfirm(request,role,eid):
+    data = {}
     try:
         entry = WeldMaterialEntry.objects.get(id = eid)
-        if entry.entry_status == STORAGESTATUS_KEEPER:
-            entry.entry_code = entry_code
-            entry.keeper = request.user
-            entry.entry_status = STORAGESTATUS_END
-            entry.entry_time = datetime.date.today()
-            entry.save()
-            weldStoreItemsCreate(entry)
-            flag = True
-        else:
-            flag = False
+        if role == "keeper":
+            data,is_show = handleEntryConfirm_Keeper(request,entry)
     except Exception,e:
-        flag = False
         print e
-    return simplejson.dumps({'flag':flag})
+        data["message"] = u"入库单不存在"
+    items = entry.weldmaterialentryitems_set.all()
+    html = render_to_string("storage/wordhtml/weldentryitemstable.html",{"items":items,"is_show":is_show,"entry":entry})
+    data["html"] = html
+    return simplejson.dumps(data)    
+
+def handleEntryConfirm_Keeper(request,entry):
+    if entry.entry_status == STORAGESTATUS_KEEPER:
+        entry.keeper = request.user
+        entry.entry_status = STORAGESTATUS_END
+        entry.save()
+        weldStoreItemsCreate(entry)
+        message = u"入库单确认成功"
+    else:
+        message = u"入库单已经确认过,不能重复确认"
+    is_show = entry.entry_status == STORAGESTATUS_KEEPER 
+    return {"message":message},is_show
 
 @dajaxice_register
 def steelEntryConfirm(request,eid,entry_code):
@@ -861,30 +869,27 @@ def weldMaterialStorageItems(request,specification):
     return simplejson.dumps({'html':html})
 
 @dajaxice_register
-def weldMaterialApply(request,itemid,form,index):
-    storageitem = WeldStoreList.objects.get(id = itemid)
-    applycard = WeldingMaterialApplyCard.objects.get(index=index)
-    form = Apply_ApplyCardForm(deserialize_form(form),instance=applycard)
+def weldMaterialApply(request,apply_form,select_item,aid):
+    storageitem = WeldStoreList.objects.get(id = select_item)
+    applycard = WeldingMaterialApplyCard.objects.get(id=aid)
+    form = WeldApplyKeeperForm(deserialize_form(apply_form),instance=applycard)
     if form.is_valid():
-        if storageitem.count >= form.cleaned_data["actual_quantity"]:
-            applycard.storelist = storageitem
-            applycard.save()
-            storageitem.count -= form.cleaned_data["actual_quantity"]
-            storageitem.save()
-            form.save()
-            applycard.status = APPLYCARD_COMMIT
-            applycard.commit_user = request.user
-            applycard.save()
-            message = u"领用单确认成功"
-            flag = True
+        if applycard.status == APPLYCARD_KEEPER:
+            if storageitem.inventory_count >= form.cleaned_data["actual_weight"]:
+                applycard.storelist = storageitem
+                applycard.save()
+                applycard.material_code = storageitem.entry_item.material_code
+                form.save()
+                message = u"领用单材料选择成功"
+                flag = True
+            else:
+                message = u"领用确认失败，所选库存材料数量不足"
+                flag = False
         else:
-            message = u"领用确认失败，所选库存材料数量不足"
             flag = False
-    else:
-        message = u"领用单确认失败，数据未填写完整"
-        flag = False
-        print form.errors
-    return simplejson.dumps({'message':message,'flag':flag})
+            message = u"领用卡已经确认，不能修改材料"
+    html = render_to_string("storage/wordhtml/weldapply.html",{"apply_card":applycard})   
+    return simplejson.dumps({'message':message,'flag':flag,"html":html})
 
 @dajaxice_register
 def weldRefundCommit(request,rid,form):
@@ -929,7 +934,7 @@ def chooseStorageMateriel(request,form,selected):
         choosedmateriel = db_model.objects.get(id = selected)
     except Exception,e:
         print e
-
+"""
 @dajaxice_register
 def searchMateriel(request,form):
     context = getSearchMaterielContext(request,form)
@@ -954,3 +959,48 @@ def getSearchMaterielContext(request,form,is_production = True):
         print materiel_form.errors
     context["is_production"] = is_production
     return context
+"""
+@dajaxice_register
+def searchWeldEntry(request,searchform):
+    form = WeldEntrySearchForm(deserialize_form(searchform))
+    replace_dic = {"search_time_start":"entry_time__gte","search_time_end":"entry_time__lte"}
+    if form.is_valid():
+        entry_set = get_set_filter(WeldMaterialEntry,form.cleaned_data,replace_dic).order_by("-entry_time")
+    else:
+        print form.errors
+        entry_set = []
+    print entry_set 
+    html = render_to_string("storage/widgets/storageentryhomemain.html",{"entry_set":entry_set,"ENTRYSTATUS_END":STORAGESTATUS_END,"entryurl":"storage/weldentryconfirm"})
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def searchMaterial(request,search_form,search_type,aid):
+    db_model = checkStorage(search_type)
+    search_form = WeldMaterialSearchForm(deserialize_form(search_form))
+    apply_card = WeldingMaterialApplyCard.objects.get(id = aid)
+    if search_form.is_valid():
+        replace_dic = gen_replace_dic(search_form.cleaned_data,"entry_item")
+        store_items = get_weld_filter(db_model,search_form.cleaned_data,replace_dic).filter(item_status = ITEM_STATUS_NORMAL)
+        for item in store_items:
+            html = render_to_string("storage/searchmaterial/store_weld_items_table.html",{"store_items":store_items,"apply_card":apply_card})
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def weldApplyConfirm(request,role,aid):
+    apply_card = WeldingMaterialApplyCard.objects.get(id=aid)
+    if role == "keeper":
+        if apply_card.storelist != None:
+            if apply_card.status == APPLYCARD_KEEPER:
+                apply_card.status = APPLYCARD_END
+                apply_card.keeper = request.user
+                apply_card.save()
+                storageitem = apply_card.storelist
+                storageitem.inventory_count -= apply_card.actual_weight
+                storageitem.save()
+                message = u"领用卡确认成功"
+            else:
+                message = u"领用确认失败，不能重复确认"
+        else:
+            message = u"领用卡确认失败，请先选择领用的材料"
+    html = render_to_string("storage/wordhtml/weldapply.html",{"apply_card":apply_card})  
+    return simplejson.dumps({"html":html,"message":message})

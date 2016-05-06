@@ -1,0 +1,32 @@
+<thead>
+    <th>选择</th>
+    <th>名称</th>
+    <th>牌号</th>
+    <th>型号</th>
+    <th>规格</th>
+    <th>材料批号</th>
+    <th>材质编号</th>
+    <th>入库时间</th>
+    <th>出厂日期</th>
+    <th>厂家</th>
+    <th>库存数量</th>
+    <th>状态</th>
+</thead>
+<tbody>
+    {% for item in store_items %}
+    <tr>
+        <td><input type="radio" name="radion_item" value = "{{item.id}}" {% ifequal apply_card.storelist.id item.id %} checked = "checked" {% endifequal %} /></td>
+        <td>{{item.entry_item.material}}</td>
+        <td>{{item.entry_item.material_mark}}</td>
+        <td>{{item.entry_item.model_number}}</td>
+        <td>{{item.entry_item.specification}}</td>
+        <td>{{item.entry_item.material_charge_number}}</td>
+        <td>{{item.entry_item.material_code}}</td>
+        <td>{{item.entry_item.entry.entry_time|date:'Y.m.d'}}</td>
+        <td>{{item.entry_item.production_date|date:'Y.m.d'}}</td>
+        <td>{{item.entry_item.factory}}</td>
+        <td>{{item.inventory_count}}</td>
+        <td>{{item.get_item_status_display}}</td>
+    </tr>
+    {% endfor %}
+</tbody>
