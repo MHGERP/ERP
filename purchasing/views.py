@@ -253,7 +253,7 @@ def inventoryTableViews(request):
     order_index = request.GET.get("order_index")
     tableid = request.GET.get("tableid")
     order = WorkOrder.objects.get(order_index = order_index)
-    inventoryType = InventoryType.objects.get(id = tableid)
+    inventoryType = InventoryType.objects.get(name = tableid)
     context = {"order": order,
                "inventoryType": inventoryType,
     }

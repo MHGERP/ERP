@@ -100,12 +100,20 @@ RECHECK_CHOICE = (
     (False,u"否"),
 )
 
+MAIN_MATERIEL = "main_materiel"
+AUXILIARY_MATERIEL = "auxiliary_materiel"
+FIRST_FEEDING = "first_feeding"
+OUT_PURCHASED = "out_purchased"
+WELD_MATERIAL = "weld_material"
+COOPERANT = "cooperant"
+
 INVENTORY_TYPE = (
-    (0, u"主材定额"),
-    (1, u"辅料定额"),
-    (2, u"先投件明细"),
-    (3, u"外购件明细"),
-    (4, u"铸锻件明细"),
+    (MAIN_MATERIEL, u"主材定额"),
+    (AUXILIARY_MATERIEL, u"辅料定额"),
+    (FIRST_FEEDING, u"先投件明细"),
+    (OUT_PURCHASED, u"外购件明细"),
+    (WELD_MATERIAL, u"焊材定额"),
+    (COOPERANT, u"工序性外协明细")
 )
 
 SELL_TYPE = (
