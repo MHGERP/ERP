@@ -6,7 +6,7 @@ from django.forms import ModelForm
 from const.models import WorkOrder
 from datetime import *
 from django.forms import ModelForm
-from production.models import ProductionPlan
+from production.models import ProductionPlan,ProductionWorkGroup
 from techdata.models import Processing
 from const.forms import WorkOrderForm
 
@@ -84,14 +84,13 @@ class DateForm(forms.Form):
         self.fields["date"].choices = DATE_CHOICE
 
 class HourMessageSearchForm(forms.Form):
-    order_index = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'form-control input-medium'}),label=u"工作令")
-    work_ticket = forms.ChoiceField(widget = forms.TextInput(attrs = {'class':'form-control input'}),label=u"工作票号")
-    group_num = forms.ChoiceField(widget = forms.TextInput(attrs = {'class':'form-control input'}),label=u"组号")
+    materiel_belong__order = forms.ChoiceField(label=u"工作令", widget = forms.Select(attrs = {"class": "form-control input"}))
+    materiel_belong__index__contains = forms.CharField(required=False, label=u"工作票号")
+    productionworkgroup__name = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
     def __init__(self, *args, **kwargs):
-        super(HourMessageSearchForm, self).__init__(*args, **kwargs)
-        ORDER_INDEX_CHOICES = tuple((item.order_index,item.order_index) for item in WorkOrder.objects.all())
-        self.fields["order_index"].choices = ORDER_INDEX_CHOICES
-
-
-
+         super(HourMessageSearchForm, self).__init__(*args, **kwargs)
+         GROUO_NUM_CHOICES = tuple([("","------")]+[(item.id, item.name) for item in ProductionWorkGroup.objects.all()])
+         self.fields["productionworkgroup__name"].choices = GROUO_NUM_CHOICES
+         WORKORDER_CHOICES = tuple((item.id, item) for item in WorkOrder.objects.all())
+         self.fields["materiel_belong__order"].choices = WORKORDER_CHOICES
 

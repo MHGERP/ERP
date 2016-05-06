@@ -477,8 +477,8 @@ def AuxiliaryToolsEntryView(request):
     object_id = int(request.GET['id'])
     auxiliary_tool_entry = AuxiliaryToolEntry.objects.get(
         id=object_id)
-    context['object'] = auxiliary_tool_entry
-    context['sub_objects'] = AuxiliaryToolEntryItems.objects.filter(
+    context['entry'] = auxiliary_tool_entry
+    context['items'] = AuxiliaryToolEntryItems.objects.filter(
         entry =auxiliary_tool_entry)
     return render(request,
                   'storage/auxiliarytools/auxiliarytoolsentry.html',

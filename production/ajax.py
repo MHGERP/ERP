@@ -50,25 +50,19 @@ def changeFileList(request, id, workorder_id):
     return html
 
 @dajaxice_register
-def getHourSearch(request, id_work_order, work_ticket, group_num):
+def getHourSearch(request, form):
     """
     Lei
     """
-    if work_ticket:
-        materiel = Materiel.objects.filter(order__order_index=id_work_order,index=work_ticket)
+    hour_message_search_form = HourMessageSearchForm(deserialize_form(form))
+    if hour_message_search_form.is_valid():
+        process_detail_list  = ProcessDetail.objects.filter(getQ(hour_message_search_form.cleaned_data))
     else:
-        materiel = Materiel.objects.filter(order__order_index=id_work_order)
-    processSet = []
-    for item in materiel:
-        if group_num:
-            process = Processing.objects.filter(materiel_belong=item,operator__username=group_num);
-            processSet.append(process)
-        else:
-            process = Processing.objects.filter(materiel_belong=item);
-            processSet.append(process)
+        print hour_message_search_form.errors
     context = {
-        "processSet":processSet
-    }
+            "process_detail_list":process_detail_list
+        }
+
     html = render_to_string("production/man_hour_message_list.html",context)
     return html
 
@@ -81,9 +75,9 @@ def getHourSummarize(request, work_order, operator, date):
     try:
         year,month = date.split("-")
         if operator:
-            process = Processing.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month))
+            process = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month))
         else:
-            process = Processing.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operate_date__year=year)&Q(operate_date__month=month))
+            process = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operate_date__year=year)&Q(operate_date__month=month))
         status = 1
     except Exception,e:
         status = 0
