@@ -145,7 +145,10 @@ def transferCardEditViews(request):
     return render(request, "techdata/transfer_card_edit.html", context)
 
 def weldQuotaViews(request):
-    context = {}
+    work_order_form = WorkOrderForm()
+    context = {
+        "form": work_order_form,
+    }
     return render(request, "techdata/weld_quota.html", context)
 def weldEditViews(request):
     context = {}

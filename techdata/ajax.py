@@ -394,6 +394,21 @@ def getWeldSeamList(self, id_work_order):
     return simplejson.dumps({"html": html, "read_only": read_only,})
 
 @dajaxice_register
+def getWeldQuotaList(self, id_work_order):
+    """
+    MH Chen
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    weldseam_list = WeldSeam.objects.filter(materiel_belong__order = work_order)
+    context = {
+        "weldseam_list": weldseam_list,
+        "work_order": work_order,
+    }
+    html = render_to_string("techdata/widgets/weld_list_table.html", context)
+    read_only = (work_order.weldlistpagemark.reviewer != None)
+
+    return simplejson.dumps({"html": html, "read_only": read_only,})
+@dajaxice_register
 def getWeldSeamWeight(self, id_work_order):
     """
     MH Chen
