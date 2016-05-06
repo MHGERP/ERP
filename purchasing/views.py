@@ -120,6 +120,7 @@ def bidTrackingViews(request, bid_id):
     """
     Liu Ye
     """
+    """
     bidform = BidForm.objects.get(id = bid_id)
     qualityPriceCardForm = QualityPriceCardForm()
     try:
@@ -154,6 +155,14 @@ def bidTrackingViews(request, bid_id):
               # "BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED": BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED,
                "supplier_set":bidform.supplierselect_set.all()
              }
+    """
+    bidform = BidForm.objects.get(id = bid_id)
+    order_form=bidform.order_form
+    context={
+        "bidform":bidform,
+        "order_form":order_form,
+        "items":MaterielCopy.objects.filter(materielformconnection__order_form=order_form)
+    }
     return render(request, "purchasing/bid_track.html", context)
 
 def contractFinanceViews(request):
