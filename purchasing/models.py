@@ -14,6 +14,17 @@ class MaterielCopy(Materiel):
     orgin_materiel=models.ForeignKey(Materiel,null=True,related_name="orgin_materiel",blank=True)
     work_order=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"工作令号")
 
+
+class CommentStatus(models.Model):
+    form_type=models.IntegerField(choices=BID_APPLY_TYPE_CHOICES,verbose_name=u"表单类型")
+    status=models.IntegerField(choices=COMMENT_STATUS_CHOICES,unique=True,verbose_name=u"表单状态")
+    next_status=models.ForeignKey('self',null=True,blank=True)
+    class Meta:
+        verbose_name = u"招标申请状态"
+        verbose_name_plural = u"招标申请状态"
+    def __unicode__(self):
+        return self.get_status_display()
+
 class MaterielExecute(models.Model):
     document_number = models.CharField(max_length = 100, null = True, blank = False, unique = True, verbose_name = u"单据编号")
     document_lister = models.ForeignKey(User, blank = False, verbose_name = u"制表人")
@@ -125,6 +136,7 @@ class bidApply(models.Model):
     bid_datetime = models.DateTimeField(null=True, blank=True, default=lambda: datetime.datetime.today(), verbose_name=u"招(议)标时间")
     bid_delivery_date = models.DateTimeField(null=True, blank=True, default=lambda: datetime.datetime.today(), verbose_name=u"标书递送时间")
     place = models.CharField(null=True, blank=True, max_length=40, verbose_name=u"地点")
+    status=models.ForeignKey(CommentStatus,verbose_name=u"招标申请表状态")
     try:
         default_status = ImplementClassChoices.objects.get(category = 0).id
     except:
@@ -149,7 +161,7 @@ class qualityPriceCard(models.Model):
     material = models.CharField(null=True, max_length=40, verbose_name=u"材质")
     delivery_period = models.CharField(null=True, max_length=40, verbose_name=u"交货期")
     price = models.CharField(null=True, max_length=40, verbose_name=u"价格")
-    ability = models.CharField(null=True, max_length=40, verbose_name=u"厂家协作能力质量情况及业绩")
+    ability = models.CharField(null=True, max_length=100, verbose_name=u"厂家协作能力质量情况及业绩")
     delivery_condition = models.CharField(null=True, max_length=40, verbose_name=u"交货及支付条件")
     class Meta:
         verbose_name = u"比质比价卡"
