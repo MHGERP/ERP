@@ -95,16 +95,8 @@ def steelLedgerViews(request):
     return render(request,"storage/steelmaterial/steelledger.html",context)
     
 def weldEntryHomeViews(request):
-    if request.method == "POST":
-        search_form = EntrySearchForm(request.POST)
-        weldentry_set = []
-        if search_form.is_valid():
-            weldentry_set = get_weld_filter(WeldMaterialEntry,search_form.cleaned_data)
-        else:
-            print search_form.errors
-    else:
-        weldentry_set = WeldMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
-        search_form = EntrySearchForm()
+    weldentry_set = WeldMaterialEntry.objects.all()
+    search_form = WeldEntrySearchForm()
     weldentry_set = weldentry_set.order_by("-entry_status","-entry_time","-entry_code")
     context = {
             "entry_set":weldentry_set,
@@ -175,11 +167,12 @@ def Weld_Apply_Card_List(request):
     params: NULL
     return: NULL
     """
-    context={}
-    context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
-    weld_apply_cards=WeldingMaterialApplyCard.objects.all().order_by('-create_time')
-    context['weld_apply_cards']=weld_apply_cards
-    context['search_form']=ApplyCardHistorySearchForm()
+    apply_cards=WeldingMaterialApplyCard.objects.all().order_by('-create_time')
+    context = {
+        'APPLYCARD_KEEPER':APPLYCARD_KEEPER,
+        'apply_cards':apply_cards,
+        'search_form':ApplyCardHistorySearchForm(),
+    }
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
 
 def Weld_Apply_Card_Detail(request):
@@ -189,17 +182,20 @@ def Weld_Apply_Card_Detail(request):
     params: index(GET)
     return: NULL
     """
-    context={}
     card_index=int(request.GET['index'])
-    apply_card=WeldingMaterialApplyCard.objects.get(index=card_index)
-    context['apply_card']=apply_card 
-    context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
-    if checkAuthority(STORAGE_KEEPER,request.user):#如果是库管员
-        context['apply_card_form']=Commit_ApplyCardForm(instance=apply_card)
-        context['redict_path'] = getUrlByViewMode(request,'/storage/weldapply')
-        print apply_card.status,APPLYCARD_COMMIT
-    else:#如果是申请者
-        context['apply_card_form']=Apply_ApplyCardForm(instance=apply_card)
+    apply_card=WeldingMaterialApplyCard.objects.get(id=card_index)
+    apply_form = WeldApplyKeeperForm()
+    store_items = WeldStoreList.objects.filter(inventory_count__gt = 0 )
+    store_items = modify_weld_item_status(store_items)
+    search_material_form = WeldMaterialSearchForm()
+    context = {
+        "apply_card":apply_card,
+        "apply_form":apply_form,
+        "APPLYCARD_KEEPER":APPLYCARD_KEEPER,
+        "store_items":store_items,
+        "ITEM_STATUS_NORMAL":ITEM_STATUS_NORMAL,
+        "search_material_form":search_material_form,
+    }
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
 
 def Handle_Apply_Card_Form(request):
