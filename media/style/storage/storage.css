@@ -27,4 +27,6 @@ div#storage-menu{
 div#storage-menu a{
     vertical-align:text-bottom;
 }
-
+.date_picker{
+    width:120px;
+}

@@ -26,21 +26,25 @@ def get_weld_filter(model_type,dict,replace_dic=None):
     
     qset = filter(lambda x : x!= None ,filter_list)
     if qset:
-        print qset
         qset = reduce(lambda x,y:x & y ,qset)
         res_set = model_type.objects.filter(qset)
     else:
-        res_set = model_type.objects.all().order_by('-id')
+        res_set = model_type.objects.all()
     return res_set
 
-def weldStoreItemsCreate(entry):
-    weld_set = entry.weldmaterialentryitems_set.all()
-    for item in weld_set:
-        entry_time = item.entry.entry_time
-        deadline = entry_time + datetime.timedelta(days = 20)
-        storeitem = WeldStoreList(entry_time = item.entry.entry_time,specification=item.material.specification,material_id=item.material.material.material_id,count=item.material.count,entry_item = item,deadline = deadline)
-        storeitem.save()
 
+def weldStoreItemsCreate(entry):
+    entry_items = entry.weldmaterialentryitems_set.all()
+
+    for item in entry_items:
+        try:
+            storeitem = WeldStoreList(entry_item = item , inventory_count = item.total_weight)        
+            if item.material.name == u"焊条" or item.material.name == u"焊剂":
+                production_date = item.production_date
+                storeitem.deadline = production_date.replace(production_date.year + 2)
+            storeitem.save()
+        except Exception,e:
+            print e
 def storeConsume(applycard):
     specification = applycard.standard
     material_id = applycard.material_number
@@ -237,3 +241,21 @@ def getDbMap(sorce):
             if tp in WELD_TYPE_LIST:
                 DB_MAP[tp] = WeldStoreList
     return DB_MAP
+
+def modify_weld_item_status(items):
+    filter_items = []
+    for item in items:
+        if item.inventory_count <= 0:
+            item.item_status = ITEM_STATUS_SPENT
+        if item.deadline != None and item. deadline < datetime.date.today():
+            item.item_status = ITEM_STATUS_OVERDUE
+        item.save()
+        if item.item_status == ITEM_STATUS_NORMAL:
+            filter_items.append(item)
+    return filter_items
+
+def gen_replace_dic(dict,fk_model):
+    replace_dic = {}
+    for k,v in dict.items():
+        replace_dic[k] = fk_model+"__"+k+"__contains"
+    return replace_dic
