@@ -15,6 +15,5 @@ for item in materiel_set:
                     setattr(materielcopy,attr,value)
             except:
                 pass
-    
-        materielcopy.save()
 
+        materielcopy.save()
