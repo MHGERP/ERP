@@ -61,6 +61,7 @@ $(document).on("click", "#prodplan_update_btn", function(){
 });
 function getProductplanFormCallBack(data){
   $("#productionplan_update_div").html(data);
+  $("#plan_date").datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true});
   $("#prodplan_modify_modal").modal("show");
 }
 
@@ -74,13 +75,6 @@ function prodplanUpdateCallBack(data){
   $("#prodplan_modify_modal").modal("hide");
   alert(data.message);
 }
-
-$(function(){
-  $("#plan_date").datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true});
-});
-
-
-
 
 
 $(document).on("click", "#productionplan_search_form .btn", function(){
