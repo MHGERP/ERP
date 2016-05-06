@@ -54,7 +54,6 @@ class SynthesizeFileListStatus(models.Model):
 
 
 class ProductionPlan(models.Model):
-    #workorder_id = models.ForeignKey(WorkOrder)
     order = models.ForeignKey(WorkOrder, verbose_name = u"工作令")
     plan_id = models.CharField(max_length=50, blank=True, default=make_uuid, verbose_name=u"生产计划编号")
     status = models.IntegerField(blank = False, choices = PRODUCTION_PLAN_STAUTS_CHOICES, default=2,verbose_name=u"生产计划状态")

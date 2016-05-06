@@ -19,7 +19,7 @@ from production.forms import *
 def getQ(con):
     query_set = Q()
     for k,v in con.items():
-         if len(v) != 0:
+         if v:
              query_set.add(Q(**{k: v}), Q.AND)
     return query_set
 
@@ -233,26 +233,7 @@ def prodplanSearch(request, form):
     """
     search_form = ProductionPlanSearchForm(deserialize_form(form))
     if search_form.is_valid():
-        #prodplan_set = get_weld_filter(ProductionPlan, search_form.cleaned_data, {"work_order": "workorder_id"})
-        con = search_form.cleaned_data
-        print con
-
-        q1 = (con["work_order"] and Q(order_id = con["work_order"])) or None
-        #q1 = None
-        q2 = (con["status"] and Q(status = con["status"])) or None
-        if con["status"]== "-1":
-            q2 = None
-        year,month = con["plan_date"].split("-")
-        q3 = (con["plan_date"] and Q(plan_date__year = year) & Q(plan_date__month = month)) or None
-        #q3 = None
-        print q3
-        query_set = filter(lambda x:x!=None, [q1,q2,q3])
-        if query_set:
-            query_con = reduce(lambda x,y:x&y, query_set)
-            print query_con
-            prodplan_set = ProductionPlan.objects.filter(query_con)
-        else:
-            prodplan_set = ProductionPlan.objects.all()
+        prodplan_set  = ProductionPlan.objects.filter(getQ(search_form.cleaned_data))
         html = render_to_string("production/widgets/production_plan_table.html",{"prodplan_set":prodplan_set})
     else:
         print search_form.errors
@@ -260,16 +241,6 @@ def prodplanSearch(request, form):
         "html":html,
     }
     return simplejson.dumps(data)
-    
-@dajaxice_register
-def getLedgerList(request, form):
-    ledgerform = LedgerSearchForm(deserialize_form(form))
-    if ledgerform.is_valid():
-        work_order = ledgerform.cleaned_data["work_order"]
-        work_index = ledgerform.cleaned_data["work_index"]
-        parent_schematic = ledgerform.cleaned_data["parent_schematic"]
-        Materiel.objects.filter()
-    return simplejson.dumps(ret)
 
 @dajaxice_register
 def taskAllocationSearch(request, form):
