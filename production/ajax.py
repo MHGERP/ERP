@@ -421,3 +421,22 @@ def ledgerSearch(request, form):
     else:
         print search_form.errors
     return simplejson.dumps({ "html" : html})
+
+@dajaxice_register
+def weldPartOrderInfo(request, iid):
+    """
+    Lei
+    """
+    materielObj = Materiel.objects.get(id = iid)
+    if CirculationRoute.objects.filter(materiel_belong = materielObj).count() == 0:
+        CirculationRoute(materiel_belong = materielObj).save()
+    materielObj.route = '.'.join(getattr(materielObj.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(materielObj.circulationroute, "L%d" % i))
+    materielObj.processDetailObj = ProcessDetail.objects.filter(materiel_belong = materielObj)
+    print "ddddd"
+    print materielObj.route
+    print "ssssss"
+    for item in materielObj.processDetailObj:
+        print item.process_id
+
+    html = render_to_string("production/widgets/weld_part_order_info_table.html",{"materielObj":materielObj})
+    return simplejson.dumps({ "html" : html})
