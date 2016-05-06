@@ -475,6 +475,7 @@ def AuxiliaryToolsEntryView(request):
     """
     context = {}
     object_id = int(request.GET['id'])
+    print object_id
     auxiliary_tool_entry = AuxiliaryToolEntry.objects.get(
         id=object_id)
     context['entry'] = auxiliary_tool_entry

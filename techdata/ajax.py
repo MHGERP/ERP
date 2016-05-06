@@ -24,6 +24,29 @@ from purchasing.models import MaterielExecute, MaterielExecuteDetail
 import datetime
 
 @dajaxice_register
+def getInventoryTables(request, id_work_order, inventory_type):
+    """
+    JunHU
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    list = Materiel.objects.filter(Q(order = work_order) & Q(inventory_type = inventory_type))
+    html = render_to_string("techdata/widgets/out_purchased_table.html", {"list": list})
+    return html
+
+@dajaxice_register
+def autoSetInventoryLabel(request, id_work_order, inventory_type):
+    """
+    JunHU
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    inventory_type = InventoryType.objects.get(name = inventory_type)
+    if inventory_type == OUT_PURCHASED:
+        for item in Materiel.objects.filter(order = work_order):
+            if item.circulationroute.L1.name != GY: continue
+            if item.inventory_type.filter(name = inventory_type).count() > 0: continue
+            item.inventory_type.add(inventory_type)
+
+@dajaxice_register
 def getProcessBOM(request, id_work_order):
     """
     JunHU
@@ -374,7 +397,7 @@ def getWeldSeamList(self, id_work_order):
     html = render_to_string("techdata/widgets/weld_list_table.html", context)
     read_only = (work_order.weldlistpagemark.reviewer != None)
 
-    return simplejson.dumps({"html": html, "read_only": read_only})
+    return simplejson.dumps({"html": html, "read_only": read_only,})
 
 @dajaxice_register
 def getWeldSeamWeight(self, id_work_order):
@@ -1129,3 +1152,74 @@ def removeConnectOrientation(request, pid):
         return simplejson.dumps({"ret": True})
     except:
         return simplejson.dumps({"ret": False})
+
+@dajaxice_register
+def getWeldJointDetailFormAndSave(request, jointArray, id_work_order):
+    ret = "ok"
+    md1, md2, bm_1, bm_2, bm_thin1, bm_thin2 = None, None, None, None, None, None
+    joint_index = ""
+    #seam_list = []
+    for i in xrange(len(jointArray)):
+        seam_id = jointArray[i]
+        seam = WeldSeam.objects.get(id = seam_id)
+        #seam_list.append(seam)
+        joint_index = joint_index + seam.weld_index
+        if i == 0:
+            md1 = seam.weld_method_1
+            md2 = seam.weld_method_2
+            bm_1 = seam.base_metal_1
+            bm_2 = seam.base_metal_2
+            bm_thin1 = seam.base_metal_thin_1
+            bm_thin2 = seam.base_metal_thin_2
+        else:
+            if seam.weld_method_1 != md1 or seam.weld_method_2 != md2 or seam.base_metal_1 != bm_1 or seam.base_metal_2 != bm_2 or seam.base_metal_thin_1 != bm_thin1 or seam.base_metal_thin_2 != bm_thin2:
+                ret = "err"
+    if ret == "ok":
+        workorder = WorkOrder.objects.get(id = id_work_order)
+        if WeldJointTech.objects.filter(order = workorder).count() == 0:
+            weld_joint = WeldJointTech(order = workorder)
+            weld_joint.save()
+        else:
+            weld_joint = WeldJointTech.objects.filter(order = workorder)[0]
+        weld_joint_detail = WeldSeam.objects.get(id = jointArray[0]).weld_joint_detail
+        if weld_joint_detail:
+            weld_joint_detail.weld_joint = joint_index
+            weld_joint_detail.is_save = True
+        else:
+            weld_joint_detail = WeldJointTechDetail(weld_joint = weld_joint, joint_index = joint_index,  bm_texture_1 = bm_1, bm_texture_2 = bm_2, bm_specification_1 = bm_thin1, bm_specification_2 = bm_thin2, weld_method_1 = md1, weld_method_2 = md2, is_save = True)
+        weld_joint_detail.save()
+        #for seam in seam_list:
+        #    seam.weld_joint_detail = weld_joint_detail
+        #    seam.save()
+        weld_joint_detail_form = WeldJointTechDetailForm(instance = weld_joint_detail)
+        context = {
+            "form" : weld_joint_detail_form
+        }
+        html = render_to_string("techdata/widgets/weldjoint_detail.html", context)
+        return simplejson.dumps({"ret" : ret, "html" : html, "id" : weld_joint_detail.id})
+    else:
+        return simplejson.dumps({"ret" : ret})
+
+@dajaxice_register
+def dismissWeldJointDetailSave(request, iid):
+    weld_joint_detail = WeldJointTechDetail.objects.get(id = iid)
+    weld_joint_detail.is_save = False
+    return "ok"
+
+@dajaxice_register
+def saveJointDetail(request, weld_joint_detail_form, jointArray, iid):
+    """
+    mxl
+    """
+    #workorder = WorkOrder.objects.get(id = id_work_order)
+    #weld_joint = WeldJointTech.objects.filter(order = workorder)[0]
+    #weld_seam = WeldSeam.objects.get(id = jointArray[0])
+    #weld_joint_detail = WeldJointTechDetail(weld_joint = weld_joint, bm_texture_1 = weld_seam.base_metal_1, bm_texture_2 = weld_seam.base_metal_2, bm_specification_1 = weld_seam.base_metal_1, bm_specification_2 = weld_seam.base_metal_2, weld_method_1 = weld_seam.weld_method_1, weld_method_2 = weld_seam.weld_method_2)
+    #weld_joint_detail.save()
+    weld_joint_detail = WeldJointTechDetail.objects.get(id = iid)
+    weld_joint_detail_form = WeldJointTechDetailForm(deserialize_form(weld_joint_detail_form), instance = weld_joint_detail)
+    weld_joint_detail_form.save()
+    for seam_id in jointArray:
+        seam = WeldSeam.objects.get(id = seam_id)
+        seam.weld_joint_detail = weld_joint_detail 
+    return simplejson.dumps({"ret" : "ok"}) 

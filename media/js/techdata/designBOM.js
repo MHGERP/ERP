@@ -141,6 +141,7 @@ $(document).on("click", "#quick_edit", function(){
 
      var options = $("#id_L"+i).children("option");
      for (var j = 0; j < options.length; j++) {
+        options[0].selected = true;
          if (options[j].text == a[i-1]){
            options[j].selected = true;
            break;

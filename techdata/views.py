@@ -77,6 +77,17 @@ def connectionOrientationEditViews(request):
     context = {}
     return render(request, "techdata/connection_orientation_edit.html", context)
 
+def outPurchasedViews(request):
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "work_order_form" : work_order_form,
+        "inventory_type": OUT_PURCHASED,
+    }
+    return render(request, "techdata/out_purchased.html", context)
+
 def firstFeedingViews(request):
     """
     JunHU
