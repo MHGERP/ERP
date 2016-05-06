@@ -169,6 +169,7 @@ $("#weld_joint_detail_save").click(function() {
         },
         {
             "weld_joint_detail_form" : $("#weldjoint_detail_form").serialize(),
+            "jointArray" : jointArray,
             "iid" : $("#weldjoint_detail_modal").attr("iid"),
         }
     );
