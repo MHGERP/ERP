@@ -451,14 +451,14 @@ def AuxiliaryToolsEntryListView(request):
     """
     context={}
     if request.method=='GET':
-        context['entry_list']=AuxiliaryToolEntryCardList.objects.filter(
-            status=STORAGESTATUS_KEEPER).order_by('-id')
+        context['entry_list']=AuxiliaryToolEntry.objects.filter(
+            entry_status=STORAGESTATUS_KEEPER).order_by('-id')
     else:
         search_form = AuxiliaryEntrySearchForm(request.POST)
         if search_form.is_valid():
             context['entry_list'] =\
-            get_weld_filter(AuxiliaryToolEntryCardList,search_form.cleaned_data)\
-                    .filter(status=STORAGESTATUS_KEEPER)
+            get_weld_filter(AuxiliaryToolEntry,search_form.cleaned_data)\
+                    .filter(entry_status=STORAGESTATUS_KEEPER)
         else:
             context['entry_list']=[]
             print search_form.errors
@@ -475,11 +475,11 @@ def AuxiliaryToolsEntryView(request):
     """
     context = {}
     object_id = int(request.GET['id'])
-    auxiliary_tool_card_list = AuxiliaryToolEntryCardList.objects.get(
+    auxiliary_tool_entry = AuxiliaryToolEntry.objects.get(
         id=object_id)
-    context['object'] = auxiliary_tool_card_list
-    context['sub_objects'] = AuxiliaryToolEntryCard.objects.filter(
-        card_list=auxiliary_tool_card_list)
+    context['object'] = auxiliary_tool_entry
+    context['sub_objects'] = AuxiliaryToolEntryItems.objects.filter(
+        entry =auxiliary_tool_entry)
     return render(request,
                   'storage/auxiliarytools/auxiliarytoolsentry.html',
                   context)

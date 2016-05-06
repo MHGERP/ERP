@@ -573,7 +573,7 @@ class AuxiliaryToolEntryItems(models.Model):
         verbose_name_plural=u'辅助材料入库材料'
 
     def __unicode__(self):
-        return u'%s %s %s'%(self.auxiliary_tool,self.quantity,self.create_time)
+        return u'%s %s %s'%(self.name,self.count,self.specification)
 
 
 class WeldStoreThread(models.Model):
