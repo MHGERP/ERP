@@ -25,12 +25,12 @@ class Material(models.Model):
         return self.name
 
 class InventoryType(models.Model):
-    name = models.CharField(blank = False, max_length = 50, verbose_name = u"明细表名称")
+    name = models.CharField(blank = False, max_length = 50, choices = INVENTORY_TYPE, verbose_name = u"明细表名称")
     class Meta:
         verbose_name = u"明细表类别"
         verbose_name_plural = u"明细表类别"
     def __unicode__(self):
-        return self.name
+        return self.get_name_display()
 
 class Materiel(models.Model):
     order = models.ForeignKey(WorkOrder, blank = True, null = True, verbose_name = u"所属工作号")
@@ -46,7 +46,7 @@ class Materiel(models.Model):
     total_weight = models.FloatField(blank = True, null = True, verbose_name = u"毛重")
     quota = models.FloatField(blank = True, null = True, verbose_name = u"定额")
     quota_coefficient = models.FloatField(blank = True, null = True, verbose_name = u"定额系数")
-    inventory_type = models.ForeignKey(InventoryType, blank = True, null = True, verbose_name = u"明细表归属")
+    inventory_type = models.ManyToManyField(InventoryType, blank = True, null = True, verbose_name = u"明细表归属")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
     specification = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"规格")
     standard = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"标准") 
