@@ -15,11 +15,23 @@ class WorkOrderProductionForm(forms.Form):
     LiuYe
     summary: store all work orders
     """
-    order = forms.ChoiceField(label=u"工作令", widget = forms.Select(attrs = {"class": "form-control input"}))
+    order = forms.ChoiceField(label=u"工作令", required = False, widget = forms.Select(attrs = {"class": "form-control input"}))
     def __init__(self, *args, **kwargs):
          super(WorkOrderProductionForm, self).__init__(*args, **kwargs)
-         WORKORDER_CHOICES = tuple((item.id, item) for item in WorkOrder.objects.all())
+         WORKORDER_CHOICES = tuple([("", u"----------")]  + [(item.id, item) for item in WorkOrder.objects.all()])
          self.fields["order"].choices = WORKORDER_CHOICES
+
+class WorkOrderProductionSearchForm(forms.Form):
+    """
+    LiuYe
+    summary: search work order fuzzy
+    """
+    order__order_index__contains = forms.CharField(required=False, label=u"工作令")
+
+class ProductionPlanSearchForm(WorkOrderProductionForm):
+    status = forms.ChoiceField(label = u"状态", required = False, choices=PRODUCTION_PLAN_STAUTS_CHOICES)
+    plan_date__gte = forms.DateField(label = u"计划年月开始", required = False)
+    plan_date__lte = forms.DateField(label = u"计划年月终止", required = False)
 
 class ProdPlanForm(ModelForm):
     class Meta:
@@ -32,15 +44,6 @@ class ProdPlanForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProdPlanForm,self).__init__(*args,**kwargs)
         self.fields["plan_date"].choices = PRODUCTION_PLAN_STAUTS_CHOICES
-       
-class ProductionPlanSearchForm(WorkOrderForm):
-    status = forms.ChoiceField(label = u"状态", required = False, choices=PRODUCTION_PLAN_STAUTS_CHOICES)
-    plan_date = forms.ChoiceField(label = u"计划年月", required = False)
-    def __init__(self, *args, **kwargs):
-        super(ProductionPlanSearchForm, self).__init__(*args, **kwargs)
-        DATE_CHOICE = tuple(("%s-%02d"%(item.year,int(item.month)),"%s-%02d"%(item.year,int(item.month))) for item in ProductionPlan.objects.dates('plan_date', 'month').distinct())
-        self.fields["plan_date"].choices = DATE_CHOICE
-
 
 
 class LedgerSearchForm(WorkOrderProductionForm):
@@ -84,7 +87,6 @@ class HourMessageSearchForm(forms.Form):
     order_index = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'form-control input-medium'}),label=u"工作令")
     work_ticket = forms.ChoiceField(widget = forms.TextInput(attrs = {'class':'form-control input'}),label=u"工作票号")
     group_num = forms.ChoiceField(widget = forms.TextInput(attrs = {'class':'form-control input'}),label=u"组号")
-    
     def __init__(self, *args, **kwargs):
         super(HourMessageSearchForm, self).__init__(*args, **kwargs)
         ORDER_INDEX_CHOICES = tuple((item.order_index,item.order_index) for item in WorkOrder.objects.all())
