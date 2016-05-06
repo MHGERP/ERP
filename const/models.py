@@ -33,13 +33,14 @@ class InventoryType(models.Model):
         return self.name
 
 class Materiel(models.Model):
-    order = models.ForeignKey(WorkOrder, blank = False, verbose_name = u"所属工作号")
-    index = models.CharField(blank = True, max_length = 20, verbose_name = u"工作票号")
-
-    schematic_index = models.CharField(blank = False, max_length = 50, verbose_name = u"零件图号")
+    order = models.ForeignKey(WorkOrder, blank = True, null = True, verbose_name = u"所属工作号")
+    index = models.CharField(blank = True, max_length = 20, verbose_name = u"票号")
+    sub_index = models.CharField(blank = True, null = True, max_length = 20, verbose_name = u"部件号")
+    schematic_index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"图号")
     parent_schematic_index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"部件图号")
+    parent_name = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"部件名称")
     material = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"材料")
-    name = models.CharField(blank = False, max_length = 20, verbose_name = u"名称")
+    name = models.CharField(blank = False, max_length = 100, verbose_name = u"名称")
     count = models.CharField(blank = True, max_length = 20, null = True, verbose_name = u"数量")
     net_weight = models.FloatField(blank = True, null = True, verbose_name = u"净重")
     total_weight = models.FloatField(blank = True, null = True, verbose_name = u"毛重")
@@ -54,6 +55,9 @@ class Materiel(models.Model):
     press=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"受压")
     recheck=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"复验")
     detection_level=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"探伤级别")
+    
+    complete_plandate = models.DateField(blank = True, null=True,verbose_name = u"计划完成时间")
+    complete_date = models.DateField(blank = True, null=True,verbose_name = u"完成时间")
     
     class Meta:
         verbose_name = u"物料"
@@ -89,4 +93,5 @@ class ImplementClassChoices(models.Model):
         verbose_name_plural = u"实施类别"
     def __unicode__(self):
         return self.get_category_display()
+
 
