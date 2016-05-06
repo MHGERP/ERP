@@ -25,6 +25,10 @@ urlpatterns=patterns('',
         techdata_views.connectionOrientationEditViews,
     ),
     url(
+        r'^outPurchased$',
+        techdata_views.outPurchasedViews,
+       ),
+    url(
         r'^firstFeeding$',
         techdata_views.firstFeedingViews,
     ),
@@ -112,5 +116,9 @@ urlpatterns=patterns('',
     url(
         r'^connectOrientationAdd',
         techdata_views.connectOrientationAdd,
+    ),
+    url(
+        r'^BOMadd',
+        techdata_views.BOMadd,
     ),
 )

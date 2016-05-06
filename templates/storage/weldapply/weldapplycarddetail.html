@@ -11,10 +11,11 @@
 
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/weldapply.css"/>
+{% comment %}
 <h3 style="text-align:center">焊材领用卡</h3>
 <div>
     <div class="span3">
-        <label>领用单位:<strong>{{apply_card.department}}</strong></label>
+        <label>领用单位:<strong>{{apply_card.get_department_display}}</strong></label>
     </div>
     <div class="span4" style="text-align:center">
         <label>日期:<strong>{{apply_card.create_time|date:'Y年m月d日'}}</strong></label>
@@ -30,7 +31,7 @@
         <tr>
             <th class="fix_th" rowspan="2">工作令</th>
             <th class="fix_th" rowspan="2">焊缝编号</th>
-            <th class="fix_th" rowspan="2">焊材编号</th>
+            <th class="fix_th" rowspan="2">焊材牌号</th>
             <th class="fix_th" rowspan="2">型号</th>
             <th class="fix_th" rowspan="2">规格</th>
             <th colspan="2">领用量</th>
@@ -81,6 +82,31 @@
    <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
         <button class="btn btn-primary" id="save_select_item" data-dismiss="modal">保存</button>
+    </div>
+</div>
+{% endcomment %}
+<div id="word_contain">
+{% include "storage/wordhtml/weldapply.html" %}
+</div>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width=0.8>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">添加</h3>
+    </div>
+    <div class="modal-body">
+        <form id="apply_form" action="" class="form-inline">
+            {% for field in apply_form %}
+                {{field.label_tag}}
+                {{field}}
+            {% endfor %}
+        </form>
+        {% include "storage/widgets/search_weld_material.html" %}
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        {% ifequal apply_card.status APPLYCARD_KEEPER %}
+        <button class="btn btn-primary" id="apply_item_save">保存</button>
+        {% endifequal %}
     </div>
 </div>
 {% endblock%}

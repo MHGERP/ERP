@@ -1,8 +1,12 @@
+<td>
+    {% if item.weld_joint_detail == None %}<input type="checkbox" class="checkbox" arg="{{item.id}}">
+    {% else %}已添加{% endif %}
+</td>
 <td>{{item.materiel_belong.schematic_index}}</td>
 <td>{{item.weld_index}}</td>
 <td>{{item.materiel_belong.index}}</td>
 <td>{{item.weldseam_type}}</td>
-<td>{{item.weld_method}}</td>
+<td>{{item.weld_method_1|default_if_none:""}} {% if item.weld_method_2 %} + {{item.weld_method_2}}{% endif %}</td>
 <td>{{item.base_metal_thin_1}}</td>
 <td>{{item.base_metal_thin_2}}</td>
 <td>{{item.length}}</td>

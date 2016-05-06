@@ -1,14 +1,25 @@
-<td>{{item.index}}</td>
-<td></td>
+<td rowspan="2" style="vertical-align: middle">{{item.index}}</td>
+<td rowspan="2" style="vertical-align: middle">{{item.sub_index}}</td>
 <td>{{item.schematic_index}}</td>
-<td>{{item.name}}</td>
-<td>{{item.parent_schematic_index|default_if_none:""}}</td>				
-<td>{{item.count|default_if_none:""}}</td>
-<td>{{item.material|default_if_none:""}}</td>
-<td>{{item.net_weight|default_if_none:""}}</td>
-<td></td>
-<td>{{item.route}}</td>
-<td>{{item.processRoute}}</td>
-<td></td>
-<td>{{item.remark|default_if_none:""}}</td>
-<td><span class="btn btn_edit_transfer_card">编辑</span></td>
+<td rowspan="2" style="vertical-align: middle">{{item.count|default_if_none:""}}</td>
+<td rowspan="2" style="vertical-align: middle">{{item.material|default_if_none:""}}</td>
+<td rowspan="2" style="vertical-align: middle">{{item.net_weight|default_if_none:""}}</td>
+<td rowspan="2" style="vertical-align: middle">{{item.total_weight|default_if_none:""}}</td>
+<td rowspan="2" style="vertical-align: middle">{{item.route}}</td>
+<td rowspan="2"></td>
+<td>{{item.processing.GX1|default_if_none:""}}</td>
+<td>{{item.processing.GX2|default_if_none:""}}</td>
+<td>{{item.processing.GX3|default_if_none:""}}</td>
+<td>{{item.processing.GX4|default_if_none:""}}</td>
+<td>{{item.processing.GX5|default_if_none:""}}</td>
+<td>{{item.processing.GX6|default_if_none:""}}</td>
+<td>{{item.processing.GX7|default_if_none:""}}</td>
+<td>{{item.processing.GX8|default_if_none:""}}</td>
+<td>{{item.processing.GX9|default_if_none:""}}</td>
+<td>{{item.processing.GX10|default_if_none:""}}</td>
+<td>{{item.processing.GX11|default_if_none:""}}</td>
+<td>{{item.processing.GX12|default_if_none:""}}</td>
+
+<td rowspan="2" style="vertical-align: middle">{{item.remark|default_if_none:""}}</td>
+<td rowspan="2" style="vertical-align: middle"><span class="btn btn-small btn_edit_transfer_card">编辑</span></td>
+<td rowspan="2" style="vertical-align: middle"><span class="btn btn-small btn_open_weld_modal">添加</span></td>

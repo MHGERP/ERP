@@ -1,10 +1,10 @@
 #search_div{
-	width: 70%;
+	width: 100%;
 	float:left;
 }
 #new_purchasing_order{
-	width:30%;
-	float:left;
+	width:20%;
+	float:right;
 }
 #new_purchase_btn{
 	width:210px;

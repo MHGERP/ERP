@@ -9,6 +9,11 @@ from django.contrib.auth.models import User
 import settings
 # Create your models here.
 
+class MaterielCopy(Materiel):
+    relate_material=models.ForeignKey('self',null=True,blank=True)
+    orgin_materiel=models.ForeignKey(Materiel,null=True,related_name="orgin_materiel",blank=True)
+    work_order=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"工作令号")
+
 class MaterielExecute(models.Model):
     document_number = models.CharField(max_length = 100, null = True, blank = False, unique = True, verbose_name = u"单据编号")
     document_lister = models.ForeignKey(User, blank = False, verbose_name = u"制表人")
@@ -27,13 +32,17 @@ class OrderForm(models.Model):
     order_id = models.CharField(unique = True, max_length = 20, blank = False, verbose_name = u"订购单编号")
     create_time = models.DateTimeField(null = True,verbose_name = u"创建日期")
     establishment_time = models.DateTimeField(null = True, verbose_name = u"编制日期")
+    audit_time=models.DateTimeField(blank=True,null=True,verbose_name=u"审核日期")
+    approved_time=models.DateTimeField(blank=True,null=True,verbose_name=u"批准日期")
     order_status = models.ForeignKey(OrderFormStatus, null = False, verbose_name = u"订购单状态")
-    establishment_user=models.ForeignKey(User,verbose_name=u"编制人",related_name="establishment_user",null=True)
-    chief=models.ForeignKey(User,verbose_name=u"外采科长",related_name="chief_user",null=True)
-    approve_user=models.ForeignKey(User,verbose_name=u"审批人",related_name="approve_user",null=True)
+    establishment_user=models.ForeignKey(User,verbose_name=u"编制人",related_name="establishment_user",null=True,blank=True)
+    chief=models.ForeignKey(User,verbose_name=u"外采科长",related_name="chief_user",null=True,blank=True)
+    approve_user=models.ForeignKey(User,verbose_name=u"审批人",related_name="approve_user",null=True,blank=True)
     tech_requirement=models.TextField(max_length=5000,blank=True,null=True)
     order_mod=models.IntegerField(default=0,verbose_name=u"标单类型")
-    meterielexecute=models.ForeignKey(MaterielExecute,blank=True,null=True,verbose_name=u"材料执行表")
+    work_order=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"工作令号")
+    number=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"编号")
+    revised_id=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"修订号")
     class Meta:
         verbose_name = u"订购单"
         verbose_name_plural = u"订购单"
@@ -41,6 +50,7 @@ class OrderForm(models.Model):
         return self.order_id
 
 class BidForm(models.Model):
+    order_form=models.ForeignKey(OrderForm,null=True,verbose_name=u'对应订购单')
     bid_id=models.CharField(unique=True,max_length=20,blank=False,verbose_name=u"标单编号")
     create_time=models.DateTimeField(blank=True,null=True,verbose_name=u"创建日期")
     establishment_time=models.DateTimeField(blank=True,null=True,verbose_name=u"编制日期")
@@ -78,8 +88,7 @@ class BidComment(models.Model):
     comment = models.CharField(max_length=400,blank=False,verbose_name=u"审批意见")
     bid = models.ForeignKey(BidForm, blank = False)
     submit_date=models.DateField(blank=True,null=True,default=lambda: datetime.datetime.today(),verbose_name=u"提交日期")
-    result=models.IntegerField(choices=APPROVED_RESULT_CHOICES,verbose_name=u"审批结果")
-    status=models.IntegerField(choices=BIDFORM_STATUS_CHOICES,verbose_name=u"状态")
+    user_title=models.IntegerField(choices=COMMENT_USER_CHOICE,verbose_name=u"审批人属性")
     class Meta:
         verbose_name = u"标单评审意见"
         verbose_name_plural = u"标单评审意见"
@@ -87,7 +96,7 @@ class BidComment(models.Model):
         return '%s'% (self.id)
 
 class MaterielFormConnection(models.Model):
-    materiel = models.OneToOneField(Materiel, blank = False, verbose_name = u"物料")
+    materiel = models.OneToOneField(MaterielCopy, blank = False, verbose_name = u"物料")
     order_form = models.ForeignKey(OrderForm, blank = True, null = True, verbose_name = u"订购单")
     bid_form = models.ForeignKey(BidForm, blank = True, null = True, verbose_name = u"标单")
     count = models.CharField(blank = True, null = True, max_length = 20, verbose_name = u"需求数量")
@@ -105,7 +114,7 @@ class bidApply(models.Model):
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
     amount = models.IntegerField(verbose_name=u"数量")
-    work_order = models.ForeignKey(WorkOrder,null=False,verbose_name=u"工作令")
+    work_order = models.CharField(max_length=100,null=False,verbose_name=u"工作令")
     bid_project = models.CharField(null=True, max_length=40, verbose_name=u"拟招(议)项目")
     bid_date = models.DateTimeField(null=True, verbose_name=u"拟招(议)标时间")
     special_model = models.CharField(null=True, max_length=40, verbose_name=u"规格、型号")
@@ -177,7 +186,7 @@ class ArrivalInspection(models.Model):
     soft_confirm = models.BooleanField(null=False,default=False,verbose_name=u"软件确认")
     inspect_confirm = models.BooleanField(null=False,default=False,verbose_name=u"检验通过")
     bidform = models.ForeignKey(BidForm,null=False,verbose_name=u"标单号")
-    material = models.ForeignKey(Materiel,verbose_name=u"材料")
+    material = models.ForeignKey(MaterielCopy,verbose_name=u"材料")
     check_pass=models.BooleanField(default=False,verbose_name=u"是否通过")
     class Meta:
         verbose_name = u"到货检验"
@@ -189,7 +198,7 @@ class ArrivalInspection(models.Model):
 
 
 class MaterielPurchasingStatus(models.Model):
-    materiel = models.OneToOneField(Materiel)
+    materiel = models.OneToOneField(MaterielCopy)
     add_to_detail = models.BooleanField(default = False)
     class Meta:
         verbose_name = u"物料采购状态"
@@ -293,4 +302,6 @@ class MaterielExecuteDetail(models.Model):
         verbose_name_plural = u"材料执行表详细"
     def __unicode__(self):
         return '%s' % (self.materiel.index)
+
+
 

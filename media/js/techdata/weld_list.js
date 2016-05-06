@@ -1,7 +1,10 @@
+var jointArray = Array();
+
 $(document).ready(refresh);
 $("#order_search").click(refresh);
 
 function refresh() {
+   // alert("我要刷新了！");
     var id_work_order = $("#id_work_order").val();
     Dajaxice.techdata.getWeldSeamList(refreshCallBack, {"id_work_order": id_work_order, });
 }
@@ -25,9 +28,12 @@ function refreshSingleCallBack(data) {
     var row = $("tr[iid='" + cur_iid + "']");
     row.html(data);
 }
-$(document).on("click", ".tr_materiel", function() {
-    var iid = $(this).attr("iid");
-    fill(iid);
+$(document).on("dblclick", ".tr_materiel td", function() {
+    if($(this).index() != 0) {
+        var iid = $(this).parent().attr("iid");
+        fill(iid);
+        $("#card_modal").modal();
+    }
 });
 
 function fill(iid) {
@@ -90,3 +96,103 @@ function reviewerConfirmCallBack(data) {
         alert("未完成编制，无法审核！");
     }
 }
+
+function clearCheckBox() {
+    var index;
+    for(var i = 0; i < jointArray.length; ++i) {
+        index = jointArray[i];
+        $(":checkbox[arg='"+index+"']:first").parent().html("已添加");
+    }
+}
+
+$("#test").click(function(){
+    clearCheckBox();
+});
+
+$("#joint_btn").click(function(){
+   jointArray = Array();
+   var method = "", thin1 = "", thin2 = "";
+   var child;
+   var err = false;
+   $("input.checkbox").each(function(){
+        if(this.checked) {
+            child = $(this).parent().parent().children();
+            jointArray.push($(this).attr("arg"));
+            if(method == "") {
+                method = child.eq(5).text();
+                thin1 = child.eq(6).text();
+                thin2 = child.eq(7).text();
+            }
+            else if(method != child.eq(5).text() || thin1 != child.eq(6).text() || thin2 != child.eq(7).text()) {
+                alert("所选焊缝不能合并");
+                err = true;
+                jointArray = Array();
+                clearCheckBox();
+                return;
+            }
+        }
+    });
+    if(jointArray.length == 0) {
+        alert("请选择！");
+        return;
+    }
+    if(err == false) {
+        Dajaxice.techdata.getWeldJointDetailFormAndSave(function(data) {
+            if(data.ret == "ok"){
+                $("#weldjoint_detail_modal").attr("iid" , data.id);
+                $("#weldjoint_detail_form").html(data.html);
+                $("#weldjoint_detail_modal").modal();
+            }
+            else{
+                alert("所选焊缝不能合并");
+            }
+        },
+        {
+            "jointArray" : jointArray,
+            "id_work_order" : $("#id_work_order").val(),
+        });
+    }
+});
+
+
+$("#weld_joint_detail_save").click(function() {
+    var id_work_order = $("#id_work_order").val();
+    $("#id_weld_method_1").attr("disabled", false);
+    $("#id_weld_method_2").attr("disabled", false);
+    Dajaxice.techdata.saveJointDetail(
+        function(data) {
+            alert("添加成功！");
+            clearCheckBox();
+            $("#weldjoint_detail_modal").modal("hide");
+            $("#id_weld_method_1").attr("disabled", true);
+            $("#id_weld_method_2").attr("disabled", true);
+        },
+        {
+            "weld_joint_detail_form" : $("#weldjoint_detail_form").serialize(),
+            "jointArray" : jointArray,
+            "iid" : $("#weldjoint_detail_modal").attr("iid"),
+        }
+    );
+});
+
+$("#weld_joint_detail_dismiss").click(function(){
+    Dajaxice.techdata.dismissWeldJointDetailSave(
+        function(data){
+                $("#weldjoint_detail_modal").modal("hide");
+        },
+        {
+            "iid" : $("#weldjoint_detail_modal").attr("iid"),
+        }
+    );
+});
+
+$("#weldjointTechView").click(function(){
+    Dajaxice.techdata.weldJointTechView(
+        function(data) {
+            
+        },
+        {
+            "id_work_order" : $("#id_work_order").val(),
+        }
+    );
+});

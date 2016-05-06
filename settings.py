@@ -136,9 +136,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-
-
     #local app
+    'production',
     'home',
     'purchasing',
     'management',
@@ -151,7 +150,6 @@ INSTALLED_APPS = (
     'dajax',
     'south',
     'news',
-    'production',
 )
 
 LOGGING_OUTPUT_ENABLED = True

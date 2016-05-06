@@ -1,0 +1,35 @@
+<div class="dataTables_length">
+    <span class="btn btn-small btn-primary btn-add_to_detail-all">全部加入物料汇总</span>
+</div>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>名称</th>
+            <th>规格</th>
+            <th>牌号</th>
+            <th>定额(kg)</th>
+            <th>执行标准</th>
+            <th>备注</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.specification}}</td>
+            <td>{{item.material.id}}</td>
+            <td>{{item.quota}}</td>
+            <td>{{item.standard}}</td>
+            <td>{{item.remark}}</td>
+            <!-- <td></td>
+            {% if not item.materielpurchasingstatus.add_to_detail %}
+            <td><span class="btn btn-small btn-primary btn-add_to_detail" args="{{item.id}}">加入物料汇总</span></td>
+            {% else %}
+            <td><span class="btn btn-small btn-warning">已加入汇总</span></td>
+            {% endif %} -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

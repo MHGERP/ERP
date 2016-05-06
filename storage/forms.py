@@ -102,9 +102,9 @@ class Commit_ApplyCardForm(ApplyCardForm):
 class EntryItemsForm(ModelForm):
     class Meta:
         model = WeldMaterialEntryItems
-        fields = ("remark","date","price")
+        fields = ("remark","production_date","price")
         widget = {
-            "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"entryitem_time"})
+            "production_date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd",})
         }
 
 class HumRecordForm(ModelForm):
@@ -121,7 +121,7 @@ class HumRecordForm(ModelForm):
 class HumSearchForm(forms.Form):
     date = forms.DateField(label = u"日期",required = False, widget = forms.TextInput(attrs={'class':'form-controli span2','id':'date'}))
     storeRoom = forms.ChoiceField(label = u"库房",required = False, widget = forms.Select(attrs={"class":'form-control span2','id':'storeRoom'}))
-    storeMan = forms.CharField(label = u"库管员",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'storeMan'}))
+    storeMan = forms.ChoiceField(label = u"库管员",required = False, widget = forms.Select(attrs={"class":'form-control span2','id':'storeMan'}))
     def __init__(self,*args,**kwargs):
         storeRoom = StoreRoom.objects.all()
         super(HumSearchForm,self).__init__(*args,**kwargs)
@@ -129,6 +129,7 @@ class HumSearchForm(forms.Form):
         for room in storeRoom:
             room_list.append((room.id,room.name))
         self.fields["storeRoom"].choices = tuple(room_list)
+        self.fields["storeMan"].choices =  getChoiceList(getUserByAuthority(STORAGE_KEEPER),"userinfo")
 
 class BakeRecordForm(ModelForm):
     class Meta:
@@ -483,6 +484,26 @@ class CheckMaterielListForm(forms.Form):
         db_type = kwargs.pop("db_type",WeldStoreList)
         super(CheckMaterielListForm,self).__init__(*args,**kwargs)
         if db_type != None:
-            materiels = db_type.objects.all()
+            materiels =objects.all()
             self.fields['materiel_type'].choices = getChoiceList(materiels,'specification')
 
+class WeldEntrySearchForm(forms.Form):
+    search_time_start = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
+    search_time_end  = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker', 'date_picker':'true'}))
+    entry_code=forms.CharField(label=u'入库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control date_picker','id':'entry_code'}))
+
+class WeldApplyKeeperForm(ModelForm):
+    class Meta:
+        model = WeldingMaterialApplyCard
+        fields = ("actual_weight","actual_quantity","remark")
+        widgets={
+                'actual_weight':forms.TextInput(attrs={'class':'span2'}),
+                'actual_quantity':forms.TextInput(attrs={'class':'span2'}),
+                'remark':forms.TextInput(attrs={'class':'span2'}),
+        }
+class WeldMaterialSearchForm(forms.Form):
+    material__name = forms.CharField(label=u"名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    material_mark = forms.CharField(label=u"牌号",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    model_number = forms.CharField(label=u"型号",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    specification = forms.CharField(label=u"规格",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    factory = forms.CharField(label=u"厂家",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))

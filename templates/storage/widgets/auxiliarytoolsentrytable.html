@@ -1,4 +1,4 @@
-<table class="table table-hover table-bordered">
+<table class="table table-hover table-bordered" style="width:60%">
    <tr>
    <th>入库单编号</th>
    <th>日期</th>
@@ -8,7 +8,7 @@
    </tr>
    {% for item in entry_list %}
    <tr>
-   <td>{{item.index}}</td>
+   <td>{{item.entry_code}}</td>
    <td>{{item.create_time|date:'Y年m月d日'}}</td>
    <td>{{item.purchaser.userinfo.name}}</td>
    <td>{{item.inspector.userinfo.name}}</td>

@@ -47,27 +47,46 @@
 	<table class="table table-bordered table-striped">
 		<thead>
 			<tr>
-				<th>工作票号</th>
-				<th>件号</th>
+				<th class="fix_th" rowspan="2" style="vertical-align: middle">票号</th>
+				<th class="fix_th" rowspan="2" style="vertical-align: middle">件号</th>
 				<th>图号</th>
-				<th>名称</th>
-	   		    <th>部件图号</th>
-				<th>数量</th>
-				<th>材料</th>
-				<th>净重</th>
-				<th>消耗</th>
-				<th>传递路线</th>
-				<th>工序</th>
-				<th>工时</th>
-				<th>备注</th>
-				<th>流转卡</th>
+				<th class="fix_th" rowspan="2" style="vertical-align: middle">数量</th>
+
+				<th class="fix_th" rowspan="2" style="vertical-align: middle">材质</th>
+				<th colspan="2">材料定额</th>
+				<th class="fix_th" rowspan="2" style="vertical-align: middle">传递路线</th>
+				<th class="fix_th" rowspan="2" style="vertical-align: middle">代码</th>
+				<th colspan="13">工序和工时定额</th>
+				<th class="fix_th" rowspan="2" style="vertical-align: middle">流转卡</th>
+                <th class="fix_th" rowspan="2" style="vertical-align: middle">焊缝</th>
+			</tr>
+			<tr>
+                <th>名称及规格</th>
+				<th>单重</th>
+				<th>总重</th>	
+				<th>1</th>
+				<th>2</th>
+				<th>3</th>
+				<th>4</th>
+				<th>5</th>
+				<th>6</th>
+				<th>7</th>
+				<th>8</th>
+				<th>9</th>
+				<th>10</th>
+				<th>11</th>
+				<th>12</th>
+				<th>备注</th>			
 			</tr>
 		<thead>
 		<tbody>
 			{% for item in BOM %}
-			<tr iid="{{item.id}}" data-toggle="modal" data-target="#card_modal" class="tr_materiel">
+			<tr iid="{{item.id}}" class="tr_materiel row_1">
 				{% include "techdata/widgets/processBOM_row.html" %}
-			</tr>				
+			</tr>		
+            <tr iid="{{item.id}}" class="tr_materiel row_2">
+                {% include "techdata/widgets/processBOM_row_2.html" %}
+            </tr>
 			{% endfor %}
 		<tbody>
 	</table>

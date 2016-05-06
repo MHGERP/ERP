@@ -27,6 +27,7 @@
     <table class="table table-bordered table-striped" >
         <thead>
 	        <tr>
+                <th style="width:5%">添加</th>
 		        <th>零部件图号</th>
 		        <th>焊缝编号</th>
 		        <th>工作票号</th>
@@ -46,7 +47,7 @@
 	    <thead>
 	    <tbody>
             {% for item in weldseam_list %}
-            <tr iid="{{item.id}}" data-toggle="modal" data-target="#card_modal" class="tr_materiel">
+            <tr iid="{{item.id}}" class="tr_materiel">
                 {% include "techdata/widgets/weld_row.html" %}
             </tr>
             {% endfor %}
