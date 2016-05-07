@@ -1,3 +1,15 @@
+$("#id_complete_date__gte").datetimepicker({
+    format : 'yyyy-mm-dd',
+    minView : 2,
+    autoclose : true,
+});
+
+$("#id_complete_date__lte").datetimepicker({
+  format : 'yyyy-mm-dd',
+  minView : 2,
+  autoclose : true,
+});
+
 $(document).ready(refresh);
 function refresh(){
     work_order = $("#id_order_index").val();
