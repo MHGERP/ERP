@@ -3,8 +3,8 @@ var dic_type = new Array();
 dic_type["main_materiel"] = 1;
 dic_type["auxiliary_materiel"] = 2;
 dic_type["first_feeding"] = 3;
-dic_type["purchased"] = 4;
-dic_type["forging"] = 5;
+dic_type["out_purchased"] = 4;
+dic_type["cooperant"] = 5;
 dic_type["weld_material"] = 6;
 
 $(document).ready(function(){
