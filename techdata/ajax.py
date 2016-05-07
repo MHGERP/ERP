@@ -1223,4 +1223,12 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray, iid):
         seam = WeldSeam.objects.get(id = seam_id)
         seam.weld_joint_detail = weld_joint_detail
         seam.save()
-    return simplejson.dumps({"ret" : "ok"}) 
+    return simplejson.dumps({"ret" : "ok"})
+
+
+@dajaxice_register
+def saveWeldJointIndex(request, id_work_order, index):
+    weld_joint = WeldJointTech.objects.get(order__id = id_work_order)
+    weld_joint.index = index
+    weld_joint.save()
+    return "ok"

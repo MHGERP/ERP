@@ -1,27 +1,25 @@
 $(document).ready(refresh);
 
+var id_work_order;
+
 function refresh() {
-    alert(window.location.href);
+    var url = window.location.href;
+    var arr = url.split("/");
+    id_work_order = arr[arr.length - 2];
 }
 
-alert("cao");
-/*$("#id_save").click(function(){
+$("#id_save").click(function(){
+    var index = $("#index_input").val();
     Dajaxice.techdata.saveWeldJointIndex(
         function(data) {
-            alert($("#index_input").val());
             if(data == "ok")
                 alert("保存成功");
             else
                 alert("保存失败");
         },
         {
-            "iid" : 
-            "index" : $("#index_input").val();
+            "id_work_order" : id_work_order,
+            "index" : index,
         }
     );
-   alert("cnm");
-});*/
-$(document).on("click", "#id_save", function() {
-    //alert("cap");
-    
 });
