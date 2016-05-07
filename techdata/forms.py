@@ -78,6 +78,24 @@ class WeldSeamForm(forms.ModelForm):
             "pressure_test_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
         }
 
+class WeldQuotaForm(forms.ModelForm):
+    """
+    MH Chen
+    """
+    class Meta:
+        model = WeldQuota
+        exclude = ('quota',)
+        widgets = {
+    
+            "weld_material": forms.Select(attrs = {"class": "input-small"}),
+            "size": forms.TextInput(attrs = {"class": "input-small"}),
+            "stardard": forms.TextInput(attrs = {"class": "input-small"}),
+            "remark": forms.TextInput(attrs = {"class": "input-large"}),
+        }
+    # def __init__(self, *args, **kwargs):
+    #     super(WeldQuotaForm, self).__init__(*args, **kwargs)
+    #     self.fields["weld_material"].choices = tuple([(item.categories, item.display_material_name()) for item in Material.objects.all()])
+
 class WeldJointTechDetailForm(forms.ModelForm):
     """
     mxl

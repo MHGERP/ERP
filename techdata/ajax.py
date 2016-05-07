@@ -275,6 +275,25 @@ def getWeldSeamCard(self, full = False, iid = None):
     else:
         html = render_to_string("techdata/widgets/weld_seam_card.html", context)
     return html
+@dajaxice_register
+def getWeldQuotaCard(self,iid = None):
+    """
+    MH Chen
+    """
+    if iid:
+        weld_quota = WeldQuota.objects.get(id = iid)
+        form = WeldQuotaForm(instance = weld_quota)
+    else:
+        form = WeldSeamForm()
+    # material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE, WELD_RIBBON, WELD_FLUX)
+    # form.fields["weld_material_1"].queryset = material_set
+    # form.fields["weld_material_2"].queryset = material_set
+    context = {
+        "form": form,
+        "weld_quota":weld_quota,
+    }
+    html = render_to_string("techdata/widgets/weld_quota_card.html", context)
+    return html
 
 @dajaxice_register
 def boxOutBought(request, order):
@@ -421,6 +440,21 @@ def getWeldSeamList(self, id_work_order):
 
     return simplejson.dumps({"html": html, "read_only": read_only,})
 
+@dajaxice_register
+def getWeldQuotaList(self, id_work_order):
+    """
+    MH Chen
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    weld_quota_list = WeldQuota.objects.filter(order = work_order)
+    context = {
+        "weld_quota_list": weld_quota_list,
+        "work_order": work_order,
+    }
+    html = render_to_string("techdata/widgets/weld_quota_table.html", context)
+    read_only = (work_order.weldlistpagemark.reviewer != None)
+
+    return simplejson.dumps({"html": html, "read_only": read_only,})
 @dajaxice_register
 def getWeldSeamWeight(self, id_work_order):
     """
@@ -1243,5 +1277,14 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray, iid):
     weld_joint_detail_form.save()
     for seam_id in jointArray:
         seam = WeldSeam.objects.get(id = seam_id)
-        seam.weld_joint_detail = weld_joint_detail 
-    return simplejson.dumps({"ret" : "ok"}) 
+        seam.weld_joint_detail = weld_joint_detail
+        seam.save()
+    return simplejson.dumps({"ret" : "ok"})
+
+
+@dajaxice_register
+def saveWeldJointIndex(request, id_work_order, index):
+    weld_joint = WeldJointTech.objects.get(order__id = id_work_order)
+    weld_joint.index = index
+    weld_joint.save()
+    return "ok"

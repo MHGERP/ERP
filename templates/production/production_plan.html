@@ -47,13 +47,11 @@
     <h2>生产计划修改</h2>
   </div>
   <div class="modal-body">
-    <form id="update_form">
-      {% for field in prodplan_form %}
-      <div class="control-group">
-        <label class="control-label">{{field.label}}</label>
-        <div class="controls">{{field}}</div>
+    <form id="productionplan_update_form">
+      {% csrf_token %}
+      <div id="productionplan_update_div">
+        {% include "production/widgets/production_plan_update_form.html"%}
       </div>
-      {% endfor %}
     </form>
   </div>
   <div class="modal-footer">

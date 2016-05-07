@@ -10,5 +10,16 @@
 {% endblock %}
 
 {% block inner_content %}
+<form class="search">
+    <div class="control-grop">
+        焊接接头编号：
+        <input id="index_input" type="text" value="{{weld_joint_index|default_if_none:""}}">
+        <button type="button" class="btn btn-success" style="margin-bottom:9px" id="id_save">保存</button>
+    </div>
+</form>
+<div id="widget-box" class="widget-box">
+    {% include "techdata/widgets/weld_joint_tech_table.html" %}
+</div>
 
+<script type="text/javascript" src="{{STATIC_URL}}js/techdata/weldjointTechView.js"></script>
 {% endblock %}

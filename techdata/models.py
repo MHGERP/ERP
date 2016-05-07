@@ -27,6 +27,7 @@ class WeldQuota(models.Model):
         verbose_name_plural = u"焊材定额"
     def __unicode__(self):
         return self.weld_material.name + "(%s)" % (self.size)
+    
 
 class ProcessingName(models.Model):
     name = models.CharField(blank = False, choices = PROCESSING_CHOICES, max_length = 10, verbose_name = u"工序简称")
