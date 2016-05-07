@@ -6,6 +6,19 @@ from users.models import Group
 from purchasing.models import MaterielExecute
 import settings
 
+class WeldQuota(models.Model):
+    order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
+    weld_material = models.ForeignKey(Material, verbose_name = u"焊材")
+    size = models.CharField(null = True, blank = True, max_length = 100, verbose_name = "规格")
+    quota = models.FloatField(null = True, blank = True, verbose_name = "定额")
+    remark = models.CharField(null = True, blank = True, max_length = 100, verbose_name = u"备注")
+    stardard = models.CharField(null = True, blank = True, max_length = 100, verbose_name = u"执行标准")
+    class Meta:
+        verbose_name = u"焊材定额"
+        verbose_name_plural = u"焊材定额"
+    def __unicode__(self):
+        return self.weld_material.name + "(%s)" % (self.size)
+
 class ProcessingName(models.Model):
     name = models.CharField(blank = False, choices = PROCESSING_CHOICES, max_length = 10, verbose_name = u"工序简称")
     class Meta:

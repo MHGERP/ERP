@@ -83,7 +83,8 @@ def outPurchasedViews(request):
     """
     work_order_form = WorkOrderForm()
     context = {
-        "work_order_form" : work_order_form
+        "work_order_form" : work_order_form,
+        "inventory_type": OUT_PURCHASED,
     }
     return render(request, "techdata/out_purchased.html", context)
 

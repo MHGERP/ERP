@@ -395,8 +395,6 @@ def weldapplyrefundDetail(request,index):
     """
     workorder = WorkOrder.objects.get(id = index)
     applyrefund_set = WeldingMaterialApplyCard.objects.filter(workorder = workorder)
-    #for i in apply_set:
-    #    print i.weldrefund.department
     context = {
             "workorder":workorder,
             "applyrefund_set":applyrefund_set,
@@ -405,15 +403,9 @@ def weldapplyrefundDetail(request,index):
 
 
 def weldRefundViews(request):
-    print checkAuthority(STORAGE_KEEPER,request.user)
-    if request.method == "POST":
-        search_form = RefundSearchForm(request.POST)
-        if search_form.is_valid():
-            refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data)
-    else:
-        search_form = RefundSearchForm()
-        refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
-        #refund_set = WeldRefund.objects.all()
+    search_form = RefundSearchForm()
+    refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
+    
     context = {
             "search_form":search_form,
             "refund_set":refund_set,
@@ -424,9 +416,9 @@ def weldRefundViews(request):
 def weldRefundDetailViews(request,rid):
     ref_obj = WeldRefund.objects.get(id = rid)
     is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
-    reform = WeldRefundForm(instance = ref_obj) 
+    reform = WeldRefundConfirmForm() 
     context = {
-            "reform":reform,
+            "refund_form":reform,
             "ref_obj":ref_obj,
             "is_show":is_show,
             }
@@ -475,9 +467,11 @@ def AuxiliaryToolsEntryView(request):
     """
     context = {}
     object_id = int(request.GET['id'])
+    print object_id
     auxiliary_tool_entry = AuxiliaryToolEntry.objects.get(
         id=object_id)
     context['entry'] = auxiliary_tool_entry
+    print context['entry'].create_time
     context['items'] = AuxiliaryToolEntryItems.objects.filter(
         entry =auxiliary_tool_entry)
     return render(request,

@@ -24,6 +24,29 @@ from purchasing.models import MaterielExecute, MaterielExecuteDetail
 import datetime
 
 @dajaxice_register
+def getInventoryTables(request, id_work_order, inventory_type):
+    """
+    JunHU
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    list = Materiel.objects.filter(Q(order = work_order) & Q(inventory_type = inventory_type))
+    html = render_to_string("techdata/widgets/out_purchased_table.html", {"list": list})
+    return html
+
+@dajaxice_register
+def autoSetInventoryLabel(request, id_work_order, inventory_type):
+    """
+    JunHU
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    inventory_type = InventoryType.objects.get(name = inventory_type)
+    if inventory_type == OUT_PURCHASED:
+        for item in Materiel.objects.filter(order = work_order):
+            if item.circulationroute.L1.name != GY: continue
+            if item.inventory_type.filter(name = inventory_type).count() > 0: continue
+            item.inventory_type.add(inventory_type)
+
+@dajaxice_register
 def getProcessBOM(request, id_work_order):
     """
     JunHU

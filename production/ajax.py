@@ -158,11 +158,13 @@ def getPartTicket(request, work_order, operator, date):
 
 
 @dajaxice_register
-def workorderSearch(request, workSearchText):
+def workorderSearch(request, form):
     """
     kad
     """
-    workorder_set = WorkOrder.objects.filter(order_index__startswith=workSearchText)
+    search_form = WorkOrderProductionSearchForm(deserialize_form(form))
+    if search_form.is_valid():
+        workorder_set  = WorkOrder.objects.filter(getQ(search_form.cleaned_data))
     html = render_to_string("production/widgets/production_plan_select_table.html",{"workorder_set":workorder_set})
     data = {
         "html":html,
@@ -176,7 +178,7 @@ def workorderAdd(request, checkList):
     """
     for i in checkList:
         wo_obj = WorkOrder.objects.get(order_index = i)
-        obj = ProductionPlan(workorder_id = wo_obj)
+        obj = ProductionPlan(order = wo_obj)
         obj.save()
     prodplan_set = ProductionPlan.objects.all()
     html = render_to_string("production/widgets/production_plan_table.html", {"prodplan_set":prodplan_set})
@@ -203,12 +205,18 @@ def prodplanDelete(request, planid):
     return simplejson.dumps(data)
 
 @dajaxice_register
+def getProductPlanForm(request, planid):
+    prodPlanForm = ProdPlanForm(instance = ProductionPlan.objects.get(plan_id = planid))
+    html = render_to_string("production/widgets/production_plan_update_form.html", {"prodPlanForm":prodPlanForm})
+    return simplejson.dumps(html)
+    
+@dajaxice_register
 def prodplanUpdate(request, form, planid):
     """
     kad
     """
     prodplan_obj = ProductionPlan.objects.get(plan_id = planid)
-    prodplan_form = ProdPlanForm(deserialize_form(form), instance = prodplan_obj)
+    prodplan_form = ProdPlanForm(deserialize_form(form), instance=prodplan_obj)
     if prodplan_form.is_valid():
         prodplan_form.save()
         message = u"修改成功"
@@ -396,12 +404,7 @@ def weldPartOrderInfo(request, iid):
     if CirculationRoute.objects.filter(materiel_belong = materielObj).count() == 0:
         CirculationRoute(materiel_belong = materielObj).save()
     materielObj.route = '.'.join(getattr(materielObj.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(materielObj.circulationroute, "L%d" % i))
-    materielObj.processDetailObj = ProcessDetail.objects.filter(materiel_belong = materielObj)
-    print "ddddd"
-    print materielObj.route
-    print "ssssss"
-    for item in materielObj.processDetailObj:
-        print item.process_id
-
+    materielObj.processDetailObj = list(ProcessDetail.objects.filter(materiel_belong = materielObj))
+    materielObj.processDetailObj.extend([ProcessDetail()] * (12-len(materielObj.processDetailObj)))
     html = render_to_string("production/widgets/weld_part_order_info_table.html",{"materielObj":materielObj})
     return simplejson.dumps({ "html" : html})

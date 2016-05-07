@@ -32,7 +32,7 @@ def getChoiceList(obj_set,field):
     params: obj_set:model set; field:model field
     return: model tuple 
     """
-    obj_list = [(-1,"------")]
+    obj_list = [("-1","------")]
     for obj in obj_set:
         obj_list.append((obj.id,getattr(obj,field)))
     return tuple(obj_list)
