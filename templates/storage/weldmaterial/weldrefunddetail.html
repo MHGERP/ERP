@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block inner_content %}
+{% comment %}
 <h3 style="text-align:center">焊材退库单</h3>
 <div style="margin-bottom:20px" >
     <div class="span3">
@@ -66,10 +67,34 @@
     {% endif %}
     </center>
 </form>
-
-<script>
-    $(function(){
-            $('#receipts_time').datetimepicker({format:"yyyy-mm-dd",minView:2});
-            });
-</script>
+{% endcomment %}
+<div id="refund_confirm_main" rid="{{ref_obj.id}}">
+{% include "storage/wordhtml/weldrefundconfirm.html"%}
+</div>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">添加</h3>
+    </div>
+    <div class="modal-body">
+        <form id="refund_form" action="" class="form-horizontal">
+            {% for field in refund_form %}
+            <div class="control-group">
+                <label class="control-label" for="inputEmail">
+                {{field.label_tag}}
+                </label>
+                <div class="controls">
+                {{field}}
+                </div>
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        {% ifequal apply_card.status APPLYCARD_KEEPER %}
+        <button class="btn btn-primary" id="refund_confirm_save">保存</button>
+        {% endifequal %}
+    </div>
+</div>
 {% endblock %}
