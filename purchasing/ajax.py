@@ -133,6 +133,7 @@ def chooseInventorytype(request,pid,key):
     }
 
     items = Materiel.objects.filter(inventory_type__name=pid, materielpurchasingstatus__add_to_detail = True,relate_material=None)
+    print pid
     print ("item的size:" + str(len(items)))
     if key:
         items = items.filter(name=key)
