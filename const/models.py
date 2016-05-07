@@ -14,6 +14,15 @@ class WorkOrder(models.Model):
     def __unicode__(self):
         return self.order_index
 
+class SubWorkOrder(models.Model):
+    order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
+    index = models.CharField(max_length = 100, verbose_name = "序号")
+    class Meta:
+        verbose_name = u"子工作令"
+        verbose_name_plural = u"子工作令"
+    def __unicode__(self):
+        return self.order.order_index + "-" + self.index
+
 class Material(models.Model):
     name = models.CharField(blank = False, max_length = 50, verbose_name = u"材质名称")
     material_id= models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"材质编号") 
@@ -58,7 +67,10 @@ class Materiel(models.Model):
     
     complete_plandate = models.DateField(blank = True, null=True,verbose_name = u"计划完成时间")
     complete_date = models.DateField(blank = True, null=True,verbose_name = u"完成时间")
-    
+
+    def total_weight_cal(self):
+        if self.count and self.net_weight:
+            return int(self.count) * self.net_weight
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"
