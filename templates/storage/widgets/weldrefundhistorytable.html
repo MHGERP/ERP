@@ -1,0 +1,22 @@
+<table class="table table-bordered" style="width:70%" id="refund_history_table">
+    <thead>
+        <th>工作令</th>
+        <th>领用单位</th>
+        <th>日期</th>
+        <th>退库单编号</th>
+        <th>焊缝编号</th>
+        <th>操作</th>
+    </thead>
+    </tbody>
+        {% for ref_obj in refund_set %}
+        <tr>
+            <td>{{ref_obj.apply_card.workorder}}</td>
+            <td>{{ref_obj.department}}</td>
+            <td>{{ref_obj.create_time|date:"Y年m月d日"}}</td>
+            <td>{{ref_obj.refund_code}}</td>
+            <td>{{ref_obj.apply_card.weld_bead_number}}</td>
+            <td>{% ifequal ref_obj.weldrefund_status  STORAGESTATUS_END %}<a class="btn" href="/storage/weldrefunddetail/{{ref_obj.id}}">查看</a>{% else %}<a class="btn btn-warning" href="/storage/weldrefunddetail/{{ref_obj.id}}">待处理</a>{% endifequal %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
