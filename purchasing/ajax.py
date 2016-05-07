@@ -1290,3 +1290,11 @@ def GoToBid(request,index):
     bid_form.order_form=OrderForm.objects.get(order_id=index)
     bid_form.save()
     return simplejson.dumps({})
+
+@dajaxice_register
+def BidApplySelect(request,val,bidid):
+    bidform=BidForm.objects.get(bid_id=bidid)
+    bidform.bid_mod=int(val)
+    bidform.save()
+    goNextStatus(bidform,request.user)
+    return simplejson.dumps({})

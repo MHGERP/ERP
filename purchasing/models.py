@@ -16,7 +16,7 @@ class MaterielCopy(Materiel):
 
 
 class CommentStatus(models.Model):
-    form_type=models.IntegerField(choices=BID_APPLY_TYPE_CHOICES,verbose_name=u"表单类型")
+    form_type=models.IntegerField(choices=BID_APPLY_TYPE_CHOICES,blank=True,null=True,verbose_name=u"表单类型")
     status=models.IntegerField(choices=COMMENT_STATUS_CHOICES,unique=True,verbose_name=u"表单状态")
     next_status=models.ForeignKey('self',null=True,blank=True)
     class Meta:
@@ -71,6 +71,7 @@ class BidForm(models.Model):
     contract_id = models.CharField(max_length=50, blank=True, default=make_uuid, verbose_name=u"合同编号")
     contract_amount = models.IntegerField(default=0,verbose_name=u"合同金额")
     billing_amount = models.IntegerField(default=0,verbose_name=u"开票金额")
+    bid_mod = models.IntegerField(default=0,verbose_name=u"招标申请类型")
     class Meta:
         verbose_name = u"标单"
         verbose_name_plural = u"标单"
