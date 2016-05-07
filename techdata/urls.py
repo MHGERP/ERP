@@ -25,6 +25,10 @@ urlpatterns=patterns('',
         techdata_views.connectionOrientationEditViews,
     ),
     url(
+        r'^outPurchased$',
+        techdata_views.outPurchasedViews,
+       ),
+    url(
         r'^firstFeeding$',
         techdata_views.firstFeedingViews,
     ),
@@ -116,5 +120,9 @@ urlpatterns=patterns('',
     url(
         r'^BOMadd',
         techdata_views.BOMadd,
+    ),
+    url(
+        r'^weldJointTechView/(?P<orderid>\w+)/$', 
+        techdata_views.weldJointTechView,
     ),
 )

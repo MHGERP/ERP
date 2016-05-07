@@ -12,18 +12,28 @@ from const.utils import getChoiceList,getDistinctSet
 
 DEPARTMENT_CHOICES=STORAGEDEPARTMENT_CHOICES
 
+def set_form_input_width(dict,style):
+    """
+    设定form的样式
+    """
+    for k , v in dict.items():
+        v.widget.attrs[style[0]] = style[1]
+
 class ApplyCardHistorySearchForm(forms.Form):
-    date=forms.DateField(label=u'日期',required=False,widget=forms.TextInput(attrs={'readonly':'readonly','class':'form-control search-query','id':'date'}))
-    department=forms.ChoiceField(label=u'领用部门',required=False,choices=DEPARTMENT_CHOICES,widget=forms.Select(attrs={'class':'form-control','id':'department'}))
-    index=forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'index'}))
-    work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'work_order'}))
-    commit_user=forms.CharField(label=u'发料人',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'commit_user'}))
-
-#class WeldingMaterialApplyCardForm(ModelForm):
-#    class Meta:
-#        model=WeldingMaterialApplyCard
-#        exclude=['create_time']
-
+    workorder = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"id":"workorder","class":"form_control","select2":"true"}))
+    weld_bead_number = forms.CharField(label=u"焊缝编号",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
+    material_mark = forms.CharField(label=u"焊材牌号",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
+    model_number = forms.CharField(label=u"型号",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
+    specification = forms.CharField(label=u"规格",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
+    #department = forms.CharField(label=u"领用单位",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
+    #applycard_code = forms.CharField(label=u"领用单编号",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
+    create_time__gte = forms.DateField(label=u"起始日期",required=False,widget=forms.TextInput(attrs={"class":'form_control','date_picker':"true"}))
+    create_time__lte = forms.DateField(label=u"终止日期",required=False,widget=forms.TextInput(attrs={"class":'form_control','date_picker':"true"}))
+    def __init__(self,*args,**kwargs):
+        super(ApplyCardHistorySearchForm,self).__init__(*args,**kwargs)
+        self.fields["workorder"].choices = getChoiceList(getDistinctSet(WeldingMaterialApplyCard,WorkOrder,'workorder'),'order_index')
+        style = ("style","width:120px;margin-bottom:10px;")
+        set_form_input_width(self.fields,style)
 class ApplyCardForm(ModelForm):
 
     class Meta:
@@ -195,17 +205,16 @@ class steelEntryItemsForm(forms.Form):
         self.fields["store_room"].choices = STORE_ROOM_CHOICES 
 
 class RefundSearchForm(forms.Form):
-    date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date',}))
-    department = forms.ChoiceField(label=u"退库单位",choices = STORAGEDEPARTMENT_CHOICES,required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'department'}))
-    code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'code'}))
-    work_order=forms.CharField(label=u'工作令',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'work_order'}))
-    keeper=forms.ChoiceField(label=u'库管员',required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'keeper'}))
+    apply_card__workorder=forms.ChoiceField(label=u'工作令',required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'work_order',"select2":"true"}))
+    apply_card__weld_bead_number=forms.CharField(label=u'焊缝编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'work_order'}))
+    create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control','date_picker':'true',}))
+    create_time__lte = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control','date_picker':'true',}))
     def __init__(self,*args,**kwargs):
         super(RefundSearchForm,self).__init__(*args,**kwargs)
-        users = getUserByAuthority(STORAGE_KEEPER)
-        group = Group.objects.all()
-        self.fields["keeper"].choices = getChoiceList(users,"userinfo")
-        self.fields["department"].choices = getChoiceList(group,"name")
+        style = ("style","width:120px;")
+        set_form_input_width(self.fields,style)
+        workorder_list = WorkOrder.objects.all()
+        self.fields["apply_card__workorder"].choices = getChoiceList(workorder_list,"order_index")
 class WeldRefundForm(ModelForm):
     class Meta:
         model = WeldRefund
@@ -254,7 +263,7 @@ class AuxiliaryToolsCardApplyForm(ModelForm):
 
 class AuxiliaryToolsForm(ModelForm):
     class Meta:
-        model=AuxiliaryTool
+        model=AuxiliaryToolStoreList
         exclude=[]
 
         widgets={
@@ -507,3 +516,8 @@ class WeldMaterialSearchForm(forms.Form):
     model_number = forms.CharField(label=u"型号",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     specification = forms.CharField(label=u"规格",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     factory = forms.CharField(label=u"厂家",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+
+class WeldRefundConfirmForm(ModelForm):
+    class Meta:
+        model = WeldRefund
+        fields = ("refund_weight","refund_status")

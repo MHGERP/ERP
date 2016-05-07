@@ -1,0 +1,25 @@
+{% extends "techdata/base/none_nav_base.html" %}
+
+{% block title%}
+<h1>焊接接头工艺</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="/techdata/weldList" class="tip-bottom">焊缝明细</a>
+<a href="#" class="current">焊接接头工艺</a>
+{% endblock %}
+
+{% block inner_content %}
+<form class="search">
+    <div class="control-grop">
+        焊接接头编号：
+        <input id="index_input" type="text" value="{{weld_joint_index|default_if_none:""}}">
+        <button type="button" class="btn btn-success" style="margin-bottom:9px" id="id_save">保存</button>
+    </div>
+</form>
+<div id="widget-box" class="widget-box">
+    {% include "techdata/widgets/weld_joint_tech_table.html" %}
+</div>
+
+<script type="text/javascript" src="{{STATIC_URL}}js/techdata/weldjointTechView.js"></script>
+{% endblock %}

@@ -1,0 +1,56 @@
+<body lang=ZH-CN style='tab-interval:21.0pt;text-justify-trim:punctuation'>
+
+<div class=WordSection1 style='layout-grid:15.6pt'>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
+mso-line-height-rule:exactly'><span style='font-size:16.0pt;font-family:宋体;
+mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>太重滨海煤化工分公司</span><span
+lang=EN-US style='font-size:16.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
+mso-line-height-rule:exactly'><span style='font-size:16.0pt;font-family:宋体;
+mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>辅</span><span
+lang=EN-US style='font-size:16.0pt'><span style='mso-spacerun:yes'>&nbsp;&nbsp;
+</span></span><span style='font-size:16.0pt;font-family:宋体;mso-ascii-font-family:
+"Times New Roman";mso-hansi-font-family:"Times New Roman"'>材</span><span
+lang=EN-US style='font-size:16.0pt'><span style='mso-spacerun:yes'>&nbsp;&nbsp;
+</span></span><span style='font-size:16.0pt;font-family:宋体;mso-ascii-font-family:
+"Times New Roman";mso-hansi-font-family:"Times New Roman"'>入</span><span
+lang=EN-US style='font-size:16.0pt'><span style='mso-spacerun:yes'>&nbsp;&nbsp;
+</span></span><span style='font-size:16.0pt;font-family:宋体;mso-ascii-font-family:
+"Times New Roman";mso-hansi-font-family:"Times New Roman"'>库</span><span
+lang=EN-US style='font-size:16.0pt'><span style='mso-spacerun:yes'>&nbsp;&nbsp;
+</span></span><span style='font-size:16.0pt;font-family:宋体;mso-ascii-font-family:
+"Times New Roman";mso-hansi-font-family:"Times New Roman"'>单</span><span
+lang=EN-US style='font-size:16.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp;
+</span><span style='mso-tab-count:2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+"Times New Roman"'>入库时间：{{entry.create_time|date:'Y.m.d'}}</span><span lang=EN-US><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span
+style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+"Times New Roman"'>单据编号：{{entry.entry_code}}</span><span lang=EN-US><span
+style='mso-spacerun:yes'>&nbsp; </span></span></p>
+
+<div align=center>
+
+    <table id="items_table" eid="{{entry.id}}" class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:.5pt solid windowtext;
+ mso-border-insidev:.5pt solid windowtext'>
+ {% include "storage/wordhtml/auxiliaryToolEntryTable.html" %} 
+</table>
+
+</div>
+
+<p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
+
+</div>
+
+</body>

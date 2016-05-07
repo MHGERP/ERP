@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from backend.utility import getContext
 from techdata.forms import *
 from const.models import Materiel
-from techdata.models import TransferCard, Program
+from techdata.models import TransferCard, Program, WeldJointTech
 from purchasing.models import MaterielExecute
 from const.forms import WorkOrderForm
 
@@ -77,6 +77,17 @@ def connectionOrientationEditViews(request):
     context = {}
     return render(request, "techdata/connection_orientation_edit.html", context)
 
+def outPurchasedViews(request):
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "work_order_form" : work_order_form,
+        "inventory_type": OUT_PURCHASED,
+    }
+    return render(request, "techdata/out_purchased.html", context)
+
 def firstFeedingViews(request):
     """
     JunHU
@@ -135,7 +146,10 @@ def transferCardEditViews(request):
     return render(request, "techdata/transfer_card_edit.html", context)
 
 def weldQuotaViews(request):
-    context = {}
+    work_order_form = WorkOrderForm()
+    context = {
+        "form": work_order_form,
+    }
     return render(request, "techdata/weld_quota.html", context)
 def weldEditViews(request):
     context = {}
@@ -322,3 +336,18 @@ def BOMadd(request):
             file_upload_error = 1
         return HttpResponse(json.dumps({'file_upload_error' : file_upload_error}))
 
+
+def weldJointTechView(request, orderid):
+    print "hehe"
+    order = WorkOrder.objects.get(id = orderid)
+    if WeldJointTech.objects.filter(order__id = orderid).count() == 0:
+        weld_joint = WeldJointTech(order = order)
+        weld_joint.save()
+    else:
+        weld_joint = WeldJointTech.objects.filter(order__id = orderid)[0]
+    weld_joint_details = WeldJointTechDetail.objects.filter(weld_joint = weld_joint, is_save = True)
+    context = {
+        "weld_joint_index" : weld_joint.index,
+        "weld_joint_details" : weld_joint_details,
+    }
+    return render(request, "techdata/weld_joint.html", context)

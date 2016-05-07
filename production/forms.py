@@ -26,7 +26,7 @@ class WorkOrderProductionSearchForm(forms.Form):
     LiuYe
     summary: search work order fuzzy
     """
-    order__order_index__contains = forms.CharField(required=False, label=u"工作令")
+    order_index__contains = forms.CharField(required=False, label=u"工作令")
 
 class ProductionPlanSearchForm(WorkOrderProductionForm):
     status = forms.ChoiceField(label = u"状态", required = False, choices=PRODUCTION_PLAN_STAUTS_CHOICES)
@@ -36,7 +36,7 @@ class ProductionPlanSearchForm(WorkOrderProductionForm):
 class ProdPlanForm(ModelForm):
     class Meta:
         model = ProductionPlan
-        exclude = ("workorder_id","plan_id",)
+        exclude = ("order","plan_id",)
         widgets = {
             "plan_date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"plan_date"}),
             "status":forms.Select(attrs={"class":"form-control"}),
