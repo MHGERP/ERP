@@ -4,7 +4,7 @@ import datetime
 from django.db import models
 from const.utility import make_uuid
 
-from const.models import BidFormStatus,Materiel,Material, WorkOrder, OrderFormStatus, ImplementClassChoices
+from const.models import BidFormStatus,Materiel,Material, WorkOrder, OrderFormStatus, ImplementClassChoices,SubWorkOrder
 from django.contrib.auth.models import User
 import settings
 # Create your models here.
@@ -13,6 +13,7 @@ class MaterielCopy(Materiel):
     relate_material=models.ForeignKey('self',null=True,blank=True)
     orgin_materiel=models.ForeignKey(Materiel,null=True,related_name="orgin_materiel",blank=True)
     work_order=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"工作令号")
+    sub_workorder=models.ForeignKey(SubWorkOrder,blank=True,null=True,verbose_name=u"子工作令")
 
 
 class CommentStatus(models.Model):
