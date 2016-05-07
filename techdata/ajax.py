@@ -253,6 +253,25 @@ def getWeldSeamCard(self, full = False, iid = None):
     else:
         html = render_to_string("techdata/widgets/weld_seam_card.html", context)
     return html
+@dajaxice_register
+def getWeldQuotaCard(self,iid = None):
+    """
+    MH Chen
+    """
+    if iid:
+        weld_quota = WeldQuota.objects.get(id = iid)
+        form = WeldQuotaForm(instance = weld_quota)
+    else:
+        form = WeldSeamForm()
+    # material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE, WELD_RIBBON, WELD_FLUX)
+    # form.fields["weld_material_1"].queryset = material_set
+    # form.fields["weld_material_2"].queryset = material_set
+    context = {
+        "form": form,
+        "weld_quota":weld_quota,
+    }
+    html = render_to_string("techdata/widgets/weld_quota_card.html", context)
+    return html
 
 @dajaxice_register
 def boxOutBought(request, order):
@@ -405,12 +424,12 @@ def getWeldQuotaList(self, id_work_order):
     MH Chen
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
-    weldseam_list = WeldSeam.objects.filter(materiel_belong__order = work_order)
+    weld_quota_list = WeldQuota.objects.filter(order = work_order)
     context = {
-        "weldseam_list": weldseam_list,
+        "weld_quota_list": weld_quota_list,
         "work_order": work_order,
     }
-    html = render_to_string("techdata/widgets/weld_list_table.html", context)
+    html = render_to_string("techdata/widgets/weld_quota_table.html", context)
     read_only = (work_order.weldlistpagemark.reviewer != None)
 
     return simplejson.dumps({"html": html, "read_only": read_only,})

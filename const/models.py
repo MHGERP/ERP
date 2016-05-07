@@ -23,6 +23,8 @@ class Material(models.Model):
         verbose_name_plural = u"材料"
     def __unicode__(self):
         return self.name
+    def display_material_name(self):
+        return "%s%s" % (self.name, self.categories)
 
 class InventoryType(models.Model):
     name = models.CharField(blank = False, max_length = 50, choices = INVENTORY_TYPE, verbose_name = u"明细表名称")
