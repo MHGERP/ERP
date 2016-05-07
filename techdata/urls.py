@@ -121,4 +121,8 @@ urlpatterns=patterns('',
         r'^BOMadd',
         techdata_views.BOMadd,
     ),
+    url(
+        r'^weldJointTechView/(?P<orderid>\w+)/$', 
+        techdata_views.weldJointTechView,
+    ),
 )

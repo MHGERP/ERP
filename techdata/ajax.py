@@ -1198,5 +1198,6 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray, iid):
     weld_joint_detail_form.save()
     for seam_id in jointArray:
         seam = WeldSeam.objects.get(id = seam_id)
-        seam.weld_joint_detail = weld_joint_detail 
+        seam.weld_joint_detail = weld_joint_detail
+        seam.save()
     return simplejson.dumps({"ret" : "ok"}) 
