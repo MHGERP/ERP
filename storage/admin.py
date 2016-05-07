@@ -19,7 +19,7 @@ Registers = (
     BarSteelMaterialReturnCardContent,
     BarSteelMaterialApplyCardContent,
     WeldRefund,
-    AuxiliaryTool,
+    AuxiliaryToolStoreList,
     AuxiliaryToolApplyCard,
     AuxiliaryToolEntry,
     AuxiliaryToolEntryItems,

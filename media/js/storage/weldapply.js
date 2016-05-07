@@ -5,12 +5,10 @@ $('#date').datetimepicker({
 });
 var aid;
 $(document).ready(function(){
-  $("#query_form").submit(function(e){
-    e.preventDefault();
+  $(document).on("click","button#search_submit",function(){
     var data=$("#query_form").serialize();
     Dajaxice.storage.Search_History_Apply_Records(function(data){
         $('#history_table').html(data);
-        $('#date').val('');
     },
     {
         'data':data,

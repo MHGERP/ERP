@@ -36,9 +36,7 @@ def searchApplyCard(request,form):
     form = SteelRefundSearchForm(deserialize_form(form))
     context={}
     if form.is_valid():
-        conditions = form.cleaned_data
-        steel_apply_cards = get_weld_filter(CommonSteelMaterialApplyCardInfo,conditions)
-        print steel_apply_cards
+        steel_apply_cards = get_weld_filter(CommonSteelMaterialApplyCardInfo,form.cleaned_data)
         result_table = render_to_string("storage/widgets/apply_card_table.html",{"apply_cards":steel_apply_cards})
         message = "success"
         context["result_table"]=result_table
@@ -332,27 +330,11 @@ def auToolEntryConfirm(request, role, eid):
 @dajaxice_register
 def Search_History_Apply_Records(request,data):
     context={}
-    context['APPLYCARD_COMMIT']=APPLYCARD_COMMIT
+    context['APPLYCARD_KEEPER']=APPLYCARD_KEEPER
     form=ApplyCardHistorySearchForm(deserialize_form(data))
-    print form
     if form.is_valid():
-        conditions=form.cleaned_data
-        if conditions['department'] == '-1':
-            conditions['department'] = ""
-        q1=(conditions['date'] and Q(create_time=conditions['date'])) or None
-        q2=(conditions['department'].strip(' ') and Q(department=conditions['department'])) or None
-        q3=(conditions['index'] and Q(index=int(conditions['index']))) or None
-        q4=(conditions['work_order'] and Q(workorder__order_index=int(conditions['work_order']))) or None
-        q5=(conditions['commit_user'] and Q(commit_user__username=conditions['commit_user'])) or None
-        qset = filter(lambda x:x!=None,[q1,q2,q3,q4,q5]) 
-        if qset:
-            query_conditions=reduce(lambda x,y:x&y,qset)
-            context['weld_apply_cards'] = WeldingMaterialApplyCard.objects.filter(query_conditions)
-        else:
-            context['weld_apply_cards']=WeldingMaterialApplyCard.objects.all()
+        context['apply_cards']=get_weld_filter(WeldingMaterialApplyCard,form.cleaned_data)
         return render_to_string('storage/weldapply/history_table.html',context)
-    else:
-        return HttpResponse('FAIL')
 
 @dajaxice_register
 def Auxiliary_Detail_Query(request,id):
@@ -1044,4 +1026,44 @@ def weldApplyConfirm(request,role,aid):
         else:
             message = u"领用卡确认失败，请先选择领用的材料"
     html = render_to_string("storage/wordhtml/weldapply.html",{"apply_card":apply_card})  
+    return simplejson.dumps({"html":html,"message":message})
+
+@dajaxice_register
+def searchWeldRefund(request,search_form):
+    search_form = RefundSearchForm(deserialize_form(search_form))
+    if search_form.is_valid():
+        refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data)
+        html = render_to_string("storage/widgets/weldrefundhistorytable.html",{"refund_set":refund_set})
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def refundKeeperModify(request,form,rid):
+    ref_obj = WeldRefund.objects.get(id = rid)
+    form = WeldRefundConfirmForm(deserialize_form(form),instance = ref_obj)
+    if form.is_valid():
+        form.save()
+        flag = True
+        message = u"信息修改成功"
+    else:
+        flag = False
+        message = u"信息修改失败"
+
+    html = render_to_string("storage/wordhtml/weldrefundconfirm.html",{"ref_obj":ref_obj})
+    return simplejson.dumps({"html":html,"message":message,"flag":flag})
+
+@dajaxice_register
+def weldRefundConfirm(request,rid,role):
+    ref_obj = WeldRefund.objects.get(id = rid)
+    if role == "keeper" and ref_obj.weldrefund_status == STORAGESTATUS_KEEPER :
+        ref_obj.weldrefund_status = STORAGESTATUS_END
+        ref_obj.keeper = request.user
+        ref_obj.save()
+        storelist_obj = ref_obj.apply_card.storelist
+        storelist_obj.inventory_count += ref_obj.refund_weight
+        storelist_obj.save()
+        message = u"退库单确认成功"
+    else:
+        message = u"退库单确认失败"
+
+    html = render_to_string("storage/wordhtml/weldrefundconfirm.html",{"ref_obj":ref_obj})
     return simplejson.dumps({"html":html,"message":message})
