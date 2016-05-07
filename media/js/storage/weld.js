@@ -1,4 +1,5 @@
 var mid;
+var rid;
 $(document).ready(function(){
     cal_entry_items_price();
     $(document).on("click","span[name='weldentry']",function(){
@@ -14,8 +15,30 @@ $(document).ready(function(){
         $("#myModal").modal('show');
     })
     $(document).on("click","#search-btn",function(){
-        Dajaxice.storage.searchWeldEntry(search_callback,{"searchform":$("#search_form").serialize()});
+        Dajaxice.storage.searchWeldEntry(weld_search_callback,{"searchform":$("#search_form").serialize()});
     })
+    $(document).on("click","#refund_search_btn",function(){
+        var search_form = $("#refund_search_form").serialize();
+        Dajaxice.storage.searchWeldRefund(weld_refund_search_callback,{"search_form":search_form});
+    })
+    $(document).on("dblclick","table#refund_confirm_table",function(){
+        var refund_weight = $("#refund_weight").text();
+        var refund_status = $("#refund_status").text();
+        $("#id_refund_weight").val(refund_weight);
+        $("#id_refund_status").val(refund_status);
+        $("#myModal").modal('show');
+    })
+    $(document).on("click","#refund_confirm_save",function(){
+        rid = $("div#refund_confirm_main").attr("rid");
+        Dajaxice.storage.refundKeeperModify(refundkeepermodify_callback,{"form":$("form#refund_form").serialize(),"rid":rid});
+    })
+    $(document).on("click","span[name='weld_refund_confirm']",function(){
+        rid = $("div#refund_confirm_main").attr("rid");
+        var role = $(this).attr('role');
+        Dajaxice.storage.weldRefundConfirm(weldrefundconfirm_callback,{"rid":rid,"role":role})
+    })
+        
+        
 })
 function entry_confirm(eid){
     
@@ -109,6 +132,23 @@ function bake_save_callback(data){
     alert(data.message);
 }
 
-function search_callback(data){
+function weld_entry_search_callback(data){
    $("#search_table").html(data.html); 
+}
+
+function weld_refund_search_callback(data){
+    $("div#refund_history_table").html(data.html);
+}
+
+function refundkeepermodify_callback(data){
+    alert(data.message);
+    if(data.flag){
+        $("div#refund_confirm_main").html(data.html);
+        $("#myModal").modal('hide');
+    }
+}
+
+function weldrefundconfirm_callback(data){
+    $("div#refund_confirm_main").html(data.html);
+    alert(data.message);
 }

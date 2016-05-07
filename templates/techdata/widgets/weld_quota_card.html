@@ -1,0 +1,37 @@
+<div class="row-fluid">
+    <div class="span3">
+        <div class="input-prepend">
+            <span class="add-on">类别</span>
+            
+            <input type="text" class="input-small" 
+            value="{{weld_quota.weld_material.get_categories_display}}">
+            </input>
+        </div>
+    </div>
+    <div class="span3">
+        <div class="input-prepend">
+            <span class="add-on">牌号</span>
+            {{form.weld_material}}
+        </div>
+    </div>
+    <div class="span3">
+        <div class="input-prepend">
+            <span class="add-on">规格</span>
+            {{form.size}}
+        </div>
+    </div>
+    <div class="span3">
+        <div class="input-prepend">
+            <span class="add-on">执行标准</span>
+            {{form.stardard}}
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span3">
+        <div class="input-prepend">
+            <span class="add-on">备注</span>
+            {{form.remark}}
+        </div>
+    </div>
+</div>

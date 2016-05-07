@@ -1,0 +1,33 @@
+<table class="table table-bordered table-striped" >
+    <thead>
+        <tr>
+            <th rowspan="2">接头编号</th>
+            <th colspan="2">母材</th>
+            <th rowspan="2">焊接方法<br/>焊接位置</th>
+            <th rowspan="2">焊接工艺评定编号</th>
+            <th rowspan="2">焊接作业指导书</th>
+            <th rowspan="2">焊工持证项目</th>
+        </tr>
+        <tr>
+            <th>材质</th>
+            <th>规格</th>
+        </tr>
+    <thead>
+    <tbody>
+    {% for item in weld_joint_details %}
+        <tr>
+            <td rowspan="2" style="height:60px;line-height:60px">{{item.joint_index}}</td>
+            <td>{{item.bm_texture_1}}</td>
+            <td>{{item.bm_specification_1}}</td>
+            <td rowspan="2" style="height:60px;line-height:60px">{{item.weld_method_1}}+{{item.weld_method_2}}</td>
+            <td rowspan="2" style="height:60px;line-height:60px">{{item.procedureQualification_index}}</td>
+            <td rowspan="2" style="height:60px;line-height:60px"></td>
+            <td rowspan="2" style="height:60px;line-height:60px"></td>
+        </tr>
+        <tr>
+            <td>{{item.bm_texture_2}}</td>
+            <td>{{item.bm_specification_2}}</td>
+        </tr>
+    {% endfor %}
+    <tbody>
+</table>

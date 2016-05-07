@@ -6,6 +6,15 @@ from users.models import Group
 from purchasing.models import MaterielExecute
 import settings
 
+class OutPurchasedItem(models.Model):
+    materiel_belong = models.OneToOneField(Materiel, verbose_name = u"所属物料")
+    remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
+    class Meta:
+        verbose_name = u"外购件"
+        verbose_name_plural = u"外购件"
+    def __unicode__(self):
+        return self.materiel_belong.name
+
 class WeldQuota(models.Model):
     order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
     weld_material = models.ForeignKey(Material, verbose_name = u"焊材")
@@ -18,6 +27,7 @@ class WeldQuota(models.Model):
         verbose_name_plural = u"焊材定额"
     def __unicode__(self):
         return self.weld_material.name + "(%s)" % (self.size)
+    
 
 class ProcessingName(models.Model):
     name = models.CharField(blank = False, choices = PROCESSING_CHOICES, max_length = 10, verbose_name = u"工序简称")
