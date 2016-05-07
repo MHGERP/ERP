@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from django.db import transaction
-from const.models import WorkOrder,Material
+from const.models import WorkOrder,Material, InventoryType
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
@@ -131,15 +131,16 @@ def chooseInventorytype(request,pid,key):
         COOPERANT: "forging",
         WELD_MATERIAL: "weld_material",
     }
-
     items = Materiel.objects.filter(inventory_type__name=pid, materielpurchasingstatus__add_to_detail = True,relate_material=None)
+    print pid
+    print ("item的size:" + str(len(items)))
     if key:
         items = items.filter(name=key)
     for item in items:
         if MaterielFormConnection.objects.filter(materiel = item).count() == 0:
             MaterielFormConnection(materiel = item, count = item.count).save()
-
-        if item.inventory_type.id <= 2 :
+        inventory_type=item.inventory_type.all()[0]
+        if inventory_type.name ==  MAIN_MATERIEL or  inventory_type.name == AUXILIARY_MATERIEL:
             if item.materielexecutedetail_set.count()>0 or item.materielformconnection.order_form:
                 item.can_choose=False
                 item.status= u"已加入订购单" if (item.materielformconnection.order_form) else u"已加入材料执行"
@@ -160,6 +161,15 @@ def chooseInventorytype(request,pid,key):
         "new_purchasing_form_html":new_purchasing_form_html,
         "inventory_detail_html":inventory_detail_html
         })
+
+
+@dajaxice_register
+def addToForeign(request, index):
+    item = Materiel.objects.get(id = index)
+    item.inventory_type.clear()
+    item.inventory_type.add(InventoryType.objects.get(name = COOPERANT))
+    return ""
+
 
 @dajaxice_register
 def pendingOrderSearch(request, order_index):
@@ -735,8 +745,6 @@ def getOngoingOrderList(request,order_type):
     """
     Lei
     """
-    print "dddddddddddddddddd"
-    print order_type
     if int(order_type) >2 :
         order_mod=1
     else:
