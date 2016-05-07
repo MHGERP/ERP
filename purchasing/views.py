@@ -572,5 +572,15 @@ def arrivalCheckViews(request,bid):
     return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 
 def bidApplyFormViews(request,bid):
-    context={}
+    bidform = BidForm.objects.get(bid_id = bid)
+    if bidform.bidapply_set.count() == 0:
+        status=CommentStatus.objects.get(status=BIDFORM_PART_STATUS_INVITE_BID_APPLY_FILL)
+        bid_apply=bidApply(bid=bidform,status=status,work_order=bidform.order_form.work_order)
+    else:
+        bid_apply = bidApply.objects.get(bid = bidform)
+    bidApplyForm = BidApplyForm(instance=bid_apply)
+    context={
+        "bid_apply":bid_apply,
+        "bidApplyForm":bidApplyForm
+    }
     return render(request,"purchasing/bid_invite/bid_apply_page.html",context)

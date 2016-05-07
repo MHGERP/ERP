@@ -5,8 +5,22 @@
 {% endblock %}
 
 {% block sub_ref %}
-<a href="#" class="current">招(议)标申请表</a>
+<a  class="current">招(议)标申请表</a>
 {% endblock %}
 {% block inner_content%}
+<div style="float:right">
+    <a href="#bid_apply_table" data-toggle="modal">填写</a>
+</div>
 {% include "purchasing/bid_invite/bid_apply_form.html"%}
+<div class="modal hide fade"  id="bid_apply_table" modal-size-width="0.8">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>添加跟踪记录</h3>
+    </div>
+    <div class="modal-body">
+        {%include "purchasing/widgets/bid_apply_table.html"%}
+    </div>
+    <div class="modal-footer">
+    </div>
+</div>
 {%endblock%}
