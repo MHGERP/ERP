@@ -8,6 +8,7 @@ class WorkOrder(models.Model):
     sell_type = models.IntegerField(blank = False, choices = SELL_TYPE, verbose_name = "销售类型")
     client_name = models.CharField(blank = False, max_length = 20, verbose_name = "客户名称")
     product_name = models.CharField(blank = False, max_length = 20, verbose_name = "产品名称")
+    count = models.CharField(blank = False, max_length = 20, verbose_name = u"数量")
     class Meta:
         verbose_name = u"工作令"
         verbose_name_plural = u"工作令"
@@ -21,6 +22,8 @@ class SubWorkOrder(models.Model):
         verbose_name = u"子工作令"
         verbose_name_plural = u"子工作令"
     def __unicode__(self):
+        if self.order.count == "1": 
+            return self.order.order_index
         return self.order.order_index + "-" + self.index
 
 class Material(models.Model):

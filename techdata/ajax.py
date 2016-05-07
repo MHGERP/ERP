@@ -23,22 +23,67 @@ from const.utils import getMaterialQuerySet
 from purchasing.models import MaterielExecute, MaterielExecuteDetail
 import datetime
 
+
+def markGenerateFactory(order, inventory_type):
+    if inventory_type == OUT_PURCHASED:
+        return order.outpurchasedmark
+
+@dajaxice_register
+def detailMark(request, id_work_order, step, inventory_type):
+    """
+    JunHU
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    mark = markGenerateFactory(order, inventory_type)
+    if step == MARK_WRITE:
+        mark.writer = request.user
+        mark.write_date = datetime.datetime.today()
+        mark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(mark.writer.userinfo),
+        }
+    elif step == MARK_REVIEW:
+        mark.reviewer = request.user
+        mark.review_date = datetime.datetime.today()
+        mark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(mark.reviewer.userinfo),
+        }
+    else:
+        context = {
+            "ret": False,
+            "warning": u"后台保存错误"
+        }
+    return simplejson.dumps(context)
+
+def detailItemGenerateFactory(inventory_type):
+    if inventory_type == OUT_PURCHASED:
+        return OutPurchasedItem
+
 @dajaxice_register
 def getInventoryTables(request, id_work_order, inventory_type):
     """
     JunHU
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
-    if inventory_type == OUT_PURCHASED:
-        list = OutPurchasedItem.objects.filter(materiel_belong__order = work_order)
-        html = render_to_string("techdata/widgets/out_purchased_table.html", {"list": list, "work_order": work_order,})
+    DetailItem = detailItemGenerateFactory(inventory_type)
+    context = {
+        "MARK_WRITE": MARK_WRITE,
+        "MARK_REVIEW": MARK_REVIEW,
+        "work_order": work_order,
+    }
+    list = DetailItem.objects.filter(materiel_belong__order = work_order)
+    context["list"] = list
+    html = render_to_string("techdata/widgets/out_purchased_table.html", context)
     return html
 
 @dajaxice_register
 def deleteSingleItem(request, iid, inventory_type):
-    if inventory_type == OUT_PURCHASED:
-        item = OutPurchasedItem.objects.get(id = iid)
-        item.delete()
+    DetailItem = detailItemGenerateFactory(inventory_type)
+    item = DetailItem.objects.get(id = iid)
+    item.delete()
 
 @dajaxice_register
 def addSingleItem(request, id_work_order, index, inventory_type):
@@ -46,18 +91,18 @@ def addSingleItem(request, id_work_order, index, inventory_type):
     JunHU
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
-    if inventory_type == OUT_PURCHASED:
-        item = Materiel.objects.filter(Q(index = index) & Q(order = work_order))
-        if item.count() == 0:
-            context = {"success": False, "remark": u"未查到该票号零件"}
-            return simplejson.dumps(context)
-        item = item[0]
-        if OutPurchasedItem.objects.filter(materiel_belong = item).count() > 0:
-            context = {"success": False, "remark": u"该零件已添加至外购件明细"}
-            return simplejson.dumps(context)
-        OutPurchasedItem(materiel_belong = item).save()
-        context = {"success" : True, "remark": u"添加成功"}
+    DetailItem = detailItemGenerateFactory(inventory_type)
+    item = Materiel.objects.filter(Q(index = index) & Q(order = work_order))
+    if item.count() == 0:
+        context = {"success": False, "remark": u"未查到该票号零件"}
         return simplejson.dumps(context)
+    item = item[0]
+    if DetailItem.objects.filter(materiel_belong = item).count() > 0:
+        context = {"success": False, "remark": u"该零件已添加至外购件明细"}
+        return simplejson.dumps(context)
+    OutPurchasedItem(materiel_belong = item).save()
+    context = {"success" : True, "remark": u"添加成功"}
+    return simplejson.dumps(context)
 
 @dajaxice_register
 def autoSetInventoryLabel(request, id_work_order, inventory_type):

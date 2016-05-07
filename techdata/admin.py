@@ -33,6 +33,7 @@ RegisterClass = (
     WeldJointTechDetail,
     OutPurchasedItem,
     WeldQuota,
+    OutPurchasedMark,
 )
 
 for item in RegisterClass:

@@ -45,3 +45,23 @@ $(document).on("click", ".btn-remove", function(){
     }
 });
 
+$(document).on("click", ".btn-mark", function() {
+    mark_span = $(this).parent();
+    var inventory_type = $(".form-search").attr("itype");
+    var id_work_order = $("#id_work_order").val();
+    var step = $(this).attr("args");
+    Dajaxice.techdata.detailMark(markCallBack, {"id_work_order": id_work_order, 
+                                     "step": step, 
+                                     "inventory_type": inventory_type,
+    });
+});
+function markCallBack(data) {
+    if(data.ret) {
+        mark_span.html(data.mark_user);
+    }
+    else {
+        alert(data.warning);
+    }
+}
+
+
