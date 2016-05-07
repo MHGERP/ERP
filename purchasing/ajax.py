@@ -750,8 +750,6 @@ def getOngoingOrderList(request,order_type):
     """
     Lei
     """
-    print "dddddddddddddddddd"
-    print order_type
     if int(order_type) >2 :
         order_mod=1
     else:

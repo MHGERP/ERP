@@ -43,18 +43,18 @@ function choose_Inventorytype_callback(data){
     }
     item = $("#new_purchasing_order");
     $("#inventory_detail_table").html(data.inventory_detail_html);
-    if(dic_type[val]==5){
-        item.html(data.new_purchasing_form_html);
-        $("#add_to_bid").show();
-        $("#add_to_order").hide();
-        Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
-    }
-    else{
+    // if(dic_type[val]==5){
+    //     item.html(data.new_purchasing_form_html);
+    //     $("#add_to_bid").show();
+    //     $("#add_to_order").hide();
+    //     Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
+    // }
+    // else{
         item.html(data.new_order_form_html);
         $("#add_to_order").show();
         $("#add_to_bid").hide();
         Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{"order_type":dic_type[val]});
-    }
+    // }
 }
 
 //delete five tables detail item
