@@ -282,32 +282,23 @@ class AuxiliaryToolsSearchForm(forms.Form):
     manufacturer=forms.CharField(label=u'厂家',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'manufacturer'}))
 
 class AuxiliaryToolsApplyCardSearchForm(forms.Form):
-    create_time=forms.DateField(label=u'申请时间',required=False,widget=forms.TextInput(attrs={'readonly':'readonly','class':'form-control search-query','id':'create_time'}))
-    apply_item=forms.CharField(label=u'申请物资',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'apply_item'}))
-    applicant=forms.CharField(label=u'领用人',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'applicant'}))
-    index=forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-query','id':'index'}))
+    create_time__gte=forms.DateField(label=u'起始日期',required=False,widget=forms.TextInput(attrs={'class':'form-control','date_picker':'true'}))
+    create_time__lte=forms.DateField(label=u'终止日期',required=False,widget=forms.TextInput(attrs={'class':'form-control','date_picker':'true'}))
+    apply_storelist__entry_item__name =forms.CharField(label=u'申请物资',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
+    department=forms.CharField(label=u'领用人',required=False,widget=forms.TextInput(attrs={'class':'form-control',}))
+    applycard_code=forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
 
 
 class AuxiliaryEntrySearchForm(forms.Form):
-    create_time = forms.DateField(label=u"日期", required=False,
-                                  widget=forms.TextInput(attrs={
-                                          'class': 'form-control search-query',
-                                          'readonly': 'readonly',
-                                          'id': 'entry_time'}))
-    purchaser = forms.ChoiceField(label=u"采购员", required=False,
-                                  widget=forms.Select(attrs={
-                                          "class": 'form-control search-query',
-                                          'id': 'purchaser'}))
-    status = forms.CharField(label=u'入库单编号', required=False,
-                             widget=forms.TextInput(attrs={
-                                     'class': 'form-control search-query',
-                                     'id': 'entry_code'}))
+    create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control','date_picker':'true'}))
+    create_time__lte  = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control', 'date_picker':'true'}))
+    entry_code=forms.CharField(label=u'入库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control date_picker','id':'entry_code'}))
 
+    
     def __init__(self, *args, **kwargs):
         super(AuxiliaryEntrySearchForm, self).__init__(*args, **kwargs)
-        users = User.objects.all()
-        self.fields["purchaser"].choices = getChoiceList(users, "userinfo")
-
+        style = ("style","width:120px;")
+        set_form_input_width(self.fields,style)
 
 class SteelRefundSearchForm(forms.Form):
     date = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'date'}))
@@ -497,8 +488,8 @@ class CheckMaterielListForm(forms.Form):
             self.fields['materiel_type'].choices = getChoiceList(materiels,'specification')
 
 class WeldEntrySearchForm(forms.Form):
-    search_time_start = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
-    search_time_end  = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker', 'date_picker':'true'}))
+    create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
+    create_time__lte  = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker', 'date_picker':'true'}))
     entry_code=forms.CharField(label=u'入库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control date_picker','id':'entry_code'}))
 
 class WeldApplyKeeperForm(ModelForm):

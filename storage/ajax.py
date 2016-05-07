@@ -309,6 +309,7 @@ def auToolEntryConfirm(request, role, eid):
                 entry.keeper = request.user;
                 entry.entry_status = STORAGESTATUS_END;
                 entry.save();
+                createAuxiliaryToolStoreList(entry)
                 message = u"入库单确认成功";
             else:
                 message = u"入库单已经确认过，不能重复确认";
@@ -414,43 +415,26 @@ def Search_Auxiliary_Tools_Records(request,data,search_type):
     if form.is_valid():
         conditions=form.cleaned_data
         if search_type=='inventory':
-            context['rets'] = get_weld_filter(AuxiliaryTool,conditions)
+            context['rets'] = get_weld_filter(AuxiliaryToolStoreList,conditions)
             return render_to_string('storage/auxiliarytools/inventory_table.html',context)
         else:
-            #            if search_type=='entry':
-#                q1=(conditions['date'] and Q(create_time=conditions['date'])) or None
-#                q2=(conditions['name'] and Q(auxiliary_tool__name=conditions['name'])) or None
-#                q3=(conditions['model'] and Q(auxiliary_tool__model=conditions['model'])) or None
-#                q4=(conditions['manufacturer'] and Q(auxiliary_tool__manufacturer=conditions['manufacturer'])) or None
-#                query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4]))
-#                entry_records=AuxiliaryToolEntryCard.objects.filter(query_conditions)
-#                context['rets']=entry_records
-#                return render_to_string('storage/auxiliarytools/entry_table.html',context)
             if search_type=='apply':
-                q1=(conditions['date'] and Q(commit_time=conditions['date'])) or None
-                q2=(conditions['name'] and Q(actual_item__name=conditions['name'])) or None
-                q3=(conditions['model'] and Q(actual_item__model=conditions['model'])) or None
-                q4=(conditions['manufacturer'] and Q(actual_item__manufacturer=conditions['manufacturer'])) or None
-                query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4]))                
-                apply_records=AuxiliaryToolApplyCard.objects.filter(query_conditions)
-                context['rets']=apply_records
+                context['rets']=get_weld_filter(AuxiliaryToolApplyCard,conditions)
                 return render_to_string('storage/auxiliarytools/apply_table.html',context)
 
 @dajaxice_register
 def Search_Auxiliary_Tools_Apply_Card(request,data):
     context={}
+    print data
     form=AuxiliaryToolsApplyCardSearchForm(deserialize_form(data))
     if form.is_valid():
         conditions=form.cleaned_data
-        q1=(conditions['create_time'] and Q(create_time=conditions['create_time'])) or None
-        q2=(conditions['apply_item'] and Q(apply_item__name=conditions['apply_item'])) or None
-        q3=(conditions['applicant'] and Q(applicant=conditions['applicant'])) or None
-        q4=(conditions['index'] and Q(index=conditions['index'])) or None
-        q5=Q(status=1)
-        query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4,q5]))                
-        apply_records=AuxiliaryToolApplyCard.objects.filter(query_conditions)
-        context['rets']=apply_records
-        return render_to_string('storage/auxiliarytools/entry_apply_detail_table.html',context)    
+        print conditions
+        context['apply_cards']=get_weld_filter(AuxiliaryToolApplyCard,conditions)
+        print context['apply_cards']
+    else:
+        print form.errors
+    return render_to_string('storage/auxiliarytools/apply_card_table.html',context)    
 
 """
 @dajaxice_register
@@ -548,6 +532,7 @@ def entryConfirm(request,role,eid):
     items = entry.weldmaterialentryitems_set.all()
     html = render_to_string("storage/wordhtml/weldentryitemstable.html",{"items":items,"is_show":is_show,"entry":entry})
     data["html"] = html
+    data["role"] = role
     return simplejson.dumps(data)    
 
 def handleEntryConfirm_Keeper(request,entry):
@@ -986,9 +971,8 @@ def getSearchMaterielContext(request,form,is_production = True):
 @dajaxice_register
 def searchWeldEntry(request,searchform):
     form = WeldEntrySearchForm(deserialize_form(searchform))
-    replace_dic = {"search_time_start":"entry_time__gte","search_time_end":"entry_time__lte"}
     if form.is_valid():
-        entry_set = get_set_filter(WeldMaterialEntry,form.cleaned_data,replace_dic).order_by("-entry_time")
+        entry_set = get_set_filter(WeldMaterialEntry,form.cleaned_data,replace_dic).order_by("-create_time")
     else:
         print form.errors
         entry_set = []
@@ -1003,7 +987,7 @@ def searchMaterial(request,search_form,search_type,aid):
     apply_card = WeldingMaterialApplyCard.objects.get(id = aid)
     if search_form.is_valid():
         replace_dic = gen_replace_dic(search_form.cleaned_data,"entry_item")
-        store_items = get_weld_filter(db_model,search_form.cleaned_data,replace_dic).filter(item_status = ITEM_STATUS_NORMAL)
+        store_items = get_weld_filter(db_model,search_form.cleaned_data,replace_dic).filter(item_status = ITEM_STATUS_NORMAL).order_by('entry_time')
         for item in store_items:
             html = render_to_string("storage/searchmaterial/store_weld_items_table.html",{"store_items":store_items,"apply_card":apply_card})
     return simplejson.dumps({"html":html})

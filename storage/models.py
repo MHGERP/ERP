@@ -90,7 +90,7 @@ class ApplyCardBase(models.Model):
         abstract = True
 
 class WeldMaterialEntry(models.Model):
-    entry_time = models.DateField(blank=False, null=True,auto_now_add=True,verbose_name=u"入库时间")
+    create_time = models.DateField(blank=False, null=True,auto_now_add=True,verbose_name=u"入库时间")
     purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "weldentry_purchaser")
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "weldentry_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "weldentry_keeper")
@@ -136,17 +136,20 @@ class WeldStoreList(models.Model):
     inventory_count = models.FloatField(verbose_name=u"数量",default=0)
     entry_item = models.ForeignKey(WeldMaterialEntryItems,verbose_name = u"焊材入库单材料")
     item_status = models.IntegerField(choices=WELD_ITEM_STATUS_CHOICES,default=0,verbose_name=u"材料状态",blank=False)
+    entry_time = models.DateField(verbose_name=u"入库时间",null = True)
     objects = WeldStoreListManager()
     class Meta:
         verbose_name = u"焊材库存清单"
         verbose_name_plural = u"焊材库存清单"
 
     def __unicode__(self):
-        return "%s(%s)" % (self.entry_item.material.name,self.entry_item.entry.entry_time)
+        return "%s(%s)" % (self.entry_item.material.name,self.entry_time)
 
     def save(self,*args,**kwargs):
-        if self. inventory_count > 0 and self.item_status == ITEM_STATUS_SPENT:
-            self.item_status = ITEM_STATUS_NORMAL
+        if self.inventory_count > 0 and self.item_status == ITEM_STATUS_SPENT:
+            self.item_status = ITEM_STATUS_NORMAL #退库更新状态
+        if self.item_status == ITEM_STATUS_NORMAL and self. inventory_count == 0:
+            self.item_status = ITEM_STATUS_SPENT #领用更新状态
         super(WeldStoreList,self).save(*args,**kwargs)
             
 class ApplyCardItemBase(models.Model):
@@ -528,45 +531,46 @@ class AuxiliaryToolEntryItems(models.Model):
         verbose_name_plural=u'辅助材料入库材料'
 
     def __unicode__(self):
-        return u'%s %s %s'%(self.name,self.count,self.specification)
+        return u'%s(%s)'%(self.name,self.specification)
 
 class AuxiliaryToolStoreList(models.Model):
     entry_item = models.ForeignKey(AuxiliaryToolEntryItems,verbose_name=u"辅助工具入库材料")
     inventory_count = models.FloatField(verbose_name=u"数量",blank=True,null=True)
+    item_status = models.IntegerField(choices=WELD_ITEM_STATUS_CHOICES,default=0,verbose_name=u"材料状态",blank=False)
+    entry_time=models.DateField(verbose_name=u'入库时间',blank=True,null=True)
     class Meta:
         verbose_name=u'辅助库存材料'
         verbose_name_plural=u'辅助库存材料'
 
     def __unicode__(self):
-        return self.entry_item
+        return "%s(%s)" % (self.entry_item.name,self.entry_time)
+    
+    def save(self,*args,**kwargs):
+        if self.inventory_count > 0 and self.item_status == ITEM_STATUS_SPENT:
+            self.item_status = ITEM_STATUS_NORMAL #退库更新状态
+        if self.item_status == ITEM_STATUS_NORMAL and self. inventory_count == 0:
+            self.item_status = ITEM_STATUS_SPENT #领用更新状态
+        super(AuxiliaryToolStoreList,self).save(*args,**kwargs)   
 
 class AuxiliaryToolApplyCard(models.Model):
     create_time=models.DateField(verbose_name=u'申请时间',auto_now_add=True)
-    commit_time=models.DateField(verbose_name=u'实发时间',blank=True,null=True)
-    index=models.IntegerField(verbose_name=u'编号',default=0,blank=False,unique=True)
-    apply_item=models.ForeignKey(AuxiliaryToolStoreList,verbose_name=u'申请物资',blank=False)
+    department = models.CharField(verbose_name=u"领用单位",max_length=50,blank=True,null=True) 
+    applycard_code = models.CharField(verbose_name=u"料单编号",max_length=20,blank=True,null=True) 
+    apply_storelist=models.ForeignKey(AuxiliaryToolStoreList,verbose_name=u'申请材料',blank=False,null=True,related_name="auap_apply_storelist")
     apply_quantity=models.IntegerField(verbose_name=u'申请数量',blank=False)
-    apply_total=models.FloatField(verbose_name=u'申请总价',default=0,blank=False)#overwrite the save() method to calculate the apply_total
+    actual_storelist = models.ForeignKey(AuxiliaryToolStoreList,verbose_name=u'实发材料',null=True,blank=True,related_name="auap_actual_storelist")
     actual_quantity=models.IntegerField(verbose_name=u'实发数量',default=0,blank=False)
-    actual_total=models.FloatField(verbose_name=u'实际总价',default=0,blank=False)
-    status=models.IntegerField(verbose_name=u'完成状态',choices=AUXILIARY_TOOL_APPLY_CARD_STATUS,default=AUXILIARY_TOOL_APPLY_CARD_CREATED,blank=False)
-    applicant=models.ForeignKey(User,verbose_name=u'领用人',default=None,blank=True,null=True,related_name="at_applicants")
-    commit_user=models.ForeignKey(User,verbose_name=u'确认人',default=None,blank=True,null=True,related_name="at_commit_users")
-    remark=models.TextField(verbose_name=u'备注',default=None,blank=True,null=True)
-    def save(self,*args,**kwargs):
-        if not self.index:
-            self.index=randint(0,10000000)
-        if self.status==AUXILIARY_TOOL_APPLY_CARD_APPLYED:
-            self.apply_total=self.apply_item.unit_price*self.apply_quantity
-        elif self.status==AUXILIARY_TOOL_APPLY_CARD_COMMITED:
-            self.commit_time=timezone.now()
-        super(AuxiliaryToolApplyCard,self).save(*args,**kwargs)
+    status=models.IntegerField(verbose_name=u'领用单状态',choices=AUXILIARY_TOOL_APPLY_CARD_STATUS,default=AUXILIARY_TOOL_APPLY_CARD_CREATED)
+    applicant=models.ForeignKey(User,verbose_name=u'领料',blank=True,null=True,related_name="at_applicants")
+    auditor = models.ForeignKey(User,verbose_name=u"主管",null=True,blank=True,related_name="at_auditor")
+    keeper=models.ForeignKey(User,verbose_name=u'发料',blank=True,null=True,related_name="at_keeper")
+    remark=models.TextField(verbose_name=u'备注',default="",blank=True,null=True)
 
     class Meta:
         verbose_name=u'辅助材料领用卡'
         verbose_name_plural=u'辅助材料领用卡'
     def __unicode__(self):
-        return str(self.index)
+        return "%s" % self.apply_storelist.entry_item.name
 
 class WeldStoreThread(models.Model):
     specification = models.CharField(max_length=50,verbose_name=u"规格")
