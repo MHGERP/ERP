@@ -14,15 +14,26 @@ class WorkOrder(models.Model):
     def __unicode__(self):
         return self.order_index
 
+class SubWorkOrder(models.Model):
+    order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
+    index = models.CharField(max_length = 100, verbose_name = "序号")
+    class Meta:
+        verbose_name = u"子工作令"
+        verbose_name_plural = u"子工作令"
+    def __unicode__(self):
+        return self.order.order_index + "-" + self.index
+
 class Material(models.Model):
     name = models.CharField(blank = False, max_length = 50, verbose_name = u"材质名称")
-    material_id= models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"材质编号") 
+    material_id= models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"材质编号")
     categories =  models.CharField(blank = True, null = True , choices = MATERIAL_CATEGORY_CHOICES, max_length = 20, verbose_name = u"材料类别")
     class Meta:
         verbose_name = u"材料"
         verbose_name_plural = u"材料"
     def __unicode__(self):
         return self.name
+    def display_material_name(self):
+        return "%s%s" % (self.name, self.categories)
 
 class InventoryType(models.Model):
     name = models.CharField(blank = False, max_length = 50, choices = INVENTORY_TYPE, verbose_name = u"明细表名称")
@@ -49,16 +60,19 @@ class Materiel(models.Model):
     inventory_type = models.ManyToManyField(InventoryType, blank = True, null = True, verbose_name = u"明细表归属")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
     specification = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"规格")
-    standard = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"标准") 
-    unit = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"单位") 
+    standard = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"标准")
+    unit = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"单位")
     status = models.CharField(blank = True, null = True , max_length = 20, verbose_name = u"状态")
     press=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"受压")
     recheck=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"复验")
     detection_level=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"探伤级别")
-    
+
     complete_plandate = models.DateField(blank = True, null=True,verbose_name = u"计划完成时间")
     complete_date = models.DateField(blank = True, null=True,verbose_name = u"完成时间")
-    
+
+    def total_weight_cal(self):
+        if self.count and self.net_weight:
+            return int(self.count) * self.net_weight
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"
@@ -93,5 +107,3 @@ class ImplementClassChoices(models.Model):
         verbose_name_plural = u"实施类别"
     def __unicode__(self):
         return self.get_category_display()
-
-

@@ -28,3 +28,7 @@ def goStopStatus(bidform,user):
     status_change.save()
     bidform.bid_status=new_status
     bidform.save()
+
+def BidNextStatus(bid_apply):
+    bid_apply.status=bid_apply.status.next_status
+    bid_apply.save()

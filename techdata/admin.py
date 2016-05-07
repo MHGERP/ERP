@@ -31,6 +31,8 @@ RegisterClass = (
     ProcedureQualificationIndex,
     WeldJointTech,
     WeldJointTechDetail,
+    OutPurchasedItem,
+    WeldQuota,
 )
 
 for item in RegisterClass:
