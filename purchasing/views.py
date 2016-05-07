@@ -157,9 +157,25 @@ def bidTrackingViews(request, bid_id):
              }
     """
     bidform = BidForm.objects.get(id = bid_id)
+    bidFormStatuss = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
+
+
+    btn_cnt = 2 if bidform.bid_status.part_status < BIDFORM_PART_STATUS_INVITE_BID_APPLY_SELECT else 0
+    btn_color = ["btn-success", "btn-warning", ""]
+    bid_status = []
+    for status in bidFormStatuss:
+        btn_cnt += 1 if status == bidform.bid_status else 0
+        bid_dict = {}
+        bid_dict["name"] = status
+        bid_dict["class"] = btn_color[btn_cnt]
+        bid_status.append(bid_dict)
+        btn_cnt += 1 if status == bidform.bid_status else 0
+
     order_form=bidform.order_form
     context={
+        "bid_status":bid_status,
         "bidform":bidform,
+        "bid_status_dic":BIDFORM_PART_STATUS_DICT,
         "order_form":order_form,
         "items":MaterielCopy.objects.filter(materielformconnection__order_form=order_form)
     }
@@ -555,4 +571,6 @@ def arrivalCheckViews(request,bid):
     }
     return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 
-    
+def bidApplyFormViews(request,bid):
+    context={}
+    return render(request,"purchasing/bid_invite/bid_apply_page.html",context)

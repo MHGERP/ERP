@@ -1,0 +1,37 @@
+<div id="BidCommentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.4">
+    {% if bidform.bid_status.part_status == bid_status_dic.BIDFORM_PART_STATUS_INVITE_BID_APPLY_SELECT%}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h2 id="myModalLabel">招标方式选择</h2>
+    </div>
+    <div class="modal-body">
+        <select id="bid_method_select" class="form-control input">
+            <option value="0">填写招标申请表</option> 
+            <option value="1">填写比质比价卡</option> 
+        </select>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success " data-dismiss="modal" id="apply_select_confirm">合并确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+    {% elif bidform.bid_status.part_status == bid_status_dic.BIDFORM_PART_STATUS_INVITE_BID_FILL%}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h2 id="myModalLabel">招标文件填写</h2>
+    </div>
+    <div class="modal-body">
+        {% if bidform.bid_mod == 0 %}
+        <a class="btn btn-primary" href="/purchasing/bidapplyform/{{bidform.bid_id}}">填写招标申请表</a>
+        <a class="btn btn-primary" >填写供应商审核表</a>
+        {% else%}
+        <a class="btn btn-primary" >填写比质比价卡</a>
+        {% endif%}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success " data-dismiss="modal" id="apply_select_confirm">合并确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+    {% endif%}
+</div>
+
+
