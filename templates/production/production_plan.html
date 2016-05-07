@@ -6,16 +6,15 @@
 <a href="#" class="current">生产计划</a>
 {% endblock %}
 {% block inner_content%}
-<script type="text/javascript" src="{{STATIC_URL}}js/production/production_plan.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
+
 <link rel="stylesheet" href="{{ STATIC_URL }}style/man_hour_summarize.css" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}bootstrap-datepicker/css/bootstrap-datetimepicker.css">
+<script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
+
 <div id="search-div" style="margin-bottom:10px;">
-  <form class="form-inline" id="pp_searchForm">
+  <form class="form-inline" id="productionplan_search_form">
     {% csrf_token %}
-    {% for field in prodplan_search_form %}
-    {{field.label}}
-    {{field}}
-    {% endfor %}
+    {{ productionplan_search_form }}
     <button type="button" class="btn btn-primary" id="prodplan_search_btn">检索</button>
   </form>
 </div>
@@ -24,22 +23,23 @@
 {%include "production/widgets/production_plan_table.html"%}
 
 <div id="prodplan_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="prodplan_modalLabel" aria-hidden="true" modal-size-width="0.8">
-    <div class="modal-header">
-        <h2>生产计划选择</h2>
-    </div>
-    <div class="modal-body">
-        <form class="form-inline" id="wo_searchForm">
-            工作令：<input type="text" id="workSearch">
-            <button class="btn btn-primary" id="workorder_search_btn" type="button">检索</button>
-        </form>
-        <br>
-        {% include "production/widgets/production_plan_select_table.html"%}
+  <div class="modal-header">
+    <h2>生产计划选择</h2>
+  </div>
+  <div class="modal-body">
+    <form class="form-inline" id="workorder_search_form">
+      {% csrf_token %}
+      {{workorder_search_form}}
+      <button class="btn btn-primary" id="workorder_search_btn" type="button">检索</button>
+    </form>
+    <br>
+    {% include "production/widgets/production_plan_select_table.html"%}
 
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-success bid-btn-open" data-dismiss="modal" id="work_confirm_btn">确认</button>
-        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success bid-btn-open" data-dismiss="modal" id="work_confirm_btn">确认</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
 </div>
 
 <div id="prodplan_modify_modal" class="modal hide fade" role="dialog" aria-labelledby="prodplan_modalLabel" aria-hidden="true">
@@ -47,24 +47,11 @@
     <h2>生产计划修改</h2>
   </div>
   <div class="modal-body">
-    <form id="update_form">
-      <!--<div class="control-group">
-        <label>状态</label>
-        <select id="status" name="status">
-          <option>必保</option>
-          <option>在制</option>
-        </select>
+    <form id="productionplan_update_form">
+      {% csrf_token %}
+      <div id="productionplan_update_div">
+        {% include "production/widgets/production_plan_update_form.html"%}
       </div>
-      <div class="control-group">
-        <label>计划年月</label>
-        <input type="text" data-date-format="yyyy-mm-dd" id="plan_date" name="plan_date">
-    </div>-->
-    {% for field in prodplan_form %}
-    <div class="control-group">
-        <label class="control-label">{{field.label}}</label>
-        <div class="controls">{{field}}</div>
-    </div>
-    {% endfor %}
     </form>
   </div>
   <div class="modal-footer">
@@ -72,7 +59,5 @@
     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
   </div>
 </div>
-
-
-
+<script type="text/javascript" src="{{STATIC_URL}}js/production/production_plan.js"></script>
 {% endblock%}

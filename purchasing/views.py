@@ -69,9 +69,12 @@ def selectSupplierViews(request,bid):
             item.selected=1
         else:
             item.selected=0
+    order_form=bidform.order_form
     context={
         "suppliers":suppliers,
-        "bidform":bidform
+        "bidform":bidform,
+        "order_form":order_form,
+        "items":MaterielCopy.objects.filter(materielformconnection__order_form=order_form)
     }
     return render(request,"purchasing/select_supplier.html",context)
 
@@ -117,6 +120,7 @@ def bidTrackingViews(request, bid_id):
     """
     Liu Ye
     """
+    """
     bidform = BidForm.objects.get(id = bid_id)
     qualityPriceCardForm = QualityPriceCardForm()
     try:
@@ -130,7 +134,7 @@ def bidTrackingViews(request, bid_id):
     bidComments = BidComment.objects.filter(Q(bid = bidform))
     bidFormStatuss = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
 
-    btn_cnt = 2 if bidform.bid_status.part_status < BIDFORM_PART_STATUS_INVITE_BID_APPLY else 0
+    btn_cnt = 2 if bidform.bid_status.part_status < BIDFORM_PART_STATUS_INVITE_BID_APPLY_SELECT else 0
     btn_color = ["btn-success", "btn-warning", ""]
     bid_status = []
     for status in bidFormStatuss:
@@ -147,10 +151,18 @@ def bidTrackingViews(request, bid_id):
                "bidCommentForm": bidCommentForm,
                "bidComments": bidComments,
                "bidform": bidform,
-               "BIDFORM_PART_STATUS_INVITE_BID_APPLY": BIDFORM_PART_STATUS_INVITE_BID_APPLY,
-               "BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED": BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED,
+              # "BIDFORM_PART_STATUS_INVITE_BID_APPLY_SELECT": BIDFORM_PART_STATUS_INVITE_BID_APPLY_SELECT,
+              # "BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED": BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED,
                "supplier_set":bidform.supplierselect_set.all()
              }
+    """
+    bidform = BidForm.objects.get(id = bid_id)
+    order_form=bidform.order_form
+    context={
+        "bidform":bidform,
+        "order_form":order_form,
+        "items":MaterielCopy.objects.filter(materielformconnection__order_form=order_form)
+    }
     return render(request, "purchasing/bid_track.html", context)
 
 def contractFinanceViews(request):
@@ -253,7 +265,7 @@ def inventoryTableViews(request):
     order_index = request.GET.get("order_index")
     tableid = request.GET.get("tableid")
     order = WorkOrder.objects.get(order_index = order_index)
-    inventoryType = InventoryType.objects.get(id = tableid)
+    inventoryType = InventoryType.objects.get(name = tableid)
     context = {"order": order,
                "inventoryType": inventoryType,
     }

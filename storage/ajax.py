@@ -284,6 +284,47 @@ def storeRoomDelete(request, sr_id):
     }
     return simplejson.dumps(data)
 
+@dajaxice_register
+def auEntryUpdate(request, aid, remark):
+    """
+    kad
+    """
+    item = AuxiliaryToolEntryItems.objects.get(id = aid);
+    item.remark = remark;
+    item.save();
+    message = u"修改成功"
+    data = {
+        "message":message,
+        "aid":aid,
+        "remark":remark,
+    }
+    return simplejson.dumps(data);
+
+@dajaxice_register
+def auToolEntryConfirm(request, role, eid):
+    try:
+        entry = AuxiliaryToolEntry.objects.get(id = eid);
+        if role == "keeper":
+            if entry.entry_status == STORAGESTATUS_KEEPER:
+                entry.keeper = request.user;
+                entry.entry_status = STORAGESTATUS_END;
+                entry.save();
+                message = u"入库单确认成功";
+            else:
+                message = u"入库单已经确认过，不能重复确认";
+    except Exception,e:
+        print e
+        message = u"入库单不存在";
+    entry = AuxiliaryToolEntry.objects.get(id = eid);
+    items = AuxiliaryToolEntryItems.objects.filter(entry = entry);
+    html = render_to_string("storage/wordhtml/auxiliaryToolEntryTable.html", {"items":items, "entry":entry});
+    data = {
+        "html":html,
+        "message":message,
+    }
+    return simplejson.dumps(data);
+
+
 
 
 @dajaxice_register

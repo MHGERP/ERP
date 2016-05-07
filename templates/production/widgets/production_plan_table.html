@@ -16,10 +16,10 @@
   </thead>
   {% for item in prodplan_set %}
   <tr planid="{{item.plan_id}}">
-    <td>{{item.workorder_id}}</td>
-    <td>{{item.workorder_id.client_name}}</td>
+    <td>{{item.order}}</td>
+    <td>{{item.order.client_name}}</td>
     <td></td>
-    <td>{{item.workorder_id.product_name}}</td>
+    <td>{{item.order.product_name}}</td>
     <td></td>
     <td></td>
     <td></td>
@@ -27,7 +27,7 @@
     <td statu="{{item.status}}">{{item.get_status_display}}</td>
     <td plandate="{{item.plan_date|date:'Y-m-d'}}">{{item.plan_date|date:"Y年m月"}}</td>
     <td>
-      <a class="btn btn-primary" data-toggle="modal" data-target="#prodplan_modify_modal" id="prodplan_update_btn">修改</a>
+      <a class="btn btn-primary" id="prodplan_update_btn">修改</a>
       <button class="btn btn-primary" id="prodplan_delete_btn">删除</button>
       <!--<button type="button" id="test">test</button>
   </td>-->

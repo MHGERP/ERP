@@ -4,7 +4,7 @@ from django.db import connection
 from django.db.models import Q, Sum
 from purchasing.models import *
 from django.contrib.auth.models import User
-from techdata.models import Processing
+from production.models import *
 from const.models import Materiel
 
 # a = ContractDetail()
@@ -32,11 +32,11 @@ from const.models import Materiel
 # for item in items:
 #     print item
 
-print "hello"
+# print "hello"
 
-materiels = Materiel.objects.filter(Q(index__in = [55,56]))
+# materiels = Materiel.objects.filter(Q(index__in = [55,56]))
 
-for item in materiels:
-    print item.index
+# for item in materiels:
+#     print item.index
 
-print "hello"
+# print "hello"

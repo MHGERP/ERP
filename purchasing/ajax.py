@@ -6,12 +6,12 @@ from purchasing.models import *
 from purchasing.forms import SupplierForm, BidApplyForm, QualityPriceCardForm, BidCommentForm,OrderFormForm, ContractDetailForm, MeterielExcecuteForm
 from const import *
 from purchasing import *
-from const.models import Materiel,OrderFormStatus, BidFormStatus, InventoryType
+from const.models import OrderFormStatus, BidFormStatus
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from django.db import transaction
-from const.models import WorkOrder, Materiel,Material
+from const.models import WorkOrder,Material
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
@@ -124,14 +124,15 @@ def chooseInventorytype(request,pid,key):
     Lei
     """
     idtable = {
-        "1": "main_materiel",
-        "2": "auxiliary_materiel",
-        "3": "first_feeding",
-        "4": "purchased",
-        "5": "forging",
-        "6": "weld_material"
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        COOPERANT: "forging",
+        WELD_MATERIAL: "weld_material",
     }
-    items = Materiel.objects.filter(inventory_type__id=pid, materielpurchasingstatus__add_to_detail = True,relate_material=None)
+
+    items = Materiel.objects.filter(inventory_type__name=pid, materielpurchasingstatus__add_to_detail = True,relate_material=None)
     if key:
         items = items.filter(name=key)
     for item in items:
@@ -188,14 +189,15 @@ def getInventoryTable(request, table_id, order_index):
     #dict of table_id to fact table
     #it should be optimized when database scale expand
     id2table = {
-        "1": "main_materiel",
-        "2": "auxiliary_materiel",
-        "3": "first_feeding",
-        "4": "purchased",
-        "5": "forging",
-        "6": "weld_material",
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        COOPERANT: "forging",
+        WELD_MATERIAL: "weld_material",
+
     }
-    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
+    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__name = table_id)
     context = {
         "items": items,
     }
@@ -220,18 +222,6 @@ def addToDetail(request, table_id, order_index):
             status = MaterielPurchasingStatus(materiel = item, add_to_detail = True)
             status.save()
     return ""
-
-@dajaxice_register
-def addToForeign(requset, index):
-    """
-    BinWu
-    """
-    tmp = InventoryType.objects.get(id = 4)
-    item = Materiel.objects.get(id = index)
-    item.inventory_type = tmp
-    item.save()
-    return ""
-
 
 @dajaxice_register
 def addToDetailSingle(request, index):
@@ -750,10 +740,8 @@ def getOngoingBidList(request):
     """
     JunHU
     """
-    print ("here 5:")
     bid_form_list = BidForm.objects.filter(Q(bid_status__part_status = BIDFORM_PART_STATUS_CREATE) | Q(bid_status__part_status = BIDFORM_PART_STATUS_ESTABLISHMENT))
     html = ''.join("<option value='%s'>%s</option>" % (bid.id, bid) for bid in bid_form_list)
-    print html
     return html
 
 @dajaxice_register
@@ -761,6 +749,8 @@ def getOngoingOrderList(request,order_type):
     """
     Lei
     """
+    print "dddddddddddddddddd"
+    print order_type
     if int(order_type) >2 :
         order_mod=1
     else:
@@ -1067,6 +1057,7 @@ def OrderFormAudit(request,index):
     order_form=OrderForm.objects.get(order_id=index)
     order_form.order_status=OrderFormStatus.objects.get(status=2)
     order_form.chief=request.user
+    order_form.audit_time=datetime.now()
     order_form.save()
     return simplejson.dumps({})
 
@@ -1075,6 +1066,7 @@ def OrderFormApprove(request,index):
     order_form=OrderForm.objects.get(order_id=index)
     order_form.order_status=OrderFormStatus.objects.get(status=3)
     order_form.approve_user=request.user
+    order_form.approved_time=datetime.now()
     order_form.save()
     return simplejson.dumps({})
 
@@ -1287,3 +1279,14 @@ def MergeMateriel(request,order_id,form,pendingArray,count,purchasing):
     mfc.save()
     status=u'合并成功'
     return simplejson.dumps({'status':status})
+
+@dajaxice_register
+def GoToBid(request,index):
+    bid_status = BidFormStatus.objects.get(part_status = BIDFORM_PART_STATUS_SELECT_SUPPLLER_APPROVED)
+    bid_form = BidForm(
+        bid_id = "2016%05d" % (getMaxId(BidForm) + 1),
+        bid_status = bid_status,
+    )
+    bid_form.order_form=OrderForm.objects.get(order_id=index)
+    bid_form.save()
+    return simplejson.dumps({})
