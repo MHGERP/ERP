@@ -71,18 +71,18 @@ class TaskAllocationForm(TaskAllocationSearchForm):
 class TaskConfirmForm(TaskAllocationSearchForm):
     task_confirm_status = forms.ChoiceField(choices=TASK_CONFIRM_STATUS_CHOICES, required=False, label=u"任务完成状态")
 
-class DateForm(forms.Form):
+class HourSummarizeForm(forms.Form):
     materiel_belong__order = forms.ChoiceField(required = False,widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
-    productionworkgroup__name = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
+    productionworkgroup = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
     complete_date__gte = forms.DateField(label = u"完成时间开始", required = False)
     complete_date__lte = forms.DateField(label = u"完成时间结束", required = False)
 
     def __init__(self, *args, **kwargs):
-        super(DateForm, self).__init__(*args, **kwargs)
+        super(HourSummarizeForm, self).__init__(*args, **kwargs)
         WORKORDER_CHOICES = tuple([("","------")]+[(item.id, item) for item in WorkOrder.objects.all()])
         self.fields["materiel_belong__order"].choices = WORKORDER_CHOICES
         GROUO_NUM_CHOICES = tuple([("","------")]+[(item.id, item.name) for item in ProductionWorkGroup.objects.all()])
-        self.fields["productionworkgroup__name"].choices = GROUO_NUM_CHOICES
+        self.fields["productionworkgroup"].choices = GROUO_NUM_CHOICES
 
 class HourMessageSearchForm(forms.Form):
     materiel_belong__order = forms.ChoiceField(label=u"工作令", widget = forms.Select(attrs = {"class": "form-control input"}))

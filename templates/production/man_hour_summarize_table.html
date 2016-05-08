@@ -9,11 +9,11 @@
 	</tr>
 	<tr>
 		<td colspan="2">组号</td>
-		<td colspan="4">{{operator}}</td>
+		<td colspan="4">{{group_num}}</td>
 	</tr>
 	<tr>
 		<td colspan="2">额定工时</td>
-		<td colspan="2">{{summarize}}</td>
+		<td colspan="2"></td>
 		<td colspan="2">工票员　张三　５月６日</td>
 	</tr>
 	<tr>
@@ -34,10 +34,10 @@
 		<td>完成</td>
 		<td>实作</td>
 	</tr>
-	{%for item in process%}
+	{%for item in process_detail_list%}
 	<tr>
-		<td>{{item.operate_date|date:'m-d'}}</td>
-		<td>{{item.operator}}</td>
+		<td>{{item.complete_date|date:'m-d'}}</td>
+		<td>{{item.productionworkgroup.name}}</td>
 		<td></td>
 		<td></td>
 		<td></td>
