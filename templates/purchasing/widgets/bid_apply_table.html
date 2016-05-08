@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL  }}style/purchasing/table.css" >
 <form class="well form" method="POST" action="" id="bid_apply_form">
   {% csrf_token %}
   <table class="table table-bordered" id="bid_apply_form_table">
@@ -5,7 +6,7 @@
       <tr>
         <th>{{bidApplyForm.apply_company.label}}</th>
         <th>{{bidApplyForm.apply_company}}</th>
-        <th colspan="2">{{bidApplyForm.demand_company.label}}</th>
+        <th colspan="2" >{{bidApplyForm.demand_company.label}}</th>
         <th colspan="2">{{bidApplyForm.demand_company}}</th>
       </tr>
       <tr>
@@ -28,32 +29,11 @@
         <th style="width:50px !important;">{{bidApplyForm.core_part.label}}</th>
         <th>{{bidApplyForm.core_part}}</th>
     </thead>
-    <tbody>
-      <tr>
-        <td>拟投标单位</td>
-        <td>供方代码</td>
-        <td>认定业务范围</td>
-    </tr>
-    {% for item in supplier_set%}
-    <tr>
-      <td>{{item.supplier.supplier_name}}</td>
-      <td>{{item.supplier.supplier_id}}</td>
-        <td></td>
-    </tr>
-    {% endfor%}
-      {% for item in bidComments%}
-      <tr>
-        <td>{{item.user.userinfo}}</td>
-        <td colspan="2"> {{item.comment}}</td>
-      </tr>
-      {% endfor%}
-    </tbody>
   </table>
   {% if bidform.bid_status.part_status == BIDFORM_PART_STATUS_INVITE_BID_APPLY%}
   <div>
     <br>
     <button type="button" class="btn btn-primary"  id="apply_confirm">标单申请表保存</button>
-    <button type="button" class="btn btn-inverse"  id="apply_reset">标单申请表重置</button>
     <button type="button" class="btn btn-success" id="apply_submit" style="float:right">标单申请表提交</button>
   </div>
   {%endif%}
@@ -77,11 +57,3 @@
 <form>
 {%endif%}
 
-{% if bidform.bid_status.part_status == BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED%}
-<div class="row" >
-  <center>
-    <button class="btn btn-large btn-primary" type="button" id="contract_confirm" style="text-align: center">合同确认</button>
-  </center>
-</div>
-<br>
-{%endif%}

@@ -1,0 +1,187 @@
+Python 2.7.6 (default, Jun 22 2015, 17:58:13) 
+Type "copyright", "credits" or "license" for more information.
+
+IPython 1.2.1 -- An enhanced Interactive Python.
+?         -> Introduction and overview of IPython's features.
+%quickref -> Quick reference.
+help      -> Python's own help system.
+object?   -> Details about 'object', use 'object??' for extra details.
+
+[0;34mIn [[1;34m1[0;34m]: [0m
+[0;34mIn [[1;34m2[0;34m]: [0m
+[0;34mIn [[1;34m3[0;34m]: [0m
+[0;34mIn [[1;34m4[0;34m]: [0m
+[0;34mIn [[1;34m5[0;34m]: [0m
+[0;34mIn [[1;34m6[0;34m]: [0m
+[0;34mIn [[1;34m7[0;34m]: [0m
+[0;34mIn [[1;34m8[0;34m]: [0m
+[0;34mIn [[1;34m8[0;34m]: [0m
+[0;34mIn [[1;34m8[0;34m]: [0m
+[0;34mIn [[1;34m8[0;34m]: [0m
+[0;34mIn [[1;34m8[0;34m]: [0m
+[0;34mIn [[1;34m9[0;34m]: [0m
+[0;34mIn [[1;34m10[0;34m]: [0m
+[0;34mIn [[1;34m11[0;34m]: [0m
+[0;34mIn [[1;34m12[0;34m]: [0m
+[0;34mIn [[1;34m13[0;34m]: [0m
+[0;34mIn [[1;34m14[0;34m]: [0m
+[0;34mIn [[1;34m15[0;34m]: [0m
+[0;34mIn [[1;34m16[0;34m]: [0m
+[0;34mIn [[1;34m17[0;34m]: [0m
+[0;34mIn [[1;34m18[0;34m]: [0m
+[0;34mIn [[1;34m19[0;34m]: [0m
+[0;34mIn [[1;34m20[0;34m]: [0m
+[0;34mIn [[1;34m21[0;34m]: [0m
+[0;34mIn [[1;34m22[0;34m]: [0m
+[0;34mIn [[1;34m23[0;34m]: [0m
+[0;34mIn [[1;34m24[0;34m]: [0m
+[0;34mIn [[1;34m25[0;34m]: [0m
+[0;34mIn [[1;34m26[0;34m]: [0m
+[0;34mIn [[1;34m27[0;34m]: [0m
+[0;34mIn [[1;34m28[0;34m]: [0m
+[0;34mIn [[1;34m29[0;34m]: [0m
+[0;34mIn [[1;34m30[0;34m]: [0m
+[0;34mIn [[1;34m31[0;34m]: [0m
+[0;34mIn [[1;34m32[0;34m]: [0m
+[0;34mIn [[1;34m33[0;34m]: [0m
+[0;34mIn [[1;34m34[0;34m]: [0m
+[0;34mIn [[1;34m34[0;34m]: [0m
+[0;34mIn [[1;34m35[0;34m]: [0m
+[0;34mIn [[1;34m36[0;34m]: [0m
+[0;34mIn [[1;34m37[0;34m]: [0m
+[0;34mIn [[1;34m38[0;34m]: [0m
+[0;34mIn [[1;34m39[0;34m]: [0m
+[0;34mIn [[1;34m40[0;34m]: [0m
+[0;34mIn [[1;34m41[0;34m]: [0m
+[0;34mIn [[1;34m42[0;34m]: [0m
+[0;34mIn [[1;34m43[0;34m]: [0m
+[0;34mIn [[1;34m44[0;34m]: [0m
+[0;34mIn [[1;34m45[0;34m]: [0m
+[0;34mIn [[1;34m46[0;34m]: [0m
+[0;34mIn [[1;34m47[0;34m]: [0m
+[0;34mIn [[1;34m48[0;34m]: [0m
+[0;34mIn [[1;34m49[0;34m]: [0m
+[0;34mIn [[1;34m50[0;34m]: [0m
+[0;34mIn [[1;34m51[0;34m]: [0m
+[0;34mIn [[1;34m52[0;34m]: [0m
+[0;34mIn [[1;34m53[0;34m]: [0m
+[0;34mIn [[1;34m54[0;34m]: [0m
+[0;34mIn [[1;34m55[0;34m]: [0m
+[0;34mIn [[1;34m56[0;34m]: [0m
+[0;34mIn [[1;34m57[0;34m]: [0m
+[0;34mIn [[1;34m58[0;34m]: [0m
+[0;34mIn [[1;34m59[0;34m]: [0m
+[0;34mIn [[1;34m60[0;34m]: [0m
+[0;34mIn [[1;34m61[0;34m]: [0m
+[0;34mIn [[1;34m62[0;34m]: [0m
+[0;34mIn [[1;34m63[0;34m]: [0m
+[0;34mIn [[1;34m64[0;34m]: [0m
+[0;34mIn [[1;34m65[0;34m]: [0m
+[0;34mIn [[1;34m66[0;34m]: [0m
+[0;34mIn [[1;34m67[0;34m]: [0m
+[0;34mIn [[1;34m68[0;34m]: [0m
+[0;34mIn [[1;34m69[0;34m]: [0m
+[0;34mIn [[1;34m70[0;34m]: [0m[0;31m---------------------------------------------------------------------------[0m
+[0;31mKeyboardInterrupt[0m                         Traceback (most recent call last)
+[0;32m/home/wubin/workspace/ERP/manage.py[0m in [0;36m<module>[0;34m()[0m
+[1;32m      8[0m     [0;32mfrom[0m [0mdjango[0m[0;34m.[0m[0mcore[0m[0;34m.[0m[0mmanagement[0m [0;32mimport[0m [0mexecute_from_command_line[0m[0;34m[0m[0m
+[1;32m      9[0m [0;34m[0m[0m
+[0;32m---> 10[0;31m     [0mexecute_from_command_line[0m[0;34m([0m[0msys[0m[0;34m.[0m[0margv[0m[0;34m)[0m[0;34m[0m[0m
+[0m
+[0;32m/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.pyc[0m in [0;36mexecute_from_command_line[0;34m(argv)[0m
+[1;32m    441[0m     """
+[1;32m    442[0m     [0mutility[0m [0;34m=[0m [0mManagementUtility[0m[0;34m([0m[0margv[0m[0;34m)[0m[0;34m[0m[0m
+[0;32m--> 443[0;31m     [0mutility[0m[0;34m.[0m[0mexecute[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    444[0m [0;34m[0m[0m
+[1;32m    445[0m [0;32mdef[0m [0mexecute_manager[0m[0;34m([0m[0msettings_mod[0m[0;34m,[0m [0margv[0m[0;34m=[0m[0mNone[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.pyc[0m in [0;36mexecute[0;34m(self)[0m
+[1;32m    380[0m             [0msys[0m[0;34m.[0m[0mstdout[0m[0;34m.[0m[0mwrite[0m[0;34m([0m[0mself[0m[0;34m.[0m[0mmain_help_text[0m[0;34m([0m[0;34m)[0m [0;34m+[0m [0;34m'\n'[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m    381[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0m
+[0;32m--> 382[0;31m             [0mself[0m[0;34m.[0m[0mfetch_command[0m[0;34m([0m[0msubcommand[0m[0;34m)[0m[0;34m.[0m[0mrun_from_argv[0m[0;34m([0m[0mself[0m[0;34m.[0m[0margv[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    383[0m [0;34m[0m[0m
+[1;32m    384[0m [0;32mdef[0m [0msetup_environ[0m[0;34m([0m[0msettings_mod[0m[0;34m,[0m [0moriginal_settings_path[0m[0;34m=[0m[0mNone[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/dist-packages/django/core/management/base.pyc[0m in [0;36mrun_from_argv[0;34m(self, argv)[0m
+[1;32m    194[0m         [0moptions[0m[0;34m,[0m [0margs[0m [0;34m=[0m [0mparser[0m[0;34m.[0m[0mparse_args[0m[0;34m([0m[0margv[0m[0;34m[[0m[0;36m2[0m[0;34m:[0m[0;34m][0m[0;34m)[0m[0;34m[0m[0m
+[1;32m    195[0m         [0mhandle_default_options[0m[0;34m([0m[0moptions[0m[0;34m)[0m[0;34m[0m[0m
+[0;32m--> 196[0;31m         [0mself[0m[0;34m.[0m[0mexecute[0m[0;34m([0m[0;34m*[0m[0margs[0m[0;34m,[0m [0;34m**[0m[0moptions[0m[0;34m.[0m[0m__dict__[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    197[0m [0;34m[0m[0m
+[1;32m    198[0m     [0;32mdef[0m [0mexecute[0m[0;34m([0m[0mself[0m[0;34m,[0m [0;34m*[0m[0margs[0m[0;34m,[0m [0;34m**[0m[0moptions[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/dist-packages/django/core/management/base.pyc[0m in [0;36mexecute[0;34m(self, *args, **options)[0m
+[1;32m    230[0m             [0;32mif[0m [0mself[0m[0;34m.[0m[0mrequires_model_validation[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m    231[0m                 [0mself[0m[0;34m.[0m[0mvalidate[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[0;32m--> 232[0;31m             [0moutput[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0mhandle[0m[0;34m([0m[0;34m*[0m[0margs[0m[0;34m,[0m [0;34m**[0m[0moptions[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    233[0m             [0;32mif[0m [0moutput[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m    234[0m                 [0;32mif[0m [0mself[0m[0;34m.[0m[0moutput_transaction[0m[0;34m:[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/dist-packages/django/core/management/base.pyc[0m in [0;36mhandle[0;34m(self, *args, **options)[0m
+[1;32m    369[0m         [0;32mif[0m [0margs[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m    370[0m             [0;32mraise[0m [0mCommandError[0m[0;34m([0m[0;34m"Command doesn't accept any arguments"[0m[0;34m)[0m[0;34m[0m[0m
+[0;32m--> 371[0;31m         [0;32mreturn[0m [0mself[0m[0;34m.[0m[0mhandle_noargs[0m[0;34m([0m[0;34m**[0m[0moptions[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    372[0m [0;34m[0m[0m
+[1;32m    373[0m     [0;32mdef[0m [0mhandle_noargs[0m[0;34m([0m[0mself[0m[0;34m,[0m [0;34m**[0m[0moptions[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/dist-packages/django/core/management/commands/shell.pyc[0m in [0;36mhandle_noargs[0;34m(self, **options)[0m
+[1;32m     52[0m                 [0;31m# Don't bother loading IPython, because the user wants plain Python.[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     53[0m                 [0;32mraise[0m [0mImportError[0m[0;34m[0m[0m
+[0;32m---> 54[0;31m             [0mself[0m[0;34m.[0m[0mrun_shell[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m     55[0m         [0;32mexcept[0m [0mImportError[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m     56[0m             [0;32mimport[0m [0mcode[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/dist-packages/django/core/management/commands/shell.pyc[0m in [0;36mrun_shell[0;34m(self)[0m
+[1;32m     35[0m         [0;32mfor[0m [0mshell[0m [0;32min[0m [0mself[0m[0;34m.[0m[0mshells[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m     36[0m             [0;32mtry[0m[0;34m:[0m[0;34m[0m[0m
+[0;32m---> 37[0;31m                 [0;32mreturn[0m [0mgetattr[0m[0;34m([0m[0mself[0m[0;34m,[0m [0mshell[0m[0;34m)[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m     38[0m             [0;32mexcept[0m [0mImportError[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m     39[0m                 [0;32mpass[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python2.7/dist-packages/django/core/management/commands/shell.pyc[0m in [0;36mipython[0;34m(self)[0m
+[1;32m     15[0m         [0;32mtry[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m     16[0m             [0;32mfrom[0m [0mIPython[0m [0;32mimport[0m [0membed[0m[0;34m[0m[0m
+[0;32m---> 17[0;31m             [0membed[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m     18[0m         [0;32mexcept[0m [0mImportError[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m     19[0m             [0;31m# IPython < 0.11[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/lib/python2.7/dist-packages/IPython/terminal/embed.pyc[0m in [0;36membed[0;34m(**kwargs)[0m
+[1;32m    299[0m         [0mkwargs[0m[0;34m[[0m[0;34m'config'[0m[0;34m][0m [0;34m=[0m [0mconfig[0m[0;34m[0m[0m
+[1;32m    300[0m     [0mshell[0m [0;34m=[0m [0mInteractiveShellEmbed[0m[0;34m.[0m[0minstance[0m[0;34m([0m[0;34m**[0m[0mkwargs[0m[0;34m)[0m[0;34m[0m[0m
+[0;32m--> 301[0;31m     [0mshell[0m[0;34m([0m[0mheader[0m[0;34m=[0m[0mheader[0m[0;34m,[0m [0mstack_depth[0m[0;34m=[0m[0;36m2[0m[0;34m,[0m [0mcompile_flags[0m[0;34m=[0m[0mcompile_flags[0m[0;34m)[0m[0;34m[0m[0m
+[0m
+[0;32m/usr/lib/python2.7/dist-packages/IPython/terminal/embed.pyc[0m in [0;36m__call__[0;34m(self, header, local_ns, module, dummy, stack_depth, global_ns, compile_flags)[0m
+[1;32m    156[0m         [0;31m# our call and get the original caller's namespaces.[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    157[0m         self.mainloop(local_ns, module, stack_depth=stack_depth,
+[0;32m--> 158[0;31m                       global_ns=global_ns, compile_flags=compile_flags)
+[0m[1;32m    159[0m [0;34m[0m[0m
+[1;32m    160[0m         [0mself[0m[0;34m.[0m[0mbanner2[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0mold_banner2[0m[0;34m[0m[0m
+
+[0;32m/usr/lib/python2.7/dist-packages/IPython/terminal/embed.pyc[0m in [0;36mmainloop[0;34m(self, local_ns, module, stack_depth, display_banner, global_ns, compile_flags)[0m
+[1;32m    253[0m [0;34m[0m[0m
+[1;32m    254[0m         [0;32mwith[0m [0mnested[0m[0;34m([0m[0mself[0m[0;34m.[0m[0mbuiltin_trap[0m[0;34m,[0m [0mself[0m[0;34m.[0m[0mdisplay_trap[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0m
+[0;32m--> 255[0;31m             [0mself[0m[0;34m.[0m[0minteract[0m[0;34m([0m[0mdisplay_banner[0m[0;34m=[0m[0mdisplay_banner[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    256[0m [0;34m[0m[0m
+[1;32m    257[0m         [0;31m# now, purge out the local namespace of IPython's hidden variables.[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/lib/python2.7/dist-packages/IPython/terminal/interactiveshell.pyc[0m in [0;36minteract[0;34m(self, display_banner)[0m
+[1;32m    553[0m                 [0;32mif[0m [0;32mnot[0m [0mmore[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m    554[0m                     [0msource_raw[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0minput_splitter[0m[0;34m.[0m[0msource_raw_reset[0m[0;34m([0m[0;34m)[0m[0;34m[[0m[0;36m1[0m[0;34m][0m[0;34m[0m[0m
+[0;32m--> 555[0;31m                     [0mself[0m[0;34m.[0m[0mrun_cell[0m[0;34m([0m[0msource_raw[0m[0;34m,[0m [0mstore_history[0m[0;34m=[0m[0mTrue[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    556[0m                     [0mhlen_b4_cell[0m [0;34m=[0m[0;31m [0m[0;31m\[0m[0;34m[0m[0m
+[1;32m    557[0m                         [0mself[0m[0;34m.[0m[0m_replace_rlhist_multiline[0m[0;34m([0m[0msource_raw[0m[0;34m,[0m [0mhlen_b4_cell[0m[0;34m)[0m[0;34m[0m[0m
+
+[0;32m/usr/lib/python2.7/dist-packages/IPython/core/interactiveshell.pyc[0m in [0;36mrun_cell[0;34m(self, raw_cell, store_history, silent, shell_futures)[0m
+[1;32m   2631[0m             [0;32mif[0m [0mstore_history[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m   2632[0m                 self.history_manager.store_inputs(self.execution_count,
+[0;32m-> 2633[0;31m                                                   cell, raw_cell)
+[0m[1;32m   2634[0m             [0;32mif[0m [0;32mnot[0m [0msilent[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m   2635[0m                 [0mself[0m[0;34m.[0m[0mlogger[0m[0;34m.[0m[0mlog[0m[0;34m([0m[0mcell[0m[0;34m,[0m [0mraw_cell[0m[0;34m)[0m[0;34m[0m[0m
+
+[0;32m/usr/lib/python2.7/dist-packages/IPython/core/history.pyc[0m in [0;36mstore_inputs[0;34m(self, line_num, source, source_raw)[0m
+[1;32m    617[0m         [0mself[0m[0;34m.[0m[0minput_hist_raw[0m[0;34m.[0m[0mappend[0m[0;34m([0m[0msource_raw[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m    618[0m [0;34m[0m[0m
+[0;32m--> 619[0;31m         [0;32mwith[0m [0mself[0m[0;34m.[0m[0mdb_input_cache_lock[0m[0;34m:[0m[0;34m[0m[0m
+[0m[1;32m    620[0m             [0mself[0m[0;34m.[0m[0mdb_input_cache[0m[0;34m.[0m[0mappend[0m[0;34m([0m[0;34m([0m[0mline_num[0m[0;34m,[0m [0msource[0m[0;34m,[0m [0msource_raw[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m    621[0m             [0;31m# Trigger to flush cache and write to DB.[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mKeyboardInterrupt[0m: 

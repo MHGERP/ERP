@@ -21,9 +21,9 @@
             <td>{{card.create_time|date:"Y年m月d日"}}</td>
             <td>{{card.applycard_code}}</td>
             {% if card.status == APPLYCARD_KEEPER %}
-            <td><a type="button" class="btn detail" href="/storage/weldapply/detail?index={{card.id}}">详情</a></td>
-            {% else %}
             <td><a type="button" class="btn btn-warning detail" href="/storage/weldapply/detail?index={{card.id}}">处理</a></td>
+            {% else %}
+            <td><a type="button" class="btn detail" href="/storage/weldapply/detail?index={{card.id}}">详情</a></td>
             {% endif %}
         {% endfor %}
     </table>

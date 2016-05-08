@@ -29,9 +29,35 @@ def getInventoryTables(request, id_work_order, inventory_type):
     JunHU
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
-    list = Materiel.objects.filter(Q(order = work_order) & Q(inventory_type = inventory_type))
-    html = render_to_string("techdata/widgets/out_purchased_table.html", {"list": list})
+    if inventory_type == OUT_PURCHASED:
+        list = OutPurchasedItem.objects.filter(materiel_belong__order = work_order)
+        html = render_to_string("techdata/widgets/out_purchased_table.html", {"list": list, "work_order": work_order,})
     return html
+
+@dajaxice_register
+def deleteSingleItem(request, iid, inventory_type):
+    if inventory_type == OUT_PURCHASED:
+        item = OutPurchasedItem.objects.get(id = iid)
+        item.delete()
+
+@dajaxice_register
+def addSingleItem(request, id_work_order, index, inventory_type):
+    """
+    JunHU
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    if inventory_type == OUT_PURCHASED:
+        item = Materiel.objects.filter(Q(index = index) & Q(order = work_order))
+        if item.count() == 0:
+            context = {"success": False, "remark": u"未查到该票号零件"}
+            return simplejson.dumps(context)
+        item = item[0]
+        if OutPurchasedItem.objects.filter(materiel_belong = item).count() > 0:
+            context = {"success": False, "remark": u"该零件已添加至外购件明细"}
+            return simplejson.dumps(context)
+        OutPurchasedItem(materiel_belong = item).save()
+        context = {"success" : True, "remark": u"添加成功"}
+        return simplejson.dumps(context)
 
 @dajaxice_register
 def autoSetInventoryLabel(request, id_work_order, inventory_type):
@@ -39,12 +65,12 @@ def autoSetInventoryLabel(request, id_work_order, inventory_type):
     JunHU
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
-    inventory_type = InventoryType.objects.get(name = inventory_type)
     if inventory_type == OUT_PURCHASED:
         for item in Materiel.objects.filter(order = work_order):
-            if item.circulationroute.L1.name != GY: continue
-            if item.inventory_type.filter(name = inventory_type).count() > 0: continue
-            item.inventory_type.add(inventory_type)
+            if item.circulationroute.L1 == None or item.circulationroute.L1.name != GY: continue
+            if item.schematic_index and item.schematic_index.endswith(".00"): continue
+            if OutPurchasedItem.objects.filter(materiel_belong = item).count() > 0: continue
+            OutPurchasedItem(materiel_belong = item, remark = item.remark).save()
 
 @dajaxice_register
 def getProcessBOM(request, id_work_order):
@@ -55,8 +81,6 @@ def getProcessBOM(request, id_work_order):
     BOM = Materiel.objects.filter(order = work_order)
     for item in BOM:
         item.route = ' '.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))   
-        if item.net_weight and item.count:
-            item.total_weight = item.net_weight * int(item.count)
     context = {
         "work_order": work_order,
         "BOM": BOM,
@@ -77,8 +101,6 @@ def getSingleProcessBOM(request, iid):
     if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
         CirculationRoute(materiel_belong = item).save()
     item.route = ' '.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
-    if item.net_weight and item.count:
-        item.total_weight = item.net_weight * int(item.count)   
     context = {
         "item": item,
     }

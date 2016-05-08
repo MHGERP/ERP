@@ -19,17 +19,12 @@ $(document).on("click", ".btn-add_to_detail-all", function() {
 var index;
 $(document).on("click", ".btn-add_to_detail", function() {
    index = $(this).attr("args");
-   Dajaxice.purchasing.addToDetailSingle(addSingleCallBack, {"index": index, });
-
-   // the code below is better to move into callback function
-   $(this).removeClass().addClass("btn btn-small btn-warning").text("已加入汇总");
+   Dajaxice.purchasing.addToDetailSingle(addCallBack, {"index": index, });
 });
-function addSingleCallBack(data) {
-}
 
 $(document).on("click", ".btn-add_to_foreign", function() {
   index = $(this).attr("args1");
-  alert(index);
+  //alert(index);
   Dajaxice.purchasing.addToForeign(addCallBack, {"index": index, });
 });
 

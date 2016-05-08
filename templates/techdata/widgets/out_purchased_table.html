@@ -28,6 +28,7 @@
 		<thead>
 			<tr>
 				<th class="fix_th" rowspan="2" style="vertical-align: middle">序号</th>
+				<th class="fix_th" rowspan="2" style="vertical-align: middle">票号</th>
 				<th class="fix_th" rowspan="2" style="vertical-align: middle">图号</th>
 				<th class="fix_th" rowspan="2" style="vertical-align: middle">名称</th>
 				<th class="fix_th" rowspan="2" style="vertical-align: middle">数量</th>
@@ -36,6 +37,7 @@
 				<th colspan="2">重量（Kg）</th>
 				<th colspan="5">生产路线</th>
 				<th class="fix_th" rowspan="2" style="vertical-align: middle">备注</th>
+				<th class="fix_th" rowspan="2" style="vertical-align: middle">操作</th>
 			</tr>
 			<tr>
 				<th>单重</th>
@@ -46,13 +48,15 @@
 				<th>4</th>
 				<th>5</th>			
 			</tr>
-		<thead>
-        {% for item in list %}
-		<tr iid="{{item.id}}" class="tr_materiel">
-			<td>{{forloop.count}}</td>
-			{% include "techdata/widgets/out_purchased_row.html" %}
-		</tr>	
-        {% endfor %}
+		</thead>
+        <tbody>
+		    {% for item in list %}
+			<tr iid="{{item.id}}" class="tr_materiel">
+				<td>{{forloop.counter}}</td>
+				{% include "techdata/widgets/out_purchased_row.html" %}
+			</tr>	
+		    {% endfor %}
+        </tbody>
     </table>
 </div>
 

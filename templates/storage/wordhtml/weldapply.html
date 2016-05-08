@@ -230,22 +230,22 @@ style='mso-spacerun:yes'></span>
 <div class="span3" style="margin-left:0px;">
 <span
 style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>领料人：</span>{% ifequal apply_card.applicant None %}<span class="btn btn-mark" name="weldapply" role="applicant">签字</span>{% else %}{{apply_card.applicant}}{% endifequal %}
+"Times New Roman"'>领料人：</span>{% ifequal apply_card.applicant None %}<span class="btn btn-mark" name="weldapply" role="applicant">签字</span>{% else %}{{apply_card.applicant.userinfo}}{% endifequal %}
 </div>
 <div class="span3">
 <span
 style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>审核人：</span>{% ifequal apply_card.auditor None %}<span class="btn btn-mark"   name="weldapply" role="purchaser">签字</span>{% else %}{{apply_card.auditor}}{% endifequal %}
+"Times New Roman"'>审核人：</span>{% ifequal apply_card.auditor None %}<span class="btn btn-mark"   name="weldapply" role="purchaser">签字</span>{% else %}{{apply_card.auditor.userinfo}}{% endifequal %}
 </div>
 <div class="span3">
 <span
 style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>检查员：</span>{% ifequal apply_card.inspector None %}<span class="btn btn-mark" name="weldapply" role="purchaser">签字</span>{% else %}{{apply_card.inspector}}{% endifequal %}
+"Times New Roman"'>检查员：</span>{% ifequal apply_card.inspector None %}<span class="btn btn-mark" name="weldapply" role="purchaser">签字</span>{% else %}{{apply_card.inspector.userinfo}}{% endifequal %}
 </div>
 <div class="span3">
 <span
 style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>发料人：</span>{% ifequal apply_card.keeper None %}<span class="btn btn-mark" name="weldapply" role="keeper">签字</span>{% else %}{{apply_card.keeper}}{% endifequal %}
+"Times New Roman"'>发料人：</span>{% ifequal apply_card.keeper None %}<span class="btn btn-mark" name="weldapply" role="keeper">签字</span>{% else %}{{apply_card.keeper.userinfo}}{% endifequal %}
 </div>
 </p>
 </div>
