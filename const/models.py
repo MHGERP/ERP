@@ -8,6 +8,7 @@ class WorkOrder(models.Model):
     sell_type = models.IntegerField(blank = False, choices = SELL_TYPE, verbose_name = "销售类型")
     client_name = models.CharField(blank = False, max_length = 20, verbose_name = "客户名称")
     product_name = models.CharField(blank = False, max_length = 20, verbose_name = "产品名称")
+    count = models.CharField(blank = False, max_length = 20, verbose_name = u"数量")
     class Meta:
         verbose_name = u"工作令"
         verbose_name_plural = u"工作令"
@@ -21,6 +22,8 @@ class SubWorkOrder(models.Model):
         verbose_name = u"子工作令"
         verbose_name_plural = u"子工作令"
     def __unicode__(self):
+        if self.order.count == "1": 
+            return self.order.order_index
         return self.order.order_index + "-" + self.index
 
 class Material(models.Model):
@@ -33,7 +36,7 @@ class Material(models.Model):
     def __unicode__(self):
         return self.name
     def display_material_name(self):
-        return "%s%s" % (self.name, self.categories)
+        return "%s" % (self.categories)
 
 class InventoryType(models.Model):
     name = models.CharField(blank = False, max_length = 50, choices = INVENTORY_TYPE, verbose_name = u"明细表名称")
@@ -73,6 +76,8 @@ class Materiel(models.Model):
     def total_weight_cal(self):
         if self.count and self.net_weight:
             return int(self.count) * self.net_weight
+    def route(self):
+       return '.'.join(getattr(self.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(self.circulationroute, "L%d" % i))   
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"

@@ -1,0 +1,20 @@
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>用户名</th>
+      <th>姓名</th>
+      <th>组号</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  {% for item in production_user_list %}
+  <tr planid="{{item.production_user_id.id}}">
+    <td>{{item.production_user_id.username}}</td>
+    <td></td>
+    <td>{{item.production_work_group}}</td>
+    <td>
+      <a class="btn btn-primary" id="prodplan_update_btn">修改</a>
+      <button class="btn btn-primary" id="prodplan_delete_btn">删除</button>
+  </tr>
+  {% endfor %}
+</table>

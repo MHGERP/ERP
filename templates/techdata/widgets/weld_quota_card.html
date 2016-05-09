@@ -4,7 +4,7 @@
             <span class="add-on">类别</span>
             
             <input type="text" class="input-small" 
-            value="{{weld_quota.weld_material.get_categories_display}}">
+            value="{{weld_quota.weld_material.get_categories_display}}" id="id_categories">
             </input>
         </div>
     </div>
@@ -28,6 +28,12 @@
     </div>
 </div>
 <div class="row-fluid">
+    <div class="span3">
+        <div class="input-prepend">
+            <span class="add-on">定额</span>
+            {{form.quota}}
+        </div>
+    </div>
     <div class="span3">
         <div class="input-prepend">
             <span class="add-on">备注</span>

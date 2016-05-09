@@ -12,7 +12,7 @@ from const.utils import getChoiceList,getDistinctSet
 
 DEPARTMENT_CHOICES=STORAGEDEPARTMENT_CHOICES
 
-def set_form_input_width(dict,style):
+def set_form_input_width(dict,style=("style","width:120px;")):
     """
     设定form的样式
     """
@@ -187,22 +187,24 @@ class EntrySearchForm(forms.Form):
 
 
 class SteelEntrySearchForm(forms.Form):
-    entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_time'}))
-    form_code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'form_code'}))
+    create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control',"date_picker":'true'}))
+    create_time__lte = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control',"date_picker":'true'}))
+    entry_code = forms.CharField(label=u'入库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'form_code'}))
     material_source = forms.CharField(label=u'货物来源',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'material_source'}))
-    purchaser = forms.ChoiceField(label=u"采购员",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'purchaser'}))
     def __init__(self,*args,**kwargs):
         super(SteelEntrySearchForm,self).__init__(*args,**kwargs)
-        users = User.objects.all()
-        self.fields["purchaser"].choices = getChoiceList(users,"userinfo")
-
+        set_form_input_width(self.fields)
 class steelEntryItemsForm(forms.Form):
-    remark = forms.CharField(label=u'备注',required=False,widget=forms.TextInput(attrs={'class':'form-control span2',}))
     store_room = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'form-control input-medium span3'}),label = u"库房位置")
     def __init__(self, *args, **kwargs):
         super(steelEntryItemsForm, self).__init__(*args, **kwargs)
         STORE_ROOM_CHOICES = tuple([(item.id,item.name) for item in StoreRoom.objects.all()])
         self.fields["store_room"].choices = STORE_ROOM_CHOICES 
+
+class steelEntryRemarkForm(ModelForm):
+    class Meta:
+        model = SteelMaterialEntry
+        fields = ("remark",)
 
 class RefundSearchForm(forms.Form):
     apply_card__workorder=forms.ChoiceField(label=u'工作令',required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'work_order',"select2":"true"}))

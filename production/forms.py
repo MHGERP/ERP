@@ -9,6 +9,7 @@ from django.forms import ModelForm
 from production.models import ProductionPlan,ProductionWorkGroup,ProcessDetail
 from techdata.models import Processing
 from const.forms import WorkOrderForm
+from django.contrib.auth.models import User
 
 class WorkOrderProductionForm(forms.Form):
     """
@@ -87,11 +88,20 @@ class HourSummarizeForm(forms.Form):
 class HourMessageSearchForm(forms.Form):
     materiel_belong__order = forms.ChoiceField(label=u"工作令", widget = forms.Select(attrs = {"class": "form-control input"}))
     materiel_belong__index__contains = forms.CharField(required=False, label=u"工作票号")
-    productionworkgroup__name = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
+    productionworkgroup = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
     def __init__(self, *args, **kwargs):
          super(HourMessageSearchForm, self).__init__(*args, **kwargs)
          GROUO_NUM_CHOICES = tuple([("","------")]+[(item.id, item.name) for item in ProductionWorkGroup.objects.all()])
-         self.fields["productionworkgroup__name"].choices = GROUO_NUM_CHOICES
+         self.fields["productionworkgroup"].choices = GROUO_NUM_CHOICES
          WORKORDER_CHOICES = tuple((item.id, item) for item in WorkOrder.objects.all())
          self.fields["materiel_belong__order"].choices = WORKORDER_CHOICES
 
+class ProductionUserSearchForm(forms.Form):
+    production_user_id__username__contains = forms.CharField(required=False, label=u"生产人员用户名",)
+    production_work_group = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
+    def __init__(self, *args, **kwargs):
+         super(ProductionUserSearchForm, self).__init__(*args, **kwargs)
+         self.fields["production_work_group"].choices = tuple([("","------")]+[(item.id, item.name) for item in ProductionWorkGroup.objects.all()])
+
+class UserChooseForm(forms.Form):
+    username__contains = forms.CharField(label=u"用户",required = False)

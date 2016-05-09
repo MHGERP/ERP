@@ -9,28 +9,18 @@
 {% endblock %}
 
 {% block inner_content%}
-<form class="form-search ">
-   &nbsp&nbsp&nbsp&nbsp<font size="4px"><b>工作令</b>&nbsp&nbsp</font>
-   <select class="input-medium search-query" id="search_pending_order">
-   <option style="width:200px">1</option>
-   <option style="width:200px">2</option>
-   <option style="width:200px">3</option>
-   <option style="width:200px">4</option>
-   <option style="width:200px">5</option>
-  </select>
+<form class="form-search" itype={{inventory_type}}>
+   工作令: 
+   {{ work_order_form.work_order }}
     <span class="btn" id="order_search">检索</span> 
+	<span style="float: right">
+    <span class="btn btn-primary" id="btn-add">添加</span>
+	</span>
 </form>
-<div class="widget-box">
-  <div class="widget-title">
-    <span class="icon"><i class="icon-th"></i></span>
-    <h5>工作令：03015001B</h5>
-    <h5>产品名称：第一中温变换炉</h5>
-    <h5>单位：公斤</h5>
-    <h5>编制人：</h5>
-    <h5>审核人：</h5>
-  </div>
-  <div class="widget-content nopadding">
-        {% include "techdata/widgets/principal_material_table.html" %}
-  </div>
+
+<div class="widget-box" id="widget-box">
+
 </div>
+
+<script type="text/javascript" src="{{STATIC_URL}}js/techdata/principal_material.js"></script>
 {% endblock%}
