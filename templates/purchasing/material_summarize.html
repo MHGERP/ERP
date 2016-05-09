@@ -19,7 +19,7 @@
     </form>
 </div>
 
-{%include "widgets/inventory_detail.html"%}  
+{%include "widgets/inventory_detail.html"%}
 <span class="btn" id="add_to_order" data-toggle="modal" data-target="#order_list">加入订购单</span>
 <span class="btn" id="add_to_bid" data-toggle="modal" data-target="#bid_list">加入标单</span>
 <span class="btn" id="add_to_execute">添加至材料执行</span>
@@ -53,6 +53,25 @@
     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
   </div>
 </div>
+
+<div id="related_model" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.8">
+  <div class="modal-header">
+    <h2 id="myModalLabel">相关库存</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+    <div id="related_html">
+
+    </div>
+    <div id="related_table">
+
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
 
 <div id="bid_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.8">
   <div class="modal-header">
@@ -92,7 +111,7 @@
   <div class="modal-body">
     选择要加入的订购单：
     <select class="input-medium search-query order-select" id="order-select-2">
-    
+
     </select>
   </div>
 
@@ -111,7 +130,7 @@
   <div class="modal-body">
     选择要加入的标单：
     <select class="input-medium search-query bid-select" id="search-query-2">
-    
+
     </select>
   </div>
 

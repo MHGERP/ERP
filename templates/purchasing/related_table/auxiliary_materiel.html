@@ -1,0 +1,18 @@
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th><input type="checkbox" name="all" id="selectall"></th>
+            <th>名称</th>
+            <th>规格</th>
+            <th>材料牌号</th>
+        </tr>
+    </thead>
+    {% for item in data%}
+    <tr iid="{{item.id}}">
+        <td>{%if item.can_choose %}<input type="checkbox" class="checkbox" args="{{item.id}}">{% endif %}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.specifications}}</td>
+        <td>{{item.material}}</td>
+    </tr>
+    {% endfor%}
+</table>
