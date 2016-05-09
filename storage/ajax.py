@@ -486,34 +486,41 @@ def entryItemSave(request,form,mid):
     return simplejson.dumps(data)
 
 @dajaxice_register
-def saveRemarkStoreRoom(request,form,mid,typeid):
+def saveSteelEntryStoreRoom(request,form,mid):
     form = steelEntryItemsForm(deserialize_form(form))
-    if typeid:
-        item = BarSteelMaterialPurchasingEntry.objects.get(id = mid)
-        pur_entry = item.card_info.barsteelmaterialpurchasingentry_set.all()
-    else:
-        item = BoardSteelMaterialPurchasingEntry.objects.get(id = mid)
-        pur_entry = item.card_info.boardsteelmaterialpurchasingentry_set.all()
-    flag = False
+    item = SteelMaterialEntryItems.objects.get(id = mid)
+    entry = item.entry
+    items = entry.steelmaterialentryitems_set.all()
     if form.is_valid():
-        remark = form.cleaned_data['remark']
         storeroom_id = form.cleaned_data['store_room']
         store_room = StoreRoom.objects.get(id = storeroom_id)
-    if item.card_info.entry_status == STORAGESTATUS_KEEPER:
-        item.remark = remark
-        item.save()
-        item.steel_material.store_room = store_room
-        item.steel_material.save()
-        flag = True
-        message = u"修改成功"
-    else:
-        message = u"修改失败，入库单已确认过"
-    if typeid:
-        html = render_to_string("storage/widgets/barmaterialentrytable.html",{"entry_set":pur_entry})
-    else:
-        html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
+        if entry.entry_status == STORAGESTATUS_KEEPER:
+            item.store_room = store_room
+            item.save()
+            message = u"修改成功"
+        else:
+            message = u"修改失败，入库单已确认过"
+    html = render_to_string("storage/wordhtml/steelentryitems.html",{"entry":entry,"items":items})
     data = {
-        "flag":flag,
+        "message":message,
+        "html":html,
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def saveSteelEntryRemark(request,form,eid):
+    entry = SteelMaterialEntry.objects.get(id = eid)
+    form = steelEntryRemarkForm(deserialize_form(form),instance=entry)
+    items = entry.steelmaterialentryitems_set.all() 
+    if form.is_valid():
+        if entry.entry_status == STORAGESTATUS_KEEPER:
+            form.save()
+            message = u"修改成功"
+        else:
+            message = u"修改失败，入库单已确认过"
+            
+    html = render_to_string("storage/wordhtml/steelentry.html",{"entry":entry,"items":items,"BAR_STEEL":BAR_STEEL})
+    data = {
         "message":message,
         "html":html,
     }

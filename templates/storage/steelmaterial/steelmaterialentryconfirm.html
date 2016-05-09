@@ -57,14 +57,16 @@
     </center>
 </form>
 {% endcomment %}
+<div id="steelentry">
 {% include "storage/wordhtml/steelentry.html"%}
+</div>
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">添加</h3>
     </div>
     <div class="modal-body">
-        <form id="entry_item_form" action="" class="form-horizontal" iid={{is_show}}>
+        <form id="entry_item_form" action="" class="form-horizontal">
             <div class="control-group">
                 {% for field in form%}
                     <label class="control-label">{{field.label}}</label>
@@ -77,7 +79,29 @@
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-        <button class="btn btn-primary" data-dismiss="modal" onclick="save_remark_storeRoom({{entry.steel_type}});">保存</button>
+        <button class="btn btn-primary" data-dismiss="modal" id="steel_entry_modify">保存</button>
+    </div>
+</div>
+<div id="entryRemarkModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">添加</h3>
+    </div>
+    <div class="modal-body">
+        <form id="entry_remark_form" action="" class="form-horizontal">
+            <div class="control-group">
+                {% for field in remark_form%}
+                    <label class="control-label">{{field.label}}</label>
+                    <div class="controls">
+                        {{field}}
+                    </div>
+                {% endfor %}
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" data-dismiss="modal" id="steel_entry_remark">保存</button>
     </div>
 </div>
 {% endblock %}
