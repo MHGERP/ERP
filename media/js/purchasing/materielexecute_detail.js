@@ -6,7 +6,7 @@ $(function(){
     $("#id_document_number").attr("disabled","disabled");
     $("#materiel_choice_select").attr("disabled","disabled");
     $("#add-btn").attr("disabled","disabled");
-        
+
    // update_select();
     }
 });
@@ -18,7 +18,7 @@ $('#submit-btn').click(function(){
     Dajaxice.purchasing.saveMaterielExecuteDetail(saveMaterielExecuteDetail_callback,
         {
             'selected':selectedArray,
-            "eid":$("#id_document_number").val()         
+            "eid":$("#id_document_number").val()
         });
 });
 
@@ -41,7 +41,7 @@ $(document).on("click","#add-btn",function(){
     var materiel_choice_select = $("#materiel_choice_select option:selected").attr("value");
     materielChoice = materiel_choice_select;
     form = $("#execute_form");
-    Dajaxice.purchasing.saveMaterielExecute(saveMaterielExecute_callback, 
+    Dajaxice.purchasing.saveMaterielExecute(saveMaterielExecute_callback,
     {
       'form':$(form).serialize(true)
     });
@@ -58,7 +58,7 @@ function saveMaterielExecute_callback(data) {
 }
 
 $(document).on("click","#commit-btn",function(){
-    Dajaxice.purchasing.materielExecuteCommit(materielExecuteCommit_callback, 
+    Dajaxice.purchasing.materielExecuteCommit(materielExecuteCommit_callback,
     {
       'materielExecuteId' : $("#id_document_number").val()
     });
@@ -69,12 +69,12 @@ function materielExecuteCommit_callback(data) {
     if(data.status == "0") {
     window.location.href = "/purchasing/materielExecute";
   }
-  
+
 }
-    
+
 $("#materiel_choice_select").change(function(){
   var materiel_choice_select = $("#materiel_choice_select option:selected").attr("value");
-  Dajaxice.purchasing.materielchoiceChange(choiceChange_callback, 
+  Dajaxice.purchasing.materielchoiceChange(choiceChange_callback,
       {
         'materielChoice' : materiel_choice_select
       });
@@ -91,7 +91,7 @@ function choiceChange_callback(data) {
 $(document).on("click", "input#selectall", function(){
     var target = this.checked;
     $("input[type='checkbox']").each(function(){
-        this.checked = target; 
+        this.checked = target;
     });
 });
 

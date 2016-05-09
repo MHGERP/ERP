@@ -45,6 +45,10 @@ $(document).ready(function(){
             "eid":$("div#steelentry_items").attr('eid'),
         });
     })
+    $(document).on("click","span[name='steel_entry_confirm']",function(){
+        alert("aa")
+        Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":$("div#steelentry_items").attr('eid'),"role":$(this).attr("role")})
+    })
 });
 
 function steelRefundEnsureCallBack(data) {
@@ -99,12 +103,6 @@ function save_remark_callback(data){
     $("div#steelentry").html(data.html);
     alert(data.message);
 }
-function steel_entry_confirm(eid){
-    var entry_code = $("#input_entry_code").val();
-    if(confirm("库房一旦分配便不可更改!")){
-    Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":eid,"entry_code":entry_code}); 
-    }
-}
 $(document).ready(function(){
 	if($("#entry_item_form").attr("iid")=="False"){
 		$("#id_store_room").attr("disabled","disabled");
@@ -112,11 +110,6 @@ $(document).ready(function(){
 });
 
 function steel_entry_confirm_callback(data){
-    if(data.flag){
-        alert("入库单确认成功");
-        window.location.reload();
-    }
-    else{
-        alert("入库单确认失败");
-    }
+    $("div#steelentry").html(data.html);
+    alert(data.message);
 }
