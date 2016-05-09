@@ -14,7 +14,7 @@ from django.db import transaction
 from const.models import WorkOrder,Material, InventoryType
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
-from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
+from purchasing.forms import *
 from django.db.models import Q
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems,BidNextStatus
 from storage.models import *
@@ -162,12 +162,64 @@ def chooseInventorytype(request,pid,key):
         "inventory_detail_html":inventory_detail_html
         })
 
+@dajaxice_register
+def getRelatedModel(request, index):
+    idtable = {
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        COOPERANT: "forging",
+        WELD_MATERIAL: "weld_material",
+    }
+    data = []
+    print "这是一个测试: "
+    print index
+    if index == MAIN_MATERIEL:
+        data = SteelMaterialStoreList.objects.all()
+    elif index == AUXILIARY_MATERIEL:
+        data = SteelMaterialStoreList.objects.all()
+    elif index == FIRST_FEEDING:
+        print index
+    elif index == OUT_PURCHASED:
+        data = OutsideStorageList.objects.all()
+    elif index == COOPERANT:
+        print index
+    elif index == WELD_MATERIAL:
+        data = WeldStoreList.objects.all()
+    context={
+        "data" : data
+    }
+    return render_to_string("purchasing/related_model/%s.html" % idtable[index], context)
+
+@dajaxice_register
+def getRelatedTable(request, index, f1, f2, f3):
+    idtable = {
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        COOPERANT: "forging",
+        WELD_MATERIAL: "weld_material",
+    }
+    data = []
+    if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
+        data = SteelMaterialStoreList.objects.filter(name = f1, specifications = f2, material = f3)
+    elif index == OUT_PURCHASED:
+        data = OutsideStorageList.objects.filter(texture = f2)
+        print data
+    elif index == WELD_MATERIAL:
+        data = WeldStoreList.objects.filter(entry_item__specifimaterial_mark = f2 , entry_item__specifications = f3)
+    context = {
+        "data" : data,
+    }
+    return render_to_string("purchasing/related_table/%s.html" % idtable[index], context)
 
 @dajaxice_register
 def addToForeign(request, index):
     item = Materiel.objects.get(id = index)
     item.inventory_type.clear()
-    item.inventory_type.add(InventoryType.objects.get(name = COOPERANT))
+    item.inventory_type.add(InventoryType.objects.get(name = OUT_PURCHASED))
     return ""
 
 
@@ -1292,3 +1344,25 @@ def BidApplySelect(request,val,bidid):
     bidform.save()
     goNextStatus(bidform,request.user)
     return simplejson.dumps({})
+
+@dajaxice_register
+def BidApplyComment(request,bid_apply_id,usertitle,comment):
+    bid_apply=bidApply.objects.get(id=bid_apply_id)
+    bid_comment=BidComment(user=request.user,comment=comment,bid=bid_apply.bid,submit_date=datetime.today(),user_title=usertitle)
+    bid_comment.save()
+    BidNextStatus(bid_apply)
+    return simplejson.dumps({})
+
+@dajaxice_register
+def BidApplyLogistical(request,form,bid_apply_id,usertitle):
+    bid_apply=bidApply.objects.get(pk=bid_apply_id)
+    bid_logistical_form = BidLogisticalForm(deserialize_form(form), instance=bid_apply)
+    if bid_logistical_form.is_valid():
+        bid_logistical_form.save()
+    else :
+        print bid_logistical_form.errors.keys()
+        return simplejson.dumps({'status':1})
+    bid_comment=BidComment(user=request.user,comment="",bid=bid_apply.bid,submit_date=datetime.today(),user_title=usertitle)
+    bid_comment.save()
+    BidNextStatus(bid_apply)
+    return simplejson.dumps({'status':0})

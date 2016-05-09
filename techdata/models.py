@@ -6,6 +6,36 @@ from users.models import Group
 from purchasing.models import MaterielExecute
 import settings
 
+class PrincipalMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "principal_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "principal_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"主材定额签章"
+        verbose_name_plural = u"主材定额签章"
+    def __unicode__(self):
+        return self.order.order_index
+
+class PrincipalItem(models.Model):
+    order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
+    size = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"规格")
+    count = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"数量")
+    weight = models.FloatField(null = True, blank = True, verbose_name = u"单重")
+    material = models.ForeignKey(Material, null = True, blank = True, verbose_name = u"材质")
+    stardard = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"执行标准")
+    status = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"供货状态")
+    remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
+    def total_weight(self):
+        if self.count and self.weight:
+            return self.weight * int(self.count)
+    class Meta:
+        verbose_name = u"主材"
+        verbose_name_plural = u"主材"
+    def __unicode__(self):
+        return self.materiel_belong.name
+
 class CooperantMark(models.Model):
     order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
     writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "cooperant_writer")

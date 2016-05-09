@@ -144,13 +144,13 @@ def steelEntryConfirmViews(request,eid):
     entry = SteelMaterialEntry.objects.get(id = eid)
     items = entry.steelmaterialentryitems_set.all()
     form = steelEntryItemsForm()
-    is_show = entry.entry_status == STORAGESTATUS_KEEPER
+    remark_form = steelEntryRemarkForm(instance = entry)
     context = {
             "entry":entry,
-            "entry_set":items,
-            "is_show":is_show,
             "form":form,
-            "BOARD_STEEL":BOARD_STEEL,
+            "remark_form":remark_form,
+            "items":items,
+            "BAR_STEEL":BAR_STEEL,
             }
     return render(request,"storage/steelmaterial/steelmaterialentryconfirm.html",context)
     
