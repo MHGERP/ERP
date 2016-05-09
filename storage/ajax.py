@@ -555,34 +555,23 @@ def handleEntryConfirm_Keeper(request,entry):
     return {"message":message},is_show
 
 @dajaxice_register
-def steelEntryConfirm(request,eid,entry_code):
+def steelEntryConfirm(request,eid,role):
     try:
-        entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-        if entry.entry_status == STORAGESTATUS_KEEPER:
-            entry.form_code = entry_code
-            steel_entry_set = SteelMaterialPurchasingEntry.objects.get(form_code = entry.form_code)
-            if steel_entry_set.steel_type == BOARD_STEEL:
-                boardsteel_set = steel_entry_set.boardsteelmaterialpurchasingentry_set.all()
-                for boardsteel in boardsteel_set:
-                    ledger = boardsteel.steel_material.boardsteelmaterialledger
-                    ledger.quantity = ledger.quantity + boardsteel.quantity
-                    ledger.save()
-            elif steel_entry_set.steel_type == BAR_STEEL:
-                barsteel_set = steel_entry_set.barsteelmaterialpurchasingentry_set.all()
-                for barsteel in barsteel_set:
-                    ledger = barsteel.steel_material.barsteelmaterialledger
-                    ledger.quantity = ledger.quantity + barsteel.quantity
-                    ledger.save()
-            entry.entry_status = STORAGESTATUS_END
-            entry.entry_time = datetime.date.today()
-            entry.save()
-            flag = True
-        else:
-            flag = False
+        entry = SteelMaterialEntry.objects.get(id = eid)
+        if role == "keeper": 
+            if entry.entry_status == STORAGESTATUS_KEEPER:
+                createSteelMaterialStoreList(entry)
+                entry.entry_status = STORAGESTATUS_END
+                entry.keeper = request.user
+                entry.save()
+                message =u"入库单确认成功"
+            else:
+                message = u"入库单已经确认过"
     except Exception,e:
-        flag = False
+        message = u"入库单确认失败"
         print e
-    return simplejson.dumps({'flag':flag})
+    html = render_to_string("storage/wordhtml/steelentry.html",{"entry":entry,"items":entry.steelmaterialentryitems_set.all(),"BAR_STEEL":BAR_STEEL})
+    return simplejson.dumps({'message':message,"html":html})
 
 @dajaxice_register
 def getOverTimeItems(request):
