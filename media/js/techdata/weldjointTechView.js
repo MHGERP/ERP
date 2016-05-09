@@ -23,3 +23,22 @@ $("#id_save").click(function(){
         }
     );
 });
+
+var cell;
+$(document).on("click", ".btn-danger", function() {
+    cell = this;
+    var uid = $(cell).attr("uid");
+    if(confirm("确定删除吗？")){
+        Dajaxice.techdata.deleteWeldJointDetail(
+            function(data) {
+                var row = $(cell).parent().parent();
+                var row_next = row.next();
+                row.remove();
+                row_next.remove();
+            },
+            {
+                "uid" : uid
+            }
+        )
+    }
+});

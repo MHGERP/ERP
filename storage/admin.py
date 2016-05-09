@@ -8,16 +8,6 @@ Registers = (
     StoreRoom,
     WeldingMaterialHumitureRecord,
     WeldingMaterialBakeRecord,
-    SteelMaterialPurchasingEntry,
-    SteelMaterial,
-    BoardSteelMaterialLedger,
-    BarSteelMaterialLedger,
-    CommonSteelMaterialReturnCardInfo,
-    CommonSteelMaterialApplyCardInfo,
-    BoardSteelMaterialReturnCardContent,
-    BoardSteelMaterialApplyCardContent,
-    BarSteelMaterialReturnCardContent,
-    BarSteelMaterialApplyCardContent,
     WeldRefund,
     AuxiliaryToolStoreList,
     AuxiliaryToolApplyCard,
@@ -32,8 +22,9 @@ Registers = (
     OutsideStorageList,
     OutsideApplyCard,
     OutsideApplyCardItem,
-    BoardSteelMaterialPurchasingEntry,
-    BarSteelMaterialPurchasingEntry,
+    SteelMaterialEntry,
+    SteelMaterialEntryItems,
+    SteelMaterialStoreList,
 )
 
 for reg in Registers:
