@@ -110,13 +110,13 @@ def steelEntryHomeViews(request):
     if request.method == "POST":
         search_form = SteelEntrySearchForm(request.POST)
         if search_form.is_valid():
-            steelentry_set = get_weld_filter(SteelMaterialPurchasingEntry,search_form.cleaned_data)
+            steelentry_set = get_weld_filter(SteelMaterialEntry,search_form.cleaned_data)
         else:
             print search_form.errors
     else:
-        steelentry_set = SteelMaterialPurchasingEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
+        steelentry_set = SteelMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
         search_form = SteelEntrySearchForm()
-    steelentry_set = steelentry_set.order_by("-entry_status","-entry_time")
+    steelentry_set = steelentry_set.order_by("steel_type","-entry_status","-create_time")
     context = {
         "steel_entry_set":steelentry_set,
         "ENTRYSTATUS_END":STORAGESTATUS_END,
@@ -140,13 +140,9 @@ def weldEntryConfirmViews(request,eid):
             }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
-def steelEntryConfirmViews(request,eid,typeid):
-    typeid = int(typeid)
-    entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-    if typeid:
-        items = entry.barsteelmaterialpurchasingentry_set.all()
-    else:
-        items = entry.boardsteelmaterialpurchasingentry_set.all()
+def steelEntryConfirmViews(request,eid):
+    entry = SteelMaterialEntry.objects.get(id = eid)
+    items = entry.steelmaterialentryitems_set.all()
     form = steelEntryItemsForm()
     is_show = entry.entry_status == STORAGESTATUS_KEEPER
     context = {
@@ -154,11 +150,9 @@ def steelEntryConfirmViews(request,eid,typeid):
             "entry_set":items,
             "is_show":is_show,
             "form":form,
+            "BOARD_STEEL":BOARD_STEEL,
             }
-    if typeid:
-        return render(request,"storage/steelmaterial/barsteelmaterialentryconfirm.html",context)
-    else:
-        return render(request,"storage/steelmaterial/boardsteelmaterialentryconfirm.html",context)
+    return render(request,"storage/steelmaterial/steelmaterialentryconfirm.html",context)
     
 def Weld_Apply_Card_List(request):
     """
