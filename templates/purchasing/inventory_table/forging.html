@@ -12,6 +12,7 @@
 						<th>单重（kg）</th>
 						<th>总重（kg）</th>
 						<th>协作内容</th>
+            <th>操作</th>
         </tr>
     </thead>
     <tbody>
@@ -25,7 +26,6 @@
             <td>{{item.net_weight}}</td>
             <td>{{item.total_weight}}</td>
             <td>{{item.remark}}</td>
-            <td></td>
             {% if not item.materielpurchasingstatus.add_to_detail %}
             <td><span class="btn btn-small btn-primary btn-add_to_detail" args="{{item.id}}">加入物料汇总</span></td>
             {% else %}
