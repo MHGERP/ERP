@@ -11,8 +11,23 @@ from django.contrib.auth.models import User
 
 from const import *
 from backend.utility import getContext
+from sell.forms import *
 
 @dajaxice_register
 def getProductionList(request):
    productions = []
    return render_to_string("sell/widgets/productions_table.html")
+
+@dajaxice_register
+def getProductionForm(request, iid):
+    form = ProductForm()
+    context = {
+        "form" : form,
+    }
+    return render_to_string("sell/widgets/production_form.html", context)
+
+@dajaxice_register
+def saveProduct(request, form):
+    form = ProductForm(deserialize_form(form))
+    form.save()
+    return "ok"
