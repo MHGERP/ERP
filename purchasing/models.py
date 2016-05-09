@@ -123,7 +123,7 @@ class MaterielFormConnection(models.Model):
 
 
 class bidApply(models.Model):
-    apply_id = models.CharField(unique=True, max_length=50, default=make_uuid, verbose_name=u"标单申请编号")
+    apply_id = models.CharField(null=True,blank=True,unique=True, max_length=50, default="", verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
     amount = models.IntegerField(default=0,verbose_name=u"数量")
