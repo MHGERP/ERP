@@ -165,6 +165,7 @@ class qualityPriceCard(models.Model):
     price = models.CharField(null=True, max_length=40, verbose_name=u"价格")
     ability = models.CharField(null=True, max_length=100, verbose_name=u"厂家协作能力质量情况及业绩")
     delivery_condition = models.CharField(null=True, max_length=40, verbose_name=u"交货及支付条件")
+    status=models.ForeignKey(CommentStatus,verbose_name=u"招标申请表状态")
     class Meta:
         verbose_name = u"比质比价卡"
 
@@ -172,11 +173,12 @@ class qualityPriceCard(models.Model):
         return '%s'% (self.apply_id)
 class SupplierCheck(models.Model):
     bid=models.ForeignKey(BidForm,blank=False)
-    apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
-    apply_date = models.DateTimeField(null=True, verbose_name=u"申请日期")
-    bid_project = models.CharField(null=True, max_length=40, verbose_name=u"拟招(议)项目")
-    price_estimate = models.CharField(null=True, max_length=40, verbose_name=u"项目名称")
-    base_situation = models.CharField(null=True, max_length=100, verbose_name=u"招（议）标项目基本情况")
+    apply_company = models.CharField(null=True,blank=True, max_length=40, verbose_name=u"申请单位")
+    apply_date = models.DateTimeField(null=True, blank=True,verbose_name=u"申请日期")
+    bid_project = models.CharField(null=True, max_length=40,blank=True, verbose_name=u"项目名称")
+    price_estimate = models.CharField(null=True, max_length=40, blank=True,verbose_name=u"估算价格")
+    base_situation = models.CharField(null=True,blank=True, max_length=100, verbose_name=u"招（议）标项目基本情况")
+    status=models.ForeignKey(CommentStatus,verbose_name=u"招标申请表状态")
     class Meta:
         verbose_name = u"供应商审核"
         verbose_name_plural = u"供应商审核"
