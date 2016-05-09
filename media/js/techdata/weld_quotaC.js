@@ -49,6 +49,40 @@ function getCardCallBack(data) {
     $("#weld_quota_card").html(data);
 }
 
+$(document).on("click", "#id_add", function() {
+    var work_order = $("#id_work_order").val();
+
+    Dajaxice.techdata.getMaterial(getMaterialCallBack, {      
+                                                            "work_order":work_order,})
+    
+});
+var weld_quota_id
+function getMaterialCallBack(data){
+    $("#widget_box3").html(data);
+    $("#card_modal_add").modal();
+}
+$(document).on("click", "#add_save", function() {
+    var work_order = $("#id_work_order").val();
+    // var weld_material = $("#id_weld_material2").val();
+    // var size = $("#id_size2").val();
+    // var stardard = $("#id_stardard2").val();
+    // var quota = $("#id_quota2").val();
+    // var remark = $("#id_remark2").val();
+    Dajaxice.techdata.addWeldQuota(addWeldQuotaCallBack, {      "form": $("#widget_box3").serialize(),
+                                                                "work_order":work_order,})
+    
+});
+
+function addWeldQuotaCallBack(data){
+     if(data == "ok") {
+            alert("新增成功！");
+            refresh();
+        }
+        else {
+            alert("新增失败！");
+        }
+}
+
 $(document).on("click", "#quick_generate", function() {
     var id_work_order = $("#id_work_order").val();
     Dajaxice.techdata.saveWeldQuota(saveWeldQuotaCallBack, {"id_work_order": id_work_order})
@@ -89,3 +123,35 @@ function updateWeldQuotaCallBack(data){
             alert("保存失败！");
         }
 }
+
+
+$(document).on("click", "#id_delete", function() {
+    var did = $(this).attr("did");
+    Dajaxice.techdata.deleteWeldQuota(deleteWeldQuotaCallBack, {"did": did})
+});
+
+function deleteWeldQuotaCallBack(data){
+     if(data == "ok") {
+            alert("删除成功！");
+            refresh();
+        }
+        else {
+            alert("删除失败！");
+        }
+}
+
+$("#id_goto_next").click(function() {
+    var cur_iid = $("#card_modal").attr("iid");
+    var row = $("tr[iid='" + cur_iid + "']");
+    var row_next = row.next(".tr_materiel");
+    if(!row_next.html()) alert("本条为最后一条！");
+    else fill(row_next.attr("iid"));
+});
+
+$("#id_goto_prev").click(function() {
+    var cur_iid = $("#card_modal").attr("iid");
+    var row = $("tr[iid='" + cur_iid + "']");
+    var row_prev = row.prev(".tr_materiel");
+    if(!row_prev.html()) alert("本条为第一条！");
+    else fill(row_prev.attr("iid"));
+});

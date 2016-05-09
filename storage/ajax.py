@@ -486,34 +486,41 @@ def entryItemSave(request,form,mid):
     return simplejson.dumps(data)
 
 @dajaxice_register
-def saveRemarkStoreRoom(request,form,mid,typeid):
+def saveSteelEntryStoreRoom(request,form,mid):
     form = steelEntryItemsForm(deserialize_form(form))
-    if typeid:
-        item = BarSteelMaterialPurchasingEntry.objects.get(id = mid)
-        pur_entry = item.card_info.barsteelmaterialpurchasingentry_set.all()
-    else:
-        item = BoardSteelMaterialPurchasingEntry.objects.get(id = mid)
-        pur_entry = item.card_info.boardsteelmaterialpurchasingentry_set.all()
-    flag = False
+    item = SteelMaterialEntryItems.objects.get(id = mid)
+    entry = item.entry
+    items = entry.steelmaterialentryitems_set.all()
     if form.is_valid():
-        remark = form.cleaned_data['remark']
         storeroom_id = form.cleaned_data['store_room']
         store_room = StoreRoom.objects.get(id = storeroom_id)
-    if item.card_info.entry_status == STORAGESTATUS_KEEPER:
-        item.remark = remark
-        item.save()
-        item.steel_material.store_room = store_room
-        item.steel_material.save()
-        flag = True
-        message = u"修改成功"
-    else:
-        message = u"修改失败，入库单已确认过"
-    if typeid:
-        html = render_to_string("storage/widgets/barmaterialentrytable.html",{"entry_set":pur_entry})
-    else:
-        html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
+        if entry.entry_status == STORAGESTATUS_KEEPER:
+            item.store_room = store_room
+            item.save()
+            message = u"修改成功"
+        else:
+            message = u"修改失败，入库单已确认过"
+    html = render_to_string("storage/wordhtml/steelentryitems.html",{"entry":entry,"items":items})
     data = {
-        "flag":flag,
+        "message":message,
+        "html":html,
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def saveSteelEntryRemark(request,form,eid):
+    entry = SteelMaterialEntry.objects.get(id = eid)
+    form = steelEntryRemarkForm(deserialize_form(form),instance=entry)
+    items = entry.steelmaterialentryitems_set.all() 
+    if form.is_valid():
+        if entry.entry_status == STORAGESTATUS_KEEPER:
+            form.save()
+            message = u"修改成功"
+        else:
+            message = u"修改失败，入库单已确认过"
+            
+    html = render_to_string("storage/wordhtml/steelentry.html",{"entry":entry,"items":items,"BAR_STEEL":BAR_STEEL})
+    data = {
         "message":message,
         "html":html,
     }
@@ -548,34 +555,23 @@ def handleEntryConfirm_Keeper(request,entry):
     return {"message":message},is_show
 
 @dajaxice_register
-def steelEntryConfirm(request,eid,entry_code):
+def steelEntryConfirm(request,eid,role):
     try:
-        entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-        if entry.entry_status == STORAGESTATUS_KEEPER:
-            entry.form_code = entry_code
-            steel_entry_set = SteelMaterialPurchasingEntry.objects.get(form_code = entry.form_code)
-            if steel_entry_set.steel_type == BOARD_STEEL:
-                boardsteel_set = steel_entry_set.boardsteelmaterialpurchasingentry_set.all()
-                for boardsteel in boardsteel_set:
-                    ledger = boardsteel.steel_material.boardsteelmaterialledger
-                    ledger.quantity = ledger.quantity + boardsteel.quantity
-                    ledger.save()
-            elif steel_entry_set.steel_type == BAR_STEEL:
-                barsteel_set = steel_entry_set.barsteelmaterialpurchasingentry_set.all()
-                for barsteel in barsteel_set:
-                    ledger = barsteel.steel_material.barsteelmaterialledger
-                    ledger.quantity = ledger.quantity + barsteel.quantity
-                    ledger.save()
-            entry.entry_status = STORAGESTATUS_END
-            entry.entry_time = datetime.date.today()
-            entry.save()
-            flag = True
-        else:
-            flag = False
+        entry = SteelMaterialEntry.objects.get(id = eid)
+        if role == "keeper": 
+            if entry.entry_status == STORAGESTATUS_KEEPER:
+                createSteelMaterialStoreList(entry)
+                entry.entry_status = STORAGESTATUS_END
+                entry.keeper = request.user
+                entry.save()
+                message =u"入库单确认成功"
+            else:
+                message = u"入库单已经确认过"
     except Exception,e:
-        flag = False
+        message = u"入库单确认失败"
         print e
-    return simplejson.dumps({'flag':flag})
+    html = render_to_string("storage/wordhtml/steelentry.html",{"entry":entry,"items":entry.steelmaterialentryitems_set.all(),"BAR_STEEL":BAR_STEEL})
+    return simplejson.dumps({'message':message,"html":html})
 
 @dajaxice_register
 def getOverTimeItems(request):
