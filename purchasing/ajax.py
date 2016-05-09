@@ -14,7 +14,7 @@ from django.db import transaction
 from const.models import WorkOrder,Material, InventoryType
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
-from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
+from purchasing.forms import *
 from django.db.models import Q
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems,BidNextStatus
 from storage.models import *
@@ -1344,3 +1344,25 @@ def BidApplySelect(request,val,bidid):
     bidform.save()
     goNextStatus(bidform,request.user)
     return simplejson.dumps({})
+
+@dajaxice_register
+def BidApplyComment(request,bid_apply_id,usertitle,comment):
+    bid_apply=bidApply.objects.get(id=bid_apply_id)
+    bid_comment=BidComment(user=request.user,comment=comment,bid=bid_apply.bid,submit_date=datetime.today(),user_title=usertitle)
+    bid_comment.save()
+    BidNextStatus(bid_apply)
+    return simplejson.dumps({})
+
+@dajaxice_register
+def BidApplyLogistical(request,form,bid_apply_id,usertitle):
+    bid_apply=bidApply.objects.get(pk=bid_apply_id)
+    bid_logistical_form = BidLogisticalForm(deserialize_form(form), instance=bid_apply)
+    if bid_logistical_form.is_valid():
+        bid_logistical_form.save()
+    else :
+        print bid_logistical_form.errors.keys()
+        return simplejson.dumps({'status':1})
+    bid_comment=BidComment(user=request.user,comment="",bid=bid_apply.bid,submit_date=datetime.today(),user_title=usertitle)
+    bid_comment.save()
+    BidNextStatus(bid_apply)
+    return simplejson.dumps({'status':0})

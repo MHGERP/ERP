@@ -256,9 +256,9 @@ class WeldingMaterialBakeRecord(models.Model):
 class SteelMaterialEntry(models.Model):
     material_source = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'货物来源')
     entry_code = models.CharField(max_length=20,blank=False,null=False,verbose_name="入库单编号")
-    purchaser =  models.ForeignKey(User,blank=False,null=False,related_name="steel_entry_purchaser",verbose_name=u"采购员")
-    inspector = models.ForeignKey(User,blank=False,null=False,related_name="steel_entry_inspector",verbose_name=u"检验员",)
-    keeper = models.ForeignKey(User,blank=False,null=False,related_name = "steel_entry_keeper",verbose_name=u"库管员" ,)
+    purchaser =  models.ForeignKey(User,blank=True,null=True,related_name="steel_entry_purchaser",verbose_name=u"采购员")
+    inspector = models.ForeignKey(User,blank=True,null=True,related_name="steel_entry_inspector",verbose_name=u"检验员",)
+    keeper = models.ForeignKey(User,blank=True,null=True,related_name = "steel_entry_keeper",verbose_name=u"库管员" ,)
     create_time = models.DateField(blank=False,null=True,auto_now_add=True,verbose_name=u"入库时间")
     entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=STORAGESTATUS_PURCHASER,verbose_name=u"入库单状态")
     steel_type = models.IntegerField(choices = STEEL_TYPE,default=BOARD_STEEL,verbose_name=u"入库单类型")
@@ -271,12 +271,10 @@ class SteelMaterialEntry(models.Model):
         verbose_name_plural=u"钢材入库单"
 
 class SteelMaterialEntryItems(models.Model):
-    name = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'材料名称')
-    specification = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'规格')
-    batch_number = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'炉号')
-    lot_number = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'批号')
-    materiel = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'材质')
-    material_code = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'材质编号')
+    specification = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'名称及规格')
+    batch_number = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'炉批号')
+    materiel = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'材料牌号')
+    material_code = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'标记号')
     weight = models.FloatField(blank=False,null=False,verbose_name=u"重量")
     unit = models.CharField(blank=True,null=True,max_length=20,verbose_name=u"单位")
     work_order = models.ManyToManyField(WorkOrder,blank=False,null=False,verbose_name=u'工作令')
@@ -284,9 +282,10 @@ class SteelMaterialEntryItems(models.Model):
     count = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
     length = models.FloatField(blank=True,null=True,verbose_name=u"长度")
     entry = models.ForeignKey(SteelMaterialEntry,verbose_name=u"钢材入库单")
-
+    schematic_index = models.CharField(max_length=50,verbose_name=u"标准号或图号")
+    material = models.ForeignKey(Materiel,null=True,blank=True,verbose_name=u"物料")
     def __unicode__(self):
-        return "%s(%s)"%(self.name,self.specification)
+        return "%s"% self.specification
 
     def show_workorder(self):
         workorder_set = self.work_order.all()
@@ -303,8 +302,7 @@ class SteelMaterialEntryItems(models.Model):
 
 class SteelMaterialStoreList(models.Model):
     entry_item = models.ForeignKey( SteelMaterialEntryItems , verbose_name=u"钢材入库材料")
-    name = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'材料名称')
-    specification = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'规格')
+    specification = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'名称及规格')
     steel_type = models.IntegerField(choices = STEEL_TYPE,verbose_name=u"材料类型")
     length = models.FloatField(blank=True,null=True,verbose_name=u"长度")
     count = models.IntegerField(blank=False,null=False,verbose_name=u"数量")

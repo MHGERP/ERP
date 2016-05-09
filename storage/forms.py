@@ -195,12 +195,16 @@ class SteelEntrySearchForm(forms.Form):
         super(SteelEntrySearchForm,self).__init__(*args,**kwargs)
         set_form_input_width(self.fields)
 class steelEntryItemsForm(forms.Form):
-    remark = forms.CharField(label=u'备注',required=False,widget=forms.TextInput(attrs={'class':'form-control span2',}))
     store_room = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'form-control input-medium span3'}),label = u"库房位置")
     def __init__(self, *args, **kwargs):
         super(steelEntryItemsForm, self).__init__(*args, **kwargs)
         STORE_ROOM_CHOICES = tuple([(item.id,item.name) for item in StoreRoom.objects.all()])
         self.fields["store_room"].choices = STORE_ROOM_CHOICES
+
+class steelEntryRemarkForm(ModelForm):
+    class Meta:
+        model = SteelMaterialEntry
+        fields = ("remark",)
 
 class RefundSearchForm(forms.Form):
     apply_card__workorder=forms.ChoiceField(label=u'工作令',required=False,widget=forms.Select(attrs={'class':'form-control span2','id':'work_order',"select2":"true"}))

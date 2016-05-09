@@ -1,3 +1,4 @@
+var mid;
 $(document).ready(function(){
 	$(".apply-card-search-btn").click(function(){
 		form=$(".apply-card-search-form").serialize(true);
@@ -25,6 +26,29 @@ $(document).ready(function(){
         var form_code =$("table").attr("iid");
         Dajaxice.storage.steelApplyEnsure(steelApplyEnsureCallBack,{'form_code':form_code});
 	});
+    $(document).on("dblclick","tr[name='item_tr']",function(){
+        mid = $(this).attr("id");
+        $("#myModal").modal('show');
+    })
+    $(document).on("click","#steel_entry_modify",function(){
+        Dajaxice.storage.saveSteelEntryStoreRoom(save_storeRoom_callback,{
+            "form":$("#entry_item_form").serialize(),
+            "mid":mid,
+        });
+    })
+    $(document).on("dblclick","tr[name='remark_tr']",function(){
+        $("#entryRemarkModal").modal('show');
+    })
+    $(document).on("click","#steel_entry_remark",function(){
+        Dajaxice.storage.saveSteelEntryRemark(save_remark_callback,{
+            "form":$("#entry_remark_form").serialize(),
+            "eid":$("div#steelentry_items").attr('eid'),
+        });
+    })
+    $(document).on("click","span[name='steel_entry_confirm']",function(){
+        alert("aa")
+        Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":$("div#steelentry_items").attr('eid'),"role":$(this).attr("role")})
+    })
 });
 
 function steelRefundEnsureCallBack(data) {
@@ -71,30 +95,13 @@ function change_remark_storeRoom(itemid){
     $("#id_remark").val(a.eq(12).text());
 }
 
-function save_remark_storeRoom(typeid){
-	var typeid = typeid;
-    Dajaxice.storage.saveRemarkStoreRoom(save_remark_storeRoom_callback,{
-    	"form":$("#entry_item_form").serialize(),
-		"typeid":typeid,
-		"mid":mid,
-    });
+function save_storeRoom_callback(data){
+    $("#items_table").html(data.html);
+    alert(data.message);
 }
-
-function save_remark_storeRoom_callback(data){
-    if(data.flag){
-    	$("#items_table").html(data.html);
-        alert(data.message);
-    }
-    else{
-        alert(data.message);
-    }
-}
-
-function steel_entry_confirm(eid){
-    var entry_code = $("#input_entry_code").val();
-    if(confirm("库房一旦分配便不可更改!")){
-    Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":eid,"entry_code":entry_code}); 
-    }
+function save_remark_callback(data){
+    $("div#steelentry").html(data.html);
+    alert(data.message);
 }
 $(document).ready(function(){
 	if($("#entry_item_form").attr("iid")=="False"){
@@ -103,11 +110,6 @@ $(document).ready(function(){
 });
 
 function steel_entry_confirm_callback(data){
-    if(data.flag){
-        alert("入库单确认成功");
-        window.location.reload();
-    }
-    else{
-        alert("入库单确认失败");
-    }
+    $("div#steelentry").html(data.html);
+    alert(data.message);
 }

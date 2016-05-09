@@ -111,7 +111,14 @@ def firstFeedingViews(request):
     return render(request, "techdata/first_feeding.html", context)
 
 def principalMaterialViews(request):
-    context = {}
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "work_order_form" : work_order_form,
+        "inventory_type": MAIN_MATERIEL,
+    }
     return render(request, "techdata/principal_material.html", context)
 
 def auxiliaryMaterialViews(request):

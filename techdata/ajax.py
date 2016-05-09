@@ -25,12 +25,17 @@ import datetime
 
 
 def markGenerateFactory(order, inventory_type):
+    """
+    JunHU
+    """
     if inventory_type == OUT_PURCHASED:
         return order.outpurchasedmark
     elif inventory_type == FIRST_FEEDING:
         return order.firstfeedingmark
     elif inventory_type == COOPERANT:
         return order.cooperantmark
+    elif inventory_type == MAIN_MATERIEL:
+        return order.principalmark
 
 @dajaxice_register
 def detailMark(request, id_work_order, step, inventory_type):
@@ -63,12 +68,17 @@ def detailMark(request, id_work_order, step, inventory_type):
     return simplejson.dumps(context)
 
 def detailItemGenerateFactory(inventory_type):
+    """
+    JunHU
+    """
     if inventory_type == OUT_PURCHASED:
         return OutPurchasedItem
     elif inventory_type == FIRST_FEEDING:
         return FirstFeedingItem
     elif inventory_type == COOPERANT:
         return CooperantItem
+    elif inventory_type == MAIN_MATERIEL:
+        return PrincipalItem
 
 @dajaxice_register
 def getInventoryTables(request, id_work_order, inventory_type):
@@ -79,6 +89,7 @@ def getInventoryTables(request, id_work_order, inventory_type):
         OUT_PURCHASED: "out_purchased_table.html",
         FIRST_FEEDING: "first_feeding_table.html",
         COOPERANT: "cooperant_table.html",
+        MAIN_MATERIEL: "principal_material_table.html",
     }
     work_order = WorkOrder.objects.get(id = id_work_order)
     DetailItem = detailItemGenerateFactory(inventory_type)
@@ -87,7 +98,10 @@ def getInventoryTables(request, id_work_order, inventory_type):
         "MARK_REVIEW": MARK_REVIEW,
         "work_order": work_order,
     }
-    list = DetailItem.objects.filter(materiel_belong__order = work_order)
+    if inventory_type == MAIN_MATERIEL:
+        list = DetailItem.objects.filter(order = work_order)
+    else:
+        list = DetailItem.objects.filter(materiel_belong__order = work_order)
     context["list"] = list
     html = render_to_string("techdata/widgets/" + id2table[inventory_type], context)
     return html
