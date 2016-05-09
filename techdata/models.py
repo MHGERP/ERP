@@ -70,7 +70,7 @@ class OutPurchasedItem(models.Model):
         return self.materiel_belong.name
 
 class WeldQuota(models.Model):
-    order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
+    order = models.ForeignKey(WorkOrder,null = True, blank = True,verbose_name = u"所属工作令")
     weld_material = models.ForeignKey(Material, verbose_name = u"焊材")
     size = models.CharField(null = True, blank = True, max_length = 100, verbose_name = "规格")
     quota = models.FloatField(null = True, blank = True, verbose_name = "定额")
