@@ -8,6 +8,7 @@ RegisterClass = (
     OrderFormStatus,
     BidFormStatus,
     WorkOrder,
+    SubWorkOrder,
     InventoryType,
     Materiel,
     Material,

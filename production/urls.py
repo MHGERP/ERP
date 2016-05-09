@@ -36,4 +36,8 @@ urlpatterns=patterns('',
         r'^ledger$',
         production_views.ledgerViews,
     ),
+    url(
+        r'^production_user_manage$',
+        production_views.production_user_manageViews,
+    ),
 )

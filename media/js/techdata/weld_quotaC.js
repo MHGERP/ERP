@@ -3,12 +3,12 @@ $(document).on("click", "#order_search", refresh);
 function refresh() {
     var id_work_order = $("#id_work_order").val();
 
-    Dajaxice.techdata.getWeldQuotaList(refreshCallBack, {"id_work_order": id_work_order, });
+    Dajaxice.techdata.getWeldSeamWeight(refreshCallBack, {"id_work_order": id_work_order, });
 
         
 }
 function refreshCallBack(data) {
-    $(".widget-box2").html(data.html);
+    $(".widget-box2").html(data);
     // $("#detail_table").html(data);
 }
 $(document).on("click", "#btn_weld_quota_write_confirm", function() {
@@ -33,9 +33,10 @@ function weldQuotaReviewerConfirmCallBack(data) {
         alert("未完成编制，无法审核！");
     }
 }
+var iid;
 $(document).on("dblclick", ".tr_materiel td", function() {
     if($(this).index() != 0) {
-        var iid = $(this).parent().attr("iid");
+        iid = $(this).parent().attr("iid");
         fill(iid);
         $("#card_modal").modal();
     }
@@ -46,4 +47,45 @@ function fill(iid) {
 }
 function getCardCallBack(data) {
     $("#weld_quota_card").html(data);
+}
+
+$(document).on("click", "#quick_generate", function() {
+    var id_work_order = $("#id_work_order").val();
+    Dajaxice.techdata.saveWeldQuota(saveWeldQuotaCallBack, {"id_work_order": id_work_order})
+});
+
+function saveWeldQuotaCallBack(data){
+     if(data == "ok") {
+            alert("生成成功！");
+            refresh();
+        }
+        else {
+            alert("生成失败！");
+        }
+}
+
+$(document).on("click", "#id_save", function() {
+    var categories = $("#id_categories").val();
+    var weld_material = $("#id_weld_material").val();
+    var size = $("#id_size").val();
+    var stardard = $("#id_stardard").val();
+    var quota = $("#id_quota").val();
+    var remark = $("#id_remark").val();
+    Dajaxice.techdata.updateWeldQuota(updateWeldQuotaCallBack, {"iid": iid,
+                                                                "categories":categories,
+                                                                "weld_material":weld_material,
+                                                                "size":size,
+                                                                "stardard":stardard,
+                                                                "quota":quota,
+                                                                "remark":remark,})
+});
+
+function updateWeldQuotaCallBack(data){
+     if(data == "ok") {
+            alert("保存成功！");
+            refresh();
+        }
+        else {
+            alert("保存失败！");
+        }
 }

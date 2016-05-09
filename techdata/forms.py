@@ -84,17 +84,14 @@ class WeldQuotaForm(forms.ModelForm):
     """
     class Meta:
         model = WeldQuota
-        exclude = ('quota',)
         widgets = {
     
             "weld_material": forms.Select(attrs = {"class": "input-small"}),
             "size": forms.TextInput(attrs = {"class": "input-small"}),
             "stardard": forms.TextInput(attrs = {"class": "input-small"}),
             "remark": forms.TextInput(attrs = {"class": "input-large"}),
+            "quota": forms.TextInput(attrs = {"class": "input-small"}),
         }
-    # def __init__(self, *args, **kwargs):
-    #     super(WeldQuotaForm, self).__init__(*args, **kwargs)
-    #     self.fields["weld_material"].choices = tuple([(item.categories, item.display_material_name()) for item in Material.objects.all()])
 
 class WeldJointTechDetailForm(forms.ModelForm):
     """

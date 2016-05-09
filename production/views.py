@@ -83,3 +83,10 @@ def production_planViews(request):
 def ledgerViews(request):
     context={"ledgerSearchForm":LedgerSearchForm()}
     return render(request,"production/ledger.html",context)
+
+def production_user_manageViews(request):
+    context={
+        "productionUserSearchForm":ProductionUserSearchForm(),
+        "userChooseForm":UserChooseForm()
+    }
+    return render(request,"production/production_user_manage.html",context)

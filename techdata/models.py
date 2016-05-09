@@ -6,6 +6,60 @@ from users.models import Group
 from purchasing.models import MaterielExecute
 import settings
 
+class CooperantMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "cooperant_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "cooperant_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"工序性外些明细签章"
+        verbose_name_plural = u"工序性外协明细签章"
+    def __unicode__(self):
+        return self.order.order_index
+
+class CooperantItem(models.Model):
+    materiel_belong = models.OneToOneField(Materiel, verbose_name = u"所属物料")
+    remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
+    class Meta:
+        verbose_name = u"工序性外协件"
+        verbose_name_plural = u"工序性外协件"
+    def __unicode__(self):
+        return self.materiel_belong.name
+
+class FirstFeedingMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "firstfeeding_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "firstfeeding_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"先投件明细签章"
+        verbose_name_plural = u"先投件明细签章"
+    def __unicode__(self):
+        return self.order.order_index
+
+class FirstFeedingItem(models.Model):
+    materiel_belong = models.OneToOneField(Materiel, verbose_name = u"所属物料")
+    remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
+    class Meta:
+        verbose_name = u"先投件"
+        verbose_name_plural = u"先投件"
+    def __unicode__(self):
+        return self.materiel_belong.name
+
+class OutPurchasedMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "outpurchased_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "outpurchased_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"外购件明细签章"
+        verbose_name_plural = u"外购件明细签章"
+    def __unicode__(self):
+        return self.order.order_index
+
 class OutPurchasedItem(models.Model):
     materiel_belong = models.OneToOneField(Materiel, verbose_name = u"所属物料")
     remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
