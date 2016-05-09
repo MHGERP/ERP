@@ -6,21 +6,20 @@
 </div>
 <div class="widget-content nopadding">
     <div class="dataTables_length">
-        <span id="span_write">
             编制人：
-            {% if not work_order.boxoutboughtmark.writer %}
-            <span class="btn btn-mini btn-primary" id="btn_write_confirm">签字</span>
+        <span id="span_write">
+            {% if not work_order.outpurchasedmark.writer %}
+            <span class="btn btn-mini btn-primary btn-mark" id="btn_write_confirm" args="{{MARK_WRITE}}">签字</span>
             {% else %}
-            {{work_order.boxoutboughtmark.writer.userinfo}}
+            {{work_order.outpurchasedmark.writer.userinfo}}
             {% endif %} 
         </span>
-
-        <span id="span_review">
             审核人：
-            {% if not work_order.boxoutboughtmark.reviewer %}
-            <span class="btn btn-mini btn-primary" id="btn_review_confirm">签字</span>
+        <span id="span_review">
+            {% if not work_order.outpurchasedmark.reviewer %}
+            <span class="btn btn-mini btn-primary btn-mark" id="btn_review_confirm" args="{{MARK_REVIEW}}">签字</span>
             {% else %}
-            {{work_order.boxoutboughtmark.reviewer.userinfo}}
+            {{work_order.outpurchasedmark.reviewer.userinfo}}
             {% endif %}
         </span>
     </div>
@@ -28,6 +27,7 @@
 		<thead>
 			<tr>
 				<th class="fix_th" rowspan="2" style="vertical-align: middle">序号</th>
+				<th class="fix_th" rowspan="2" style="vertical-align: middle">票号</th>
 				<th class="fix_th" rowspan="2" style="vertical-align: middle">图号</th>
 				<th class="fix_th" rowspan="2" style="vertical-align: middle">名称</th>
 				<th class="fix_th" rowspan="2" style="vertical-align: middle">数量</th>
@@ -36,6 +36,7 @@
 				<th colspan="2">重量（Kg）</th>
 				<th colspan="5">生产路线</th>
 				<th class="fix_th" rowspan="2" style="vertical-align: middle">备注</th>
+				<th class="fix_th" rowspan="2" style="vertical-align: middle">操作</th>
 			</tr>
 			<tr>
 				<th>单重</th>
@@ -46,13 +47,15 @@
 				<th>4</th>
 				<th>5</th>			
 			</tr>
-		<thead>
-        {% for item in list %}
-		<tr iid="{{item.id}}" class="tr_materiel">
-			<td>{{forloop.count}}</td>
-			{% include "techdata/widgets/out_purchased_row.html" %}
-		</tr>	
-        {% endfor %}
+		</thead>
+        <tbody>
+		    {% for item in list %}
+			<tr iid="{{item.id}}" class="tr_materiel">
+				<td>{{forloop.counter}}</td>
+				{% include "techdata/widgets/out_purchased_row.html" %}
+			</tr>	
+		    {% endfor %}
+        </tbody>
     </table>
 </div>
 

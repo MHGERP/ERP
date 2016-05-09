@@ -12,8 +12,14 @@
    <td>{{item.create_time|date:'Y年m月d日'}}</td>
    <td>{{item.purchaser.userinfo.name}}</td>
    <td>{{item.inspector.userinfo.name}}</td>
-   
-   <td><a href="/storage/auxiliarytools/entry?id={{item.id}}"><button type="button" class="btn btn-warning">待处理</button></a></td>
+   <td><a href="/storage/auxiliarytools/entry?id={{item.id}}">
+    {% ifequal entry.entry_status STORAGESTATUS_KEEPER %}
+        <button type="button" class="btn btn-warning">待处理</button>
+    {% else %}
+        <button type="button" class="btn">查看</button>
+    {% endifequal %}
+    </a>
+    </td>
    </tr>
 
    {% endfor %}

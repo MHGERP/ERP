@@ -39,4 +39,4 @@ from const.models import Materiel
 # for item in materiels:
 #     print item.index
 
-# print "hello"
+ print "hello"

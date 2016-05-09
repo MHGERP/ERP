@@ -197,12 +197,12 @@ lang=EN-US style='font-size:12.0pt'><o:p></o:p></span>
 <div class="span6">
 <span
 style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>退库人：</span>{% ifequal ref_obj.refunder None %}<span class="btn btn-mark" name="weld_refund_confirm" role="refunder">签字</span>{% else %}{{ref_obj.refunder}}{% endifequal %}<span lang=EN-US></span>
+"Times New Roman"'>退库人：</span>{% ifequal ref_obj.refunder None %}<span class="btn btn-mark" name="weld_refund_confirm" role="refunder">签字</span>{% else %}{{ref_obj.refunder.userinfo}}{% endifequal %}<span lang=EN-US></span>
 </div>
 <div class="span4">
 <span
 style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>库管人：</span>{% ifequal ref_obj.keeper None %}<span class="btn btn-mark" name="weld_refund_confirm" role="keeper">签字</span>{% else %}{{ref_obj.keeper}}{% endifequal %}<span lang=EN-US></span>
+"Times New Roman"'>库管人：</span>{% ifequal ref_obj.keeper None %}<span class="btn btn-mark" name="weld_refund_confirm" role="keeper">签字</span>{% else %}{{ref_obj.keeper.userinfo}}{% endifequal %}<span lang=EN-US></span>
 </div>
 </div>
 </p>

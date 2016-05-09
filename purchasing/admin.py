@@ -22,7 +22,9 @@ RegisterClass = (
     StatusChangeReason,
     MaterielExecuteDetail,
     ContractDetail,
-    MaterielCopy
+    MaterielCopy,
+    bidApply,
+    CommentStatus
 )
 
 for item in RegisterClass:

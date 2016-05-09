@@ -1,62 +1,59 @@
+$("#id_complete_date__gte").datetimepicker({
+    format : 'yyyy-mm-dd',
+    minView : 2,
+    autoclose : true,
+});
+
+$("#id_complete_date__lte").datetimepicker({
+  format : 'yyyy-mm-dd',
+  minView : 2,
+  autoclose : true,
+});
+
 $(document).ready(refresh);
+
 function refresh(){
-    work_order = $("#id_order_index").val();
-    name = $("#id_operator").val();
-    date = $("#id_date").val();
-    Dajaxice.production.getHourSummarize(getHourSummarizeCallBack,{
-        "work_order":work_order,
-        "operator":name,
-        "date":date
-    });
+    Dajaxice.production.getHourSummarize(getHourSummarizeCallBack,{"form":$("#hourSummarizeForm").serialize()});
 }
 $(document).on("click","#btn-search",function(){
     refresh();
 })
 
 function getHourSummarizeCallBack(data){
-    if(data.status==0)
-        alert(data.message);
-    else
-        $("#widget-content").html(data.html);   
+    $("#widget-content").html(data);   
 }
 
 $(document).on("click","#summarize-ticket",function(){
     tr = $(this).parent().parent();
     work_order = $(tr).find("td:eq(0)").html();
-    operator = $(tr).find("td:eq(1)").html();
+    groupNumId = $(tr).find("td:eq(1)").attr("uid");
     date = $(tr).find("td:eq(2)").html();
     Dajaxice.production.getSummarizeTicket(getHourTableCallBack,{
         "work_order":work_order,
-        "operator":operator,
+        "groupNumId":groupNumId,
         "date":date
     });
 })
 
 function getHourTableCallBack(data){
-    if(data.status==0)
-        alert(data.message);
-    else
-        $("#summarize_ticket_modal").modal();
-        $("#summarize-ticket-table").html(data.html);
+    $("#summarize_ticket_modal").modal();
+    $("#summarize-ticket-table").html(data);
 }
 
 $(document).on("click","#part-ticket",function(){
     tr = $(this).parent().parent();
     work_order = $(tr).find("td:eq(0)").html();
-    operator = $(tr).find("td:eq(1)").html();
+    groupNumId = $(tr).find("td:eq(1)").attr("uid");
     date = $(tr).find("td:eq(2)").html();
     Dajaxice.production.getPartTicket(getPartTicketCallBack,{
         "work_order":work_order,
-        "operator":operator,
+        "groupNumId":groupNumId,
         "date":date
     });
 })
 
 function getPartTicketCallBack(data){
-    if(data.status==0)
-        alert(data.message);
-    else
-        $("#part_ticket_modal").modal();
-        $("#part-ticket-table").html(data.html);
+    $("#part_ticket_modal").modal();
+    $("#part-ticket-table").html(data);
 
 }

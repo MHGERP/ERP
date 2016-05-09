@@ -101,4 +101,8 @@ urlpatterns=patterns('',
         r'^contractFinance/$',
         purchasing_views.contractFinanceViews,
     ),
+    url(
+        r'^bidapplyform/(?P<bid>\w+)/$',
+        purchasing_views.bidApplyFormViews,
+    )
 )

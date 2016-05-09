@@ -5,7 +5,7 @@
         <th>申请物资</th>
         <th>申请数量</th>
         <th>申请时间</th>
-        <th>领用人</th>
+        <th>领用单位</th>
         <th>操作</th>
     </tr>
     {% if not apply_cards %}
@@ -16,13 +16,13 @@
     {% for record in apply_cards %}
     <tr>
     <td>{{forloop.counter}}</td>
-    <td>{{record.index}}</td>
-    <td>{{record.apply_item.name}}</td>
+    <td>{{record.applycard_code}}</td>
+    <td>{{record.apply_storelist.entry_item.name}}</td>
     <td>{{record.apply_quantity}}</td>
     <td>{{record.create_time|date:"Y年m月d日"}}</td>
-    <td>{{record.applicant.userinfo.name}}</td>
+    <td>{{record.department}}</td>
     <td>
-        <a href="/storage/auxiliarytools/apply?index={{record.index}}"><button type="button" class="btn btn-primary">处理申请</button></a>
+        <a href="/storage/auxiliarytools/apply?index={{record.id}}"><button type="button" class="btn btn-primary">处理申请</button></a>
     </td>
     </tr>
     {% endfor %}

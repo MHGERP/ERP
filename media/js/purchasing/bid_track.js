@@ -1,3 +1,4 @@
+/*
 $("#id_bid_date").datetimepicker({
     format:'yyyy-mm-dd',
     weekStart:1,
@@ -69,3 +70,16 @@ function saveComment_callback(data){
   }
 
 }
+
+*/
+
+$("#apply_select_confirm").click(function(){
+   var val=$("#bid_method_select").val();
+   var bidid=$("#bid_invite_buttons").attr('bidid');
+   Dajaxice.purchasing.BidApplySelect(function(data){
+       window.location.reload();
+   },{
+       'val':val,
+       "bidid":bidid
+   });
+});

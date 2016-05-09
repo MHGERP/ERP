@@ -11,12 +11,12 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.contrib.auth.models import User
 from django.db import transaction
-from const.models import WorkOrder,Material
+from const.models import WorkOrder,Material, InventoryType
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
 from django.db.models import Q
-from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
+from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems,BidNextStatus
 from storage.models import *
 from storage.forms import EntryTypeForm
 from storage.utils import AutoGenEntry
@@ -131,15 +131,16 @@ def chooseInventorytype(request,pid,key):
         COOPERANT: "forging",
         WELD_MATERIAL: "weld_material",
     }
-
     items = Materiel.objects.filter(inventory_type__name=pid, materielpurchasingstatus__add_to_detail = True,relate_material=None)
+    print pid
+    print ("item的size:" + str(len(items)))
     if key:
         items = items.filter(name=key)
     for item in items:
         if MaterielFormConnection.objects.filter(materiel = item).count() == 0:
             MaterielFormConnection(materiel = item, count = item.count).save()
-
-        if item.inventory_type.id <= 2 :
+        inventory_type=item.inventory_type.all()[0]
+        if inventory_type.name ==  MAIN_MATERIEL or  inventory_type.name == AUXILIARY_MATERIEL:
             if item.materielexecutedetail_set.count()>0 or item.materielformconnection.order_form:
                 item.can_choose=False
                 item.status= u"已加入订购单" if (item.materielformconnection.order_form) else u"已加入材料执行"
@@ -160,6 +161,15 @@ def chooseInventorytype(request,pid,key):
         "new_purchasing_form_html":new_purchasing_form_html,
         "inventory_detail_html":inventory_detail_html
         })
+
+
+@dajaxice_register
+def addToForeign(request, index):
+    item = Materiel.objects.get(id = index)
+    item.inventory_type.clear()
+    item.inventory_type.add(InventoryType.objects.get(name = COOPERANT))
+    return ""
+
 
 @dajaxice_register
 def pendingOrderSearch(request, order_index):
@@ -634,21 +644,11 @@ def saveComment(request, form, bid_id):
     return simplejson.dumps(ret)
 
 @dajaxice_register
-def saveBidApply(request, form, bid_id):
-    bidform = BidForm.objects.get(id = bid_id)
-    try:
-        bidapply = bidApply.objects.get(bid = bidform)
-        bidApplyForm = BidApplyForm(deserialize_form(form), instance=bidapply)
-    except:
-        bidapply = None
-        bidApplyForm = BidApplyForm(deserialize_form(form))
+def saveBidApply(request, form, bid_apply_id):
+    bid_apply=bidApply.objects.get(pk=bid_apply_id)
+    bidApplyForm = BidApplyForm(deserialize_form(form), instance=bid_apply)
     if bidApplyForm.is_valid():
-        if bidapply:
-            bidApplyForm.save()
-        else:
-            bidapply = bidApplyForm.save(commit = False)
-            bidapply.bid = bidform
-            bidapply.save()
+        bidApplyForm.save()
         ret = {'status': '2', 'message': u"申请书保存成功"}
     else:
         ret = {'status': '0', 'field':bidApplyForm.data.keys(), 'error_id':bidApplyForm.errors.keys(), 'message': u"申请书保存不成功"}
@@ -666,14 +666,10 @@ def resetBidApply(request, bid_id):
     return simplejson.dumps(ret)
 
 @dajaxice_register
-def submitStatus(request, bid_id):
-    try:
-        bidform = BidForm.objects.get(id = bid_id)
-        goNextStatus(bidform, request.user)
-        ret = {'status': '1', 'message': u"申请书提交成功"}
-    except:
-        ret = {'status': '2', 'message': u"申请书不存在"}
-    return simplejson.dumps(ret)
+def submitBidApply(request, bid_apply_id):
+    bid_apply = bidApply.objects.get(id = bid_apply_id)
+    BidNextStatus(bid_apply)
+    return simplejson.dumps({})
 
 
 def AddProcessFollowing(request,bid,process_form):
@@ -749,8 +745,6 @@ def getOngoingOrderList(request,order_type):
     """
     Lei
     """
-    print "dddddddddddddddddd"
-    print order_type
     if int(order_type) >2 :
         order_mod=1
     else:
@@ -1289,4 +1283,12 @@ def GoToBid(request,index):
     )
     bid_form.order_form=OrderForm.objects.get(order_id=index)
     bid_form.save()
+    return simplejson.dumps({})
+
+@dajaxice_register
+def BidApplySelect(request,val,bidid):
+    bidform=BidForm.objects.get(bid_id=bidid)
+    bidform.bid_mod=int(val)
+    bidform.save()
+    goNextStatus(bidform,request.user)
     return simplejson.dumps({})
