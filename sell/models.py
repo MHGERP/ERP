@@ -3,16 +3,7 @@ from django.db import models
 from users.models import Group
 import settings
 
-class Product(models.Model):
-    name = models.CharField(max_length = 50, verbose_name = u"产品名称")
-    class Meta:
-        verbose_name = u"产品"
-        verbose_name_plural = u"产品"
-    def __unicode__(self):
-        return self.name
-
 class BidFile(models.Model):
-    product = models.ForeignKey(Product, verbose_name = u"所属产品")
     recv_group = models.ForeignKey(Group, verbose_name = u"下发部门")
     file_obj = models.FileField(upload_to = settings.SELL_BIDFILE_PATH + "/%Y/%m/%d", verbose_name = u"招标文件")
     name = models.CharField(max_length = 100, blank = False, verbose_name = u"文件名称")
@@ -25,4 +16,16 @@ class BidFile(models.Model):
         verbose_name_plural = u"招标文件"
     def __unicode__(self):
         return self.name
+
+class Product(models.Model):
+    name = models.CharField(max_length = 50, verbose_name = u"产品名称")
+    manufacture_file = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"生产科文件", related_name = "manufacture_file")
+    techdata_file = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"工艺科文件", related_name = "techdata_file")
+    purchasing_file = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"采购科文件", related_name = "purchasing_file")
+    class Meta:
+        verbose_name = u"产品"
+        verbose_name_plural = u"产品"
+    def __unicode__(self):
+        return self.name
+
 

@@ -29,3 +29,15 @@ function fill(iid) {
 $("#add_product").click(function(){
     fill(-1);
 });
+
+$("#id_save").click(function(){
+    Dajaxice.sell.saveProduct(
+        function(data) {
+            alert("保存成功");
+            $("#product_modal").modal("hide");
+        },
+        {
+            "form" : $("#product_form").serialize(),
+        }
+    )
+});
