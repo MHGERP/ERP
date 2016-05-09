@@ -267,3 +267,7 @@ def createAuxiliaryToolStoreList(entry):
     """
     for item in entry.auxiliarytoolentryitems_set.all():
         AuxiliaryToolStoreList(entry_item = item , inventory_count = item.count,entry_time=entry.create_time).save()
+
+def createSteelMaterialStoreList(entry):
+    for item in entry.steelmaterialentryitems_set.all():
+        SteelMaterialStoreList(entry_item=item,specification=item.specification , steel_type=entry.steel_type ,count=item.count,length=item.length,weight=item.weight,store_room=item.store_room).save()
