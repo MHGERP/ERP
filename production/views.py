@@ -65,9 +65,9 @@ def man_hour_messageViews(request):
     return render(request,"production/man_hour_message.html",context)
 
 def man_hour_summarizeViews(request):
-    dateForm = DateForm();
+    hourSummarizeForm = HourSummarizeForm();
     context={
-        "dateForm":dateForm
+        "hourSummarizeForm":hourSummarizeForm
     }
     return render(request,"production/man_hour_summarize.html",context)
 
@@ -83,3 +83,7 @@ def production_planViews(request):
 def ledgerViews(request):
     context={"ledgerSearchForm":LedgerSearchForm()}
     return render(request,"production/ledger.html",context)
+
+def production_user_manageViews(request):
+    context={"productionUserSearchForm":productionUserSearchForm()}
+    return render(request,"production/production_user_manage.html",context)

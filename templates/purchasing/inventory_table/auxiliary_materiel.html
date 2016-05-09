@@ -40,7 +40,11 @@
             {% else %}
             <td><span class="btn btn-small btn-warning">已加入汇总</span></td>
             {% endif %}
+            {% if item.materielpurchasingstatus.add_to_detail %}
+            <td></td>
+            {% else %}
             <td><span class="btn btn-small btn-primary btn-add_to_foreign" args1="{{item.id}}">加入外购件物料汇总</span></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

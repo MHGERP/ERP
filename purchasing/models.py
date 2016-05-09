@@ -4,7 +4,7 @@ import datetime
 from django.db import models
 from const.utility import make_uuid
 
-from const.models import BidFormStatus,Materiel,Material, WorkOrder, OrderFormStatus, ImplementClassChoices
+from const.models import BidFormStatus,Materiel,Material, WorkOrder, OrderFormStatus, ImplementClassChoices,SubWorkOrder
 from django.contrib.auth.models import User
 import settings
 # Create your models here.
@@ -13,6 +13,7 @@ class MaterielCopy(Materiel):
     relate_material=models.ForeignKey('self',null=True,blank=True)
     orgin_materiel=models.ForeignKey(Materiel,null=True,related_name="orgin_materiel",blank=True)
     work_order=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"工作令号")
+    sub_workorder=models.ForeignKey(SubWorkOrder,blank=True,null=True,verbose_name=u"子工作令")
 
 
 class CommentStatus(models.Model):
@@ -125,11 +126,11 @@ class bidApply(models.Model):
     apply_id = models.CharField(unique=True, max_length=50, default=make_uuid, verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
-    amount = models.IntegerField(verbose_name=u"数量")
-    work_order = models.CharField(max_length=100,null=False,verbose_name=u"工作令")
+    amount = models.IntegerField(default=0,verbose_name=u"数量")
+    work_order = models.CharField(max_length=100,null=True,verbose_name=u"工作令")
     bid_project = models.CharField(null=True, max_length=40, verbose_name=u"拟招(议)项目")
     bid_date = models.DateTimeField(null=True, verbose_name=u"拟招(议)标时间")
-    special_model = models.CharField(null=True, max_length=40, verbose_name=u"规格、型号")
+    special_model = models.CharField(null=True, blank=True,max_length=40, verbose_name=u"规格、型号")
     core_part = models.BooleanField(verbose_name="是否为核心件", default = False)
 
     bid = models.ForeignKey(BidForm)
@@ -148,7 +149,7 @@ class bidApply(models.Model):
         verbose_name = u"标单申请表"
 
     def __unicode__(self):
-        return '%s'% (self.apply_id)
+        return '%s'% (self.bid.bid_id)
 
 class qualityPriceCard(models.Model):
     bid = models.ForeignKey(BidForm, blank = False)
@@ -315,6 +316,3 @@ class MaterielExecuteDetail(models.Model):
         verbose_name_plural = u"材料执行表详细"
     def __unicode__(self):
         return '%s' % (self.materiel.index)
-
-
-
