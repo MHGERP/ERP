@@ -326,7 +326,7 @@ def getProcessReviewForm(request, iid):
     return html
 
 @dajaxice_register
-def getWeldSeamCard(self, full = False, iid = None):
+def getWeldSeamCard(request, full = False, iid = None):
     """
     JunHU
     """
@@ -347,7 +347,7 @@ def getWeldSeamCard(self, full = False, iid = None):
         html = render_to_string("techdata/widgets/weld_seam_card.html", context)
     return html
 @dajaxice_register
-def getWeldQuotaCard(self,iid = None):
+def getWeldQuotaCard(request,iid = None):
     """
     MH Chen
     """
@@ -445,18 +445,6 @@ def techBoxWeld(request, order):
     return html
 
 @dajaxice_register
-def weldQuota(request, order):
-    """
-    MH Chen
-    """
-    list = Materiel.objects.filter(order = order)
-    context = {
-        "list" : list,
-    }
-    html = render_to_string("techdata/widgets/weld_quota_table.html", context)
-    return html
-
-@dajaxice_register
 def addWeldSeam(request, iid, form):
     """
     JunHU
@@ -493,7 +481,7 @@ def modifyWeldSeam(request, iid, form):
         return html
 
 @dajaxice_register
-def getWeldSeamList(self, id_work_order):
+def getWeldSeamList(request, id_work_order):
     """
     JunHU
     """
@@ -509,7 +497,7 @@ def getWeldSeamList(self, id_work_order):
     return simplejson.dumps({"html": html, "read_only": read_only,})
 
 @dajaxice_register
-def getWeldQuotaList(self, id_work_order):
+def getWeldQuotaList(request, id_work_order):
     """
     MH Chen
     """
@@ -524,7 +512,7 @@ def getWeldQuotaList(self, id_work_order):
 
     return simplejson.dumps({"html": html, "read_only": read_only,})
 @dajaxice_register
-def getWeldSeamWeight(self, id_work_order):
+def getWeldSeamWeight(request, id_work_order):
     """
     MH Chen
     """
@@ -541,7 +529,7 @@ def getWeldSeamWeight(self, id_work_order):
     return html
     
 @dajaxice_register
-def saveWeldQuota(self, id_work_order):
+def saveWeldQuota(request, id_work_order):
     """
     MH Chen
     """
@@ -566,7 +554,7 @@ def saveWeldQuota(self, id_work_order):
 
     return "ok"
 @dajaxice_register
-def updateWeldQuota(self, iid,categories,weld_material,size,stardard,quota,remark):
+def updateWeldQuota(request, iid,categories,weld_material,size,stardard,quota,remark):
     """
     MH Chen
     """
@@ -579,6 +567,41 @@ def updateWeldQuota(self, iid,categories,weld_material,size,stardard,quota,remar
     weld_quota.remark = remark
     weld_quota.save()
     return "ok"
+
+@dajaxice_register
+def deleteWeldQuota(request,did):
+    """
+    MH Chen
+    """
+    weld_quota = WeldQuota.objects.get(id = did)
+    weld_quota.delete()
+    return "ok"
+@dajaxice_register
+def addWeldQuota(request,form,work_order):
+    """
+    MH Chen
+    """
+    order = WorkOrder.objects.get(id = work_order)
+    quota_form = WeldQuotaForm(deserialize_form(form))
+    if quota_form.is_valid():
+        quota = quota_form.save(commit = False)
+        quota.order = order
+        quota.save()
+        return  "ok"
+    else:
+        return "fail"
+@dajaxice_register
+def getMaterial(request,work_order):
+    """
+    MH Chen
+    """
+    order = WorkOrder.objects.get(id = work_order)
+    form = WeldQuotaForm()
+    context = {
+        "form": form,
+    }
+    html = render_to_string("techdata/widgets/weld_quota_add_card.html", context)
+    return html
 @dajaxice_register  
 def updateProcessReview(request, iid,processReview_form):
     """
@@ -593,7 +616,7 @@ def updateProcessReview(request, iid,processReview_form):
         return "fail"
 
 @dajaxice_register
-def getSingleWeldSeamInfo(self, iid):
+def getSingleWeldSeamInfo(request, iid):
     """
     JunHU
     """
