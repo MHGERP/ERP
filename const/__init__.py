@@ -626,3 +626,8 @@ BID_APPLY_TYPE_CHOICES=(
     (SUPPLIER_CHECK,u"供应商审核表"),
     (QUALITYPRICECARD,u"比质比价卡")
 )
+
+SupplierCChoices=(
+    (0,u"实体"),
+    (1,u"贸易")
+)
