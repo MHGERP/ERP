@@ -33,6 +33,15 @@ class BidApplyForm(ModelForm):
                    "bid_date": forms.DateInput(attrs={'class':'form-control'}),
                   }
 
+class BidLogisticalForm(ModelForm):
+    class Meta:
+        model = bidApply
+        fields = ("apply_id","bid_delivery_date","bid_datetime","place","implement_class")
+        widgets = {
+            "bid_delivery_date":forms.DateInput(attrs={'class':'form-control'}),
+            "bid_datetime":forms.DateInput(attrs={'class':'form-control'})
+                  }
+
 class QualityPriceCardForm(ModelForm):
     class Meta:
         model = qualityPriceCard
