@@ -263,9 +263,6 @@ def getWeldQuotaCard(self,iid = None):
         form = WeldQuotaForm(instance = weld_quota)
     else:
         form = WeldSeamForm()
-    # material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE, WELD_RIBBON, WELD_FLUX)
-    # form.fields["weld_material_1"].queryset = material_set
-    # form.fields["weld_material_2"].queryset = material_set
     context = {
         "form": form,
         "weld_quota":weld_quota,
@@ -439,30 +436,56 @@ def getWeldSeamWeight(self, id_work_order):
     MH Chen
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
-    weldseam_list = WeldSeam.objects.filter(materiel_belong__order = work_order)
-    dic = {}
-
-    # items = WeldSeam.objects.values('weld_material_1__categories', 'size_1',"weld_material_2__categories","size_1").annotate(Sum('hour'))
-
-    for item1 in weldseam_list:
-        if dic.has_key((item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)):
-            dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)]+= float(item1.weight_1)
-        else:
-            dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)] = float(item1.weight_1)
-    for item2 in weldseam_list:
-        if item2.weld_material_2 != None:
-            if dic.has_key((item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)):
-                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)]+= float(item2.weight_2)
-            else:
-                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)] = float(item2.weight_2)
-
+    try:
+        weld_quota_list = WeldQuota.objects.filter(order = work_order)
+    except WeldQuota.DoesNotExist:
+        pass
     context = {
         "work_order":work_order,
-        "dic":dic,
+        "weld_quota_list":weld_quota_list,
     }
     html = render_to_string("techdata/widgets/weld_quota_table.html", context)
     return html
+    
+@dajaxice_register
+def saveWeldQuota(self, id_work_order):
+    """
+    MH Chen
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    weldseam_list = WeldSeam.objects.filter(materiel_belong__order = work_order)
+    dic = {}
+    for item1 in weldseam_list:
+        if item1.weld_material_1 != None:
+            if dic.has_key((item1.weld_material_1,item1.size_1,item1.weld_material_1.get_categories_display)):
+                dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.get_categories_display)]+= float(item1.weight_1)
+            else:
+                dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.get_categories_display)] = float(item1.weight_1)
+    for item2 in weldseam_list:
+        if item2.weld_material_2 != None:
+            if dic.has_key((item2.weld_material_2,item2.size_2,item2.weld_material_2.get_categories_display)):
+                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.get_categories_display)]+= float(item2.weight_2)
+            else:
+                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.get_categories_display)] = float(item2.weight_2)
+    for item in dic:
+        weldQuota = WeldQuota(order = work_order,weld_material = item[0],size = item[1],quota = dic[item])
+        weldQuota.save()
 
+    return "ok"
+@dajaxice_register
+def updateWeldQuota(self, iid,categories,weld_material,size,stardard,quota,remark):
+    """
+    MH Chen
+    """
+    weld_quota = WeldQuota.objects.get(id = iid)
+    weld_quota.categories = categories
+    weld_quota.weld_material = Material.objects.get(id = weld_material)
+    weld_quota.size = size
+    weld_quota.stardard = stardard
+    weld_quota.quota = quota
+    weld_quota.remark = remark
+    weld_quota.save()
+    return "ok"
 @dajaxice_register  
 def updateProcessReview(request, iid,processReview_form):
     """
