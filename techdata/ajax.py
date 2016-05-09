@@ -1240,9 +1240,10 @@ def getWeldJointDetailFormAndSave(request, jointArray, id_work_order):
         weld_joint_detail = WeldSeam.objects.get(id = jointArray[0]).weld_joint_detail
         if weld_joint_detail:
             weld_joint_detail.weld_joint = joint_index
-            weld_joint_detail.is_save = True
         else:
-            weld_joint_detail = WeldJointTechDetail(weld_joint = weld_joint, joint_index = joint_index,  bm_texture_1 = bm_1, bm_texture_2 = bm_2, bm_specification_1 = bm_thin1, bm_specification_2 = bm_thin2, weld_method_1 = md1, weld_method_2 = md2, is_save = True)
+            weld_joint_detail = WeldJointTechDetail(weld_joint = weld_joint, joint_index = joint_index,  bm_texture_1 = bm_1, bm_texture_2 = bm_2, bm_specification_1 = bm_thin1, bm_specification_2 = bm_thin2, weld_method_1 = md1, weld_method_2 = md2)
+        weld_joint_detail.is_save = True
+        print weld_joint_detail.is_save
         weld_joint_detail.save()
         #for seam in seam_list:
         #    seam.weld_joint_detail = weld_joint_detail
@@ -1287,4 +1288,10 @@ def saveWeldJointIndex(request, id_work_order, index):
     weld_joint = WeldJointTech.objects.get(order__id = id_work_order)
     weld_joint.index = index
     weld_joint.save()
+    return "ok"
+
+@dajaxice_register
+def deleteWeldJointDetail(request, uid):
+    weld_joint_detail = WeldJointTechDetail.objects.get(id = uid)
+    weld_joint_detail.delete()
     return "ok"

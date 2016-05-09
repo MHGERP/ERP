@@ -65,9 +65,9 @@ def man_hour_messageViews(request):
     return render(request,"production/man_hour_message.html",context)
 
 def man_hour_summarizeViews(request):
-    dateForm = DateForm();
+    hourSummarizeForm = HourSummarizeForm();
     context={
-        "dateForm":dateForm
+        "hourSummarizeForm":hourSummarizeForm
     }
     return render(request,"production/man_hour_summarize.html",context)
 
