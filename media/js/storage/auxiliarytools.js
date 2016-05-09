@@ -12,7 +12,7 @@ $(document).ready(function(){
     var aid;
     $(document).on("dblclick", "tr[name='entry_item']", function(){
         aid = $(this).attr("id");
-        var remark = $(this).find("td").eq(6).children("p").eq(0).text();
+        var remark = $(this).find("td").eq(5).children("p").eq(0).text();
         $("#myModal").modal('show');
         $("#id_remark").val(remark);
     });
@@ -139,7 +139,7 @@ $('input[type=text]').keyup(function(){
 
 function updateCallback(data){
     var aid = data.aid;
-    $("tr[id="+aid+"]").find("td").eq(6).children("p").eq(0).text(data.remark);
+    $("tr[id="+aid+"]").find("td").eq(5).children("p").eq(0).text(data.remark);
     alert(data.message);
 }
 

@@ -97,7 +97,7 @@ def steelLedgerViews(request):
 def weldEntryHomeViews(request):
     weldentry_set = WeldMaterialEntry.objects.all()
     search_form = WeldEntrySearchForm()
-    weldentry_set = weldentry_set.order_by("-entry_status","-entry_time","-entry_code")
+    weldentry_set = weldentry_set.order_by("-entry_status","-create_time","-entry_code")
     context = {
             "entry_set":weldentry_set,
             "ENTRYSTATUS_END":STORAGESTATUS_END,
@@ -444,17 +444,17 @@ def AuxiliaryToolsEntryListView(request):
     context={}
     if request.method=='GET':
         context['entry_list']=AuxiliaryToolEntry.objects.filter(
-            entry_status=STORAGESTATUS_KEEPER).order_by('-id')
+            entry_status=STORAGESTATUS_KEEPER).order_by('create_time')
     else:
         search_form = AuxiliaryEntrySearchForm(request.POST)
         if search_form.is_valid():
             context['entry_list'] =\
-            get_weld_filter(AuxiliaryToolEntry,search_form.cleaned_data)\
-                    .filter(entry_status=STORAGESTATUS_KEEPER)
+            get_weld_filter(AuxiliaryToolEntry,search_form.cleaned_data).order_by('create_time')
         else:
             context['entry_list']=[]
             print search_form.errors
     context['search_form'] = AuxiliaryEntrySearchForm()
+    context['STORAGESTATUS_KEEPER'] = STORAGESTATUS_KEEPER
     return render(request,'storage/auxiliarytools/auxiliarytoolsentry_list.html',context)
 
 
@@ -467,11 +467,9 @@ def AuxiliaryToolsEntryView(request):
     """
     context = {}
     object_id = int(request.GET['id'])
-    print object_id
     auxiliary_tool_entry = AuxiliaryToolEntry.objects.get(
         id=object_id)
     context['entry'] = auxiliary_tool_entry
-    print context['entry'].create_time
     context['items'] = AuxiliaryToolEntryItems.objects.filter(
         entry =auxiliary_tool_entry)
     return render(request,
@@ -486,10 +484,9 @@ def AuxiliaryToolsApplyListView(request):
     return: NULL
     """
     context={}
-    apply_cards=AuxiliaryToolApplyCard.objects.exclude(status=AUXILIARY_TOOL_APPLY_CARD_COMMITED).order_by('-create_time')
+    apply_cards=AuxiliaryToolApplyCard.objects.all().order_by('-create_time')
     context['search_form']=AuxiliaryToolsApplyCardSearchForm()
     context['apply_cards']=apply_cards
-    context['STORAGE_KEEPER']=checkAuthority(STORAGE_KEEPER,request.user)
     return render(request,'storage/auxiliarytools/auxiliarytoolsapply_list.html',context)
 
 

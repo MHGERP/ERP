@@ -94,7 +94,7 @@ function entryconfirm(eid){
 function entry_confirm_callback(data){
     alert(data.message);
     $("#items_table").html(data.html)
-    if(role == "keeper")
+    if(data.role == "keeper")
         cal_entry_items_price()
 }
 

@@ -38,13 +38,14 @@ def weldStoreItemsCreate(entry):
 
     for item in entry_items:
         try:
-            storeitem = WeldStoreList(entry_item = item , inventory_count = item.total_weight)        
+            storeitem = WeldStoreList(entry_item = item , inventory_count = item.total_weight,entry_time = entry.create_time)        
             if item.material.name == u"焊条" or item.material.name == u"焊剂":
                 production_date = item.production_date
                 storeitem.deadline = production_date.replace(production_date.year + 2)
             storeitem.save()
         except Exception,e:
             print e
+
 def storeConsume(applycard):
     specification = applycard.standard
     material_id = applycard.material_number
@@ -235,7 +236,7 @@ def checkStorage(db_type,sorce=None):
     return db_model
 
 def getDbMap(sorce):
-    DB_MAP = {WELD:WeldStoreList,PROFILE:BarSteelMaterialLedger,SHEET:BoardSteelMaterialLedger,PURCHASED:OutsideStorageList,AUXILIARY_TOOL:AuxiliaryTool}
+    DB_MAP = {WELD:WeldStoreList,PROFILE:BarSteelMaterialLedger,SHEET:BoardSteelMaterialLedger,PURCHASED:OutsideStorageList,AUXILIARY_TOOL:AuxiliaryToolStoreList}
     if sorce == "purchaser":    
         for tp in WELD_TYPE_LIST:
             if tp in WELD_TYPE_LIST:
@@ -259,3 +260,10 @@ def gen_replace_dic(dict,fk_model):
     for k,v in dict.items():
         replace_dic[k] = fk_model+"__"+k+"__contains"
     return replace_dic
+
+def createAuxiliaryToolStoreList(entry):
+    """
+    辅助工具入库单台账更新
+    """
+    for item in entry.auxiliarytoolentryitems_set.all():
+        AuxiliaryToolStoreList(entry_item = item , inventory_count = item.count,entry_time=entry.create_time).save()

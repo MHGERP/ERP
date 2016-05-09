@@ -16,7 +16,7 @@ from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
 from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
 from django.db.models import Q
-from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems
+from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems,BidNextStatus
 from storage.models import *
 from storage.forms import EntryTypeForm
 from storage.utils import AutoGenEntry
@@ -644,21 +644,11 @@ def saveComment(request, form, bid_id):
     return simplejson.dumps(ret)
 
 @dajaxice_register
-def saveBidApply(request, form, bid_id):
-    bidform = BidForm.objects.get(id = bid_id)
-    try:
-        bidapply = bidApply.objects.get(bid = bidform)
-        bidApplyForm = BidApplyForm(deserialize_form(form), instance=bidapply)
-    except:
-        bidapply = None
-        bidApplyForm = BidApplyForm(deserialize_form(form))
+def saveBidApply(request, form, bid_apply_id):
+    bid_apply=bidApply.objects.get(pk=bid_apply_id)
+    bidApplyForm = BidApplyForm(deserialize_form(form), instance=bid_apply)
     if bidApplyForm.is_valid():
-        if bidapply:
-            bidApplyForm.save()
-        else:
-            bidapply = bidApplyForm.save(commit = False)
-            bidapply.bid = bidform
-            bidapply.save()
+        bidApplyForm.save()
         ret = {'status': '2', 'message': u"申请书保存成功"}
     else:
         ret = {'status': '0', 'field':bidApplyForm.data.keys(), 'error_id':bidApplyForm.errors.keys(), 'message': u"申请书保存不成功"}
@@ -676,14 +666,10 @@ def resetBidApply(request, bid_id):
     return simplejson.dumps(ret)
 
 @dajaxice_register
-def submitStatus(request, bid_id):
-    try:
-        bidform = BidForm.objects.get(id = bid_id)
-        goNextStatus(bidform, request.user)
-        ret = {'status': '1', 'message': u"申请书提交成功"}
-    except:
-        ret = {'status': '2', 'message': u"申请书不存在"}
-    return simplejson.dumps(ret)
+def submitBidApply(request, bid_apply_id):
+    bid_apply = bidApply.objects.get(id = bid_apply_id)
+    BidNextStatus(bid_apply)
+    return simplejson.dumps({})
 
 
 def AddProcessFollowing(request,bid,process_form):
