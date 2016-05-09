@@ -3,38 +3,20 @@
         <tr>
             <th><input type="checkbox" name="all" id="selectall"></th>
             <th>序号</th>
-            <th>工作令编号</th>
             <th>名称</th>
             <th>规格</th>
-            <th>标准号/图号</th>
-            <th>材质</th>
-            <th>单位</th>
+            <th>材料牌号</th>
             <th>数量</th>
-            <th>质量等级</th>
-            <th>采购</th>
-            <th>库存</th>
-            <th>相关库存</th>
-            <th>删除</th>
-            <th>是否已加入订购单</th>
         </tr>
     </thead>
-    {% for item in inventory_detail_list%}
+    {% for item in data%}
     <tr iid="{{item.id}}">
         <td>{%if item.can_choose %}<input type="checkbox" class="checkbox" args="{{item.id}}">{% endif %}</td>
         <td>{{forloop.counter}}</td>
-        <td>{{item.order.order_index}}</td>
         <td>{{item.name}}</td>
-        <td>{{item.specification}}</td>
-        <td>{{item.schematic_index}}</td>
-        <td>{{item.material.name}}</td>
-        <td>{{item.unit}}</td>
-        <td>{{item.count}}</td>
-        <td>{{item.press}}</td>
-        <td>{{item.total_weight}}</td>
-        <td>0</td>
-        <td><button class="btn btn-primary">查看相关库存</button></td>
-        <td><button class="btn btn-danger" uid={{item.id}}>删除</button></td>
-        <td>{{item.status}}</td>
+        <td>{{item.specifications}}</td>
+        <td>{{item.material}}</td>
+        <td>{{item.quantity}}</td>
     </tr>
     {% endfor%}
 </table>

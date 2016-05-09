@@ -176,9 +176,9 @@ def getRelatedModel(request, index):
     print "这是一个测试: "
     print index
     if index == MAIN_MATERIEL:
-        data = SteelMaterial.objects.all()
+        data = SteelMaterialStoreList.objects.all()
     elif index == AUXILIARY_MATERIEL:
-        data = SteelMaterial.objects.all()
+        data = SteelMaterialStoreList.objects.all()
     elif index == FIRST_FEEDING:
         print index
     elif index == OUT_PURCHASED:
@@ -202,10 +202,12 @@ def getRelatedTable(request, index, f1, f2, f3):
         COOPERANT: "forging",
         WELD_MATERIAL: "weld_material",
     }
+    data = []
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        data = SteelMaterial.objects.filter(name = f1, specifications = f2, material = f3)
+        data = SteelMaterialStoreList.objects.filter(name = f1, specifications = f2, material = f3)
     elif index == OUT_PURCHASED:
         data = OutsideStorageList.objects.filter(texture = f2)
+        print data
     elif index == WELD_MATERIAL:
         data = WeldStoreList.objects.filter(entry_item__specifimaterial_mark = f2 , entry_item__specifications = f3)
     context = {
