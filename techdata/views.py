@@ -77,6 +77,17 @@ def connectionOrientationEditViews(request):
     context = {}
     return render(request, "techdata/connection_orientation_edit.html", context)
 
+def cooperantViews(request):
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "work_order_form" : work_order_form,
+        "inventory_type": COOPERANT,
+    }
+    return render(request, "techdata/cooperant.html", context)
+
 def outPurchasedViews(request):
     """
     JunHU
@@ -94,12 +105,20 @@ def firstFeedingViews(request):
     """
     work_order_form = WorkOrderForm()
     context = {
-        "work_order_form" : work_order_form
+        "work_order_form" : work_order_form,
+        "inventory_type": FIRST_FEEDING,
     }
     return render(request, "techdata/first_feeding.html", context)
 
 def principalMaterialViews(request):
-    context = {}
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "work_order_form" : work_order_form,
+        "inventory_type": MAIN_MATERIEL,
+    }
     return render(request, "techdata/principal_material.html", context)
 
 def auxiliaryMaterialViews(request):
@@ -345,7 +364,9 @@ def weldJointTechView(request, orderid):
         weld_joint.save()
     else:
         weld_joint = WeldJointTech.objects.filter(order__id = orderid)[0]
-    weld_joint_details = WeldJointTechDetail.objects.filter(weld_joint = weld_joint, is_save = True)
+    #weld_joint_details = WeldJointTechDetail.objects.filter(weld_joint = weld_joint, is_save = True)
+    weld_joint_details = WeldJointTechDetail.objects.filter(Q(weld_joint = weld_joint) & Q(is_save = True))
+    print len(weld_joint_details)
     context = {
         "weld_joint_index" : weld_joint.index,
         "weld_joint_details" : weld_joint_details,

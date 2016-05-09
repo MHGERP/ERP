@@ -15,6 +15,7 @@ from django.db.models import Q,Sum
 from storage.utils import get_weld_filter
 from const.forms import WorkOrderForm
 from production.forms import *
+from django.contrib.auth.models import User
 
 def getQ(con):
     query_set = Q()
@@ -67,93 +68,54 @@ def getHourSearch(request, form):
     return html
 
 @dajaxice_register
-def getHourSummarize(request, work_order, operator, date):
+def getHourSummarize(request, form):
     """
     Lei
     """
-    message = ""
-    try:
-        year,month = date.split("-")
-        if operator:
-            process = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month))
-        else:
-            process = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operate_date__year=year)&Q(operate_date__month=month))
-        status = 1
-    except Exception,e:
-        status = 0
-        message = "日期格式不正确"
-    processSet=set()
-    process_filter = []
-    for item in process:
-        if item.operator not in processSet:
-            processSet.add(item.operator)
-            process_filter.append(item)
+    hour_summarize_form = HourSummarizeForm(deserialize_form(form))
+    if hour_summarize_form.is_valid():
+        process_detail_list  = ProcessDetail.objects.exclude(productionworkgroup = None).filter(getQ(hour_summarize_form.cleaned_data))
+    else:
+        print hour_message_search_form.errors
     context = {
-        "process":process_filter,
-        "date":date
+        "process_detail_list":process_detail_list
     }
     html = render_to_string("production/widgets/man_hour_table.html",context)
-    ret = {
-        "status":status,
-        "message":message,
-        "html":html
-    }
-    return simplejson.dumps(ret)
+    return html
 
 @dajaxice_register
-def getSummarizeTicket(request, work_order, operator, date):
+def getSummarizeTicket(request, work_order, groupNumId, date):
     """
     Lei
     """
-    message = ""
-    try:
-        year,month = date.split("-")
-        process = Processing.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month)).order_by('operate_date')
-        summarize = reduce(lambda x,y:x+y.hour,process,0)
-        status = 1
-    except Exception,e:
-        status = 0
-        message = "日期格式不正确"
-    
+    year,month = date.split("-")
+    process_detail_list = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(productionworkgroup=groupNumId)&Q(complete_date__year=year)&Q(complete_date__month=month)).order_by('complete_date')
+    summarize = reduce(lambda x,y:x+y.work_hour,process_detail_list,0)
+    group_num = process_detail_list[0].productionworkgroup.name
     context = {
         "work_order":work_order,
-        "summarize":summarize,
-        "process":process,
+        "group_num":group_num,
+        "process_detail_list":process_detail_list,
+        "summarize":summarize
     }
     html = render_to_string("production/man_hour_summarize_table.html",context)
-    ret = {
-        "status":status,
-        "message":message,
-        "html":html
-    }
-    return simplejson.dumps(ret)
+    return html
 
 @dajaxice_register
-def getPartTicket(request, work_order, operator, date):
+def getPartTicket(request, work_order, groupNumId, date):
     """
     Lei
     """
-    message = ""
-    try:
-        year,month = date.split("-")
-        process = Processing.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(operator__username=operator)&Q(operate_date__year=year)&Q(operate_date__month=month)).order_by('materiel_belong')
-        status = 1
-    except Exception,e:
-        status = 0
-        message = "日期格式不正确"
-
+    year,month = date.split("-")
+    process_detail_list = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(productionworkgroup=groupNumId)&Q(complete_date__year=year)&Q(complete_date__month=month)).order_by('materiel_belong')
+    group_num = process_detail_list[0].productionworkgroup.name
     context = {
-        "operator":operator,
         "work_order":work_order,
-        "process":process
+        "group_num":group_num,
+        "process_detail_list":process_detail_list
     }
     html = render_to_string("production/man_hour_part_ticket.html",context)
-    ret = {
-        "status":status,
-        "message":message,
-        "html":html
-    }
-    return simplejson.dumps(ret)
+    return html
 
 
 
@@ -408,3 +370,47 @@ def weldPartOrderInfo(request, iid):
     materielObj.processDetailObj.extend([ProcessDetail()] * (12-len(materielObj.processDetailObj)))
     html = render_to_string("production/widgets/weld_part_order_info_table.html",{"materielObj":materielObj})
     return simplejson.dumps({ "html" : html})
+
+@dajaxice_register
+def getProductionUser(request, form):
+    """
+    Lei
+    """
+    production_user_search_form = ProductionUserSearchForm(deserialize_form(form))
+    if production_user_search_form.is_valid():
+        production_user_list  = ProductionUser.objects.filter(getQ(production_user_search_form.cleaned_data))
+    html = render_to_string("production/widgets/production_user_table.html",{"production_user_list":production_user_list})
+    return html
+
+@dajaxice_register
+def getUser(request, form):
+    """
+    Lei
+    """
+    user_choose_form = UserChooseForm(deserialize_form(form))
+    if user_choose_form.is_valid():
+        user_list = User.objects.filter(getQ(user_choose_form.cleaned_data))
+    html = render_to_string("production/widgets/user_table.html",{"user_list":user_list})
+    return html
+
+# @dajaxice_register
+# def addProductionUser(request, form):
+#     """
+#     Lei
+#     """
+#     production_user_search_form = productionUserSearchForm(deserialize_form(form))
+#     if production_user_search_form.is_valid():
+#         print production_user_search_form.cleaned_data
+#         production_user_name = roduction_user_search_form.cleaned_data["production_user_id__username__contains"]
+#         users=User.objects.all()
+#         productionUser = ProductionUser()
+#         productionUser.production_user_id.username = production_user_search_form.cleaned_data["production_user_id__username__contains"]
+#         productionUser.production_work_group.name = production_user_search_form.cleaned_data["production_work_group"]
+#         productionUser.save()
+#         message = u"生产人员添加成功"
+#         print "ssssssssssss"
+        
+#         print "ddddddddddddd"
+#     else:
+#         message=u"添加失败,生产人员用户名不能为空！"
+#     return message

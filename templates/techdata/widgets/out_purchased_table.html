@@ -6,21 +6,20 @@
 </div>
 <div class="widget-content nopadding">
     <div class="dataTables_length">
-        <span id="span_write">
             编制人：
-            {% if not work_order.boxoutboughtmark.writer %}
-            <span class="btn btn-mini btn-primary" id="btn_write_confirm">签字</span>
+        <span id="span_write">
+            {% if not work_order.outpurchasedmark.writer %}
+            <span class="btn btn-mini btn-primary btn-mark" id="btn_write_confirm" args="{{MARK_WRITE}}">签字</span>
             {% else %}
-            {{work_order.boxoutboughtmark.writer.userinfo}}
+            {{work_order.outpurchasedmark.writer.userinfo}}
             {% endif %} 
         </span>
-
-        <span id="span_review">
             审核人：
-            {% if not work_order.boxoutboughtmark.reviewer %}
-            <span class="btn btn-mini btn-primary" id="btn_review_confirm">签字</span>
+        <span id="span_review">
+            {% if not work_order.outpurchasedmark.reviewer %}
+            <span class="btn btn-mini btn-primary btn-mark" id="btn_review_confirm" args="{{MARK_REVIEW}}">签字</span>
             {% else %}
-            {{work_order.boxoutboughtmark.reviewer.userinfo}}
+            {{work_order.outpurchasedmark.reviewer.userinfo}}
             {% endif %}
         </span>
     </div>

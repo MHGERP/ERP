@@ -35,7 +35,14 @@ import datetime
 #                     complete_plandate = datetime.datetime.now().date(),
 #                     complete_date = datetime.datetime.now().date()
 #                 )
-
+idtable = {
+    MAIN_MATERIEL: "main_materiel",
+    AUXILIARY_MATERIEL: "auxiliary_materiel",
+    FIRST_FEEDING: "first_feeding",
+    OUT_PURCHASED: "purchased",
+    COOPERANT: "forging",
+    WELD_MATERIAL: "weld_material",
+}
 # sub=SubWorkOrder.objects.get(pk = 1)
 oneObj = MaterielCopy(
                     order = WorkOrder.objects.get(id = 1),
@@ -73,7 +80,7 @@ oneObj.save()
 it = InventoryType.objects.get(name = "main_materiel")
 # print "===================="
 # print it
-oneObj.inventory_type.add(InventoryType.objects.get(name = "auxiliary_materiel"))
+oneObj.inventory_type.add(InventoryType.objects.get(name = MAIN_MATERIEL))
 # twoObj = MaterielPurchasingStatus(
 #                     materiel = oneObj,
 #                     add_to_detail = True
