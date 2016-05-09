@@ -9,6 +9,19 @@ function refreshCallBack(data) {
     $(".widget-box").html(data);
 }
 
+$("#btn_save_principal").click(function() {
+    var id_work_order = $("#id_work_order").val();   
+    Dajaxice.techdata.addSinglePrincipalItem(function(data) {
+        if(data == "ok") {
+            alert("保存成功");
+            refresh();
+        }
+        else alert("保存失败");
+    }, {
+        "id_work_order": id_work_order,
+        "form": $("#principal_form").serialize(),
+    })
+});
 $(document).on("click", ".btn-remove", function(){
     if (confirm("是否确定删除？")) {
         var inventory_type = $(".form-search").attr("itype");

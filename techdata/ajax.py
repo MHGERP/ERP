@@ -113,6 +113,17 @@ def deleteSingleItem(request, iid, inventory_type):
     item.delete()
 
 @dajaxice_register
+def addSinglePrincipalItem(request, id_work_order, form):
+    form = PrincipalItemForm(deserialize_form(form))
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    if form.is_valid():
+        item = form.save(commit = False)
+        item.order = work_order
+        item.save()
+        return "ok"
+    return "fail"
+
+@dajaxice_register
 def addSingleItem(request, id_work_order, index, inventory_type):
     """
     JunHU
@@ -125,7 +136,7 @@ def addSingleItem(request, id_work_order, index, inventory_type):
         return simplejson.dumps(context)
     item = item[0]
     if DetailItem.objects.filter(materiel_belong = item).count() > 0:
-        context = {"success": False, "remark": u"该零件已添加至外购件明细"}
+        context = {"success": False, "remark": u"该零件已添加至明细中"}
         return simplejson.dumps(context)
     DetailItem(materiel_belong = item).save()
     context = {"success" : True, "remark": u"添加成功"}
