@@ -80,7 +80,7 @@ oneObj.save()
 it = InventoryType.objects.get(name = "main_materiel")
 # print "===================="
 # print it
-oneObj.inventory_type.add(InventoryType.objects.get(name = "auxiliary_materiel"))
+oneObj.inventory_type.add(InventoryType.objects.get(name = MAIN_MATERIEL))
 # twoObj = MaterielPurchasingStatus(
 #                     materiel = oneObj,
 #                     add_to_detail = True
