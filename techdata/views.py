@@ -77,6 +77,17 @@ def connectionOrientationEditViews(request):
     context = {}
     return render(request, "techdata/connection_orientation_edit.html", context)
 
+def cooperantViews(request):
+    """
+    JunHU
+    """
+    work_order_form = WorkOrderForm()
+    context = {
+        "work_order_form" : work_order_form,
+        "inventory_type": COOPERANT,
+    }
+    return render(request, "techdata/cooperant.html", context)
+
 def outPurchasedViews(request):
     """
     JunHU
@@ -94,7 +105,8 @@ def firstFeedingViews(request):
     """
     work_order_form = WorkOrderForm()
     context = {
-        "work_order_form" : work_order_form
+        "work_order_form" : work_order_form,
+        "inventory_type": FIRST_FEEDING,
     }
     return render(request, "techdata/first_feeding.html", context)
 

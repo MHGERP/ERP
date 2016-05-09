@@ -27,6 +27,10 @@ import datetime
 def markGenerateFactory(order, inventory_type):
     if inventory_type == OUT_PURCHASED:
         return order.outpurchasedmark
+    elif inventory_type == FIRST_FEEDING:
+        return order.firstfeedingmark
+    elif inventory_type == COOPERANT:
+        return order.cooperantmark
 
 @dajaxice_register
 def detailMark(request, id_work_order, step, inventory_type):
@@ -61,12 +65,21 @@ def detailMark(request, id_work_order, step, inventory_type):
 def detailItemGenerateFactory(inventory_type):
     if inventory_type == OUT_PURCHASED:
         return OutPurchasedItem
+    elif inventory_type == FIRST_FEEDING:
+        return FirstFeedingItem
+    elif inventory_type == COOPERANT:
+        return CooperantItem
 
 @dajaxice_register
 def getInventoryTables(request, id_work_order, inventory_type):
     """
     JunHU
     """
+    id2table = {
+        OUT_PURCHASED: "out_purchased_table.html",
+        FIRST_FEEDING: "first_feeding_table.html",
+        COOPERANT: "cooperant_table.html",
+    }
     work_order = WorkOrder.objects.get(id = id_work_order)
     DetailItem = detailItemGenerateFactory(inventory_type)
     context = {
@@ -76,7 +89,7 @@ def getInventoryTables(request, id_work_order, inventory_type):
     }
     list = DetailItem.objects.filter(materiel_belong__order = work_order)
     context["list"] = list
-    html = render_to_string("techdata/widgets/out_purchased_table.html", context)
+    html = render_to_string("techdata/widgets/" + id2table[inventory_type], context)
     return html
 
 @dajaxice_register
@@ -100,7 +113,7 @@ def addSingleItem(request, id_work_order, index, inventory_type):
     if DetailItem.objects.filter(materiel_belong = item).count() > 0:
         context = {"success": False, "remark": u"该零件已添加至外购件明细"}
         return simplejson.dumps(context)
-    OutPurchasedItem(materiel_belong = item).save()
+    DetailItem(materiel_belong = item).save()
     context = {"success" : True, "remark": u"添加成功"}
     return simplejson.dumps(context)
 
@@ -110,12 +123,23 @@ def autoSetInventoryLabel(request, id_work_order, inventory_type):
     JunHU
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
+    DetailItem = detailItemGenerateFactory(inventory_type)
     if inventory_type == OUT_PURCHASED:
         for item in Materiel.objects.filter(order = work_order):
-            if item.circulationroute.L1 == None or item.circulationroute.L1.name != GY: continue
+            if not item.route().startswith("GY"): continue
             if item.schematic_index and item.schematic_index.endswith(".00"): continue
-            if OutPurchasedItem.objects.filter(materiel_belong = item).count() > 0: continue
-            OutPurchasedItem(materiel_belong = item, remark = item.remark).save()
+            if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
+            DetailItem(materiel_belong = item, remark = item.remark).save()
+    elif inventory_type == FIRST_FEEDING:
+        for item in Materiel.objects.filter(order = work_order):
+            if not (item.route().startswith("DY") or item.route().startswith("H1.XZ.H1")): continue
+            if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
+            DetailItem(materiel_belong = item, remark = item.remark).save()
+    elif inventory_type == COOPERANT:
+        for item in Materiel.objects.filter(order = work_order):
+            if not item.route().startswith("H1.J.ZM"): continue
+            if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
+            DetailItem(materiel_belong = item, remark = item.remark).save()
 
 @dajaxice_register
 def getProcessBOM(request, id_work_order):
@@ -124,8 +148,6 @@ def getProcessBOM(request, id_work_order):
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
-    for item in BOM:
-        item.route = ' '.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))   
     context = {
         "work_order": work_order,
         "BOM": BOM,
@@ -143,9 +165,6 @@ def getSingleProcessBOM(request, iid):
     JunHU
     """
     item = Materiel.objects.get(id = iid)
-    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
-        CirculationRoute(materiel_belong = item).save()
-    item.route = ' '.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
     context = {
         "item": item,
     }
@@ -247,10 +266,6 @@ def getDesignBOM(request, id_work_order):
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
-    for item in BOM:
-        if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
-            CirculationRoute(materiel_belong = item).save()
-        item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
     context = {
         "work_order" : work_order,
         "BOM" : BOM,
@@ -267,9 +282,6 @@ def getSingleDesignBOM(request, iid):
     mxl
     """
     item = Materiel.objects.get(id = iid)
-    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
-        circulationroute(materiel_belong = item).save()
-    item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
     context = {
         "item" : item
     }

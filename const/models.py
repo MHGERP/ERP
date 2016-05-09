@@ -76,6 +76,8 @@ class Materiel(models.Model):
     def total_weight_cal(self):
         if self.count and self.net_weight:
             return int(self.count) * self.net_weight
+    def route(self):
+       return '.'.join(getattr(self.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(self.circulationroute, "L%d" % i))   
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"

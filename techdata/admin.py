@@ -34,6 +34,8 @@ RegisterClass = (
     OutPurchasedItem,
     WeldQuota,
     OutPurchasedMark,
+    FirstFeedingItem,
+    FirstFeedingMark,
 )
 
 for item in RegisterClass:
