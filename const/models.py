@@ -12,6 +12,12 @@ class WorkOrder(models.Model):
     class Meta:
         verbose_name = u"工作令"
         verbose_name_plural = u"工作令"
+
+    def save(self, *args, **kwargs):
+        super(WorkOrder, self).save(*args, **kwargs)
+        for i in xrange(int(self.count)):
+            SubWorkOrder(order = self, index = str(i + 1)).save()
+
     def __unicode__(self):
         return self.order_index
 
