@@ -113,15 +113,37 @@ def deleteSingleItem(request, iid, inventory_type):
     item.delete()
 
 @dajaxice_register
-def addSinglePrincipalItem(request, id_work_order, form):
-    form = PrincipalItemForm(deserialize_form(form))
-    work_order = WorkOrder.objects.get(id = id_work_order)
-    if form.is_valid():
-        item = form.save(commit = False)
-        item.order = work_order
-        item.save()
-        return "ok"
-    return "fail"
+def getItemInfo(request, iid, inventory_type):
+    """
+    JunHU
+    """
+    DetailItem = detailItemGenerateFactory(inventory_type)
+    item = DetailItem.objects.get(id = iid)
+    if inventory_type == MAIN_MATERIEL:
+        principal_form = PrincipalItemForm(instance = item)
+        html = render_to_string("techdata/widgets/principal_card.html", {"principal_form": principal_form})
+    else:
+        html = ""
+    return html
+
+@dajaxice_register
+def addOrUpdateSinglePrincipalItem(request, id_work_order, form, iid = None):
+    if iid == None:
+        form = PrincipalItemForm(deserialize_form(form))
+        work_order = WorkOrder.objects.get(id = id_work_order)
+        if form.is_valid():
+            item = form.save(commit = False)
+            item.order = work_order
+            item.save()
+            return "ok"
+        return "fail"
+    else:
+        item = PrincipalItem.objects.get(id = iid)
+        form = PrincipalItemForm(deserialize_form(form), instance = item)
+        if form.is_valid():
+            form.save()
+            return "ok"
+        return "fail"
 
 @dajaxice_register
 def addSingleItem(request, id_work_order, index, inventory_type):
@@ -162,7 +184,7 @@ def autoSetInventoryLabel(request, id_work_order, inventory_type):
             DetailItem(materiel_belong = item, remark = item.remark).save()
     elif inventory_type == COOPERANT:
         for item in Materiel.objects.filter(order = work_order):
-            if not item.route().startswith("H1.J.ZM"): continue
+            if not item.route().startswith("H1.J"): continue
             if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
             DetailItem(materiel_belong = item, remark = item.remark).save()
 
