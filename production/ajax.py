@@ -16,6 +16,7 @@ from storage.utils import get_weld_filter
 from const.forms import WorkOrderForm
 from production.forms import *
 from django.contrib.auth.models import User
+from users.models import UserInfo
 
 def getQ(con):
     query_set = Q()
@@ -74,7 +75,10 @@ def getHourSummarize(request, form):
     """
     hour_summarize_form = HourSummarizeForm(deserialize_form(form))
     if hour_summarize_form.is_valid():
-        process_detail_list  = ProcessDetail.objects.exclude(productionworkgroup = None).filter(getQ(hour_summarize_form.cleaned_data))
+        select = {'month': connection.ops.date_trunc_sql('month', 'complete_date')}
+        process_detail_list  = ProcessDetail.objects.exclude(complete_date = None).filter(getQ(hour_summarize_form.cleaned_data))\
+        .extra(select=select).values('materiel_belong__order','materiel_belong__order__order_index', 'productionworkgroup', 'productionworkgroup__name').annotate(Sum('work_hour'))
+        print process_detail_list
     else:
         print hour_message_search_form.errors
     context = {
@@ -389,28 +393,53 @@ def getUser(request, form):
     """
     user_choose_form = UserChooseForm(deserialize_form(form))
     if user_choose_form.is_valid():
-        user_list = User.objects.filter(getQ(user_choose_form.cleaned_data))
+        user_list = UserInfo.objects.filter(getQ(user_choose_form.cleaned_data)).order_by("productionuser")
     html = render_to_string("production/widgets/user_table.html",{"user_list":user_list})
     return html
 
-# @dajaxice_register
-# def addProductionUser(request, form):
-#     """
-#     Lei
-#     """
-#     production_user_search_form = productionUserSearchForm(deserialize_form(form))
-#     if production_user_search_form.is_valid():
-#         print production_user_search_form.cleaned_data
-#         production_user_name = roduction_user_search_form.cleaned_data["production_user_id__username__contains"]
-#         users=User.objects.all()
-#         productionUser = ProductionUser()
-#         productionUser.production_user_id.username = production_user_search_form.cleaned_data["production_user_id__username__contains"]
-#         productionUser.production_work_group.name = production_user_search_form.cleaned_data["production_work_group"]
-#         productionUser.save()
-#         message = u"生产人员添加成功"
-#         print "ssssssssssss"
-        
-#         print "ddddddddddddd"
-#     else:
-#         message=u"添加失败,生产人员用户名不能为空！"
-#     return message
+@dajaxice_register
+def prodUserModify(request, produserid):
+    """
+    Lei
+    """
+    productionUserForm = ProductionUserForm(instance = ProductionUser.objects.get(id = produserid))
+    return productionUserForm.as_p()
+
+@dajaxice_register
+def saveProdUserModify(request, form, produserid):
+    prod_user_obj = ProductionUser.objects.get(id = produserid)
+    prod_user_form = ProductionUserForm(deserialize_form(form),instance = prod_user_obj)
+    if prod_user_form.is_valid():
+        prod_user_form.save()
+        message = u"修改成功"
+    else:
+        message = u"修改失败"
+    return message
+
+@dajaxice_register
+def prodUserDelete(request, uid):
+    """
+    Lei
+    """
+    produser_obj = ProductionUser.objects.get(id = uid)
+    produser_obj.delete()
+    return uid
+
+@dajaxice_register
+def addProdUser(request, checkUserList):
+    """
+    Lei
+    """
+    for username in checkUserList:
+        userInfor_obj = UserInfo.objects.get(user__username = username)
+        prod_user_obj = ProductionUser()
+        prod_user_obj.production_user_id = userInfor_obj
+        prod_user_obj.save()
+    return
+
+    # prodplan_set = ProductionPlan.objects.all()
+    # html = render_to_string("production/widgets/production_plan_table.html", {"prodplan_set":prodplan_set})
+    # data = {
+    #     "html":html,
+    # }
+    # return simplejson.dumps(data)

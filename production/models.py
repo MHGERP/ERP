@@ -18,13 +18,13 @@ class ProductionWorkGroup(models.Model):
         return self.name
 
 class ProductionUser(models.Model):
-    production_user_id = models.ForeignKey(UserInfo,unique=True,verbose_name=u"生产人员")
+    production_user_id = models.OneToOneField(UserInfo,verbose_name=u"生产人员")
     production_work_group = models.ForeignKey(ProductionWorkGroup,blank=True, null=True, verbose_name=u"所属工作组")
     class Meta:
         verbose_name = "生产人员账户"
         verbose_name_plural = "生产人员账户"
     def __unicode__(self):
-        return '%s' % (self.production_user_id)
+        return '%s' % (self.production_user_id.name)
 
 class ProcessDetail(models.Model):
     materiel_belong = models.ForeignKey(Materiel, blank = False, verbose_name = u"工作票")
