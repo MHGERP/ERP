@@ -22,7 +22,7 @@
     <div class="modal-body">
         {% if bidform.bid_mod == 0 %}
         <a class="btn btn-primary" href="/purchasing/bidapplyform/{{bidform.bid_id}}">填写招标申请表</a>
-        <a class="btn btn-primary" >填写供应商审核表</a>
+        <a class="btn btn-primary" href="/purchasing/suppliercheck/{{bidform.bid_id}}">填写供应商审核表</a>
         {% else%}
         <a class="btn btn-primary" >填写比质比价卡</a>
         {% endif%}

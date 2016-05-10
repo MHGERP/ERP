@@ -9,7 +9,7 @@
     </thead>
     {%for item in process_detail_list%}
     <tr>
-        <td>{{item.materiel_belong.order}}</td>
+        <td>{{item.materiel_belong__order}}</td>
         <td uid="{{item.productionworkgroup.id}}">{{item.productionworkgroup.name}}</td>
         <td>{{item.complete_date|date:"Y-m"}}</td>
         <td>
