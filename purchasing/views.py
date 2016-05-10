@@ -170,13 +170,40 @@ def bidTrackingViews(request, bid_id):
         bid_dict["class"] = btn_color[btn_cnt]
         bid_status.append(bid_dict)
         btn_cnt += 1 if status == bidform.bid_status else 0
-
+    try:
+        bid_apply=bidform.bidapply_set.all()[0]     
+        if bid_apply.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
+            bid_apply_finish=True
+        else:
+            bid_apply_finish=False
+    except:
+        bid_apply_finish=False
+    try:
+        supplier_check=bidform.suppliercheck_set.all()[0]     
+        if supplier_check.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
+            supplier_check_finish=True
+        else:
+            supplier_check_finish=False
+    except:
+        supplier_check_finish=False
+    try:
+        quality_card=bidform.qualitypricecard_set.all()[0]     
+        if quality_card.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
+            quality_card_finish=True
+        else:
+            quality_card_finish=False
+    except:
+        quality_card_finish=False
+    print bid_apply_finish
     order_form=bidform.order_form
     context={
         "bid_status":bid_status,
         "bidform":bidform,
         "bid_status_dic":BIDFORM_PART_STATUS_DICT,
         "order_form":order_form,
+        "bid_apply_finish":bid_apply_finish,
+        "supplier_check_finish":supplier_check_finish,
+        "quality_card_finish":quality_card_finish,
         "items":MaterielCopy.objects.filter(materielformconnection__order_form=order_form)
     }
     return render(request, "purchasing/bid_track.html", context)

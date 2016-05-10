@@ -21,14 +21,18 @@
     </div>
     <div class="modal-body">
         {% if bidform.bid_mod == 0 %}
-        <a class="btn btn-primary" href="/purchasing/bidapplyform/{{bidform.bid_id}}">填写招标申请表</a>
-        <a class="btn btn-primary" href="/purchasing/suppliercheck/{{bidform.bid_id}}">填写供应商审核表</a>
+        <a class="btn {% if bid_apply_finish%}btn-success{%else%}btn-warning{%endif%}" href="/purchasing/bidapplyform/{{bidform.bid_id}}">填写招标申请表</a>
+        <a class="btn {% if supplier_check_finish%}btn-success{% else%}btn-warning{%endif%}" href="/purchasing/suppliercheck/{{bidform.bid_id}}">填写供应商审核表</a>
         {% else%}
-        <a class="btn btn-primary" >填写比质比价卡</a>
+        <a class="btn {% if quality_card_finish%}btn-success{%else%}btn-warning{%endif%}" >填写比质比价卡</a>
         {% endif%}
     </div>
     <div class="modal-footer">
-        <button class="btn btn-success " data-dismiss="modal" id="apply_select_confirm">确认</button>
+        {% if bid_apply_finish and supplier_check_finish%}
+        <button class="btn btn-success " data-dismiss="modal" id="apply_fill_confirm">确认</button>
+        {% elif quality_card_finish%}
+        <button class="btn btn-success " data-dismiss="modal" id="apply_fill_confirm">确认</button>
+        {% endif%}
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
     </div>
     {% endif%}
