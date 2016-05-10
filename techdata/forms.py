@@ -84,8 +84,8 @@ class WeldQuotaForm(forms.ModelForm):
     """
     class Meta:
         model = WeldQuota
+        exclude = ('order')
         widgets = {
-    
             "weld_material": forms.Select(attrs = {"class": "input-small"}),
             "size": forms.TextInput(attrs = {"class": "input-small"}),
             "stardard": forms.TextInput(attrs = {"class": "input-small"}),

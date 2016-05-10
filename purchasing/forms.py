@@ -42,6 +42,18 @@ class BidLogisticalForm(ModelForm):
             "bid_datetime":forms.DateInput(attrs={'class':'form-control'})
                   }
 
+class SupplierCheckForm(ModelForm):
+    class Meta:
+        model=SupplierCheck
+        fields=("apply_company","apply_date","bid_project","price_estimate","base_situation")
+        widgets = {
+                   "apply_date": forms.DateInput(attrs={'class':'form-control'}),
+                  }
+
+class SupplierCheckSupplierForm(ModelForm):
+    class Meta:
+        model=SupplierSelect
+        fields=("A","B","C","D","E","F","G")
 class QualityPriceCardForm(ModelForm):
     class Meta:
         model = qualityPriceCard
