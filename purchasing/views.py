@@ -586,6 +586,8 @@ def bidApplyFormViews(request,bid):
         comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
         if comment.count()>0:
             comment_dict[k]=comment[0]
+    for item in supplier_set:
+        item.form=BidApplySupplierForm(instance=item)
 
     context={
         "bid_apply":bid_apply,
@@ -617,12 +619,12 @@ def SupplierCheckViews(request,bid):
 
     for item in supplier_set:
         item.form=SupplierCheckSupplierForm(instance=item)
-        context={
-            "supplier_check":supplier_check,
-            "supplier_check_form":supplier_check_form,
-            "supplier_set":supplier_set,
-            "status_dic":BIDFORM_INVITE_BID_SUPPLIER_DIC,
-            "comment_user_dict":COMMENT_USER_DICT,
-            "comment_dict":comment_dict
-        }
+    context={
+        "supplier_check":supplier_check,
+        "supplier_check_form":supplier_check_form,
+        "supplier_set":supplier_set,
+        "status_dic":BIDFORM_INVITE_BID_SUPPLIER_DIC,
+        "comment_user_dict":COMMENT_USER_DICT,
+        "comment_dict":comment_dict
+    }
     return render(request,"purchasing/bid_invite/supplier_check_page.html",context)
