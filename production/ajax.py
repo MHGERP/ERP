@@ -73,7 +73,8 @@ def getHourSummarize(request, form):
     """
     hour_summarize_form = HourSummarizeForm(deserialize_form(form))
     if hour_summarize_form.is_valid():
-        process_detail_list  = ProcessDetail.objects.exclude(productionworkgroup = None).filter(getQ(hour_summarize_form.cleaned_data))
+        process_detail_list  = ProcessDetail.objects.exclude(productionworkgroup = None).filter(getQ(hour_summarize_form.cleaned_data)).values("materiel_belong__order", "productionworkgroup").distinct()
+        print process_detail_list
     else:
         print hour_message_search_form.errors
     context = {
@@ -115,7 +116,6 @@ def getPartTicket(request, work_order, groupNumId, date):
     }
     html = render_to_string("production/man_hour_part_ticket.html",context)
     return html
-
 
 
 @dajaxice_register
@@ -168,8 +168,7 @@ def prodplanDelete(request, planid):
 @dajaxice_register
 def getProductPlanForm(request, planid):
     prodPlanForm = ProdPlanForm(instance = ProductionPlan.objects.get(plan_id = planid))
-    html = render_to_string("production/widgets/production_plan_update_form.html", {"prodPlanForm":prodPlanForm})
-    return simplejson.dumps(html)
+    return simplejson.dumps(prodPlanForm.as_p())
     
 @dajaxice_register
 def prodplanUpdate(request, form, planid):
