@@ -15,7 +15,7 @@ for item in RegisterClass:
     admin.site.register(item)
 
 class ProductionUserAdmin(admin.ModelAdmin):
-    search_fields = ['production_user_id__username']
+    search_fields = ['production_user_id__name']
 
 RegisterSearchClass = (
     (ProductionUser,ProductionUserAdmin),
