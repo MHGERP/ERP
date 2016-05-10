@@ -48,19 +48,19 @@ class ProcessDetail(models.Model):
 
 class SynthesizeFileListStatus(models.Model):
     order = models.ForeignKey(WorkOrder, verbose_name = u"工作令")
-    sketch = models.BooleanField(default = False)
-    pressure_test = models.BooleanField(default = False)
-    craph = models.BooleanField(default = False)
-    product = models.BooleanField(default = False)
-    encasement_graph = models.BooleanField(default = False)
-    mark = models.BooleanField(default = False)
-    encasement_list = models.BooleanField(default = False)
-    coating_detail = models.BooleanField(default = False)
+    sketch = models.BooleanField(default = False, verbose_name = u"简图")
+    pressure_test = models.BooleanField(default = False, verbose_name = u"试压工艺")
+    craph = models.BooleanField(default = False, verbose_name = u"工艺库")
+    product = models.BooleanField(default = False, verbose_name = u"产品图")
+    encasement_graph = models.BooleanField(default = False, verbose_name = u"装箱图")
+    mark = models.BooleanField(default = False, verbose_name = u"唛头")
+    encasement_list = models.BooleanField(default = False, verbose_name = u"装箱单")
+    coating_detail = models.BooleanField(default = False, verbose_name = u"涂装明细")
     class Meta:
         verbose_name = u"综合工部"
         verbose_name_plural = u"综合工部"
     def __unicode__(self):
-        return "%s" % self.workorder_id
+        return "%s" % self.order
 
 
 class ProductionPlan(models.Model):

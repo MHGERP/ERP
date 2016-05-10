@@ -6,19 +6,13 @@ $(document).ready(function(){
 	});
 	$(".refund-card-search-btn").click(function(){
 		form=$(".refund-card-search-form").serialize(true);
-		Dajaxice.storage.searchRefundCard(searchRefundCard_CallBack,{'form':form});
+		Dajaxice.storage.searchSteelRefundCard(searchRefundCard_CallBack,{'form':form});
 	});
 	$(".ledger-search-btn").click(function(){
 		form=$(".ledger-search-form").serialize(true);
 		Dajaxice.storage.searchSteelLedger(searchSteelLedger_CallBack,{'form':form});
 	});
-    //var material_number_list = new Array();
 	$(".refund-card-ensure-btn").click(function(){
-        //$("tr.everyReturn").each(function(i){
-        //    material_number_list.push($(this).attr("matnum"));
-        //})
-		//alert(material_number_list);
-
         var form_code = $("table").attr("fc");
         Dajaxice.storage.steelRefundEnsure(steelRefundEnsureCallBack, {'form_code':form_code});
 	});
@@ -70,6 +64,13 @@ $(document).ready(function(){
         var aid = $("div#steelapplycard_table").attr('aid');
         if(confirm("领用单确认后不能再修改")){
             Dajaxice.storage.steelApplyCardConfirm(steel_applycard_confirm_callback,{"aid":aid,"role":role});
+        }
+    })
+    $(document).on("click","span[name='steel_refund']",function(){
+        var role = $(this).attr('role');
+        var rid = $("#refund_table").attr("rid");
+        if(confirm("退库单确认后不能再次修改")){
+            Dajaxice.storage.steelRefundConfirm(steel_refund_callback,{"rid":rid});
         }
     })
 });
@@ -147,5 +148,9 @@ function steelapply_callback(data){
 }
 function steel_applycard_confirm_callback(data){
     $("div#steelapplycard").html(data.html);
+    alert(data.message);
+}
+function steel_refund_callback(data){
+    $("div#refund_table_div").html(data.html);
     alert(data.message);
 }

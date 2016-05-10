@@ -47,6 +47,7 @@
         <div class="span4 control-group {% if form.intoheattime.errors %}error{% endif %}">
             <button type="button" class="btn btn-default bl">{{form.intoheattime.label}}</button>
             {{form.intoheattime}}
+
         </div>
         <div class="span4 control-group {% if form.bakingtemp.errors %}error{% endif %}"> 
             <button type="button" class="btn btn-default bl">{{form.bakingtemp.label}}</button>
@@ -106,7 +107,7 @@
     <a class="btn btn-success bakeform-btn"  href="/storage/weldbake">返回</a>
     <script>
         $(function (){
-            $("#date").datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true})
+            $("#date").datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true});
             $("#intoheattime").datetimepicker({format:"yyyy-mm-dd hh:ii",minView:0,minuteStep:1,startView:1,autoclose:true})
             $("#timefortemp").datetimepicker({format:"yyyy-mm-dd hh:ii",minView:0,minuteStep:1,startView:1,autoclose:true})
             $("#tempfalltime").datetimepicker({format:"yyyy-mm-dd hh:ii",minView:0,minuteStep:1,startView:1,autoclose:true})
