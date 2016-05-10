@@ -1102,3 +1102,31 @@ def steelApplyCardConfirm(request,aid,role):
     else:
         transaction.rollback()
     return simplejson.dumps({"message":message,"html":html})
+
+@dajaxice_register
+def steelRefundConfirm(request,rid):
+    try:
+        refund = SteelMaterialRefundCard.objects.get(id=rid)
+        if refund.steel_type == BOARD_STEEL:
+            items = refund.boardsteelmaterialrefunditems
+            items_table_path = "steelboardrefund.html"
+        else:
+            items = refund.bardsteelmaterialrefunditems_set.all
+        updateSteelStoreList(refund,items)
+        refund.status = STORAGESTATUS_END
+        refund.keeper = request.user
+        refund.save()
+        message = u"退库成功"
+    except Exception,e:
+        message = u"退库失败"
+        print e
+    items_table_path = "storage/wordhtml/" + items_table_path
+    html = render_to_string(items_table_path,{"refund":refund,"items":items})
+    return simplejson.dumps({"html":html,"message":message})
+
+def updateSteelStoreList(refund,items):
+    if refund.steel_type == BOARD_STEEL:
+        old_storelist = items.applyitem.storelist
+        return_time = old_storelist.return_time + 1
+        new_storelist = SteelMaterialStoreList(entry_item=old_storelist.entry_item,specification=items.specification,steel_type=old_storelist.steel_type,count=items.count,return_time=return_time,weight=items.weight,refund=refund.id)
+        new_storelist.save() 

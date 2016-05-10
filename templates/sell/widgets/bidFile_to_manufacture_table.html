@@ -1,0 +1,30 @@
+<div class="widget-content nopadding" style="max-height:800px;overflow-y:auto">    
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>产品名称</th>
+                <th>下发文件</th>
+                <th>上传招标文件</th>
+                <th>查看上传招标文件</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in productions %} 
+            <tr iid="{{item.id}}" class="productions_row">
+                <td>{{item.name}}</td>
+                <td>
+                    {% if item.manufacture_file_down%}
+                    <span a href="{{item.manufacture_file_down.url}}">{{item.manufacture_file_down.name}}</span>
+                    {% endif %}
+                </td>
+                <td><span class="btn btn-primary btn-upload" group="manufacture" href="#product_upload" data-toggle="modal">上传</span></td>
+                <td>
+                    {% if item.manufacture_file_up%}
+                    <span a href="{{item.manufacture_file_up.url}}">{{item.manufacture_file_up.name}}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -9,7 +9,7 @@ from users.models import UserInfo,Group
 from django.utils import timezone
 from const import STORAGEDEPARTMENT_CHOICES,STORAGESTATUS_KEEPER,REFUNDSTATUS_CHOICES
 from const import LENGHT_MANAGEMENT,WEIGHT_MANAGEMENT,AREA_MANAGEMENT,STEEL_TYPE,MATERIAL_TYPE
-from purchasing.models import BidForm
+from purchasing.models import BidForm,MaterielCopy
 from random import randint
 from django.conf import settings
 # Create your models here.
@@ -108,7 +108,7 @@ class WeldMaterialEntry(models.Model):
         return self.entry_status == status
 
 class WeldMaterialEntryItems(models.Model):
-    material = models.ForeignKey(Materiel,blank = True , null = True , verbose_name = u"材料")
+    material = models.ForeignKey(MaterielCopy,blank = True , null = True , verbose_name = u"材料")
     remark = models.CharField(max_length = 100, blank = True , default="" , verbose_name = u"备注")
     production_date = models.DateField( blank = True ,null = True, verbose_name = u"出厂日期")
     factory = models.CharField(max_length = 100, blank = True , verbose_name = u"厂家")
@@ -284,7 +284,7 @@ class SteelMaterialEntryItems(models.Model):
     length = models.FloatField(blank=True,null=True,verbose_name=u"长度")
     entry = models.ForeignKey(SteelMaterialEntry,verbose_name=u"钢材入库单")
     schematic_index = models.CharField(max_length=50,verbose_name=u"标准号或图号")
-    material = models.ForeignKey(Materiel,null=True,blank=True,verbose_name=u"物料")
+    material = models.ForeignKey(MaterielCopy,null=True,blank=True,verbose_name=u"物料")
     def __unicode__(self):
         return "%s"% self.specification
 
@@ -309,7 +309,8 @@ class SteelMaterialStoreList(models.Model):
     count = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
     weight = models.FloatField(blank=False,null=False,verbose_name=u"重量")
     return_time = models.IntegerField(default=0,verbose_name=u'退库次数')
-    store_room = models.ForeignKey(StoreRoom,blank=False,null=False,verbose_name=u'库房位置')
+    store_room = models.ForeignKey(StoreRoom,blank=True,null=True,verbose_name=u'库房位置')
+    refund = models.IntegerField(verbose_name=u"退库单",blank=True,null=True)
     class Meta:
         verbose_name=u'钢材库存材料'
         verbose_name_plural=u'钢材库存材料'
@@ -374,6 +375,7 @@ class BoardSteelMaterialRefundItems(models.Model):
     name = models.CharField(max_length=20,verbose_name=u"名称")
     card_info = models.OneToOneField(SteelMaterialRefundCard,blank=False,null=False,verbose_name=u"退库单表头")
     status = models.CharField(max_length=20,blank=False,null=False,verbose_name=u"状态")
+    specification = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'名称及规格')
     count = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
     weight = models.FloatField(blank=True,null=True,verbose_name=u"重量")
     graph = models.FileField(upload_to=settings.PROCESS_FILE_PATH+"/storage",null=True,verbose_name=u"套料图")
@@ -391,6 +393,7 @@ class BarSteelMaterialRefundItems(models.Model):
     name = models.CharField(max_length=20,verbose_name=u"名称")
     card_info = models.ForeignKey(SteelMaterialRefundCard,blank=False,null=False,verbose_name=u"退库单表头")
     status = models.CharField(max_length=20,blank=False,null=False,verbose_name=u"状态")
+    specification = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'名称及规格')
     count = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
     weight = models.FloatField(blank=True,null=True,verbose_name=u"重量")
     length = models.FloatField(null=True,verbose_name=u"退库长度")
