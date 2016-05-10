@@ -17,6 +17,7 @@ from const.forms import WorkOrderForm
 from production.forms import *
 from django.contrib.auth.models import User
 from users.models import UserInfo
+from const import *
 
 def getQ(con):
     query_set = Q()
@@ -30,26 +31,25 @@ def getFileList(request, id_work_order):
     """
     Lei
     """
-    workorder = SynthesizeFileListStatus.objects.filter(order_id__id = id_work_order)
+    syn_size_file_list_status = SynthesizeFileListStatus.objects.filter(order_id__id = id_work_order)
+    syn_size_file_list = []
+    for item in syn_size_file_list_status:
+        syn_size_file_list.append([(status, getattr(item,status)) for status in SYNSIZE_FILE_LIST_STATUS])
     context = {
-        "workorder":workorder,
+        "syn_size_file_list":zip(syn_size_file_list_status, syn_size_file_list),
     }
     html = render_to_string("production/synthesize_detail_filelist.html",context)
     return html
 
 @dajaxice_register
-def changeFileList(request, id, workorder_id):
+def changeFileList(request, status, workorder_id, is_check):
     """
     Lei
     """
-    workorder = SynthesizeFileListStatus.objects.filter(workorder_id__order_index = workorder_id)[0]
-    exec("workorder.%s=True"%id)
-    workorder.save()
-    context = {
-        "workorder":[workorder],
-    }
-    html = render_to_string("production/synthesize_detail_filelist.html",context)
-    return html
+    syn_size_file_status = SynthesizeFileListStatus.objects.get(order = workorder_id)
+    setattr(syn_size_file_status,status,is_check)
+    syn_size_file_status.save()
+    return 
 
 @dajaxice_register
 def getHourSearch(request, form):
@@ -75,10 +75,9 @@ def getHourSummarize(request, form):
     """
     hour_summarize_form = HourSummarizeForm(deserialize_form(form))
     if hour_summarize_form.is_valid():
-        select = {'month': connection.ops.date_trunc_sql('month', 'complete_date')}
-        process_detail_list  = ProcessDetail.objects.exclude(complete_date = None).filter(getQ(hour_summarize_form.cleaned_data))\
-        .extra(select=select).values('materiel_belong__order','materiel_belong__order__order_index', 'productionworkgroup', 'productionworkgroup__name').annotate(Sum('work_hour'))
-        print process_detail_list
+        select = {'month': connection.ops.date_trunc_sql('month', 'complete_process_date')}
+        process_detail_list  = ProcessDetail.objects.exclude(complete_process_date = None).filter(getQ(hour_summarize_form.cleaned_data))\
+        .extra(select=select).values('month','materiel_belong__order','materiel_belong__order__order_index', 'productionworkgroup', 'productionworkgroup__name').annotate(Sum('work_hour'))
     else:
         print hour_message_search_form.errors
     context = {
@@ -88,31 +87,32 @@ def getHourSummarize(request, form):
     return html
 
 @dajaxice_register
-def getSummarizeTicket(request, work_order, groupNumId, date):
+def getSummarizeTicket(request, work_order_id, groupNumId, date):
     """
     Lei
     """
     year,month = date.split("-")
-    process_detail_list = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(productionworkgroup=groupNumId)&Q(complete_date__year=year)&Q(complete_date__month=month)).order_by('complete_date')
-    summarize = reduce(lambda x,y:x+y.work_hour,process_detail_list,0)
+    process_detail_list = ProcessDetail.objects.filter(Q(materiel_belong__order=work_order_id)&Q(productionworkgroup=groupNumId)&Q(complete_process_date__year=year)&Q(complete_process_date__month=month)).order_by('complete_process_date')
+    work_order = process_detail_list[0].materiel_belong.order.order_index
     group_num = process_detail_list[0].productionworkgroup.name
     context = {
         "work_order":work_order,
         "group_num":group_num,
-        "process_detail_list":process_detail_list,
-        "summarize":summarize
+        "process_detail_list":process_detail_list
     }
     html = render_to_string("production/man_hour_summarize_table.html",context)
     return html
 
 @dajaxice_register
-def getPartTicket(request, work_order, groupNumId, date):
+def getPartTicket(request, work_order_id, groupNumId, date):
     """
     Lei
     """
     year,month = date.split("-")
-    process_detail_list = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(productionworkgroup=groupNumId)&Q(complete_date__year=year)&Q(complete_date__month=month)).order_by('materiel_belong')
+    process_detail_list = list(ProcessDetail.objects.filter(Q(materiel_belong__order=work_order_id)&Q(productionworkgroup=groupNumId)&Q(complete_process_date__year=year)&Q(complete_process_date__month=month)).order_by('materiel_belong'))
+    work_order = process_detail_list[0].materiel_belong.order.order_index
     group_num = process_detail_list[0].productionworkgroup.name
+    process_detail_list.extend([ProcessDetail()] * ((4-len(process_detail_list))%4))
     context = {
         "work_order":work_order,
         "group_num":group_num,

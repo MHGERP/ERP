@@ -645,3 +645,9 @@ SupplierCChoices=(
     (0,u"实体"),
     (1,u"贸易")
 )
+
+SYNSIZE_FILE_LIST_STATUS = [
+    "sketch","pressure_test","craph","product","encasement_graph","mark","encasement_list","coating_detail"
+
+]
+

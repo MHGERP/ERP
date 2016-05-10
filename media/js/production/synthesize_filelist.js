@@ -5,7 +5,7 @@ function refresh(){
 	Dajaxice.production.getFileList(getFileListCallBack,{"id_work_order":id_work_order});
 }
 function getFileListCallBack(data){
-	$('#widget-content').html(data);
+	$("#widget-content").html(data);
 }
 
 $("#order_search").click(function(){
@@ -14,8 +14,20 @@ $("#order_search").click(function(){
 
 $(document).on("click",".confirm",function(){
     if(confirm("是否进行确认？")){
-        var id = $(this).attr("id");
-        var workorder_id = $(this).parent().parent().children(":first").html();
-        Dajaxice.production.changeFileList(getFileListCallBack,{"id":id,"workorder_id":workorder_id});
+        var status = $(this).attr("uid");
+        var workorder_id = $(this).parent().parent().attr("uid");
+        Dajaxice.production.changeFileList(changeFileListCallBack,{"status":status,"workorder_id":workorder_id,"is_check":true});
     }
 })
+
+$(document).on("click",".back",function(){
+    if(confirm("是否进行撤消？")){
+        var status = $(this).attr("uid");
+        var workorder_id = $(this).parent().parent().attr("uid");
+        Dajaxice.production.changeFileList(changeFileListCallBack,{"status":status,"workorder_id":workorder_id,"is_check":false});
+    }
+})
+
+function changeFileListCallBack(){
+    refresh();
+}
