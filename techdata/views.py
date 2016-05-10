@@ -281,6 +281,10 @@ def connectOrientationAdd(request):
         return HttpResponse(json.dumps({'file_upload_error' : file_upload_error}))
 
 def gen_material(name):
+    try:
+        name = int(name)
+    except:
+        pass
     target = Material.objects.filter(name = name)
     if target.count():
         return target[0]
@@ -365,7 +369,11 @@ def BOMadd(request):
                                              remark = table.cell(rownum, 8).value
                                     ))
                 total += 1
-            Materiel.objects.bulk_create(materiel_list)
+            for item in materiel_list:
+                item.save()
+                CirculationRoute(materiel_belong = item).save()
+                Processing(materiel_belong = item).save()
+
             file_upload_error = 1
         return HttpResponse(json.dumps({'file_upload_error' : file_upload_error}))
 
