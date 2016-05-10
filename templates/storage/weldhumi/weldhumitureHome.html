@@ -42,24 +42,5 @@
     </tbody>
 </table>
 
-<div class="modal hide fade" id="warnModal" tabindex="-1" role="dialog" aria-labelledby="warnModalLabel" aria-hidden="true"  show="{{flag}}">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>提醒</h3>
-    </div>
-    <div class="modal-body">
-        <p>今日还未新增记录</p>
-    </div>
-</div>
-<script>
-    window.onload = function(){
-        console.log($("#warnModal").attr("show"));
-        var flag = $("#warnModal").attr("show");
-        if(flag == "False"){
-            $("#warnModal").modal('show');
-        }
-    }
-</script>
-
 </div>
 {% endblock %}
