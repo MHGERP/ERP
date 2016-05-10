@@ -66,6 +66,13 @@ $(document).ready(function(){
             Dajaxice.storage.steelApplyCardConfirm(steel_applycard_confirm_callback,{"aid":aid,"role":role});
         }
     })
+    $(document).on("click","span[name='steel_refund']",function(){
+        var role = $(this).attr('role');
+        var rid = $("#refund_table").attr("rid");
+        if(confirm("退库单确认后不能再次修改")){
+            Dajaxice.storage.steelRefundConfirm(steel_refund_callback,{"rid":rid});
+        }
+    })
 });
 
 function steelRefundEnsureCallBack(data) {
@@ -141,5 +148,9 @@ function steelapply_callback(data){
 }
 function steel_applycard_confirm_callback(data){
     $("div#steelapplycard").html(data.html);
+    alert(data.message);
+}
+function steel_refund_callback(data){
+    $("div#refund_table_div").html(data.html);
     alert(data.message);
 }
