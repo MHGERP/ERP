@@ -1,0 +1,111 @@
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=674
+ style='width:505.3pt;border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:.5pt solid windowtext;
+ mso-border-insidev:.5pt solid windowtext'>
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;height:39.0pt'>
+  <td width=83 style='width:62.1pt;border:solid windowtext 1.0pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:39.0pt'>
+  <p class=MsoNormal align=center style='text-align:center;line-height:14.0pt;
+  mso-line-height-rule:exactly'><span style='font-size:9.0pt;mso-bidi-font-size:
+  10.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>工作令</span><span lang=EN-US style='font-size:9.0pt;
+  mso-bidi-font-size:10.0pt'><o:p></o:p></span></p>
+  </td>
+  <td width=104 style='width:78.0pt;border:solid windowtext 1.0pt;border-left:
+  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:39.0pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-size:9.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>钢号</span><span lang=EN-US
+  style='font-size:9.0pt'><o:p></o:p></span></p>
+  </td>
+  <td width=113 style='width:3.0cm;border:solid windowtext 1.0pt;border-left:
+  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:39.0pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-size:9.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>材质编号</span><span lang=EN-US
+  style='font-size:9.0pt'><o:p></o:p></span></p>
+  </td>
+  <td width=113 style='width:3.0cm;border:solid windowtext 1.0pt;border-left:
+  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:39.0pt'>
+  <p class=MsoNormal align=center style='text-align:center;line-height:14.0pt;
+  mso-line-height-rule:exactly'><span style='font-size:9.0pt;mso-bidi-font-size:
+  10.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>规格</span><span lang=EN-US style='font-size:9.0pt;
+  mso-bidi-font-size:10.0pt'><o:p></o:p></span></p>
+  </td>
+  <td width=66 style='width:49.6pt;border:solid windowtext 1.0pt;border-left:
+  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:39.0pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-size:9.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>数量</span><span lang=EN-US
+  style='font-size:9.0pt'><o:p></o:p></span></p>
+  </td>
+  <td width=194 style='width:145.5pt;border:solid windowtext 1.0pt;border-left:
+  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:39.0pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-size:9.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>零件编号</span><span lang=EN-US
+  style='font-size:9.0pt'><o:p></o:p></span></p>
+  </td>
+ </tr>
+ {% for item in items %}
+ <tr style='mso-yfti-irow:5;mso-yfti-lastrow:yes;height:19.25pt' name="apply_item_tr" id="{{item.id}}">
+  <td width=83 style='width:62.1pt;border:solid windowtext 1.0pt;border-top:
+  none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:19.25pt'>
+  <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.work_order}}</span></p>
+  </td>
+  <td width=104 style='width:78.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.25pt'>
+  <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.materiel}}</span></p>
+  </td>
+  <td width=113 style='width:3.0cm;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.25pt'>
+  <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.material_code}}</span></p>
+  </td>
+  <td width=113 style='width:3.0cm;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.25pt'>
+  <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.specification}}</span></p>
+  </td>
+  <td width=66 style='width:49.6pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.25pt'>
+  <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.apply_count}}</span></p>
+  </td>
+  <td width=194 style='width:145.5pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.25pt'>
+  <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.component}}</span></p>
+  </td>
+ </tr>
+ {% endfor %}
+<tr style='mso-yfti-irow:5;mso-yfti-lastrow:yes;height:50.7pt' name="remark_tr">
+  <td width=747 colspan=6 valign=top style='width:560.1pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:50.7pt'>
+  <p class=MsoNormal><span style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";
+      mso-hansi-font-family:"Arial Narrow"'>备注：</span><span lang=EN-US
+  style='font-family:"Arial Narrow","sans-serif"'><o:p></o:p></span></p>
+  <p class=MsoNormal><span lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{applycard.remark}}</span></p>
+  </td>
+ </tr>
+</table>

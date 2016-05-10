@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 from production.models import *
 from const.models import Materiel
 
+select = {'month': connection.ops.date_trunc_sql('month', 'complete_date')}
+process_detail_list  = ProcessDetail.objects.extra(select=select).values('month', 'materiel_belong','productionworkgroup' )
+print process_detail_list
 # a = ContractDetail()
 # a.user = User.objects.get(username="123")
 # a.amount = 0
@@ -38,5 +41,3 @@ from const.models import Materiel
 
 # for item in materiels:
 #     print item.index
-
- print "hello"

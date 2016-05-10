@@ -61,29 +61,28 @@ def steelrefunddetailViews(request,typeid,rid):
 
 
 def steelApplyViews(request):
-    search_form = SteelRefundSearchForm()
-    apply_cards = CommonSteelMaterialApplyCardInfo.objects.all().order_by("apply_confirm")
+    search_form = SteelApplyCardSearchForm()
+    apply_cards = SteelMaterialApplyCard.objects.all().order_by("status")
     context={
         "search_form":search_form,
         "apply_cards":apply_cards,
+        "APPLYCARD_KEEPER":APPLYCARD_KEEPER,
     }
     return render(request,"storage/steelmaterial/steelapplyhome.html",context)
 
-def steelApplyDetailViews(request,typeid,rid):
-    typeid = int(typeid)
-    common_Info = CommonSteelMaterialApplyCardInfo.objects.get(id=int(rid))
-    if typeid:
-        apply_cards = common_Info.barsteelmaterialapplycardcontent_set.all()
-    else:
-        apply_cards = common_Info.boardsteelmaterialapplycardcontent_set.all()
+def steelApplyDetailViews(request,aid):
+    applycard = SteelMaterialApplyCard.objects.get(id=aid)
+    items = applycard.steelmaterialapplycarditems_set.all()
+    search_material_form = SteelMaterialSearchForm()
+    store_items = SteelMaterialStoreList.objects.all()
     context={
-        'apply_cards':apply_cards,
-        'common_Info':common_Info,
+        'applycard':applycard,
+        'items':items,
+        'search_material_form':search_material_form,
+        'store_items':store_items,
+        "search_table_path":"storage/searchmaterial/store_steel_items_table.html",
     }
-    if typeid==1:
-        return render(request,"storage/steelmaterial/barsteelapplydetail.html",context)
-    else:
-        return render(request,"storage/steelmaterial/boardsteelapplydetail.html",context)
+    return render(request,"storage/steelmaterial/steelapplydetail.html",context)
 
 def steelLedgerViews(request):
     search_form = SteelLedgerSearchForm()
@@ -189,6 +188,7 @@ def Weld_Apply_Card_Detail(request):
         "store_items":store_items,
         "ITEM_STATUS_NORMAL":ITEM_STATUS_NORMAL,
         "search_material_form":search_material_form,
+        "search_table_path":"storage/searchmaterial/store_weld_items_table.html",
     }
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
 

@@ -25,7 +25,7 @@ urlpatterns = patterns('',
         storage_views.steelApplyViews,
     ),
     url(
-        r'^steelapplydetail/(?P<typeid>\d+)/(?P<rid>\d+)$',
+        r'^steelapplydetail/(?P<aid>\d+)$',
         storage_views.steelApplyDetailViews,
     ),
     url(

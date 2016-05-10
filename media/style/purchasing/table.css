@@ -1,1 +1,5 @@
 .table tr th { vertical-align:middle; }
+#id_C {width:70px;}
+#id_base_situation {
+    width:600px;
+}

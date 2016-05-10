@@ -6,7 +6,7 @@ from django.forms import ModelForm
 from const.models import WorkOrder
 from datetime import *
 from django.forms import ModelForm
-from production.models import ProductionPlan,ProductionWorkGroup,ProcessDetail
+from production.models import *
 from techdata.models import Processing
 from const.forms import WorkOrderForm
 from django.contrib.auth.models import User
@@ -97,11 +97,28 @@ class HourMessageSearchForm(forms.Form):
          self.fields["materiel_belong__order"].choices = WORKORDER_CHOICES
 
 class ProductionUserSearchForm(forms.Form):
-    production_user_id__username__contains = forms.CharField(required=False, label=u"生产人员用户名",)
+    production_user_id__name__contains = forms.CharField(required=False, label=u"生产人员姓名",)
     production_work_group = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
     def __init__(self, *args, **kwargs):
          super(ProductionUserSearchForm, self).__init__(*args, **kwargs)
          self.fields["production_work_group"].choices = tuple([("","------")]+[(item.id, item.name) for item in ProductionWorkGroup.objects.all()])
 
 class UserChooseForm(forms.Form):
-    username__contains = forms.CharField(label=u"用户",required = False)
+    name__contains = forms.CharField(label=u"用户姓名",required = False)
+
+class WorkGroupForm(forms.Form):
+    production_work_group = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
+    def __init__(self, *args, **kwargs):
+         super(WorkGroupForm, self).__init__(*args, **kwargs)
+         self.fields["production_work_group"].choices = tuple([("","------")]+[(item.id, item.name) for item in ProductionWorkGroup.objects.all()])
+
+class ProductionUserForm(ModelForm):
+    class Meta:
+        model = ProductionUser
+        fields = ("production_work_group",)
+        widgets = {
+            "production_work_group":forms.Select(attrs={"class":"form-control"}),
+        }
+    def __init__(self, *args, **kwargs):
+        super(ProductionUserForm,self).__init__(*args,**kwargs)
+        self.fields["production_work_group"].choices = tuple((item.id, item.name) for item in ProductionWorkGroup.objects.all())         
