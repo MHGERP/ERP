@@ -241,9 +241,9 @@ $(document).on("click", "#related_search", function() {
     ch = dic_type[val];
     if (ch <= 2) {
       f1 = $("#id_mingcheng").val();
-      //alert(f1);
-      f2 = $("#guige").val();
-      f3 = $("#caizhi").val();
+      f2 = $("#id_guige").val();
+      f3 = $("#id_caizhi").val();
+      alert(f1+" "+f2+" "+f3);
       Dajaxice.purchasing.getRelatedTable(function(data) {
           $("#related_table").html(data);
       }, {"index" : val, "f1" : f1, "f2" : f2, "f3" : f3});
@@ -254,12 +254,13 @@ $(document).on("click", "#related_search", function() {
       //alert(f2);
       Dajaxice.purchasing.getRelatedTable(function(data) {
           $("#related_table").html(data);
-      }, {"index" : val, "f1" : "", "f2" : f2, "f3" : ""});
+      }, {"index" : val, "f1" : f1, "f2" : f2, "f3" : ""});
     }
     else if (ch == 6) {
       f1 = $("#id_mingcheng").val();
-      f2 = $("#paihao").val();
-      f3 = $("#guige").val();
+      f2 = $("#id_paihao").val();
+      f3 = $("#id_guige").val();
+      //alert(f1+" "+f2+" "+f3);
       Dajaxice.purchasing.getRelatedTable(function(data) {
           $("#related_table").html(data);
       }, {"index" : val, "f1" : f1, "f2" : f2, "f3" : f3});
