@@ -9,7 +9,7 @@ urlpatterns = patterns('',
         storage_views.weldMaterialHomeViews,
     ),
     url(
-        r'^steelrefunddetail/(?P<typeid>\d+)/(?P<rid>\d+)$',
+        r'^steelrefunddetail/(?P<rid>\d+)$',
         storage_views.steelrefunddetailViews,
     ),
     url(

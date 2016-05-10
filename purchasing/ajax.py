@@ -1364,6 +1364,13 @@ def BidApplySelect(request,val,bidid):
     return simplejson.dumps({})
 
 @dajaxice_register
+def BidApplyFillFinish(request,bidid):
+    print bidid
+    bidform=BidForm.objects.get(bid_id=bidid)
+    goNextStatus(bidform,request.user)
+    return simplejson.dumps({})
+
+@dajaxice_register
 def BidApplyComment(request,bid_apply_id,usertitle,comment):
     bid_apply=bidApply.objects.get(id=bid_apply_id)
     bid_comment=BidComment(user=request.user,comment=comment,bid=bid_apply.bid,submit_date=datetime.today(),user_title=usertitle)
