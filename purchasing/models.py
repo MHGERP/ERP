@@ -350,7 +350,7 @@ class BidAcceptance(models.Model):
     apply_content = models.CharField(null=True, max_length=40, verbose_name=u"招（议）标内容")
     amount=models.CharField(null=True, max_length=40, verbose_name=u"数量")
     accept_date = models.DateTimeField(null=True, blank=True,verbose_name=u"中标日期")
-    accept_money=models.CharField(null=True, blank=True,max_length=40, verbose_name=u"数量")
+    accept_money=models.CharField(null=True, blank=True,max_length=40, verbose_name=u"中标金额")
     accept_supplier=models.ForeignKey(Supplier,null=True,blank=True,verbose_name=u"中标单位")
     contact_people=models.CharField(null=True, blank=True,max_length=40, verbose_name=u"联系人")
     contact_tel=models.CharField(null=True, blank=True,max_length=40, verbose_name=u"联系电话")

@@ -196,6 +196,13 @@ def bidTrackingViews(request, bid_id):
         quality_card_finish=False
     print bid_apply_finish
     order_form=bidform.order_form
+
+    try:
+        bid_acception=bidform.bidacceptance
+    except:
+        bid_acception=BidAcceptance(bid=bidform)
+        bid_acception.save()
+    bid_acceptance_form=BidAcceptanceForm(instance=bid_acception,bidform=bidform)
     context={
         "bid_status":bid_status,
         "bidform":bidform,
@@ -204,6 +211,8 @@ def bidTrackingViews(request, bid_id):
         "bid_apply_finish":bid_apply_finish,
         "supplier_check_finish":supplier_check_finish,
         "quality_card_finish":quality_card_finish,
+        "bid_acceptance_form":bid_acceptance_form,
+        "bid_acceptance":bid_acception,
         "items":MaterielCopy.objects.filter(materielformconnection__order_form=order_form)
     }
     return render(request, "purchasing/bid_track.html", context)
@@ -600,12 +609,12 @@ def arrivalCheckViews(request,bid):
 
 def bidApplyFormViews(request,bid):
     bidform = BidForm.objects.get(bid_id = bid)
-    if bidform.bidapply == None:
+    try:
+        bid_apply = bidform.bidapply
+    except:
         status=CommentStatus.objects.get(status=BIDFORM_PART_STATUS_INVITE_BID_APPLY_FILL)
         bid_apply=bidApply(bid=bidform,status=status,work_order=bidform.order_form.work_order)
         bid_apply.save()
-    else:
-        bid_apply = bidform.bidapply
     bidApplyForm = BidApplyForm(instance=bid_apply)
     supplier_set=bidform.supplierselect_set.all()
     comment_dict={}
@@ -629,13 +638,12 @@ def bidApplyFormViews(request,bid):
 
 def SupplierCheckViews(request,bid):
     bidform = BidForm.objects.get(bid_id = bid)
-    if bidform.suppliercheck == None:
+    try:
+        supplier_check = bidform.suppliercheck
+    except:    
         status=CommentStatus.objects.get(status=BIDFORM_PART_STATUS_INVITE_BID_CHECK_FILL)
         supplier_check=SupplierCheck(bid=bidform,status=status)
         supplier_check.save()
-    else:
-        supplier_check = bidform.suppliercheck
-
     supplier_check_form=SupplierCheckForm(instance=supplier_check)
     supplier_set=bidform.supplierselect_set.all()
     comment_dict={}
