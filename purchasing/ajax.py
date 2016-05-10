@@ -1384,3 +1384,15 @@ def saveSupplierCheck(request,form,supplier_check_id,supplier_form_set,supplier_
 
 
 
+@dajaxice_register
+def submitSupplierCheck(request,supplier_check_id):
+    supplier_check =SupplierCheck.objects.get(id = supplier_check_id)
+    BidNextStatus(supplier_check)
+    return simplejson.dumps({})
+@dajaxice_register
+def SupplierCheckComment(request,supplier_check_id,usertitle,comment):
+    supplier_check=SupplierCheck.objects.get(id=supplier_check_id)
+    bid_comment=BidComment(user=request.user,comment=comment,bid=supplier_check.bid,submit_date=datetime.today(),user_title=usertitle)
+    bid_comment.save()
+    BidNextStatus(supplier_check)
+    return simplejson.dumps({})

@@ -59,7 +59,6 @@ $("#apply_comment_confirm").click(function(){
     });
 });
 $("#apply_logistical_confirm").click(function(){
-    alert($("#comment_add").attr("usertitle"));
     Dajaxice.purchasing.BidApplyLogistical(function(data){
         alert(data.status);
     if(data.status==0)window.location.reload();

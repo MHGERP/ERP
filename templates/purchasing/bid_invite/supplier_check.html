@@ -907,25 +907,25 @@ div.WordSection1
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
   mso-font-kerning:0pt'>经办人意见<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=456 colspan=5 valign=bottom style='width:342.0pt;border-top:none;
+  <td width=456 colspan=5 valign=center style='width:342.0pt;border-top:none;
   border-left:none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
   mso-border-top-alt:solid black .5pt;mso-border-left-alt:solid black .5pt;
-  mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'></td>
+  mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'>
+  <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
+  lang=EN-US style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;
+  color:black;mso-font-kerning:0pt'> 
+  {% if supplier_check.status.status == status_dic.OPERATOR_COMMENT%}<button id="comment_add" href="#supplier_check_comment" usertitle="{{comment_user_dict.G_OPERATOR}}" data-toggle="modal">填写</button>{%elif supplier_check.status.status > status_dic.OPERATOR_COMMENT%}{{comment_dict.G_OPERATOR.comment}}{%endif%}</span></p>
+  </td>
   <td width=216 colspan=3 valign=bottom style='width:162.0pt;border-top:none;
   border-left:none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
   mso-border-top-alt:solid black .5pt;mso-border-left-alt:solid black .5pt;
   mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'>
-  <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=center style='text-align:left;font-size:16px;mso-pagination:widow-orphan'>{%if supplier_check.status.status > status_dic.OPERATOR_COMMENT%}{{comment_dict.G_OPERATOR.user.userinfo.name}}{%endif%}</p>
+  
+  <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan;font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
+  mso-font-kerning:0pt'>{%if supplier_check.status.status > status_dic.OPERATOR_COMMENT%}{{comment_dict.G_OPERATOR.submit_date|date:"Y年m月d日"}}{%else%}<span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>年</span><span lang=EN-US style='font-size:14.0pt;
-  mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>月</span><span lang=EN-US style='font-size:14.0pt;
-  mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>日<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日<span lang=EN-US><o:p></o:p></span></span>{% endif%}</p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:47.25pt;border:none' width=0 height=63></td>
@@ -939,26 +939,19 @@ div.WordSection1
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
   mso-font-kerning:0pt'>主管领导意见<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=456 colspan=5 valign=bottom style='width:342.0pt;border-top:none;
+  <td width=456 colspan=5 valign=center style='width:342.0pt;border-top:none;
   border-left:none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
   mso-border-top-alt:solid black .5pt;mso-border-left-alt:solid black .5pt;
-  mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'></td>
+  mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'>{% if supplier_check.status.status == status_dic.LEAD_COMMENT%}<button id="comment_add" href="#supplier_check_comment" usertitle="{{comment_user_dict.G_LEAD}}" data-toggle="modal">填写</button>{%elif supplier_check.status.status > status_dic.LEAD_COMMENT%}{{comment_dict.G_LEAD.comment}}{%endif%}</td>
   <td width=216 colspan=3 valign=bottom style='width:162.0pt;border-top:none;
   border-left:none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
   mso-border-top-alt:solid black .5pt;mso-border-left-alt:solid black .5pt;
   mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'>
-  <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=center style='text-align:left;font-size:16px;mso-pagination:widow-orphan'>{%if supplier_check.status.status > status_dic.LEAD_COMMENT%}{{comment_dict.G_LEAD.user.userinfo.name}}{%endif%}</p>
+  <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan;font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
+  mso-font-kerning:0pt'>{%if supplier_check.status.status > status_dic.LEAD_COMMENT%}{{comment_dict.G_LEAD.submit_date|date:"Y年m月d日"}}{%else%}<span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>年</span><span lang=EN-US style='font-size:14.0pt;
-  mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>月</span><span lang=EN-US style='font-size:14.0pt;
-  mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>日<span lang=EN-US><o:p></o:p></span></span></p>
-  </td>
+  mso-font-kerning:0pt'>年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日<span lang=EN-US><o:p></o:p></span></span>{% endif%}</p>
   <![if !supportMisalignedRows]>
   <td style='height:47.25pt;border:none' width=0 height=63></td>
   <![endif]>
@@ -974,29 +967,17 @@ div.WordSection1
   <td width=456 colspan=5 style='width:342.0pt;border-top:none;border-left:
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
   mso-border-top-alt:solid black .5pt;mso-border-left-alt:solid black .5pt;
-  mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'>
-  <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
-  lang=EN-US style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  color:black;mso-font-kerning:0pt'>B:</span><span style='font-size:14.0pt;
-  font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'>□<span
-  lang=EN-US> C:</span>□<span lang=EN-US> D:</span>□<span lang=EN-US> E:</span>□<span
-  lang=EN-US> F:</span>□<span lang=EN-US> G:</span>□<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'>{% if supplier_check.status.status == status_dic.QUALITY%}<button id="comment_add" href="#supplier_check_comment" usertitle="{{comment_user_dict.G_QUALITY}}" data-toggle="modal">填写</button>{%elif supplier_check.status.status > status_dic.QUALITY%}{{comment_dict.G_QUALITY.comment}}{%endif%}
   </td>
   <td width=216 colspan=3 valign=bottom style='width:162.0pt;border-top:none;
   border-left:none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
   mso-border-top-alt:solid black .5pt;mso-border-left-alt:solid black .5pt;
   mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'>
-  <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=center style='text-align:left;font-size:16px;mso-pagination:widow-orphan'>{%if supplier_check.status.status > status_dic.QUALITY%}{{comment_dict.G_QUALITY.user.userinfo.name}}{%endif%}</p>
+  <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan;font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
+  mso-font-kerning:0pt'>{%if supplier_check.status.status > status_dic.QUALITY%}{{comment_dict.G_QUALITY.submit_date|date:"Y年m月d日"}}{%else%}<span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>年</span><span lang=EN-US style='font-size:14.0pt;
-  mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>月</span><span lang=EN-US style='font-size:14.0pt;
-  mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>日<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日<span lang=EN-US><o:p></o:p></span></span>{% endif%}</p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:47.25pt;border:none' width=0 height=63></td>
@@ -1014,29 +995,17 @@ div.WordSection1
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
   mso-border-top-alt:solid black .5pt;mso-border-left-alt:solid black .5pt;
   mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'>
-  <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
-  lang=EN-US style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  color:black;mso-font-kerning:0pt'>A:</span><span style='font-size:14.0pt;
-  font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'>□<span
-  lang=EN-US> B:</span>□<span lang=EN-US> C:</span>□<span lang=EN-US> D:</span>□<span
-  lang=EN-US> E:</span>□<span lang=EN-US> F:</span>□<span lang=EN-US> G:</span>□<span
-  lang=EN-US><o:p></o:p></span></span></p>
+  {% if supplier_check.status.status == status_dic.ECONOMIC_COMMENT%}<button id="comment_add" href="#supplier_check_comment" usertitle="{{comment_user_dict.G_ECONOMIC}}" data-toggle="modal">填写</button>{%elif supplier_check.status.status > status_dic.ECONOMIC_COMMENT%}{{comment_dict.G_ECONOMIC.comment}}{%endif%}
   </td>
   <td width=216 colspan=3 valign=bottom style='width:162.0pt;border-top:none;
   border-left:none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
   mso-border-top-alt:solid black .5pt;mso-border-left-alt:solid black .5pt;
   mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'>
-  <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=center style='text-align:left;font-size:16px;mso-pagination:widow-orphan'>{%if supplier_check.status.status > status_dic.ECONOMIC_COMMENT%}{{comment_dict.G_ECONOMIC.user.userinfo.name}}{%endif%}</p>
+  <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan;font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
+  mso-font-kerning:0pt'>{%if supplier_check.status.status > status_dic.ECONOMIC_COMMENT%}{{comment_dict.G_ECONOMIC.submit_date|date:"Y年m月d日"}}{%else%}<span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>年</span><span lang=EN-US style='font-size:14.0pt;
-  mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>月</span><span lang=EN-US style='font-size:14.0pt;
-  mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>日<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日<span lang=EN-US><o:p></o:p></span></span>{% endif%}</p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:47.25pt;border:none' width=0 height=63></td>
@@ -1054,27 +1023,17 @@ div.WordSection1
   none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
   mso-border-top-alt:solid black .5pt;mso-border-left-alt:solid black .5pt;
   mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'>
-  <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
-  lang=EN-US style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  color:black;mso-font-kerning:0pt'>A:</span><span style='font-size:14.0pt;
-  font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'>□<span
-  lang=EN-US> G:</span>□ <span lang=EN-US><o:p></o:p></span></span></p>
+  {% if supplier_check.status.status == status_dic.COMPREHENSIVE%}<button id="comment_add" href="#supplier_check_comment" usertitle="{{comment_user_dict.G_COMPREHENSIVE}}" data-toggle="modal">填写</button>{%elif supplier_check.status.status > status_dic.COMPREHENSIVE%}{{comment_dict.G_COMPREHENSIVE.comment}}{%endif%}
   </td>
   <td width=216 colspan=3 valign=bottom style='width:162.0pt;border-top:none;
   border-left:none;border-bottom:solid black 1.0pt;border-right:solid black 1.0pt;
   mso-border-top-alt:solid black .5pt;mso-border-left-alt:solid black .5pt;
   mso-border-alt:solid black .5pt;padding:.75pt .75pt .75pt .75pt;height:47.25pt'>
-  <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=center style='text-align:left;font-size:16px;mso-pagination:widow-orphan'>{%if supplier_check.status.status > status_dic.COMPREHENSIVE%}{{comment_dict.G_COMPREHENSIVE.user.userinfo.name}}{%endif%}</p>
+  <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan;font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
+  mso-font-kerning:0pt'>{%if supplier_check.status.status > status_dic.COMPREHENSIVE%}{{comment_dict.G_COMPREHENSIVE.submit_date|date:"Y年m月d日"}}{%else%}<span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>年</span><span lang=EN-US style='font-size:14.0pt;
-  mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>月</span><span lang=EN-US style='font-size:14.0pt;
-  mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>日<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日<span lang=EN-US><o:p></o:p></span></span>{% endif%}</p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:47.25pt;border:none' width=0 height=63></td>

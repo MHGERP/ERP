@@ -33,3 +33,20 @@ $("#suppliercheck_confirm").click(function(){
         'supplier_id_set':supplier_id_set
     });
 });
+$("#suppliercheck_submit").click(function(){
+      var supplier_check_id=$("#supplier_check_div").attr("suppliercheckid");
+      Dajaxice.purchasing.submitSupplierCheck(function(data){
+    window.location.reload();
+      },{supplier_check_id:supplier_check_id});
+});
+$("#suppliercheck_comment_confirm").click(function(){
+    var supplier_check_id=$("#supplier_check_div").attr("suppliercheckid");
+    var usertitle=$("#comment_add").attr("usertitle");
+    Dajaxice.purchasing.SupplierCheckComment(function(data){
+        window.location.reload();
+    },{
+        "supplier_check_id":supplier_check_id,
+        "usertitle":usertitle,
+        "comment":$("#comment_area").val()
+    });
+});
