@@ -175,20 +175,32 @@ def getRelatedModel(request, index):
     data = []
     print "这是一个测试: "
     print index
-    if index == MAIN_MATERIEL:
-        data = SteelMaterialStoreList.objects.all()
-    elif index == AUXILIARY_MATERIEL:
-        data = SteelMaterialStoreList.objects.all()
+    if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
+        f1 = set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.all())
+        f2 = set(item.entry_item.specification for item in SteelMaterialStoreList.objects.all())
+        f3 = set(item.entry_item.materiel for item in SteelMaterialStoreList.objects.all())
     elif index == FIRST_FEEDING:
         print index
     elif index == OUT_PURCHASED:
-        data = OutsideStorageList.objects.all()
+        f1 = set(item.specification for item in OutsideStorageList.objects.all())
+        f2 = set(item.texture for item in OutsideStorageList.objects.all())
+        f3 = set()
     elif index == COOPERANT:
         print index
     elif index == WELD_MATERIAL:
-        data = WeldStoreList.objects.all()
+        f1 = set(item.entry_item.material.name for item in WeldStoreList.objects.all())
+        f2 = set(item.entry_item.material_mark for item in WeldStoreList.objects.all())
+        f3 = set(item.entry_item.specification for item in WeldStoreList.objects.all())
+    if "" in f1:
+        f1.remove("")
+    if "" in f2:
+        f2.remove("")
+    if "" in f3:
+        f3.remove("")
     context={
-        "data" : data
+        "f1" : f1,
+        "f2" : f2,
+        "f3" : f3,
     }
     return render_to_string("purchasing/related_model/%s.html" % idtable[index], context)
 
@@ -204,12 +216,12 @@ def getRelatedTable(request, index, f1, f2, f3):
     }
     data = []
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        data = SteelMaterialStoreList.objects.filter(name = f1, specifications = f2, material = f3)
+        data = SteelMaterialStoreList.objects.filter(entry_item__material__name = f1, entry_item__specification = f2, entry_item__materiel = f3)
     elif index == OUT_PURCHASED:
-        data = OutsideStorageList.objects.filter(texture = f2)
+        data = OutsideStorageList.objects.filter(specification = f1, texture = f2)
         print data
     elif index == WELD_MATERIAL:
-        data = WeldStoreList.objects.filter(entry_item__specifimaterial_mark = f2 , entry_item__specifications = f3)
+        data = WeldStoreList.objects.filter(entry_item__material__name = f1, entry_item__material_mark = f2, entry_item__specification = f3)
     context = {
         "data" : data,
     }
