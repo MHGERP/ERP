@@ -3,18 +3,36 @@
         <thead>
             <tr>
                 <th rowspan="2">产品名称</th>
-                <th colspan="3">下发文件</th>
+                <th colspan="6">下发文件</th>
             </tr>
             <tr>
-                <th>生产</th>
-                <th>工艺</th>
-                <th>采购</th>
+                <th colspan="2">生产</th>
+                <th colspan="2">工艺</th>
+                <th colspan="2">采购</th>
             </tr>
         </thead>
         <tbody>
             {% for item in productions %} 
-            <tr iid="" class="productions_row">
+            <tr iid="{{item.id}}" class="productions_row">
                 <td>{{item.name}}</td>
+                <td>
+                    {% if item.manufacture_file_down%}
+                    <span a href="{{item.manufacture_file_down.url}}">{{item.manufacture_file_down.name}}</span>
+                    {% endif %}
+                </td>
+                <td><span class="btn btn-primary btn-upload" group="manufacture" href="#product_upload" data-toggle="modal">上传</span></td>
+                <td>
+                    {% if item.techdata_file_down%}
+                    <span a href="{{item.techdata_file_down.url}}">{{item.techdata_file_down.name}}</span>
+                    {% endif %}
+                </td>
+                <td><span class="btn btn-primary btn-upload" group="techdata" href="#product_upload" data-toggle="modal">上传</span></td>
+                <td>
+                    {% if item.manufacture_file_down%}
+                    <span a href="{{item.purchasing_file_down.url}}">{{item.purchasing_file_down.name}}</span>
+                    {% endif %}
+                </td>
+                <td><span class="btn btn-primary btn-upload" group="purchasing" href="#product_upload" data-toggle="modal">上传</span></td>
             </tr>
             {% endfor %}
         </tbody>
