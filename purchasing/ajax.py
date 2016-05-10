@@ -583,7 +583,7 @@ def SelectSupplierOperation(request,selected,bid):
         supplier=Supplier.objects.get(pk=item)
         select_supplier=SupplierSelect.objects.filter(bidform=bidform,supplier=supplier)
         if select_supplier.count()==0:
-            supplier_select_item=SupplierSelect(bidform=bidform,supplier=supplier)
+            supplier_select_item=SupplierSelect(bidform=bidform,supplier=supplier,supplier_code=supplier.supplier_id)
             supplier_select_item.save()
     return simplejson.dumps({"status":u"选择成功"})
 
@@ -708,14 +708,20 @@ def saveComment(request, form, bid_id):
     return simplejson.dumps(ret)
 
 @dajaxice_register
-def saveBidApply(request, form, bid_apply_id):
+def saveBidApply(request, form, bid_apply_id,supplier_form_set,supplier_id_set):
     bid_apply=bidApply.objects.get(pk=bid_apply_id)
     bidApplyForm = BidApplyForm(deserialize_form(form), instance=bid_apply)
     if bidApplyForm.is_valid():
         bidApplyForm.save()
         ret = {'status': '2', 'message': u"申请书保存成功"}
     else:
-        ret = {'status': '0', 'field':bidApplyForm.data.keys(), 'error_id':bidApplyForm.errors.keys(), 'message': u"申请书保存不成功"}
+        ret = {'status': '1', 'field':bidApplyForm.data.keys(), 'error_id':bidApplyForm.errors.keys(), 'message': u"申请书保存不成功"}
+        return simplejson.dumps(ret)
+    for (id ,form) in zip(supplier_id_set,supplier_form_set):
+        supplierselect=SupplierSelect.objects.get(pk=id)
+        form=BidApplySupplierForm(deserialize_form(form),instance=supplierselect)
+        form.save()
+    ret = {'status': '0', 'message': u"申请书保存成功"}
     return simplejson.dumps(ret)
 
 @dajaxice_register
@@ -1396,3 +1402,15 @@ def saveSupplierCheck(request,form,supplier_check_id,supplier_form_set,supplier_
 
 
 
+@dajaxice_register
+def submitSupplierCheck(request,supplier_check_id):
+    supplier_check =SupplierCheck.objects.get(id = supplier_check_id)
+    BidNextStatus(supplier_check)
+    return simplejson.dumps({})
+@dajaxice_register
+def SupplierCheckComment(request,supplier_check_id,usertitle,comment):
+    supplier_check=SupplierCheck.objects.get(id=supplier_check_id)
+    bid_comment=BidComment(user=request.user,comment=comment,bid=supplier_check.bid,submit_date=datetime.today(),user_title=usertitle)
+    bid_comment.save()
+    BidNextStatus(supplier_check)
+    return simplejson.dumps({})

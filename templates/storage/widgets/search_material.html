@@ -1,0 +1,10 @@
+<form class="form-inline" id="search_material_form" style="margin-bottom:10px;">
+    {% for field in search_material_form%}
+        {{field.label_tag}}
+        {{field}}
+    {% endfor %}
+    <button type="button" id="search_material_btn" class="btn btn-success">检索</button>
+</form>
+<table class="table table-bordered" id="store_items_table" table_path = {{search_table_path}}>
+    {% include search_table_path %}
+</table>

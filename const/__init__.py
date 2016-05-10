@@ -393,6 +393,7 @@ SHEET = "sheet"
 PROFILE = "profile"
 PURCHASED = "purchased"
 OTHER = "other"
+STEEL = "steel"
 AUXILIARY_TOOL = "auxiliary_tool"
 MATERIAL_CATEGORY_CHOICES = (
     (WELD_ROD, u"焊条"),
