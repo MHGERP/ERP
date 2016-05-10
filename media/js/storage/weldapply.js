@@ -93,7 +93,8 @@ $(document).ready(function(){
         }
     })
     $(document).on("click","#search_material_btn",function(){
-        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"weld","aid":aid});
+        var table_path = $("table#store_items_table").attr("table_path");
+        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"weld","table_path":table_path});
     })
     $(document).on("click","span[name='weldapply']",function(){
         var role = $(this).attr("role");
