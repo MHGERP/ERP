@@ -38,7 +38,6 @@ function getDesignBOMFormCallback(data) {
 
 $(document).on("click","#save_desginBOM_btn", function(){
     var iid = $("#designBOM_edit_modal").attr("iid");
-    //alert(iid);
     Dajaxice.techdata.saveDesignBOM(saveDesignBOMCallback, 
                                     {
                                         'iid' : iid,
