@@ -1,20 +1,20 @@
 <form class="form-search">
   <label>名称：</label>
   <select id="id_mingcheng" class="form-control input" name="mingcheng">
-    {% for item in data %}
-    <option value="{{item.name}}">{{item.name}}</option>
+    {% for item in f1 %}
+    <option value="{{item}}">{{item}}</option>
     {% endfor %}
   </select>
   <label>规格：</label>
-  <select id="id_guge" class="form-control input" name="guige">
-    {% for item in data %}
-    <option value="{{item.specifications}}">{{item.specifications}}</option>
+  <select id="id_guige" class="form-control input" name="guige">
+    {% for item in f2 %}
+    <option value="{{item}}">{{item}}</option>
     {% endfor %}
   </select>
   <label>材质：</label>
   <select id="id_caizhi" class="form-control input" name="caizhi">
-    {% for item in data %}
-    <option value="{{item.material}}">{{item.material}}</option>
+    {% for item in f3 %}
+    <option value="{{item}}">{{item}}</option>
     {% endfor %}
   </select>
   <span class="btn search" id="related_search">查询</span>

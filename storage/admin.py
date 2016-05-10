@@ -25,6 +25,8 @@ Registers = (
     SteelMaterialEntry,
     SteelMaterialEntryItems,
     SteelMaterialStoreList,
+    SteelMaterialApplyCard,
+    SteelMaterialApplyCardItems,
 )
 
 for reg in Registers:
