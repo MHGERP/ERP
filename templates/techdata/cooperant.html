@@ -23,6 +23,20 @@
 <div class="widget-box" id="widget-box">
 
 </div>
+<div id="info_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.3" >
+  <div class="modal-header">
+    <h2 id="groupLabel">物料信息卡</h2>
+  </div>
 
+  <div class="modal-body" style="clear:both;">
+	<form class="form" id="info_form" class="well">
+		协作内容：<input type="text" id="input-remark"/>
+	</form>
+  </div>
+  <div class="modal-footer">
+	<button class="btn btn-primary" id="btn_save">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
 <script type="text/javascript" src="{{STATIC_URL}}js/techdata/cooperant.js"></script>
 {% endblock%}

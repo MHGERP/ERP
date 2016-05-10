@@ -15,6 +15,7 @@
 {% endblock %}
 
 {% block inner_content %}
+{% comment %}
 <h3 class="table-title">板材退库单</h3>
 <div class="control-group">
     <button type="button" class="btn btn-default">工作令: {{common_Info.work_order}}</button>
@@ -69,4 +70,6 @@
         <button class="refund-card-ensure-btn btn btn-success">确认</button>   
         {% endifequal %}
     </center>
+{% endcomment %}
+{% include "storage/wordhtml/steelboardrefund.html" %}
 {% endblock %}

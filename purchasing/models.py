@@ -133,7 +133,7 @@ class bidApply(models.Model):
     special_model = models.CharField(null=True, blank=True,max_length=40, verbose_name=u"规格、型号")
     core_part = models.BooleanField(verbose_name="是否为核心件", default = False)
 
-    bid = models.ForeignKey(BidForm)
+    bid = models.OneToOneField(BidForm)
     project_category = models.CharField(null=True, blank=True, max_length=40, verbose_name=u"项目类别")
     bid_datetime = models.DateTimeField(null=True, blank=True, default=lambda: datetime.datetime.today(), verbose_name=u"招(议)标时间")
     bid_delivery_date = models.DateTimeField(null=True, blank=True, default=lambda: datetime.datetime.today(), verbose_name=u"标书递送时间")
@@ -152,7 +152,7 @@ class bidApply(models.Model):
         return '%s'% (self.bid.bid_id)
 
 class qualityPriceCard(models.Model):
-    bid = models.ForeignKey(BidForm, blank = False)
+    bid = models.OneToOneField(BidForm, blank = False)
     apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
@@ -172,7 +172,7 @@ class qualityPriceCard(models.Model):
     def __unicode__(self):
         return '%s'% (self.apply_id)
 class SupplierCheck(models.Model):
-    bid=models.ForeignKey(BidForm,blank=False)
+    bid=models.OneToOneField(BidForm,blank=False)
     apply_company = models.CharField(null=True,blank=True, max_length=40, verbose_name=u"申请单位")
     apply_date = models.DateTimeField(null=True, blank=True,verbose_name=u"申请日期")
     bid_project = models.CharField(null=True, max_length=40,blank=True, verbose_name=u"项目名称")
@@ -245,6 +245,7 @@ class SupplierSelect(models.Model):
     F=models.BooleanField(blank=True,default=False,verbose_name="F")
     G=models.BooleanField(blank=True,default=False,verbose_name="G")
     sphere=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"认定业务范围")
+    supplier_code=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"供方代码")
     price=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"价格")
     ability_situation=models.CharField(max_length=200,blank=True,null=True,verbose_name=u"厂家协作能力质量情况及业绩")
     delivery_payment=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"交货及支付条件")
@@ -341,3 +342,22 @@ class MaterielExecuteDetail(models.Model):
         verbose_name_plural = u"材料执行表详细"
     def __unicode__(self):
         return '%s' % (self.materiel.index)
+
+class BidAcceptance(models.Model):
+    bid=models.OneToOneField(BidForm,verbose_name=u"标单")
+    document_id=models.CharField(max_length = 50,blank=True,null=True,verbose_name=u"标书编号")
+    apply_company = models.CharField(null=True, max_length=40, verbose_name=u"招（议）标单位")
+    apply_content = models.CharField(null=True, max_length=40, verbose_name=u"招（议）标内容")
+    amount=models.CharField(null=True, max_length=40, verbose_name=u"数量")
+    accept_date = models.DateTimeField(null=True, blank=True,verbose_name=u"中标日期")
+    accept_money=models.CharField(null=True, blank=True,max_length=40, verbose_name=u"数量")
+    accept_supplier=models.ForeignKey(Supplier,null=True,blank=True,verbose_name=u"中标单位")
+    contact_people=models.CharField(null=True, blank=True,max_length=40, verbose_name=u"联系人")
+    contact_tel=models.CharField(null=True, blank=True,max_length=40, verbose_name=u"联系电话")
+    class Meta:
+        verbose_name = u"中标通知书"
+        verbose_name_plural = u"中标通知书"
+    def __unicode__(self):
+        return '%s' % (self.bid.bid_id)
+    
+

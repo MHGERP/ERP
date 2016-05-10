@@ -46,7 +46,7 @@ def searchApplyCard(request,form):
     return simplejson.dumps(context)
 
 @dajaxice_register
-def searchRefundCard(request,form):
+def searchSteelRefundCard(request,form):
     """
     author: Rosen
     summary:process the search request for steel refund card and return the result
@@ -57,8 +57,7 @@ def searchRefundCard(request,form):
     context={}
     if form.is_valid():
         conditions = form.cleaned_data
-        steel_refund_cards = get_weld_filter(CommonSteelMaterialReturnCardInfo,conditions)
-        print steel_refund_cards
+        steel_refund_cards = get_weld_filter(SteelMaterialRefundCard,conditions)
         result_table = render_to_string("storage/widgets/refund_card_table.html",{"refund_cards":steel_refund_cards})
         message = "success"
         context["result_table"]=result_table

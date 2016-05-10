@@ -6,19 +6,13 @@ $(document).ready(function(){
 	});
 	$(".refund-card-search-btn").click(function(){
 		form=$(".refund-card-search-form").serialize(true);
-		Dajaxice.storage.searchRefundCard(searchRefundCard_CallBack,{'form':form});
+		Dajaxice.storage.searchSteelRefundCard(searchRefundCard_CallBack,{'form':form});
 	});
 	$(".ledger-search-btn").click(function(){
 		form=$(".ledger-search-form").serialize(true);
 		Dajaxice.storage.searchSteelLedger(searchSteelLedger_CallBack,{'form':form});
 	});
-    //var material_number_list = new Array();
 	$(".refund-card-ensure-btn").click(function(){
-        //$("tr.everyReturn").each(function(i){
-        //    material_number_list.push($(this).attr("matnum"));
-        //})
-		//alert(material_number_list);
-
         var form_code = $("table").attr("fc");
         Dajaxice.storage.steelRefundEnsure(steelRefundEnsureCallBack, {'form_code':form_code});
 	});

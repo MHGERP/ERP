@@ -27,6 +27,9 @@ Registers = (
     SteelMaterialStoreList,
     SteelMaterialApplyCard,
     SteelMaterialApplyCardItems,
+    SteelMaterialRefundCard,
+    BarSteelMaterialRefundItems,
+    BoardSteelMaterialRefundItems,
 )
 
 for reg in Registers:

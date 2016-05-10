@@ -36,28 +36,27 @@ def steelMaterialHomeViews(request):
 
 def steelRefundViews(request):
     search_form = SteelRefundSearchForm()
-    refund_cards = CommonSteelMaterialReturnCardInfo.objects.all()
+    refund_cards = SteelMaterialRefundCard.objects.all()
     context={
             "search_form":search_form,
             "refund_cards":refund_cards,
+            "STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER,
     }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
-def steelrefunddetailViews(request,typeid,rid):
-    typeid=int(typeid)
-    common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
-    if typeid:
-        return_cards = common_Info.barsteelmaterialreturncardcontent_set.all()
+def steelrefunddetailViews(request,rid):
+    refund = SteelMaterialRefundCard.objects.get(id=rid)
+    if refund.steel_type == BOARD_STEEL:
+        items = refund.boardsteelmaterialrefunditems
+        html_path = "boardsteelrefunddetail.html"
     else:
-        return_cards = common_Info.boardsteelmaterialreturncardcontent_set.all()
+        items = refund.bardsteelmaterialrefunditems_set.all()
+        html_path = "bardsteelrefunddetail.html"
     context={
-        'return_cards':return_cards,
-        'common_Info':common_Info,
+        'refund':refund,
+        'items':items,
     }
-    if typeid==1:
-        return render(request,"storage/steelmaterial/barsteelrefunddetail.html",context)
-    else:
-        return render(request,"storage/steelmaterial/boardsteelrefunddetail.html",context)
+    return render(request,"storage/steelmaterial/"+html_path,context)
 
 
 def steelApplyViews(request):

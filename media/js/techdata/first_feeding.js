@@ -33,6 +33,21 @@ $("#btn-add").click(function() {
         "inventory_type": inventory_type,
     })
 });
+$(document).on("dblclick", ".tr_materiel", function() {
+    var iid = $(this).attr("iid");
+    $("#info_modal").attr("iid", iid);
+    $("#info_modal").modal("show");
+});
+$("#btn_save").click(function() {
+    var remark = $("#input-remark").val();
+    var iid = $("#info_modal").attr("iid");
+    var inventory_type = $(".form-search").attr("itype");
+    Dajaxice.techdata.updateDetailItemInfo(refresh, {
+        "remark": remark,
+        "iid": iid,
+        "inventory_type": inventory_type,
+    });
+});
 
 $(document).on("click", ".btn-remove", function(){
     if (confirm("是否确定删除？")) {
