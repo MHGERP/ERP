@@ -171,7 +171,7 @@ def bidTrackingViews(request, bid_id):
         bid_status.append(bid_dict)
         btn_cnt += 1 if status == bidform.bid_status else 0
     try:
-        bid_apply=bidform.bidapply_set.all()[0]     
+        bid_apply=bidform.bidapply     
         if bid_apply.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
             bid_apply_finish=True
         else:
@@ -179,7 +179,7 @@ def bidTrackingViews(request, bid_id):
     except:
         bid_apply_finish=False
     try:
-        supplier_check=bidform.suppliercheck_set.all()[0]     
+        supplier_check=bidform.suppliercheck     
         if supplier_check.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
             supplier_check_finish=True
         else:
@@ -187,7 +187,7 @@ def bidTrackingViews(request, bid_id):
     except:
         supplier_check_finish=False
     try:
-        quality_card=bidform.qualitypricecard_set.all()[0]     
+        quality_card=bidform.qualitypricecard     
         if quality_card.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
             quality_card_finish=True
         else:
@@ -600,12 +600,12 @@ def arrivalCheckViews(request,bid):
 
 def bidApplyFormViews(request,bid):
     bidform = BidForm.objects.get(bid_id = bid)
-    if bidform.bidapply_set.count() == 0:
+    if bidform.bidapply == None:
         status=CommentStatus.objects.get(status=BIDFORM_PART_STATUS_INVITE_BID_APPLY_FILL)
         bid_apply=bidApply(bid=bidform,status=status,work_order=bidform.order_form.work_order)
         bid_apply.save()
     else:
-        bid_apply = bidApply.objects.get(bid = bidform)
+        bid_apply = bidform.bidapply
     bidApplyForm = BidApplyForm(instance=bid_apply)
     supplier_set=bidform.supplierselect_set.all()
     comment_dict={}
@@ -629,12 +629,12 @@ def bidApplyFormViews(request,bid):
 
 def SupplierCheckViews(request,bid):
     bidform = BidForm.objects.get(bid_id = bid)
-    if bidform.suppliercheck_set.count() == 0:
+    if bidform.suppliercheck == None:
         status=CommentStatus.objects.get(status=BIDFORM_PART_STATUS_INVITE_BID_CHECK_FILL)
         supplier_check=SupplierCheck(bid=bidform,status=status)
         supplier_check.save()
     else:
-        supplier_check = SupplierCheck.objects.get(bid = bidform)
+        supplier_check = bidform.suppliercheck
 
     supplier_check_form=SupplierCheckForm(instance=supplier_check)
     supplier_set=bidform.supplierselect_set.all()
