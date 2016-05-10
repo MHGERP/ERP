@@ -18,12 +18,12 @@ class BidFile(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length = 50, verbose_name = u"产品名称")
     #down : sell group to others, up : others to sell
-    manufacture_file_down = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"生产科文件", related_name = "manufacture_file")
-    techdata_file_down = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"工艺科文件", related_name = "techdata_file")
-    purchasing_file_down = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"采购科文件", related_name = "purchasing_file")
-    manufacture_file_up = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"生产科文件", related_name = "manufacture_file")
-    techdata_file_up = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"工艺科文件", related_name = "techdata_file")
-    purchasing_file_up = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"采购科文件", related_name = "purchasing_file")
+    manufacture_file_down = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"生产科文件", related_name = "manufacture_file_down")
+    techdata_file_down = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"工艺科文件", related_name = "techdata_file_down")
+    purchasing_file_down = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"采购科文件", related_name = "purchasing_file_down")
+    manufacture_file_up = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"生产科文件", related_name = "manufacture_file_up")
+    techdata_file_up = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"工艺科文件", related_name = "techdata_file_up")
+    purchasing_file_up = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"采购科文件", related_name = "purchasing_file_up")
     class Meta:
         verbose_name = u"产品"
         verbose_name_plural = u"产品"

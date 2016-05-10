@@ -45,9 +45,8 @@ def product_bidFile_add(request):
         return HttpResponse(json.dumps({"file_upload_error" : file_upload_error, }))
 
 def bidFile_to_manufacture(request):
-    productions = Product.objects.filter(manufacture_file__isnull = False)
     context = {
-        "productions" : productions,
+
     }
     return render(request, "sell/bidFile_to_manufacture.html", context)
 
