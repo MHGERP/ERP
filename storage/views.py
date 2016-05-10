@@ -261,10 +261,16 @@ def weldHumitureHomeViews(request):
             print search_form.errors
     else:
         hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("-date")
+        todayDate = datetime.datetime.now().date()
+        if hum_set[0].date == todayDate:
+            flag = True
+        else:
+            flag = False
         search_form = HumSearchForm()
     context = {
             "hum_set":hum_set,
             "search_form":search_form,
+            "flag": flag,
             }
     return render(request,"storage/weldhumi/weldhumitureHome.html",context)
 

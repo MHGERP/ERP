@@ -148,11 +148,11 @@ class BakeRecordForm(ModelForm):
         widgets = {
             "remark": forms.Textarea(attrs = {"rows":"2","style":"width:600px"}),
             "date":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"date"}),
-            "intoheattime":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"intoheattime"}),
-            "timefortemp":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"timefortemp"}),
-            "tempfalltime":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"tempfalltime"}),
-            "timeforremainheat":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"timeforremainheat"}),
-            "usetime":forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"usetime"}),
+            "intoheattime":forms.DateTimeInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"intoheattime"}),
+            "timefortemp":forms.DateTimeInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"timefortemp"}),
+            "tempfalltime":forms.DateTimeInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"tempfalltime"}),
+            "timeforremainheat":forms.DateTimeInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"timeforremainheat"}),
+            "usetime":forms.DateTimeInput(attrs={"data-date-format":"yyyy-mm-dd hh:ii","id":"usetime"}),
         }
     def __init__(self,*args,**kwargs):
         super(BakeRecordForm,self).__init__(*args,**kwargs)
