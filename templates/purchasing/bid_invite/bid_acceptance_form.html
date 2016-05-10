@@ -1,0 +1,41 @@
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL  }}style/purchasing/table.css" >
+<table class="table table-bordered" id="bid_accetance_form_table">
+    <thead>
+
+        <form  method="POST" action="" id="bid_acceptance_form">
+            <tr>
+                <td>{{bid_acceptance_form.document_id.label}}</td>
+                <td>{{bid_acceptance_form.document_id}}</td>
+                <td>{{bid_acceptance_form.apply_company.label}}</td>
+                <td>{{bid_acceptance_form.apply_company}}</td>
+
+            </tr>
+            <tr>
+                <td>{{bid_acceptance_form.apply_content.label}}</td>
+                <td>{{bid_acceptance_form.apply_content}}</td>
+                <td>{{bid_acceptance_form.amount.label}}</td>
+                <td>{{bid_acceptance_form.amount}}</td>
+
+            </tr>
+            <tr>
+                <td>{{bid_acceptance_form.accept_date.label}}</td>
+                <td>{{bid_acceptance_form.accept_date}}</td>
+                <td>{{bid_acceptance_form.accept_money.label}}</td>
+                <td>{{bid_acceptance_form.accept_money}}</td>
+            </tr>
+            <tr>
+                <td>{{bid_acceptance_form.accept_supplier.label}}</td>
+                <td >{{bid_acceptance_form.accept_supplier}}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{{bid_acceptance_form.contact_people.label}}</td>
+                <td>{{bid_acceptance_form.contact_people}}</td>
+                <td>{{bid_acceptance_form.contact_tel.label}}</td>
+                <td>{{bid_acceptance_form.contact_tel}}</td>
+            </tr>
+        </form>
+    </thead>
+</table>

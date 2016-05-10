@@ -127,6 +127,13 @@ def getItemInfo(request, iid, inventory_type):
     return html
 
 @dajaxice_register
+def updateDetailItemInfo(request, remark, iid, inventory_type):
+    DetailItem = detailItemGenerateFactory(inventory_type)
+    item = DetailItem.objects.get(id = iid)
+    item.remark = remark
+    item.save()
+
+@dajaxice_register
 def addOrUpdateSinglePrincipalItem(request, id_work_order, form, iid = None):
     if iid == None:
         form = PrincipalItemForm(deserialize_form(form))
