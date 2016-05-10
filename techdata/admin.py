@@ -36,6 +36,10 @@ RegisterClass = (
     OutPurchasedMark,
     FirstFeedingItem,
     FirstFeedingMark,
+    CooperantItem,
+    CooperantMark,
+    PrincipalItem,
+    PrincipalMark,
 )
 
 for item in RegisterClass:

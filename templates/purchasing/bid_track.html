@@ -16,7 +16,7 @@
   <div>
     {% include "purchasing/purchasing_form_div.html"%}
   </div>
-  <div class="row" id="bid_invite_buttons" bidid="{{bidform.bidid}}">
+  <div class="row" id="bid_invite_buttons" bidid="{{bidform.bid_id}}">
     {%for item in bid_status%}
     <a {%if item.class == "btn-warning" %}href="#BidCommentModal" {%endif%} role="button" class="btn {{item.class}}" data-toggle="modal">{{item.name}}</a>
     {%endfor%}

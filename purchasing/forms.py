@@ -32,6 +32,11 @@ class BidApplyForm(ModelForm):
         widgets = {
                    "bid_date": forms.DateInput(attrs={'class':'form-control'}),
                   }
+class BidApplySupplierForm(ModelForm):
+    class Meta:
+        model=SupplierSelect
+        fields=("supplier_code","sphere")
+
 
 class BidLogisticalForm(ModelForm):
     class Meta:

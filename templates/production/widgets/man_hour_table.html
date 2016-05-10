@@ -4,14 +4,17 @@
             <th>工作令</th>
             <th>组号</th>
             <th>日期</th>
+            <th>工时总计</th>
             <th>操作</th>
         </tr>
     </thead>
     {%for item in process_detail_list%}
     <tr>
-        <td>{{item.materiel_belong__order}}</td>
-        <td uid="{{item.productionworkgroup.id}}">{{item.productionworkgroup.name}}</td>
+        <td>{{item.materiel_belong__order__order_index}}</td>
+        <td uid="{{item.productionworkgroup.id}}">
+        {{item.productionworkgroup__name}}</td>
         <td>{{item.complete_date|date:"Y-m"}}</td>
+        <td>{{item.work_hour__sum}}</td>
         <td>
             <button type="button" class="btn btn-primary" id="summarize-ticket">工时汇总票</button>
             <button type="button" class="btn btn-primary" id="part-ticket">备料零件工时票</button>

@@ -83,3 +83,12 @@ $("#apply_select_confirm").click(function(){
        "bidid":bidid
    });
 });
+
+$("#apply_fill_confirm").click(function(){
+   var bidid=$("#bid_invite_buttons").attr('bidid');
+   Dajaxice.purchasing.BidApplyFillFinish(function(data){
+       window.location.reload();
+   },{
+    "bidid":bidid
+   });
+});

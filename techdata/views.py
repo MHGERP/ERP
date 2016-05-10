@@ -115,9 +115,11 @@ def principalMaterialViews(request):
     JunHU
     """
     work_order_form = WorkOrderForm()
+    principal_form = PrincipalItemForm()
     context = {
         "work_order_form" : work_order_form,
         "inventory_type": MAIN_MATERIEL,
+        "principal_form": principal_form,
     }
     return render(request, "techdata/principal_material.html", context)
 

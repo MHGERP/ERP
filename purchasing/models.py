@@ -245,6 +245,7 @@ class SupplierSelect(models.Model):
     F=models.BooleanField(blank=True,default=False,verbose_name="F")
     G=models.BooleanField(blank=True,default=False,verbose_name="G")
     sphere=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"认定业务范围")
+    supplier_code=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"供方代码")
     price=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"价格")
     ability_situation=models.CharField(max_length=200,blank=True,null=True,verbose_name=u"厂家协作能力质量情况及业绩")
     delivery_payment=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"交货及支付条件")
