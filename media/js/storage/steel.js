@@ -1,3 +1,4 @@
+var mid;
 $(document).ready(function(){
 	$(".apply-card-search-btn").click(function(){
 		form=$(".apply-card-search-form").serialize(true);
@@ -25,6 +26,52 @@ $(document).ready(function(){
         var form_code =$("table").attr("iid");
         Dajaxice.storage.steelApplyEnsure(steelApplyEnsureCallBack,{'form_code':form_code});
 	});
+    $(document).on("dblclick","tr[name='item_tr']",function(){
+        mid = $(this).attr("id");
+        $("#myModal").modal('show');
+    })
+    $(document).on("click","#steel_entry_modify",function(){
+        Dajaxice.storage.saveSteelEntryStoreRoom(save_storeRoom_callback,{
+            "form":$("#entry_item_form").serialize(),
+            "mid":mid,
+        });
+    })
+    $(document).on("dblclick","tr[name='remark_tr']",function(){
+        $("#entryRemarkModal").modal('show');
+    })
+    $(document).on("click","#steel_entry_remark",function(){
+        Dajaxice.storage.saveSteelEntryRemark(save_remark_callback,{
+            "form":$("#entry_remark_form").serialize(),
+            "eid":$("div#steelentry_items").attr('eid'),
+        });
+    })
+    $(document).on("click","span[name='steel_entry_confirm']",function(){
+        Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":$("div#steelentry_items").attr('eid'),"role":$(this).attr("role")})
+    })
+    $(document).on("dblclick","tr[name='apply_item_tr']",function(){
+        mid = $(this).attr("id");
+        $("#myModal").modal('show');
+    })
+    $(document).on("click","#search_material_btn",function(){
+        var table_path = $("table#store_items_table").attr("table_path");
+        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"steel","table_path":table_path});
+    })
+    $(document).on("click","#steel_select_save",function(){
+        var select_item = $("input[type='radio']:checked").val();
+        if(select_item != null){
+            Dajaxice.storage.steelMaterialApply(steelapply_callback,{"select_item":select_item,"mid":mid});
+        }
+        else{
+            alert("请选择领用材料");
+        }
+    })
+    $(document).on("click","span[name='steel_applycard']",function(){
+        var role = $(this).attr('role');
+        var aid = $("div#steelapplycard_table").attr('aid');
+        if(confirm("领用单确认后不能再修改")){
+            Dajaxice.storage.steelApplyCardConfirm(steel_applycard_confirm_callback,{"aid":aid,"role":role});
+        }
+    })
 });
 
 function steelRefundEnsureCallBack(data) {
@@ -71,30 +118,13 @@ function change_remark_storeRoom(itemid){
     $("#id_remark").val(a.eq(12).text());
 }
 
-function save_remark_storeRoom(typeid){
-	var typeid = typeid;
-    Dajaxice.storage.saveRemarkStoreRoom(save_remark_storeRoom_callback,{
-    	"form":$("#entry_item_form").serialize(),
-		"typeid":typeid,
-		"mid":mid,
-    });
+function save_storeRoom_callback(data){
+    $("#items_table").html(data.html);
+    alert(data.message);
 }
-
-function save_remark_storeRoom_callback(data){
-    if(data.flag){
-    	$("#items_table").html(data.html);
-        alert(data.message);
-    }
-    else{
-        alert(data.message);
-    }
-}
-
-function steel_entry_confirm(eid){
-    var entry_code = $("#input_entry_code").val();
-    if(confirm("库房一旦分配便不可更改!")){
-    Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":eid,"entry_code":entry_code}); 
-    }
+function save_remark_callback(data){
+    $("div#steelentry").html(data.html);
+    alert(data.message);
 }
 $(document).ready(function(){
 	if($("#entry_item_form").attr("iid")=="False"){
@@ -103,11 +133,19 @@ $(document).ready(function(){
 });
 
 function steel_entry_confirm_callback(data){
+    $("div#steelentry").html(data.html);
+    alert(data.message);
+}
+function search_material_callback(data){
+   $("#store_items_table").html(data.html); 
+}
+function steelapply_callback(data){
     if(data.flag){
-        alert("入库单确认成功");
-        window.location.reload();
+        $("#myModal").modal('hide');
     }
-    else{
-        alert("入库单确认失败");
-    }
+    alert(data.message);
+}
+function steel_applycard_confirm_callback(data){
+    $("div#steelapplycard").html(data.html);
+    alert(data.message);
 }

@@ -794,7 +794,7 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   lang=EN-US style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  color:black;mso-font-kerning:0pt'>{{item.supplier.supplier_name}}<o:p></o:p></span></p>
+  color:black;mso-font-kerning:0pt'>{{item.supplier_code}}<o:p></o:p></span></p>
   </td>
   <td width=197 nowrap colspan=3 style='width:148.0pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -803,7 +803,7 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>{{item.supplier.id}}<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{{item.sphere}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:24.75pt;border:none' width=0 height=33></td>
@@ -880,21 +880,21 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:31.5pt'>
   <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{% if bid_apply.status.status == status_dic.OPERATOR_COMMENT%}<button id="comment_add" href="#bid_apply_comment" usertitle="{{comment_user_dict.Z_APPLY_OPERATOR}}" data-toggle="modal">填写</button>{%elif bid_apply.status.status > status_dic.OPERATOR_COMMENT%}{{comment_dict.Z_APPLY_OPERATOR.comment}}{%endif%}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=277 nowrap colspan=3 style='width:208.0pt;border:none;border-right:
   solid black 1.0pt;mso-border-right-alt:solid black .5pt;background:white;
   padding:0cm 5.4pt 0cm 5.4pt;height:31.5pt'>
   <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{% if bid_apply.status.status == status_dic.NEED_COMMENT%}<button id="comment_add" href="#bid_apply_comment" usertitle="{{comment_user_dict.Z_NEED}}" data-toggle="modal">填写</button>{%elif bid_apply.status.status > status_dic.NEED_COMMENT%}{{comment_dict.Z_NEED.comment}}{%endif%}　<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=197 nowrap colspan=3 style='width:148.0pt;border:none;border-right:
   solid black 1.0pt;mso-border-right-alt:solid black .5pt;background:white;
   padding:0cm 5.4pt 0cm 5.4pt;height:31.5pt'>
-  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=center style='text-align:left;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{% if bid_apply.status.status == status_dic.CENTRALIZE_COMMENT%}<button id="comment_add" href="#bid_apply_comment" usertitle="{{comment_user_dict.Z_CENTRALIZE}}" data-toggle="modal">填写</button>{%elif bid_apply.status.status > status_dic.CENTRALIZE_COMMENT%}{{comment_dict.Z_CENTRALIZE.comment}}{%endif%}　<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:31.5pt;border:none' width=0 height=42></td>
@@ -913,7 +913,7 @@ div.WordSection1
   height:18.0pt'>
   <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'><span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=277 nowrap colspan=3 style='width:208.0pt;border:none;border-right:
   solid black 1.0pt;mso-border-right-alt:solid black .5pt;background:white;
@@ -938,9 +938,9 @@ div.WordSection1
   border-left:solid windowtext 1.0pt;border-bottom:none;border-right:solid black 1.0pt;
   mso-border-left-alt:solid windowtext .5pt;mso-border-right-alt:solid black .5pt;
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:12.75pt'>
-  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=center style='text-align:left;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{% if bid_apply.status.status == status_dic.LEAD_COMMENT%}<button id="comment_add" href="#bid_apply_comment" usertitle="{{comment_user_dict.Z_APPLY_LEAD}}" data-toggle="modal">填写</button>{%elif bid_apply.status.status > status_dic.LEAD_COMMENT%}{{comment_dict.Z_APPLY_LEAD.comment}}{%endif%}　<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=277 nowrap colspan=3 style='width:208.0pt;border:none;border-right:
   solid black 1.0pt;mso-border-right-alt:solid black .5pt;background:white;
@@ -968,9 +968,9 @@ div.WordSection1
   <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
   lang=EN-US style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;
   color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </span></span><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
-  宋体;color:black;mso-font-kerning:0pt'>签 名：<span lang=EN-US><span
+  宋体;color:black;mso-font-kerning:0pt'>签 名：{%if bid_apply.status.status > status_dic.LEAD_COMMENT%}{{comment_dict.Z_APPLY_LEAD.user.userinfo.name}}{%endif%}<span lang=EN-US><span
   style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><o:p></o:p></span></span></p>
   </td>
   <td width=277 nowrap colspan=3 style='width:208.0pt;border:none;border-right:
@@ -981,7 +981,7 @@ div.WordSection1
   color:black;mso-font-kerning:0pt'><span
   style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </span></span><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
-  宋体;color:black;mso-font-kerning:0pt'>签 名：<span lang=EN-US><span
+  宋体;color:black;mso-font-kerning:0pt'>签 名：{%if bid_apply.status.status > status_dic.CENTRALIZE_COMMENT%}{{comment_dict.Z_CENTRALIZE.user.userinfo.name}}{%endif%}<span lang=EN-US><span
   style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><o:p></o:p></span></span></p>
   </td>
   <td width=197 nowrap colspan=3 style='width:148.0pt;border:none;border-right:
@@ -990,9 +990,9 @@ div.WordSection1
   <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
   lang=EN-US style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;
   color:black;mso-font-kerning:0pt'><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </span></span><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
-  宋体;color:black;mso-font-kerning:0pt'>签 名：<span lang=EN-US><span
+  宋体;color:black;mso-font-kerning:0pt'>签 名：{%if bid_apply.status.status > status_dic.NEED_COMMENT%}{{comment_dict.Z_NEED.user.userinfo.name}}{%endif%}<span lang=EN-US><span
   style='mso-spacerun:yes'>&nbsp; </span><o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
@@ -1007,8 +1007,8 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:18.0pt'>
   <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;
-  </span></span>月<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp; </span></span>日<span
+  mso-font-kerning:0pt'>{%if bid_apply.status.status > status_dic.LEAD_COMMENT%}{{comment_dict.Z_APPLY_LEAD.submit_date|date:"Y年m月d日"}}{%else%}年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;
+      </span></span>月<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp; </span></span>日{% endif%}<span
   lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=277 colspan=3 style='width:208.0pt;border-top:none;border-left:
@@ -1017,8 +1017,8 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:18.0pt'>
   <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;
-  </span></span>月<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp; </span></span>日<span
+  mso-font-kerning:0pt'>{%if bid_apply.status.status > status_dic.NEED_COMMENT%}{{comment_dict.Z_NEED.submit_date|date:"Y年m月d日"}}{%else%}年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;
+      </span></span>月<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp; </span></span>日{% endif%}<span
   lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=197 colspan=3 style='width:148.0pt;border-top:none;border-left:
@@ -1027,8 +1027,8 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:18.0pt'>
   <p class=MsoNormal align=right style='text-align:right;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;
-  </span></span>月<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp; </span></span>日<span
+  mso-font-kerning:0pt'>{%if bid_apply.status.status > status_dic.CENTRALIZE_COMMENT%}{{comment_dict.Z_CENTRALIZE.submit_date|date:"Y年m月d日"}}{%else%}年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;
+      </span></span>月<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp; </span></span>日{%endif%}<span
   lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
@@ -1058,11 +1058,12 @@ div.WordSection1
   lang=EN-US style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;
   color:black;mso-font-kerning:0pt'><span style='mso-spacerun:yes'>&nbsp;&nbsp;
   </span></span><span style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:
-  宋体;color:black;mso-font-kerning:0pt'>领导签字：<span lang=EN-US><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  宋体;color:black;mso-font-kerning:0pt'>领导签字：{% if bid_apply.status.status == status_dic.LOGISTICAL_COMMENT%}<button id="comment_add" href="#bid_apply_logistical_modal" usertitle="{{comment_user_dict.Z_LOGISTICAL}}" data-toggle="modal">填写</button>{%elif bid_apply.status.status > status_dic.LOGISTICAL_COMMENT%}{{comment_dict.Z_LOGISTICAL.user.userinfo.name}}{%endif%}<span lang=EN-US><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  {% if bid_apply.status.status > status_dic.LOGISTICAL_COMMENT%}{{comment_dict.Z_LOGISTICAL.submit_date|date:"Y年m月d日"}}{%else%}
   </span></span>年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp;
   </span></span>月<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp;
-  </span></span>日<span lang=EN-US><o:p></o:p></span></span></p>
+  </span></span>日<span lang=EN-US>{%endif%}<o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:19.5pt;border:none' width=0 height=26></td>
@@ -1085,7 +1086,7 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:19.5pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{% if bid_apply.status.status > status_dic.LOGISTICAL_COMMENT%}{{bid_apply.apply_id}}{%endif%}　<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:19.5pt;border:none' width=0 height=26></td>
@@ -1108,7 +1109,7 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:19.5pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>　{% if bid_apply.status.status > status_dic.LOGISTICAL_COMMENT%}{{bid_apply.bid_delivery_date|date:"Y-m-d"}}{%endif%}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:19.5pt;border:none' width=0 height=26></td>
@@ -1131,7 +1132,7 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:19.5pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>　{% if bid_apply.status.status > status_dic.LOGISTICAL_COMMENT%}{{bid_apply.bid_datetime|date:"Y-m-d"}}{%endif%}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=53 nowrap style='width:40.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -1148,7 +1149,7 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:19.5pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>　{% if bid_apply.status.status > status_dic.LOGISTICAL_COMMENT%}{{bid_apply.place}}{%endif%}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:19.5pt;border:none' width=0 height=26></td>
@@ -1172,7 +1173,7 @@ div.WordSection1
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
   mso-font-kerning:0pt'>招<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;
-  </span></span>标<span lang=EN-US><o:p></o:p></span></span></p>
+  </span></span>标<span lang=EN-US>{% if bid_apply.status.status > status_dic.LOGISTICAL_COMMENT and bid_apply.implement_class.category == 0 %}√{%endif%}<o:p></o:p></span></span></p>
   </td>
   <td width=197 nowrap colspan=3 style='width:148.0pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -1182,7 +1183,7 @@ div.WordSection1
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
   mso-font-kerning:0pt'>议<span lang=EN-US><span
-  style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>标<span lang=EN-US><o:p></o:p></span></span></p>
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>标<span lang=EN-US>{% if bid_apply.status.status > status_dic.LOGISTICAL_COMMENT and bid_apply.implement_class.category == 1 %}√{%endif%}<o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:19.5pt;border:none' width=0 height=26></td>
@@ -1209,43 +1210,22 @@ div.WordSection1
   height:70.5pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{% if bid_apply.status.status == status_dic.COMPANY_COMMENT%}<button id="comment_add" href="#bid_apply_comment" usertitle="{{comment_user_dict.Z_COMPANY}}" data-toggle="modal">填写</button>{%elif bid_apply.status.status > status_dic.COMPANY_COMMENT%}{{comment_dict.Z_COMPANY.comment}}{%endif%}　<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=63 nowrap style='width:47.05pt;border:none;border-bottom:solid windowtext 1.0pt;
+  <td width=150 colspan=2 nowrap style='width:47.05pt;border:none;border-bottom:solid windowtext 1.0pt;
   mso-border-bottom-alt:solid windowtext .5pt;background:white;padding:0cm 5.4pt 0cm 5.4pt;
   height:70.5pt'>
-  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=left style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{%if bid_apply.status.status > status_dic.COMPANY_COMMENT%}{{comment_dict.Z_COMPANY.user.userinfo.name}}{%endif%}　<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=100 nowrap style='width:74.95pt;border:none;border-bottom:solid windowtext 1.0pt;
-  mso-border-bottom-alt:solid windowtext .5pt;background:white;padding:0cm 5.4pt 0cm 5.4pt;
-  height:70.5pt'>
-  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
-  </td>
-  <td width=53 nowrap style='width:40.0pt;border:none;border-bottom:solid windowtext 1.0pt;
-  mso-border-bottom-alt:solid windowtext .5pt;background:white;padding:0cm 5.4pt 0cm 5.4pt;
-  height:70.5pt'>
-  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
-  </td>
-  <td width=58 nowrap style='width:43.5pt;border:none;border-bottom:solid windowtext 1.0pt;
-  mso-border-bottom-alt:solid windowtext .5pt;background:white;padding:0cm 5.4pt 0cm 5.4pt;
-  height:70.5pt'>
-  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
-  style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
-  </td>
-  <td width=86 nowrap style='width:64.5pt;border-top:none;border-left:none;
+  <td width=86 colspan=3 nowrap style='width:64.5pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-bottom-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext .5pt;
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:70.5pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>　　{%if bid_apply.status.status > status_dic.COMPANY_COMMENT%}{{comment_dict.Z_COMPANY.submit_date|date:"Y年m月d日"}}{%endif%}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:70.5pt;border:none' width=0 height=94></td>

@@ -123,7 +123,7 @@ class MaterielFormConnection(models.Model):
 
 
 class bidApply(models.Model):
-    apply_id = models.CharField(unique=True, max_length=50, default=make_uuid, verbose_name=u"标单申请编号")
+    apply_id = models.CharField(null=True,blank=True,unique=True, max_length=50, default="", verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
     amount = models.IntegerField(default=0,verbose_name=u"数量")
@@ -165,11 +165,25 @@ class qualityPriceCard(models.Model):
     price = models.CharField(null=True, max_length=40, verbose_name=u"价格")
     ability = models.CharField(null=True, max_length=100, verbose_name=u"厂家协作能力质量情况及业绩")
     delivery_condition = models.CharField(null=True, max_length=40, verbose_name=u"交货及支付条件")
+    status=models.ForeignKey(CommentStatus,verbose_name=u"招标申请表状态")
     class Meta:
         verbose_name = u"比质比价卡"
 
     def __unicode__(self):
         return '%s'% (self.apply_id)
+class SupplierCheck(models.Model):
+    bid=models.ForeignKey(BidForm,blank=False)
+    apply_company = models.CharField(null=True,blank=True, max_length=40, verbose_name=u"申请单位")
+    apply_date = models.DateTimeField(null=True, blank=True,verbose_name=u"申请日期")
+    bid_project = models.CharField(null=True, max_length=40,blank=True, verbose_name=u"项目名称")
+    price_estimate = models.CharField(null=True, max_length=40, blank=True,verbose_name=u"估算价格")
+    base_situation = models.CharField(null=True,blank=True, max_length=100, verbose_name=u"招（议）标项目基本情况")
+    status=models.ForeignKey(CommentStatus,verbose_name=u"招标申请表状态")
+    class Meta:
+        verbose_name = u"供应商审核"
+        verbose_name_plural = u"供应商审核"
+    def __unicode__(self):
+        return '%s'% (self.bid.bid_id)
 
 class Supplier(models.Model):
     supplier_id=models.CharField(unique=True,max_length=20,blank=False,verbose_name=u"供应商编号")
@@ -223,6 +237,18 @@ class MaterielPurchasingStatus(models.Model):
 class SupplierSelect(models.Model):
     bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
     supplier=models.ForeignKey(Supplier,blank=False,verbose_name=u"供应商")
+    A=models.BooleanField(blank=True,default=False,verbose_name="A")
+    B=models.BooleanField(blank=True,default=False,verbose_name="B")
+    C=models.IntegerField(choices=SupplierCChoices,blank=True,null=True,verbose_name="C")
+    D=models.BooleanField(blank=True,default=False,verbose_name="D")
+    E=models.BooleanField(blank=True,default=False,verbose_name="E")
+    F=models.BooleanField(blank=True,default=False,verbose_name="F")
+    G=models.BooleanField(blank=True,default=False,verbose_name="G")
+    sphere=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"认定业务范围")
+    supplier_code=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"供方代码")
+    price=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"价格")
+    ability_situation=models.CharField(max_length=200,blank=True,null=True,verbose_name=u"厂家协作能力质量情况及业绩")
+    delivery_payment=models.CharField(max_length=40,blank=True,null=True,verbose_name=u"交货及支付条件")
     class Meta:
         verbose_name = u"供应商选择"
         verbose_name_plural = u"供应商选择"

@@ -122,7 +122,6 @@ def getPartTicket(request, work_order, groupNumId, date):
     return html
 
 
-
 @dajaxice_register
 def workorderSearch(request, form):
     """
@@ -173,8 +172,7 @@ def prodplanDelete(request, planid):
 @dajaxice_register
 def getProductPlanForm(request, planid):
     prodPlanForm = ProdPlanForm(instance = ProductionPlan.objects.get(plan_id = planid))
-    html = render_to_string("production/widgets/production_plan_update_form.html", {"prodPlanForm":prodPlanForm})
-    return simplejson.dumps(html)
+    return simplejson.dumps(prodPlanForm.as_p())
     
 @dajaxice_register
 def prodplanUpdate(request, form, planid):
@@ -442,4 +440,23 @@ def addProdUser(request, checkUserList):
     # data = {
     #     "html":html,
     # }
-    # return simplejson.dumps(data)
+# def addProductionUser(request, form):
+#     """
+#     Lei
+#     """
+#     production_user_search_form = productionUserSearchForm(deserialize_form(form))
+#     if production_user_search_form.is_valid():
+#         print production_user_search_form.cleaned_data
+#         production_user_name = roduction_user_search_form.cleaned_data["production_user_id__username__contains"]
+#         users=User.objects.all()
+#         productionUser = ProductionUser()
+#         productionUser.production_user_id.username = production_user_search_form.cleaned_data["production_user_id__username__contains"]
+#         productionUser.production_work_group.name = production_user_search_form.cleaned_data["production_work_group"]
+#         productionUser.save()
+#         message = u"生产人员添加成功"
+#         print "ssssssssssss"
+        
+#         print "ddddddddddddd"
+#     else:
+#         message=u"添加失败,生产人员用户名不能为空！"
+#     return message

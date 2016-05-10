@@ -581,9 +581,50 @@ def bidApplyFormViews(request,bid):
         bid_apply = bidApply.objects.get(bid = bidform)
     bidApplyForm = BidApplyForm(instance=bid_apply)
     supplier_set=bidform.supplierselect_set.all()
+    comment_dict={}
+    for k in COMMENT_USER_DICT:
+        comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
+        if comment.count()>0:
+            comment_dict[k]=comment[0]
+    for item in supplier_set:
+        item.form=BidApplySupplierForm(instance=item)
+
     context={
         "bid_apply":bid_apply,
         "bidApplyForm":bidApplyForm,
-        "supplier_set":supplier_set
+        "BidLogisticalForm":BidLogisticalForm,
+        "supplier_set":supplier_set,
+        "status_dic":BIDFORM_INVITE_BID_APPLY_DIC,
+        "comment_user_dict":COMMENT_USER_DICT,
+        "comment_dict":comment_dict
     }
     return render(request,"purchasing/bid_invite/bid_apply_page.html",context)
+
+def SupplierCheckViews(request,bid):
+    bidform = BidForm.objects.get(bid_id = bid)
+    if bidform.suppliercheck_set.count() == 0:
+        status=CommentStatus.objects.get(status=BIDFORM_PART_STATUS_INVITE_BID_CHECK_FILL)
+        supplier_check=SupplierCheck(bid=bidform,status=status)
+        supplier_check.save()
+    else:
+        supplier_check = SupplierCheck.objects.get(bid = bidform)
+
+    supplier_check_form=SupplierCheckForm(instance=supplier_check)
+    supplier_set=bidform.supplierselect_set.all()
+    comment_dict={}
+    for k in COMMENT_USER_DICT:
+        comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
+        if comment.count()>0:
+            comment_dict[k]=comment[0]
+
+    for item in supplier_set:
+        item.form=SupplierCheckSupplierForm(instance=item)
+    context={
+        "supplier_check":supplier_check,
+        "supplier_check_form":supplier_check_form,
+        "supplier_set":supplier_set,
+        "status_dic":BIDFORM_INVITE_BID_SUPPLIER_DIC,
+        "comment_user_dict":COMMENT_USER_DICT,
+        "comment_dict":comment_dict
+    }
+    return render(request,"purchasing/bid_invite/supplier_check_page.html",context)

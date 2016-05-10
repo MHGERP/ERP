@@ -4,6 +4,7 @@
 import datetime
 import const 
 from storage.models import *
+from storage.forms import *
 from purchasing.models import *
 from django.db.models import Q
 def get_weld_filter(model_type,dict,replace_dic=None):
@@ -232,15 +233,12 @@ class AutoGenEntry(object):
 
 def checkStorage(db_type,sorce=None):
     DB_MAP = getDbMap(sorce)
-    db_model = DB_MAP[db_type]
-    return db_model
+    return DB_MAP[db_type]
 
 def getDbMap(sorce):
-    DB_MAP = {WELD:WeldStoreList,PROFILE:BarSteelMaterialLedger,SHEET:BoardSteelMaterialLedger,PURCHASED:OutsideStorageList,AUXILIARY_TOOL:AuxiliaryToolStoreList}
-    if sorce == "purchaser":    
-        for tp in WELD_TYPE_LIST:
-            if tp in WELD_TYPE_LIST:
-                DB_MAP[tp] = WeldStoreList
+    weld_tuple = (WeldStoreList,WeldStorageSearchForm,WeldingMaterialApplyCard)
+    steel_tuple = (SteelMaterialStoreList,SteelMaterialSearchForm,SteelMaterialApplyCard)
+    DB_MAP = {WELD:weld_tuple,STEEL:steel_tuple,PURCHASED:steel_tuple,AUXILIARY_TOOL:steel_tuple}
     return DB_MAP
 
 def modify_weld_item_status(items):
@@ -267,3 +265,7 @@ def createAuxiliaryToolStoreList(entry):
     """
     for item in entry.auxiliarytoolentryitems_set.all():
         AuxiliaryToolStoreList(entry_item = item , inventory_count = item.count,entry_time=entry.create_time).save()
+
+def createSteelMaterialStoreList(entry):
+    for item in entry.steelmaterialentryitems_set.all():
+        SteelMaterialStoreList(entry_item=item,specification=item.specification , steel_type=entry.steel_type ,count=item.count,length=item.length,weight=item.weight,store_room=item.store_room).save()

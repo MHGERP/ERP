@@ -14,7 +14,7 @@ from django.db import transaction
 from const.models import WorkOrder,Material, InventoryType
 from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
-from purchasing.forms import SupplierForm,ProcessFollowingForm,SubApplyItemForm, MaterielExecuteForm
+from purchasing.forms import *
 from django.db.models import Q
 from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems,BidNextStatus
 from storage.models import *
@@ -162,12 +162,76 @@ def chooseInventorytype(request,pid,key):
         "inventory_detail_html":inventory_detail_html
         })
 
+@dajaxice_register
+def getRelatedModel(request, index):
+    idtable = {
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        COOPERANT: "forging",
+        WELD_MATERIAL: "weld_material",
+    }
+    data = []
+    print "这是一个测试: "
+    print index
+    if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
+        f1 = set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.all())
+        f2 = set(item.entry_item.specification for item in SteelMaterialStoreList.objects.all())
+        f3 = set(item.entry_item.materiel for item in SteelMaterialStoreList.objects.all())
+    elif index == FIRST_FEEDING:
+        print index
+    elif index == OUT_PURCHASED:
+        f1 = set(item.specification for item in OutsideStorageList.objects.all())
+        f2 = set(item.texture for item in OutsideStorageList.objects.all())
+        f3 = set()
+    elif index == COOPERANT:
+        print index
+    elif index == WELD_MATERIAL:
+        f1 = set(item.entry_item.material.name for item in WeldStoreList.objects.all())
+        f2 = set(item.entry_item.material_mark for item in WeldStoreList.objects.all())
+        f3 = set(item.entry_item.specification for item in WeldStoreList.objects.all())
+    if "" in f1:
+        f1.remove("")
+    if "" in f2:
+        f2.remove("")
+    if "" in f3:
+        f3.remove("")
+    context={
+        "f1" : f1,
+        "f2" : f2,
+        "f3" : f3,
+    }
+    return render_to_string("purchasing/related_model/%s.html" % idtable[index], context)
+
+@dajaxice_register
+def getRelatedTable(request, index, f1, f2, f3):
+    idtable = {
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        COOPERANT: "forging",
+        WELD_MATERIAL: "weld_material",
+    }
+    data = []
+    if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
+        data = SteelMaterialStoreList.objects.filter(entry_item__material__name = f1, entry_item__specification = f2, entry_item__materiel = f3)
+    elif index == OUT_PURCHASED:
+        data = OutsideStorageList.objects.filter(specification = f1, texture = f2)
+        print data
+    elif index == WELD_MATERIAL:
+        data = WeldStoreList.objects.filter(entry_item__material__name = f1, entry_item__material_mark = f2, entry_item__specification = f3)
+    context = {
+        "data" : data,
+    }
+    return render_to_string("purchasing/related_table/%s.html" % idtable[index], context)
 
 @dajaxice_register
 def addToForeign(request, index):
     item = Materiel.objects.get(id = index)
     item.inventory_type.clear()
-    item.inventory_type.add(InventoryType.objects.get(name = COOPERANT))
+    item.inventory_type.add(InventoryType.objects.get(name = OUT_PURCHASED))
     return ""
 
 
@@ -519,7 +583,7 @@ def SelectSupplierOperation(request,selected,bid):
         supplier=Supplier.objects.get(pk=item)
         select_supplier=SupplierSelect.objects.filter(bidform=bidform,supplier=supplier)
         if select_supplier.count()==0:
-            supplier_select_item=SupplierSelect(bidform=bidform,supplier=supplier)
+            supplier_select_item=SupplierSelect(bidform=bidform,supplier=supplier,supplier_code=supplier.supplier_id)
             supplier_select_item.save()
     return simplejson.dumps({"status":u"选择成功"})
 
@@ -644,14 +708,20 @@ def saveComment(request, form, bid_id):
     return simplejson.dumps(ret)
 
 @dajaxice_register
-def saveBidApply(request, form, bid_apply_id):
+def saveBidApply(request, form, bid_apply_id,supplier_form_set,supplier_id_set):
     bid_apply=bidApply.objects.get(pk=bid_apply_id)
     bidApplyForm = BidApplyForm(deserialize_form(form), instance=bid_apply)
     if bidApplyForm.is_valid():
         bidApplyForm.save()
         ret = {'status': '2', 'message': u"申请书保存成功"}
     else:
-        ret = {'status': '0', 'field':bidApplyForm.data.keys(), 'error_id':bidApplyForm.errors.keys(), 'message': u"申请书保存不成功"}
+        ret = {'status': '1', 'field':bidApplyForm.data.keys(), 'error_id':bidApplyForm.errors.keys(), 'message': u"申请书保存不成功"}
+        return simplejson.dumps(ret)
+    for (id ,form) in zip(supplier_id_set,supplier_form_set):
+        supplierselect=SupplierSelect.objects.get(pk=id)
+        form=BidApplySupplierForm(deserialize_form(form),instance=supplierselect)
+        form.save()
+    ret = {'status': '0', 'message': u"申请书保存成功"}
     return simplejson.dumps(ret)
 
 @dajaxice_register
@@ -1291,4 +1361,56 @@ def BidApplySelect(request,val,bidid):
     bidform.bid_mod=int(val)
     bidform.save()
     goNextStatus(bidform,request.user)
+    return simplejson.dumps({})
+
+@dajaxice_register
+def BidApplyComment(request,bid_apply_id,usertitle,comment):
+    bid_apply=bidApply.objects.get(id=bid_apply_id)
+    bid_comment=BidComment(user=request.user,comment=comment,bid=bid_apply.bid,submit_date=datetime.today(),user_title=usertitle)
+    bid_comment.save()
+    BidNextStatus(bid_apply)
+    return simplejson.dumps({})
+
+@dajaxice_register
+def BidApplyLogistical(request,form,bid_apply_id,usertitle):
+    bid_apply=bidApply.objects.get(pk=bid_apply_id)
+    bid_logistical_form = BidLogisticalForm(deserialize_form(form), instance=bid_apply)
+    if bid_logistical_form.is_valid():
+        bid_logistical_form.save()
+    else :
+        return simplejson.dumps({'status':1})
+    bid_comment=BidComment(user=request.user,comment="",bid=bid_apply.bid,submit_date=datetime.today(),user_title=usertitle)
+    bid_comment.save()
+    BidNextStatus(bid_apply)
+    return simplejson.dumps({'status':0})
+
+@dajaxice_register
+def saveSupplierCheck(request,form,supplier_check_id,supplier_form_set,supplier_id_set):
+    supplier_check=SupplierCheck.objects.get(pk=supplier_check_id)
+    supplier_check_form=SupplierCheckForm(deserialize_form(form),instance=supplier_check)
+    if supplier_check_form.is_valid():
+        supplier_check_form.save()
+    else:
+        for item in  supplier_check_form.errors.keys():
+            print item,supplier_check_form.errors[item]
+        return simplejson.dumps({'status':1})
+    for (id,form) in zip(supplier_id_set,supplier_form_set):
+        supplierselect=SupplierSelect.objects.get(pk=id)
+        form=SupplierCheckSupplierForm(deserialize_form(form),instance=supplierselect)
+        form.save()
+    return simplejson.dumps({"status":0})
+
+
+
+@dajaxice_register
+def submitSupplierCheck(request,supplier_check_id):
+    supplier_check =SupplierCheck.objects.get(id = supplier_check_id)
+    BidNextStatus(supplier_check)
+    return simplejson.dumps({})
+@dajaxice_register
+def SupplierCheckComment(request,supplier_check_id,usertitle,comment):
+    supplier_check=SupplierCheck.objects.get(id=supplier_check_id)
+    bid_comment=BidComment(user=request.user,comment=comment,bid=supplier_check.bid,submit_date=datetime.today(),user_title=usertitle)
+    bid_comment.save()
+    BidNextStatus(supplier_check)
     return simplejson.dumps({})
