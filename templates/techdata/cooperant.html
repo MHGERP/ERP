@@ -1,0 +1,28 @@
+{% extends "techdata/base/none_nav_base.html"%}
+
+{% block title %}
+<h1>工序性外协明细表</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">工序性外协明细表</a>
+{% endblock %}
+
+{% block inner_content%}
+<form class="form-search" itype={{inventory_type}}>
+   工作令: 
+   {{ work_order_form.work_order }}
+    <span class="btn" id="order_search">检索</span> 
+	<span style="float: right">
+票号：	<input type="text" id="input-index" style="width: 50px"></input>
+    <span class="btn btn-primary" id="btn-add">添加</span>
+    <span class="btn btn-success" id="fast_generate">快捷生成</span>
+	</span>
+</form>
+
+<div class="widget-box" id="widget-box">
+
+</div>
+
+<script type="text/javascript" src="{{STATIC_URL}}js/techdata/cooperant.js"></script>
+{% endblock%}

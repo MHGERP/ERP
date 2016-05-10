@@ -11,7 +11,7 @@
         </select>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-success " data-dismiss="modal" id="apply_select_confirm">合并确认</button>
+        <button class="btn btn-success " data-dismiss="modal" id="apply_select_confirm">确认</button>
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
     </div>
     {% elif bidform.bid_status.part_status == bid_status_dic.BIDFORM_PART_STATUS_INVITE_BID_FILL%}
@@ -22,13 +22,13 @@
     <div class="modal-body">
         {% if bidform.bid_mod == 0 %}
         <a class="btn btn-primary" href="/purchasing/bidapplyform/{{bidform.bid_id}}">填写招标申请表</a>
-        <a class="btn btn-primary" >填写供应商审核表</a>
+        <a class="btn btn-primary" href="/purchasing/suppliercheck/{{bidform.bid_id}}">填写供应商审核表</a>
         {% else%}
         <a class="btn btn-primary" >填写比质比价卡</a>
         {% endif%}
     </div>
     <div class="modal-footer">
-        <button class="btn btn-success " data-dismiss="modal" id="apply_select_confirm">合并确认</button>
+        <button class="btn btn-success " data-dismiss="modal" id="apply_select_confirm">确认</button>
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
     </div>
     {% endif%}

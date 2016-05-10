@@ -1,0 +1,29 @@
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL  }}style/purchasing/table.css" >
+
+<form class="well form" method="POST" accept="" id="logistical_form">
+    {% csrf_token%}
+    <table class="table table-bordered" id="bid_apply_logistical_form_table">
+        <thead>
+            <tr>
+                <td>{{BidLogisticalForm.apply_id.label}}</td>
+                <td >{{BidLogisticalForm.apply_id}}</td>
+            </tr>
+            <tr>
+                <td>{{BidLogisticalForm.bid_delivery_date.label}}</td>
+                <td>{{BidLogisticalForm.bid_delivery_date}}</td>
+            </tr>
+            <tr>
+                <td>{{BidLogisticalForm.bid_datetime.label}}</td>
+                <td>{{BidLogisticalForm.bid_datetime}}</td>
+            </tr>
+            <tr>
+                <td>{{BidLogisticalForm.place.label}}</td>
+                <td>{{BidLogisticalForm.place}}</td>
+            </tr>
+            <tr>
+                <td>{{BidLogisticalForm.implement_class.label}}</td>
+                <td>{{BidLogisticalForm.implement_class}}</td>
+            </tr>
+        </thead>
+    </table>

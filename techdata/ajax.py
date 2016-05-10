@@ -23,22 +23,94 @@ from const.utils import getMaterialQuerySet
 from purchasing.models import MaterielExecute, MaterielExecuteDetail
 import datetime
 
+
+def markGenerateFactory(order, inventory_type):
+    """
+    JunHU
+    """
+    if inventory_type == OUT_PURCHASED:
+        return order.outpurchasedmark
+    elif inventory_type == FIRST_FEEDING:
+        return order.firstfeedingmark
+    elif inventory_type == COOPERANT:
+        return order.cooperantmark
+    elif inventory_type == MAIN_MATERIEL:
+        return order.principalmark
+
+@dajaxice_register
+def detailMark(request, id_work_order, step, inventory_type):
+    """
+    JunHU
+    """
+    order = WorkOrder.objects.get(id = id_work_order)
+    mark = markGenerateFactory(order, inventory_type)
+    if step == MARK_WRITE:
+        mark.writer = request.user
+        mark.write_date = datetime.datetime.today()
+        mark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(mark.writer.userinfo),
+        }
+    elif step == MARK_REVIEW:
+        mark.reviewer = request.user
+        mark.review_date = datetime.datetime.today()
+        mark.save()
+        context = {
+            "ret": True,
+            "mark_user": unicode(mark.reviewer.userinfo),
+        }
+    else:
+        context = {
+            "ret": False,
+            "warning": u"后台保存错误"
+        }
+    return simplejson.dumps(context)
+
+def detailItemGenerateFactory(inventory_type):
+    """
+    JunHU
+    """
+    if inventory_type == OUT_PURCHASED:
+        return OutPurchasedItem
+    elif inventory_type == FIRST_FEEDING:
+        return FirstFeedingItem
+    elif inventory_type == COOPERANT:
+        return CooperantItem
+    elif inventory_type == MAIN_MATERIEL:
+        return PrincipalItem
+
 @dajaxice_register
 def getInventoryTables(request, id_work_order, inventory_type):
     """
     JunHU
     """
+    id2table = {
+        OUT_PURCHASED: "out_purchased_table.html",
+        FIRST_FEEDING: "first_feeding_table.html",
+        COOPERANT: "cooperant_table.html",
+        MAIN_MATERIEL: "principal_material_table.html",
+    }
     work_order = WorkOrder.objects.get(id = id_work_order)
-    if inventory_type == OUT_PURCHASED:
-        list = OutPurchasedItem.objects.filter(materiel_belong__order = work_order)
-        html = render_to_string("techdata/widgets/out_purchased_table.html", {"list": list, "work_order": work_order,})
+    DetailItem = detailItemGenerateFactory(inventory_type)
+    context = {
+        "MARK_WRITE": MARK_WRITE,
+        "MARK_REVIEW": MARK_REVIEW,
+        "work_order": work_order,
+    }
+    if inventory_type == MAIN_MATERIEL:
+        list = DetailItem.objects.filter(order = work_order)
+    else:
+        list = DetailItem.objects.filter(materiel_belong__order = work_order)
+    context["list"] = list
+    html = render_to_string("techdata/widgets/" + id2table[inventory_type], context)
     return html
 
 @dajaxice_register
 def deleteSingleItem(request, iid, inventory_type):
-    if inventory_type == OUT_PURCHASED:
-        item = OutPurchasedItem.objects.get(id = iid)
-        item.delete()
+    DetailItem = detailItemGenerateFactory(inventory_type)
+    item = DetailItem.objects.get(id = iid)
+    item.delete()
 
 @dajaxice_register
 def addSingleItem(request, id_work_order, index, inventory_type):
@@ -46,18 +118,18 @@ def addSingleItem(request, id_work_order, index, inventory_type):
     JunHU
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
-    if inventory_type == OUT_PURCHASED:
-        item = Materiel.objects.filter(Q(index = index) & Q(order = work_order))
-        if item.count() == 0:
-            context = {"success": False, "remark": u"未查到该票号零件"}
-            return simplejson.dumps(context)
-        item = item[0]
-        if OutPurchasedItem.objects.filter(materiel_belong = item).count() > 0:
-            context = {"success": False, "remark": u"该零件已添加至外购件明细"}
-            return simplejson.dumps(context)
-        OutPurchasedItem(materiel_belong = item).save()
-        context = {"success" : True, "remark": u"添加成功"}
+    DetailItem = detailItemGenerateFactory(inventory_type)
+    item = Materiel.objects.filter(Q(index = index) & Q(order = work_order))
+    if item.count() == 0:
+        context = {"success": False, "remark": u"未查到该票号零件"}
         return simplejson.dumps(context)
+    item = item[0]
+    if DetailItem.objects.filter(materiel_belong = item).count() > 0:
+        context = {"success": False, "remark": u"该零件已添加至外购件明细"}
+        return simplejson.dumps(context)
+    DetailItem(materiel_belong = item).save()
+    context = {"success" : True, "remark": u"添加成功"}
+    return simplejson.dumps(context)
 
 @dajaxice_register
 def autoSetInventoryLabel(request, id_work_order, inventory_type):
@@ -65,12 +137,23 @@ def autoSetInventoryLabel(request, id_work_order, inventory_type):
     JunHU
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
+    DetailItem = detailItemGenerateFactory(inventory_type)
     if inventory_type == OUT_PURCHASED:
         for item in Materiel.objects.filter(order = work_order):
-            if item.circulationroute.L1 == None or item.circulationroute.L1.name != GY: continue
+            if not item.route().startswith("GY"): continue
             if item.schematic_index and item.schematic_index.endswith(".00"): continue
-            if OutPurchasedItem.objects.filter(materiel_belong = item).count() > 0: continue
-            OutPurchasedItem(materiel_belong = item, remark = item.remark).save()
+            if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
+            DetailItem(materiel_belong = item, remark = item.remark).save()
+    elif inventory_type == FIRST_FEEDING:
+        for item in Materiel.objects.filter(order = work_order):
+            if not (item.route().startswith("DY") or item.route().startswith("H1.XZ.H1")): continue
+            if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
+            DetailItem(materiel_belong = item, remark = item.remark).save()
+    elif inventory_type == COOPERANT:
+        for item in Materiel.objects.filter(order = work_order):
+            if not item.route().startswith("H1.J.ZM"): continue
+            if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
+            DetailItem(materiel_belong = item, remark = item.remark).save()
 
 @dajaxice_register
 def getProcessBOM(request, id_work_order):
@@ -79,8 +162,6 @@ def getProcessBOM(request, id_work_order):
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
-    for item in BOM:
-        item.route = ' '.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))   
     context = {
         "work_order": work_order,
         "BOM": BOM,
@@ -98,9 +179,6 @@ def getSingleProcessBOM(request, iid):
     JunHU
     """
     item = Materiel.objects.get(id = iid)
-    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
-        CirculationRoute(materiel_belong = item).save()
-    item.route = ' '.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
     context = {
         "item": item,
     }
@@ -202,10 +280,6 @@ def getDesignBOM(request, id_work_order):
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
-    for item in BOM:
-        if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
-            CirculationRoute(materiel_belong = item).save()
-        item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
     context = {
         "work_order" : work_order,
         "BOM" : BOM,
@@ -222,9 +296,6 @@ def getSingleDesignBOM(request, iid):
     mxl
     """
     item = Materiel.objects.get(id = iid)
-    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
-        circulationroute(materiel_belong = item).save()
-    item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
     context = {
         "item" : item
     }
@@ -255,7 +326,7 @@ def getProcessReviewForm(request, iid):
     return html
 
 @dajaxice_register
-def getWeldSeamCard(self, full = False, iid = None):
+def getWeldSeamCard(request, full = False, iid = None):
     """
     JunHU
     """
@@ -276,7 +347,7 @@ def getWeldSeamCard(self, full = False, iid = None):
         html = render_to_string("techdata/widgets/weld_seam_card.html", context)
     return html
 @dajaxice_register
-def getWeldQuotaCard(self,iid = None):
+def getWeldQuotaCard(request,iid = None):
     """
     MH Chen
     """
@@ -285,9 +356,6 @@ def getWeldQuotaCard(self,iid = None):
         form = WeldQuotaForm(instance = weld_quota)
     else:
         form = WeldSeamForm()
-    # material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE, WELD_RIBBON, WELD_FLUX)
-    # form.fields["weld_material_1"].queryset = material_set
-    # form.fields["weld_material_2"].queryset = material_set
     context = {
         "form": form,
         "weld_quota":weld_quota,
@@ -377,18 +445,6 @@ def techBoxWeld(request, order):
     return html
 
 @dajaxice_register
-def weldQuota(request, order):
-    """
-    MH Chen
-    """
-    list = Materiel.objects.filter(order = order)
-    context = {
-        "list" : list,
-    }
-    html = render_to_string("techdata/widgets/weld_quota_table.html", context)
-    return html
-
-@dajaxice_register
 def addWeldSeam(request, iid, form):
     """
     JunHU
@@ -425,7 +481,7 @@ def modifyWeldSeam(request, iid, form):
         return html
 
 @dajaxice_register
-def getWeldSeamList(self, id_work_order):
+def getWeldSeamList(request, id_work_order):
     """
     JunHU
     """
@@ -441,7 +497,7 @@ def getWeldSeamList(self, id_work_order):
     return simplejson.dumps({"html": html, "read_only": read_only,})
 
 @dajaxice_register
-def getWeldQuotaList(self, id_work_order):
+def getWeldQuotaList(request, id_work_order):
     """
     MH Chen
     """
@@ -456,35 +512,96 @@ def getWeldQuotaList(self, id_work_order):
 
     return simplejson.dumps({"html": html, "read_only": read_only,})
 @dajaxice_register
-def getWeldSeamWeight(self, id_work_order):
+def getWeldSeamWeight(request, id_work_order):
+    """
+    MH Chen
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    try:
+        weld_quota_list = WeldQuota.objects.filter(order = work_order)
+    except WeldQuota.DoesNotExist:
+        pass
+    context = {
+        "work_order":work_order,
+        "weld_quota_list":weld_quota_list,
+    }
+    html = render_to_string("techdata/widgets/weld_quota_table.html", context)
+    return html
+    
+@dajaxice_register
+def saveWeldQuota(request, id_work_order):
     """
     MH Chen
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
     weldseam_list = WeldSeam.objects.filter(materiel_belong__order = work_order)
     dic = {}
-
-    # items = WeldSeam.objects.values('weld_material_1__categories', 'size_1',"weld_material_2__categories","size_1").annotate(Sum('hour'))
-
     for item1 in weldseam_list:
-        if dic.has_key((item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)):
-            dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)]+= float(item1.weight_1)
-        else:
-            dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.categories)] = float(item1.weight_1)
+        if item1.weld_material_1 != None:
+            if dic.has_key((item1.weld_material_1,item1.size_1,item1.weld_material_1.get_categories_display)):
+                dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.get_categories_display)]+= float(item1.weight_1)
+            else:
+                dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.get_categories_display)] = float(item1.weight_1)
     for item2 in weldseam_list:
         if item2.weld_material_2 != None:
-            if dic.has_key((item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)):
-                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)]+= float(item2.weight_2)
+            if dic.has_key((item2.weld_material_2,item2.size_2,item2.weld_material_2.get_categories_display)):
+                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.get_categories_display)]+= float(item2.weight_2)
             else:
-                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.categories)] = float(item2.weight_2)
+                dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.get_categories_display)] = float(item2.weight_2)
+    for item in dic:
+        weldQuota = WeldQuota(order = work_order,weld_material = item[0],size = item[1],quota = dic[item])
+        weldQuota.save()
 
+    return "ok"
+@dajaxice_register
+def updateWeldQuota(request, iid,categories,weld_material,size,stardard,quota,remark):
+    """
+    MH Chen
+    """
+    weld_quota = WeldQuota.objects.get(id = iid)
+    weld_quota.categories = categories
+    weld_quota.weld_material = Material.objects.get(id = weld_material)
+    weld_quota.size = size
+    weld_quota.stardard = stardard
+    weld_quota.quota = quota
+    weld_quota.remark = remark
+    weld_quota.save()
+    return "ok"
+
+@dajaxice_register
+def deleteWeldQuota(request,did):
+    """
+    MH Chen
+    """
+    weld_quota = WeldQuota.objects.get(id = did)
+    weld_quota.delete()
+    return "ok"
+@dajaxice_register
+def addWeldQuota(request,form,work_order):
+    """
+    MH Chen
+    """
+    order = WorkOrder.objects.get(id = work_order)
+    quota_form = WeldQuotaForm(deserialize_form(form))
+    if quota_form.is_valid():
+        quota = quota_form.save(commit = False)
+        quota.order = order
+        quota.save()
+        return  "ok"
+    else:
+        return "fail"
+@dajaxice_register
+def getMaterial(request,work_order):
+    """
+    MH Chen
+    """
+    order = WorkOrder.objects.get(id = work_order)
+    form = WeldQuotaForm()
     context = {
-        "work_order":work_order,
-        "dic":dic,
+        "form": form,
     }
-    html = render_to_string("techdata/widgets/weld_quota_table.html", context)
+    html = render_to_string("techdata/widgets/weld_quota_add_card.html", context)
     return html
-
 @dajaxice_register  
 def updateProcessReview(request, iid,processReview_form):
     """
@@ -499,7 +616,7 @@ def updateProcessReview(request, iid,processReview_form):
         return "fail"
 
 @dajaxice_register
-def getSingleWeldSeamInfo(self, iid):
+def getSingleWeldSeamInfo(request, iid):
     """
     JunHU
     """

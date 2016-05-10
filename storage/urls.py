@@ -45,7 +45,7 @@ urlpatterns = patterns('',
         storage_views.weldEntryConfirmViews,
     ),
     url(
-        r'^steelentryconfirm/(?P<eid>\d+)/(?P<typeid>\d+)$',
+        r'^steelentryconfirm/(?P<eid>\d+)$',
         storage_views.steelEntryConfirmViews,
     ),
     url(

@@ -15,6 +15,7 @@ from django.db.models import Q,Sum
 from storage.utils import get_weld_filter
 from const.forms import WorkOrderForm
 from production.forms import *
+from django.contrib.auth.models import User
 
 def getQ(con):
     query_set = Q()
@@ -368,3 +369,47 @@ def weldPartOrderInfo(request, iid):
     materielObj.processDetailObj.extend([ProcessDetail()] * (12-len(materielObj.processDetailObj)))
     html = render_to_string("production/widgets/weld_part_order_info_table.html",{"materielObj":materielObj})
     return simplejson.dumps({ "html" : html})
+
+@dajaxice_register
+def getProductionUser(request, form):
+    """
+    Lei
+    """
+    production_user_search_form = ProductionUserSearchForm(deserialize_form(form))
+    if production_user_search_form.is_valid():
+        production_user_list  = ProductionUser.objects.filter(getQ(production_user_search_form.cleaned_data))
+    html = render_to_string("production/widgets/production_user_table.html",{"production_user_list":production_user_list})
+    return html
+
+@dajaxice_register
+def getUser(request, form):
+    """
+    Lei
+    """
+    user_choose_form = UserChooseForm(deserialize_form(form))
+    if user_choose_form.is_valid():
+        user_list = User.objects.filter(getQ(user_choose_form.cleaned_data))
+    html = render_to_string("production/widgets/user_table.html",{"user_list":user_list})
+    return html
+
+# @dajaxice_register
+# def addProductionUser(request, form):
+#     """
+#     Lei
+#     """
+#     production_user_search_form = productionUserSearchForm(deserialize_form(form))
+#     if production_user_search_form.is_valid():
+#         print production_user_search_form.cleaned_data
+#         production_user_name = roduction_user_search_form.cleaned_data["production_user_id__username__contains"]
+#         users=User.objects.all()
+#         productionUser = ProductionUser()
+#         productionUser.production_user_id.username = production_user_search_form.cleaned_data["production_user_id__username__contains"]
+#         productionUser.production_work_group.name = production_user_search_form.cleaned_data["production_work_group"]
+#         productionUser.save()
+#         message = u"生产人员添加成功"
+#         print "ssssssssssss"
+        
+#         print "ddddddddddddd"
+#     else:
+#         message=u"添加失败,生产人员用户名不能为空！"
+#     return message

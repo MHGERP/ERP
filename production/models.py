@@ -2,8 +2,10 @@
 from const import *
 from django.db import models
 from const.models import *
+from django.contrib.auth.models import User
 from const.utility import make_uuid
 from techdata.models import ProcessingName
+from users.models import UserInfo
 import datetime
 
 class ProductionWorkGroup(models.Model):
@@ -15,6 +17,14 @@ class ProductionWorkGroup(models.Model):
     def __unicode__(self):
         return self.name
 
+class ProductionUser(models.Model):
+    production_user_id = models.ForeignKey(UserInfo,unique=True,verbose_name=u"生产人员")
+    production_work_group = models.ForeignKey(ProductionWorkGroup,blank=True, null=True, verbose_name=u"所属工作组")
+    class Meta:
+        verbose_name = "生产人员账户"
+        verbose_name_plural = "生产人员账户"
+    def __unicode__(self):
+        return '%s' % (self.production_user_id)
 
 class ProcessDetail(models.Model):
     materiel_belong = models.ForeignKey(Materiel, blank = False, verbose_name = u"工作票")

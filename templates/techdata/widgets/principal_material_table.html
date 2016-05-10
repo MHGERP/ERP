@@ -1,59 +1,52 @@
-<!-- <form class="form-search ">
-    &nbsp;&nbsp;&nbsp;&nbsp;<font size="4px"><b>工作令</b>&nbsp;&nbsp;</font>
-    <select class="input-medium search-query" id="search_pending_order">
-        <option style="width:200px">1</option>
-        <option style="width:200px">2</option>
-        <option style="width:200px">3</option>
-        <option style="width:200px">4</option>
-        <option style="width:200px">5</option>
-    </select>
-    <span class="btn" id="order_search">检索</span> 
-</form> -->
-<div class="widget-box">
-    <div class="widget-title">
-        <span class="icon"><i class="icon-th"></i></span>
-        <h5>工作令：03015001B</h5>
-        <h5>产品名称：第一中温变换炉</h5>
-        <h5>单位：公斤</h5>
-        <h5>编制人：</h5>
-        <h5>审核人：</h5>
-    </div>
-    <div class="widget-content nopadding">
-        <div class="dataTables_length">
-            <span class="btn btn-small btn-primary">完成</span>
-            <span class="btn btn-small btn-primary">审核</span>
-        </div>
-        <table class="table table-bordered table-striped" >
-
-            <thead>
-                <th>序号</th>
-                <th>工作令</th>
-                <th>名称</th>
-                <th>图号</th>
-                <th>票号</th>
-                <th>数量</th>
-                <th>材质</th>
-                <th>外形尺寸</th>
-                <th>毛重（kg）</th>
-                <th>备注</th>
-
-            </thead>
-            <tbody>
-                {% for item in list%}
-                <tr>
-                    <td>{{item.id}}</td>
-                    <td>{{item.order}}</td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.schematic_index}}</td>
-                    <td>{{item.index}}</td>
-                    <td>{{item.count}}</td>
-                    <td>{{item.material}}</td>
-                    <td>?不明?</td>
-                    <td>{{item.total_weight}}</td>
-                    <td>{{item.remark}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+<div class="widget-title">
+    <span class="icon"><i class="icon-th"></i></span>
+    <h5>工作令：{{work_order.order_index}}</h5>
+    <h5>产品名称：{{work_order.product_name}}</h5>
+    <h5>单位：公斤</h5>
 </div>
+<div class="widget-content nopadding">
+    <div class="dataTables_length">
+            编制人：
+        <span id="span_write">
+            {% if not work_order.firstfeedingmark.writer %}
+            <span class="btn btn-mini btn-primary btn-mark" id="btn_write_confirm" args="{{MARK_WRITE}}">签字</span>
+            {% else %}
+            {{work_order.firstfeedingmark.writer.userinfo}}
+            {% endif %} 
+        </span>
+            审核人：
+        <span id="span_review">
+            {% if not work_order.firstfeedingmark.reviewer %}
+            <span class="btn btn-mini btn-primary btn-mark" id="btn_review_confirm" args="{{MARK_REVIEW}}">签字</span>
+            {% else %}
+            {{work_order.firstfeedingmark.reviewer.userinfo}}
+            {% endif %}
+        </span>
+    </div>
+    <table class="table table-bordered table-striped" style="width:100%">
+		<thead>
+			<tr>
+				<th class="fix_th" rowspan="1" style="vertical-align: middle">序号</th>
+				<th class="fix_th" rowspan="1" style="vertical-align: middle">规格</th>
+				<th class="fix_th" rowspan="1" style="vertical-align: middle">图数量</th>
+				<th class="fix_th" rowspan="1" style="vertical-align: middle">单重(Kg)</th>
+				<th class="fix_th" rowspan="1" style="vertical-align: middle">总重(Kg)</th>
+
+				<th class="fix_th" rowspan="1" style="vertical-align: middle">材质</th>
+				<th class="fix_th" rowspan="1" style="vertical-align: middle">执行标准及供货状态</th>
+
+				<th class="fix_th" rowspan="1" style="vertical-align: middle">备注</th>
+				<th class="fix_th" rowspan="1" style="vertical-align: middle">操作</th>
+			</tr>
+		</thead>
+        <tbody>
+		    {% for item in list %}
+			<tr iid="{{item.id}}" class="tr_materiel">
+				<td>{{forloop.counter}}</td>
+				{% include "techdata/widgets/principal_material_row.html" %}
+			</tr>	
+		    {% endfor %}
+        </tbody>
+    </table>
+</div>
+
