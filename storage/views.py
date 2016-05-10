@@ -23,8 +23,14 @@ from users import STORAGE_KEEPER
 from random import randint
 
 def weldMaterialHomeViews(request):
+    hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("-date");
+    todayDate = datetime.datetime.now().date()
+    if hum_set[0].date == todayDate:
+        flag = True
+    else:
+        flag = False
     context = {
-
+            "flag":flag,
             }
     return render(request,"storage/weldmaterial/weldmaterialhome.html",context)
 

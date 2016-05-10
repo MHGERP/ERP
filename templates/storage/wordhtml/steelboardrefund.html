@@ -51,7 +51,7 @@ lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></p>
 <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
  style='border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
  mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:.5pt solid windowtext;
- mso-border-insidev:.5pt solid windowtext'>
+ mso-border-insidev:.5pt solid windowtext' id="refund_table" rid="{{refund.id}}">
  <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;height:19.85pt'>
   <td width=68 colspan=2 style='width:51.3pt;border:solid windowtext 1.0pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.85pt'>
@@ -132,7 +132,7 @@ lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></p>
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.85pt'>
-  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US>{{items.applyitem.storelist.specification}}</span></p>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US>{{items.specification}}</span></p>
   </td>
   <td width=79 style='width:59.15pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -203,7 +203,7 @@ lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></p>
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.85pt'>
-  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US>{% ifequal refund.refunder None %}<span class="btn btn-mark" name="steel_refund" role="refunder">签字</span>{% else %}{{refund.refunder.userinfo}}{% endifequal %}</span></p>
   </td>
   <td width=79 style='width:59.15pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -217,7 +217,7 @@ lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></p>
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.85pt'>
-  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US>{% ifequal refund.inspector None %}<span class="btn btn-mark" name="steel_refund" role="inspector">签字</span>{% else %}{{refund.inspector.userinfo}}{% endifequal %}</span></p>
   </td>
   <td width=68 colspan=2 style='width:51.3pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -231,7 +231,7 @@ lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></p>
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.85pt'>
-  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US>{% ifequal refund.keeper None %}<span class="btn btn-mark" name="steel_refund" role="keeper">签字</span>{% else %}{{refund.keeper.userinfo}}{% endifequal %}</span></p>
   </td>
  </tr>
  <![if !supportMisalignedColumns]>
@@ -251,8 +251,6 @@ lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></p>
  </tr>
  <![endif]>
 </table>
-
-<p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
 
 </div>
 
