@@ -1360,9 +1360,27 @@ def BidApplyLogistical(request,form,bid_apply_id,usertitle):
     if bid_logistical_form.is_valid():
         bid_logistical_form.save()
     else :
-        print bid_logistical_form.errors.keys()
         return simplejson.dumps({'status':1})
     bid_comment=BidComment(user=request.user,comment="",bid=bid_apply.bid,submit_date=datetime.today(),user_title=usertitle)
     bid_comment.save()
     BidNextStatus(bid_apply)
     return simplejson.dumps({'status':0})
+
+@dajaxice_register
+def saveSupplierCheck(request,form,supplier_check_id,supplier_form_set,supplier_id_set):
+    supplier_check=SupplierCheck.objects.get(pk=supplier_check_id)
+    supplier_check_form=SupplierCheckForm(deserialize_form(form),instance=supplier_check)
+    if supplier_check_form.is_valid():
+        supplier_check_form.save()
+    else:
+        for item in  supplier_check_form.errors.keys():
+            print item,supplier_check_form.errors[item]
+        return simplejson.dumps({'status':1})
+    for (id,form) in zip(supplier_id_set,supplier_form_set):
+        supplierselect=SupplierSelect.objects.get(pk=id)
+        form=SupplierCheckSupplierForm(deserialize_form(form),instance=supplierselect)
+        form.save()
+    return simplejson.dumps({"status":0})
+
+
+

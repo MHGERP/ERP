@@ -45,7 +45,7 @@ class BidLogisticalForm(ModelForm):
 class SupplierCheckForm(ModelForm):
     class Meta:
         model=SupplierCheck
-        field=("apply_company","apply_date","bid_project","price_estimate","base_situation")
+        fields=("apply_company","apply_date","bid_project","price_estimate","base_situation")
         widgets = {
                    "apply_date": forms.DateInput(attrs={'class':'form-control'}),
                   }
@@ -53,7 +53,7 @@ class SupplierCheckForm(ModelForm):
 class SupplierCheckSupplierForm(ModelForm):
     class Meta:
         model=SupplierSelect
-        field=("A","B","C","D","E","F","G")
+        fields=("A","B","C","D","E","F","G")
 class QualityPriceCardForm(ModelForm):
     class Meta:
         model = qualityPriceCard
