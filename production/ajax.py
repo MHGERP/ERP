@@ -23,6 +23,8 @@ def getQ(con):
     query_set = Q()
     for k,v in con.items():
          if v:
+             if k.endswith("isnull"):
+                 v = int(v)
              query_set.add(Q(**{k: v}), Q.AND)
     return query_set
 
@@ -223,9 +225,7 @@ def taskAllocationSearch(request, form):
     items_list = {}
     if form.is_valid():
         conditions = form.cleaned_data
-    
         items_list = ProcessDetail.objects.filter(complete_process_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
-        print getQ(conditions)
         #task_allocation_status = conditions['task_allocation_status']
         #del conditions['task_allocation_status']
         #if task_allocation_status == "-1":

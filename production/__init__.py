@@ -12,3 +12,6 @@ TASK_CONFIRM_STATUS_CHOICES = (
   (0,u"已完成"),
 )
 
+
+PRODUCTION_=40
+
