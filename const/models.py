@@ -59,7 +59,7 @@ class Materiel(models.Model):
     schematic_index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"图号")
     parent_schematic_index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"部件图号")
     parent_name = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"部件名称")
-    material = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"材料")
+    material = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"材质")
     name = models.CharField(blank = False, max_length = 100, verbose_name = u"名称")
     count = models.CharField(blank = True, max_length = 20, null = True, verbose_name = u"数量")
     net_weight = models.FloatField(blank = True, null = True, verbose_name = u"净重")
@@ -79,7 +79,12 @@ class Materiel(models.Model):
         if self.count and self.net_weight:
             return int(self.count) * self.net_weight
     def route(self):
-       return '.'.join(getattr(self.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(self.circulationroute, "L%d" % i))
+        route_list = []
+        for i in xrange(1, 11):
+            step = getattr(self.circulationroute, "L%d" % i)
+            if step == None: break
+            route_list.append(step.get_name_display())
+        return '.'.join(route_list)
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"

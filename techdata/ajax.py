@@ -227,6 +227,15 @@ def getProcessBOM(request, id_work_order):
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
+    for item in BOM:
+        if item.processing.GX1 == None:
+            continue
+        for i in xrange(1, 13):
+            step = getattr(item.processing, "GX%d" % i)
+            if step == None:
+                break
+            setattr(item, "GX%d" % i, step)
+
     context = {
         "work_order": work_order,
         "BOM": BOM,
