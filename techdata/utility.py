@@ -6,6 +6,9 @@ from purchasing.models import MaterielCopy
 from models import *
 
 def batchDecentialization(order, inventory_type, DetailItem):
+    """
+    JunHU
+    """
     for sub_order in SubWorkOrder.objects.filter(order = order):
         if inventory_type == MAIN_MATERIEL:
             for item in DetailItem.objects.filter(order = order):
@@ -42,3 +45,12 @@ def batchDecentialization(order, inventory_type, DetailItem):
 
                 materielcopy.inventory_type = InventoryType.objects.get(name = inventory_type)
                 materielcopy.save()
+
+def processDetailGenerate(order):
+    """
+    JunHU
+    """
+    for sub_order in SubWorkOrder.objects.filter(order = order):
+        SynthesizeFileListStatus(order = sub_order).save()
+        for item in Materiel.objects.filter(order = order):
+
