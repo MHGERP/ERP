@@ -360,8 +360,8 @@ def weldPartOrderInfo(request, iid):
     """
     Lei
     """
-    materielObj = SubMateriel.objects.get(id = iid)
-    materielObj.processDetailObj = list(ProcessDetail.objects.filter(materiel_belong = materielObj))
+    materielObj = SubMateriel.objects.get(id=iid)
+    materielObj.processDetailObj = list(ProcessDetail.objects.filter(sub_materiel_belong = materielObj).order_by('process_id'))
     materielObj.processDetailObj.extend([ProcessDetail()] * (12-len(materielObj.processDetailObj)))
     html = render_to_string("production/widgets/weld_part_order_info_table.html",{"materielObj":materielObj})
     return simplejson.dumps({ "html" : html})
