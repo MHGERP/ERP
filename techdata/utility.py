@@ -42,7 +42,7 @@ def batchDecentialization(order, inventory_type, DetailItem):
                 materielcopy.sub_workorder = sub_order
                 materielcopy.remark = item.remark
                 materielcopy.work_order = item.materiel_belong.order
-
+                materielcopy.origin_materiel = materiel
                 materielcopy.inventory_type = InventoryType.objects.get(name = inventory_type)
                 materielcopy.save()
 
@@ -63,4 +63,5 @@ def processDetailGenerate(order):
                 detail.sub_materiel_belong = sub_materiel
                 detail.processname = step
                 detail.process_id = i
+                detail.work_hour = 0
                 detail.save()

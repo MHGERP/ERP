@@ -44,7 +44,7 @@
   mso-border-top-alt:solid windowtext 1.5pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:13.9pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold' id="file_index_span">RH04-{{card.file_index|default_if_none:""}}<o:p></o:p></span></p>
+  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold' id="file_index_span">RH04-{{card.materiel_belong.order.suffix}}- -{{card.file_index}}<o:p></o:p></span></p>
   </td>
   <td width=108 colspan=5 style='width:81.25pt;border-top:solid windowtext 1.5pt;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -62,7 +62,7 @@
   1.5pt;mso-border-color-alt:windowtext;mso-border-style-alt:solid;padding:
   0cm 5.4pt 0cm 5.4pt;height:13.9pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
+  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>备料工艺卡</o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:1;page-break-inside:avoid;height:13.35pt'>
@@ -81,7 +81,7 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:13.35pt'>
   <p class=MsoNormal align=center style='text-align:center'><b
   style='mso-bidi-font-weight:normal'><span lang=EN-US style='mso-bidi-font-size:
-  14.0pt;font-family:宋体'><o:p>&nbsp;</o:p></span></b></p>
+  14.0pt;font-family:宋体'><o:p>RH01-{{card.materiel_belong.order.suffix}}</o:p></span></b></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:2;page-break-inside:avoid;height:19.9pt'>
@@ -260,7 +260,7 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:22.75pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
   style='mso-bidi-font-size:14.0pt;font-family:宋体;color:black;mso-bidi-font-weight:
-  bold'><o:p>&nbsp;</o:p></span></p>
+  bold'><o:p>{{item.remark}}</o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:7;page-break-inside:avoid;height:22.7pt'>
@@ -458,7 +458,7 @@
   </td>
  </tr>
 
-{% for process in process_list %}
+
 
  <tr style='mso-yfti-irow:12;page-break-inside:avoid;height:18.0pt'>
   <td width=59 style='width:44.15pt;border-top:none;border-left:solid windowtext 1.5pt;
@@ -468,7 +468,7 @@
   height:18.0pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:15.0pt;
   mso-line-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
-  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{forloop.counter}}</o:p></span></p>
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p></o:p></span></p>
   </td>
   <td width=59 style='width:44.3pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
@@ -476,7 +476,7 @@
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:18.0pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:15.0pt;
   mso-line-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
-  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{process.get_name_display}}</o:p></span></p>
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p></o:p></span></p>
   </td>
   <td width=624 colspan=12 style='width:468.1pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -484,7 +484,7 @@
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:18.0pt'>
   <p class=MsoNormal style='line-height:16.0pt;mso-line-height-rule:exactly'><span
   lang=EN-US style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:
-  bold'><o:p><div class="word_textarea" style="width: 440pt" contenteditable={% if card.transfercardmark.reviewer %}"false"{% else %}"true"{% endif %} id="{{process.id}}">{{process.technical_requirement|default_if_none:""}}
+  bold'><o:p><div class="word_textarea" style="width: 440pt" >sdfad
   </div></o:p></span></p></td>
   <td width=66 colspan=4 valign=top style='width:49.85pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -521,7 +521,6 @@
   </td>
  </tr>
  
-{% endfor %}
 
 
  <tr style='mso-yfti-irow:22;page-break-inside:avoid;height:14.6pt'>

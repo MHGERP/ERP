@@ -14,14 +14,13 @@
 <form class="form-search">
    流转卡种类：
    {{ form.card_type }}
-    <span class="btn" id="card_open">打开</span> 
+    <span class="btn" id="card_open">创建</span> 
 </form>
 <br/>
 {% endif %}
 
 <div id="div_card" iid="{{iid}}">
 </div>
-<script type='text/javascript' src="{{STATIC_URL}}js/techdata/auto_save.js"></script>
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/transfer_card_edit.js"></script>
 {% endblock%}
 

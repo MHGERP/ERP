@@ -346,6 +346,11 @@ class TransferCard(models.Model):
     file_index = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"文件编号")
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属零件")
     card_type = models.CharField(blank = False, max_length = 100, choices = TRANSFER_CARD_TYPE_CHOICES, verbose_name = u"流转卡类型")
+    container_type = models.CharField(blank = True, null = True, verbose_name = u"容器类别", max_length = 100)
+    parent_name = models.CharField(blank = True, null = True, verbose_name = u"所属部件名称", max_length = 100)
+    weld_test_plate_index = models.CharField(blank = True, null = True, verbose_name = u"焊接试板图号", max_length = 100)
+    material_index = models.CharField(blank = True, null = True, verbose_name = u"材质标记", max_length = 100)
+    file_obj = models.FileField(upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"简图")
     class Meta:
         verbose_name = u"流转卡"
         verbose_name_plural = u"流转卡"
