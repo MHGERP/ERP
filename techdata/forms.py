@@ -40,6 +40,20 @@ class ProcessReviewForm(forms.ModelForm):
             # "materiel":forms.CharField( )
         }
 
+class AuxiliaryForm(forms.ModelForm):
+    """
+    MH Chen
+    """
+    class Meta:
+        model = AuxiliaryItem
+        widgets = {
+            "materiel_belong": forms.TextInput(attrs = {"readonly" : "true"}),
+            "quota_coeficient": forms.TextInput(attrs = {"readonly" : "true"}),
+            "quota": forms.TextInput(attrs = {"readonly" : "true"}),
+            "stardard": forms.TextInput(attrs = {"readonly" : "true"}),
+            "remark": forms.TextInput(attrs = {"readonly" : "true"}),
+
+        }
     
 class ProcessingForm(forms.Form):
     """

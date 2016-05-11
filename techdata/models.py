@@ -6,6 +6,29 @@ from users.models import Group
 from purchasing.models import MaterielExecute
 import settings
 
+class AuxiliaryMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "auxiliary_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "auxiliary_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"辅材定额明细签章"
+        verbose_name_plural = u"辅材定额明细签章"
+    def __unicode__(self):
+        return self.order.order_index
+
+class AuxiliaryItem(models.Model):
+    materiel_belong = models.OneToOneField(Materiel, verbose_name = u"所属物料")
+    quota_coeficient = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"定额系数")
+    quota = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"定额")
+    stardard = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"标准代码")
+    remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
+    class Meta:
+        verbose_name = u"辅材"
+        verbose_name_plural = u"辅材"
+    def __unicode__(self):
+        return self.materiel_belong.name
 class PrincipalMark(models.Model):
     order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
     writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "principal_writer")

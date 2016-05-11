@@ -122,9 +122,11 @@ def principalMaterialViews(request):
     return render(request, "techdata/principal_material.html", context)
 
 def auxiliaryMaterialViews(request):
-    categories_form = CategoriesForm()
+    work_order_form = WorkOrderForm()
     context = {
-            "categories_form":categories_form
+        "work_order_form" : work_order_form,
+        "inventory_type": AUXILIARY_MATERIEL,
+
     }
     return render(request, "techdata/auxiliary_material.html", context)
 
