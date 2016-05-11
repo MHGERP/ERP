@@ -667,7 +667,7 @@ def outsideEntryHomeViews(request):
     entry_set = OutsideStandardEntry.objects.filter(entry_status__gte = STORAGESTATUS_KEEPER)
     search_form = OutsideEntrySearchForm()
     context = {
-        "entry_set":entry_set,
+        "card_set":entry_set,
         "STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER,
         "search_form":search_form,
     }
