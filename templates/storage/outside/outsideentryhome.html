@@ -7,7 +7,7 @@
 <a href="/storage/outsidehome" class="current">外购件入库管理</a>
 {% endblock %}
 {% block inner_content %}
-<div class="span8">
+<div>
 <h3>外购件入库单</h3>
 <form class="form-inline" id="search_form">
     {% csrf_token %}
@@ -15,9 +15,10 @@
     {{field.label}}
     {{field}}
     {% endfor %}
-    <button type="button" class="btn btn-success" id="search-btn">检索</button> 
+    <button type="button" class="btn btn-success" id="search_btn" role="entry">检索</button> 
 </form>
-<div id="entry_table">
+<br/>
+<div id="card_table" style="width:80%;">
 {% include "storage/widgets/outsideentryhometable.html"%}
 </div>
 </div>
