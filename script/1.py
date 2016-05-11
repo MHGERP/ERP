@@ -7,11 +7,14 @@ from django.contrib.auth.models import User
 from production.models import *
 from const.models import Materiel
 
-
-synthesize = SynthesizeFileListStatus.objects.filter(order_id = 1).values("sketch","encasement_list", "coating_detail")
-print synthesize
-for k,v in synthesize[0].items():
-    print k,v
+items_list = ProcessDetail.objects.filter(complete_process_date__isnull = 1).order_by('-productionworkgroup');
+print items_list.count()
+items_list = ProcessDetail.objects.filter(complete_process_date__isnull = 0).order_by('-productionworkgroup');
+print items_list.count()
+# synthesize = SynthesizeFileListStatus.objects.filter(order_id = 1).values("sketch","encasement_list", "coating_detail")
+# print synthesize
+# for k,v in synthesize[0].items():
+#     print k,v
 
 
 # select = {'month': connection.ops.date_trunc_sql('month', 'complete_process_date')}

@@ -185,24 +185,12 @@ class MeterielExcecuteForm(ModelForm):
 
 
 
-class OrderFormForm(ModelForm):
+class OrderFormOne(ModelForm):
     class Meta:
         model=MaterielCopy
-        fields={'index','name','material','specification','press','recheck','remark','standard','detection_level','quota','count','net_weight','total_weight','status'}
-        widgets={
-            'name':forms.TextInput(attrs={'class':'form-control','id':'name'}),
-            'material':forms.Select(attrs={'class':'form-control','id':'material'}),
-            'specification':forms.TextInput(attrs={'class':'form-control','id':'specification'}),
-            'press':forms.TextInput(attrs={'class':'form-control','id':'press'}),
-            'recheck':forms.TextInput(attrs={'class':'form-control','id':'recheck'}),
-            'remark':forms.TextInput(attrs={'class':'form-control','id':'remark'}),
-            'standard':forms.TextInput(attrs={'class':'form-control','id':'standard'}),
-            'detection_level':forms.TextInput(attrs={'class':'form-control','id':'detection_level'}),
-            'quota':forms.TextInput(attrs={'class':'form-control','id':'quota'}),
-            'count':forms.TextInput(attrs={'class':'form-control','id':'count'}),
-            'net_weight':forms.TextInput(attrs={'class':'form-control','id':'net_weight'}),
-            'total_weight':forms.TextInput(attrs={'class':'form-control','id':'total_weight'}),
-            'status':forms.TextInput(attrs={'class':'form-control','id':'status'}),
-            'index':forms.TextInput(attrs={'class':'form-control','id':'index'})
-        }
+        fields={'index','name','material','specification','press','recheck','remark','standard','detection_level','count','total_weight','status'}
 
+class OrderFormTwo(ModelForm):
+    class Meta:
+        model=MaterielCopy
+        fields={'index','name','schematic_index','material','count','remark'}

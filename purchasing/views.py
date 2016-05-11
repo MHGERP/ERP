@@ -500,11 +500,7 @@ def materielExecuteDetailViews(request, choice, source, *mid):
             materielexecute_detail_set=None
             tech_requirement=""
             
-        if materiel_choice==MAIN_MATERIEL:
-            type=1
-        else:
-            type=2
-        materiels=MaterielExecuteDetail.objects.filter(materiel__inventory_type__id=type,materiel_execute__isnull=True)
+        materiels=MaterielExecuteDetail.objects.filter(materiel__inventory_type__name=materiel_choice,materiel_execute__isnull=True)
         context = {
             "materielexecute_detail_set" : materielexecute_detail_set,
             "choice" : materiel_choice,
