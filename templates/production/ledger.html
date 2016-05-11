@@ -44,7 +44,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="modal_close()">&times;</button>
                 <h3 class="modal-title" id="modal_title">更改计划完成时间</h3>
             </div>
             <div class="modal-body" id="ledger_plantime_table">
@@ -52,7 +52,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="plantime_change()">确认</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="close">关闭</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="close" onclick="modal_close()">关闭</button>
             </div>
         </div>
     </div>

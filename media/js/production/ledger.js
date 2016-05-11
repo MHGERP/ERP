@@ -37,9 +37,23 @@ function ledger_plantime_change_callback(data){
 
 function plantime_change(){
     var mid = $('#ledger_info_table').attr("value");
-    Dajaxice.production.material_plantime_change(plantime_change_callback,{'mid':mid});
+    var date = $('#id_complete_plandate').attr("value");
+    if(date == "")
+    {    
+        alert("计划日期不能为空！");
+        return ; 
+    }
+
+    Dajaxice.production.materialPlantimeChange(plantime_change_callback,{'mid':mid,'date':date});
 }
 
 function plantime_change_callback(data){
+    $('#ledger_plantime_modal').modal("hide");
+    alert("修改成功");
+    $('#weld_part_order_info_modal').modal("show");
+    $('#tableBody').html(data.html);
+}
 
+function modal_close(){
+    $('#weld_part_order_info_modal').modal("show");
 }

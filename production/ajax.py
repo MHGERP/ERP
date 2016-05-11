@@ -224,16 +224,16 @@ def taskAllocationSearch(request, form):
     if form.is_valid():
         conditions = form.cleaned_data
     
-        items_list = ProcessDetail.objects.filter(complete_process_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
-        print getQ(conditions)
-        #task_allocation_status = conditions['task_allocation_status']
-        #del conditions['task_allocation_status']
-        #if task_allocation_status == "-1":
-        #    items_list = ProcessDetail.objects.filter(complete_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
-        #elif task_allocation_status == "0":
-        #    items_list = ProcessDetail.objects.filter(complete_date = None).filter(productionworkgroup = None).filter(getQ(conditions));
-        #else:
-        #    items_list = ProcessDetail.objects.filter(complete_date = None).exclude(productionworkgroup = None).filter(getQ(conditions)).order_by('-productionworkgroup');
+        #items_list = ProcessDetail.objects.filter(complete_process_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
+        #print getQ(conditions)
+        task_allocation_status = conditions['task_allocation_status']
+        del conditions['task_allocation_status']
+        if task_allocation_status == "-1":
+            items_list = ProcessDetail.objects.filter(complete_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
+        elif task_allocation_status == "0":
+            items_list = ProcessDetail.objects.filter(complete_date = None).filter(productionworkgroup = None).filter(getQ(conditions));
+        else:
+            items_list = ProcessDetail.objects.filter(complete_date = None).exclude(productionworkgroup = None).filter(getQ(conditions)).order_by('-productionworkgroup');
         for item in items_list:
             item.groups = ProductionWorkGroup.objects.filter(processname = item.processname);
     context = {
@@ -321,10 +321,21 @@ def ledgerTimeChange(request, mid):
     """
     item = SubMateriel.objects.get(id = mid)
     form = MaterialPlantimeChangeForm(instance = item)
-    print form
     return simplejson.dumps(form.as_p())
 
-
+@dajaxice_register
+def materialPlantimeChange(request, mid, date):
+    """
+    bin
+    """
+    materielObj= SubMateriel.objects.get(id = mid)
+    complete_plandate = datetime.datetime.strptime(date, '%Y-%m-%d')
+    materielObj.complete_plandate = complete_plandate
+    materielObj.save()
+    materielObj.processDetailObj = list(ProcessDetail.objects.filter(sub_materiel_belong = materielObj).order_by('process_id'))
+    materielObj.processDetailObj.extend([ProcessDetail()] * (12-len(materielObj.processDetailObj)))
+    html = render_to_string("production/widgets/weld_part_order_info_table.html",{"materielObj":materielObj})
+    return simplejson.dumps({ "html" : html})
 
 
 
