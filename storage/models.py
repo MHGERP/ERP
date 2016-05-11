@@ -274,7 +274,7 @@ class SteelMaterialEntry(models.Model):
 class SteelMaterialEntryItems(models.Model):
     specification = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'名称及规格')
     batch_number = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'炉批号')
-    materiel = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'材料牌号')
+    material_mark = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'材料牌号')
     material_code = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'标记号')
     weight = models.FloatField(blank=False,null=False,verbose_name=u"重量")
     unit = models.CharField(blank=True,null=True,max_length=20,verbose_name=u"单位")
@@ -341,7 +341,7 @@ class SteelMaterialApplyCardItems(models.Model):
     apply_card = models.ForeignKey(SteelMaterialApplyCard,blank=False,null=False,verbose_name=u"钢材领用单")
     apply_count = models.IntegerField(blank=False,null=False,verbose_name=u"申请数量")
     actual_count = models.IntegerField(blank=True,null=True,verbose_name=u"实发数量")
-    materiel = models.CharField(max_length=20,blank=False,null=True,verbose_name=u'钢号')
+    material_mark = models.CharField(max_length=20,blank=False,null=True,verbose_name=u'钢号')
     material_code = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'材质编号')
     component = models.CharField(max_length=100,blank=True,null=True,verbose_name=u"零件编号")
     work_order=models.ForeignKey(WorkOrder,blank=False,null=False,verbose_name=u"工作令")
