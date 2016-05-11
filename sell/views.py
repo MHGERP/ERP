@@ -55,12 +55,13 @@ def product_bidFile_back(request):
         if request.FILES['product_file'].size > 10 * 1024 * 1024:
             file_upload_error = 2
         else:
+            print "back"
             product_id = request.POST['product_id']
             group_type = request.POST['group_type']
             #print product_id
             #print group_type
             product = Product.objects.get(id = product_id)
-            bidfile = BidFile()
+            bidfile = BidFile(file_type = True)
             bidfile.file_obj = request.FILES['product_file']
             bidfile.file_size = str(int(request.FILES['product_file'].size) / 1000) + "kb"
             bidfile.name = request.FILES['product_file'].name
@@ -99,4 +100,8 @@ def bidFile_to_purchasing(request):
     }
     return render(request, "sell/bidFile_to_purchasing.html", context)
 
-
+def productions_audit(request):
+    context = {
+        
+    }
+    return render(request, "sell/product_audit.html", context)

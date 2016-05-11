@@ -17,19 +17,19 @@
                 <td>{{item.name}}</td>
                 <td>
                     {% if item.manufacture_file_down%}
-                    <span a href="{{item.manufacture_file_down.url}}">{{item.manufacture_file_down.name}}</span>
+                    <span><a href="{{item.manufacture_file_down.file_obj.url}}">{{item.manufacture_file_down.name}}</a></span>
                     {% endif %}
                 </td>
                 <td><span class="btn btn-primary btn-upload" group="manufacture" href="#product_upload" data-toggle="modal">上传</span></td>
                 <td>
                     {% if item.techdata_file_down%}
-                    <span a href="{{item.techdata_file_down.url}}">{{item.techdata_file_down.name}}</span>
+                    <span><a href="{{item.techdata_file_down.file_obj.url}}">{{item.techdata_file_down.name}}</a></span>
                     {% endif %}
                 </td>
                 <td><span class="btn btn-primary btn-upload" group="techdata" href="#product_upload" data-toggle="modal">上传</span></td>
                 <td>
                     {% if item.manufacture_file_down%}
-                    <span a href="{{item.purchasing_file_down.url}}">{{item.purchasing_file_down.name}}</span>
+                    <span><a href="{{item.purchasing_file_down.file_obj.url}}">{{item.purchasing_file_down.name}}</a></span>
                     {% endif %}
                 </td>
                 <td><span class="btn btn-primary btn-upload" group="purchasing" href="#product_upload" data-toggle="modal">上传</span></td>

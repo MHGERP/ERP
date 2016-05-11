@@ -46,10 +46,11 @@ def importProductionWorkGroup():
 
 def importProcessDetail():
     process = Processing.objects.get(materiel_belong__id = 31)
+    subMateriel = SubMateriel.objects.get(id=1)
     print process
     for i in xrange(1,13):
         #setattr(process, "GS%d" %i, i*10)
-        item = ProcessDetail(materiel_belong = process.materiel_belong, processname = getattr(process, "GX%d" %i), work_hour = int(getattr(process, "GS%d" %i)), process_id = i, complete_process_date=datetime.datetime.today())
+        item = ProcessDetail(sub_materiel_belong = subMateriel, processname = getattr(process, "GX%d" %i), work_hour = int(getattr(process, "GS%d" %i)), process_id = i, complete_process_date=datetime.datetime.today())
         item.save()
     print "help"
 

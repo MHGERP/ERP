@@ -9,10 +9,7 @@
 <script type="text/javascript" src="{{STATIC_URL}}js/production/task.js"></script>
 <div class="form-inline" style="padding:20px; margin-bottom:20px;">
     <form id="search_form">
-        {% for field in taskallocationform %}
-        {{field.label}}
-        {{field}}
-        {% endfor %}
+        {{ taskallocationform }}
         <button class="btn btn-primary" type="button" onclick="task_allocation_search()">检索</button>
     </form>
 </div>

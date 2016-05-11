@@ -216,51 +216,26 @@ def prodplanSearch(request, form):
 
 @dajaxice_register
 def taskAllocationSearch(request, form):
+    """
+    bin
+    """
     form = TaskAllocationForm(deserialize_form(form))
-    items_list1 = {}
-    items_list2 = {}
+    items_list = {}
     if form.is_valid():
         conditions = form.cleaned_data
-        q1 = (conditions['workorder']!="-1" and Q(materiel_belong__order=conditions['workorder'])) or None
-        q2 = (conditions['identifier'] and Q(materiel_belong__index=conditions['identifier'])) or None
-        q3 = (conditions['processnumber'] and Q(name=conditions['processnumber'])) or None
-        q4 = None
-        from django.contrib.auth.models import User
-        from users.models import UserInfo
-        if conditions['groupnumber']:
-            group = UserInfo.objects.get(name = conditions['groupnumber'])
-            q4 = (conditions['groupnumber'] and Q(operator = group.user)) or None
-        """q4 = (conditions['groupnumber'] and Q(operator__userinfo__name=conditions['groupnumber'])) or None"""
-        query_set = filter(lambda x:x!=None,[q1,q2,q3,q4])
-        query = q1 or q2 or q3 or q4
-        if query == None:
-            items_set1 = Processing.objects.filter(operate_date = None).filter(operator = None)
-            items_set2 = Processing.objects.filter(operate_date = None).exclude(operator = None)
+    
+        task_allocation_status = conditions['task_allocation_status']
+        del conditions['task_allocation_status']
+        if task_allocation_status == "-1":
+            items_list = ProcessDetail.objects.filter(complete_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
+        elif task_allocation_status == "0":
+            items_list = ProcessDetail.objects.filter(complete_date = None).filter(productionworkgroup = None).filter(getQ(conditions));
         else:
-            if query_set :
-                query_conditions=reduce(lambda x,y:x&y,query_set)
-                items_set1 = Processing.objects.filter(operate_date = None).filter(operator = None).filter(query_conditions)
-                items_set2 = Processing.objects.filter(operate_date = None).exclude(operator = None).filter(query_conditions)
-            else:
-                items_set1 = Processing.objects.filter(operate_date = None).filter(operator = None)
-                items_set2 = Processing.objects.filter(operate_date = None).exclude(operator = None)
-        for item in items_set2:
-            if item.operator != None:
-                item.operator.info = item.operator.userinfo
-
-        if conditions['task_allocation_status'] == "-1":
-            items_list1 = items_set1
-            items_list2 = items_set2
-        elif conditions['task_allocation_status'] == "0":
-            items_list1 = items_set1
-        else:
-            items_list2 = items_set2
-                    
-    user_list = UserInfo.objects.all()
+            items_list = ProcessDetail.objects.filter(complete_date = None).exclude(productionworkgroup = None).filter(getQ(conditions)).order_by('-productionworkgroup');
+        for item in items_list:
+            item.groups = ProductionWorkGroup.objects.filter(processname = item.processname);
     context = {
-        "items_list1":items_list1,
-        "items_list2":items_list2,
-        "user_list":user_list,
+        "items_list":items_list,
         "taskallocationform":form,
     }
     html = render_to_string("production/table/task_allocation_table.html",context)
@@ -268,52 +243,25 @@ def taskAllocationSearch(request, form):
 
 @dajaxice_register
 def taskConfirmSearch(request, form):
+    """
+    bin
+    """
     form = TaskConfirmForm(deserialize_form(form))
-    items_list1 = {}
-    items_list2 = {}
+    items_list = {}
     if form.is_valid():
         conditions = form.cleaned_data
-        q1 = (conditions['workorder']!="-1" and Q(materiel_belong__order=conditions['workorder'])) or None
-        q2 = (conditions['identifier'] and Q(materiel_belong__index=conditions['identifier'])) or None
-        q3 = (conditions['processnumber'] and Q(name=conditions['processnumber'])) or None
-        q4 = None
-        from django.contrib.auth.models import User
-        from users.models import UserInfo
-        if conditions['groupnumber']:
-            group = UserInfo.objects.get(name = conditions['groupnumber'])
-            q4 = (conditions['groupnumber'] and Q(operator = group.user)) or None
-        query_set = filter(lambda x:x!=None,[q1,q2,q3,q4])
-        query = q1 or q2 or q3 or q4
-        if query == None:
-            items_set1 = Processing.objects.filter(operate_date = None).exclude(operator = None)
-            items_set2 = Processing.objects.exclude(operate_date = None)
+        
+        task_confirm_status = conditions['task_confirm_status']
+        del conditions['task_confirm_status']
+        if task_confirm_status == "-1":
+            items_list = ProcessDetail.objects.exclude(productionworkgroup = None).filter(getQ(conditions)).order_by('complete_date');
+        elif task_confirm_status == "0":
+            items_list = ProcessDetail.objects.exclude(productionworkgroup = None).filter(complete_date = None).filter(getQ(conditions));
         else:
-            if query_set:
-                query_conditions=reduce(lambda x,y:x&y,query_set)
-                items_set1 = Processing.objects.filter(query_conditions).filter(operate_date = None).exclude(operator = None)
-                items_set2 = Processing.objects.exclude(operate_date = None).filter(query_conditions)
-            else:
-                items_set1 = Processing.objects.filter(operate_date =  None).exclude(operator = None)
-                items_set2 = Processing.objects.exclude(operate_date = None)
-        for item in items_set1:
-            if item.operator != None:
-                item.operator.info = item.operator.userinfo
-        for item in items_set2:
-            if item.operator != None:
-                item.operator.info = item.operator.userinfo
-        if conditions['task_confirm_status'] == "-1":
-            items_list1 = items_set1
-            items_list2 = items_set2
-        elif conditions['task_confirm_status'] == "0":
-            items_list1 = items_set1
-        else:
-            items_list2 = items_set2
+            items_list = ProcessDetail.objects.exclude(productionworkgroup = None).exclude(complete_date = None).filter(getQ(conditions)).order_by('complete_date');
     
-    user_list = UserInfo.objects.all()
     context = {
-        "items_list1":items_list1,
-        "items_list2":items_list2,
-        "user_list":user_list,
+        "items_list":items_list,
         "taskallocationform":form,
     }
     html = render_to_string("production/table/task_confirm_table.html",context)
@@ -321,40 +269,68 @@ def taskConfirmSearch(request, form):
 
 @dajaxice_register
 def taskAllocationRemove(request, form, mid):
-   item = Processing.objects.get(id = mid)
-   item.operator = None
-   item.save()
-   return taskAllocationSearch(request, form)
+    """
+    bin
+    """
+    item = ProcessDetail.objects.get(id = mid)
+    item.productionworkgroup = None
+    item.save()
+    return taskAllocationSearch(request, form)
    
 @dajaxice_register
 def taskAllocationSubmit(request, form, mid, groupid):
-    item = Processing.objects.get(id = mid)
-    from django.contrib.auth.models import User
-    user = User.objects.get(id = groupid)
-    item.operator = user
+    """
+    bin
+    """
+    item = ProcessDetail.objects.get(id = mid)
+    group = ProductionWorkGroup.objects.get(id = groupid)
+    item.productionworkgroup = group
     item.save()
     return taskAllocationSearch(request, form)
       
 @dajaxice_register
 def taskConfirmFinish(request, form, mid):
-    item = Processing.objects.get(id = mid)
+    """
+    bin
+    """
+    item = ProcessDetail.objects.get(id = mid)
     import datetime
-    item.operate_date = datetime.datetime.today();
+    item.complete_date = datetime.datetime.today();
     print datetime.datetime.today()
     item.save()
     return taskConfirmSearch(request, form)
+
+@dajaxice_register
+def taskConfirmView(request,mid):
+    """
+    bin
+    """
+    item = ProcessDetail.objects.get(id = mid)
+    context = {
+        "item":item,
+    }
+    html = render_to_string("production/table/task_view_table.html",context)
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def ledgerTimeChange(request, mid):
+    """
+    bin
+    """
+    item = Materiel.objects.get(id = mid)
+    context = {
+        "item":item,
+    }
+    html = render_to_string("production/widgets/ledger_plantime_table.html",context)
+    return simplejson.dumps({"html":html})
 
 
 @dajaxice_register
 def ledgerSearch(request, form):
     search_form = LedgerSearchForm(deserialize_form(form))
     if search_form.is_valid():
-        materiel_list  = Materiel.objects.filter(getQ(search_form.cleaned_data))
-        for item in materiel_list:
-            if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
-                CirculationRoute(materiel_belong = item).save()
-            item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
-        html = render_to_string("techdata/widgets/designBOM_table_list.html",{"BOM":materiel_list})
+        materiel_list  = SubMateriel.objects.filter(getQ(search_form.cleaned_data))
+        html = render_to_string("production/widgets/designBOM_table_list.html",{"BOM":materiel_list})
     else:
         print search_form.errors
     return simplejson.dumps({ "html" : html})
@@ -364,11 +340,8 @@ def weldPartOrderInfo(request, iid):
     """
     Lei
     """
-    materielObj = Materiel.objects.get(id = iid)
-    if CirculationRoute.objects.filter(materiel_belong = materielObj).count() == 0:
-        CirculationRoute(materiel_belong = materielObj).save()
-    materielObj.route = '.'.join(getattr(materielObj.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(materielObj.circulationroute, "L%d" % i))
-    materielObj.processDetailObj = list(ProcessDetail.objects.filter(materiel_belong = materielObj))
+    materielObj = SubMateriel.objects.get(id=iid)
+    materielObj.processDetailObj = list(ProcessDetail.objects.filter(sub_materiel_belong = materielObj).order_by('process_id'))
     materielObj.processDetailObj.extend([ProcessDetail()] * (12-len(materielObj.processDetailObj)))
     html = render_to_string("production/widgets/weld_part_order_info_table.html",{"materielObj":materielObj})
     return simplejson.dumps({ "html" : html})
