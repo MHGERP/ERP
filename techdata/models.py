@@ -36,7 +36,7 @@ class PrincipalItem(models.Model):
         verbose_name = u"主材"
         verbose_name_plural = u"主材"
     def __unicode__(self):
-        return self.materiel_belong.name
+        return self.size
 
 class CooperantMark(models.Model):
     order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
