@@ -1,3 +1,14 @@
+$(document).ready(function(){
+    $(document).on("click","button#search_btn",function(){
+        var role = $(this).attr('role');
+        Dajaxice.storage.outsideCardSearch(outsidecardsearch_callback,{"role":role,"form":$("#search_form").serialize()})
+    })
+});
+
+function outsidecardsearch_callback(data){
+    $("#card_table").html(data.html);
+}
+
 function outsideentryconfirm(eid){
     Dajaxice.storage.outsideEntryConfirm(outside_entryconfirm_callback,{"eid":eid,"form":$("#entryform").serialize(),});
 }

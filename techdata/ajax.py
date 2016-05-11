@@ -37,6 +37,9 @@ def markGenerateFactory(order, inventory_type):
         return order.cooperantmark
     elif inventory_type == MAIN_MATERIEL:
         return order.principalmark
+    elif inventory_type == AUXILIARY_MATERIEL:
+        return order.auxiliarymark
+    
 
 def detailItemGenerateFactory(inventory_type):
     """
@@ -82,7 +85,20 @@ def detailMark(request, id_work_order, step, inventory_type):
             "warning": u"后台保存错误"
         }
     return simplejson.dumps(context)
-
+def detailItemGenerateFactory(inventory_type):
+    """
+    JunHU
+    """
+    if inventory_type == OUT_PURCHASED:
+        return OutPurchasedItem
+    elif inventory_type == FIRST_FEEDING:
+        return FirstFeedingItem
+    elif inventory_type == COOPERANT:
+        return CooperantItem
+    elif inventory_type == MAIN_MATERIEL:
+        return PrincipalItem
+    elif inventory_type == AUXILIARY_MATERIEL:
+        return AuxiliaryItem
 
 @dajaxice_register
 def getInventoryTables(request, id_work_order, inventory_type):
@@ -94,6 +110,7 @@ def getInventoryTables(request, id_work_order, inventory_type):
         FIRST_FEEDING: "first_feeding_table.html",
         COOPERANT: "cooperant_table.html",
         MAIN_MATERIEL: "principal_material_table.html",
+        AUXILIARY_MATERIEL:"auxiliary_material_table.html",
     }
     work_order = WorkOrder.objects.get(id = id_work_order)
     DetailItem = detailItemGenerateFactory(inventory_type)
@@ -106,6 +123,7 @@ def getInventoryTables(request, id_work_order, inventory_type):
         list = DetailItem.objects.filter(order = work_order)
     else:
         list = DetailItem.objects.filter(materiel_belong__order = work_order)
+    print list
     context["list"] = list
     html = render_to_string("techdata/widgets/" + id2table[inventory_type], context)
     return html
@@ -238,6 +256,7 @@ def getAuxiliaryMaterielInfo(request, iid,categories):
     """
     MH Chen
     """
+    print "1"*111
     materiel = Materiel.objects.get(id = iid)
     form = AuxiliaryMaterielForm(instance = materiel)
     categories_form = CategoriesForm(initial={"categorie_type":categories})
@@ -318,6 +337,19 @@ def getProcess(request, iid):
         "form": form,
     }
     html = render_to_string("techdata/widgets/process_table.html", context)
+    return html
+@dajaxice_register
+def getAuxiliary(request, iid):
+    """
+    MH Chen
+    """
+    
+    materiel = Materiel.objects.get(id = iid)
+    form = AuxiliaryForm(instance = materiel)
+    context = {
+        "form": form,
+    }
+    html = render_to_string("techdata/widgets/auxiliary_material_form.html", context)
     return html
 
 @dajaxice_register
