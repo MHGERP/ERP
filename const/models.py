@@ -75,9 +75,6 @@ class Materiel(models.Model):
     recheck=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"复验")
     detection_level=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"探伤级别")
 
-    complete_plandate = models.DateField(blank = True, null=True,verbose_name = u"计划完成时间")
-    complete_date = models.DateField(blank = True, null=True,verbose_name = u"完成时间")
-
     def total_weight_cal(self):
         if self.count and self.net_weight:
             return int(self.count) * self.net_weight

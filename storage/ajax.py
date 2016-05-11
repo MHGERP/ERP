@@ -1130,3 +1130,15 @@ def updateSteelStoreList(refund,items):
         return_time = old_storelist.return_time + 1
         new_storelist = SteelMaterialStoreList(entry_item=old_storelist.entry_item,specification=items.specification,steel_type=old_storelist.steel_type,count=items.count,return_time=return_time,weight=items.weight,refund=refund.id)
         new_storelist.save() 
+
+@dajaxice_register
+def outsideCardSearch(request,role,form):
+    OutsideCardDict = {"entry":OutsideStandardEntry}
+    TableHtmlPathDict = {"entry":"outsideentryhometable",}
+    form = OutsideEntrySearchForm(deserialize_form(form))
+    card_model = OutsideCardDict[role]
+    html_path = "storage/widgets/"+TableHtmlPathDict[role]+".html"
+    if form.is_valid():
+        card_set = get_weld_filter(card_model,form.cleaned_data)
+    html = render_to_string(html_path,{"card_set":card_set,"STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER})
+    return simplejson.dumps({"html":html})
