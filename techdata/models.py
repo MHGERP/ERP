@@ -21,9 +21,10 @@ class AuxiliaryMark(models.Model):
 class AuxiliaryItem(models.Model):
     materiel_belong = models.OneToOneField(Materiel, verbose_name = u"所属物料")
     quota_coeficient = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"定额系数")
-    quota = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"定额")
+    quota = models.FloatField( null = True, blank = True, verbose_name = u"定额")
     stardard = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"标准代码")
     remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
+    materiel_categories = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"材料分类")
     class Meta:
         verbose_name = u"辅材"
         verbose_name_plural = u"辅材"

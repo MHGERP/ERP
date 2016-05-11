@@ -1,19 +1,12 @@
 <body lang=ZH-CN style='tab-interval:21.0pt;text-justify-trim:punctuation'>
 
-<div class=WordSection1 style='layout-grid:15.6pt'>
-
-<p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
-
-<p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
-
-<p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
-
+<div class=WordSection1 style='layout-grid:15.6pt;width:838px;margin-left:10%;'>
 <p class=MsoNormal style='text-indent:200.7pt;mso-char-indent-count:16.66'><b
 style='mso-bidi-font-weight:normal'><u><span style='font-size:12.0pt;
 font-family:宋体'>太重（滨海）重型机械有限公司</span></u></b><b style='mso-bidi-font-weight:
 normal'><span lang=EN-US style='font-size:12.0pt;mso-fareast-font-family:黑体'><span
-style='mso-spacerun:yes'>&nbsp;&nbsp; </span><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></b><span
+style='mso-spacerun:yes'>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
+style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></b><span
 style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
 "Times New Roman"'>修改号：</span><b style='mso-bidi-font-weight:normal'><span
 lang=EN-US style='font-size:12.0pt;mso-fareast-font-family:黑体'><span
@@ -22,36 +15,38 @@ style='mso-spacerun:yes'>&nbsp;&nbsp; </span><o:p></o:p></span></b></p>
 <p class=MsoNormal style='text-indent:259.75pt;mso-char-indent-count:21.56'><b
 style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;font-family:
 宋体'>入 库 单<span lang=EN-US><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span><span style='mso-spacerun:yes'>&nbsp;</span><span
 style='mso-spacerun:yes'>&nbsp;</span></span></span></b><span style='font-family:
-宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>样表：</span><b
+宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>样表：{{entry.sample_report|default_if_none:""}}</span><b
 style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:12.0pt;
 font-family:宋体'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal style='text-indent:228.55pt;mso-char-indent-count:18.97'><b
-style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:12.0pt;
-font-family:宋体'><o:p>&nbsp;</o:p></span></b></p>
-
-<p class=MsoNormal><span style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";
-mso-hansi-font-family:"Arial Narrow"'>货物来源：</span><span lang=EN-US
-style='font-family:"Arial Narrow","sans-serif"'><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span><span style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";
+<p class=MsoNormal>
+<div class="row-fluid">
+<div class="span2">
+<span style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";
+    mso-hansi-font-family:"Arial Narrow"'>货物来源：{{entry.material_source}}</span><span lang=EN-US
+style='font-family:"Arial Narrow","sans-serif"'></span>
+</div>
+<div class="span3">
+<span style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";
 mso-hansi-font-family:"Arial Narrow"'>订购单编号</span><span style='font-family:
-宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>：</span><span
+宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>：{{entry.bidform_code|default_if_none:""}}</span><span
 style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";mso-hansi-font-family:
-"Arial Narrow"'>　　　　　</span><span lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+"Arial Narrow"'></span><span lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>
+</div>
+<div class="span4">
+<span
 style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";mso-hansi-font-family:
-"Arial Narrow"'>接收检查记录表编号：　　　　　　　</span><span style='font-family:宋体;mso-ascii-font-family:
-"Times New Roman";mso-hansi-font-family:"Times New Roman"'>编号：</span><span
-lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p></o:p></span></p>
-
-<p class=MsoNormal><span lang=EN-US style='mso-bidi-font-size:10.5pt;
-font-family:"Arial Narrow","sans-serif"'><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span></span></p>
-
+"Arial Narrow"'>接收检查记录表编号：{{entry.inspection_record|default_if_none:""}}</span>
+</div>
+<div class="span3">
+<span style='font-family:宋体;mso-ascii-font-family:
+    "Times New Roman";mso-hansi-font-family:"Times New Roman"'>编号：{{entry.entry_code}}</span><span
+lang=EN-US style='font-family:"Arial Narrow","sans-serif"'></span></p>
+</div>
+</div>
 <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
  style='border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
  mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:.5pt solid windowtext;
@@ -138,262 +133,72 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span></span></p>
   lang=EN-US style='mso-bidi-font-size:10.5pt;font-family:"Arial Narrow","sans-serif"'><o:p></o:p></span></b></p>
   </td>
  </tr>
- <tr style='mso-yfti-irow:1;height:29.0pt'>
-  <td width=43 valign=top style='width:32.35pt;border:solid windowtext 1.0pt;
+ {% for item in items %}
+ <tr style='mso-yfti-irow:1;height:29.0pt' name="entry_item_tr" id={{item.id}}>
+  <td width=43 align=center style='width:32.35pt;border:solid windowtext 1.0pt;
   border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:29.0pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{forloop.counter}}</span></p>
   </td>
-  <td width=68 valign=top style='width:51.3pt;border-top:none;border-left:none;
+  <td width=68 align=center style='width:51.3pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.0pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.work_order}}</span></p>
   </td>
-  <td width=108 valign=top style='width:80.95pt;border-top:none;border-left:
+  <td width=108 align=center style='width:80.95pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.0pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.schematic_index}}</span></p>
   </td>
-  <td width=136 valign=top style='width:101.8pt;border-top:none;border-left:
+  <td width=136 align=center style='width:101.8pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.0pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.specification}}</span></p>
   </td>
-  <td width=83 valign=top style='width:62.0pt;border-top:none;border-left:none;
+  <td width=83 align=center style='width:62.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.0pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.material_mark}}</span></p>
   </td>
-  <td width=88 valign=top style='width:66.25pt;border-top:none;border-left:
+  <td width=88 align=center style='width:66.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.0pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.batch_number}}</span></p>
   </td>
-  <td width=69 valign=top style='width:51.45pt;border-top:none;border-left:
+  <td width=69 align=center style='width:51.45pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.0pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.material_code}}</span></p>
   </td>
-  <td width=56 valign=top style='width:42.0pt;border-top:none;border-left:none;
+  <td width=56 align=center style='width:42.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.0pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.unit}}</span></p>
   </td>
-  <td width=48 valign=top style='width:36.0pt;border-top:none;border-left:none;
+  <td width=48 align=center style='width:36.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.0pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.count}}</span></p>
   </td>
  </tr>
- <tr style='mso-yfti-irow:2;height:30.8pt'>
-  <td width=43 valign=top style='width:32.35pt;border:solid windowtext 1.0pt;
-  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:30.8pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=68 valign=top style='width:51.3pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.8pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=108 valign=top style='width:80.95pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.8pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=136 valign=top style='width:101.8pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.8pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=83 valign=top style='width:62.0pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.8pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=88 valign=top style='width:66.25pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.8pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=69 valign=top style='width:51.45pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.8pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=56 valign=top style='width:42.0pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.8pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=48 valign=top style='width:36.0pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.8pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
- </tr>
- <tr style='mso-yfti-irow:3;height:30.5pt'>
-  <td width=43 valign=top style='width:32.35pt;border:solid windowtext 1.0pt;
-  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:30.5pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=68 valign=top style='width:51.3pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.5pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=108 valign=top style='width:80.95pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.5pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=136 valign=top style='width:101.8pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.5pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=83 valign=top style='width:62.0pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.5pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=88 valign=top style='width:66.25pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.5pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=69 valign=top style='width:51.45pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.5pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=56 valign=top style='width:42.0pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.5pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=48 valign=top style='width:36.0pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.5pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
- </tr>
- <tr style='mso-yfti-irow:4;height:30.9pt'>
-  <td width=43 valign=top style='width:32.35pt;border:solid windowtext 1.0pt;
-  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:30.9pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=68 valign=top style='width:51.3pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.9pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=108 valign=top style='width:80.95pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.9pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=136 valign=top style='width:101.8pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.9pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=83 valign=top style='width:62.0pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.9pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=88 valign=top style='width:66.25pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.9pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=69 valign=top style='width:51.45pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.9pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=56 valign=top style='width:42.0pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.9pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=48 valign=top style='width:36.0pt;border-top:none;border-left:none;
-  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:30.9pt'>
-  <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
-  </td>
- </tr>
+ {% endfor %}
  <tr style='mso-yfti-irow:5;mso-yfti-lastrow:yes;height:61.7pt'>
   <td width=699 colspan=9 valign=top style='width:524.1pt;border:solid windowtext 1.0pt;
   border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
@@ -402,42 +207,34 @@ style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span></span></p>
   mso-hansi-font-family:"Arial Narrow"'>备注：</span><span lang=EN-US
   style='font-family:"Arial Narrow","sans-serif"'><o:p></o:p></span></p>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{entry.remark}}</span></p>
   </td>
  </tr>
 </table>
 
-<p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
-
-<p class=MsoNormal style='line-height:12.0pt;mso-line-height-rule:exactly'><span
+<p class=MsoNormal style='line-height:12.0pt;mso-line-height-rule:exactly'>
+<div class="row-fluid">
+<div class="span4">
+<span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman"'>采购员：</span><span lang=EN-US
-style='mso-bidi-font-size:10.5pt'><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span><span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;</span></span><span
+mso-hansi-font-family:"Times New Roman"'>采购员：{% ifequal entry.purchaser None %}<span class="btn btn-mark" name="outside_entry_confirm" role="purchaser">签字</span>{% else %}{{entry.purchaser.userinfo}}{% endifequal %}</span></span>
+</div>
+<div class="span4">
+<span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman"'>检查员：　　　　　　　</span><span lang=EN-US
-style='mso-bidi-font-size:10.5pt'><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+mso-hansi-font-family:"Times New Roman"'>检查员：{% ifequal entry.inspector None %}<span class="btn btn-mark" name="outside_entry_confirm" role="inspector">签字</span>{% else %}{{entry.inspector.userinfo}}{% endifequal %}</span><span lang=EN-US
+style='mso-bidi-font-size:10.5pt'></span>
+</div>
+<div class="span4">
+<span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman"'>库管员：</span><span lang=EN-US
-style='mso-bidi-font-size:10.5pt'><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span><o:p></o:p></span></p>
+mso-hansi-font-family:"Times New Roman"'>库管员：{% ifequal entry.keeper None %}<span class="btn btn-mark" name="outside_entry_confirm" role="keeper">签字</span>{% else %}{{entry.keeper.userinfo}}{% endifequal %}</span><span lang=EN-US
+style='mso-bidi-font-size:10.5pt'></span>
+</div>
+</div>
+</p>
 
-<p class=MsoNormal style='line-height:12.0pt;mso-line-height-rule:exactly'><span
-lang=EN-US style='font-size:9.0pt;mso-bidi-font-size:12.0pt'><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span
-style='font-size:9.0pt;mso-bidi-font-size:12.0pt;font-family:宋体;mso-ascii-font-family:
-"Times New Roman";mso-hansi-font-family:"Times New Roman"'>　　　　</span><span
-lang=EN-US style='font-size:9.0pt;mso-bidi-font-size:12.0pt'><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span><o:p></o:p></span></p>
 
-<p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
-
-<p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
 
 </div>
 

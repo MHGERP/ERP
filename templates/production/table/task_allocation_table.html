@@ -1,7 +1,7 @@
 
 <table class="table table-bordered table-striped">
     <thead>
-        <th>编号</th>
+        <th>工作票号</th>
         <th>工作令</th>
         <th>工序编号</th>
         <th>工序</th>
@@ -10,40 +10,32 @@
         <th>操作</th>
     </thead>
     <tbody>
-        {% for item in items_list2 %}
+        {% for item in items_list %}
         <tr>
             <td>{{item.materiel_belong.index}}</td>
             <td>{{item.materiel_belong.order.order_index}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.get_name_display}}</td>
-            <td>{{item.hour}}</td>
+            <td>{{item.process_id}}</td>
+            <td>{{item.processname}}</td>
+            <td>{{item.work_hour}}</td>
             <td>
-                已分配：{{item.operator.info.name}}
-            </td>
-            <td>
-                <button class="btn btn-primary" type="button" onclick="task_allocation_remove({{item.id}})">撤销</button>
-            
-            </td>
-        </tr>
-        {% endfor %}    
-        {% for item in items_list1 %}
-        <tr>
-            <td>{{item.materiel_belong.index}}</td>
-            <td>{{item.materiel_belong.order.order_index}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.get_name_display}}</td>
-            <td>{{item.hour}}</td>
-            <td>
+                {% if item.productionworkgroup = None %}
                 <select id="table_select{{item.id}}">
-                    {% for user in user_list %}
-                    <option value="{{user.user.id}}">{{user}}</option>
+                    {% for group in item.groups %}
+                    <option value="{{group.id}}">{{group.name}}</option>
                     {% endfor %}
                 </select>
+                {% else %}
+                    已分配：{{item.productionworkgroup}}
+                {% endif %}
             </td>
             <td>
-                <button class="btn btn-primary" type="button" onclick="task_allocation_submit({{item.id}})">确认</button>
+                {% if item.productionworkgroup = None %}
+                    <button class="btn btn-primary" type="button" onclick="task_allocation_submit({{item.id}})">确认</button>
+                {% else %}
+                    <button class="btn btn-primary" type="button" onclick="task_allocation_remove({{item.id}})">撤销</button>
+                {% endif %}
             </td>
         </tr>
-        {% endfor %}   
+        {% endfor %}
     </tbody>
 </table>

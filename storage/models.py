@@ -347,7 +347,7 @@ class SteelMaterialApplyCardItems(models.Model):
     work_order=models.ForeignKey(WorkOrder,blank=False,null=False,verbose_name=u"工作令")
     specification = models.CharField(max_length=50,blank=False,null=False,verbose_name=u'规格')
     def __unicode__(self):
-        return "%s" % self.materiel
+        return "%s" % self.material_mark
 
     class Meta:
         verbose_name=u"钢材领用单材料"
@@ -543,16 +543,30 @@ class OutsideStandardItem(models.Model):
     unit =  models.CharField(verbose_name=u"单位",max_length=20,blank=True,null=True)
     count = models.IntegerField(verbose_name=u"数量",default=0)
     weight = models.FloatField(verbose_name=u"净重",null=True,blank=True)
-    heatno = models.CharField(verbose_name=u"熔炼号",null=True,blank=True,max_length=50)
+    heatnum = models.CharField(verbose_name=u"熔炼号",null=True,blank=True,max_length=50)
     remark = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'备注')
     factory = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'生产厂家')
     ticket_number = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'票号')
-    
+    work_order=models.ForeignKey(WorkOrder,blank=False,null=False,verbose_name=u"工作令")
     class Meta:
         verbose_name = u"外购件入库材料"
         verbose_name_plural = u"外购件入库材料"
     def __unicode__(self):
-        return '%s(%s)' % (self.specification, self.entry)
+        return '%s' % self.specification
+
+
+class OutsideStorageList(models.Model):
+    entry_item = models.OneToOneField(OutsideStandardItem,verbose_name=u"入库材料")
+    count = models.IntegerField(verbose_name=u"数量",default=0)
+    outsidebuy_type = models.IntegerField(choices=OUTSIDEBUY_TYPE,default=COOPERATION_OUTSIDEBUY,verbose_name=u"外购件类型")
+    class Meta:
+        verbose_name = u"外购件库存材料"
+        verbose_name_plural = u"外购件库存材料"
+
+    def __unicode__(self):
+        return "%s" % self.entry_item.specification
+
+
 """
 class OutsideApplyCard(ApplyCardBase):
     proposer = models.ForeignKey(User,blank=True,null=True,verbose_name=u"领用人",related_name = "out_apply_proposer")
