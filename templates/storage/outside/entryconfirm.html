@@ -19,19 +19,12 @@
     </div>
     <div class="modal-body">
         <form id="entry_item_form" action="" class="form-horizontal" iid={{is_show}}>
-            <div class="control-group">
-                {% for field in form%}
-                    <label class="control-label">{{field.label}}</label>
-                    <div class="controls">
-                        {{field}}
-                    </div>
-                {% endfor %}               
-            </div>
+            {% include "storage/outside/entryitemform.html" %}
         </form>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-        <button class="btn btn-primary" data-dismiss="modal" id="save_entry_item">保存</button>
+        <button class="btn btn-primary" id="save_entry_item">保存</button>
     </div>
 </div>
 {% endblock %}
