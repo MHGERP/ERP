@@ -4,9 +4,11 @@
 {% if order_form.bidform_set.count == 0 %}
 <button id='go_to_invite_bid' >进入招标</button>
 {% endif%}
+{% if order_form.order_mod == 0%}
 <form action="/purchasing/orderForm" >
     <input type="hidden" name="index" value="{{order_form.order_id}}"/>
     <input type="hidden" name="target" value="1"/> 
     <button id='turn_to_add' style="float:right">添加材料执行</button>
 </form>
+{% endif%}
 {% endif%}
