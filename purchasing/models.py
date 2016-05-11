@@ -364,5 +364,3 @@ class BidAcceptance(models.Model):
         verbose_name_plural = u"中标通知书"
     def __unicode__(self):
         return '%s' % (self.bid.bid_id)
-    
-

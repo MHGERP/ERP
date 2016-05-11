@@ -139,7 +139,7 @@ def chooseInventorytype(request,pid,key):
     for item in items:
         if MaterielFormConnection.objects.filter(materiel = item).count() == 0:
             MaterielFormConnection(materiel = item, count = item.count).save()
-        inventory_type=item.inventory_type.all()[0]
+        inventory_type=item.inventory_type
         if inventory_type.name ==  MAIN_MATERIEL or  inventory_type.name == AUXILIARY_MATERIEL:
             if item.materielexecutedetail_set.count()>0 or item.materielformconnection.order_form:
                 item.can_choose=False
@@ -203,6 +203,30 @@ def getRelatedModel(request, index):
         "f3" : f3,
     }
     return render_to_string("purchasing/related_model/%s.html" % idtable[index], context)
+
+@dajaxice_register
+def defaultRelated(request, index, mid):
+    idtable = {
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        COOPERANT: "forging",
+        WELD_MATERIAL: "weld_material",
+    }
+    item = Materiel.objects.get(id = mid)
+    data = []
+    if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
+        data = SteelMaterialStoreList.objects.filter(entry_item__specification = item.specification, entry_item__materiel = item.material.name)
+    # elif index == OUT_PURCHASED:
+    #     data = OutsideStorageList.objects.filter(specification = f1, texture = f2)
+    #     print data
+    elif index == WELD_MATERIAL:
+        data = WeldStoreList.objects.filter(entry_item__material__name = f1, entry_item__material_mark = f2, entry_item__specification = f3)
+    context = {
+        "data" : data,
+    }
+    return render_to_string("purchasing/related_table/%s.html" % idtable[index], context)
 
 @dajaxice_register
 def getRelatedTable(request, index, f1, f2, f3):

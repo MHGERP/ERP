@@ -228,11 +228,14 @@ function add_to_material_execute_callback(data){
 
 
 $(document).on("click", ".btn-primary", function() {
+    mid = $(this).closest("tr").attr("iid");
     val = $("#id_inventory_type").val();
     key = $("#search_key").val();
     Dajaxice.purchasing.getRelatedModel(function (data) {
       $("#related_html").html(data);
-      //alert(data);
+      Dajaxice.purchasing.defaultRelated(function (data) {
+        $("#related_table").html(data);
+      }, {"index" : val, "mid" : mid});
     }, {"index" : val});
 });
 
