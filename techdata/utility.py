@@ -34,7 +34,7 @@ def batchDecentialization(order, inventory_type, DetailItem):
                 materielcopy = MaterielCopy()
                 for attr in fields:
                     try:
-                        if attr != "id":
+                        if attr != "id" or attr != "order":
                             value = getattr(item.materiel_belong, attr)
                             setattr(materielcopy, attr, value)
                     except:
@@ -51,14 +51,16 @@ def processDetailGenerate(order):
     JunHU
     """
     for sub_order in SubWorkOrder.objects.filter(order = order):
-        SynthesizeFileListStatus(order = sub_order).save()
+        SynthesizeFileListStatus(sub_order = sub_order).save()
         for item in Materiel.objects.filter(order = order):
             if item.index != "1" and item.sub_index == "0": continue
             sub_materiel = SubMateriel(materiel_belong = item, sub_order = sub_order)
             sub_materiel.save()
-            for i in xrange(12):
-                if getattr(item.processing, "GX%d" %(i + 1)) == None: break
+            for i in xrange(1, 13):
+                step = getattr(item.processing, "GX%d" % i)
+                if step == None: break
                 detail = ProcessDetail()
                 detail.sub_materiel_belong = sub_materiel
-                detail.processname = getattr(item.processing, "GX%d" %(i + 1))
-                detail.process_id = i + 1
+                detail.processname = step
+                detail.process_id = i
+                detail.save()

@@ -19,7 +19,7 @@ from techdata.forms import *
 from techdata.models import *
 from const.models import *
 from const.utils import getMaterialQuerySet
-from techdata.utility import batchDecentialization
+from techdata.utility import batchDecentialization, processDetailGenerate
 
 from purchasing.models import MaterielExecute, MaterielExecuteDetail
 import datetime
@@ -123,7 +123,6 @@ def getInventoryTables(request, id_work_order, inventory_type):
         list = DetailItem.objects.filter(order = work_order)
     else:
         list = DetailItem.objects.filter(materiel_belong__order = work_order)
-    print list
     context["list"] = list
     html = render_to_string("techdata/widgets/" + id2table[inventory_type], context)
     return html
@@ -862,6 +861,7 @@ def processBOMMark(request, id_work_order, step):
         order.processbompagemark.proofreader = request.user
         order.processbompagemark.proofread_date = datetime.datetime.today()
         order.processbompagemark.save()
+        processDetailGenerate(order)
         context = {
             "ret": True,
             "mark_user": unicode(order.processbompagemark.proofreader.userinfo),
