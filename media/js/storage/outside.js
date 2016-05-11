@@ -1,7 +1,12 @@
+var mid;
 $(document).ready(function(){
     $(document).on("click","button#search_btn",function(){
         var role = $(this).attr('role');
         Dajaxice.storage.outsideCardSearch(outsidecardsearch_callback,{"role":role,"form":$("#search_form").serialize()})
+    })
+    $(document).on("dblclick","tr[name='entry_item_tr']",function(){
+        mid = $(this).attr("id");
+        $("#myModal").modal('show');
     })
 });
 

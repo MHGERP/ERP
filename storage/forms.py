@@ -525,3 +525,18 @@ class OutsideEntrySearchForm(forms.Form):
         outsidetypes = [("-1","------")]
         outsidetypes.extend(OUTSIDEBUY_TYPE)
         self.fields["outsidebuy_type"].choices = tuple(outsidetypes)
+
+class OutsideEntryItemForm(ModelForm):
+    class Meta:
+        model = OutsideStandardItem
+        fields = ("weight","heatnum","factory","ticket_number","remark")
+        widgets =  {
+            "weight":forms.TextInput(attrs={"class":"span2"}),
+            "heatnum":forms.TextInput(attrs={"class":"span2"}),
+            "factory":forms.TextInput(attrs={"class":"span2"}),
+            "ticket_number":forms.TextInput(attrs={"class":"span2"}),
+            "remark":forms.TextInput(attrs={"class":"span2"}),
+        }
+    def __init__(self,*args,**kwargs):
+        super(OutsideEntryItemForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields)

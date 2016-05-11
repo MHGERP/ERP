@@ -19,7 +19,7 @@ Registers = (
     WeldStoreThread,
     OutsideStandardEntry,
     OutsideStandardItem,
-    #OutsideStorageList,
+    OutsideStorageList,
     #OutsideApplyCard,
     #OutsideApplyCardItem,
     SteelMaterialEntry,
