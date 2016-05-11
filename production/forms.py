@@ -107,6 +107,12 @@ class HourMessageSearchForm(forms.Form):
          WORKORDER_CHOICES = tuple((item.id, item) for item in WorkOrder.objects.all())
          self.fields["materiel_belong__order"].choices = WORKORDER_CHOICES
 
+class WorkGroupForm(forms.Form):
+    production_work_group = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
+    def __init__(self, *args, **kwargs):
+         super(WorkGroupForm, self).__init__(*args, **kwargs)
+         self.fields["production_work_group"].choices = tuple([("","------")]+[(item.id, item.name) for item in ProductionWorkGroup.objects.all()])
+
 class ProductionUserSearchForm(forms.Form):
     production_user_id__name__contains = forms.CharField(required=False, label=u"生产人员姓名",)
     production_work_group = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
@@ -117,11 +123,6 @@ class ProductionUserSearchForm(forms.Form):
 class UserChooseForm(forms.Form):
     name__contains = forms.CharField(label=u"用户姓名",required = False)
 
-class WorkGroupForm(forms.Form):
-    production_work_group = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
-    def __init__(self, *args, **kwargs):
-         super(WorkGroupForm, self).__init__(*args, **kwargs)
-         self.fields["production_work_group"].choices = tuple([("","------")]+[(item.id, item.name) for item in ProductionWorkGroup.objects.all()])
 
 class ProductionUserForm(ModelForm):
     class Meta:
@@ -132,4 +133,4 @@ class ProductionUserForm(ModelForm):
         }
     def __init__(self, *args, **kwargs):
         super(ProductionUserForm,self).__init__(*args,**kwargs)
-        self.fields["production_work_group"].choices = tuple((item.id, item.name) for item in ProductionWorkGroup.objects.all())         
+        self.fields["production_work_group"].choices = tuple((item.id, item.name) for item in ProductionWorkGroup.objects.all()) 
