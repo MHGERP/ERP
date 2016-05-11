@@ -63,12 +63,13 @@ class AuxiliaryForm(forms.ModelForm):
     """
     class Meta:
         model = AuxiliaryItem
+        exclude = ('id','materiel_belong')
         widgets = {
-            "materiel_belong": forms.TextInput(attrs = {"readonly" : "true"}),
-            "quota_coeficient": forms.TextInput(attrs = {"readonly" : "true"}),
-            "quota": forms.TextInput(attrs = {"readonly" : "true"}),
-            "stardard": forms.TextInput(attrs = {"readonly" : "true"}),
-            "remark": forms.TextInput(attrs = {"readonly" : "true"}),
+            "quota_coeficient": forms.TextInput(attrs = {"class": "input-small"}),
+            "quota": forms.TextInput(attrs = {"class": "input-small"}),
+            "stardard": forms.TextInput(attrs = {"class": "input-small"}),
+            "remark": forms.TextInput(attrs = {"class": "input-small"}),
+            "materiel_categories": forms.TextInput(attrs = {"class": "input-small"}),
 
         }
     
