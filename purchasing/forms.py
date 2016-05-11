@@ -59,10 +59,19 @@ class SupplierCheckSupplierForm(ModelForm):
     class Meta:
         model=SupplierSelect
         fields=("A","B","C","D","E","F","G")
+
 class QualityPriceCardForm(ModelForm):
     class Meta:
         model = qualityPriceCard
+        fields=("apply_company","work_order","amount","unit","content","material","delivery_period")
+        widgets = {
+                   "apply_date": forms.DateInput(attrs={'class':'form-control'}),
+                  }
 
+class QualityCardSupplierForm(ModelForm):
+    class Meta:
+        model=SupplierSelect
+        fields=("price","ability_situation","delivery_payment")
 class ContractDetailForm(ModelForm):
     class Meta:
         model = ContractDetail
