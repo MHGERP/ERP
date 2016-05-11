@@ -3,8 +3,8 @@ var dic_type = new Array();
 dic_type["main_materiel"] = 1;
 dic_type["auxiliary_materiel"] = 2;
 dic_type["first_feeding"] = 3;
-dic_type["purchased"] = 4;
-dic_type["forging"] = 5;
+dic_type["out_purchased"] = 4;
+dic_type["cooperant"] = 5;
 dic_type["weld_material"] = 6;
 
 $(document).ready(function(){
@@ -43,18 +43,18 @@ function choose_Inventorytype_callback(data){
     }
     item = $("#new_purchasing_order");
     $("#inventory_detail_table").html(data.inventory_detail_html);
-    if(dic_type[val]==5){
-        item.html(data.new_purchasing_form_html);
-        $("#add_to_bid").show();
-        $("#add_to_order").hide();
-        Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
-    }
-    else{
+    // if(dic_type[val]==5){
+    //     item.html(data.new_purchasing_form_html);
+    //     $("#add_to_bid").show();
+    //     $("#add_to_order").hide();
+    //     Dajaxice.purchasing.getOngoingBidList(getBidListCallBack, {});
+    // }
+    // else{
         item.html(data.new_order_form_html);
         $("#add_to_order").show();
         $("#add_to_bid").hide();
         Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{"order_type":dic_type[val]});
-    }
+    // }
 }
 
 //delete five tables detail item
@@ -225,3 +225,44 @@ function add_to_material_execute_callback(data){
     if(data.message!='')alert(data.message);
     else refresh();
 }
+
+
+$(document).on("click", ".btn-primary", function() {
+    val = $("#id_inventory_type").val();
+    key = $("#search_key").val();
+    Dajaxice.purchasing.getRelatedModel(function (data) {
+      $("#related_html").html(data);
+      //alert(data);
+    }, {"index" : val});
+});
+
+$(document).on("click", "#related_search", function() {
+    val = $("#id_inventory_type").val();
+    ch = dic_type[val];
+    if (ch <= 2) {
+      f1 = $("#id_mingcheng").val();
+      f2 = $("#id_guige").val();
+      f3 = $("#id_caizhi").val();
+      alert(f1+" "+f2+" "+f3);
+      Dajaxice.purchasing.getRelatedTable(function(data) {
+          $("#related_table").html(data);
+      }, {"index" : val, "f1" : f1, "f2" : f2, "f3" : f3});
+    }
+    else if (ch == 4) {
+      f1 = $("#id_mingcheng").val();
+      f2 = $("#id_caizhi").val();
+      //alert(f2);
+      Dajaxice.purchasing.getRelatedTable(function(data) {
+          $("#related_table").html(data);
+      }, {"index" : val, "f1" : f1, "f2" : f2, "f3" : ""});
+    }
+    else if (ch == 6) {
+      f1 = $("#id_mingcheng").val();
+      f2 = $("#id_paihao").val();
+      f3 = $("#id_guige").val();
+      //alert(f1+" "+f2+" "+f3);
+      Dajaxice.purchasing.getRelatedTable(function(data) {
+          $("#related_table").html(data);
+      }, {"index" : val, "f1" : f1, "f2" : f2, "f3" : f3});
+    }
+});

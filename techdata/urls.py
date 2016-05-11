@@ -33,6 +33,10 @@ urlpatterns=patterns('',
         techdata_views.firstFeedingViews,
     ),
     url(
+        r'^cooperant$',
+        techdata_views.cooperantViews,
+    ),
+    url(
         r'^principalMaterial$',
         techdata_views.principalMaterialViews,
     ),

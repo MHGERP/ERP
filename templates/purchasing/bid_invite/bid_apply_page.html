@@ -1,0 +1,59 @@
+
+{% extends "purchasing/base/none_nav_base.html"%}
+{% block title %}
+<h1>招(议)标申请表</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a  class="current">招(议)标申请表</a>
+{% endblock %}
+{% block inner_content%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}bootstrap-datepicker/css/bootstrap-datetimepicker.css" >
+<div style="float:right">
+    {% if bid_apply.status.status == status_dic.FILL%}
+    <a href="#bid_apply_table" data-toggle="modal" data-target="#bid_apply_table">填写</a>
+    {% endif%}
+</div>
+<div id="bid_apply_div" bidapplyid="{{bid_apply.id}}">
+{% include "purchasing/bid_invite/bid_apply_form.html"%}
+</div>
+<div class="modal hide fade"  id="bid_apply_table" modal-size-width="0.8">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h2>招(议)标申请表</h2>
+    </div>
+    <div class="modal-body">
+        {%include "purchasing/widgets/bid_apply_table.html"%}
+    </div>
+    <div class="modal-footer">
+    </div>
+</div>
+<div class="modal hide fade"  id="bid_apply_comment" >
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h2>招(议)标申请表意见</h2>
+    </div>
+    <div class="modal-body">
+        <textarea id ="comment_area" cols=40 rows=5 style="width:80%;"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success " data-dismiss="modal" id="apply_comment_confirm">确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+<div class="modal hide fade"  id="bid_apply_logistical_modal" modal-size-width="0.6">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h2>物流采控审核意见</h2>
+    </div>
+    <div class="modal-body">
+        {%include "purchasing/bid_invite/bid_apply_logistical_form.html"%}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success " data-dismiss="modal" id="apply_logistical_confirm">确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+<script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/purchasing/bid_apply_form.js"></script>
+{%endblock%}

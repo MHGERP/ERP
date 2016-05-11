@@ -1,4 +1,5 @@
-$("#id_bid_date").datetimepicker({
+
+$("#id_accept_date").datetimepicker({
     format:'yyyy-mm-dd',
     weekStart:1,
     todayBtn: 1,
@@ -8,7 +9,7 @@ $("#id_bid_date").datetimepicker({
     forceParse:0,
     minView:2
 });
-
+/*
 bidapplyform = "";
 $(function(){
   urls = window.location.href.split("/");
@@ -69,3 +70,42 @@ function saveComment_callback(data){
   }
 
 }
+
+*/
+
+$("#apply_select_confirm").click(function(){
+   var val=$("#bid_method_select").val();
+   var bidid=$("#bid_invite_buttons").attr('bidid');
+   Dajaxice.purchasing.BidApplySelect(function(data){
+       window.location.reload();
+   },{
+       'val':val,
+       "bidid":bidid
+   });
+});
+
+$("#apply_fill_confirm").click(function(){
+   var bidid=$("#bid_invite_buttons").attr('bidid');
+   Dajaxice.purchasing.BidApplyFillFinish(function(data){
+       window.location.reload();
+   },{
+    "bidid":bidid
+   });
+});
+$("#apply_carry_confirm").click(function(){
+   var bidid=$("#bid_invite_buttons").attr('bidid');
+   Dajaxice.purchasing.BidApplyCarryFinish(function(data){
+       window.location.reload();
+   },{
+    "bidid":bidid,
+    "form":$("#bid_acceptance_form").serialize(true)
+   });
+});
+$("#bid_apply_complete").click(function(){
+   var bidid=$("#bid_invite_buttons").attr('bidid');
+   Dajaxice.purchasing.BidApplyFillFinish(function(data){
+       window.location.reload();
+   },{
+    "bidid":bidid
+   });
+});

@@ -157,10 +157,62 @@ def bidTrackingViews(request, bid_id):
              }
     """
     bidform = BidForm.objects.get(id = bid_id)
+    bidFormStatuss = BidFormStatus.objects.filter(Q(main_status = BIDFORM_STATUS_INVITE_BID)).order_by("part_status")
+
+
+    btn_cnt = 2 if bidform.bid_status.part_status < BIDFORM_PART_STATUS_INVITE_BID_APPLY_SELECT else 0
+    btn_color = ["btn-success", "btn-warning", ""]
+    bid_status = []
+    for status in bidFormStatuss:
+        btn_cnt += 1 if status == bidform.bid_status else 0
+        bid_dict = {}
+        bid_dict["name"] = status
+        bid_dict["class"] = btn_color[btn_cnt]
+        bid_status.append(bid_dict)
+        btn_cnt += 1 if status == bidform.bid_status else 0
+    try:
+        bid_apply=bidform.bidapply     
+        if bid_apply.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
+            bid_apply_finish=True
+        else:
+            bid_apply_finish=False
+    except:
+        bid_apply_finish=False
+    try:
+        supplier_check=bidform.suppliercheck     
+        if supplier_check.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
+            supplier_check_finish=True
+        else:
+            supplier_check_finish=False
+    except:
+        supplier_check_finish=False
+    try:
+        quality_card=bidform.qualitypricecard     
+        if quality_card.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
+            quality_card_finish=True
+        else:
+            quality_card_finish=False
+    except:
+        quality_card_finish=False
+    print bid_apply_finish
     order_form=bidform.order_form
+
+    try:
+        bid_acception=bidform.bidacceptance
+    except:
+        bid_acception=BidAcceptance(bid=bidform)
+        bid_acception.save()
+    bid_acceptance_form=BidAcceptanceForm(instance=bid_acception,bidform=bidform)
     context={
+        "bid_status":bid_status,
         "bidform":bidform,
+        "bid_status_dic":BIDFORM_PART_STATUS_DICT,
         "order_form":order_form,
+        "bid_apply_finish":bid_apply_finish,
+        "supplier_check_finish":supplier_check_finish,
+        "quality_card_finish":quality_card_finish,
+        "bid_acceptance_form":bid_acceptance_form,
+        "bid_acceptance":bid_acception,
         "items":MaterielCopy.objects.filter(materielformconnection__order_form=order_form)
     }
     return render(request, "purchasing/bid_track.html", context)
@@ -264,7 +316,7 @@ def arrivalCheckViews(request,bid):
 def inventoryTableViews(request):
     order_index = request.GET.get("order_index")
     tableid = request.GET.get("tableid")
-    order = WorkOrder.objects.get(order_index = order_index)
+    order = SubWorkOrder.objects.get(id = order_index)
     inventoryType = InventoryType.objects.get(name = tableid)
     context = {"order": order,
                "inventoryType": inventoryType,
@@ -555,4 +607,59 @@ def arrivalCheckViews(request,bid):
     }
     return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 
-    
+def bidApplyFormViews(request,bid):
+    bidform = BidForm.objects.get(bid_id = bid)
+    try:
+        bid_apply = bidform.bidapply
+    except:
+        status=CommentStatus.objects.get(status=BIDFORM_PART_STATUS_INVITE_BID_APPLY_FILL)
+        bid_apply=bidApply(bid=bidform,status=status,work_order=bidform.order_form.work_order)
+        bid_apply.save()
+    bidApplyForm = BidApplyForm(instance=bid_apply)
+    supplier_set=bidform.supplierselect_set.all()
+    comment_dict={}
+    for k in COMMENT_USER_DICT:
+        comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
+        if comment.count()>0:
+            comment_dict[k]=comment[0]
+    for item in supplier_set:
+        item.form=BidApplySupplierForm(instance=item)
+
+    context={
+        "bid_apply":bid_apply,
+        "bidApplyForm":bidApplyForm,
+        "BidLogisticalForm":BidLogisticalForm,
+        "supplier_set":supplier_set,
+        "status_dic":BIDFORM_INVITE_BID_APPLY_DIC,
+        "comment_user_dict":COMMENT_USER_DICT,
+        "comment_dict":comment_dict
+    }
+    return render(request,"purchasing/bid_invite/bid_apply_page.html",context)
+
+def SupplierCheckViews(request,bid):
+    bidform = BidForm.objects.get(bid_id = bid)
+    try:
+        supplier_check = bidform.suppliercheck
+    except:    
+        status=CommentStatus.objects.get(status=BIDFORM_PART_STATUS_INVITE_BID_CHECK_FILL)
+        supplier_check=SupplierCheck(bid=bidform,status=status)
+        supplier_check.save()
+    supplier_check_form=SupplierCheckForm(instance=supplier_check)
+    supplier_set=bidform.supplierselect_set.all()
+    comment_dict={}
+    for k in COMMENT_USER_DICT:
+        comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
+        if comment.count()>0:
+            comment_dict[k]=comment[0]
+
+    for item in supplier_set:
+        item.form=SupplierCheckSupplierForm(instance=item)
+    context={
+        "supplier_check":supplier_check,
+        "supplier_check_form":supplier_check_form,
+        "supplier_set":supplier_set,
+        "status_dic":BIDFORM_INVITE_BID_SUPPLIER_DIC,
+        "comment_user_dict":COMMENT_USER_DICT,
+        "comment_dict":comment_dict
+    }
+    return render(request,"purchasing/bid_invite/supplier_check_page.html",context)

@@ -1,4 +1,4 @@
-<table class="table table-bordered table-striped table-hover" style="width:70%">
+<table class="table table-bordered table-striped table-hover" style="width:80%">
     <thead>
         <tr>
             <th>工作令</th>
@@ -10,11 +10,11 @@
     <tbody>
         {% for order in orders %}
         <tr>
-            <td>{{order.order_index}}</td>
+            <td>{{order}}</td>
             <td>
                 <form class="form-inline">
                 {{inventoryTypeForm.inventory_type}}
-                <span class="btn inventory_open" args="{{order.order_index}}">查看</span>
+                <span class="btn inventory_open" args="{{order.id}}">查看</span>
                 </form>
             </td>
             <td>

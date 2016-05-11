@@ -9,28 +9,34 @@
 {% endblock %}
 
 {% block inner_content%}
-<form class="form-search ">
-   &nbsp&nbsp&nbsp&nbsp<font size="4px"><b>工作令</b>&nbsp&nbsp</font>
-   <select class="input-medium search-query" id="search_pending_order">
-   <option style="width:200px">1</option>
-   <option style="width:200px">2</option>
-   <option style="width:200px">3</option>
-   <option style="width:200px">4</option>
-   <option style="width:200px">5</option>
-  </select>
+<form class="form-search" itype={{inventory_type}}>
+   工作令: 
+   {{ work_order_form.work_order }}
     <span class="btn" id="order_search">检索</span> 
+	<span style="float: right">
+    <span class="btn btn-primary" id="btn-add" data-toggle="modal" data-target="#info_modal">添加</span>
+	</span>
 </form>
-<div class="widget-box">
-  <div class="widget-title">
-    <span class="icon"><i class="icon-th"></i></span>
-    <h5>工作令：03015001B</h5>
-    <h5>产品名称：第一中温变换炉</h5>
-    <h5>单位：公斤</h5>
-    <h5>编制人：</h5>
-    <h5>审核人：</h5>
+
+<div class="widget-box" id="widget-box">
+
+</div>
+
+<div id="info_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.65" >
+  <div class="modal-header">
+    <h2 id="groupLabel">物料信息卡</h2>
   </div>
-  <div class="widget-content nopadding">
-        {% include "techdata/widgets/principal_material_table.html" %}
+
+  <div class="modal-body" style="clear:both;">
+	<form class="form" id="principal_form" class="well">
+		{% include "techdata/widgets/principal_card.html" %}
+	</form>
+  </div>
+  <div class="modal-footer">
+	<button class="btn btn-primary" id="btn_save_principal">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
   </div>
 </div>
+
+<script type="text/javascript" src="{{STATIC_URL}}js/techdata/principal_material.js"></script>
 {% endblock%}

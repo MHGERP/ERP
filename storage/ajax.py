@@ -33,10 +33,10 @@ def searchApplyCard(request,form):
     params: search form
     return: search result and message
     """
-    form = SteelRefundSearchForm(deserialize_form(form))
+    form = SteelApplyCardSearchForm(deserialize_form(form))
     context={}
     if form.is_valid():
-        steel_apply_cards = get_weld_filter(CommonSteelMaterialApplyCardInfo,form.cleaned_data)
+        steel_apply_cards = get_weld_filter(SteelMaterialApplyCard,form.cleaned_data)
         result_table = render_to_string("storage/widgets/apply_card_table.html",{"apply_cards":steel_apply_cards})
         message = "success"
         context["result_table"]=result_table
@@ -46,7 +46,7 @@ def searchApplyCard(request,form):
     return simplejson.dumps(context)
 
 @dajaxice_register
-def searchRefundCard(request,form):
+def searchSteelRefundCard(request,form):
     """
     author: Rosen
     summary:process the search request for steel refund card and return the result
@@ -57,8 +57,7 @@ def searchRefundCard(request,form):
     context={}
     if form.is_valid():
         conditions = form.cleaned_data
-        steel_refund_cards = get_weld_filter(CommonSteelMaterialReturnCardInfo,conditions)
-        print steel_refund_cards
+        steel_refund_cards = get_weld_filter(SteelMaterialRefundCard,conditions)
         result_table = render_to_string("storage/widgets/refund_card_table.html",{"refund_cards":steel_refund_cards})
         message = "success"
         context["result_table"]=result_table
@@ -309,6 +308,7 @@ def auToolEntryConfirm(request, role, eid):
                 entry.keeper = request.user;
                 entry.entry_status = STORAGESTATUS_END;
                 entry.save();
+                createAuxiliaryToolStoreList(entry)
                 message = u"入库单确认成功";
             else:
                 message = u"入库单已经确认过，不能重复确认";
@@ -414,43 +414,26 @@ def Search_Auxiliary_Tools_Records(request,data,search_type):
     if form.is_valid():
         conditions=form.cleaned_data
         if search_type=='inventory':
-            context['rets'] = get_weld_filter(AuxiliaryTool,conditions)
+            context['rets'] = get_weld_filter(AuxiliaryToolStoreList,conditions)
             return render_to_string('storage/auxiliarytools/inventory_table.html',context)
         else:
-            #            if search_type=='entry':
-#                q1=(conditions['date'] and Q(create_time=conditions['date'])) or None
-#                q2=(conditions['name'] and Q(auxiliary_tool__name=conditions['name'])) or None
-#                q3=(conditions['model'] and Q(auxiliary_tool__model=conditions['model'])) or None
-#                q4=(conditions['manufacturer'] and Q(auxiliary_tool__manufacturer=conditions['manufacturer'])) or None
-#                query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4]))
-#                entry_records=AuxiliaryToolEntryCard.objects.filter(query_conditions)
-#                context['rets']=entry_records
-#                return render_to_string('storage/auxiliarytools/entry_table.html',context)
             if search_type=='apply':
-                q1=(conditions['date'] and Q(commit_time=conditions['date'])) or None
-                q2=(conditions['name'] and Q(actual_item__name=conditions['name'])) or None
-                q3=(conditions['model'] and Q(actual_item__model=conditions['model'])) or None
-                q4=(conditions['manufacturer'] and Q(actual_item__manufacturer=conditions['manufacturer'])) or None
-                query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4]))                
-                apply_records=AuxiliaryToolApplyCard.objects.filter(query_conditions)
-                context['rets']=apply_records
+                context['rets']=get_weld_filter(AuxiliaryToolApplyCard,conditions)
                 return render_to_string('storage/auxiliarytools/apply_table.html',context)
 
 @dajaxice_register
 def Search_Auxiliary_Tools_Apply_Card(request,data):
     context={}
+    print data
     form=AuxiliaryToolsApplyCardSearchForm(deserialize_form(data))
     if form.is_valid():
         conditions=form.cleaned_data
-        q1=(conditions['create_time'] and Q(create_time=conditions['create_time'])) or None
-        q2=(conditions['apply_item'] and Q(apply_item__name=conditions['apply_item'])) or None
-        q3=(conditions['applicant'] and Q(applicant=conditions['applicant'])) or None
-        q4=(conditions['index'] and Q(index=conditions['index'])) or None
-        q5=Q(status=1)
-        query_conditions=reduce(lambda x,y:x&y,filter(lambda x:x!=None,[q1,q2,q3,q4,q5]))                
-        apply_records=AuxiliaryToolApplyCard.objects.filter(query_conditions)
-        context['rets']=apply_records
-        return render_to_string('storage/auxiliarytools/entry_apply_detail_table.html',context)    
+        print conditions
+        context['apply_cards']=get_weld_filter(AuxiliaryToolApplyCard,conditions)
+        print context['apply_cards']
+    else:
+        print form.errors
+    return render_to_string('storage/auxiliarytools/apply_card_table.html',context)    
 
 """
 @dajaxice_register
@@ -502,34 +485,41 @@ def entryItemSave(request,form,mid):
     return simplejson.dumps(data)
 
 @dajaxice_register
-def saveRemarkStoreRoom(request,form,mid,typeid):
+def saveSteelEntryStoreRoom(request,form,mid):
     form = steelEntryItemsForm(deserialize_form(form))
-    if typeid:
-        item = BarSteelMaterialPurchasingEntry.objects.get(id = mid)
-        pur_entry = item.card_info.barsteelmaterialpurchasingentry_set.all()
-    else:
-        item = BoardSteelMaterialPurchasingEntry.objects.get(id = mid)
-        pur_entry = item.card_info.boardsteelmaterialpurchasingentry_set.all()
-    flag = False
+    item = SteelMaterialEntryItems.objects.get(id = mid)
+    entry = item.entry
+    items = entry.steelmaterialentryitems_set.all()
     if form.is_valid():
-        remark = form.cleaned_data['remark']
         storeroom_id = form.cleaned_data['store_room']
         store_room = StoreRoom.objects.get(id = storeroom_id)
-    if item.card_info.entry_status == STORAGESTATUS_KEEPER:
-        item.remark = remark
-        item.save()
-        item.steel_material.store_room = store_room
-        item.steel_material.save()
-        flag = True
-        message = u"修改成功"
-    else:
-        message = u"修改失败，入库单已确认过"
-    if typeid:
-        html = render_to_string("storage/widgets/barmaterialentrytable.html",{"entry_set":pur_entry})
-    else:
-        html = render_to_string("storage/widgets/boardmaterialentrytable.html",{"entry_set":pur_entry})
+        if entry.entry_status == STORAGESTATUS_KEEPER:
+            item.store_room = store_room
+            item.save()
+            message = u"修改成功"
+        else:
+            message = u"修改失败，入库单已确认过"
+    html = render_to_string("storage/wordhtml/steelentryitems.html",{"entry":entry,"items":items})
     data = {
-        "flag":flag,
+        "message":message,
+        "html":html,
+    }
+    return simplejson.dumps(data)
+
+@dajaxice_register
+def saveSteelEntryRemark(request,form,eid):
+    entry = SteelMaterialEntry.objects.get(id = eid)
+    form = steelEntryRemarkForm(deserialize_form(form),instance=entry)
+    items = entry.steelmaterialentryitems_set.all() 
+    if form.is_valid():
+        if entry.entry_status == STORAGESTATUS_KEEPER:
+            form.save()
+            message = u"修改成功"
+        else:
+            message = u"修改失败，入库单已确认过"
+            
+    html = render_to_string("storage/wordhtml/steelentry.html",{"entry":entry,"items":items,"BAR_STEEL":BAR_STEEL})
+    data = {
         "message":message,
         "html":html,
     }
@@ -548,6 +538,7 @@ def entryConfirm(request,role,eid):
     items = entry.weldmaterialentryitems_set.all()
     html = render_to_string("storage/wordhtml/weldentryitemstable.html",{"items":items,"is_show":is_show,"entry":entry})
     data["html"] = html
+    data["role"] = role
     return simplejson.dumps(data)    
 
 def handleEntryConfirm_Keeper(request,entry):
@@ -563,34 +554,23 @@ def handleEntryConfirm_Keeper(request,entry):
     return {"message":message},is_show
 
 @dajaxice_register
-def steelEntryConfirm(request,eid,entry_code):
+def steelEntryConfirm(request,eid,role):
     try:
-        entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-        if entry.entry_status == STORAGESTATUS_KEEPER:
-            entry.form_code = entry_code
-            steel_entry_set = SteelMaterialPurchasingEntry.objects.get(form_code = entry.form_code)
-            if steel_entry_set.steel_type == BOARD_STEEL:
-                boardsteel_set = steel_entry_set.boardsteelmaterialpurchasingentry_set.all()
-                for boardsteel in boardsteel_set:
-                    ledger = boardsteel.steel_material.boardsteelmaterialledger
-                    ledger.quantity = ledger.quantity + boardsteel.quantity
-                    ledger.save()
-            elif steel_entry_set.steel_type == BAR_STEEL:
-                barsteel_set = steel_entry_set.barsteelmaterialpurchasingentry_set.all()
-                for barsteel in barsteel_set:
-                    ledger = barsteel.steel_material.barsteelmaterialledger
-                    ledger.quantity = ledger.quantity + barsteel.quantity
-                    ledger.save()
-            entry.entry_status = STORAGESTATUS_END
-            entry.entry_time = datetime.date.today()
-            entry.save()
-            flag = True
-        else:
-            flag = False
+        entry = SteelMaterialEntry.objects.get(id = eid)
+        if role == "keeper": 
+            if entry.entry_status == STORAGESTATUS_KEEPER:
+                createSteelMaterialStoreList(entry)
+                entry.entry_status = STORAGESTATUS_END
+                entry.keeper = request.user
+                entry.save()
+                message =u"入库单确认成功"
+            else:
+                message = u"入库单已经确认过"
     except Exception,e:
-        flag = False
+        message = u"入库单确认失败"
         print e
-    return simplejson.dumps({'flag':flag})
+    html = render_to_string("storage/wordhtml/steelentry.html",{"entry":entry,"items":entry.steelmaterialentryitems_set.all(),"BAR_STEEL":BAR_STEEL})
+    return simplejson.dumps({'message':message,"html":html})
 
 @dajaxice_register
 def getOverTimeItems(request):
@@ -986,9 +966,8 @@ def getSearchMaterielContext(request,form,is_production = True):
 @dajaxice_register
 def searchWeldEntry(request,searchform):
     form = WeldEntrySearchForm(deserialize_form(searchform))
-    replace_dic = {"search_time_start":"entry_time__gte","search_time_end":"entry_time__lte"}
     if form.is_valid():
-        entry_set = get_set_filter(WeldMaterialEntry,form.cleaned_data,replace_dic).order_by("-entry_time")
+        entry_set = get_set_filter(WeldMaterialEntry,form.cleaned_data,replace_dic).order_by("-create_time")
     else:
         print form.errors
         entry_set = []
@@ -997,15 +976,16 @@ def searchWeldEntry(request,searchform):
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
-def searchMaterial(request,search_form,search_type,aid):
-    db_model = checkStorage(search_type)
-    search_form = WeldMaterialSearchForm(deserialize_form(search_form))
-    apply_card = WeldingMaterialApplyCard.objects.get(id = aid)
+def searchMaterial(request,search_form,search_type,table_path):
+    (storelist_model,form_type,applycard_model) = checkStorage(search_type)
+    search_form = form_type(deserialize_form(search_form))
     if search_form.is_valid():
-        replace_dic = gen_replace_dic(search_form.cleaned_data,"entry_item")
-        store_items = get_weld_filter(db_model,search_form.cleaned_data,replace_dic).filter(item_status = ITEM_STATUS_NORMAL)
-        for item in store_items:
-            html = render_to_string("storage/searchmaterial/store_weld_items_table.html",{"store_items":store_items,"apply_card":apply_card})
+        if search_type=="weld":
+            replace_dic = gen_replace_dic(search_form.cleaned_data,"entry_item")
+            store_items = get_weld_filter(storelist_model,search_form.cleaned_data,replace_dic).filter(item_status = ITEM_STATUS_NORMAL).order_by("create_time")
+        else:
+            store_items = get_weld_filter(storelist_model,search_form.cleaned_data)
+    html = render_to_string(table_path,{"store_items":store_items,})
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
@@ -1067,3 +1047,98 @@ def weldRefundConfirm(request,rid,role):
 
     html = render_to_string("storage/wordhtml/weldrefundconfirm.html",{"ref_obj":ref_obj})
     return simplejson.dumps({"html":html,"message":message})
+
+@dajaxice_register
+def steelMaterialApply(request,select_item,mid):
+    flag = False
+    try:
+        storelist = SteelMaterialStoreList.objects.get(id=select_item)
+        applyitem = SteelMaterialApplyCardItems.objects.get(id=mid)
+        applyitem.storelist = storelist
+        if applyitem.apply_card.status == APPLYCARD_KEEPER:
+            if applyitem.apply_count <= storelist.count:
+                applyitem.save()
+                flag = True
+                message = u"材料选择成功"
+            else:
+                message = u"所选材料数量不足"
+        else:
+            message = u"领用单已经确认不能再修改"
+    except Exception,e:
+        message = u"材料选择失败"
+        print e
+        
+    return simplejson.dumps({"message":message,"flag":flag})
+
+@dajaxice_register
+@transaction.commit_manually
+def steelApplyCardConfirm(request,aid,role):
+    applycard = SteelMaterialApplyCard.objects.get(id = aid)
+    items = applycard.steelmaterialapplycarditems_set.all()
+    flag = True
+    if role == "keeper" and applycard.status == APPLYCARD_KEEPER:
+        applycard.status = APPLYCARD_END
+        applycard.keeper = request.user
+        applycard.save()
+        for item in items:
+            storelist = item.storelist
+            if storelist != None:
+                storelist.count -= item.apply_count
+                storelist.save()
+            else:
+                flag = False
+                break;
+        if flag:
+            message = u"领用单确认成功"
+        else:
+            applycard.keeper = None
+            message = u"还有领用项未分配库存材料"
+    else:
+        flag = False
+        message = u"领用单确认失败"
+    html = render_to_string("storage/wordhtml/steelapplycard.html",{"items":items,"applycard":applycard})
+    if flag:
+        transaction.commit()
+    else:
+        transaction.rollback()
+    return simplejson.dumps({"message":message,"html":html})
+
+@dajaxice_register
+def steelRefundConfirm(request,rid):
+    try:
+        refund = SteelMaterialRefundCard.objects.get(id=rid)
+        if refund.steel_type == BOARD_STEEL:
+            items = refund.boardsteelmaterialrefunditems
+            items_table_path = "steelboardrefund.html"
+        else:
+            items = refund.bardsteelmaterialrefunditems_set.all
+        updateSteelStoreList(refund,items)
+        refund.status = STORAGESTATUS_END
+        refund.keeper = request.user
+        refund.save()
+        message = u"退库成功"
+    except Exception,e:
+        message = u"退库失败"
+        print e
+    items_table_path = "storage/wordhtml/" + items_table_path
+    html = render_to_string(items_table_path,{"refund":refund,"items":items})
+    return simplejson.dumps({"html":html,"message":message})
+
+def updateSteelStoreList(refund,items):
+    if refund.steel_type == BOARD_STEEL:
+        old_storelist = items.applyitem.storelist
+        return_time = old_storelist.return_time + 1
+        new_storelist = SteelMaterialStoreList(entry_item=old_storelist.entry_item,specification=items.specification,steel_type=old_storelist.steel_type,count=items.count,return_time=return_time,weight=items.weight,refund=refund.id)
+        new_storelist.save() 
+
+@dajaxice_register
+def outsideCardSearch(request,role,form):
+    OutsideCardDict = {"entry":OutsideStandardEntry}
+    TableHtmlPathDict = {"entry":"outsideentryhometable",}
+    form = OutsideEntrySearchForm(deserialize_form(form))
+    card_model = OutsideCardDict[role]
+    html_path = "storage/widgets/"+TableHtmlPathDict[role]+".html"
+    if form.is_valid():
+        card_set = get_weld_filter(card_model,form.cleaned_data)
+    html = render_to_string(html_path,{"card_set":card_set,"STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER})
+    return simplejson.dumps({"html":html})

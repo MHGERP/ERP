@@ -26,9 +26,9 @@
         <td>{{item.material.name}}</td>
         <!-- <td>{{item.}}</td> -->
         <td>{{item.count}}</td>
-        <td>{{item.total_weight}}</td>
+        <td>{{item.total_weight_cal}}</td>
         <!-- <td></td> -->
-        <td><button class="btn btn-primary">查看相关库存</button></td>
+        <td><button class="btn btn-primary" data-toggle="modal" data-target="#related_model">查看相关库存</button></td>
         <td><button class="btn btn-danger" uid={{item.id}}>删除</button></td>
         <td>{{item.status}}</td>
     </tr>

@@ -6,7 +6,7 @@
 	</tr>
 	<tr>
 		<td colspan="4">{{work_order}}</td>
-		<td colspan="2">{{operator}}</td>
+		<td colspan="2">{{group_num}}</td>
 		<td colspan="2">1</td>
 	</tr>
 	<tr>
@@ -19,10 +19,10 @@
 		<td>票号</td>
 		<td>工时</td>
 	</tr>
-	{%for item in process%}
+	{%for item in process_detail_list%}
 	{% cycle '<tr>' '' '' ''%}
-	    <td>{{item.materiel_belong.index}}</td>
-	    <td>{{item.hour}}</td>
+	    <td>{{item.materiel_belong.index|default:""}}</td>
+	    <td>{{item.work_hour|default:""}}</td>
 	{% cycle '' '' '' '</tr>'%}
 	{%endfor%}
 </table>

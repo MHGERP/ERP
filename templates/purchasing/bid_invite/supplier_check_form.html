@@ -1,0 +1,43 @@
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL  }}style/purchasing/table.css" >
+    <table class="table table-bordered" id="supplier_check_form_table">
+        <thead>
+<form  method="POST" action="" id="supplier_check_form">
+            <tr>
+                <th>{{supplier_check_form.apply_company.label}}</th>
+                <th>{{supplier_check_form.apply_company}}</th>
+                <th>{{supplier_check_form.apply_date.label}}</th>
+                <th>{{supplier_check_form.apply_date}}</th>
+            </tr> 
+            <tr>
+                <th>{{supplier_check_form.bid_project.label}}</th>
+                <th>{{supplier_check_form.bid_project}}</th>
+                <th>{{supplier_check_form.price_estimate.label}}</th>
+                <th>{{supplier_check_form.price_estimate}}</th>
+            </tr>
+            <tr>
+                <th>{{supplier_check_form.base_situation.label}}</th>
+                <th colspan=3>{{supplier_check_form.base_situation}}</th>
+            </tr>
+            </form>
+            <tr>
+                <th>序号</th>
+                <th>拟投标单位</th>
+                <th colspan=2></th>
+            </tr>
+            {% for item in supplier_set%}
+            <tr>
+            <th>{{forloop.counter}}</th>
+            <th>{{item.supplier}}</th>
+            <form class="supplierform" supplierselect={{item.id}}>
+                <th colspan=2>{{item.form.A.label}}&nbsp;&nbsp;{{item.form.A}}&nbsp;&nbsp;{{item.form.B.label}}&nbsp;&nbsp;{{item.form.B}}&nbsp;&nbsp;{{item.form.C.label}}&nbsp;&nbsp;{{item.form.C}}&nbsp;&nbsp;{{item.form.D.label}}&nbsp;&nbsp;{{item.form.D}}&nbsp;&nbsp;{{item.form.E.label}}&nbsp;&nbsp;{{item.form.E}}&nbsp;&nbsp;{{item.form.F.label}}&nbsp;&nbsp;{{item.form.F}}&nbsp;&nbsp;{{item.form.G.label}}&nbsp;&nbsp;{{item.form.G}}</th>
+                </form>
+        </tr>
+            {% endfor%}
+        </thead>
+  </table>
+  <div>
+    <br>
+    <button type="button" class="btn btn-primary"  id="suppliercheck_confirm">审核表表保存</button>
+    <button type="button" class="btn btn-success" id="suppliercheck_submit" style="float:right">审核表表提交</button>
+</div>

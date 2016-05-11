@@ -18,13 +18,30 @@ class MaterielForm(forms.ModelForm):
             "index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "sub_index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "schematic_index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
-            "parent_schematic_index" : forms.TextInput(attrs = {"class" : "input-medium"}),
+            "parent_schematic_index" : forms.TextInput(attrs = {"class" : "input-medium", "readonly": "true"}),
             "material": forms.Select(attrs = {"class": "input-medium", "readonly": "true"}),
             "count": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "net_weight": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "total_weight": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "specification": forms.TextInput(attrs = {"class": "input-medium"}),
+        }
+
+class PrincipalItemForm(forms.ModelForm):
+    """
+    JunHU
+    """
+    class Meta:
+        model = PrincipalItem
+        exclude = ("order", )
+        widgets = {
+           "size": forms.TextInput(attrs = {"class": "input-medium"}),
+           "count": forms.TextInput(attrs = {"class": "input-medium"}),
+           "weight": forms.TextInput(attrs = {"class": "input-medium"}),
+           "stardard": forms.TextInput(attrs = {"class": "input-medium"}),
+           "status": forms.TextInput(attrs = {"class": "input-medium"}),
+           "remark": forms.TextInput(attrs = {"class": "input-medium"}),
+           "material": forms.Select(attrs = {"class": "input-medium"}),
         }
 
 class ProcessReviewForm(forms.ModelForm):
@@ -40,6 +57,20 @@ class ProcessReviewForm(forms.ModelForm):
             # "materiel":forms.CharField( )
         }
 
+class AuxiliaryForm(forms.ModelForm):
+    """
+    MH Chen
+    """
+    class Meta:
+        model = AuxiliaryItem
+        widgets = {
+            "materiel_belong": forms.TextInput(attrs = {"readonly" : "true"}),
+            "quota_coeficient": forms.TextInput(attrs = {"readonly" : "true"}),
+            "quota": forms.TextInput(attrs = {"readonly" : "true"}),
+            "stardard": forms.TextInput(attrs = {"readonly" : "true"}),
+            "remark": forms.TextInput(attrs = {"readonly" : "true"}),
+
+        }
     
 class ProcessingForm(forms.Form):
     """
@@ -84,17 +115,14 @@ class WeldQuotaForm(forms.ModelForm):
     """
     class Meta:
         model = WeldQuota
-        exclude = ('quota',)
+        exclude = ('order')
         widgets = {
-    
             "weld_material": forms.Select(attrs = {"class": "input-small"}),
             "size": forms.TextInput(attrs = {"class": "input-small"}),
             "stardard": forms.TextInput(attrs = {"class": "input-small"}),
             "remark": forms.TextInput(attrs = {"class": "input-large"}),
+            "quota": forms.TextInput(attrs = {"class": "input-small"}),
         }
-    # def __init__(self, *args, **kwargs):
-    #     super(WeldQuotaForm, self).__init__(*args, **kwargs)
-    #     self.fields["weld_material"].choices = tuple([(item.categories, item.display_material_name()) for item in Material.objects.all()])
 
 class WeldJointTechDetailForm(forms.ModelForm):
     """
@@ -102,7 +130,7 @@ class WeldJointTechDetailForm(forms.ModelForm):
     """
     class Meta:
         model = WeldJointTechDetail
-        exclude = ('id', 'weld_joint')
+        exclude = ('id', 'weld_joint', 'is_save')
         widgets = {
             "joint_index" : forms.TextInput(attrs = {"class" : "input-small"}),
             "bm_texture_1" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),

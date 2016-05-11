@@ -1,14 +1,23 @@
 <div class="row-fluid" style="margin-top: 0px">
-    <div class="span4">
+    <div class="span3">
         <div class="input-prepend">
-            <span class="add-on">工作票号:</span>
+            <span class="add-on">票号:</span>
             {{materiel_form.index}}
         </div>
         {% if materiel_form.errors.index %}
             {{ materiel_form.errors.index }}
         {% endif %}
     </div>
-    <div class="span4">
+    <div class="span3">
+        <div class="input-prepend">
+            <span class="add-on">部件号:</span>
+            {{materiel_form.sub_index}}
+        </div>
+        {% if materiel_form.errors.sub_index %}
+            {{ materiel_form.errors.sub_index }}
+        {% endif %}
+    </div>
+    <div class="span3">
         <div class="input-prepend">
             <span class="add-on">图号:</span>
             {{materiel_form.schematic_index}}
@@ -17,7 +26,7 @@
             {{ materiel_form.errors.schematic_index }}
         {% endif %}
     </div>
-    <div class="span4">
+    <div class="span3">
         <div class="input-prepend">
             <span class="add-on">名称:</span>
             {{materiel_form.name}}
@@ -39,7 +48,7 @@
     </div>
     <div class="span4">
         <div class="input-prepend">
-            <span class="add-on">材料:</span>
+            <span class="add-on">材质:</span>
             {{materiel_form.material}}
         </div>
         {% if materiel_form.errors.material %}

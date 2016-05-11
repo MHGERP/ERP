@@ -1,0 +1,36 @@
+
+<table class="table table-bordered" id="bid_accetance_table">
+    <thead>
+
+            <tr>
+                <td>{{bid_acceptance_form.document_id.label}}</td>
+                <td>{{bid_acceptance.document_id}}</td>
+                <td>{{bid_acceptance_form.apply_company.label}}</td>
+                <td>{{bid_acceptance.apply_company}}</td>
+
+            </tr>
+            <tr>
+                <td>{{bid_acceptance_form.apply_content.label}}</td>
+                <td>{{bid_acceptance.apply_content}}</td>
+                <td>{{bid_acceptance_form.amount.label}}</td>
+                <td>{{bid_acceptance.amount}}</td>
+
+            </tr>
+            <tr>
+                <td>{{bid_acceptance_form.accept_date.label}}</td>
+                <td>{{bid_acceptance.accept_date|date:"Y年m月d日"}}</td>
+                <td>{{bid_acceptance_form.accept_money.label}}</td>
+                <td>{{bid_acceptance.accept_money}}</td>
+            </tr>
+            <tr>
+                <td>{{bid_acceptance_form.accept_supplier.label}}</td>
+                <td colspan=3>{{bid_acceptance.accept_supplier}}</td>
+            </tr>
+            <tr>
+                <td>{{bid_acceptance_form.contact_people.label}}</td>
+                <td>{{bid_acceptance.contact_people}}</td>
+                <td>{{bid_acceptance_form.contact_tel.label}}</td>
+                <td>{{bid_acceptance.contact_tel}}</td>
+            </tr>
+    </thead>
+</table>

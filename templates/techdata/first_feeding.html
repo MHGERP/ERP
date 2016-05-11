@@ -9,13 +9,35 @@
 {% endblock %}
 
 {% block inner_content%}
-<form class="form-search ">
+<form class="form-search" itype={{inventory_type}}>
    工作令: 
    {{ work_order_form.work_order }}
     <span class="btn" id="order_search">检索</span> 
+	<span style="float: right">
+票号：	<input type="text" id="input-index" style="width: 50px"></input>
+    <span class="btn btn-primary" id="btn-add">添加</span>
+    <span class="btn btn-success" id="fast_generate">快捷生成</span>
+	</span>
 </form>
 
+<div class="widget-box" id="widget-box">
 
-{% include "techdata/widgets/first_feeding_table.html" %}
+</div>
+<div id="info_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.3" >
+  <div class="modal-header">
+    <h2 id="groupLabel">物料信息卡</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+	<form class="form" id="info_form" class="well">
+		备注：<input type="text" id="input-remark"/>
+	</form>
+  </div>
+  <div class="modal-footer">
+	<button class="btn btn-primary" id="btn_save">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+<script type="text/javascript" src="{{STATIC_URL}}js/techdata/first_feeding.js"></script>
 
 {% endblock%}

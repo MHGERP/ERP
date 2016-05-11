@@ -6,8 +6,126 @@ from users.models import Group
 from purchasing.models import MaterielExecute
 import settings
 
-class WeldQuota(models.Model):
+class AuxiliaryMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "auxiliary_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "auxiliary_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"辅材定额明细签章"
+        verbose_name_plural = u"辅材定额明细签章"
+    def __unicode__(self):
+        return self.order.order_index
+
+class AuxiliaryItem(models.Model):
+    materiel_belong = models.OneToOneField(Materiel, verbose_name = u"所属物料")
+    quota_coeficient = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"定额系数")
+    quota = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"定额")
+    stardard = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"标准代码")
+    remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
+    class Meta:
+        verbose_name = u"辅材"
+        verbose_name_plural = u"辅材"
+    def __unicode__(self):
+        return self.materiel_belong.name
+class PrincipalMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "principal_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "principal_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"主材定额签章"
+        verbose_name_plural = u"主材定额签章"
+    def __unicode__(self):
+        return self.order.order_index
+
+class PrincipalItem(models.Model):
     order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
+    size = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"规格")
+    count = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"数量")
+    weight = models.FloatField(null = True, blank = True, verbose_name = u"单重")
+    material = models.ForeignKey(Material, null = True, blank = True, verbose_name = u"材质")
+    stardard = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"执行标准")
+    status = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"供货状态")
+    remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
+    def total_weight(self):
+        if self.count and self.weight:
+            return self.weight * int(self.count)
+    def stardard_status(self):
+        return " ".join((self.stardard, self.status))
+    class Meta:
+        verbose_name = u"主材"
+        verbose_name_plural = u"主材"
+    def __unicode__(self):
+        return self.size
+
+class CooperantMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "cooperant_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "cooperant_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"工序性外些明细签章"
+        verbose_name_plural = u"工序性外协明细签章"
+    def __unicode__(self):
+        return self.order.order_index
+
+class CooperantItem(models.Model):
+    materiel_belong = models.OneToOneField(Materiel, verbose_name = u"所属物料")
+    remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
+    class Meta:
+        verbose_name = u"工序性外协件"
+        verbose_name_plural = u"工序性外协件"
+    def __unicode__(self):
+        return self.materiel_belong.name
+
+class FirstFeedingMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "firstfeeding_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "firstfeeding_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"先投件明细签章"
+        verbose_name_plural = u"先投件明细签章"
+    def __unicode__(self):
+        return self.order.order_index
+
+class FirstFeedingItem(models.Model):
+    materiel_belong = models.OneToOneField(Materiel, verbose_name = u"所属物料")
+    remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
+    class Meta:
+        verbose_name = u"先投件"
+        verbose_name_plural = u"先投件"
+    def __unicode__(self):
+        return self.materiel_belong.name
+
+class OutPurchasedMark(models.Model):
+    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "outpurchased_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "outpurchased_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+    class Meta:
+        verbose_name = u"外购件明细签章"
+        verbose_name_plural = u"外购件明细签章"
+    def __unicode__(self):
+        return self.order.order_index
+
+class OutPurchasedItem(models.Model):
+    materiel_belong = models.OneToOneField(Materiel, verbose_name = u"所属物料")
+    remark = models.CharField(max_length = 100, null = True, blank = True, verbose_name = "备注")
+    class Meta:
+        verbose_name = u"外购件"
+        verbose_name_plural = u"外购件"
+    def __unicode__(self):
+        return self.materiel_belong.name
+
+class WeldQuota(models.Model):
+    order = models.ForeignKey(WorkOrder,null = True, blank = True,verbose_name = u"所属工作令")
     weld_material = models.ForeignKey(Material, verbose_name = u"焊材")
     size = models.CharField(null = True, blank = True, max_length = 100, verbose_name = "规格")
     quota = models.FloatField(null = True, blank = True, verbose_name = "定额")
@@ -150,7 +268,7 @@ class WeldJointTech(models.Model):
         verbose_name = u"焊接接头工艺分析表"
         verbose_name_plural = u"焊接接头工艺分析表"
     def __unicode__(self):
-        return self.index
+        return self.order.order_index
 
 class WeldJointTechDetail(models.Model):
     weld_joint = models.ForeignKey(WeldJointTech, verbose_name = u"焊接接头工艺分析表")
@@ -164,7 +282,7 @@ class WeldJointTechDetail(models.Model):
     procedureQualification_index = models.ForeignKey(ProcedureQualificationIndex, blank = True, null = True,max_length = 100, verbose_name = u"焊接工艺评定编号")
     weld_certification = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目", related_name = "weld_certification")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
-    is_save = models.BooleanField(default = False, verbose_name = u"是否保存")
+    is_save = models.BooleanField(default = True, verbose_name = u"是否保存")
     class Meta:
         verbose_name = u"焊接接头"
         verbose_name_plural = u"焊接接头"

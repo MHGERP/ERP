@@ -1,87 +1,57 @@
+<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL  }}style/purchasing/table.css" >
 <form class="well form" method="POST" action="" id="bid_apply_form">
-  {% csrf_token %}
-  <table class="table table-bordered" id="bid_apply_form_table">
-    <thead>
-      <tr>
-        <th>{{bidApplyForm.apply_company.label}}</th>
-        <th>{{bidApplyForm.apply_company}}</th>
-        <th colspan="2">{{bidApplyForm.demand_company.label}}</th>
-        <th colspan="2">{{bidApplyForm.demand_company}}</th>
-      </tr>
-      <tr>
-        <th>{{bidApplyForm.bid_project.label}}</th>
-        <th>{{bidApplyForm.bid_project}}</th>
-        <th colspan="2">{{bidApplyForm.bid_date.label}}</th>
-        <th colspan="2">{{bidApplyForm.bid_date}}</th>
-      </tr>
-      <tr>
-        <th>{{bidApplyForm.project_category.label}}</th>
-        <th>{{bidApplyForm.project_category}}</th>
-        <th colspan="2">{{bidApplyForm.work_order.label}}</th>
-        <th colspan="2">{{bidApplyForm.work_order}}</th>
-      </tr>
-      <tr>
-        <th>{{bidApplyForm.special_model.label}}</th>
-        <th>{{bidApplyForm.special_model}}</th>
-        <th>{{bidApplyForm.amount.label}}</th>
-        <th>{{bidApplyForm.amount}}</th>
-        <th style="width:50px !important;">{{bidApplyForm.core_part.label}}</th>
-        <th>{{bidApplyForm.core_part}}</th>
-    </thead>
-    <tbody>
-      <tr>
-        <td>拟投标单位</td>
-        <td>供方代码</td>
-        <td>认定业务范围</td>
-    </tr>
-    {% for item in supplier_set%}
-    <tr>
-      <td>{{item.supplier.supplier_name}}</td>
-      <td>{{item.supplier.supplier_id}}</td>
-        <td></td>
-    </tr>
-    {% endfor%}
-      {% for item in bidComments%}
-      <tr>
-        <td>{{item.user.userinfo}}</td>
-        <td colspan="2"> {{item.comment}}</td>
-      </tr>
-      {% endfor%}
-    </tbody>
-  </table>
-  {% if bidform.bid_status.part_status == BIDFORM_PART_STATUS_INVITE_BID_APPLY%}
-  <div>
-    <br>
-    <button type="button" class="btn btn-primary"  id="apply_confirm">标单申请表保存</button>
-    <button type="button" class="btn btn-inverse"  id="apply_reset">标单申请表重置</button>
-    <button type="button" class="btn btn-success" id="apply_submit" style="float:right">标单申请表提交</button>
-  </div>
-  {%endif%}
-</form>
-{% if bidform.bid_status.part_status > BIDFORM_PART_STATUS_INVITE_BID_APPLY  and bidform.bid_status.part_status < BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED%}
-<form class="well form" method="POST" action="" id="bid_form">
-  {% csrf_token %}
-  <div class="control-group">
-    <label class="control-label" for="inputEmail">{{bidCommentForm.judgeresult.label}}</label>
-    <div class="controls">
-      {{bidCommentForm.judgeresult}}
+    {% csrf_token %}
+    <table class="table table-bordered" id="bid_apply_form_table">
+        <thead>
+            <form  method="POST" action="" id="bid_apply_form">
+                <tr>
+                    <th>{{bidApplyForm.apply_company.label}}</th>
+                    <th>{{bidApplyForm.apply_company}}</th>
+                    <th colspan="2" >{{bidApplyForm.demand_company.label}}</th>
+                    <th colspan="2">{{bidApplyForm.demand_company}}</th>
+                </tr>
+                <tr>
+                    <th>{{bidApplyForm.bid_project.label}}</th>
+                    <th>{{bidApplyForm.bid_project}}</th>
+                    <th colspan="2">{{bidApplyForm.bid_date.label}}</th>
+                    <th colspan="2">{{bidApplyForm.bid_date}}</th>
+                </tr>
+                <tr>
+                    <th>{{bidApplyForm.project_category.label}}</th>
+                    <th>{{bidApplyForm.project_category}}</th>
+                    <th colspan="2">{{bidApplyForm.work_order.label}}</th>
+                    <th colspan="2">{{bidApplyForm.work_order}}</th>
+                </tr>
+                <tr>
+                    <th>{{bidApplyForm.special_model.label}}</th>
+                    <th>{{bidApplyForm.special_model}}</th>
+                    <th>{{bidApplyForm.amount.label}}</th>
+                    <th>{{bidApplyForm.amount}}</th>
+                    <th style="width:50px !important;">{{bidApplyForm.core_part.label}}</th>
+                    <th>{{bidApplyForm.core_part}}</th>
+                </tr>
+            </form>
+                <tr>
+                    <th colspan=2>拟投标单位</th>
+                    <th colspan=2>供方代码</th>
+                    <th colspan=2>认定服务范围</th>
+                </tr>
+                {% for item in supplier_set%}
+                <tr>
+                    <th colspan=2>{{item.supplier}}</th>  
+                    <form class="supplierform" supplierselect={{item.id}}>
+                        <th colspan=2>{{item.form.supplier_code}}</th>
+                        <th colspan=2>{{item.form.sphere}}</th>
+                    </form>
+                    {% endfor%}
+                </tr>
+        </thead>
+    </table>
+    {% if bidform.bid_status.part_status == BIDFORM_PART_STATUS_INVITE_BID_APPLY%}
+    <div>
+        <br>
+        <button type="button" class="btn btn-primary"  id="apply_confirm">标单申请表保存</button>
+        <button type="button" class="btn btn-success" id="apply_submit" style="float:right">标单申请表提交</button>
     </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="inputPassword">{{bidCommentForm.reason.label}}</label>
-    <div class="controls">
-      {{bidCommentForm.reason}}
-    </div>
-  </div>
-  <button type="button" class="btn"> 提交 </button>
-<form>
-{%endif%}
+    {%endif%}
 
-{% if bidform.bid_status.part_status == BIDFORM_PART_STATUS_INVITE_BID_WINBIDNOTICE_AOORIVED%}
-<div class="row" >
-  <center>
-    <button class="btn btn-large btn-primary" type="button" id="contract_confirm" style="text-align: center">合同确认</button>
-  </center>
-</div>
-<br>
-{%endif%}

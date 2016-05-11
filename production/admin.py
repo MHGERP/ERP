@@ -9,6 +9,18 @@ RegisterClass = (
     ProductionPlan,
     ProductionWorkGroup,
     ProcessDetail,
+    SubMateriel,
 )
+
 for item in RegisterClass:
     admin.site.register(item)
+
+class ProductionUserAdmin(admin.ModelAdmin):
+    search_fields = ['production_user_id__name']
+
+RegisterSearchClass = (
+    (ProductionUser,ProductionUserAdmin),
+)
+
+for temp in RegisterSearchClass:
+    admin.site.register(temp[0],temp[1])

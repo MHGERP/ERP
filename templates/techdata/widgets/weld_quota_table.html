@@ -32,26 +32,19 @@
                     <th>执行标准</th>
                     <th>定额</th>
                     <th>备注</th>
+                    <th>操作</th>
             </tr>
-           <!-- {% for item,value in dic.items%}
-            <tr class="tr_weldseam" >
-                
-                <td id="id_weld_rod">{% if item.2 == "weld_rod" %}{{item.0}}{% endif %}</td>
-                <td id="id_weld_wire">{% if item.2 == "weld_wire" %}{{item.0}}{% endif %}</td>
-                <td id="id_weld_ribbon">{% if item.2 == "weld_ribbon" %}{{item.0}}{% endif %}</td>
-                <td id="id_weld_flux">{% if item.2 == "weld_flux" %}{{item.0}}{% endif %}</td>
-                <td >{{item.1}}</td>
-                <td>{{value}}</td>
-            </tr>
-            {% endfor %} -->
             {% for item in weld_quota_list %}
-            <tr iid="{{item.id}}" class="tr_materiel">
-                <td>{{item.weld_material.get_categories_display}}</td>
-                <td>{{item.weld_material}}</td>
-                <td>{{item.size}}</td>
-                <td>{{item.stardard}}</td>
-                <td>{{item.quota}}</td>
-                <td>{{item.remark}}</td>
+            <tr iid="{{item.id}}"class="tr_materiel">
+                <td >{{item.weld_material.get_categories_display|default:""}}</td>
+                <td>{{item.weld_material|default:""}}</td>
+                <td>{{item.size|default:""}}</td>
+                <td>{{item.stardard|default:""}}</td>
+                <td>{{item.quota|default:""}}</td>
+                <td>{{item.remark|default:""}}</td>
+                <td>
+                    <span class="btn btn-danger btn-small btn-remove" did="{{item.id}}" id="id_delete">删除</span>
+                </td>
             </tr>
             {% endfor %}
         </table>

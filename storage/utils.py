@@ -4,6 +4,7 @@
 import datetime
 import const 
 from storage.models import *
+from storage.forms import *
 from purchasing.models import *
 from django.db.models import Q
 def get_weld_filter(model_type,dict,replace_dic=None):
@@ -38,13 +39,14 @@ def weldStoreItemsCreate(entry):
 
     for item in entry_items:
         try:
-            storeitem = WeldStoreList(entry_item = item , inventory_count = item.total_weight)        
+            storeitem = WeldStoreList(entry_item = item , inventory_count = item.total_weight,entry_time = entry.create_time)        
             if item.material.name == u"焊条" or item.material.name == u"焊剂":
                 production_date = item.production_date
                 storeitem.deadline = production_date.replace(production_date.year + 2)
             storeitem.save()
         except Exception,e:
             print e
+
 def storeConsume(applycard):
     specification = applycard.standard
     material_id = applycard.material_number
@@ -231,15 +233,12 @@ class AutoGenEntry(object):
 
 def checkStorage(db_type,sorce=None):
     DB_MAP = getDbMap(sorce)
-    db_model = DB_MAP[db_type]
-    return db_model
+    return DB_MAP[db_type]
 
 def getDbMap(sorce):
-    DB_MAP = {WELD:WeldStoreList,PROFILE:BarSteelMaterialLedger,SHEET:BoardSteelMaterialLedger,PURCHASED:OutsideStorageList,AUXILIARY_TOOL:AuxiliaryTool}
-    if sorce == "purchaser":    
-        for tp in WELD_TYPE_LIST:
-            if tp in WELD_TYPE_LIST:
-                DB_MAP[tp] = WeldStoreList
+    weld_tuple = (WeldStoreList,WeldStorageSearchForm,WeldingMaterialApplyCard)
+    steel_tuple = (SteelMaterialStoreList,SteelMaterialSearchForm,SteelMaterialApplyCard)
+    DB_MAP = {WELD:weld_tuple,STEEL:steel_tuple,PURCHASED:steel_tuple,AUXILIARY_TOOL:steel_tuple}
     return DB_MAP
 
 def modify_weld_item_status(items):
@@ -259,3 +258,14 @@ def gen_replace_dic(dict,fk_model):
     for k,v in dict.items():
         replace_dic[k] = fk_model+"__"+k+"__contains"
     return replace_dic
+
+def createAuxiliaryToolStoreList(entry):
+    """
+    辅助工具入库单台账更新
+    """
+    for item in entry.auxiliarytoolentryitems_set.all():
+        AuxiliaryToolStoreList(entry_item = item , inventory_count = item.count,entry_time=entry.create_time).save()
+
+def createSteelMaterialStoreList(entry):
+    for item in entry.steelmaterialentryitems_set.all():
+        SteelMaterialStoreList(entry_item=item,specification=item.specification , steel_type=entry.steel_type ,count=item.count,length=item.length,weight=item.weight,store_room=item.store_room).save()
