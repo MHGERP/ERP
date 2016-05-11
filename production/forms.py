@@ -46,10 +46,21 @@ class ProdPlanForm(ModelForm):
         super(ProdPlanForm,self).__init__(*args,**kwargs)
         self.fields["plan_date"].choices = PRODUCTION_PLAN_STAUTS_CHOICES
 
+class SubWorkOrderForm(forms.Form):
+    """
+    LiuYe
+    summary: store all work orders
+    """
+    sub_order = forms.ChoiceField(label=u"工作令", required = False, widget = forms.Select(attrs = {"class": "form-control input"}))
+    def __init__(self, *args, **kwargs):
+         super(SubWorkOrderForm, self).__init__(*args, **kwargs)
+         WORKORDER_CHOICES = tuple([("", u"----------")]  + [(item.id, item) for item in SubWorkOrder.objects.all()])
+         self.fields["sub_order"].choices = WORKORDER_CHOICES
 
-class LedgerSearchForm(WorkOrderProductionForm):
-    index__contains = forms.CharField(required=False, label=u"工作票号")
-    parent_schematic_index__contains = forms.CharField(required=False, label=u"部件图号")
+        
+class LedgerSearchForm(SubWorkOrderForm):
+    materiel_belong__index__contains = forms.CharField(required=False, label=u"工作票号")
+    materiel_belong__parent_schematic_index__contains = forms.CharField(required=False, label=u"部件图号")
 
 
 class OrderIndexForm(forms.Form):
