@@ -10,6 +10,7 @@ from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
 from sell.models import *
+from users.models import Group
 
 def productionsView(request):
     context = {
@@ -24,8 +25,8 @@ def product_bidFile_add(request):
         else:
             product_id = request.POST['product_id']
             group_type = request.POST['group_type']
-            print product_id
-            print group_type
+            #print product_id
+            #print group_type
             product = Product.objects.get(id = product_id)
             bidfile = BidFile()
             bidfile.file_obj = request.FILES['product_file']
@@ -35,11 +36,16 @@ def product_bidFile_add(request):
             bidfile.file_type = False
             bidfile.save()
             if group_type == "manufacture":
-                product.manufacture_file = bidfile
+                group = Group.objects.filter(name__icontains = u"生产")
+                product.manufacture_file_down = bidfile
             elif group_type == "techdata":
-                product.techdata_file = bidfile
+                group = Group.objects.filter(name__icontains = u"工艺")
+                product.techdata_file_down = bidfile
             else:
-                product.purchasing_file = bidfile
+                group = Group.objects.filter(name__icontains = u"采购")
+                product.purchasing_file_down = bidfile
+            bidfile.recv_group = group[0] if len(group) > 0 else None
+            bidfile.save()
             product.save()
             file_upload_error = 1
         return HttpResponse(json.dumps({"file_upload_error" : file_upload_error, }))
