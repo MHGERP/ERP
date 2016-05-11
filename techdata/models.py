@@ -30,11 +30,13 @@ class PrincipalItem(models.Model):
     def total_weight(self):
         if self.count and self.weight:
             return self.weight * int(self.count)
+    def stardard_status(self):
+        return " ".join((self.stardard, self.status))
     class Meta:
         verbose_name = u"主材"
         verbose_name_plural = u"主材"
     def __unicode__(self):
-        return self.materiel_belong.name
+        return self.size
 
 class CooperantMark(models.Model):
     order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")

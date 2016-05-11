@@ -18,13 +18,30 @@ class MaterielForm(forms.ModelForm):
             "index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "sub_index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "schematic_index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
-            "parent_schematic_index" : forms.TextInput(attrs = {"class" : "input-medium"}),
+            "parent_schematic_index" : forms.TextInput(attrs = {"class" : "input-medium", "readonly": "true"}),
             "material": forms.Select(attrs = {"class": "input-medium", "readonly": "true"}),
             "count": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "net_weight": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "total_weight": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "specification": forms.TextInput(attrs = {"class": "input-medium"}),
+        }
+
+class PrincipalItemForm(forms.ModelForm):
+    """
+    JunHU
+    """
+    class Meta:
+        model = PrincipalItem
+        exclude = ("order", )
+        widgets = {
+           "size": forms.TextInput(attrs = {"class": "input-medium"}),
+           "count": forms.TextInput(attrs = {"class": "input-medium"}),
+           "weight": forms.TextInput(attrs = {"class": "input-medium"}),
+           "stardard": forms.TextInput(attrs = {"class": "input-medium"}),
+           "status": forms.TextInput(attrs = {"class": "input-medium"}),
+           "remark": forms.TextInput(attrs = {"class": "input-medium"}),
+           "material": forms.Select(attrs = {"class": "input-medium"}),
         }
 
 class ProcessReviewForm(forms.ModelForm):

@@ -265,6 +265,12 @@ AUXILIARY_TOOL_APPLY_CARD_STATUS=(
         (AUXILIARY_TOOL_APPLY_CARD_END,u'完成'),
         )
 
+REFUNDSTATUS_STEEL_CHOICES = (
+    (STORAGESTATUS_REFUNDER,u"退库人"),
+    (STORAGESTATUS_INSPECTOR,u"检查员"),
+    (STORAGESTATUS_KEEPER,u"库管员"),
+    (STORAGESTATUS_END,u"结束"),
+)
 
 
 REFUNDSTATUS_CHOICES = (
@@ -639,3 +645,9 @@ SupplierCChoices=(
     (0,u"实体"),
     (1,u"贸易")
 )
+
+SYNSIZE_FILE_LIST_STATUS = [
+    "sketch","pressure_test","craph","product","encasement_graph","mark","encasement_list","coating_detail"
+
+]
+

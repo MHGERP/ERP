@@ -148,6 +148,20 @@ class StatusChangeApplyForm(ModelForm):
     origin_status = forms.CharField(label=u"当前状态",widget=forms.TextInput(attrs={'readonly':'readonly','id':'origin_status'}))
     reason = forms.CharField(label=u"回溯原因",widget=forms.Textarea(attrs={'id':'reason','cols':'80','rows':'5'}))
 
+
+class BidAcceptanceForm(ModelForm):
+    class Meta:
+        model=BidAcceptance
+        exclude=('bid')
+    def __init__(self,*args,**kwargs):
+        bidform=kwargs.pop("bidform",None)
+        super(BidAcceptanceForm,self).__init__(*args,**kwargs)
+        if bidform != None:
+            choice=[(item.supplier.id,item.supplier.supplier_name) for item in bidform.supplierselect_set.all()]
+            choice=tuple(choice)
+            self.fields["accept_supplier"].choices=choice
+
+
 class OrderInfoForm(ModelForm):
     class Meta:
         model = Materiel

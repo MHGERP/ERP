@@ -1364,6 +1364,13 @@ def BidApplySelect(request,val,bidid):
     return simplejson.dumps({})
 
 @dajaxice_register
+def BidApplyFillFinish(request,bidid):
+    print bidid
+    bidform=BidForm.objects.get(bid_id=bidid)
+    goNextStatus(bidform,request.user)
+    return simplejson.dumps({})
+
+@dajaxice_register
 def BidApplyComment(request,bid_apply_id,usertitle,comment):
     bid_apply=bidApply.objects.get(id=bid_apply_id)
     bid_comment=BidComment(user=request.user,comment=comment,bid=bid_apply.bid,submit_date=datetime.today(),user_title=usertitle)
@@ -1414,3 +1421,15 @@ def SupplierCheckComment(request,supplier_check_id,usertitle,comment):
     bid_comment.save()
     BidNextStatus(supplier_check)
     return simplejson.dumps({})
+
+@dajaxice_register
+def BidApplyCarryFinish(request,bidid,form):
+    bid_form=BidForm.objects.get(bid_id=bidid)
+    bid_acceptance=bid_form.bidacceptance
+    bid_acceptance_form=BidAcceptanceForm(deserialize_form(form),instance=bid_acceptance)
+    if bid_acceptance_form.is_valid():
+        bid_acceptance_form.save()
+    else:
+        return simplejson.dumps({"status":1})
+    goNextStatus(bid_form,request.user)
+    return simplejson.dumps({"status":0})

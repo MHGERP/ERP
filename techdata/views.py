@@ -115,9 +115,11 @@ def principalMaterialViews(request):
     JunHU
     """
     work_order_form = WorkOrderForm()
+    principal_form = PrincipalItemForm()
     context = {
         "work_order_form" : work_order_form,
         "inventory_type": MAIN_MATERIEL,
+        "principal_form": principal_form,
     }
     return render(request, "techdata/principal_material.html", context)
 
@@ -278,6 +280,19 @@ def connectOrientationAdd(request):
 
         return HttpResponse(json.dumps({'file_upload_error' : file_upload_error}))
 
+def gen_material(name):
+    try:
+        name = int(name)
+    except:
+        pass
+    target = Material.objects.filter(name = name)
+    if target.count():
+        return target[0]
+    else:
+        item = Material(name = name)
+        item.save()
+        return item
+
 def BOMadd(request):
     """
     JunHU
@@ -313,6 +328,7 @@ def BOMadd(request):
                                              parent_schematic_index = main_materiel.parent_schematic_index,
                                              parent_name = main_materiel.parent_name,
                                              name = table.cell(2, 2).value,
+                                             material = gen_material(table.cell(2, 4).value),
                                              count = origin_count,
                                              net_weight = weight,
                                              remark = table.cell(2, 8).value,
@@ -324,6 +340,7 @@ def BOMadd(request):
                                              sub_index = 0, 
                                              schematic_index = table.cell(2, 1).value,
                                              name = table.cell(2, 2).value,
+                                             material = gen_material(table.cell(2, 4).value),
                                              count = origin_count, 
                                              net_weight = weight,
                                              remark = table.cell(2, 8).value,
@@ -346,12 +363,17 @@ def BOMadd(request):
                                              parent_schematic_index = table.cell(2, 1).value,
                                              parent_name = table.cell(2, 2).value,
                                              name = table.cell(rownum, 2).value,
+                                             material = gen_material(table.cell(rownum, 4).value),
                                              count = int(table.cell(rownum, 3).value) * origin_count, 
                                              net_weight = weight,
                                              remark = table.cell(rownum, 8).value
                                     ))
                 total += 1
-            Materiel.objects.bulk_create(materiel_list)
+            for item in materiel_list:
+                item.save()
+                CirculationRoute(materiel_belong = item).save()
+                Processing(materiel_belong = item).save()
+
             file_upload_error = 1
         return HttpResponse(json.dumps({'file_upload_error' : file_upload_error}))
 

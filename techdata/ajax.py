@@ -19,6 +19,7 @@ from techdata.forms import *
 from techdata.models import *
 from const.models import *
 from const.utils import getMaterialQuerySet
+from techdata.utility import batchDecentialization
 
 from purchasing.models import MaterielExecute, MaterielExecuteDetail
 import datetime
@@ -37,12 +38,26 @@ def markGenerateFactory(order, inventory_type):
     elif inventory_type == MAIN_MATERIEL:
         return order.principalmark
 
+def detailItemGenerateFactory(inventory_type):
+    """
+    JunHU
+    """
+    if inventory_type == OUT_PURCHASED:
+        return OutPurchasedItem
+    elif inventory_type == FIRST_FEEDING:
+        return FirstFeedingItem
+    elif inventory_type == COOPERANT:
+        return CooperantItem
+    elif inventory_type == MAIN_MATERIEL:
+        return PrincipalItem
+
 @dajaxice_register
 def detailMark(request, id_work_order, step, inventory_type):
     """
     JunHU
     """
     order = WorkOrder.objects.get(id = id_work_order)
+    DetailItem = detailItemGenerateFactory(inventory_type)
     mark = markGenerateFactory(order, inventory_type)
     if step == MARK_WRITE:
         mark.writer = request.user
@@ -56,6 +71,7 @@ def detailMark(request, id_work_order, step, inventory_type):
         mark.reviewer = request.user
         mark.review_date = datetime.datetime.today()
         mark.save()
+        batchDecentialization(order, inventory_type, DetailItem)
         context = {
             "ret": True,
             "mark_user": unicode(mark.reviewer.userinfo),
@@ -67,18 +83,6 @@ def detailMark(request, id_work_order, step, inventory_type):
         }
     return simplejson.dumps(context)
 
-def detailItemGenerateFactory(inventory_type):
-    """
-    JunHU
-    """
-    if inventory_type == OUT_PURCHASED:
-        return OutPurchasedItem
-    elif inventory_type == FIRST_FEEDING:
-        return FirstFeedingItem
-    elif inventory_type == COOPERANT:
-        return CooperantItem
-    elif inventory_type == MAIN_MATERIEL:
-        return PrincipalItem
 
 @dajaxice_register
 def getInventoryTables(request, id_work_order, inventory_type):
@@ -113,6 +117,46 @@ def deleteSingleItem(request, iid, inventory_type):
     item.delete()
 
 @dajaxice_register
+def getItemInfo(request, iid, inventory_type):
+    """
+    JunHU
+    """
+    DetailItem = detailItemGenerateFactory(inventory_type)
+    item = DetailItem.objects.get(id = iid)
+    if inventory_type == MAIN_MATERIEL:
+        principal_form = PrincipalItemForm(instance = item)
+        html = render_to_string("techdata/widgets/principal_card.html", {"principal_form": principal_form})
+    else:
+        html = ""
+    return html
+
+@dajaxice_register
+def updateDetailItemInfo(request, remark, iid, inventory_type):
+    DetailItem = detailItemGenerateFactory(inventory_type)
+    item = DetailItem.objects.get(id = iid)
+    item.remark = remark
+    item.save()
+
+@dajaxice_register
+def addOrUpdateSinglePrincipalItem(request, id_work_order, form, iid = None):
+    if iid == None:
+        form = PrincipalItemForm(deserialize_form(form))
+        work_order = WorkOrder.objects.get(id = id_work_order)
+        if form.is_valid():
+            item = form.save(commit = False)
+            item.order = work_order
+            item.save()
+            return "ok"
+        return "fail"
+    else:
+        item = PrincipalItem.objects.get(id = iid)
+        form = PrincipalItemForm(deserialize_form(form), instance = item)
+        if form.is_valid():
+            form.save()
+            return "ok"
+        return "fail"
+
+@dajaxice_register
 def addSingleItem(request, id_work_order, index, inventory_type):
     """
     JunHU
@@ -125,7 +169,7 @@ def addSingleItem(request, id_work_order, index, inventory_type):
         return simplejson.dumps(context)
     item = item[0]
     if DetailItem.objects.filter(materiel_belong = item).count() > 0:
-        context = {"success": False, "remark": u"该零件已添加至外购件明细"}
+        context = {"success": False, "remark": u"该零件已添加至明细中"}
         return simplejson.dumps(context)
     DetailItem(materiel_belong = item).save()
     context = {"success" : True, "remark": u"添加成功"}
@@ -140,18 +184,21 @@ def autoSetInventoryLabel(request, id_work_order, inventory_type):
     DetailItem = detailItemGenerateFactory(inventory_type)
     if inventory_type == OUT_PURCHASED:
         for item in Materiel.objects.filter(order = work_order):
+            if item.sub_index == "0" and item.index != "1": continue
             if not item.route().startswith("GY"): continue
             if item.schematic_index and item.schematic_index.endswith(".00"): continue
             if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
             DetailItem(materiel_belong = item, remark = item.remark).save()
     elif inventory_type == FIRST_FEEDING:
         for item in Materiel.objects.filter(order = work_order):
+            if item.sub_index == "0" and item.index != "1": continue
             if not (item.route().startswith("DY") or item.route().startswith("H1.XZ.H1")): continue
             if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
             DetailItem(materiel_belong = item, remark = item.remark).save()
     elif inventory_type == COOPERANT:
         for item in Materiel.objects.filter(order = work_order):
-            if not item.route().startswith("H1.J.ZM"): continue
+            if item.sub_index == "0" and item.index != "1": continue
+            if not item.route().startswith("H1.J"): continue
             if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
             DetailItem(materiel_belong = item, remark = item.remark).save()
 
