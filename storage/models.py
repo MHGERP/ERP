@@ -512,24 +512,48 @@ class WeldStoreThread(models.Model):
     def __unicode__(self):
         return '%s' % self.specification
 
-class OutsideStandardEntry(StorageEntryBaseA):
-    purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "out_purchaser")
-    inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "out_inspector")
-    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "out_keeper")
-    entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=STORAGESTATUS_INSPECTOR,verbose_name=u"入库单状态")
-    bidform  =  models.ForeignKey(BidForm,verbose_name=u"订购单编号",max_length=20,blank=True,null=True)
+class OutsideStandardEntry(models.Model):
+    purchaser =  models.ForeignKey(User,blank=True,null=True,verbose_name=u"采购员",related_name = "outside_entry_purchaser")
+    inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "outside_entry_inspector")
+    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "outside_entry_keeper")
+    entry_status = models.IntegerField(choices=ENTRYSTATUS_CHOICES,default=STORAGESTATUS_PURCHASER,verbose_name=u"入库单状态")
+    material_source = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'货物来源')
+    bidform_code = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'订购单编号')
+    inspection_record = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'接收检查记录表')
+    entry_code = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'编号')
+    change_code = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'修改号')
+    sample_report = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'样表')
+    create_time = models.DateField(verbose_name=u"入库时间",null=True,auto_now_add=True)
+    remark = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'备注')
+    outsidebuy_type = models.IntegerField(choices=OUTSIDEBUY_TYPE,default=COOPERATION_OUTSIDEBUY,verbose_name=u"外购件类型")
     class Meta:
         verbose_name = u"外购件入库单"
         verbose_name_plural = u"外购件入库单"
+    def __unicode__(self):
+        return "%s" % self.entry_code
 
-class OutsideStandardItem(StorageEntryItemBaseA):
+class OutsideStandardItem(models.Model):
     entry = models.ForeignKey(OutsideStandardEntry,verbose_name = u"入库单")
+    materiel = models.ForeignKey(MaterielCopy,verbose_name=u"物料",null=True,blank=True)
+    schematic_index = models.CharField(verbose_name=u"标准号或图号",max_length=50,blank=True,null=True)
+    specification = models.CharField(verbose_name=u"名称及规格",max_length=50,blank=True,null=True)
+    material_mark = models.CharField(verbose_name=u"材料牌号",max_length=50,blank=True,null=True)
+    batch_number = models.CharField(verbose_name=u"炉批号",max_length=50,blank=True,null=True)
+    material_code = models.CharField(verbose_name=u"标记号",max_length=20,blank=True,null=True)
+    unit =  models.CharField(verbose_name=u"单位",max_length=20,blank=True,null=True)
+    count = models.IntegerField(verbose_name=u"数量",default=0)
+    weight = models.FloatField(verbose_name=u"净重",null=True,blank=True)
+    heatno = models.CharField(verbose_name=u"熔炼号",null=True,blank=True,max_length=50)
+    remark = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'备注')
+    factory = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'生产厂家')
+    ticket_number = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'票号')
+    
     class Meta:
-        verbose_name = u"外购件材料"
-        verbose_name_plural = u"外购件材料"
+        verbose_name = u"外购件入库材料"
+        verbose_name_plural = u"外购件入库材料"
     def __unicode__(self):
         return '%s(%s)' % (self.specification, self.entry)
-
+"""
 class OutsideApplyCard(ApplyCardBase):
     proposer = models.ForeignKey(User,blank=True,null=True,verbose_name=u"领用人",related_name = "out_apply_proposer")
     auditor = models.ForeignKey(User,blank=True,null=True,verbose_name=u"审核人",related_name = "out_apply_auditor")
@@ -560,3 +584,4 @@ class OutsideApplyCardItem(ApplyCardItemBase):
         verbose_name_plural = u"外购件领用单材料"
     def __unicode__(self):
         return "%s(%s)" % (self.specification,self.applycard)
+"""
