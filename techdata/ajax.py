@@ -85,8 +85,6 @@ def detailMark(request, id_work_order, step, inventory_type):
             "warning": u"后台保存错误"
         }
     return simplejson.dumps(context)
-
-<<<<<<< HEAD
 def detailItemGenerateFactory(inventory_type):
     """
     JunHU
@@ -101,8 +99,6 @@ def detailItemGenerateFactory(inventory_type):
         return PrincipalItem
     elif inventory_type == AUXILIARY_MATERIEL:
         return AuxiliaryItem
-=======
->>>>>>> dfadc7da896310c7d1771304262db6b4122ec2bd
 
 @dajaxice_register
 def getInventoryTables(request, id_work_order, inventory_type):
