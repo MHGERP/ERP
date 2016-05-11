@@ -24,7 +24,7 @@ class ProcessDetail(models.Model):
     productionworkgroup = models.ForeignKey(ProductionWorkGroup, blank = True, null = True, verbose_name = u"工作组")
     plan_startdate = models.DateField(blank = True, null= True, verbose_name = u"计划开始时间")
     plan_enddate = models.DateField(blank = True, null= True, verbose_name = u"计划完成时间")
-    complete_date = models.DateField(blank = True, null= True, verbose_name = u"完成时间")
+    complete_process_date = models.DateField(blank = True, null= True, verbose_name = u"完成时间")
     check_user = models.ForeignKey(User, null = True, verbose_name = u"检查者")
     check_date = models.DateField(blank = True, null= True, verbose_name = u"检查时间")
     check_content = models.CharField(blank = True,  null= True, max_length = 500, verbose_name = u"检查内容")

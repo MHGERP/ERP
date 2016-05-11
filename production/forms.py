@@ -4,10 +4,12 @@ from production import *
 from django import forms
 from django.forms import ModelForm
 from const.models import WorkOrder
+from const.models import Materiel
 from datetime import *
 from django.forms import ModelForm
 from production.models import ProductionPlan,ProductionWorkGroup
 from techdata.models import Processing
+from techdata.models import ProcessingName
 from const.forms import WorkOrderForm
 
 class WorkOrderProductionForm(forms.Form):
@@ -59,17 +61,30 @@ class OrderIndexForm(forms.Form):
         self.fields["order_index"].choices = ORDER_INDEX_CHOICES
 
 class TaskAllocationSearchForm(forms.Form):
-    workorder_choices=tuple([(-1,"------")]+[(item.id,item.order_index) for item in WorkOrder.objects.all()])
-    workorder=forms.ChoiceField(choices=workorder_choices,required=False, label=u"工作令")
-    identifier=forms.CharField(required=False, label=u"编号")
-    processnumber=forms.CharField(required=False, label=u"工序号")
-    groupnumber=forms.CharField(required=False,label=u"操作组")
+    materiel_belong__order__order_index = forms.ChoiceField(required = False, widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
+    materiel_belong__index = forms.CharField(required=False, label=u"编号")
+    processname__name = forms.ChoiceField(required=False, label=u"工序")
+    productionworkgroup__name__contains = forms.CharField(required=False,label=u"操作组")
+    def __init__(self, *args, **kwargs):
+        super(TaskAllocationSearchForm, self).__init__(*args, **kwargs)
+        ORDER_INDEX_CHOICES = tuple([("", u"----------")]  + [(item.order_index,item.order_index) for item in WorkOrder.objects.all()])
+        self.fields["materiel_belong__order__order_index"].choices = ORDER_INDEX_CHOICES
+        PROCESS_NAME_CHIOCES = tuple([("",u"----------")] + [(item.name,item.get_name_display()) for item in ProcessingName.objects.all()])
+        self.fields["processname__name"].choices = PROCESS_NAME_CHIOCES
 
 class TaskAllocationForm(TaskAllocationSearchForm):
     task_allocation_status = forms.ChoiceField(choices=TASK_ALLOCATION_STATUS_CHOICES, required=False, label=u"任务分配状态")
 
 class TaskConfirmForm(TaskAllocationSearchForm):
     task_confirm_status = forms.ChoiceField(choices=TASK_CONFIRM_STATUS_CHOICES, required=False, label=u"任务完成状态")
+
+class LedgerTimeChangeForm(ModelForm):
+    class Meta:
+        model = Materiel
+        fields = {'index','order','name','complete_plandate'}
+        widgets = { 
+            "complete_plandate" : forms.DateInput(attrs={"data-date-format":"yyyy-mm-dd","id":"complete_plandate"}),
+        }
 
 class DateForm(forms.Form):
     order_index = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
