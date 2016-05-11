@@ -219,14 +219,14 @@ $("#generate_execute").click(function(){
 
 
 $("#audit_button").click(function(){
-   var index=$("#order_form_id_span").text();
+   var index=$("#orderformbody").attr("orderid");
    Dajaxice.purchasing.OrderFormAudit(function(data){
         window.location.reload();
        
    },{'index':index});
 });
 $("#approve_button").click(function(){
-   var index=$("#order_form_id_span").text();
+   var index=$("#orderformbody").attr("orderid");
    Dajaxice.purchasing.OrderFormApprove(function(data){
         window.location.reload();
        
@@ -235,7 +235,7 @@ $("#approve_button").click(function(){
 
 $("#go_to_invite_bid").click(function(){
     
-   var index=$("#order_form_id_span").text();
+   var index=$("#orderformbody").attr("orderid");
    Dajaxice.purchasing.GoToBid(function(data){
        window.location.href="/purchasing/purchasingfollowing";
    },{
