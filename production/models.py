@@ -8,6 +8,18 @@ from techdata.models import ProcessingName
 from users.models import UserInfo
 import datetime
 
+class SubMateriel(models.Model):
+    materiel_belong = models.ForeignKey(Materiel, blank = False, verbose_name = u"工作票")
+    sub_order = models.ForeignKey(SubWorkOrder, verbose_name = u"所属工作令")
+    complete_plandate = models.DateField(blank = True, null=True,verbose_name = u"计划完成时间")
+    complete_date = models.DateField(blank = True, null=True,verbose_name = u"完成时间")
+    class Meta:
+        verbose_name = u"子工作票"
+        verbose_name_plural = u"子工作票"
+    def __unicode__(self):
+         return '%s-%s %s' % (self.sub_order.order.order_index, self.sub_order.index, self.materiel_belong.index)
+
+
 class ProductionWorkGroup(models.Model):
     name = models.CharField(blank = False, null = False , max_length = 20, verbose_name = u"名字")
     processname = models.ForeignKey(ProcessingName, blank = False, null = False, verbose_name = u"工序")
@@ -26,11 +38,6 @@ class ProductionUser(models.Model):
     def __unicode__(self):
         return '%s' % (self.production_user_id.name)
 
-class SubMateriel(models.Model):
-    materiel_belong = models.ForeignKey(Materiel, blank = False, verbose_name = u"工作票")
-    sub_order = models.ForeignKey(SubWorkOrder, verbose_name = u"所属工作令")
-    complete_plandate = models.DateField(blank = True, null=True,verbose_name = u"计划完成时间")
-    complete_date = models.DateField(blank = True, null=True,verbose_name = u"完成时间")
 
 class ProcessDetail(models.Model):
     sub_materiel_belong = models.ForeignKey(SubMateriel, blank = False, verbose_name = u"工作票")
@@ -67,11 +74,9 @@ class SynthesizeFileListStatus(models.Model):
         verbose_name = u"综合工部"
         verbose_name_plural = u"综合工部"
     def __unicode__(self):
-        return "%s" % self.order
-
-
+        return "%s" % self.sub_order
 class ProductionPlan(models.Model):
-    sub_order = models.ForeignKey(SubWorkOrder, verbose_name = u"工作令")
+    order = models.ForeignKey(WorkOrder, verbose_name = u"工作令")
     plan_id = models.CharField(max_length=50, blank=True, default=make_uuid, verbose_name=u"生产计划编号")
     status = models.IntegerField(blank = False, choices = PRODUCTION_PLAN_STAUTS_CHOICES, default=2,verbose_name=u"生产计划状态")
     plan_date = models.DateField(blank = True, default=lambda:datetime.datetime.today(), verbose_name = u"计划年月")

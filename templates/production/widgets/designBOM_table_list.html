@@ -1,0 +1,36 @@
+<table class="table table-bordered table-striped" id="designBOM_table">
+  <thead>
+    <tr>
+      <th>票号</th>
+      <th>工作令</th>
+      <th>件号</th>
+      <th>图号</th>
+      <th>部件图号</th>
+      <th>名称</th>
+      <th>材质</th>
+      <th>数量</th>
+      <th>净重</th>
+      <th>总重</th>
+      <th>流转路线</th>
+      <th>备注</th>
+    </tr>
+  </thead>
+</table>
+<tbody>
+  {% for item in BOM %}
+  <tr iid="{{item.id}}" class="designBOM_row">
+    <td>{{item.materiel_belong.index}}</td>
+    <td>{{item.sub_order}}</td>
+    <td>{{item.materiel_belong.sub_index}}</td>
+    <td>{{item.materiel_belong.schematic_index}}</td>
+    <td>{{item.materiel_belong.parent_schematic_index|default_if_none:""}}</td>
+    <td>{{item.materiel_belong.name}}</td>
+    <td>{{item.materiel_belong.material|default_if_none:""}}</td>
+    <td>{{item.materiel_belong.count|default_if_none:""}}</td>
+    <td>{{item.materiel_belong.net_weight|default_if_none:""}}</td>
+    <td>{{item.materiel_belong.total_weight_cal|default_if_none:""}}</td>
+    <td>{{item.materiel_belong.route}}</td>
+    <td>{{item.materiel_belong.remark}}</td>
+  </tr>
+  {% endfor %}
+</tbody>

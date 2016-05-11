@@ -15,6 +15,10 @@ urlpatterns=patterns('',
         r'product_bidFile_add$',
          sell_views.product_bidFile_add,
     ),
+     url(
+        r'^product_bidFile_back$',
+         sell_views.product_bidFile_back,
+    ),
     url(
         r'^bidFile_to_manufacture$',
         sell_views.bidFile_to_manufacture,
@@ -26,5 +30,9 @@ urlpatterns=patterns('',
     url(
         r'^bidFile_to_purchasing$',
         sell_views.bidFile_to_purchasing,
+    ),
+     url(
+        r'^productions_audit$',
+        sell_views.productions_audit, 
     ),
 )

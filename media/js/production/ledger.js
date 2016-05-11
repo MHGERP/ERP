@@ -13,6 +13,23 @@ $(document).on("click","table td",function(){
 })
 
 function weld_part_order_info_callback(data){
+    $("#weld_part_order_info_modal").modal({backdrop:'static',keyboard:false});
     $("#weld_part_order_info_modal").modal("show");
     $('#tableBody').html(data.html);
 }
+
+function ledger_plantime_change(){
+    var mid = $('#ledger_info_table').attr("value") ;
+    Dajaxice.production.ledgerTimeChange(ledger_plantime_change_callback,{'mid':mid});
+}
+
+function ledger_plantime_change_callback(data){
+    $("#weld_part_order_info_modal").modal("hide");
+    $("#ledger_plantime_modal").modal({backdrop:'static',keyboard:false});
+    $("#ledger_plantime_modal").modal("show");
+    $('#ledger_plantime_table').html(data.html);
+}
+
+$("#datetimepicker").datetimepicker({
+    format:'yyyy-mm-dd'
+});
