@@ -496,7 +496,7 @@ class WeldRefundConfirmForm(ModelForm):
 class SteelMaterialSearchForm(forms.Form):
     entry_item__work_order__order_index = forms.CharField(label=u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     specification = forms.CharField(label=u"名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
-    materiel = forms.CharField(label=u"材质",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__material_mark = forms.CharField(label=u"材质",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     def __init__(self,*args,**kwargs):
         super(SteelMaterialSearchForm,self).__init__(*args,**kwargs) 
         set_form_input_width(self.fields)
