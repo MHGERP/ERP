@@ -31,4 +31,8 @@ urlpatterns=patterns('',
         r'^bidFile_to_purchasing$',
         sell_views.bidFile_to_purchasing,
     ),
+     url(
+        r'^productions_audit$',
+        sell_views.productions_audit, 
+    ),
 )
