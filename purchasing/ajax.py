@@ -1471,3 +1471,9 @@ def saveQualityCard(request,form,quality_card_id,supplier_form_set,supplier_id_s
         form=QualityCardSupplierForm(deserialize_form(form),instance=supplierselect)
         form.save()
     return simplejson.dumps({"status":0})
+
+@dajaxice_register
+def submitQualityCard(request,quality_card_id):
+    quality_card =qualityPriceCard.objects.get(id = quality_card_id)
+    BidNextStatus(quality_card)
+    return simplejson.dumps({})

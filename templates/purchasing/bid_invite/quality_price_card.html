@@ -688,8 +688,9 @@ table.MsoTableGrid
   height:63.0pt'>
   <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>在满足要求的情况下，本着节约成本原则，拟用<span class=GramE>沧州华</span>泰管件制造有限公司<span
-  lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>
+  {% if quality_card.status.status == status_dic.OPERATOR_COMMENT%}<button id="comment_add" href="#quality_card_comment" usertitle="{{comment_user_dict.Q_OPERATOR}}" data-toggle="modal">填写</button>{%elif quality_card.status.status > status_dic.OPERATOR_COMMENT%}{{comment_dict.Q_OPERATOR.comment}}{%endif%}
+  </span></p>
   </td>
   <td width=99 nowrap style='width:74.6pt;border:none;border-bottom:solid windowtext 1.0pt;
   mso-border-bottom-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;

@@ -22,3 +22,9 @@ $("#qualitycard_confirm").click(function(){
         'supplier_id_set':supplier_id_set
     });
 });
+$("#qualitycard_submit").click(function(){
+    var quality_card_id=$("#quality_card_div").attr("qualitycardid");
+      Dajaxice.purchasing.submitQualityCard(function(data){
+    window.location.reload();
+      },{'quality_card_id':quality_card_id});
+});
