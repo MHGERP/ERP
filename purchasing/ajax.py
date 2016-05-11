@@ -139,7 +139,7 @@ def chooseInventorytype(request,pid,key):
     for item in items:
         if MaterielFormConnection.objects.filter(materiel = item).count() == 0:
             MaterielFormConnection(materiel = item, count = item.count).save()
-        inventory_type=item.inventory_type.all()[0]
+        inventory_type=item.inventory_type
         if inventory_type.name ==  MAIN_MATERIEL or  inventory_type.name == AUXILIARY_MATERIEL:
             if item.materielexecutedetail_set.count()>0 or item.materielformconnection.order_form:
                 item.can_choose=False
@@ -244,7 +244,7 @@ def pendingOrderSearch(request, order_index):
     return: table html string
     """
     inventoryTypeForm = InventoryTypeForm()
-    orders = WorkOrder.objects.filter(order_index__startswith = order_index)
+    orders =SubWorkOrder.objects.filter(order__order_index__startswith = order_index)
     context = {"inventoryTypeForm": inventoryTypeForm,
                "orders": orders
               }
@@ -271,7 +271,8 @@ def getInventoryTable(request, table_id, order_index):
         WELD_MATERIAL: "weld_material",
 
     }
-    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__name = table_id)
+    print order_index
+    items = Materiel.objects.filter(sub_workorder__id = order_index, inventory_type__name = table_id)
     context = {
         "items": items,
     }
@@ -815,7 +816,9 @@ def getOngoingOrderList(request,order_type):
     """
     Lei
     """
-    if int(order_type) >2 :
+    if int(order_type)==6:
+        order_type=2
+    elif int(order_type) >2 :
         order_mod=1
     else:
         order_mod=0
@@ -850,7 +853,9 @@ def newOrderCreate(request,select_type):
     Lei
     """
     cDate_datetime = datetime.now()
-    if int(select_type) > 2:
+    if int(select_type)==6:
+        order_type=2
+    elif int(select_type) > 2:
         order_type=1
     else:
         order_type=0
@@ -907,6 +912,7 @@ def newOrderSave(request, id, pendingArray):
         print type(materiel.count)
         conn.order_form = order_form
         conn.count=int(materiel.count)
+        conn.purchasing=float(materiel.total_weight_cal())
         conn.save()
     order_form.establishment_time = cDate_datetime
     order_form.save()
