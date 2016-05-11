@@ -14,17 +14,17 @@
 	<tr>
 		<td colspan="2">额定工时</td>
 		<td colspan="2"></td>
-		<td colspan="2">工票员　张三　５月６日</td>
+		<td colspan="2">工票员</td>
 	</tr>
 	<tr>
 		<td colspan="2">追加工时</td>
-		<td colspan="2">100</td>
-		<td colspan="2">定额员　李四　５月８日</td>
+		<td colspan="2"></td>
+		<td colspan="2">定额员</td>
 	</tr>
 	<tr>
 		<td colspan="2">检查印</td>
 		<td colspan="2"></td>
-		<td colspan="2">５月９日</td>
+		<td colspan="2"></td>
 	</tr>
 	<tr>
 		<td>日期</td>
@@ -36,7 +36,7 @@
 	</tr>
 	{%for item in process_detail_list%}
 	<tr>
-		<td>{{item.complete_date|date:'m-d'}}</td>
+		<td>{{item.complete_process_date|date:'m-d'}}</td>
 		<td>{{item.productionworkgroup.name}}</td>
 		<td></td>
 		<td></td>

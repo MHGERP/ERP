@@ -18,7 +18,7 @@ class MaterielForm(forms.ModelForm):
             "index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "sub_index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "schematic_index": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
-            "parent_schematic_index" : forms.TextInput(attrs = {"class" : "input-medium"}),
+            "parent_schematic_index" : forms.TextInput(attrs = {"class" : "input-medium", "readonly": "true"}),
             "material": forms.Select(attrs = {"class": "input-medium", "readonly": "true"}),
             "count": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),
             "remark": forms.TextInput(attrs = {"class": "input-medium", "readonly": "true"}),

@@ -1421,3 +1421,15 @@ def SupplierCheckComment(request,supplier_check_id,usertitle,comment):
     bid_comment.save()
     BidNextStatus(supplier_check)
     return simplejson.dumps({})
+
+@dajaxice_register
+def BidApplyCarryFinish(request,bidid,form):
+    bid_form=BidForm.objects.get(bid_id=bidid)
+    bid_acceptance=bid_form.bidacceptance
+    bid_acceptance_form=BidAcceptanceForm(deserialize_form(form),instance=bid_acceptance)
+    if bid_acceptance_form.is_valid():
+        bid_acceptance_form.save()
+    else:
+        return simplejson.dumps({"status":1})
+    goNextStatus(bid_form,request.user)
+    return simplejson.dumps({"status":0})

@@ -26,8 +26,14 @@ class ProductionUser(models.Model):
     def __unicode__(self):
         return '%s' % (self.production_user_id.name)
 
-class ProcessDetail(models.Model):
+class SubMateriel(models.Model):
     materiel_belong = models.ForeignKey(Materiel, blank = False, verbose_name = u"工作票")
+    order = models.ForeignKey(SubWorkOrder, verbose_name = u"所属工作令")
+    complete_plandate = models.DateField(blank = True, null=True,verbose_name = u"计划完成时间")
+    complete_date = models.DateField(blank = True, null=True,verbose_name = u"完成时间")
+
+class ProcessDetail(models.Model):
+    materiel_belong = models.ForeignKey(SubMateriel, blank = False, verbose_name = u"工作票")
     processname = models.ForeignKey(ProcessingName, blank = False, verbose_name = u"工序名称")
     process_id = models.IntegerField(blank=False, verbose_name=u"第几道工序")
     work_hour = models.IntegerField(blank=False, verbose_name=u"工时")
@@ -46,25 +52,26 @@ class ProcessDetail(models.Model):
     def __unicode__(self):
         return u"%s-%d-%s" % (self.materiel_belong, self.process_id, self.processname)
 
+
 class SynthesizeFileListStatus(models.Model):
-    order = models.ForeignKey(WorkOrder, verbose_name = u"工作令")
-    sketch = models.BooleanField(default = False)
-    pressure_test = models.BooleanField(default = False)
-    craph = models.BooleanField(default = False)
-    product = models.BooleanField(default = False)
-    encasement_graph = models.BooleanField(default = False)
-    mark = models.BooleanField(default = False)
-    encasement_list = models.BooleanField(default = False)
-    coating_detail = models.BooleanField(default = False)
+    order = models.ForeignKey(SubWorkOrder, verbose_name = u"工作令")
+    sketch = models.BooleanField(default = False, verbose_name = u"简图")
+    pressure_test = models.BooleanField(default = False, verbose_name = u"试压工艺")
+    craph = models.BooleanField(default = False, verbose_name = u"工艺库")
+    product = models.BooleanField(default = False, verbose_name = u"产品图")
+    encasement_graph = models.BooleanField(default = False, verbose_name = u"装箱图")
+    mark = models.BooleanField(default = False, verbose_name = u"唛头")
+    encasement_list = models.BooleanField(default = False, verbose_name = u"装箱单")
+    coating_detail = models.BooleanField(default = False, verbose_name = u"涂装明细")
     class Meta:
         verbose_name = u"综合工部"
         verbose_name_plural = u"综合工部"
     def __unicode__(self):
-        return "%s" % self.workorder_id
+        return "%s" % self.order
 
 
 class ProductionPlan(models.Model):
-    order = models.ForeignKey(WorkOrder, verbose_name = u"工作令")
+    order = models.ForeignKey(SubWorkOrder, verbose_name = u"工作令")
     plan_id = models.CharField(max_length=50, blank=True, default=make_uuid, verbose_name=u"生产计划编号")
     status = models.IntegerField(blank = False, choices = PRODUCTION_PLAN_STAUTS_CHOICES, default=2,verbose_name=u"生产计划状态")
     plan_date = models.DateField(blank = True, default=lambda:datetime.datetime.today(), verbose_name = u"计划年月")
