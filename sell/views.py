@@ -100,4 +100,8 @@ def bidFile_to_purchasing(request):
     }
     return render(request, "sell/bidFile_to_purchasing.html", context)
 
-
+def productions_audit(request):
+    context = {
+        
+    }
+    return render(request, "sell/product_audit.html", context)
