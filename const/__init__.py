@@ -156,6 +156,15 @@ ENTRYTYPE_CHOICES_2 = (
     (ENTRYTYPE_BAR,u"型材"),
 )
 
+COOPERATION_OUTSIDEBUY = 0
+STANDARD_OUTSIDEBUY = 1
+FORGING_OUTSIDEBUY = 2
+OUTSIDEBUY_TYPE = (
+    (COOPERATION_OUTSIDEBUY,u"外协加工"),
+    (STANDARD_OUTSIDEBUY,u"标准件"),
+    (FORGING_OUTSIDEBUY,u"锻件"),
+)
+
 BOARD_STEEL = 0
 BAR_STEEL = 1
 STEEL_TYPE = (
@@ -645,3 +654,9 @@ SupplierCChoices=(
     (0,u"实体"),
     (1,u"贸易")
 )
+
+SYNSIZE_FILE_LIST_STATUS = [
+    "sketch","pressure_test","craph","product","encasement_graph","mark","encasement_list","coating_detail"
+
+]
+

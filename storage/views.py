@@ -23,8 +23,14 @@ from users import STORAGE_KEEPER
 from random import randint
 
 def weldMaterialHomeViews(request):
+    hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("-date");
+    todayDate = datetime.datetime.now().date()
+    if hum_set[0].date == todayDate:
+        flag = True
+    else:
+        flag = False
     context = {
-
+            "flag":flag,
             }
     return render(request,"storage/weldmaterial/weldmaterialhome.html",context)
 
@@ -657,11 +663,14 @@ def outsideHomeViews(request):
     return render(request,"storage/outside/outsidehome.html",context)
 
 def outsideEntryHomeViews(request):
-    key_list = ["entry_set","entryurl","ENTRYSTATUS_END"]
-    context = getStorageHomeContext(request,OutsideStandardEntry,OutsideEntrySearchForm,STORAGESTATUS_KEEPER,"storage/outside/entryconfirm",key_list,"entry_time")
-    context["check_materiel_form"] = CheckMaterielListForm()
-    context["is_production"] = True
-    context["items_set"] = WeldStoreList.objects.all()
+    
+    entry_set = OutsideStandardEntry.objects.filter(entry_status__gte = STORAGESTATUS_KEEPER)
+    search_form = OutsideEntrySearchForm()
+    context = {
+        "entry_set":entry_set,
+        "STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER,
+        "search_form":search_form,
+    }
     return render(request,"storage/outside/outsideentryhome.html",context)
 
 def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list,order_field):

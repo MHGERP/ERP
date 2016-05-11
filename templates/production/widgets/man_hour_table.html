@@ -10,10 +10,13 @@
     </thead>
     {%for item in process_detail_list%}
     <tr>
-        <td>{{item.materiel_belong__order__order_index}}</td>
-        <td uid="{{item.productionworkgroup.id}}">
-        {{item.productionworkgroup__name}}</td>
-        <td>{{item.complete_date|date:"Y-m"}}</td>
+        <td uid="{{item.materiel_belong__order}}">
+            {{item.materiel_belong__order__order_index}}
+        </td>
+        <td uid="{{item.productionworkgroup}}">
+            {{item.productionworkgroup__name}}
+        </td>
+        <td>{{item.month|date:"Y-m"}}</td>
         <td>{{item.work_hour__sum}}</td>
         <td>
             <button type="button" class="btn btn-primary" id="summarize-ticket">工时汇总票</button>

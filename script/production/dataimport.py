@@ -8,6 +8,7 @@ from techdata.models import *
 from production.models import *
 from django.contrib.auth.models import User
 from const.models import *
+import datetime
 
 PRODUCTIONGROUP_PROCESS = (
         ("F",  102),
@@ -44,12 +45,13 @@ def importProductionWorkGroup():
             pass
 
 def importProcessDetail():
-    process = Processing.objects.get(materiel_belong__id = 226)
+    process = Processing.objects.get(materiel_belong__id = 31)
     print process
     for i in xrange(1,13):
-        item = ProcessDetail(materiel_belong = process.materiel_belong, processname = getattr(process, "GX%d" %i), work_hour = int(getattr(process, "GS%d" %i)), process_id = i)
+        #setattr(process, "GS%d" %i, i*10)
+        item = ProcessDetail(materiel_belong = process.materiel_belong, processname = getattr(process, "GX%d" %i), work_hour = int(getattr(process, "GS%d" %i)), process_id = i, complete_process_date=datetime.datetime.today())
         item.save()
     print "help"
 
-importProductionWorkGroup()
+importProcessDetail()
 print "hello"

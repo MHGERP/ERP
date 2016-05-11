@@ -9,7 +9,17 @@
 {% block inner_content %}
 <div class="span8">
 <h3>外购件入库单</h3>
-{% include "storage/widgets/storageentryhomemain.html"%}
+<form class="form-inline" id="search_form">
+    {% csrf_token %}
+    {% for field in search_form %}
+    {{field.label}}
+    {{field}}
+    {% endfor %}
+    <button type="button" class="btn btn-success" id="search-btn">检索</button> 
+</form>
+<div id="entry_table">
+{% include "storage/widgets/outsideentryhometable.html"%}
+</div>
 </div>
 
 {% endblock %}
