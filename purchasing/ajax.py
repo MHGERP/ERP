@@ -176,7 +176,7 @@ def getRelatedModel(request, index):
     print "这是一个测试: "
     print index
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        f1 = set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.all())
+        f1 = set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.filter( entry_item__material__isnull= False))
         f2 = set(item.entry_item.specification for item in SteelMaterialStoreList.objects.all())
         f3 = set(item.entry_item.materiel for item in SteelMaterialStoreList.objects.all())
     elif index == FIRST_FEEDING:

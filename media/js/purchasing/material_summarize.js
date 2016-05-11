@@ -243,7 +243,7 @@ $(document).on("click", "#related_search", function() {
       f1 = $("#id_mingcheng").val();
       f2 = $("#id_guige").val();
       f3 = $("#id_caizhi").val();
-      alert(f1+" "+f2+" "+f3);
+      //alert(f1+" "+f2+" "+f3);
       Dajaxice.purchasing.getRelatedTable(function(data) {
           $("#related_table").html(data);
       }, {"index" : val, "f1" : f1, "f2" : f2, "f3" : f3});
