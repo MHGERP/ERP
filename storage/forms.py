@@ -539,4 +539,4 @@ class OutsideEntryItemForm(ModelForm):
         }
     def __init__(self,*args,**kwargs):
         super(OutsideEntryItemForm,self).__init__(*args,**kwargs)
-        set_form_input_width(self.fields)
+        set_form_input_width(self.fields,("style","width:250px;"))

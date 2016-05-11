@@ -6,18 +6,28 @@ $(document).ready(function(){
     })
     $(document).on("dblclick","tr[name='entry_item_tr']",function(){
         mid = $(this).attr("id");
+        Dajaxice.storage.getOutsideEntryItemFormInfo(getforminfo_callback,{"mid":mid});
         $("#myModal").modal('show');
     })
+    $(document).on("click","#save_entry_item",function(){
+        var form = $("#entry_item_form").serialize();
+        Dajaxice.storage.outsideEntryItemSave(outsideentryitemsave_callback,{"form":form,"mid":mid});
+    })
+    $(document).on("click","span[name='outside_entry_confirm']",function(){
+        var eid = $(this).attr("eid");
+        Dajaxice.storage.outsideEntryConfirm(outsideentryconfirm_callback,{"eid":eid});
+    })
 });
+
+function getforminfo_callback(data){
+    $("#entry_item_form").html(data.html); 
+}
 
 function outsidecardsearch_callback(data){
     $("#card_table").html(data.html);
 }
 
-function outsideentryconfirm(eid){
-    Dajaxice.storage.outsideEntryConfirm(outside_entryconfirm_callback,{"eid":eid,"form":$("#entryform").serialize(),});
-}
-function outside_entryconfirm_callback(data){
+function outsideentryconfirm_callback(data){
     $("#entrybody").html(data.html);
     alert(data.message)
 }
@@ -77,4 +87,10 @@ function outside_thread_search(){
 
 function outsideThreadSearch_callback(data){
     $('#item_table').html(data.html);
+}
+
+function outsideentryitemsave_callback(data){
+    $("#entry_item_form").html(data.html); 
+    alert(data.message);
+    if(data.flag) $("#myModal").modal("hide")
 }
