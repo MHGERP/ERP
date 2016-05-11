@@ -55,6 +55,7 @@ def product_bidFile_back(request):
         if request.FILES['product_file'].size > 10 * 1024 * 1024:
             file_upload_error = 2
         else:
+            print "back"
             product_id = request.POST['product_id']
             group_type = request.POST['group_type']
             #print product_id
