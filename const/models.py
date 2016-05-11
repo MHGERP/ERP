@@ -28,7 +28,7 @@ class SubWorkOrder(models.Model):
         verbose_name = u"子工作令"
         verbose_name_plural = u"子工作令"
     def __unicode__(self):
-        if self.order.count == "1": 
+        if self.order.count == "1":
             return self.order.order_index
         return self.order.order_index + "-" + self.index
 
@@ -75,14 +75,11 @@ class Materiel(models.Model):
     recheck=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"复验")
     detection_level=models.CharField(blank=True,null=True,max_length=20,verbose_name=u"探伤级别")
 
-    complete_plandate = models.DateField(blank = True, null=True,verbose_name = u"计划完成时间")
-    complete_date = models.DateField(blank = True, null=True,verbose_name = u"完成时间")
-
     def total_weight_cal(self):
         if self.count and self.net_weight:
             return int(self.count) * self.net_weight
     def route(self):
-       return '.'.join(getattr(self.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(self.circulationroute, "L%d" % i))   
+       return '.'.join(getattr(self.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(self.circulationroute, "L%d" % i))
     class Meta:
         verbose_name = u"物料"
         verbose_name_plural = u"物料"
