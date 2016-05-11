@@ -402,17 +402,10 @@ class OutsideApplyCardSearchForm(forms.Form):
     entry_code = forms.CharField(label=u"领用单号",required=False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_code'}))
     def __init__(self,*args,**kwargs):
         super(OutsideApplyCardSearchForm,self).__init__(*args,**kwargs)
-        workorders = getDistinctSet(OutsideApplyCard,WorkOrder,'workorder')
-        proposers = getDistinctSet(OutsideApplyCard,User,'proposer')
-        self.fields['workorder'].choices = getChoiceList(workorders,'order_index')
-        self.fields['proposer'].choices = getChoiceList(proposers,'userinfo')
 
 class OutsideApplyCardForm(ModelForm):
     class Meta:
-        model = OutsideApplyCard
-        fields = ("change_code","sample_report","entry_code")
-    def __init__(self,*args,**kwargs):
-        super(OutsideApplyCardForm,self).__init__(*args,**kwargs)
+        model = OutsideStandardEntry
 
 class OutsideStorageSearchForm(forms.Form):
     texture = forms.CharField(label=u'材质',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'texture'}))
@@ -472,11 +465,7 @@ class CheckMaterielDbForm(forms.Form):
 class CheckMaterielListForm(forms.Form):
     materiel_type = forms.ChoiceField(label=u"库存材料",required = False, widget=forms.Select(attrs={'id':'materiel_type','class':"span2",'select2':'true'}))
     def __init__(self,*args,**kwargs):
-        db_type = kwargs.pop("db_type",WeldStoreList)
         super(CheckMaterielListForm,self).__init__(*args,**kwargs)
-        if db_type != None:
-            materiels =objects.all()
-            self.fields['materiel_type'].choices = getChoiceList(materiels,'specification')
 
 class WeldEntrySearchForm(forms.Form):
     create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
@@ -522,3 +511,9 @@ class SteelRefundSearchForm(forms.Form):
         workorder_list = WorkOrder.objects.all()
         self.fields["work_order"].choices = getChoiceList(workorder_list,"order_index")
         set_form_input_width(self.fields)
+
+class OutsideEntrySearchForm(forms.Form):
+    create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
+    create_time__lte  = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker', 'date_picker':'true'}))
+    entry_code = forms.CharField(label=u'入库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
+    
