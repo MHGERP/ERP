@@ -123,7 +123,6 @@ def getInventoryTables(request, id_work_order, inventory_type):
         list = DetailItem.objects.filter(order = work_order)
     else:
         list = DetailItem.objects.filter(materiel_belong__order = work_order)
-    print list
     context["list"] = list
     html = render_to_string("techdata/widgets/" + id2table[inventory_type], context)
     return html
@@ -219,6 +218,12 @@ def autoSetInventoryLabel(request, id_work_order, inventory_type):
             if not item.route().startswith("H1.J"): continue
             if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
             DetailItem(materiel_belong = item, remark = item.remark).save()
+    elif inventory_type == AUXILIARY_MATERIEL:
+        for item in Materiel.objects.filter(order = work_order):
+            if item.sub_index == "0" and item.index != "1": continue
+            if not item.route().startswith("H1"): continue
+            if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
+            DetailItem(materiel_belong = item, remark = item.remark).save()
 
 @dajaxice_register
 def getProcessBOM(request, id_work_order):
@@ -256,7 +261,6 @@ def getAuxiliaryMaterielInfo(request, iid,categories):
     """
     MH Chen
     """
-    print "1"*111
     materiel = Materiel.objects.get(id = iid)
     form = AuxiliaryMaterielForm(instance = materiel)
     categories_form = CategoriesForm(initial={"categorie_type":categories})
@@ -286,6 +290,19 @@ def getMaterielInfo(request, iid):
         "form": form,
     }
     html = render_to_string("techdata/widgets/materiel_base_info.html", context)
+    return html  
+
+@dajaxice_register  
+def getMaterielDetailInfo(request, iid):
+    """
+    MH Chen
+    """
+
+    materiel = AuxiliaryItem.objects.get( id = iid).materiel_belong
+    context = {
+        "materiel": materiel,
+    }
+    html = render_to_string("techdata/widgets/auxiliary_material_base_info_table.html", context)
     return html  
 
 @dajaxice_register  
@@ -344,8 +361,8 @@ def getAuxiliary(request, iid):
     MH Chen
     """
     
-    materiel = Materiel.objects.get(id = iid)
-    form = AuxiliaryForm(instance = materiel)
+    materiel = AuxiliaryItem.objects.get( id = iid).materiel_belong
+    form = AuxiliaryForm(instance = materiel.auxiliaryitem)
     context = {
         "form": form,
     }
@@ -522,6 +539,19 @@ def techBoxWeld(request, order):
     }
     html = render_to_string("techdata/widgets/tech_box_weld_table.html", context)
     return html
+
+@dajaxice_register
+def updateAuxiliary(request,iid,form):
+    """
+    MH Chen
+    """
+    materiel = AuxiliaryItem.objects.get(id = iid).materiel_belong
+    form = AuxiliaryForm(deserialize_form(form),instance = AuxiliaryItem.objects.get(materiel_belong = materiel))
+    if form.is_valid():
+        obj = form.save(commit = False)
+        obj.materiel_belong = materiel
+        obj.save()
+        return "ok"
 
 @dajaxice_register
 def addWeldSeam(request, iid, form):
