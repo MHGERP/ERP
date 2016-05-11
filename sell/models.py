@@ -18,6 +18,8 @@ class BidFile(models.Model):
         verbose_name_plural = u"招标文件"
     def __unicode__(self):
         return self.name
+    def getStatus(self):
+        return self.get_is_approval_display()
 
 class Product(models.Model):
     name = models.CharField(max_length = 50, verbose_name = u"产品名称")
@@ -34,5 +36,6 @@ class Product(models.Model):
         verbose_name_plural = u"产品"
     def __unicode__(self):
         return self.name
-
+    def getStatus(self):
+        return self.get_is_approval_display()
 
