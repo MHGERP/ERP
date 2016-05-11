@@ -94,7 +94,7 @@ COOPERANT = "cooperant"
 
 INVENTORY_TYPE = (
     (MAIN_MATERIEL, u"主材定额"),
-    (AUXILIARY_MATERIEL, u"辅料定额"),
+    (AUXILIARY_MATERIEL, u"辅材定额"),
     (FIRST_FEEDING, u"先投件明细"),
     (OUT_PURCHASED, u"外购件明细"),
     (WELD_MATERIAL, u"焊材定额"),

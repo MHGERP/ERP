@@ -349,12 +349,8 @@ def taskConfirmFinish(request, form, mid):
 def ledgerSearch(request, form):
     search_form = LedgerSearchForm(deserialize_form(form))
     if search_form.is_valid():
-        materiel_list  = Materiel.objects.filter(getQ(search_form.cleaned_data))
-        for item in materiel_list:
-            if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
-                CirculationRoute(materiel_belong = item).save()
-            item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))
-        html = render_to_string("techdata/widgets/designBOM_table_list.html",{"BOM":materiel_list})
+        materiel_list  = SubMateriel.objects.filter(getQ(search_form.cleaned_data))
+        html = render_to_string("production/widgets/designBOM_table_list.html",{"BOM":materiel_list})
     else:
         print search_form.errors
     return simplejson.dumps({ "html" : html})
@@ -364,11 +360,8 @@ def weldPartOrderInfo(request, iid):
     """
     Lei
     """
-    materielObj = Materiel.objects.get(id = iid)
-    if CirculationRoute.objects.filter(materiel_belong = materielObj).count() == 0:
-        CirculationRoute(materiel_belong = materielObj).save()
-    materielObj.route = '.'.join(getattr(materielObj.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(materielObj.circulationroute, "L%d" % i))
-    materielObj.processDetailObj = list(ProcessDetail.objects.filter(materiel_belong = materielObj))
+    materielObj = SubMateriel.objects.get(id=iid)
+    materielObj.processDetailObj = list(ProcessDetail.objects.filter(sub_materiel_belong = materielObj).order_by('process_id'))
     materielObj.processDetailObj.extend([ProcessDetail()] * (12-len(materielObj.processDetailObj)))
     html = render_to_string("production/widgets/weld_part_order_info_table.html",{"materielObj":materielObj})
     return simplejson.dumps({ "html" : html})
