@@ -19,12 +19,17 @@ Registers = (
     WeldStoreThread,
     OutsideStandardEntry,
     OutsideStandardItem,
-    OutsideStorageList,
-    OutsideApplyCard,
-    OutsideApplyCardItem,
+    #OutsideStorageList,
+    #OutsideApplyCard,
+    #OutsideApplyCardItem,
     SteelMaterialEntry,
     SteelMaterialEntryItems,
     SteelMaterialStoreList,
+    SteelMaterialApplyCard,
+    SteelMaterialApplyCardItems,
+    SteelMaterialRefundCard,
+    BarSteelMaterialRefundItems,
+    BoardSteelMaterialRefundItems,
 )
 
 for reg in Registers:

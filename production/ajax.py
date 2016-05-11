@@ -16,6 +16,8 @@ from storage.utils import get_weld_filter
 from const.forms import WorkOrderForm
 from production.forms import *
 from django.contrib.auth.models import User
+from users.models import UserInfo
+from const import *
 
 def getQ(con):
     query_set = Q()
@@ -29,26 +31,25 @@ def getFileList(request, id_work_order):
     """
     Lei
     """
-    workorder = SynthesizeFileListStatus.objects.filter(order_id__id = id_work_order)
+    syn_size_file_list_status = SynthesizeFileListStatus.objects.filter(order_id__id = id_work_order)
+    syn_size_file_list = []
+    for item in syn_size_file_list_status:
+        syn_size_file_list.append([(status, getattr(item,status)) for status in SYNSIZE_FILE_LIST_STATUS])
     context = {
-        "workorder":workorder,
+        "syn_size_file_list":zip(syn_size_file_list_status, syn_size_file_list),
     }
     html = render_to_string("production/synthesize_detail_filelist.html",context)
     return html
 
 @dajaxice_register
-def changeFileList(request, id, workorder_id):
+def changeFileList(request, status, workorder_id, is_check):
     """
     Lei
     """
-    workorder = SynthesizeFileListStatus.objects.filter(workorder_id__order_index = workorder_id)[0]
-    exec("workorder.%s=True"%id)
-    workorder.save()
-    context = {
-        "workorder":[workorder],
-    }
-    html = render_to_string("production/synthesize_detail_filelist.html",context)
-    return html
+    syn_size_file_status = SynthesizeFileListStatus.objects.get(order = workorder_id)
+    setattr(syn_size_file_status,status,is_check)
+    syn_size_file_status.save()
+    return 
 
 @dajaxice_register
 def getHourSearch(request, form):
@@ -74,7 +75,9 @@ def getHourSummarize(request, form):
     """
     hour_summarize_form = HourSummarizeForm(deserialize_form(form))
     if hour_summarize_form.is_valid():
-        process_detail_list  = ProcessDetail.objects.exclude(productionworkgroup = None).filter(getQ(hour_summarize_form.cleaned_data))
+        select = {'month': connection.ops.date_trunc_sql('month', 'complete_process_date')}
+        process_detail_list  = ProcessDetail.objects.exclude(complete_process_date = None).filter(getQ(hour_summarize_form.cleaned_data))\
+        .extra(select=select).values('month','materiel_belong__order','materiel_belong__order__order_index', 'productionworkgroup', 'productionworkgroup__name').annotate(Sum('work_hour'))
     else:
         print hour_message_search_form.errors
     context = {
@@ -84,31 +87,32 @@ def getHourSummarize(request, form):
     return html
 
 @dajaxice_register
-def getSummarizeTicket(request, work_order, groupNumId, date):
+def getSummarizeTicket(request, work_order_id, groupNumId, date):
     """
     Lei
     """
     year,month = date.split("-")
-    process_detail_list = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(productionworkgroup=groupNumId)&Q(complete_date__year=year)&Q(complete_date__month=month)).order_by('complete_date')
-    summarize = reduce(lambda x,y:x+y.work_hour,process_detail_list,0)
+    process_detail_list = ProcessDetail.objects.filter(Q(materiel_belong__order=work_order_id)&Q(productionworkgroup=groupNumId)&Q(complete_process_date__year=year)&Q(complete_process_date__month=month)).order_by('complete_process_date')
+    work_order = process_detail_list[0].materiel_belong.order.order_index
     group_num = process_detail_list[0].productionworkgroup.name
     context = {
         "work_order":work_order,
         "group_num":group_num,
-        "process_detail_list":process_detail_list,
-        "summarize":summarize
+        "process_detail_list":process_detail_list
     }
     html = render_to_string("production/man_hour_summarize_table.html",context)
     return html
 
 @dajaxice_register
-def getPartTicket(request, work_order, groupNumId, date):
+def getPartTicket(request, work_order_id, groupNumId, date):
     """
     Lei
     """
     year,month = date.split("-")
-    process_detail_list = ProcessDetail.objects.filter(Q(materiel_belong__order__order_index=work_order)&Q(productionworkgroup=groupNumId)&Q(complete_date__year=year)&Q(complete_date__month=month)).order_by('materiel_belong')
+    process_detail_list = list(ProcessDetail.objects.filter(Q(materiel_belong__order=work_order_id)&Q(productionworkgroup=groupNumId)&Q(complete_process_date__year=year)&Q(complete_process_date__month=month)).order_by('materiel_belong'))
+    work_order = process_detail_list[0].materiel_belong.order.order_index
     group_num = process_detail_list[0].productionworkgroup.name
+    process_detail_list.extend([ProcessDetail()] * ((4-len(process_detail_list))%4))
     context = {
         "work_order":work_order,
         "group_num":group_num,
@@ -116,7 +120,6 @@ def getPartTicket(request, work_order, groupNumId, date):
     }
     html = render_to_string("production/man_hour_part_ticket.html",context)
     return html
-
 
 
 @dajaxice_register
@@ -169,8 +172,7 @@ def prodplanDelete(request, planid):
 @dajaxice_register
 def getProductPlanForm(request, planid):
     prodPlanForm = ProdPlanForm(instance = ProductionPlan.objects.get(plan_id = planid))
-    html = render_to_string("production/widgets/production_plan_update_form.html", {"prodPlanForm":prodPlanForm})
-    return simplejson.dumps(html)
+    return simplejson.dumps(prodPlanForm.as_p())
     
 @dajaxice_register
 def prodplanUpdate(request, form, planid):
@@ -389,11 +391,55 @@ def getUser(request, form):
     """
     user_choose_form = UserChooseForm(deserialize_form(form))
     if user_choose_form.is_valid():
-        user_list = User.objects.filter(getQ(user_choose_form.cleaned_data))
+        user_list = UserInfo.objects.filter(getQ(user_choose_form.cleaned_data)).order_by("productionuser")
     html = render_to_string("production/widgets/user_table.html",{"user_list":user_list})
     return html
 
-# @dajaxice_register
+@dajaxice_register
+def prodUserModify(request, produserid):
+    """
+    Lei
+    """
+    productionUserForm = ProductionUserForm(instance = ProductionUser.objects.get(id = produserid))
+    return productionUserForm.as_p()
+
+@dajaxice_register
+def saveProdUserModify(request, form, produserid):
+    prod_user_obj = ProductionUser.objects.get(id = produserid)
+    prod_user_form = ProductionUserForm(deserialize_form(form),instance = prod_user_obj)
+    if prod_user_form.is_valid():
+        prod_user_form.save()
+        message = u"修改成功"
+    else:
+        message = u"修改失败"
+    return message
+
+@dajaxice_register
+def prodUserDelete(request, uid):
+    """
+    Lei
+    """
+    produser_obj = ProductionUser.objects.get(id = uid)
+    produser_obj.delete()
+    return uid
+
+@dajaxice_register
+def addProdUser(request, checkUserList):
+    """
+    Lei
+    """
+    for username in checkUserList:
+        userInfor_obj = UserInfo.objects.get(user__username = username)
+        prod_user_obj = ProductionUser()
+        prod_user_obj.production_user_id = userInfor_obj
+        prod_user_obj.save()
+    return
+
+    # prodplan_set = ProductionPlan.objects.all()
+    # html = render_to_string("production/widgets/production_plan_table.html", {"prodplan_set":prodplan_set})
+    # data = {
+    #     "html":html,
+    # }
 # def addProductionUser(request, form):
 #     """
 #     Lei

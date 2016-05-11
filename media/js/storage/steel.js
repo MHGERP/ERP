@@ -6,19 +6,13 @@ $(document).ready(function(){
 	});
 	$(".refund-card-search-btn").click(function(){
 		form=$(".refund-card-search-form").serialize(true);
-		Dajaxice.storage.searchRefundCard(searchRefundCard_CallBack,{'form':form});
+		Dajaxice.storage.searchSteelRefundCard(searchRefundCard_CallBack,{'form':form});
 	});
 	$(".ledger-search-btn").click(function(){
 		form=$(".ledger-search-form").serialize(true);
 		Dajaxice.storage.searchSteelLedger(searchSteelLedger_CallBack,{'form':form});
 	});
-    //var material_number_list = new Array();
 	$(".refund-card-ensure-btn").click(function(){
-        //$("tr.everyReturn").each(function(i){
-        //    material_number_list.push($(this).attr("matnum"));
-        //})
-		//alert(material_number_list);
-
         var form_code = $("table").attr("fc");
         Dajaxice.storage.steelRefundEnsure(steelRefundEnsureCallBack, {'form_code':form_code});
 	});
@@ -46,8 +40,38 @@ $(document).ready(function(){
         });
     })
     $(document).on("click","span[name='steel_entry_confirm']",function(){
-        alert("aa")
         Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":$("div#steelentry_items").attr('eid'),"role":$(this).attr("role")})
+    })
+    $(document).on("dblclick","tr[name='apply_item_tr']",function(){
+        mid = $(this).attr("id");
+        $("#myModal").modal('show');
+    })
+    $(document).on("click","#search_material_btn",function(){
+        var table_path = $("table#store_items_table").attr("table_path");
+        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"steel","table_path":table_path});
+    })
+    $(document).on("click","#steel_select_save",function(){
+        var select_item = $("input[type='radio']:checked").val();
+        if(select_item != null){
+            Dajaxice.storage.steelMaterialApply(steelapply_callback,{"select_item":select_item,"mid":mid});
+        }
+        else{
+            alert("请选择领用材料");
+        }
+    })
+    $(document).on("click","span[name='steel_applycard']",function(){
+        var role = $(this).attr('role');
+        var aid = $("div#steelapplycard_table").attr('aid');
+        if(confirm("领用单确认后不能再修改")){
+            Dajaxice.storage.steelApplyCardConfirm(steel_applycard_confirm_callback,{"aid":aid,"role":role});
+        }
+    })
+    $(document).on("click","span[name='steel_refund']",function(){
+        var role = $(this).attr('role');
+        var rid = $("#refund_table").attr("rid");
+        if(confirm("退库单确认后不能再次修改")){
+            Dajaxice.storage.steelRefundConfirm(steel_refund_callback,{"rid":rid});
+        }
     })
 });
 
@@ -111,5 +135,22 @@ $(document).ready(function(){
 
 function steel_entry_confirm_callback(data){
     $("div#steelentry").html(data.html);
+    alert(data.message);
+}
+function search_material_callback(data){
+   $("#store_items_table").html(data.html); 
+}
+function steelapply_callback(data){
+    if(data.flag){
+        $("#myModal").modal('hide');
+    }
+    alert(data.message);
+}
+function steel_applycard_confirm_callback(data){
+    $("div#steelapplycard").html(data.html);
+    alert(data.message);
+}
+function steel_refund_callback(data){
+    $("div#refund_table_div").html(data.html);
     alert(data.message);
 }

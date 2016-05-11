@@ -1,5 +1,5 @@
-<div id="BidCommentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.4">
     {% if bidform.bid_status.part_status == bid_status_dic.BIDFORM_PART_STATUS_INVITE_BID_APPLY_SELECT%}
+<div id="BidCommentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.4">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h2 id="myModalLabel">招标方式选择</h2>
@@ -14,24 +14,60 @@
         <button class="btn btn-success " data-dismiss="modal" id="apply_select_confirm">确认</button>
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
     </div>
+</div>
     {% elif bidform.bid_status.part_status == bid_status_dic.BIDFORM_PART_STATUS_INVITE_BID_FILL%}
+<div id="BidCommentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.4">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h2 id="myModalLabel">招标文件填写</h2>
     </div>
     <div class="modal-body">
         {% if bidform.bid_mod == 0 %}
-        <a class="btn btn-primary" href="/purchasing/bidapplyform/{{bidform.bid_id}}">填写招标申请表</a>
-        <a class="btn btn-primary" >填写供应商审核表</a>
+        <a class="btn {% if bid_apply_finish%}btn-success{%else%}btn-warning{%endif%}" href="/purchasing/bidapplyform/{{bidform.bid_id}}">填写招标申请表</a>
+        <a class="btn {% if supplier_check_finish%}btn-success{% else%}btn-warning{%endif%}" href="/purchasing/suppliercheck/{{bidform.bid_id}}">填写供应商审核表</a>
         {% else%}
-        <a class="btn btn-primary" >填写比质比价卡</a>
+        <a class="btn {% if quality_card_finish%}btn-success{%else%}btn-warning{%endif%}" >填写比质比价卡</a>
         {% endif%}
     </div>
     <div class="modal-footer">
-        <button class="btn btn-success " data-dismiss="modal" id="apply_select_confirm">确认</button>
+        {% if bid_apply_finish and supplier_check_finish%}
+        <button class="btn btn-success " data-dismiss="modal" id="apply_fill_confirm">确认</button>
+        {% elif quality_card_finish%}
+        <button class="btn btn-success " data-dismiss="modal" id="apply_fill_confirm">确认</button>
+        {% endif%}
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
     </div>
-    {% endif%}
 </div>
+    {% elif bidform.bid_status.part_status == bid_status_dic.BIDFORM_PART_STATUS_INVITE_BID_CARRY%}
+<div id="BidCommentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.6">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h2 id="myModalLabel">标书填写</h2>
+    </div>
+    <div class="modal-body">
+        {% include "purchasing/bid_invite/bid_acceptance_form.html"%}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success " data-dismiss="modal" id="apply_carry_confirm">确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+    {% elif bidform.bid_status.part_status == bid_status_dic.BIDFORM_PART_STATUS_INVITE_BID_COMPLETE%}
+<div id="BidCommentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.6">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h2 id="myModalLabel">中标确认</h2>
+    </div>
+    <div class="modal-body">
+        {% include "purchasing/bid_invite/bid_acceptance_table.html"%}
+    </div>
+    <center>
+        <button class="btn btn-primary" style="margin-bottom:30px;" id="bid_apply_complete">合同确认</button>
+    </center>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+{% endif%}
 
 

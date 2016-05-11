@@ -19,8 +19,9 @@
     <a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
     <ul>
         <li {% block HOME_ACTIVE %}{% endblock %}><a href="/home"><i class="icon icon-home"></i> <span>首页</span></a></li>
-        <li class="submenu {% block DISTRIBUTE_ACTICVE %}{% endblock %}">
+        <li class="submenu {% block SELL_ACTICVE %}{% endblock %}">
         <a href="#"><i class="icon icon-globe"></i> <span>经销管理</span></a>
+        {% include "sell/widgets/menu_list.html" %}
         </li>
 
         <li class="submenu {% block TECHDATA_ACTICVE %}{% endblock %}">

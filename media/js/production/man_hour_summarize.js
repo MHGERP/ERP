@@ -25,11 +25,11 @@ function getHourSummarizeCallBack(data){
 
 $(document).on("click","#summarize-ticket",function(){
     tr = $(this).parent().parent();
-    work_order = $(tr).find("td:eq(0)").html();
+    work_order_id = $(tr).find("td:eq(0)").attr("uid");
     groupNumId = $(tr).find("td:eq(1)").attr("uid");
     date = $(tr).find("td:eq(2)").html();
     Dajaxice.production.getSummarizeTicket(getHourTableCallBack,{
-        "work_order":work_order,
+        "work_order_id":work_order_id,
         "groupNumId":groupNumId,
         "date":date
     });
@@ -42,11 +42,11 @@ function getHourTableCallBack(data){
 
 $(document).on("click","#part-ticket",function(){
     tr = $(this).parent().parent();
-    work_order = $(tr).find("td:eq(0)").html();
+    work_order_id = $(tr).find("td:eq(0)").attr("uid");
     groupNumId = $(tr).find("td:eq(1)").attr("uid");
     date = $(tr).find("td:eq(2)").html();
     Dajaxice.production.getPartTicket(getPartTicketCallBack,{
-        "work_order":work_order,
+        "work_order_id":work_order_id,
         "groupNumId":groupNumId,
         "date":date
     });

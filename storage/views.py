@@ -23,8 +23,14 @@ from users import STORAGE_KEEPER
 from random import randint
 
 def weldMaterialHomeViews(request):
+    hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("-date");
+    todayDate = datetime.datetime.now().date()
+    if hum_set[0].date == todayDate:
+        flag = True
+    else:
+        flag = False
     context = {
-
+            "flag":flag,
             }
     return render(request,"storage/weldmaterial/weldmaterialhome.html",context)
 
@@ -36,54 +42,52 @@ def steelMaterialHomeViews(request):
 
 def steelRefundViews(request):
     search_form = SteelRefundSearchForm()
-    refund_cards = CommonSteelMaterialReturnCardInfo.objects.all()
+    refund_cards = SteelMaterialRefundCard.objects.all()
     context={
             "search_form":search_form,
             "refund_cards":refund_cards,
+            "STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER,
     }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
-def steelrefunddetailViews(request,typeid,rid):
-    typeid=int(typeid)
-    common_Info = CommonSteelMaterialReturnCardInfo.objects.get(id=int(rid))
-    if typeid:
-        return_cards = common_Info.barsteelmaterialreturncardcontent_set.all()
+def steelrefunddetailViews(request,rid):
+    refund = SteelMaterialRefundCard.objects.get(id=rid)
+    if refund.steel_type == BOARD_STEEL:
+        items = refund.boardsteelmaterialrefunditems
+        html_path = "boardsteelrefunddetail.html"
     else:
-        return_cards = common_Info.boardsteelmaterialreturncardcontent_set.all()
+        items = refund.bardsteelmaterialrefunditems_set.all()
+        html_path = "bardsteelrefunddetail.html"
     context={
-        'return_cards':return_cards,
-        'common_Info':common_Info,
+        'refund':refund,
+        'items':items,
     }
-    if typeid==1:
-        return render(request,"storage/steelmaterial/barsteelrefunddetail.html",context)
-    else:
-        return render(request,"storage/steelmaterial/boardsteelrefunddetail.html",context)
+    return render(request,"storage/steelmaterial/"+html_path,context)
 
 
 def steelApplyViews(request):
-    search_form = SteelRefundSearchForm()
-    apply_cards = CommonSteelMaterialApplyCardInfo.objects.all().order_by("apply_confirm")
+    search_form = SteelApplyCardSearchForm()
+    apply_cards = SteelMaterialApplyCard.objects.all().order_by("status")
     context={
         "search_form":search_form,
         "apply_cards":apply_cards,
+        "APPLYCARD_KEEPER":APPLYCARD_KEEPER,
     }
     return render(request,"storage/steelmaterial/steelapplyhome.html",context)
 
-def steelApplyDetailViews(request,typeid,rid):
-    typeid = int(typeid)
-    common_Info = CommonSteelMaterialApplyCardInfo.objects.get(id=int(rid))
-    if typeid:
-        apply_cards = common_Info.barsteelmaterialapplycardcontent_set.all()
-    else:
-        apply_cards = common_Info.boardsteelmaterialapplycardcontent_set.all()
+def steelApplyDetailViews(request,aid):
+    applycard = SteelMaterialApplyCard.objects.get(id=aid)
+    items = applycard.steelmaterialapplycarditems_set.all()
+    search_material_form = SteelMaterialSearchForm()
+    store_items = SteelMaterialStoreList.objects.all()
     context={
-        'apply_cards':apply_cards,
-        'common_Info':common_Info,
+        'applycard':applycard,
+        'items':items,
+        'search_material_form':search_material_form,
+        'store_items':store_items,
+        "search_table_path":"storage/searchmaterial/store_steel_items_table.html",
     }
-    if typeid==1:
-        return render(request,"storage/steelmaterial/barsteelapplydetail.html",context)
-    else:
-        return render(request,"storage/steelmaterial/boardsteelapplydetail.html",context)
+    return render(request,"storage/steelmaterial/steelapplydetail.html",context)
 
 def steelLedgerViews(request):
     search_form = SteelLedgerSearchForm()
@@ -189,6 +193,7 @@ def Weld_Apply_Card_Detail(request):
         "store_items":store_items,
         "ITEM_STATUS_NORMAL":ITEM_STATUS_NORMAL,
         "search_material_form":search_material_form,
+        "search_table_path":"storage/searchmaterial/store_weld_items_table.html",
     }
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
 
@@ -658,11 +663,14 @@ def outsideHomeViews(request):
     return render(request,"storage/outside/outsidehome.html",context)
 
 def outsideEntryHomeViews(request):
-    key_list = ["entry_set","entryurl","ENTRYSTATUS_END"]
-    context = getStorageHomeContext(request,OutsideStandardEntry,OutsideEntrySearchForm,STORAGESTATUS_KEEPER,"storage/outside/entryconfirm",key_list,"entry_time")
-    context["check_materiel_form"] = CheckMaterielListForm()
-    context["is_production"] = True
-    context["items_set"] = WeldStoreList.objects.all()
+    
+    entry_set = OutsideStandardEntry.objects.filter(entry_status__gte = STORAGESTATUS_KEEPER)
+    search_form = OutsideEntrySearchForm()
+    context = {
+        "entry_set":entry_set,
+        "STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER,
+        "search_form":search_form,
+    }
     return render(request,"storage/outside/outsideentryhome.html",context)
 
 def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list,order_field):
