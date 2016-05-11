@@ -6,7 +6,7 @@ from const.forms import WorkOrderForm
 
 def taskAllocationViews(request):
     search_form = TaskAllocationForm()
-    items_list = ProcessDetail.objects.filter(complete_date = None).order_by('-productionworkgroup')
+    items_list = ProcessDetail.objects.filter(complete_process_date = None).order_by('-productionworkgroup')
     for item in items_list:
         item.groups = ProductionWorkGroup.objects.filter(processname = item.processname)
 
@@ -19,7 +19,7 @@ def taskAllocationViews(request):
 
 def taskConfirmViews(request):
     search_form = TaskConfirmForm()
-    items_list = ProcessDetail.objects.exclude(productionworkgroup = None).order_by('complete_date')
+    items_list = ProcessDetail.objects.exclude(productionworkgroup = None).order_by('complete_process_date')
 
     context={
         "taskallocationform":search_form,

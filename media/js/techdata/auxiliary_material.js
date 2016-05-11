@@ -50,7 +50,7 @@ $(document).on("dblclick", ".tr_materiel td", function() {
 });
 function fill(iid) {
     $("#card_modal").attr("iid", iid);
-    Dajaxice.techdata.getMaterielInfo(getInfoCallBack, {"iid": iid});
+    Dajaxice.techdata.getMaterielDetailInfo(getInfoCallBack, {"iid": iid});
     Dajaxice.techdata.getAuxiliary(getAuxiliaryCallBack, {"iid": iid});
 }
 function getInfoCallBack(data) {
@@ -74,4 +74,44 @@ $("#id_goto_prev").click(function() {
     var row_prev = row.prev(".tr_materiel");
     if(!row_prev.html()) alert("本条为第一条！");
     else fill(row_prev.attr("iid"));
+});
+$(document).on("click", "#id_save", function() {
+    var iid = $("#card_modal").attr("iid");
+    Dajaxice.techdata.updateAuxiliary(updateAuxiliaryCallBack, {    "iid":iid,
+                                                                    "form": $("#auxiliary_form").serialize()});
+});
+function updateAuxiliaryCallBack(data){
+    if(data=="ok"){
+        alert("保存成功");
+    }
+    else{
+        alert("保存失败");
+    }
+}
+
+
+$(document).on("click", "#fast_generate", function(){
+    var id_work_order = $("#id_work_order").val();
+    var inventory_type = $(".form-search").attr("itype");
+    Dajaxice.techdata.autoSetInventoryLabel(function(data) {
+        alert("生成成功！");
+        refresh();
+    }, {
+        "id_work_order": id_work_order,
+        "inventory_type": inventory_type,
+    })
+});
+
+$("#btn-add").click(function() {
+    var index = $("#input-index").val()
+    var id_work_order = $("#id_work_order").val();
+    var inventory_type = $(".form-search").attr("itype");
+    Dajaxice.techdata.addSingleItem(function(data) {
+        if(data.success) refresh();
+        alert(data.remark);
+    }, {
+        "id_work_order": id_work_order,
+        "index": index,
+        "inventory_type": inventory_type,
+    })
 });

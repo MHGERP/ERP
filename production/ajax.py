@@ -224,14 +224,16 @@ def taskAllocationSearch(request, form):
     if form.is_valid():
         conditions = form.cleaned_data
     
-        task_allocation_status = conditions['task_allocation_status']
-        del conditions['task_allocation_status']
-        if task_allocation_status == "-1":
-            items_list = ProcessDetail.objects.filter(complete_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
-        elif task_allocation_status == "0":
-            items_list = ProcessDetail.objects.filter(complete_date = None).filter(productionworkgroup = None).filter(getQ(conditions));
-        else:
-            items_list = ProcessDetail.objects.filter(complete_date = None).exclude(productionworkgroup = None).filter(getQ(conditions)).order_by('-productionworkgroup');
+        items_list = ProcessDetail.objects.filter(complete_process_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
+        print getQ(conditions)
+        #task_allocation_status = conditions['task_allocation_status']
+        #del conditions['task_allocation_status']
+        #if task_allocation_status == "-1":
+        #    items_list = ProcessDetail.objects.filter(complete_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
+        #elif task_allocation_status == "0":
+        #    items_list = ProcessDetail.objects.filter(complete_date = None).filter(productionworkgroup = None).filter(getQ(conditions));
+        #else:
+        #    items_list = ProcessDetail.objects.filter(complete_date = None).exclude(productionworkgroup = None).filter(getQ(conditions)).order_by('-productionworkgroup');
         for item in items_list:
             item.groups = ProductionWorkGroup.objects.filter(processname = item.processname);
     context = {
@@ -317,12 +319,14 @@ def ledgerTimeChange(request, mid):
     """
     bin
     """
-    item = Materiel.objects.get(id = mid)
-    context = {
-        "item":item,
-    }
-    html = render_to_string("production/widgets/ledger_plantime_table.html",context)
-    return simplejson.dumps({"html":html})
+    item = SubMateriel.objects.get(id = mid)
+    form = MaterialPlantimeChangeForm(instance = item)
+    print form
+    return simplejson.dumps(form.as_p())
+
+
+
+
 
 
 @dajaxice_register

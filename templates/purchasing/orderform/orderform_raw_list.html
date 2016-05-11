@@ -34,7 +34,7 @@
             <td>{{item.press}}</td>
 			<td>{{item.specification}}</td>
             <td>{{item.count}}</td>
-            <td>{{item.total_weight_cal}}</td>
+            <td>{{item.total_weight}}</td>
             <td>{{item.recheck}}</td>
             <td>{{item.detection_level}}</td>
             <td>{{item.status}}</td>
@@ -54,13 +54,13 @@
 			<input type="checkbox" class="checkbox" args="{{item.id}}">
 			{% endif %}</td> 
             <td>{{forloop.counter}}</td>
-            <td>{{item.sub_workorder}}</td>
+            <td>{{item.work_order}}</td>
         	<td>{{item.name}}</th>
             <td>{{item.material.name}}</td>
             <td>{{item.press}}</td>
 			<td>{{item.specification}}</td>
-            <td>{{item.materielformconnection.count}}</td>
-            <td>{{item.materielformconnection.purchasing}}</td>
+            <td>{{item.count}}</td>
+            <td>{{item.total_weight}}</td>
             <td>{{item.recheck}}</td>
             <td>{{item.detection_level}}</td>
             <td>{{item.status}}</td>
