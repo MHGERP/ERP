@@ -1,8 +1,8 @@
 <div>
     <div>工作票号：</div>
-    <input type="text" value="{{item.index}}"></input>
+    <input type="text" value="{{item.materiel_belong.index}}" readonly></input>
     <div>工作令：</div>
-    <input type="text" value="{{item.order}}"></input>
+    <input type="text" value="{{item.sub_order}}" readonly></input>
     <div>计划完成时间：</div>
-    <input id="datetimepicker" type="text" value="{{item.complete_plandate}}" date-date-format="yyyy-mm-dd"/>
+    <input id="datetimepicker" type="text" value="{{item.complete_plandate|date:"Y-m-d"}}"/>
 </div> 

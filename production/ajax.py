@@ -317,12 +317,14 @@ def ledgerTimeChange(request, mid):
     """
     bin
     """
-    item = Materiel.objects.get(id = mid)
-    context = {
-        "item":item,
-    }
-    html = render_to_string("production/widgets/ledger_plantime_table.html",context)
-    return simplejson.dumps({"html":html})
+    item = SubMateriel.objects.get(id = mid)
+    form = MaterialPlantimeChangeForm(instance = item)
+    print form
+    return simplejson.dumps(form.as_p())
+
+
+
+
 
 
 @dajaxice_register
