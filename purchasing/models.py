@@ -336,7 +336,7 @@ class StatusChangeReason(models.Model):
 
 class MaterielExecuteDetail(models.Model):
     materiel_execute = models.ForeignKey(MaterielExecute, null = True, blank = True, verbose_name = u"材料执行")
-    materiel=models.ForeignKey(Materiel,verbose_name=u"物料")
+    materiel=models.ForeignKey(MaterielCopy,verbose_name=u"物料")
     batch_number = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"出厂批号")
     quota = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"定额")
     part = models.CharField(max_length = 50, null = True, blank = True, verbose_name = u"零件")
