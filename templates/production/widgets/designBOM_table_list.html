@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <th>票号</th>
+      <th>工作令</th>
       <th>件号</th>
       <th>图号</th>
       <th>部件图号</th>
@@ -19,6 +20,7 @@
   {% for item in BOM %}
   <tr iid="{{item.id}}" class="designBOM_row">
     <td>{{item.materiel_belong.index}}</td>
+    <td>{{item.sub_order}}</td>
     <td>{{item.materiel_belong.sub_index}}</td>
     <td>{{item.materiel_belong.schematic_index}}</td>
     <td>{{item.materiel_belong.parent_schematic_index|default_if_none:""}}</td>
