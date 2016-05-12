@@ -186,9 +186,11 @@ lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></p>
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:82.1pt'>
+  {% if items.graph %}
     <a href={{items.graph.url}} target="_blank">
         <img src="{{items.graph.url}}" style="max-width:403.85pt;max-height:82.1pt;">
     </a>
+    {% endif %}
   </td>
  </tr>
  <tr style='mso-yfti-irow:3;mso-yfti-lastrow:yes;height:19.85pt'>

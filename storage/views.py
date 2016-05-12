@@ -56,8 +56,8 @@ def steelrefunddetailViews(request,rid):
         items = refund.boardsteelmaterialrefunditems
         html_path = "boardsteelrefunddetail.html"
     else:
-        items = refund.bardsteelmaterialrefunditems_set.all()
-        html_path = "bardsteelrefunddetail.html"
+        items = refund.barsteelmaterialrefunditems_set.all()
+        html_path = "barsteelrefunddetail.html"
     context={
         'refund':refund,
         'items':items,
