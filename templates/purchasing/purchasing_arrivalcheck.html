@@ -10,6 +10,7 @@
 {% include "purchasing/widgets/arrivalinspection_table.html" %}
 {% if is_show %}
 <div>
+    {{entrytype.entry_type}}
     <button id="genbtn" class="btn btn-primary" onclick="gen_entry({{bid}});">生成入库单</button>
 </div>
 {% endif %}
