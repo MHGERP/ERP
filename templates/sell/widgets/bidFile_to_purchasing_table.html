@@ -6,10 +6,11 @@
                 <th>下发文件</th>
                 <th>上传招标文件</th>
                 <th>查看上传招标文件</th>
+                <th>文件审核状态</th>
             </tr>
         </thead>
         <tbody>
-            {% for item in productions %} 
+            {% for item in productions %}
             <tr iid="{{item.id}}" class="productions_row">
                 <td>{{item.name}}</td>
                 <td>
@@ -17,10 +18,20 @@
                     <span><a href="{{item.purchasing_file_down.file_obj.url}}">{{item.purchasing_file_down.name}}</a></span>
                     {% endif %}
                 </td>
-                <td><span class="btn btn-primary btn-upload" group="purchasing" href="#product_upload" data-toggle="modal">上传</span></td>
+                <td>
+                    {% if item.purchasing_file_up and item.purchasing_file_up.is_approval == 0%}
+                    <span>已上传</span>
+                    {% else %}
+                    <span class="btn btn-primary btn-upload" group="purchasing" href="#product_upload" data-toggle="modal">上传</span></td>
+                    {% endif %} 
                 <td>
                     {% if item.purchasing_file_up%}
                     <span><a href="{{item.purchasing_file_up.file_obj.url}}">{{item.purchasing_file_up.name}}</a></span>
+                    {% endif %}
+                </td>
+                <td>
+                     {% if item.purchasing_file_up %}
+                    <span>{{item.purchasing_file_up.getStatus}}</span>
                     {% endif %}
                 </td>
             </tr>

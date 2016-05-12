@@ -4,6 +4,7 @@
             <tr>
                 <th rowspan="2">产品名称</th>
                 <th colspan="6">招标文件</th>
+                <th rowspan="2">产品审核</th>
             </tr>
             <tr>
                 <th colspan="2">生产</th>
@@ -21,7 +22,16 @@
                     {% endif %}
                 </td>
                 <td>
-                    <span class="btn btn-success" group="manufacture">审核</span>
+                    {% if item.manufacture_file_up %}
+                    {% if item.manufacture_file_up.is_approval == -1 %}
+                        <span class="btn btn-success bidfile_audit" group="manufacture">审核</span>
+                    {% elif item.manufacture_file_up.is_approval == 0 %}
+                        <span>审核通过</span>
+                    {% else %}
+                        <span>未通过</span>
+                    {% endif %}
+                    {% else %}<span>未上传文件</span>
+                    {% endif %}
                 </td>
                 <td>
                     {% if item.techdata_file_up%}
@@ -29,7 +39,16 @@
                     {% endif %}
                 </td>
                 <td>
-                    <span class="btn btn-success" group="techdata">审核</span>
+                    {% if item.techdata_file_up %}
+                    {% if item.techdata_file_up.is_approval == -1 %}
+                        <span class="btn btn-success bidfile_audit" group="techdata">审核</span>
+                    {% elif item.techdata_file_up.is_approval == 0 %}
+                        <span>审核通过</span>
+                    {% else %}
+                        <span>未通过</span>
+                    {% endif %}
+                    {% else %}<span>未上传文件</span>
+                    {% endif %}
                 </td>
                 <td>
                     {% if item.manufacture_file_up%}
@@ -37,7 +56,19 @@
                     {% endif %}
                 </td>
                 <td>
-                    <span class="btn btn-success" group="purchasing">审核</span>
+                    {% if item.purchasing_file_up %}
+                    {% if item.purchasing_file_up.is_approval == -1 %}
+                        <span class="btn btn-success bidfile_audit" group="purchasing">审核</span>
+                    {% elif item.purchasing_file_up.is_approval == 0 %}
+                        <span>审核通过</span>
+                    {% else %}
+                        <span>未通过</span>
+                    {% endif %}
+                    {% else %}<span>未上传文件</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <span class="btn btn-primary product_audit">审核通过</span>
                 </td>
             </tr>
             {% endfor %}

@@ -73,14 +73,14 @@ class OrderIndexForm(forms.Form):
         self.fields["order_index"].choices = ORDER_INDEX_CHOICES
 
 class TaskAllocationSearchForm(forms.Form):
-    materiel_belong__order__order_index = forms.ChoiceField(required = False, widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
-    materiel_belong__index = forms.CharField(required=False, label=u"编号")
+    sub_materiel_belong__sub_order= forms.ChoiceField(required = False, widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
+    sub_materiel_belong__materiel_belong__index = forms.CharField(required=False, label=u"编号")
     processname__name = forms.ChoiceField(required=False, label=u"工序")
     productionworkgroup__name__contains = forms.CharField(required=False,label=u"操作组")
     def __init__(self, *args, **kwargs):
         super(TaskAllocationSearchForm, self).__init__(*args, **kwargs)
-        ORDER_INDEX_CHOICES = tuple([("", u"----------")]  + [(item.order_index,item.order_index) for item in WorkOrder.objects.all()])
-        self.fields["materiel_belong__order__order_index"].choices = ORDER_INDEX_CHOICES
+        ORDER_INDEX_CHOICES = tuple([("", u"----------")]  + [(item.id,item) for item in SubWorkOrder.objects.all()])
+        self.fields["sub_materiel_belong__sub_order"].choices = ORDER_INDEX_CHOICES
         PROCESS_NAME_CHIOCES = tuple([("",u"----------")] + [(item.name,item.get_name_display()) for item in ProcessingName.objects.all()])
         self.fields["processname__name"].choices = PROCESS_NAME_CHIOCES
 
