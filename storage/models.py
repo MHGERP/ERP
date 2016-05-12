@@ -532,7 +532,7 @@ class OutsideStandardEntry(models.Model):
     def __unicode__(self):
         return "%s" % self.entry_code
 
-class OutsideStandardItem(models.Model):
+class OutsideStandardItems(models.Model):
     entry = models.ForeignKey(OutsideStandardEntry,verbose_name = u"入库单")
     materiel = models.ForeignKey(MaterielCopy,verbose_name=u"物料",null=True,blank=True)
     schematic_index = models.CharField(verbose_name=u"标准号或图号",max_length=50,blank=True,null=True)
@@ -556,7 +556,7 @@ class OutsideStandardItem(models.Model):
 
 
 class OutsideStorageList(models.Model):
-    entry_item = models.OneToOneField(OutsideStandardItem,verbose_name=u"入库材料")
+    entry_item = models.OneToOneField(OutsideStandardItems,verbose_name=u"入库材料")
     count = models.IntegerField(verbose_name=u"数量",default=0)
     outsidebuy_type = models.IntegerField(choices=OUTSIDEBUY_TYPE,default=COOPERATION_OUTSIDEBUY,verbose_name=u"外购件类型")
     class Meta:
@@ -572,7 +572,7 @@ class OutsideApplyCard(models.Model):
     auditor = models.ForeignKey(User,blank=True,null=True,verbose_name=u"审核人",related_name = "out_apply_auditor")
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "out_apply_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "out_apply_keeper")
-    entry_status = models.IntegerField(choices=APPLYCARD_STATUS_CHOICES,default=APPLYCARD_APPLICANT,verbose_name=u"入库单状态")
+    status = models.IntegerField(choices=APPLYCARD_STATUS_CHOICES,default=APPLYCARD_APPLICANT,verbose_name=u"入库单状态")
     change_code = models.CharField(verbose_name=u"修改号",max_length=50,blank=True,null=True)
     sample_report = models.CharField(verbose_name=u"样表",max_length=50,blank=True,null=True)
     applycard_code = models.CharField(verbose_name=u"编号",max_length=20)
@@ -586,9 +586,9 @@ class OutsideApplyCard(models.Model):
     def __unicode__(self):
         return self.applycard_code
 
-class OutsideApplyCardItem(models.Model):
+class OutsideApplyCardItems(models.Model):
     applycard = models.ForeignKey(OutsideApplyCard,verbose_name=u"领用单")
-    storelist = models.ForeignKey(OutsideStorageList,verbose_name=u"外购件库存材料")
+    storelist = models.ForeignKey(OutsideStorageList,verbose_name=u"外购件库存材料",null=True,blank=True)
     schematic_index = models.CharField(verbose_name=u"标准号或图号",max_length=50,blank=True,null=True)
     specification = models.CharField(verbose_name=u"名称及规格",max_length=50,blank=True,null=True)
     material_mark = models.CharField(verbose_name=u"材料牌号",max_length=50,blank=True,null=True)
