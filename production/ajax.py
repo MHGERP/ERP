@@ -270,6 +270,50 @@ def taskConfirmSearch(request, form):
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
+def taskPlanSearch(request, form):
+    """
+    bin
+    """
+    form = TaskPlanForm(deserialize_form(form))
+    items_list = {}
+    if form.is_valid():
+        conditions = form.cleaned_data
+        #del conditions['plan_startdate__isnull']
+        items_list = ProcessDetail.objects.filter(productionworkgroup = None).filter(getQ(conditions)).order_by('sub_materiel_belong').order_by('-plan_startdate');
+        
+    context = {
+        "items_list":items_list,
+        "taskplanform":form,
+    }
+    html = render_to_string("production/table/task_plan_table.html",context)
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def taskPlanSubmit(request, form, mid, startdate, enddate):
+    """
+    bin
+    """
+    item = ProcessDetail.objects.get(id = mid)
+    item.plan_startdate = datetime.datetime.strptime(startdate, '%Y-%m-%d')
+    item.plan_enddate = datetime.datetime.strptime(enddate, '%Y-%m-%d')
+    item.save()
+    return taskPlanSearch(request, form)
+
+
+@dajaxice_register
+def taskPlanChange(request, mid):
+    """
+    bin
+    """
+    item = ProcessDetail.objects.get(id = mid)
+    context = {
+        "item":item,
+    }
+    html = render_to_string("production/table/task_plantime_table.html",context)
+    return simplejson.dumps({"html":html})
+    
+
+@dajaxice_register
 def taskAllocationRemove(request, form, mid):
     """
     bin
