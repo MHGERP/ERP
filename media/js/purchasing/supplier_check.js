@@ -37,7 +37,7 @@ $("#suppliercheck_submit").click(function(){
       var supplier_check_id=$("#supplier_check_div").attr("suppliercheckid");
       Dajaxice.purchasing.submitSupplierCheck(function(data){
     window.location.reload();
-      },{supplier_check_id:supplier_check_id});
+      },{'supplier_check_id':supplier_check_id});
 });
 $("#suppliercheck_comment_confirm").click(function(){
     var supplier_check_id=$("#supplier_check_div").attr("suppliercheckid");

@@ -25,7 +25,8 @@ RegisterClass = (
     MaterielCopy,
     bidApply,
     CommentStatus,
-    SupplierCheck
+    SupplierCheck,
+    qualityPriceCard
 )
 
 for item in RegisterClass:

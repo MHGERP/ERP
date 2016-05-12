@@ -26,7 +26,7 @@
         <a class="btn {% if bid_apply_finish%}btn-success{%else%}btn-warning{%endif%}" href="/purchasing/bidapplyform/{{bidform.bid_id}}">填写招标申请表</a>
         <a class="btn {% if supplier_check_finish%}btn-success{% else%}btn-warning{%endif%}" href="/purchasing/suppliercheck/{{bidform.bid_id}}">填写供应商审核表</a>
         {% else%}
-        <a class="btn {% if quality_card_finish%}btn-success{%else%}btn-warning{%endif%}" >填写比质比价卡</a>
+        <a class="btn {% if quality_card_finish %}btn-success{%else%}btn-warning{%endif%}" href="/purchasing/qualitycard/{{bidform.bid_id}}">填写比质比价卡</a>
         {% endif%}
     </div>
     <div class="modal-footer">
