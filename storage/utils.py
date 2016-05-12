@@ -238,7 +238,8 @@ def checkStorage(db_type,sorce=None):
 def getDbMap(sorce):
     weld_tuple = (WeldStoreList,WeldStorageSearchForm,WeldingMaterialApplyCard)
     steel_tuple = (SteelMaterialStoreList,SteelMaterialSearchForm,SteelMaterialApplyCard)
-    DB_MAP = {WELD:weld_tuple,STEEL:steel_tuple,PURCHASED:steel_tuple,AUXILIARY_TOOL:steel_tuple}
+    outside_tuple = (OutsideStorageList,OutsideMaterialSearchForm,OutsideApplyCard)
+    DB_MAP = {"weld":weld_tuple,"steel":steel_tuple,"outside":outside_tuple,"auxiliary_tool":steel_tuple}
     return DB_MAP
 
 def modify_weld_item_status(items):

@@ -1,0 +1,28 @@
+<table class="table table-bordered">
+    <thead>
+        <th>工作令</th>
+        <th>编号</th>
+        <th>日期</th>
+        <th>领用人</th>
+        <th>领用单位</th>
+        <th>操作</th>
+    </thead>
+    </tbody>
+        {% for card in card_set %}
+        <tr>
+            <td>{{card.work_order}}</td>
+            <td>{{card.applycard_code}}</td>
+            <td>{{card.create_time|date:"Y年m月d日"}}</td>
+            <td>{{card.applicant.userinfo|default_if_none:""}}</td>
+            <td>{{card.department}}</td>
+            <td>
+                {% ifequal card.entry_status  APPLYSTATUS_KEEPER %}
+                <a class="btn btn-warning" href="/storage/outside/applycardconfirm/{{card.id}}">待处理</a>
+                {% else %}
+                <a class="btn" href="/storage/outside/applycardconfirm/{{card.id}}">查看</a>
+                {% endifequal %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
