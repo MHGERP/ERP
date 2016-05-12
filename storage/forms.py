@@ -496,7 +496,7 @@ class WeldRefundConfirmForm(ModelForm):
 class SteelMaterialSearchForm(forms.Form):
     entry_item__work_order__order_index = forms.CharField(label=u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     specification = forms.CharField(label=u"名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
-    materiel = forms.CharField(label=u"材质",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__material_mark = forms.CharField(label=u"材质",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     def __init__(self,*args,**kwargs):
         super(SteelMaterialSearchForm,self).__init__(*args,**kwargs) 
         set_form_input_width(self.fields)
@@ -528,7 +528,7 @@ class OutsideEntrySearchForm(forms.Form):
 
 class OutsideEntryItemForm(ModelForm):
     class Meta:
-        model = OutsideStandardItem
+        model = OutsideStandardItems
         fields = ("weight","heatnum","factory","ticket_number","remark")
         widgets =  {
             "weight":forms.TextInput(attrs={"class":"span2"}),
@@ -539,4 +539,29 @@ class OutsideEntryItemForm(ModelForm):
         }
     def __init__(self,*args,**kwargs):
         super(OutsideEntryItemForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields,("style","width:250px;"))
+
+class OutsideApplyCardSearchForm(forms.Form):
+    create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
+    create_time__lte  = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker', 'date_picker':'true'}))
+    work_order = forms.ChoiceField(label=u"工作令",required=False,widget=forms.Select(attrs={'class':'form-control',"select2":'true'}))
+    applycard_code = forms.CharField(label=u'领用卡编号',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
+    department = forms.CharField(label=u'领用单位',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideApplyCardSearchForm,self).__init__(*args,**kwargs)
         set_form_input_width(self.fields)
+        workorder_set = WorkOrder.objects.all()
+        self.fields["work_order"].choices = getChoiceList(workorder_set,"order_index")
+
+class OutsideMaterialSearchForm(forms.Form):
+    entry_item__work_order__order_index = forms.CharField(label=u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    outsidebuy_type = forms.ChoiceField(label=u"材料类型",required = False, widget = forms.Select(attrs={"class":'form-control'}))
+    entry_item__material_mark = forms.CharField(label=u"材质",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__schematic_index = forms.CharField(label=u"零件图/标准",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__specification = forms.CharField(label=u"名称规格",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideMaterialSearchForm,self).__init__(*args,**kwargs) 
+        set_form_input_width(self.fields)
+        outsidetypes = [("-1","------")]
+        outsidetypes.extend(OUTSIDEBUY_TYPE)
+        self.fields["outsidebuy_type"].choices = tuple(outsidetypes)

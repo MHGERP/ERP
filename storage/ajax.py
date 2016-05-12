@@ -690,17 +690,30 @@ def bakeSave(request,bakeform,bid=None):
     return simplejson.dumps({"html":html,"message":message})
 
 @dajaxice_register
-def outsideEntryConfirm(request,eid,form):
-    status_list = [ x[0]  for x in ENTRYSTATUS_CHOICES ] 
-    html,flag,context = getEntryData(request,eid,form,OutsideStandardEntry,OutsideStandardItem,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,"outside/entryhome","keeper",status_list)
-    entry_obj = context["entry_obj"]
-    items_set = context["entry_set"]
-    genOutsideStoreList(items_set)
+@transaction.commit_manually
+def outsideEntryConfirm(request,eid):
+    entry = OutsideStandardEntry.objects.get(id=eid)
+    items = OutsideStandardItem.objects.filter(entry = entry)
+    flag = False
+    try:
+        if entry.entry_status == STORAGESTATUS_KEEPER:
+            for item in items:
+                new_storelist = OutsideStorageList(entry_item=item,count=item.count,outsidebuy_type=entry.outsidebuy_type)
+                new_storelist.save()
+            entry.entry_status = STORAGESTATUS_END
+            entry.keeper = request.user
+            entry.save()
+            flag = True
+    except Exception,e:
+        entry.keeper = None
+        print e
+    html = render_to_string("storage/wordhtml/outsideentry.html",{"entry":entry,"items":items})
     if flag:
-        message = u"保存成功"
+        message = u"入库单确认成功"
+        transaction.commit()
     else:
-        message = u"保存失败"
-    status_list = [ x[0]  for x in ENTRYSTATUS_CHOICES ] 
+        message = u"入库单确认失败"
+        transaction.rollback()
     return simplejson.dumps({"html":html,"message":message})
 
 def getEntryData(request,eid,form,_Model,_ItemModel,_Inform,_Reform,entryhomeurl,role,status_list,entry_status=STORAGESTATUS_KEEPER):
@@ -742,26 +755,29 @@ def outsideApplyCardItemRemarkChange(request,itemid,remark):
     return simplejson.dumps({"remark":item.remark,"id":item.id})
 
 @dajaxice_register
-def outsideApplyCardConfirm(request,form,aid):
+def outsideApplyCardConfirm(request,aid):
     applycard = OutsideApplyCard.objects.get(id = aid)
-    form = OutsideApplyCardForm(deserialize_form(form),instance=applycard)
-    if form.is_valid():
-        form.save()
-        saveRolers(applycard,"keeper",request.user)
-        items_set = OutsideApplyCardItem.objects.filter(applycard = applycard)
-        isOk = updateStorageLits(items_set,OutsideStorageList)
-        if isOk:
-            message = u"确认成功"
-            setObjAttr(applycard,"entry_status",STORAGESTATUS_END)
+    items = OutsideApplyCardItems.objects.filter(applycard = applycard)
+    if applycard.status == APPLYCARD_KEEPER:
+        if items.filter(storelist__isnull = True).count() > 0:
+            message = u"还有领用项未分配库存材料"
         else:
-            message = u"确认失败，部分材料库存不够"
+            for item in items:
+                storelist = item.storelist
+                storelist.count -= item.count
+                storelist.save()
+            applycard.status = APPLYCARD_END
+            applycard.keeper = request.user
+            applycard.save()
+            message = u"领用卡确认成功"
     else:
-        message = u"确认失败，领用单内容未填全"
-        print form.errors
-    url = "outside/applycardhome"
-    default_status = STORAGESTATUS_KEEPER
-    context = getOutsideApplyCardContext(applycard,form,url,default_status)
-    html = render_to_string("storage/widgets/applycardbody.html",context)
+        message = u"领用卡已经确认过"
+    
+    context = {
+        "applycard":applycard,
+        "items":items,
+    }
+    html = render_to_string("storage/wordhtml/outsideapplycard.html",context)
     return simplejson.dumps({"message":message,"html":html})
 
 def getOutsideApplyCardContext(applycard,inform,url,default_status):
@@ -976,8 +992,9 @@ def searchWeldEntry(request,searchform):
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
-def searchMaterial(request,search_form,search_type,table_path):
+def searchMaterial(request,search_form,search_type):
     (storelist_model,form_type,applycard_model) = checkStorage(search_type)
+    table_path = "storage/searchmaterial/store_"+search_type+"_items_table.html"
     search_form = form_type(deserialize_form(search_form))
     if search_form.is_valid():
         if search_type=="weld":
@@ -1111,7 +1128,8 @@ def steelRefundConfirm(request,rid):
             items = refund.boardsteelmaterialrefunditems
             items_table_path = "steelboardrefund.html"
         else:
-            items = refund.bardsteelmaterialrefunditems_set.all
+            items = refund.barsteelmaterialrefunditems_set.all()
+            items_table_path = "steelbarrefund.html"
         updateSteelStoreList(refund,items)
         refund.status = STORAGESTATUS_END
         refund.keeper = request.user
@@ -1130,15 +1148,64 @@ def updateSteelStoreList(refund,items):
         return_time = old_storelist.return_time + 1
         new_storelist = SteelMaterialStoreList(entry_item=old_storelist.entry_item,specification=items.specification,steel_type=old_storelist.steel_type,count=items.count,return_time=return_time,weight=items.weight,refund=refund.id)
         new_storelist.save() 
+    else:
+        for item in items:
+            old_storelist = item.applyitem.storelist
+            return_time = old_storelist.return_time + 1
+            new_storelist = SteelMaterialStoreList(entry_item=old_storelist.entry_item, specification=item.specification, steel_type=old_storelist.steel_type, count=item.count, return_time=return_time, weight=item.weight, length=item.length, refund=refund.id)
+            new_storelist.save()
 
 @dajaxice_register
 def outsideCardSearch(request,role,form):
-    OutsideCardDict = {"entry":OutsideStandardEntry}
-    TableHtmlPathDict = {"entry":"outsideentryhometable",}
-    form = OutsideEntrySearchForm(deserialize_form(form))
+    OutsideCardDict = {"entry":OutsideStandardEntry,"applycard":OutsideApplyCard}
+    TableHtmlPathDict = {"entry":"outsideentryhometable","applycard":"applycardhometable"}
+    OutsideSearchFormDict = {"entry":OutsideEntrySearchForm,"applycard":OutsideApplyCardSearchForm}
+    form = OutsideSearchFormDict[role](deserialize_form(form))
     card_model = OutsideCardDict[role]
     html_path = "storage/widgets/"+TableHtmlPathDict[role]+".html"
     if form.is_valid():
         card_set = get_weld_filter(card_model,form.cleaned_data)
     html = render_to_string(html_path,{"card_set":card_set,"STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER})
     return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def outsideEntryItemSave(request,form,mid):
+    item = OutsideStandardItems.objects.get(id=mid)
+    form = OutsideEntryItemForm(deserialize_form(form),instance = item)
+    flag = False
+    if item.entry.entry_status == STORAGESTATUS_KEEPER:
+        if form.is_valid():
+            form.save()
+            flag = True
+            message = u"材料信息保存成功"
+        else:
+            message = u"材料信息保存失败"
+    else:
+        message = u"入库单已经确认过，不能再次修改"
+        
+    html = render_to_string("storage/outside/entryitemform.html",{"form":form})
+    return simplejson.dumps({"message":message,"flag":flag,"html":html})
+
+@dajaxice_register
+def getOutsideEntryItemFormInfo(request,mid):
+    item = OutsideStandardItems.objects.get(id=mid)
+    form = OutsideEntryItemForm(instance = item)
+    html = render_to_string("storage/outside/entryitemform.html",{"form":form})
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def outsideMaterialApply(request,select_item,mid):
+    applyitem = OutsideApplyCardItems.objects.get(id=mid)
+    storelist = OutsideStorageList.objects.get(id=select_item)
+    if applyitem.applycard.status == APPLYCARD_KEEPER:
+        if applyitem.count <= storelist.count:
+            applyitem.storelist = storelist
+            applyitem.save()
+            message = u"材料选择成功"
+        else:
+            message = u"所选材料数量不足"
+    else:
+        message = u"领用卡已经确认，不能修改材料"
+        
+    return simplejson.dumps({"message":message})
+        

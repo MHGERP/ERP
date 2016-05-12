@@ -6,18 +6,48 @@ $(document).ready(function(){
     })
     $(document).on("dblclick","tr[name='entry_item_tr']",function(){
         mid = $(this).attr("id");
+        Dajaxice.storage.getOutsideEntryItemFormInfo(getforminfo_callback,{"mid":mid});
         $("#myModal").modal('show');
     })
+    $(document).on("click","#save_entry_item",function(){
+        var form = $("#entry_item_form").serialize();
+        Dajaxice.storage.outsideEntryItemSave(outsideentryitemsave_callback,{"form":form,"mid":mid});
+    })
+    $(document).on("click","span[name='outside_entry_confirm']",function(){
+        var eid = $(this).attr("eid");
+        Dajaxice.storage.outsideEntryConfirm(outsideentryconfirm_callback,{"eid":eid});
+    })
+    $(document).on("click","#search_material_btn",function(){
+        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"outside",});
+    })
+    $(document).on("dblclick","tr[name='applycard_item_tr']",function(){
+        mid = $(this).attr("id");
+        $("#myModal").modal('show');    
+    })
+    $(document).on("click","#outside_select_save",function(){
+        var select_item = $("input[type='radio']:checked").val();
+        if(select_item != null){
+            Dajaxice.storage.outsideMaterialApply(outsideapply_callback,{"select_item":select_item,"mid":mid});
+        }
+        else{
+            alert("请选择领用材料");
+        }
+    })
+    $(document).on("click","span[name='outside_applycard']",function(){
+        var aid = $(this).attr("aid");
+        Dajaxice.storage.outsideApplyCardConfirm(outsideapplycardconfirm_callback,{"aid":aid});
+    })
 });
+
+function getforminfo_callback(data){
+    $("#entry_item_form").html(data.html); 
+}
 
 function outsidecardsearch_callback(data){
     $("#card_table").html(data.html);
 }
 
-function outsideentryconfirm(eid){
-    Dajaxice.storage.outsideEntryConfirm(outside_entryconfirm_callback,{"eid":eid,"form":$("#entryform").serialize(),});
-}
-function outside_entryconfirm_callback(data){
+function outsideentryconfirm_callback(data){
     $("#entrybody").html(data.html);
     alert(data.message)
 }
@@ -38,12 +68,8 @@ function save_remark_callback(data){
     $("#"+data.id+"remark").text(data.remark);
 }
 
-function outsideapplycardconfirm(aid){
-    Dajaxice.storage.outsideApplyCardConfirm(outsideapplycardconfirm_callback,{"form":$("#applycardform").serialize(),"aid":aid});
-}
-
 function outsideapplycardconfirm_callback(data){
-    $("div#applycardbody").html(data.html);
+    $("div#applycard").html(data.html);
     alert(data.message);
 }
 
@@ -77,4 +103,17 @@ function outside_thread_search(){
 
 function outsideThreadSearch_callback(data){
     $('#item_table').html(data.html);
+}
+
+function outsideentryitemsave_callback(data){
+    $("#entry_item_form").html(data.html); 
+    alert(data.message);
+    if(data.flag) $("#myModal").modal("hide")
+}
+function search_material_callback(data){
+   $("#store_items_table").html(data.html); 
+}
+
+function outsideapply_callback(data){
+    alert(data.message);
 }

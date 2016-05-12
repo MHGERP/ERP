@@ -2,24 +2,25 @@
     <th>选择</th>
     <th>材质</th>
     <th>工作令</th>
-    <th>炉号批号</th>
+    <th>标准号/图号</th>
     <th>名称规格</th>
     <th>数量</th>
     <th>材料代号</th>
-    <th>位置</th>
+    <th>材料类型</th>
 </thead>
 <tbody>
     {% for item in store_items %}
     <tr>
         <td><input type="radio" name="radion_item" value = "{{item.id}}" /></td>
         <td>{{item.entry_item.material_mark}}</td>
-        <td>{{item.entry_item.show_workorder}}</td>
-        <td>{{item.entry_item.batch_number}}</td>
-        <td>{{item.specification}}</td>
+        <td>{{item.entry_item.work_order}}</td>
+        <td>{{item.entry_item.schematic_index}}</td>
+        <td>{{item.entry_item.specification}}</td>
         <td>{{item.count}}</td>
         <td>{{item.entry_item.material_code}}</td>
-        <td>{{item.store_room}}</td>
+        <td>{{item.get_outsidebuy_type_display}}</td>
     </tr>
     {% endfor %}
 </tbody>
+
 

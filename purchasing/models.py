@@ -160,22 +160,19 @@ class qualityPriceCard(models.Model):
     bid = models.OneToOneField(BidForm, blank = False)
     apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
-    demand_company = models.CharField(null=True, max_length=40, verbose_name=u"需求单位")
-    work_order = models.ForeignKey(WorkOrder,null=False,verbose_name=u"工作令")
-    amount = models.IntegerField(verbose_name=u"数量")
+    demand_company = models.CharField(null=True,blank=True, max_length=40, verbose_name=u"需求单位")
+    work_order = models.CharField(max_length=50,null=True,blank=True,verbose_name=u"工作令")
+    amount = models.IntegerField(null=True,blank=True,verbose_name=u"数量")
     unit = models.CharField(null=True, max_length=40, verbose_name=u"单位")
     content = models.CharField(null=True, max_length=40, verbose_name=u"内容")
     material = models.CharField(null=True, max_length=40, verbose_name=u"材质")
     delivery_period = models.CharField(null=True, max_length=40, verbose_name=u"交货期")
-    price = models.CharField(null=True, max_length=40, verbose_name=u"价格")
-    ability = models.CharField(null=True, max_length=100, verbose_name=u"厂家协作能力质量情况及业绩")
-    delivery_condition = models.CharField(null=True, max_length=40, verbose_name=u"交货及支付条件")
     status=models.ForeignKey(CommentStatus,verbose_name=u"招标申请表状态")
     class Meta:
         verbose_name = u"比质比价卡"
 
     def __unicode__(self):
-        return '%s'% (self.apply_id)
+        return '%s'% (self.bid.bid_id)
 class SupplierCheck(models.Model):
     bid=models.OneToOneField(BidForm,blank=False)
     apply_company = models.CharField(null=True,blank=True, max_length=40, verbose_name=u"申请单位")

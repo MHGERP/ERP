@@ -1454,3 +1454,34 @@ def BidApplyCarryFinish(request,bidid,form):
         return simplejson.dumps({"status":1})
     goNextStatus(bid_form,request.user)
     return simplejson.dumps({"status":0})
+
+
+@dajaxice_register
+def saveQualityCard(request,form,quality_card_id,supplier_form_set,supplier_id_set):
+    quality_card=qualityPriceCard.objects.get(pk=quality_card_id)
+    quality_card_form=QualityPriceCardForm(deserialize_form(form),instance=quality_card)
+    if quality_card_form.is_valid():
+        quality_card_form.save()
+    else:
+        for item in  quality_card_form.errors.keys():
+            print item,quality_card_form.errors[item]
+        return simplejson.dumps({'status':1})
+    for (id,form) in zip(supplier_id_set,supplier_form_set):
+        supplierselect=SupplierSelect.objects.get(pk=id)
+        form=QualityCardSupplierForm(deserialize_form(form),instance=supplierselect)
+        form.save()
+    return simplejson.dumps({"status":0})
+
+@dajaxice_register
+def submitQualityCard(request,quality_card_id):
+    quality_card =qualityPriceCard.objects.get(id = quality_card_id)
+    BidNextStatus(quality_card)
+    return simplejson.dumps({})
+
+@dajaxice_register
+def QualityCardComment(request,quality_card_id,usertitle,comment):
+    quality_card=qualityPriceCard.objects.get(pk=quality_card_id)
+    bid_comment=BidComment(user=request.user,comment=comment,bid=quality_card.bid,submit_date=datetime.today(),user_title=usertitle)
+    bid_comment.save()
+    BidNextStatus(quality_card)
+    return simplejson.dumps({})
