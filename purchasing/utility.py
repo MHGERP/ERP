@@ -15,7 +15,7 @@ def goNextStatus(bidform,user):
 
 
 def buildArrivalItems(bidform):
-    mat_connection = MaterielFormConnection.objects.filter(bid_form = bidform)
+    mat_connection = MaterielFormConnection.objects.filter(order_form = bidform.order_form)
     for mat in mat_connection:
         arrivalIns = ArrivalInspection(bidform = bidform , material = mat.materiel)
         arrivalIns.save()

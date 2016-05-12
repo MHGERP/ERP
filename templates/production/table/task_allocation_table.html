@@ -12,8 +12,8 @@
     <tbody>
         {% for item in items_list %}
         <tr>
-            <td>{{item.materiel_belong.index}}</td>
-            <td>{{item.materiel_belong.order.order_index}}</td>
+            <td>{{item.sub_materiel_belong.materiel_belong.index}}</td>
+            <td>{{item.sub_materiel_belong.sub_order}}</td>
             <td>{{item.process_id}}</td>
             <td>{{item.processname}}</td>
             <td>{{item.work_hour}}</td>
