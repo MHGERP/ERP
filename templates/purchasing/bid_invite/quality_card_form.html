@@ -1,49 +1,49 @@
 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL  }}style/purchasing/table.css" >
-    <table class="table table-bordered" id="supplier_check_form_table">
-        <thead>
-            <form  method="POST" action="" id="quality_card_form">
-                <tr>
-                    <th>{{quality_card_form.apply_company.label}}</th>
-                    <th>{{quality_card_form.apply_company}}</th>
-                    <th>{{quality_card_form.content.label}}</th>
-                    <th>{{quality_card_form.content}}</th>
-                    <th>{{quality_card_form.work_order.label}}</th>
-                    <th>{{quality_card_form.work_order}}</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th>{{quality_card_form.unit.label}}</th>
-                    <th>{{quality_card_form.unit}}</th>
-                    <th>{{quality_card_form.amount.label}}</th>
-                    <th>{{quality_card_form.amount}}</th>
-                    <th>{{quality_card_form.material.label}}</th>
-                    <th>{{quality_card_form.material}}</th>
-                    <th>{{quality_card_form.delivery_period.label}}</th>
-                    <th>{{quality_card_form.delivery_period}}</th>
-                </tr>
+<table class="table table-bordered" id="supplier_check_form_table">
+    <thead>
+        <form  method="POST" action="" id="quality_card_form">
+            <tr>
+                <th>{{quality_card_form.apply_company.label}}</th>
+                <th>{{quality_card_form.apply_company}}</th>
+                <th>{{quality_card_form.content.label}}</th>
+                <th>{{quality_card_form.content}}</th>
+                <th>{{quality_card_form.work_order.label}}</th>
+                <th>{{quality_card_form.work_order}}</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>{{quality_card_form.unit.label}}</th>
+                <th>{{quality_card_form.unit}}</th>
+                <th>{{quality_card_form.amount.label}}</th>
+                <th>{{quality_card_form.amount}}</th>
+                <th>{{quality_card_form.material.label}}</th>
+                <th>{{quality_card_form.material}}</th>
+                <th>{{quality_card_form.delivery_period.label}}</th>
+                <th>{{quality_card_form.delivery_period}}</th>
+            </tr>
+        </form>
+        <tr>
+            <th colspan=2>供方</th>
+            <th colspan=2>价格</th>
+            <th colspan=2>厂家协作能力质量情况及业绩</th>
+            <th colspan=2>交货及支付条件</th>
+        </tr>
+        {% for item in supplier_set%}
+        <tr>
+            <form class="supplierform" supplierselect={{item.id}}>
+                <th colspan=2>{{item.supplier}}</th>
+                <th colspan=2>{{item.form.price}}</th>
+                <th colspan=2>{{item.form.ability_situation}}</th>
+                <th colspan=2>{{item.form.delivery_payment}}</th>
             </form>
-                <tr>
-                    <th colspan=2>供方</th>
-                    <th colspan=2>价格</th>
-                    <th colspan=2>厂家协作能力质量情况及业绩</th>
-                    <th colspan=2>交货及支付条件</th>
-                </tr>
-                {% for item in supplier_set%}
-                <tr>
-                    <form class="supplierform" supplierselect={{item.id}}>
-                    <th colspan=2>{{item.supplier}}</th>
-                    <th colspan=2>{{item.form.price}}</th>
-                    <th colspan=2>{{item.form.ability_situation}}</th>
-                    <th colspan=2>{{item.form.delivery_payment}}</th>
-                </form>
-                </tr>
-                {% endfor%}
+        </tr>
+        {% endfor%}
 
-        </thead>
-    <table>
-  <div style="margin-bottom:30px;">
+    </thead>
+</table>
+<div style="margin-bottom:30px;">
     <br>
     <button type="button" class="btn btn-primary"  id="qualitycard_confirm">审核表表保存</button>
     <button type="button" class="btn btn-success" id="qualitycard_submit" style="float:right">审核表表提交</button>

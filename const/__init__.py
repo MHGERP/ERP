@@ -347,30 +347,36 @@ CIRCULATION_CHOICES = (
     (XZ, "XZ"),
 )
 
-W = "0"
-W1 = "1"
-W2 = "2"
-W3 = "3"
-W4 = "4"
-W5 = "5"
-W6 = "6"
-W25 = "7"
-P01 = "8"
-P02 = "9"
-R = "10"
-R1 = "11"
-R2 = "12"
-Z = "13"
-H = "14"
-M = "15"
-L = "16"
-Y = "17"
-G = "18"
-G1 = "19"
-G2 = "20"
-X = "21"
-J = "22"
-DY = "23"
+W = "W"
+W1 = "W1"
+W2 = "W2"
+W3 = "W3"
+W4 = "W4"
+W5 = "W5"
+W6 = "W6"
+W25 = "W25"
+P01 = "P01"
+P02 = "P02"
+R = "R"
+R1 = "R1"
+R2 = "R2"
+Z = "Z"
+H = "H"
+M = "M"
+L = "L"
+Y = "Y"
+G = "G"
+G1 = "G1"
+G2 = "G2"
+G3 = "G3"
+G4 = "G4"
+G5 = "G5"
+X = "X"
+J = "J"
+K = "K"
+D2 = "D2"
+D = "D"
+
 PROCESSING_CHOICES = (
     (W, "W"),    
     (W1, "W1"),
@@ -393,9 +399,14 @@ PROCESSING_CHOICES = (
     (G, "G"),
     (G1, "G1"),
     (G2, "G2"),
+    (G3, "G3"),
+    (G4, "G4"),
+    (G5, "G5"),
     (X, "X"),
     (J, "J"),
-    (DY, "DY"),
+    (D, "D"),
+    (D2, "D2"),
+    (K, "K"),
 )
 
 
@@ -620,7 +631,7 @@ BIDFORM_INVITE_BID_QUALITY_DIC={
     "FILL":BIDFORM_PART_STATUS_INVITE_BID_QUALITY_FILL,
     "OPERATOR_COMMENT":BIDFORM_PART_STATUS_INVITE_BID_QUALITY_OPERATOR_COMMENT,
     "TECH_COMMENT":BIDFORM_PART_STATUS_INVITE_BID_QUALITY_NEED_TECH_COMMENT,
-    "LEAD":BIDFORM_PART_STATUS_INVITE_BID_QUALITY_NEED_LEAD_COMMENT,
+    "LEAD_COMMENT":BIDFORM_PART_STATUS_INVITE_BID_QUALITY_NEED_LEAD_COMMENT,
     "COMPREHENSIVE_COMMENT":BIDFORM_PART_STATUS_INVITE_BID_QUALITY_COMPREHENSIVE_COMMENT,
     "COMPANY_COMMENT":BIDFORM_PART_STATUS_INVITE_BID_QUALITY_COMPANY_COMMENT
 }

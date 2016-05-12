@@ -19,7 +19,7 @@ from techdata.forms import *
 from techdata.models import *
 from const.models import *
 from const.utils import getMaterialQuerySet
-from techdata.utility import batchDecentialization
+from techdata.utility import batchDecentialization, processDetailGenerate
 
 from purchasing.models import MaterielExecute, MaterielExecuteDetail
 import datetime
@@ -222,6 +222,7 @@ def autoSetInventoryLabel(request, id_work_order, inventory_type):
         for item in Materiel.objects.filter(order = work_order):
             if item.sub_index == "0" and item.index != "1": continue
             if not item.route().startswith("H1"): continue
+            if item.schematic_index and item.schematic_index.endswith(".00"): continue
             if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
             DetailItem(materiel_belong = item, remark = item.remark).save()
 
@@ -232,6 +233,15 @@ def getProcessBOM(request, id_work_order):
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
     BOM = Materiel.objects.filter(order = work_order)
+    for item in BOM:
+        if item.processing.GX1 == None:
+            continue
+        for i in xrange(1, 13):
+            step = getattr(item.processing, "GX%d" % i)
+            if step == None:
+                break
+            setattr(item, "GX%d" % i, step)
+
     context = {
         "work_order": work_order,
         "BOM": BOM,
@@ -883,6 +893,7 @@ def processBOMMark(request, id_work_order, step):
         order.processbompagemark.proofreader = request.user
         order.processbompagemark.proofread_date = datetime.datetime.today()
         order.processbompagemark.save()
+        processDetailGenerate(order)
         context = {
             "ret": True,
             "mark_user": unicode(order.processbompagemark.proofreader.userinfo),
@@ -895,43 +906,65 @@ def processBOMMark(request, id_work_order, step):
     return simplejson.dumps(context)
 
 @dajaxice_register
-def getTransferCard(request, iid, card_type = None):
+def createTransferCard(request, iid, card_type):
     """
     JunHU
     """
     item = Materiel.objects.get(id = iid)
-    if CirculationRoute.objects.filter(materiel_belong = item).count() == 0:
-        CirculationRoute(materiel_belong = item).save()
-    item.route = '.'.join(getattr(item.circulationroute, "L%d" % i).get_name_display() for i in xrange(1, 11) if getattr(item.circulationroute, "L%d" % i))     
-    
-    try:
-        process = Processing.objects.get(materiel_belong = item, is_first_processing = True)  
-        process_list = []
-        while process:
-            process_list.append(process)
-            process = process.next_processing
-    except:
-        process_list = []
+    card = TransferCard(materiel_belong = item, card_type = card_type)
+    card.materiel_belong = item
+    card.card_type = card_type
+    card.file_index = "%02d" % (TransferCard.objects.filter(Q(materiel_belong__order = item.order) & Q(card_type = card_type)).count() + 1)
+    card.save()
+    mark = TransferCardMark(card = card)
+    mark.save()
+
+@dajaxice_register
+def getTransferCard(request, iid):
+    """
+    JunHU
+    """
+    item = Materiel.objects.get(id = iid)
     
     context = {
         "item": item,
-        "process_list": process_list,
         "MARK_WRITE": MARK_WRITE,
         "MARK_REVIEW": MARK_REVIEW,
         "MARK_PROOFREAD": MARK_PROOFREAD,
         "MARK_APPROVE": MARK_APPROVE,
     }
 
-    cards = TransferCard.objects.filter(materiel_belong = item)
-    if cards:
-        context["card"] = cards[0]
-        html = render_to_string(CARD_TYPE_TO_HTML[cards[0].card_type], context)
-    else:
-        html = render_to_string(CARD_TYPE_TO_HTML[card_type], context)
+    card = TransferCard.objects.get(materiel_belong = item)
+    context["card"] = card
+    html = render_to_string(CARD_TYPE_TO_HTML[card.card_type], context)
     return html
 
 @dajaxice_register
-def transferCardMark(request, iid, step, card_type = None):
+def getTransferCardInfoForm(request, iid):
+    """
+    JunHU
+    """
+    card = TransferCard.objects.get(materiel_belong__id = iid)
+    form = TransferCardInfoForm(instance = card)
+    html = render_to_string("techdata/widgets/transfer_card_info_card.html", {"form": form, })
+    return html
+
+@dajaxice_register
+def saveTransferCardInfoForm(request, iid, form):
+    """
+    JunHU
+    """
+    card = TransferCard.objects.get(materiel_belong__id = iid)
+    form = TransferCardInfoForm(deserialize_form(form), instance = card)
+    if form.is_valid():
+        form.save()
+        return simplejson.dumps({"ret": "ok"})
+    else:
+        html = render_to_string("techdata/widgets/transfer_card_info_card.html", {"form": form, })
+        return simplejson.dumps({"ret": "fail", "html": html})
+
+@dajaxice_register
+def transferCardMark(request, iid, step):
     """
     JunHU
     """
@@ -941,39 +974,22 @@ def transferCardMark(request, iid, step, card_type = None):
     item = Materiel.objects.get(id = iid)
     context = {}
     if step == MARK_WRITE:
-        if TransferCard.objects.filter(materiel_belong = item).count() > 0:
-            context = {
-                "ret": False,
-                "warning": u"已为该零件创建流转卡",
-            }
-            return simplejson.dumps(context)
-
-        card = TransferCard(materiel_belong = item, card_type = card_type)
-        card.save()
-        card.file_index = "%06d" % (card.id)
-        card.save()
-        mark = TransferCardMark(card = card)
-        mark.save()
-        card.transfercardmark.writer = request.user
-        card.transfercardmark.write_date = datetime.datetime.today()
-        card.transfercardmark.save()
+        card = TransferCard.objects.get(materiel_belong = item)
         context = {
             "ret": True,
             "file_index": unicode(card),
             "mark_user": unicode(card.transfercardmark.writer.userinfo),
             "mark_date": date2str(card.transfercardmark.write_date)
         }
-        print context
     elif step == MARK_PROOFREAD:
-        cards = TransferCard.objects.filter(materiel_belong = item)
-        if cards.count() == 0 or cards[0].transfercardmark.writer == None:
+        card = TransferCard.objects.get(materiel_belong = item)
+        if cards.transfercardmark.writer == None:
             context = {
                 "ret": False,
                 "warning": u"该流转卡还未完成编制",
             }
             return simplejson.dumps(context)
 
-        card = cards[0]
         card.transfercardmark.proofreader = request.user
         card.transfercardmark.proofread_date = datetime.datetime.today()
         card.transfercardmark.save()
@@ -983,15 +999,14 @@ def transferCardMark(request, iid, step, card_type = None):
             "mark_date": date2str(card.transfercardmark.proofread_date)
         }
     elif step == MARK_REVIEW:
-        cards = TransferCard.objects.filter(materiel_belong = item)
-        if cards.count() == 0 or cards[0].transfercardmark.proofreader == None:
+        card = TransferCard.objects.get(materiel_belong = item)
+        if cards.transfercardmark.proofreader == None:
             context = {
                 "ret": False,
                 "warning": u"该流转卡还未完成校对",
             }
             return simplejson.dumps(context)
 
-        card = cards[0]
         card.transfercardmark.reviewer = request.user
         card.transfercardmark.review_date = datetime.datetime.today()
         card.transfercardmark.save()
@@ -1001,15 +1016,14 @@ def transferCardMark(request, iid, step, card_type = None):
             "mark_date": date2str(card.transfercardmark.review_date)
         }
     elif step == MARK_APPROVE:
-        cards = TransferCard.objects.filter(materiel_belong = item)
-        if cards.count() == 0 or cards[0].transfercardmark.reviewer == None:
+        card = TransferCard.objects.get(materiel_belong = item)
+        if cards.transfercardmark.reviewer == None:
             context = {
                 "ret": False,
                 "warning": u"该流转卡还未完成审核",
             }
             return simplejson.dumps(context)
 
-        card = cards[0]
         card.transfercardmark.approver = request.user
         card.transfercardmark.approve_date = datetime.datetime.today()
         card.transfercardmark.save()

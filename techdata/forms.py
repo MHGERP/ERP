@@ -225,6 +225,19 @@ class CirculationRouteForm(forms.ModelForm):
                 raise forms.ValidationError("流转路线必须连续")
         return cleaned_data
 
+class TransferCardInfoForm(forms.ModelForm):
+    """
+    JunHU
+    """
+    class Meta:
+        model = TransferCard
+        exclude = ("materiel_belong", "file_index", "card_type", "file_obj")
+        widgets = {
+            "container_type": forms.TextInput(attrs = {"class": "input-medium"}),
+            "parent_name": forms.TextInput(attrs = {"class": "input-medium"}),
+            "weld_test_plate_index": forms.TextInput(attrs = {"class": "input-medium"}),
+            "material_index": forms.TextInput(attrs = {"class": "input-medium"}),
+        }
 class TransferCardForm(forms.Form):
     """
     JunHU

@@ -194,7 +194,8 @@ def bidTrackingViews(request, bid_id):
             quality_card_finish=False
     except:
         quality_card_finish=False
-    print bid_apply_finish
+    
+    print quality_card_finish
     order_form=bidform.order_form
 
     try:
