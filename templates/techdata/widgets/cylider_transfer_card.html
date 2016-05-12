@@ -121,7 +121,7 @@
   </td>
  </tr>
  <tr style='mso-yfti-irow:3;page-break-inside:avoid;height:22.7pt'>
-  <td width=504 colspan=7 rowspan=7 valign=top style='width:378.0pt;border-top:
+  <td class="pic_area" width=504 colspan=7 rowspan=7 valign=top style='width:378.0pt;border-top:
   none;border-left:solid windowtext 1.5pt;border-bottom:solid windowtext 1.0pt;
   border-right:solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext 1.5pt;
@@ -129,8 +129,13 @@
   <p class=MsoNormal style='line-height:150%'><span style='mso-bidi-font-size:
   14.0pt;line-height:150%;font-family:宋体;mso-bidi-font-weight:bold'>简图：<span
   lang=EN-US><o:p></o:p></span></span></p>
+    <p align=center>
+    {% if card.file_obj %}
+  <img align="center" id="mypic" src="{{card.file_obj.url}}">
+    {% endif %}
+  </p>
   </td>
-  <td width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
+  <td class="info_area" width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
@@ -138,14 +143,14 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>工 作 令<span
   lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
+  <td class="info_area" width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{item.order}}</o:p></span></p>
   </td>
-  <td width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
+  <td class="info_area" width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
@@ -153,7 +158,7 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>零 件
   图 号<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
+  <td class="info_area" width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext 1.5pt;
@@ -164,7 +169,7 @@
   </td>
  </tr>
  <tr style='mso-yfti-irow:4;page-break-inside:avoid;height:22.7pt'>
-  <td width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
+  <td class="info_area" width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
@@ -172,14 +177,14 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>产 品
   名 称<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
+  <td class="info_area" width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{item.order.product_name}}</o:p></span></p>
   </td>
-  <td width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
+  <td class="info_area" class="info_area"width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
@@ -187,7 +192,7 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>零 件
   名 称<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
+  <td class="info_area" width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext 1.5pt;
@@ -197,7 +202,7 @@
   </td>
  </tr>
  <tr style='mso-yfti-irow:5;page-break-inside:avoid;height:22.7pt'>
-  <td width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
+  <td class="info_area" width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
@@ -205,14 +210,14 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>容 器
   类 别<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
+  <td class="info_area" width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
+  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{card.container_type}}</o:p></span></p>
   </td>
-  <td width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
+  <td class="info_area" width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
@@ -220,7 +225,7 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>数 量<span
   lang=EN-US> / </span>台<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
+  <td class="info_area" width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext 1.5pt;
@@ -229,8 +234,8 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{item.count}}</o:p></span></p>
   </td>
  </tr>
- <tr style='mso-yfti-irow:6;page-break-inside:avoid;height:22.75pt'>
-  <td width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
+ <tr class="info_area" style='mso-yfti-irow:6;page-break-inside:avoid;height:22.75pt'>
+  <td class="info_area" width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.75pt'>
@@ -238,14 +243,14 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>所属部件名称<span
   lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
+  <td class="info_area" width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.75pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
+  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{card.parent_name}}</o:p></span></p>
   </td>
-  <td width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
+  <td class="info_area" width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.75pt'>
@@ -253,7 +258,7 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>受 压
   标 记<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
+  <td class="info_area" width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext 1.5pt;
@@ -264,7 +269,7 @@
   </td>
  </tr>
  <tr style='mso-yfti-irow:7;page-break-inside:avoid;height:22.7pt'>
-  <td width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
+  <td class="info_area" width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
@@ -272,7 +277,7 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>所属部件图号<span
   lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
+  <td class="info_area" width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
@@ -280,7 +285,7 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;color:black;mso-bidi-font-weight:
   bold'><o:p>{{item.parent_schematic_index}}</o:p></span></p>
   </td>
-  <td width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
+  <td class="info_area" width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
@@ -290,7 +295,7 @@
   style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;</span></span>料<span
   lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
+  <td class="info_area" width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext 1.5pt;
@@ -300,7 +305,7 @@
   </td>
  </tr>
  <tr style='mso-yfti-irow:8;page-break-inside:avoid;height:22.7pt'>
-  <td width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
+  <td class="info_area" width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
@@ -309,15 +314,15 @@
   lang=EN-US style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:
   bold'><o:p></o:p></span></p>
   </td>
-  <td width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
+  <td class="info_area" width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal align=center style='margin-right:-3.8pt;text-align:center'><span
   lang=EN-US style='mso-bidi-font-size:14.0pt;font-family:宋体;color:red;
-  mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
+  mso-bidi-font-weight:bold'><o:p>{{card.weld_test_plate_index}}</o:p></span></p>
   </td>
-  <td width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
+  <td class="info_area" width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
@@ -325,7 +330,7 @@
   style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>材 质
   标 记<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
+  <td class="info_area" width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext 1.5pt;
@@ -335,7 +340,7 @@
   </td>
  </tr>
  <tr style='mso-yfti-irow:9;page-break-inside:avoid;height:22.75pt'>
-  <td width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
+  <td class="info_area" width=108 colspan=5 style='width:81.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.75pt'>
@@ -344,7 +349,7 @@
   lang=EN-US style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:
   bold'><o:p></o:p></span></p>
   </td>
-  <td width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
+  <td class="info_area" width=146 colspan=4 style='width:109.6pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.75pt'>
@@ -352,7 +357,7 @@
   -.36gd;text-align:center'><span lang=EN-US style='mso-bidi-font-size:14.0pt;
   font-family:宋体;mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
   </td>
-  <td width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
+  <td class="info_area" width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.75pt'>
@@ -361,7 +366,7 @@
   lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
   </span></span>线<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
-  <td width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
+  <td class="info_area" width=147 colspan=4 style='width:110.15pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext 1.5pt;

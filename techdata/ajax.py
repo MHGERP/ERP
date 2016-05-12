@@ -939,7 +939,31 @@ def getTransferCard(request, iid):
     return html
 
 @dajaxice_register
-def transferCardMark(request, iid, step, card_type = None):
+def getTransferCardInfoForm(request, iid):
+    """
+    JunHU
+    """
+    card = TransferCard.objects.get(materiel_belong__id = iid)
+    form = TransferCardInfoForm(instance = card)
+    html = render_to_string("techdata/widgets/transfer_card_info_card.html", {"form": form, })
+    return html
+
+@dajaxice_register
+def saveTransferCardInfoForm(request, iid, form):
+    """
+    JunHU
+    """
+    card = TransferCard.objects.get(materiel_belong__id = iid)
+    form = TransferCardInfoForm(deserialize_form(form), instance = card)
+    if form.is_valid():
+        form.save()
+        return simplejson.dumps({"ret": "ok"})
+    else:
+        html = render_to_string("techdata/widgets/transfer_card_info_card.html", {"form": form, })
+        return simplejson.dumps({"ret": "fail", "html": html})
+
+@dajaxice_register
+def transferCardMark(request, iid, step):
     """
     JunHU
     """

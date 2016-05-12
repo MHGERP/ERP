@@ -21,6 +21,40 @@
 
 <div id="div_card" iid="{{iid}}">
 </div>
+
+<div id="info_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.4" >
+  <div class="modal-header">
+    <h2 id="groupLabel">基础信息</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+	<form class="form" id="info_card" class="well">
+		
+	</form>
+  </div>
+  <div class="modal-footer">
+	<button class="btn btn-primary" id="btn_save_info">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+<div id="pic_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.4" >
+  <div class="modal-header">
+    <h2 id="groupLabel">简图上传</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+        <form method="POST" action="" class="form-inline" enctype="multipart/form-data" id="pic_form">
+            {% csrf_token%}
+            <input type="text" style="display:none;" name="iid" id="iid_input">
+            <input type='file' class='filestyle' name='pic_file' data-ButtonName='btn btn-primary'  data-buttonBefore='true' data-buttonText='浏览..' id="filestyle_input">
+        </form>
+  </div>
+  <div class="modal-footer">
+	<button class="btn btn-primary" id="btn_save_pic">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
 <script type='text/javascript' src="{{STATIC_URL}}js/techdata/transfer_card_edit.js"></script>
+<script type='text/javascript' src="{{ STATIC_URL  }}jquery/jquery.form.js"></script>
 {% endblock%}
 
