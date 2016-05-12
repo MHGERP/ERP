@@ -3,10 +3,22 @@ from django.shortcuts import render
 from production.forms import *
 from production.models import *
 from const.forms import WorkOrderForm
+def taskPlanViews(request):
+    search_form = TaskAllocationForm()
+    items_list = ProcessDetail.objects.filter(complete_process_date = None).order_by('-productionworkgroup')
+    for item in items_list:
+        item.groups = ProductionWorkGroup.objects.filter(processname = item.processname)
+
+    context={
+        "taskallocationform":search_form,
+        "items_list":items_list,
+    }
+
+    return render(request,"production/task_plan.html",context)
 
 def taskAllocationViews(request):
     search_form = TaskAllocationForm()
-    items_list = ProcessDetail.objects.filter(complete_date = None).order_by('-productionworkgroup')
+    items_list = ProcessDetail.objects.filter(complete_process_date = None).order_by('-productionworkgroup')
     for item in items_list:
         item.groups = ProductionWorkGroup.objects.filter(processname = item.processname)
 
@@ -19,7 +31,7 @@ def taskAllocationViews(request):
 
 def taskConfirmViews(request):
     search_form = TaskConfirmForm()
-    items_list = ProcessDetail.objects.exclude(productionworkgroup = None).order_by('complete_date')
+    items_list = ProcessDetail.objects.exclude(productionworkgroup = None).order_by('complete_process_date')
 
     context={
         "taskallocationform":search_form,

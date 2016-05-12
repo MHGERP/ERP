@@ -1,13 +1,13 @@
 <td>{{item.materiel_belong.index|default_if_none:""}}</td>
 <td>{{item.materiel_belong.parent_schematic_index|default_if_none:""}}</td>
 <td>{{item.materiel_belong.schematic_index|default_if_none:""}}</td>
-<td>{{item.materiel_belong.material.get_categories_display|default_if_none:""}}</td>
+<td>{{item.materiel_categories|default_if_none:""}}</td>
 <td>{{item.materiel_belong.material|default_if_none:""}}</td>
 <td>{{item.materiel_belong.specification|default_if_none:""}}</td>
 <td>{{item.materiel_belong.count|default_if_none:""}}</td>
 <td>{{item.materiel_belong.net_weight|default_if_none:""}}</td>
 <td>{{item.materiel_belong.total_weight|default_if_none:""}}</td>
-<td>{{item.materiel_belong.quota|default_if_none:""}}</td>
-<td>利用率</td>
-<td>{{item.press|default_if_none:""}}</td>
+<td>{{item.quota|default_if_none:""}}</td>
+<td>{% widthratio item.materiel_belong.quota|default_if_none:0  item.materiel_belong.net_weight 1 %}</td>
+<td>{{item.materiel_belong.remark|default_if_none:""}}</td>
 <td><span class="btn btn-danger btn-small btn-remove">删除</span></td>
