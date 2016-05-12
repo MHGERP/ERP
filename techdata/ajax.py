@@ -11,7 +11,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 
 from const import *
-from backend.utility import getContext
+from backend.utility import getContext, transferCardProcessPaginator
 from const.models import *
 from forms import MaterielForm
 
@@ -22,7 +22,7 @@ from const.utils import getMaterialQuerySet
 from techdata.utility import batchDecentialization, processDetailGenerate
 
 from purchasing.models import MaterielExecute, MaterielExecuteDetail
-import datetime
+import datetime, re
 
 
 def markGenerateFactory(order, inventory_type):
@@ -919,8 +919,9 @@ def createTransferCard(request, iid, card_type):
     mark = TransferCardMark(card = card)
     mark.save()
 
+
 @dajaxice_register
-def getTransferCard(request, iid):
+def getTransferCard(request, iid, page = "1"):
     """
     JunHU
     """
@@ -933,11 +934,18 @@ def getTransferCard(request, iid):
         "MARK_PROOFREAD": MARK_PROOFREAD,
         "MARK_APPROVE": MARK_APPROVE,
     }
-
+    print iid, page
     card = TransferCard.objects.get(materiel_belong = item)
     context["card"] = card
+    process_list = TransferCardProcess.objects.filter(card_belong = card)
+    page = int(page)
+    total_page, process_list = transferCardProcessPaginator(process_list, page)
+    context["total_page"] = total_page
+    context["current_page"] = page
+    context["process_list"] = process_list
     html = render_to_string(CARD_TYPE_TO_HTML[card.card_type], context)
     return html
+
 
 @dajaxice_register
 def getTransferCardInfoForm(request, iid):

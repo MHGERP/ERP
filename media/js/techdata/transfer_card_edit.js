@@ -13,10 +13,17 @@ $("#card_open").click(function() {
 });
 function refresh() {
     var iid = $("#div_card").attr("iid")
-    Dajaxice.techdata.getTransferCard(refreshCallBack, {"iid": iid});
+    var page = $("#paginator_div").attr("page");
+    getCard(iid, page);
 }
-function refreshCallBack(data) {
-    $("#div_card").html(data);
+
+function getCard(iid, page) {
+    Dajaxice.techdata.getTransferCard(function(data) {
+        $("#div_card").html(data);
+    }, {
+        "iid": iid,
+        "page": page,
+    });
 }
 
 $(document).on("dblclick", ".info_area", function() {
@@ -26,6 +33,24 @@ $(document).on("dblclick", ".info_area", function() {
     }, {
         "iid": $("#div_card").attr("iid"),
     });
+});
+
+$(document).on("click", ".turnpage", function() {
+    var page = $("#paginator_div").attr("page");
+    var total_page = $("#paginator_div").attr("total_page");
+    var iid = $("#div_card").attr("iid")
+    if($(this).hasClass("next-page")) {
+        if(page == total_page) alert("已到最后一页");
+        else {
+            getCard(iid, parseInt(page) + 1);
+        }
+    }
+    else {
+        if(page == "1") alert("已到第一页");
+        else {
+            getCard(iid, parseInt(page) - 1);
+        }
+    }
 });
 $("#btn_save_info").click(function() {
     Dajaxice.techdata.saveTransferCardInfoForm(function(data) {
