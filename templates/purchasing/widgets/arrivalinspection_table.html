@@ -2,11 +2,18 @@
     <thead>
         <tr>
             <th>序号</th>
-            <th>名称及规格</th>
-            <th>标准号/图号</th>
+            {% if bidform.order_form.order_mod == 0%}
+            <th>名称</th>
+            <th>规格</th>
             <th>材料牌号</th>
-            <th>单位</th>
             <th>数量</th>
+            <th>采购</th>
+            {% elif bidform.order_form.order_mod == 1 %}
+            <th>名称</th>
+            <th>材质</th>
+            <th>标准号/图号</th>
+            <th>数量</th>
+            {%endif%}
             <th>实物确认</th>
             <th>软件确认</th>
             <th>检验通过</th>
@@ -16,11 +23,20 @@
         {% for cargo in cargo_set %}
         <tr aid="{{cargo.id}}">
             <td> <input type="checkbox" class="arrival_checkbox" {% if cargo.material_confirm and cargo.soft_confirm and cargo.inspect_confirm%}{%else%}disabled="disabled"{% endif%}></td>
+            {% if bidform.order_form.order_mod == 0%}
             <td>{{cargo.material.name}}</td>
+            <td>{{cargo.material.specification}}</td>
+            <td>{{cargo.material.material}}</td>
+            <td>{{cargo.material.count}}</td>
+            <td>{{cargo.material.total_weight}}</td> 
+
+            {% elif bidform.order_form.order_mod == 1 %}
+            <td>{{cargo.material.name}}</td>
+            <td>{{cargo.material.material}}</td>
             <td>{{cargo.material.schematic_index}}</td>
-            <td></td>
-            <td></td>
-            <td>{{cargo.material.count}}</td>           
+            <td>{{cargo.material.count}}</td>
+
+            {% endif%}
             <td><button cid="mat" class="btn {% if cargo.material_confirm %} btn-success {%endif%}">实&nbsp&nbsp物</button></td>
             <td><button cid="sof" class="btn {% if cargo.soft_confirm %} btn-success {%endif%}">软&nbsp&nbsp件</button></td>
             <td><button cid="ins" class="btn {% if cargo.inspect_confirm %} btn-success {%endif%}">检&nbsp&nbsp验</button></td>

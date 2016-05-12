@@ -19,7 +19,6 @@ from django.db import transaction
 
 from users.decorators import authority_required
 from users import *
-from storage.forms import EntryTypeForm
 from storage.models import *
 from datetime import datetime
 def purchasingFollowingViews(request):
@@ -227,15 +226,6 @@ def contractFinanceViews(request):
     }
     return render(request,"purchasing/contract_finance.html",context)
 
-@csrf.csrf_protect
-def arrivalInspectionViews(request):
-    """
-    Liu Guochao
-    """
-    context = {
-
-    }
-    return render(request,"purchasing/purchasing_arrival.html",context)
 def arrivalInspectionConfirmViews(request,entry_typeid,eid,steel_typeid):
     """
     Liu Guochao
@@ -299,20 +289,6 @@ def outsideEntryConfirm(request,eid,entry_typeid):
             "entry_type":entry_typeid,
     }
     return render(request,"purchasing/widgets/purchasing_arrival_confirm_outside.html",context)
-def arrivalCheckViews(request,bid):
-    """
-    shen Lian
-    """
-    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid,check_pass=False)
-    is_show = BidForm.objects.filter(bid_id = bid , bid_status__part_status = BIDFORM_PART_STATUS_CHECK).count() > 0
-    entrytypeform = EntryTypeForm()
-    context = {
-        "cargo_set":cargo_set,
-        "bid":bid,
-        "is_show":is_show,
-        "entrytype":entrytypeform,
-    }
-    return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 
 def inventoryTableViews(request):
     order_index = request.GET.get("order_index")
@@ -595,10 +571,11 @@ def arrivalCheckViews(request,bid):
     """
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid,check_pass=False)
     is_show = BidForm.objects.filter(bid_id = bid , bid_status__part_status = BIDFORM_PART_STATUS_CHECK).count() > 0
-    entrytypeform = EntryTypeForm()
+    bidform=BidForm.objects.get(bid_id=bid)
+    entrytypeform = EntryTypeForm(bidform=bidform)
     context = {
         "cargo_set":cargo_set,
-        "bid":bid,
+        "bidform":bidform,
         "is_show":is_show,
         "entrytype":entrytypeform,
     }

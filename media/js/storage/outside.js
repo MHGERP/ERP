@@ -37,10 +37,20 @@ $(document).ready(function(){
         var aid = $(this).attr("aid");
         Dajaxice.storage.outsideApplyCardConfirm(outsideapplycardconfirm_callback,{"aid":aid});
     })
+    $(document).on("click","span[name='outside_refundcard']",function(){
+        var role = $(this).attr("role");
+        var fid = $(this).attr("fid");
+        Dajaxice.storage.outsideRefundCardConfirm(outsiderefundcardconfirm_callback,{"role":role,"fid":fid});
+    })
 });
 
 function getforminfo_callback(data){
     $("#entry_item_form").html(data.html); 
+}
+
+function outsiderefundcardconfirm_callback(data){
+    $("#refundbody").html(data.html);
+    alert(data.message);
 }
 
 function outsidecardsearch_callback(data){

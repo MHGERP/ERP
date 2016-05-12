@@ -8,14 +8,15 @@ from django.utils import simplejson
 
 from django.db.models import Q
 from django.contrib.auth.models import User
-
+from django.utils import simplejson
 from const import *
 from backend.utility import getContext
 from sell.forms import *
+from sell.models import *
 
 @dajaxice_register
 def getProductionList(request, type):
-   productions = Product.objects.all()
+   productions = Product.objects.exclude(is_approval = 0)
    context = {
        "productions" : productions,
    }
@@ -53,3 +54,36 @@ def getBidFile_issuance(request, param):
         "productions" : productions,
     }
     return render_to_string(path, context)
+
+@dajaxice_register
+def getBidFileForm(request, group, pid):
+    product = Product.objects.get(id = pid)
+    if group == "manufacture":
+        bid = product.manufacture_file_up.id
+    elif group == "techdata":
+        bid = product.techdata_file_up.id
+    else:
+        bid = product.purchasing_file_up.id
+    form = BidFileAuditForm()
+    context = {
+        "form" : form,
+    }
+    html = render_to_string("sell/widgets/bidFileAuditForm.html", context)
+    return simplejson.dumps({"html" : html, "bid" : bid})
+
+@dajaxice_register
+def saveBidFileStatus(request, bid, sta):
+    bidfile = BidFile.objects.get(id = bid)
+    bidfile.is_approval = sta
+    bidfile.save()
+    return "ok"
+
+@dajaxice_register
+def saveProductStatus(request, pid):
+    product = Product.objects.get(id = pid)
+    if product.manufacture_file_up and product.manufacture_file_up.is_approval == 0 and product.techdata_file_up and product.techdata_file_up.is_approval == 0 and product.purchasing_file_up and product.purchasing_file_up.is_approval == 0:
+        product.is_approval = 0
+        product.save()
+        return "ok"
+    else:
+        return "err"

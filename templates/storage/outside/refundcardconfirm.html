@@ -1,0 +1,17 @@
+{% extends "storage/base/outsidebase.html" %}
+
+{% block sub_sec %}
+<a href="/storage/outside/refundcardhome">外购件退库管理</a>
+<a href="#" class="current">外购件退库单</a>
+{% endblock %}
+
+{% block title %}
+<h1>外购件退库单</h1>
+{% endblock %}
+
+{% block inner_content %}
+<div id="refundbody">
+    {% include "storage/wordhtml/outsiderefund.html" %}
+</div>
+{% endblock %}
+

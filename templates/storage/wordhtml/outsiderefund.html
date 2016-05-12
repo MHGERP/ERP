@@ -6,54 +6,45 @@
 line-height:23.0pt;mso-line-height-rule:exactly;tab-stops:270.0pt'><b
 style='mso-bidi-font-weight:normal'><u><span style='font-size:12.0pt;
 font-family:宋体'>太原重工股份有限公司</span></u></b><b style='mso-bidi-font-weight:normal'><span
-lang=EN-US style='font-size:12.0pt;font-family:宋体'><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span><span style='mso-tab-count:
-2'>&nbsp;&nbsp;&nbsp;</span></b><span
-style='font-size:9.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman"'>修改号：</span><b style='mso-bidi-font-weight:
-normal'><span lang=EN-US style='font-size:12.0pt;font-family:宋体'><o:p></o:p></span></b></p>
+lang=EN-US style='font-size:12.0pt;font-family:宋体'><o:p></o:p></span></b></p>
 
 <p class=MsoNormal style='text-indent:156.6pt;mso-char-indent-count:13.0'><b
 style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;font-family:
-宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>领</span></b><b
+宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>退</span></b><b
 style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt'> </span></b><b
 style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;font-family:
-宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>用</span></b><b
+宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>库</span></b><b
 style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt'> </span></b><b
 style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;font-family:
 宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>单</span></b><b
-style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt'> <span
-lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;</span><span
-style='mso-tab-count:3'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
-style='mso-tab-count:2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
-style='mso-spacerun:yes'>&nbsp;</span><span
-style='mso-spacerun:yes'>&nbsp;</span></span></span></b><span style='font-size:
-9.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>样表：</span><b style='mso-bidi-font-weight:normal'><span
-lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></b></p>
+style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:12.0pt'><span
+style='mso-tab-count:1'> </span> <span
+style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></b><span
+style='mso-bidi-font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+mso-hansi-font-family:"Times New Roman";margin-left:20px;'>领用单编号：{{refundcard.applycard.applycard_code}}</span><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></b></p>
 
 <p class=MsoNormal>
 <div class="row-fluid">
 <div class="span3">
 <span style='mso-bidi-font-size:10.5pt;font-family:宋体;
-mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>工作令号：{{applycard.work_order}}</span>
+    mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>工作令号：{{refundcard.work_order}}</span>
 </div>
 <div class="span3">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman"'>领用单位：{{applycard.department}}</span>
+mso-hansi-font-family:"Times New Roman"'>领用单位：{{refundcard.applycard.department}}</span>
 </div>
 <div class="span3">
 <span style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:
-"Times New Roman";mso-hansi-font-family:"Times New Roman"'>日期：{{applycard.create_time|date:'Y.m.d.'}}</span>
+    "Times New Roman";mso-hansi-font-family:"Times New Roman"'>日期：{{refundcard.create_time|date:'Y.m.d'}}</span>
 </div>
 <div class="span3">
 <span style='mso-bidi-font-size:
 10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>编号：{{applycard.applycard_code}}</span>
+"Times New Roman"'>编号：</span><span lang=EN-US style='font-size:9.0pt'>{{refundcard.refundcard_code}}</span></p>
 </div>
-</p>
-
+</div>
 <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=588
  style='width:441.3pt;border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
  mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:.5pt solid windowtext;
@@ -128,86 +119,78 @@ mso-hansi-font-family:"Times New Roman"'>领用单位：{{applycard.department}}
   style='font-size:9.0pt'><o:p></o:p></span></p>
   </td>
  </tr>
+ {%for item in items %}
  <tr style='mso-yfti-irow:5;mso-yfti-lastrow:yes;height:19.45pt'>
   <td width=43 style='width:32.4pt;border:solid windowtext 1.0pt;border-top:
   none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:19.45pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{forloop.counter}}</span></p>
   </td>
   <td width=84 style='width:63.0pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
   solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.45pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.applyitem.schematic_index}}</span></p>
   </td>
   <td width=84 style='width:63.0pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
   solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.45pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.applyitem.specification}}</span></p>
   </td>
   <td width=96 style='width:72.0pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
   solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.45pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.applyitem.material_mark}}</span></p>
   </td>
   <td width=50 style='width:37.8pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
   solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.45pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.applyitem.unit}}</span></p>
   </td>
   <td width=58 style='width:43.2pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
   solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.45pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.count}}</span></p>
   </td>
-  <td width=113 valign=top style='width:85.1pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.45pt'>
-  <p class=MsoNormal style='line-height:22.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
-  </td>
-  <td width=60 valign=top style='width:44.8pt;border-top:none;border-left:none;
+  <td width=113 style='width:85.1pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.45pt'>
-  <p class=MsoNormal style='line-height:22.0pt;mso-line-height-rule:exactly'><span
-  lang=EN-US style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
+  <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.applyitem.material_code}}</span></p>
+  </td>
+  <td width=60 style='width:44.8pt;border-top:none;border-left:none;border-bottom:
+  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.45pt'>
+  <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'><o:p>&nbsp;</o:p></span></p>
   </td>
  </tr>
+ {% endfor %}
 </table>
 
 <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'>
 <div class="row-fluid">
-<div class="span3">
+<div class="span6">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman"'>领用人：{% ifequal applycard.applicant None %}<span class="btn btn-mark" name="outside_applycard" role="applicant">签字</span>{% else %}{{applycard.applicant}}{% endifequal %}</span>
+mso-hansi-font-family:"Times New Roman"'>退库人：{% ifequal refundcard.refunder None %}<span class="btn btn-mark" name="outside_refundcard" role="refunder" fid="{{refundcard.id}}">签字</span>{% else %}{{refundcard.refunder.userinfo}}{% endifequal %}</span>
 </div>
-<div class="span3">
-<span style='mso-bidi-font-size:
-10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>审核人：{% ifequal applycard.auditor None %}<span class="btn btn-mark" name="outside_applycard" role="auditor">签字</span>{% else %}{{applycard.auditor}}{% endifequal %}</span>
-</div>
-<div class="span3">
-<span style='mso-bidi-font-size:
-10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>检查员：{% ifequal applycard.inspector None %}<span class="btn btn-mark" name="outside_applycard" role="inspector">签字</span>{% else %}{{applycard.inspector}}{% endifequal %}</span>
-</div>
-<div class="span3">
-<span style='mso-bidi-font-size:
-10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>库管员：{% ifequal applycard.keeper None %}<span class="btn btn-mark" name="outside_applycard" role="keeper">签字</span>{% else %}{{applycard.keeper}}{% endifequal %}</span>
+<div class="span6">
+<span
+style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+mso-hansi-font-family:"Times New Roman"'>库管员：{% ifequal refundcard.keeper None %}<span class="btn btn-mark" name="outside_refundcard" role="keeper" fid="{{refundcard.id}}">签字</span>{% else %}{{refundcard.keeper.userinfo}}{% endifequal %}</span>
 </div>
 </div>
 </p>
