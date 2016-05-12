@@ -736,9 +736,6 @@ def StoreThreadViews(request):
     return render(request,"storage/storethread/storethread.html",context)
 
 def outsideApplyCardHomeViews(request):
-    #applyurl = "storage/outside/applycardconfirm"
-    #key_list = ["card_set","applyurl","APPLYSTATUS_END"]
-    #context = getStorageHomeContext(request,OutsideApplyCard,OutsideApplyCardSearchForm,STORAGESTATUS_KEEPER,applyurl,key_list,"date")
     applycard_set = OutsideApplyCard.objects.filter(status__gt = STORAGESTATUS_KEEPER)
     search_form = OutsideApplyCardSearchForm()
     context = {
@@ -828,3 +825,22 @@ def storeRoomManageViews(request):
         "new_room":new_room,
     }
     return render(request,"storage/basedata/storeroommanage.html", context)
+
+def outsideRefundHomeViews(request):
+    refund_cards = OutsideRefundCard.objects.exclude(status = STORAGESTATUS_REFUNDER)
+    search_form = OutsideRefundSearchForm()
+    context = {
+        "card_set":refund_cards,
+        "STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER,
+        "search_form":search_form,
+    }
+    return render(request,"storage/outside/outsiderefundhome.html", context)
+
+def outsideRefundConfirmViews(request,fid):
+    refundcard = OutsideRefundCard.objects.get(id=fid)
+    items = OutsideRefundCardItems.objects.filter(refundcard = refundcard)
+    context = {
+        "refundcard":refundcard,
+        "items":items,
+    }
+    return render(request,"storage/outside/refundcardconfirm.html", context)

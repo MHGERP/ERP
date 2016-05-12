@@ -572,7 +572,7 @@ class OutsideApplyCard(models.Model):
     auditor = models.ForeignKey(User,blank=True,null=True,verbose_name=u"审核人",related_name = "out_apply_auditor")
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "out_apply_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "out_apply_keeper")
-    status = models.IntegerField(choices=APPLYCARD_STATUS_CHOICES,default=APPLYCARD_APPLICANT,verbose_name=u"入库单状态")
+    status = models.IntegerField(choices=APPLYCARD_STATUS_CHOICES,default=APPLYCARD_APPLICANT,verbose_name=u"领用单状态")
     change_code = models.CharField(verbose_name=u"修改号",max_length=50,blank=True,null=True)
     sample_report = models.CharField(verbose_name=u"样表",max_length=50,blank=True,null=True)
     applycard_code = models.CharField(verbose_name=u"编号",max_length=20)
@@ -602,3 +602,30 @@ class OutsideApplyCardItems(models.Model):
         verbose_name_plural = u"外购件领用单材料"
     def __unicode__(self):
         return "%s" %  self.specification
+
+class OutsideRefundCard(models.Model):
+    refunder = models.ForeignKey(User,blank=True,null=True,verbose_name=u"退库人",related_name = "out_refund_refunder")
+    keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "out_refund_keeper")
+    status = models.IntegerField(choices=REFUNDSTATUS_CHOICES,default=STORAGESTATUS_REFUNDER,verbose_name=u"退库单状态")
+    applycard = models.ForeignKey(OutsideApplyCard,verbose_name=u"外购件领用单")
+    refundcard_code = models.CharField(verbose_name=u"退库单编号",max_length=20)
+    work_order = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
+    create_time = models.DateField(verbose_name=u"日期",auto_now_add=True)
+    
+    class Meta:
+        verbose_name = u"外购件退库单"
+        verbose_name_plural = u"外购件退库单"
+    def __unicode__(self):
+        return self.refundcard_code
+
+class OutsideRefundCardItems(models.Model):
+    refundcard = models.ForeignKey(OutsideRefundCard,verbose_name=u"退库单")
+    applyitem = models.ForeignKey(OutsideApplyCardItems,verbose_name=u"领用材料")
+    count = models.IntegerField(verbose_name=u"数量",default=0)
+    remark =  models.CharField(verbose_name=u"备注",max_length=50,blank=True,null=True)
+    
+    class Meta:
+        verbose_name = u"外购件退库单材料"
+        verbose_name_plural = u"外购件退库单材料"
+    def __unicode__(self):
+        return "%s" %  self.applyitem.specification

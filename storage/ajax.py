@@ -1157,12 +1157,11 @@ def updateSteelStoreList(refund,items):
 
 @dajaxice_register
 def outsideCardSearch(request,role,form):
-    OutsideCardDict = {"entry":OutsideStandardEntry,"applycard":OutsideApplyCard}
-    TableHtmlPathDict = {"entry":"outsideentryhometable","applycard":"applycardhometable"}
-    OutsideSearchFormDict = {"entry":OutsideEntrySearchForm,"applycard":OutsideApplyCardSearchForm}
+    OutsideCardDict = {"entry":OutsideStandardEntry,"applycard":OutsideApplyCard,"refund":OutsideRefundCard}
+    OutsideSearchFormDict = {"entry":OutsideEntrySearchForm,"applycard":OutsideApplyCardSearchForm,"refund":OutsideRefundSearchForm}
     form = OutsideSearchFormDict[role](deserialize_form(form))
     card_model = OutsideCardDict[role]
-    html_path = "storage/widgets/"+TableHtmlPathDict[role]+".html"
+    html_path = "storage/widgets/outside"+role+"hometable.html"
     if form.is_valid():
         card_set = get_weld_filter(card_model,form.cleaned_data)
     html = render_to_string(html_path,{"card_set":card_set,"STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER})
@@ -1208,4 +1207,27 @@ def outsideMaterialApply(request,select_item,mid):
         message = u"领用卡已经确认，不能修改材料"
         
     return simplejson.dumps({"message":message})
-        
+
+@dajaxice_register
+def outsideRefundCardConfirm(request,role,fid):
+    refundcard = OutsideRefundCard.objects.get(id=fid)
+    items = refundcard.outsiderefundcarditems_set.all()
+    if role == "keeper":
+        if refundcard.status == STORAGESTATUS_KEEPER:
+            for item in items:
+                storelist = item.applyitem.storelist
+                storelist.count += item.count
+                storelist.save()
+            refundcard.status = STORAGESTATUS_END
+            refundcard.keeper = request.user
+            refundcard.save()
+            message = u"退库单确认成功"
+        else:
+            message = u"退库单已经确认过"
+    
+    context = {
+        "refundcard":refundcard,
+        "items":items,
+    }
+    html = render_to_string("storage/wordhtml/outsiderefund.html",context)
+    return simplejson.dumps({"html":html,"message":message})
