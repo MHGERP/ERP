@@ -6,11 +6,13 @@
 			{% endif %}
 			<th>序号</th>
 			<th>工作令编号</th>
+			<th>票号</th>
 			<th>名称及规格</th>
-			<th>标准号/图号</th>
-			<th>材料牌号</th>
-			<th>单位</th>
+			<th>图号</th>
+			<th>材质</th>
 			<th>数量</th>
+			<th>单重</th>
+			<th>总重</th>
 			<th>备注</th>
 			<th>状态</th>
 			{% if not can_choose %}
@@ -25,15 +27,17 @@
 			<td>{% if item.can_choose %}
 			<input type="checkbox" class="checkbox" args="{{item.id}}">
 			{% endif %}</td> {% endif %}
+			<td>{{forloop.counter}}</td>
+        	<td>{{item.sub_workorder}}</th>
 			<td>{{item.index}}</td>
-        	<td>{{item.order.order_index}}</th>
 			<td>{{item.name}}</td>
 			<td>{{item.schematic_index}}</td>
 			<td>{{item.material}}</td>
-			<td></td>
-			<td>{{item.materielformconnection.count}}</td>
-			<td></td>
-			<td>{{item.status}}</td>
+            <td>{{item.count}}</td>
+			<td>{{item.net_weight}}</td>
+			<td>{{item.total_weight_cal}}</td>
+            <td>{{item.remark}}</td>
+			<td>{{item.order_status}}</td>
             {% if not can_choose %}
 			<td>
 				<button class="btn btn-primary" uid={{item.id}}>修改</button>
@@ -47,15 +51,17 @@
 			<td>{% if item.can_choose %}
 			<input type="checkbox" class="checkbox"  args="{{item.id}}">
 			{% endif %}</td> {% endif %}
+			<td>{{forloop.counter}}</td>
+        	<td>{{item.sub_workorder}}</th>
 			<td>{{item.index}}</td>
-        		<td>{{item.order.order_index}}</th>
 			<td>{{item.name}}</td>
 			<td>{{item.schematic_index}}</td>
 			<td>{{item.material}}</td>
-			<td></td>
-			<td>{{item.materielformconnection.count}}</td>
-			<td></td>
-			<td>{{item.status}}</td>
+            <td>{{item.count}}</td>
+			<td>{{item.net_weight}}</td>
+			<td>{{item.total_weight_cal}}</td>
+            <td>{{item.remark}}</td>
+			<td>{{item.order_status}}</td>
 			{% if not can_choose %}
 			<td>
 				<button class="btn btn-primary" id="edit" uid={{item.id}}>修改</button>

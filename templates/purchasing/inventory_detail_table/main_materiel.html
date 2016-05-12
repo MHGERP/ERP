@@ -4,14 +4,13 @@
             <th><input type="checkbox" name="all" id="selectall"></th>
             <th>序号</th>
             <th>工作令编号</th>
-            <th>名称</th>
             <th>规格</th>
-            <th>标准号/图号</th>
+            <th>标准</th>
             <th>材质</th>
             <th>单位</th>
             <th>数量</th>
             <th>质量等级</th>
-            <th>采购</th>
+            <th>采购(kg)</th>
             <th>库存</th>
             <th>相关库存</th>
             <th>删除</th>
@@ -22,10 +21,9 @@
     <tr iid="{{item.id}}">
         <td>{%if item.can_choose %}<input type="checkbox" class="checkbox" args="{{item.id}}">{% endif %}</td>
         <td>{{forloop.counter}}</td>
-        <td>{{item.order.order_index}}</td>
-        <td>{{item.name}}</td>
+        <td>{{item.sub_workorder}}</td>
         <td>{{item.specification}}</td>
-        <td>{{item.schematic_index}}</td>
+        <td>{{item.standard}}</td>
         <td>{{item.material.name}}</td>
         <td>{{item.unit}}</td>
         <td>{{item.count}}</td>

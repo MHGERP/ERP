@@ -6,7 +6,7 @@ function refresh() {
             $("#widget-box").html(data);
         },
         {
-
+            "type" : "down",
         }
     );
 }

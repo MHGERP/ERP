@@ -9,6 +9,7 @@ RegisterClass = (
     ProductionPlan,
     ProductionWorkGroup,
     ProcessDetail,
+    SubMateriel,
 )
 
 for item in RegisterClass:

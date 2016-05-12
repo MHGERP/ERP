@@ -3,6 +3,7 @@
 		<tr>
 			<th><input type="checkbox" id="select_all"/></th>
 			<th>序号</th>
+			<th>工作令</th>
 			<th>名称</th>
 			<th>材质</th>
 			<th>质量分类</th>
@@ -27,12 +28,13 @@
 			<input type="checkbox" class="checkbox" args="{{item.id}}">
             {% endif %}</td> 
 			<td>{{forloop.counter}}</td>
+			<td>{{item.sub_workorder}}</td>
         	<td>{{item.name}}</th>
             <td>{{item.material.name}}</td>
             <td>{{item.press}}</td>
 			<td>{{item.specification}}</td>
-            <td>{{item.materielformconnection.count}}</td>
-            <td>{{item.materielformconnection.purchasing}}</td>
+            <td>{{item.count}}</td>
+            <td>{{item.total_weight}}</td>
             <td>{{item.recheck}}</td>
             <td>{{item.detection_level}}</td>
             <td>{{item.status}}</td>
@@ -51,13 +53,14 @@
 			<td>{% if item.can_choose %}
 			<input type="checkbox" class="checkbox" args="{{item.id}}">
 			{% endif %}</td> 
-			<td>{{forloop.counter}}</td>
+            <td>{{forloop.counter}}</td>
+            <td>{{item.work_order}}</td>
         	<td>{{item.name}}</th>
             <td>{{item.material.name}}</td>
             <td>{{item.press}}</td>
 			<td>{{item.specification}}</td>
-            <td>{{item.materielformconnection.count}}</td>
-            <td>{{item.materielformconnection.purchasing}}</td>
+            <td>{{item.count}}</td>
+            <td>{{item.total_weight}}</td>
             <td>{{item.recheck}}</td>
             <td>{{item.detection_level}}</td>
             <td>{{item.status}}</td>

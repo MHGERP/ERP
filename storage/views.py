@@ -56,8 +56,8 @@ def steelrefunddetailViews(request,rid):
         items = refund.boardsteelmaterialrefunditems
         html_path = "boardsteelrefunddetail.html"
     else:
-        items = refund.bardsteelmaterialrefunditems_set.all()
-        html_path = "bardsteelrefunddetail.html"
+        items = refund.barsteelmaterialrefunditems_set.all()
+        html_path = "barsteelrefunddetail.html"
     context={
         'refund':refund,
         'items':items,
@@ -693,8 +693,14 @@ def getStorageHomeContext(request,_Model,_SearchForm,default_status,url,key_list
     return context
 
 def outsideEntryConfirmViews(request,eid):
-    entry_url = getUrlByViewMode(request,"outside/entryhome")
-    context = getEntryConfirmContext(request,eid,OutsideStandardEntry,StorageOutsideEntryInfoForm,StorageOutsideEntryRemarkForm,entry_url)
+    entry = OutsideStandardEntry.objects.get(id= eid)
+    items = OutsideStandardItem.objects.filter(entry = entry)
+    form = OutsideEntryItemForm()
+    context = {
+        "entry":entry,
+        "items":items,
+        "form":form,
+    }
     return render(request,"storage/outside/entryconfirm.html",context)
 
 def getEntryConfirmContext(request,eid,_Model,_Inform,_Reform,entry_url):

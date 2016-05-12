@@ -83,7 +83,7 @@ class ApplyCardBase(models.Model):
     sample_report = models.CharField(verbose_name=u"样表",max_length=20,blank=True,null=True)
     entry_code = models.CharField(verbose_name=u"编号",max_length=20,unique=True)
     workorder = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
-    date = models.DateField(verbose_name=u"日期")
+    create_time = models.DateField(verbose_name=u"日期")
     department = models.CharField(verbose_name = u"领用单位",max_length=20)
     class Meta:
         verbose_name = u"领用卡"
@@ -347,7 +347,7 @@ class SteelMaterialApplyCardItems(models.Model):
     work_order=models.ForeignKey(WorkOrder,blank=False,null=False,verbose_name=u"工作令")
     specification = models.CharField(max_length=50,blank=False,null=False,verbose_name=u'规格')
     def __unicode__(self):
-        return "%s" % self.materiel
+        return "%s" % self.material_mark
 
     class Meta:
         verbose_name=u"钢材领用单材料"
@@ -543,45 +543,62 @@ class OutsideStandardItem(models.Model):
     unit =  models.CharField(verbose_name=u"单位",max_length=20,blank=True,null=True)
     count = models.IntegerField(verbose_name=u"数量",default=0)
     weight = models.FloatField(verbose_name=u"净重",null=True,blank=True)
-    heatno = models.CharField(verbose_name=u"熔炼号",null=True,blank=True,max_length=50)
+    heatnum = models.CharField(verbose_name=u"熔炼号",null=True,blank=True,max_length=50)
     remark = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'备注')
     factory = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'生产厂家')
     ticket_number = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'票号')
-
+    work_order=models.ForeignKey(WorkOrder,blank=False,null=False,verbose_name=u"工作令")
     class Meta:
         verbose_name = u"外购件入库材料"
         verbose_name_plural = u"外购件入库材料"
     def __unicode__(self):
-        return '%s(%s)' % (self.specification, self.entry)
-"""
-class OutsideApplyCard(ApplyCardBase):
-    proposer = models.ForeignKey(User,blank=True,null=True,verbose_name=u"领用人",related_name = "out_apply_proposer")
+        return '%s' % self.specification
+
+
+class OutsideStorageList(models.Model):
+    entry_item = models.OneToOneField(OutsideStandardItem,verbose_name=u"入库材料")
+    count = models.IntegerField(verbose_name=u"数量",default=0)
+    outsidebuy_type = models.IntegerField(choices=OUTSIDEBUY_TYPE,default=COOPERATION_OUTSIDEBUY,verbose_name=u"外购件类型")
+    class Meta:
+        verbose_name = u"外购件库存材料"
+        verbose_name_plural = u"外购件库存材料"
+
+    def __unicode__(self):
+        return "%s" % self.entry_item.specification
+
+
+class OutsideApplyCard(models.Model):
+    applicant = models.ForeignKey(User,blank=True,null=True,verbose_name=u"领用人",related_name = "out_apply_applicant")
     auditor = models.ForeignKey(User,blank=True,null=True,verbose_name=u"审核人",related_name = "out_apply_auditor")
     inspector = models.ForeignKey(User,blank=True,null=True,verbose_name=u"检验员",related_name = "out_apply_inspector")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "out_apply_keeper")
-    entry_status = models.IntegerField(choices=APPLYCARDSTATUS_CHOICES,default=STORAGESTATUS_AUDITOR,verbose_name=u"入库单状态")
+    entry_status = models.IntegerField(choices=APPLYCARD_STATUS_CHOICES,default=APPLYCARD_APPLICANT,verbose_name=u"入库单状态")
+    change_code = models.CharField(verbose_name=u"修改号",max_length=50,blank=True,null=True)
+    sample_report = models.CharField(verbose_name=u"样表",max_length=50,blank=True,null=True)
+    applycard_code = models.CharField(verbose_name=u"编号",max_length=20)
+    work_order = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
+    create_time = models.DateField(verbose_name=u"日期",auto_now_add=True)
+    department = models.CharField(verbose_name = u"领用单位",max_length=20,null=True,blank=True)
 
     class Meta:
         verbose_name = u"外购件领用单"
         verbose_name_plural = u"外购件领用单"
     def __unicode__(self):
-        return self.entry_code
+        return self.applycard_code
 
-class OutsideStorageList(models.Model):
-    texture = models.CharField(verbose_name=u"材质",max_length=50,blank=True,null=True)
-    specification = models.CharField(verbose_name=u"规格",max_length=20,blank=True,null=True)
-    number = models.IntegerField(verbose_name=u"数量")
-    unit = models.CharField(verbose_name=u"单位",max_length=20,blank=True,null=True)
-    class Meta:
-        verbose_name = u"外购件库存"
-        verbose_name_plural = u"外购件库存"
-    def __unicode__(self):
-        return '%s' % self.specification
-class OutsideApplyCardItem(ApplyCardItemBase):
+class OutsideApplyCardItem(models.Model):
     applycard = models.ForeignKey(OutsideApplyCard,verbose_name=u"领用单")
+    storelist = models.ForeignKey(OutsideStorageList,verbose_name=u"外购件库存材料")
+    schematic_index = models.CharField(verbose_name=u"标准号或图号",max_length=50,blank=True,null=True)
+    specification = models.CharField(verbose_name=u"名称及规格",max_length=50,blank=True,null=True)
+    material_mark = models.CharField(verbose_name=u"材料牌号",max_length=50,blank=True,null=True)
+    material_code = models.CharField(verbose_name=u"标记号",max_length=20,blank=True,null=True)
+    unit =  models.CharField(verbose_name=u"单位",max_length=20,blank=True,null=True)
+    count = models.IntegerField(verbose_name=u"数量",default=0)
+    remark =  models.CharField(verbose_name=u"备注",max_length=50,blank=True,null=True)
+
     class Meta:
         verbose_name = u"外购件领用单材料"
         verbose_name_plural = u"外购件领用单材料"
     def __unicode__(self):
-        return "%s(%s)" % (self.specification,self.applycard)
-"""
+        return "%s" %  self.specification

@@ -1,48 +1,29 @@
 # coding: UTF-8
 from django.shortcuts import render
 from production.forms import *
+from production.models import *
 from const.forms import WorkOrderForm
 
 def taskAllocationViews(request):
     search_form = TaskAllocationForm()
-    from django.contrib.auth.models import User
-    from users.models import UserInfo
-    items_list1 = Processing.objects.filter(operate_date = None).filter(operator = None)
-    items_list2 = Processing.objects.filter(operate_date = None).exclude(operator = None)
-    for item in items_list2:
-        if item.operator != None:
-            item.operator.info = item.operator.userinfo
-
-    user_list = UserInfo.objects.all()
+    items_list = ProcessDetail.objects.filter(complete_process_date = None).order_by('-productionworkgroup')
+    for item in items_list:
+        item.groups = ProductionWorkGroup.objects.filter(processname = item.processname)
 
     context={
         "taskallocationform":search_form,
-        "user_list":user_list, 
-        "items_list1":items_list1,
-        "items_list2":items_list2,
+        "items_list":items_list,
     }
 
     return render(request,"production/task_allocation.html",context)
 
 def taskConfirmViews(request):
     search_form = TaskConfirmForm()
-    from django.contrib.auth.models import User
-    from users.models import UserInfo
-    items_list1 = Processing.objects.filter(operate_date = None).exclude(operator = None)
-    items_list2 = Processing.objects.exclude(operate_date = None)
-    for item in items_list1:
-        if item.operator != None:
-            item.operator.info = item.operator.userinfo
-    for item in items_list2:
-        if item.operator != None:
-            item.operator.info = item.operator.userinfo
-    user_list = UserInfo.objects.all()
-    
+    items_list = ProcessDetail.objects.exclude(productionworkgroup = None).order_by('complete_process_date')
+
     context={
         "taskallocationform":search_form,
-        "user_list":user_list, 
-        "items_list1":items_list1,
-        "items_list2":items_list2,
+        "items_list":items_list,
     }
     return render(request,"production/task_confirm.html",context)
 

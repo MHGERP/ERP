@@ -1,42 +1,33 @@
 
 <table class="table table-bordered table-striped">
     <thead>
-        <th>编号</th>
+        <th>工作票号</th>
         <th>工作令</th>
         <th>工序编号</th>
         <th>工序</th>
         <th>工时</th>
         <th>分配组</th>
         <th>完成确认</th>
+        <th>查看</th>
     </thead>
     <tbody>
-    {% for item in items_list1 %}
+    {% for item in items_list %}
         <tr>
             <td>{{item.materiel_belong.index}}</td>
             <td>{{item.materiel_belong.order.order_index}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.get_name_display}}</td>
-            <td>{{item.hour}}</td>
+            <td>{{item.process_id}}</td>
+            <td>{{item.processname}}</td>
+            <td>{{item.work_hour}}</td>
+            <td>{{item.productionworkgroup}}</td>
+            {% if item.complete_date = None %}
+                <td>
+                    <button class="btn btn-primary" type="button" onclick="task_confirm_finish({{item.id}})">确认</button>
+                </td>
+            {% else %}
+                <td>{{item.complete_date|date:"Y-m-d"}}</td>
+            {% endif %}
             <td>
-                {{item.operator.info.name}}
-            </td>
-            <td>
-                <button class="btn btn-primary" type="button" onclick="task_confirm_finish({{item.id}})">确认</button>
-            </td>
-        </tr>
-    {% endfor %}
-    {% for item in items_list2 %}
-        <tr>
-            <td>{{item.materiel_belong.index}}</td>
-            <td>{{item.materiel_belong.order.order_index}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.get_name_display}}</td>
-            <td>{{item.hour}}</td>
-            <td>
-                {{item.operator.info.name}}
-            </td>
-            <td>
-                {{item.operate_date}}
+                <button class="btn" onclick="task_confirm_view({{item.id}})">查看</button>
             </td>
         </tr>
     {% endfor %}

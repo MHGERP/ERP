@@ -14,12 +14,15 @@ from backend.utility import getContext
 from sell.forms import *
 
 @dajaxice_register
-def getProductionList(request):
+def getProductionList(request, type):
    productions = Product.objects.all()
    context = {
        "productions" : productions,
    }
-   return render_to_string("sell/widgets/productions_table.html", context)
+   if type == "down":
+       return render_to_string("sell/widgets/productions_table.html", context)
+   else:
+       return render_to_string("sell/widgets/productions_audit_table.html", context)
 
 @dajaxice_register
 def getProductionForm(request, iid):
