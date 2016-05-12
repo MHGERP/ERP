@@ -82,7 +82,8 @@ def saveBidFileStatus(request, bid, sta):
 def saveProductStatus(request, pid):
     product = Product.objects.get(id = pid)
     if product.manufacture_file_up and product.manufacture_file_up.is_approval == 0 and product.techdata_file_up and product.techdata_file_up.is_approval == 0 and product.purchasing_file_up and product.purchasing_file_up.is_approval == 0:
-        product.is_approval = 1
+        product.is_approval = 0
+        product.save()
         return "ok"
     else:
         return "err"
