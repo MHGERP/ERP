@@ -68,6 +68,9 @@ $("#btn_save_info").click(function() {
     })
 });
 
+$(document).on("dblclick", ".process_area", function() {
+    $("#process_modal").modal("show");
+});
 $(document).on("dblclick", ".pic_area", function() {
     $("#iid_input").val($("#div_card").attr("iid"));
     $("#pic_modal").modal("show");

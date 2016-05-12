@@ -934,7 +934,6 @@ def getTransferCard(request, iid, page = "1"):
         "MARK_PROOFREAD": MARK_PROOFREAD,
         "MARK_APPROVE": MARK_APPROVE,
     }
-    print iid, page
     card = TransferCard.objects.get(materiel_belong = item)
     context["card"] = card
     process_list = TransferCardProcess.objects.filter(card_belong = card)
