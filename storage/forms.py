@@ -565,3 +565,15 @@ class OutsideMaterialSearchForm(forms.Form):
         outsidetypes = [("-1","------")]
         outsidetypes.extend(OUTSIDEBUY_TYPE)
         self.fields["outsidebuy_type"].choices = tuple(outsidetypes)
+
+class OutsideRefundSearchForm(forms.Form):
+    create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
+    create_time__lte  = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker', 'date_picker':'true'}))
+    work_order = forms.ChoiceField(label=u"工作令",required=False,widget=forms.Select(attrs={'class':'form-control',"select2":'true'}))
+    refundcard_code = forms.CharField(label=u'退库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
+    applycard__department = forms.CharField(label=u'领用单位',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideRefundSearchForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields)
+        workorder_set = WorkOrder.objects.all()
+        self.fields["work_order"].choices = getChoiceList(workorder_set,"order_index")

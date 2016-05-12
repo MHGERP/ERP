@@ -184,6 +184,14 @@ urlpatterns = patterns('',
         storage_views.outsideEntryConfirmViews,    
     ),
     url(
+        r'^outside/refundcardhome$',
+        storage_views.outsideRefundHomeViews,    
+    ),
+    url(
+        r'^outside/refundconfirm/(?P<fid>\w+)$',
+        storage_views.outsideRefundConfirmViews,    
+    ),
+    url(
         r'^storethread$',
         storage_views.StoreThreadViews,
     ),

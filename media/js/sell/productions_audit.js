@@ -46,7 +46,8 @@ $(document).on("click", ".product_audit", function() {
     Dajaxice.sell.saveProductStatus(
         function(data) {
             if(data == "ok") {
-                $(this).parent().html("审核通过");
+                alert("审核通过！");
+                refresh();
             }
             else {
                 alert("还有招标文件审核未通过！");

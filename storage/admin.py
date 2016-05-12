@@ -22,6 +22,8 @@ Registers = (
     OutsideStorageList,
     OutsideApplyCard,
     OutsideApplyCardItems,
+    OutsideRefundCard,
+    OutsideRefundCardItems,
     SteelMaterialEntry,
     SteelMaterialEntryItems,
     SteelMaterialStoreList,

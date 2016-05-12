@@ -42,7 +42,7 @@ RegisterClass = (
     CooperantMark,
     PrincipalItem,
     PrincipalMark,
-
+    TransferCardProcess,
 )
 
 for item in RegisterClass:

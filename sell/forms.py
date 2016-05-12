@@ -7,7 +7,7 @@ from sell.models import Product
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        exclude = ("id", "manufacture_file", "techdata_file", "purchasing_file",)
+        fields = {"name"}
         widgets = {
             "mame" : forms.TextInput(attrs = {
                 "class" : "input-medium"
