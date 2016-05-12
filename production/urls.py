@@ -5,6 +5,10 @@ from production import views as production_views
 
 urlpatterns=patterns('',
     url(
+        r'^task_plan$',
+        production_views.taskPlanViews,
+    ),
+    url(
         r'^task_allocation$',
         production_views.taskAllocationViews,
     ),

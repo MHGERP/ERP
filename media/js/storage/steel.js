@@ -47,8 +47,7 @@ $(document).ready(function(){
         $("#myModal").modal('show');
     })
     $(document).on("click","#search_material_btn",function(){
-        var table_path = $("table#store_items_table").attr("table_path");
-        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"steel","table_path":table_path});
+        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"steel",});
     })
     $(document).on("click","#steel_select_save",function(){
         var select_item = $("input[type='radio']:checked").val();

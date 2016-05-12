@@ -185,6 +185,18 @@ def programmeEditViews(request):
     }
     return render(request, "techdata/programme_edit.html", context)
 
+def transferCardPicUpload(request):
+    if request.is_ajax():
+        if request.FILES['pic_file'].size > 10*1024*1024:
+            file_upload_error = 2
+        else:
+            iid = request.POST['iid']
+            card = TransferCard.objects.get(materiel_belong__id = iid)
+            card.file_obj = request.FILES['pic_file']
+            card.save()
+            file_upload_error = 1
+        return HttpResponse(json.dumps({"file_upload_error": file_upload_error, }))
+
 def programAdd(request):
     if request.is_ajax():
         if request.FILES['program_file'].size > 10*1024*1024:

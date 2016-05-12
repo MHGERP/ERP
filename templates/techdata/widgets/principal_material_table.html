@@ -16,10 +16,10 @@
         </span>
             审核人：
         <span id="span_review">
-            {% if not work_order.firstfeedingmark.reviewer %}
+            {% if not work_order.principalmark.reviewer %}
             <span class="btn btn-mini btn-primary btn-mark" id="btn_review_confirm" args="{{MARK_REVIEW}}">签字</span>
             {% else %}
-            {{work_order.firstfeedingmark.reviewer.userinfo}}
+            {{work_order.principalmark.reviewer.userinfo}}
             {% endif %}
         </span>
     </div>

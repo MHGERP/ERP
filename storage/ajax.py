@@ -755,26 +755,29 @@ def outsideApplyCardItemRemarkChange(request,itemid,remark):
     return simplejson.dumps({"remark":item.remark,"id":item.id})
 
 @dajaxice_register
-def outsideApplyCardConfirm(request,form,aid):
+def outsideApplyCardConfirm(request,aid):
     applycard = OutsideApplyCard.objects.get(id = aid)
-    form = OutsideApplyCardForm(deserialize_form(form),instance=applycard)
-    if form.is_valid():
-        form.save()
-        saveRolers(applycard,"keeper",request.user)
-        items_set = OutsideApplyCardItem.objects.filter(applycard = applycard)
-        isOk = updateStorageLits(items_set,OutsideStorageList)
-        if isOk:
-            message = u"确认成功"
-            setObjAttr(applycard,"entry_status",STORAGESTATUS_END)
+    items = OutsideApplyCardItems.objects.filter(applycard = applycard)
+    if applycard.status == APPLYCARD_KEEPER:
+        if items.filter(storelist__isnull = True).count() > 0:
+            message = u"还有领用项未分配库存材料"
         else:
-            message = u"确认失败，部分材料库存不够"
+            for item in items:
+                storelist = item.storelist
+                storelist.count -= item.count
+                storelist.save()
+            applycard.status = APPLYCARD_END
+            applycard.keeper = request.user
+            applycard.save()
+            message = u"领用卡确认成功"
     else:
-        message = u"确认失败，领用单内容未填全"
-        print form.errors
-    url = "outside/applycardhome"
-    default_status = STORAGESTATUS_KEEPER
-    context = getOutsideApplyCardContext(applycard,form,url,default_status)
-    html = render_to_string("storage/widgets/applycardbody.html",context)
+        message = u"领用卡已经确认过"
+    
+    context = {
+        "applycard":applycard,
+        "items":items,
+    }
+    html = render_to_string("storage/wordhtml/outsideapplycard.html",context)
     return simplejson.dumps({"message":message,"html":html})
 
 def getOutsideApplyCardContext(applycard,inform,url,default_status):
@@ -989,8 +992,9 @@ def searchWeldEntry(request,searchform):
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
-def searchMaterial(request,search_form,search_type,table_path):
+def searchMaterial(request,search_form,search_type):
     (storelist_model,form_type,applycard_model) = checkStorage(search_type)
+    table_path = "storage/searchmaterial/store_"+search_type+"_items_table.html"
     search_form = form_type(deserialize_form(search_form))
     if search_form.is_valid():
         if search_type=="weld":
@@ -1153,9 +1157,10 @@ def updateSteelStoreList(refund,items):
 
 @dajaxice_register
 def outsideCardSearch(request,role,form):
-    OutsideCardDict = {"entry":OutsideStandardEntry}
-    TableHtmlPathDict = {"entry":"outsideentryhometable",}
-    form = OutsideEntrySearchForm(deserialize_form(form))
+    OutsideCardDict = {"entry":OutsideStandardEntry,"applycard":OutsideApplyCard}
+    TableHtmlPathDict = {"entry":"outsideentryhometable","applycard":"applycardhometable"}
+    OutsideSearchFormDict = {"entry":OutsideEntrySearchForm,"applycard":OutsideApplyCardSearchForm}
+    form = OutsideSearchFormDict[role](deserialize_form(form))
     card_model = OutsideCardDict[role]
     html_path = "storage/widgets/"+TableHtmlPathDict[role]+".html"
     if form.is_valid():
@@ -1165,7 +1170,7 @@ def outsideCardSearch(request,role,form):
 
 @dajaxice_register
 def outsideEntryItemSave(request,form,mid):
-    item = OutsideStandardItem.objects.get(id=mid)
+    item = OutsideStandardItems.objects.get(id=mid)
     form = OutsideEntryItemForm(deserialize_form(form),instance = item)
     flag = False
     if item.entry.entry_status == STORAGESTATUS_KEEPER:
@@ -1183,8 +1188,24 @@ def outsideEntryItemSave(request,form,mid):
 
 @dajaxice_register
 def getOutsideEntryItemFormInfo(request,mid):
-    item = OutsideStandardItem.objects.get(id=mid)
+    item = OutsideStandardItems.objects.get(id=mid)
     form = OutsideEntryItemForm(instance = item)
     html = render_to_string("storage/outside/entryitemform.html",{"form":form})
     return simplejson.dumps({"html":html})
 
+@dajaxice_register
+def outsideMaterialApply(request,select_item,mid):
+    applyitem = OutsideApplyCardItems.objects.get(id=mid)
+    storelist = OutsideStorageList.objects.get(id=select_item)
+    if applyitem.applycard.status == APPLYCARD_KEEPER:
+        if applyitem.count <= storelist.count:
+            applyitem.storelist = storelist
+            applyitem.save()
+            message = u"材料选择成功"
+        else:
+            message = u"所选材料数量不足"
+    else:
+        message = u"领用卡已经确认，不能修改材料"
+        
+    return simplejson.dumps({"message":message})
+        

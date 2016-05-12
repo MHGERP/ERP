@@ -129,4 +129,8 @@ urlpatterns=patterns('',
         r'^weldJointTechView/(?P<orderid>\w+)/$', 
         techdata_views.weldJointTechView,
     ),
+    url(
+        r'^transferCardPicUpload$',
+        techdata_views.transferCardPicUpload,
+    ),
 )
