@@ -40,15 +40,15 @@
 	</div>
 	<div class="form-inline div_margin">
 	    <label class="span1 label_margin">数量</label>
-        <input class="form-control" maxlength="20" type="text" id="cnt" value={{count}}>
+		{{order_form.count}}
 	</div>
 	<div class="form-inline div_margin">
 	    <label class="span1 label_margin">备注</label>
 		{{order_form.remark}}
 	</div>
-    <div class="form-inline div_margin"{% if order_form.order_mod == 1 %}style="display:none" {% endif%}>
+    <div class="form-inline div_margin"{% if order_form.order_mod > 0 %}style="display:none"{% endif%}>
         <label class="span1 label_margin">采购(kg)</label>
-        <input class="form-control" maxlength="20" type="text" id="purchasing" value={{purchasing}}>
+		{{order_form.total_weight}}
     </div>
 </div>
 

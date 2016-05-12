@@ -500,11 +500,7 @@ def materielExecuteDetailViews(request, choice, source, *mid):
             materielexecute_detail_set=None
             tech_requirement=""
             
-        if materiel_choice==MAIN_MATERIEL:
-            type=1
-        else:
-            type=2
-        materiels=MaterielExecuteDetail.objects.filter(materiel__inventory_type__id=type,materiel_execute__isnull=True)
+        materiels=MaterielExecuteDetail.objects.filter(materiel__inventory_type__name=materiel_choice,materiel_execute__isnull=True)
         context = {
             "materielexecute_detail_set" : materielexecute_detail_set,
             "choice" : materiel_choice,
@@ -663,3 +659,32 @@ def SupplierCheckViews(request,bid):
         "comment_dict":comment_dict
     }
     return render(request,"purchasing/bid_invite/supplier_check_page.html",context)
+
+def QualityCardViews(request,bid):
+    bidform = BidForm.objects.get(bid_id = bid)
+    try:
+        quality_card = bidform.qualitypricecard
+    except:    
+        status=CommentStatus.objects.get(status=BIDFORM_PART_STATUS_INVITE_BID_QUALITY_FILL)
+        quality_card=qualityPriceCard(bid=bidform,status=status,work_order=bidform.order_form.work_order)
+        quality_card.save()
+    quality_card_form=QualityPriceCardForm(instance=quality_card)
+    supplier_set=bidform.supplierselect_set.all()
+    comment_dict={}
+    for k in COMMENT_USER_DICT:
+        comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
+        if comment.count()>0:
+            comment_dict[k]=comment[0]
+
+    for item in supplier_set:
+        item.form=QualityCardSupplierForm(instance=item)
+    context={
+        "quality_card":quality_card,
+        "quality_card_form":quality_card_form,
+        "supplier_set":supplier_set,
+        "status_dic":BIDFORM_INVITE_BID_QUALITY_DIC,
+        "comment_user_dict":COMMENT_USER_DICT,
+        "comment_dict":comment_dict
+    }
+    return render(request,"purchasing/bid_invite/quality_card_page.html",context)
+

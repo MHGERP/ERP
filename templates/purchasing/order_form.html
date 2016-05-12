@@ -12,7 +12,7 @@
 {% block inner_content%}
 <link rel="stylesheet" href="{{ STATIC_URL }}style/orderform.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="{{ STATIC_URL  }}bootstrap-datepicker/css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
-<div id="orderformbody">
+<div id="orderformbody" orderid={{order_form.order_id}}>
 {% if order_form.order_status.status == 0  or target == "1" %}
 {%include "purchasing/orderform/order_form_page.html"%}
 {% else%}
