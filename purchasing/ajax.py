@@ -182,8 +182,11 @@ def getRelatedModel(request, index):
     elif index == FIRST_FEEDING:
         print index
     elif index == OUT_PURCHASED:
-        f1 = set(item.specification for item in OutsideStorageList.objects.all())
-        f2 = set(item.texture for item in OutsideStorageList.objects.all())
+        item = OutsideStandardItem.objects.all()
+        print "sdfsfsfdsdf"
+        print len(item)
+        f1 = set(item.entry_item.specification for item in OutsideStorageList.objects.all())
+        f2 = set(item.entry_item.material_mark for item in OutsideStorageList.objects.all())
         f3 = set()
     elif index == COOPERANT:
         print index
@@ -295,7 +298,7 @@ def getInventoryTable(request, table_id, order_index):
         WELD_MATERIAL: "weld_material",
 
     }
-    
+
     items = Materiel.objects.filter(sub_workorder__id = order_index, inventory_type__name = table_id)
     context = {
         "items": items,

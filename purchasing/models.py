@@ -361,3 +361,15 @@ class BidAcceptance(models.Model):
         verbose_name_plural = u"中标通知书"
     def __unicode__(self):
         return '%s' % (self.bid.bid_id)
+
+class QuotingPrice(models.Model):
+    nameorspacification = models.CharField(max_length=50,blank=True,null=True,verbose_name=u"规格及名称")
+    material_mark = models.CharField(max_length=50,blank=True,null=True,verbose_name=u"材质或牌号")
+    per_fee = models.CharField(max_length=50,blank=True,null=True,verbose_name=u"单价")
+    unit = models.CharField(max_length=50,blank=True,null=True,verbose_name=u"单位")
+    the_supplier=models.ForeignKey(Supplier,verbose_name=u"供应商")
+    class Meta:
+        verbose_name = u"报价单"
+        verbose_name_plural = u"报价单"
+    def __unicode__(self):
+        return '%s' % (self.per_fee)
