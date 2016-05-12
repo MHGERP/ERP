@@ -1124,7 +1124,8 @@ def steelRefundConfirm(request,rid):
             items = refund.boardsteelmaterialrefunditems
             items_table_path = "steelboardrefund.html"
         else:
-            items = refund.bardsteelmaterialrefunditems_set.all
+            items = refund.barsteelmaterialrefunditems_set.all()
+            items_table_path = "steelbarrefund.html"
         updateSteelStoreList(refund,items)
         refund.status = STORAGESTATUS_END
         refund.keeper = request.user
@@ -1143,6 +1144,12 @@ def updateSteelStoreList(refund,items):
         return_time = old_storelist.return_time + 1
         new_storelist = SteelMaterialStoreList(entry_item=old_storelist.entry_item,specification=items.specification,steel_type=old_storelist.steel_type,count=items.count,return_time=return_time,weight=items.weight,refund=refund.id)
         new_storelist.save() 
+    else:
+        for item in items:
+            old_storelist = item.applyitem.storelist
+            return_time = old_storelist.return_time + 1
+            new_storelist = SteelMaterialStoreList(entry_item=old_storelist.entry_item, specification=item.specification, steel_type=old_storelist.steel_type, count=item.count, return_time=return_time, weight=item.weight, length=item.length, refund=refund.id)
+            new_storelist.save()
 
 @dajaxice_register
 def outsideCardSearch(request,role,form):
