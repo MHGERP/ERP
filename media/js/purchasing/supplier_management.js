@@ -42,7 +42,7 @@ $("#add_or_update_supplier").click(function(){
     Dajaxice.purchasing.SupplierAddorChange(add_or_change_supplier_callback,{
         "mod":mod,
         "supplier_form":$("#supplier_info_form").serialize(true),
-        
+
     });
 });
 

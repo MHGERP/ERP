@@ -21,7 +21,10 @@
                         {% for file in supplier.supplierfile_set.all%}
                         <a href="{{file.file_obj.url}}">{{file}}</a>
                         {% endfor%}
-                    </td> 
+                    </td>
+                    <td>
+                        <a class='btn btn-primary' id="quote_supplier" data-toggle="modal" href="#supplier_info" >报价</a>
+                    </td>
                     <td>
                         <a class='btn btn-primary' id="edit_supplier" data-toggle="modal" href="#supplier_info" >编辑</a>
                     </td>

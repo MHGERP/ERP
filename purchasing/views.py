@@ -33,7 +33,7 @@ def purchasingFollowingViews(request):
         "BIDFORM_STATUS_SELECT_SUPPLIER":BIDFORM_STATUS_SELECT_SUPPLIER,
         "BIDFORM_STATUS_INVITE_BID":BIDFORM_STATUS_INVITE_BID,
         "BIDFORM_STATUS_PROCESS_FOLLOW":BIDFORM_STATUS_PROCESS_FOLLOW,
-        "BIDFORM_STATUS_CHECK_STORE":BIDFORM_STATUS_CHECK_STORE 
+        "BIDFORM_STATUS_CHECK_STORE":BIDFORM_STATUS_CHECK_STORE
     }
 
     return render(request,"purchasing/purchasing_following.html",context)
@@ -171,7 +171,7 @@ def bidTrackingViews(request, bid_id):
         bid_status.append(bid_dict)
         btn_cnt += 1 if status == bidform.bid_status else 0
     try:
-        bid_apply=bidform.bidapply     
+        bid_apply=bidform.bidapply
         if bid_apply.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
             bid_apply_finish=True
         else:
@@ -179,7 +179,7 @@ def bidTrackingViews(request, bid_id):
     except:
         bid_apply_finish=False
     try:
-        supplier_check=bidform.suppliercheck     
+        supplier_check=bidform.suppliercheck
         if supplier_check.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
             supplier_check_finish=True
         else:
@@ -187,7 +187,7 @@ def bidTrackingViews(request, bid_id):
     except:
         supplier_check_finish=False
     try:
-        quality_card=bidform.qualitypricecard     
+        quality_card=bidform.qualitypricecard
         if quality_card.status.status == BIDFORM_PART_STATUS_INVITE_BID_APPLY_FINISH:
             quality_card_finish=True
         else:
@@ -334,7 +334,7 @@ def subApplyHomeViews(request):
         receipts_code = request.POST["subapply_search"]
         subapply_set = MaterialSubApply.objects.filter(receipts_code = receipts_code)
     else:
-        subapply_set = MaterialSubApply.objects.filter(is_submit = True) 
+        subapply_set = MaterialSubApply.objects.filter(is_submit = True)
     context = {
         "subapply_set":subapply_set,
         "is_show":is_show,
@@ -371,7 +371,7 @@ def subApplyViews(request,sid = None):
 @csrf.csrf_protect
 def subApplyReviewViews(request,sid = None):
     subapply_obj = MaterialSubApply.objects.get(id = sid)
-    is_show = subapply_obj.is_submit and subapply_obj.is_approval == REVIEW_COMMENTS_CHOICE_WAIT 
+    is_show = subapply_obj.is_submit and subapply_obj.is_approval == REVIEW_COMMENTS_CHOICE_WAIT
     if request.method == "POST":
         subapply_form = SubApplyInspectForm(request.POST,instance = subapply_obj)
         if subapply_form.is_valid():
@@ -410,7 +410,7 @@ def orderFormViews(request):
     index = request.GET.get("index")
     target=request.GET.get("target")
     order_form = OrderForm.objects.get(order_id = index)
-    
+
     items=MaterielCopy.objects.filter(materielformconnection__order_form__order_id=index)
     print target
     context = {
@@ -454,7 +454,7 @@ def processFollowAdd(request):
             status=1
         return HttpResponse(json.dumps({'status':status,"form_html":form_html}),content_type="application/json")
 
-    
+
 def materielExecuteDetailViews(request, choice, source, *mid):
     """
     mxl
@@ -467,7 +467,7 @@ def materielExecuteDetailViews(request, choice, source, *mid):
         materielexecute_id = mid[0]
         materielexecute = MaterielExecute.objects.get(pk = materielexecute_id)
         materiel_choice = materielexecute.materiel_choice
-        
+
         materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
         # materielexecute_detail_set = [materielexecute_detail]
         executeForm = MaterielExecuteForm(instance = materielexecute)
@@ -492,14 +492,14 @@ def materielExecuteDetailViews(request, choice, source, *mid):
             executeForm = MaterielExecuteForm(instance = materielexecute)
             materielexecute_detail_set = MaterielExecuteDetail.objects.filter(materiel_execute = materielexecute)
             tech_requirement=materielexecute.tech_requirement
-            
+
 
         except:
             executeForm = MaterielExecuteForm()
             materiel_choice=MAIN_MATERIEL
             materielexecute_detail_set=None
             tech_requirement=""
-            
+
         if materiel_choice==MAIN_MATERIEL:
             type=1
         else:
@@ -529,9 +529,9 @@ def statusChangeViews(request):
 
 def statusChangeHistoryViews(request,bid):
     statuschange_set = StatusChange.objects.filter(bidform__bid_id = bid).order_by("change_time")
-    
+
     for obj in statuschange_set:
-        try: 
+        try:
             obj.reason = obj.statuschangereason
         except Exception,e:
             pass
@@ -567,8 +567,8 @@ def statusChangeApplyViews(request,bid):
         else:
             print statuschangeform.errors
     else:
-        statuschangeform = StatusChangeApplyForm(bidform=bidform)   
-    
+        statuschangeform = StatusChangeApplyForm(bidform=bidform)
+
     context = {
         'chform':statuschangeform,
     }
@@ -585,7 +585,7 @@ def arrivalInspectionViews(request):
         bid_id = request.POST["bidform_search"]
         bidFormSet = BidForm.objects.filter(bid_id = bid_id)
     else:
-        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_STORE)    
+        bidFormSet = BidForm.objects.filter(bid_status__part_status = BIDFORM_PART_STATUS_STORE)
     context = {
         "bidFormSet":bidFormSet,
         "BIDFORM_PART_STATUS_STORE":BIDFORM_PART_STATUS_STORE,
@@ -640,7 +640,7 @@ def SupplierCheckViews(request,bid):
     bidform = BidForm.objects.get(bid_id = bid)
     try:
         supplier_check = bidform.suppliercheck
-    except:    
+    except:
         status=CommentStatus.objects.get(status=BIDFORM_PART_STATUS_INVITE_BID_CHECK_FILL)
         supplier_check=SupplierCheck(bid=bidform,status=status)
         supplier_check.save()

@@ -217,7 +217,7 @@ def defaultRelated(request, index, mid):
     item = Materiel.objects.get(id = mid)
     data = []
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        data = SteelMaterialStoreList.objects.filter(entry_item__specification = item.specification, entry_item__materiel = item.material.name)
+        data = SteelMaterialStoreList.objects.filter(entry_item__specification = item.specification, entry_item__material_mark = item.material.name)
     # elif index == OUT_PURCHASED:
     #     data = OutsideStorageList.objects.filter(specification = f1, texture = f2)
     #     print data
@@ -240,7 +240,7 @@ def getRelatedTable(request, index, f1, f2, f3):
     }
     data = []
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        data = SteelMaterialStoreList.objects.filter(entry_item__material__name = f1, entry_item__specification = f2, entry_item__materiel = f3)
+        data = SteelMaterialStoreList.objects.filter(entry_item__specification = f2, entry_item__material_mark = f3)
     elif index == OUT_PURCHASED:
         data = OutsideStorageList.objects.filter(specification = f1, texture = f2)
         print data

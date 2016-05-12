@@ -547,7 +547,7 @@ class OutsideStandardItem(models.Model):
     remark = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'备注')
     factory = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'生产厂家')
     ticket_number = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'票号')
-    
+
     class Meta:
         verbose_name = u"外购件入库材料"
         verbose_name_plural = u"外购件入库材料"
