@@ -8,18 +8,18 @@
     <div class="dataTables_length">
             编制人：
         <span id="span_write">
-            {% if not work_order.firstfeedingmark.writer %}
+            {% if not work_order.auxiliarymark.writer %}
             <span class="btn btn-mini btn-primary btn-mark" id="btn_write_confirm" args="{{MARK_WRITE}}">签字</span>
             {% else %}
-            {{work_order.firstfeedingmark.writer.userinfo}}
+            {{work_order.auxiliarymark.writer.userinfo}}
             {% endif %} 
         </span>
             审核人：
         <span id="span_review">
-            {% if not work_order.firstfeedingmark.reviewer %}
+            {% if not work_order.auxiliarymark.reviewer %}
             <span class="btn btn-mini btn-primary btn-mark" id="btn_review_confirm" args="{{MARK_REVIEW}}">签字</span>
             {% else %}
-            {{work_order.firstfeedingmark.reviewer.userinfo}}
+            {{work_order.auxiliarymark.reviewer.userinfo}}
             {% endif %}
         </span>
     </div>

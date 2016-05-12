@@ -1,6 +1,9 @@
 .form-horizontal .controls {
     margin-left:110px!important;
 }
+label.entry_item_form{
+    width:120px!important;
+}
 div#applyform_div .control-label {
     width:100px!important;
 }

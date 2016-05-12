@@ -108,5 +108,9 @@ urlpatterns=patterns('',
     url(
         r'^suppliercheck/(?P<bid>\w+)/$',
         purchasing_views.SupplierCheckViews,
+    ),
+    url(
+        r'^qualitycard/(?P<bid>\w+)/$',
+        purchasing_views.QualityCardViews,
     )
 )
