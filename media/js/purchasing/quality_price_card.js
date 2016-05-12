@@ -28,3 +28,14 @@ $("#qualitycard_submit").click(function(){
     window.location.reload();
       },{'quality_card_id':quality_card_id});
 });
+$("#qualitycard_comment_confirm").click(function(){
+    var quality_card_id=$("#quality_card_div").attr("qualitycardid");
+    var usertitle=$("#comment_add").attr("usertitle");
+    Dajaxice.purchasing.QualityCardComment(function(data){
+        window.location.reload();
+    },{
+        "quality_card_id":quality_card_id,
+        "usertitle":usertitle,
+        "comment":$("#comment_area").val()
+    });
+});

@@ -697,17 +697,21 @@ table.MsoTableGrid
   height:63.0pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>签字盖章<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>签字<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=174 nowrap valign=bottom style='width:130.4pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-bottom-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:63.0pt'>
+  {%if quality_card.status.status > status_dic.OPERATOR_COMMENT%}
+  <p>{{comment_dict.Q_OPERATOR.user.userinfo.name}}</p>
+  <p>{{comment_dict.Q_OPERATOR.submit_date|date:"Y年m月d日"}}</p>
+  {%else%}
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:11.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
   0pt'>年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>月<span
   lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>日<span
-  lang=EN-US><o:p></o:p></span></span></p>
+  lang=EN-US><o:p></o:p></span></span></p>{%endif%}
   </td>
  </tr>
  <tr style='mso-yfti-irow:9;height:53.25pt'>
@@ -733,26 +737,32 @@ table.MsoTableGrid
   mso-border-top-alt:solid windowtext .5pt;mso-border-top-alt:solid windowtext .5pt;
   mso-border-bottom-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:53.25pt'>
-  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=center style='text-align:left;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>
+  {% if quality_card.status.status == status_dic.TECH_COMMENT%}<button id="comment_add" href="#quality_card_comment" usertitle="{{comment_user_dict.Q_NEED_TECH}}" data-toggle="modal">填写</button>{%elif quality_card.status.status > status_dic.TECH_COMMENT%}{{comment_dict.Q_NEED_TECH.comment}}{%endif%}
+  　<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=99 nowrap style='width:74.6pt;border:none;border-bottom:solid windowtext 1.0pt;
   mso-border-bottom-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:53.25pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>签字盖章<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>签字<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=174 nowrap valign=bottom style='width:130.4pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-bottom-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:53.25pt'>
+  {%if quality_card.status.status > status_dic.TECH_COMMENT%}
+  <p>{{comment_dict.Q_NEED_TECH.user.userinfo.name}}</p>
+  <p>{{comment_dict.Q_NEED_TECH.submit_date|date:"Y年m月d日"}}</p>
+  {%else%}
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:11.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
   0pt'>年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>月<span
   lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>日<span
-  lang=EN-US><o:p></o:p></span></span></p>
+  lang=EN-US><o:p></o:p></span></span></p>{% endif%}
   </td>
  </tr>
  <tr style='mso-yfti-irow:10;height:53.25pt'>
@@ -768,25 +778,31 @@ table.MsoTableGrid
   solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .5pt;mso-border-top-alt:
   solid windowtext .5pt;mso-border-bottom-alt:solid windowtext .5pt;padding:
   0cm 5.4pt 0cm 5.4pt;height:53.25pt'>
-  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=center style='text-align:left;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>
+  {% if quality_card.status.status == status_dic.LEAD_COMMENT%}<button id="comment_add" href="#quality_card_comment" usertitle="{{comment_user_dict.Q_NEED_LEAD}}" data-toggle="modal">填写</button>{%elif quality_card.status.status > status_dic.LEAD_COMMENT%}{{comment_dict.Q_NEED_LEAD.comment}}{%endif%}
+  <span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=99 nowrap style='width:74.6pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:53.25pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>签字盖章<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>签字<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=174 nowrap valign=bottom style='width:130.4pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-bottom-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:53.25pt'>
+  {%if quality_card.status.status > status_dic.LEAD_COMMENT%}
+  <p>{{comment_dict.Q_NEED_LEAD.user.userinfo.name}}</p>
+  <p>{{comment_dict.Q_NEED_LEAD.submit_date|date:"Y年m月d日"}}</p>
+  {%else%}
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:11.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
   0pt'>年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>月<span
   lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>日<span
-  lang=EN-US><o:p></o:p></span></span></p>
+  lang=EN-US><o:p></o:p></span></span></p>{% endif%}
   </td>
  </tr>
  <tr style='mso-yfti-irow:11;height:66.75pt'>
@@ -804,9 +820,11 @@ table.MsoTableGrid
   solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .5pt;mso-border-top-alt:
   solid windowtext .5pt;mso-border-bottom-alt:solid windowtext .5pt;padding:
   0cm 5.4pt 0cm 5.4pt;height:66.75pt'>
-  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=center style='text-align:left;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>
+  {% if quality_card.status.status == status_dic.COMPREHENSIVE_COMMENT%}<button id="comment_add" href="#quality_card_comment" usertitle="{{comment_user_dict.Q_COMPREHENSIVE}}" data-toggle="modal">填写</button>{%elif quality_card.status.status > status_dic.COMPREHENSIVE_COMMENT%}{{comment_dict.Q_COMPREHENSIVE.comment}}{%endif%}
+  <span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=99 nowrap style='width:74.6pt;border-top:solid windowtext 1.0pt;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:none;
@@ -814,17 +832,21 @@ table.MsoTableGrid
   padding:0cm 5.4pt 0cm 5.4pt;height:66.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>签字盖章<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>签字<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=174 nowrap valign=bottom style='width:130.4pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-bottom-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:66.75pt'>
+  {%if quality_card.status.status > status_dic.COMPREHENSIVE_COMMENT%}
+  <p>{{comment_dict.Q_COMPREHENSIVE.user.userinfo.name}}</p>
+  <p>{{comment_dict.Q_COMPREHENSIVE.submit_date|date:"Y年m月d日"}}</p>
+  {%else%}
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:11.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
   0pt'>年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>月<span
   lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>日<span
-  lang=EN-US><o:p></o:p></span></span></p>
+  lang=EN-US><o:p></o:p></span></span></p>{% endif%}
   </td>
  </tr>
  <tr style='mso-yfti-irow:12;mso-yfti-lastrow:yes;height:82.5pt'>
@@ -842,26 +864,32 @@ table.MsoTableGrid
   solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .5pt;mso-border-top-alt:
   solid windowtext .5pt;mso-border-bottom-alt:solid windowtext .5pt;padding:
   0cm 5.4pt 0cm 5.4pt;height:82.5pt'>
-  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  <p class=MsoNormal align=center style='text-align:left;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>　<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>
+  {% if quality_card.status.status == status_dic.COMPANY_COMMENT%}<button id="comment_add" href="#quality_card_comment" usertitle="{{comment_user_dict.Q_COMPANY}}" data-toggle="modal">填写</button>{%elif quality_card.status.status > status_dic.COMPANY_COMMENT%}{{comment_dict.Q_COMPANY.comment}}{%endif%}
+  <span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=99 nowrap style='width:74.6pt;border:none;border-bottom:solid windowtext 1.0pt;
   mso-border-bottom-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:82.5pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>签字盖章<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>签字<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=174 nowrap valign=bottom style='width:130.4pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-bottom-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:82.5pt'>
+  {%if quality_card.status.status > status_dic.COMPANY_COMMENT%}
+  <p>{{comment_dict.Q_COMPANY.user.userinfo.name}}</p>
+  <p>{{comment_dict.Q_COMPANY.submit_date|date:"Y年m月d日"}}</p>
+  {%else%}
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:11.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
   0pt'>年<span lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>月<span
   lang=EN-US><span style='mso-spacerun:yes'>&nbsp;&nbsp; </span></span>日<span
-  lang=EN-US><o:p></o:p></span></span></p>
+  lang=EN-US><o:p></o:p></span></span></p>{% endif%}
   </td>
  </tr>
  <![if !supportMisalignedColumns]>

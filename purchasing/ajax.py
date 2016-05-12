@@ -1477,3 +1477,11 @@ def submitQualityCard(request,quality_card_id):
     quality_card =qualityPriceCard.objects.get(id = quality_card_id)
     BidNextStatus(quality_card)
     return simplejson.dumps({})
+
+@dajaxice_register
+def QualityCardComment(request,quality_card_id,usertitle,comment):
+    quality_card=qualityPriceCard.objects.get(pk=quality_card_id)
+    bid_comment=BidComment(user=request.user,comment=comment,bid=quality_card.bid,submit_date=datetime.today(),user_title=usertitle)
+    bid_comment.save()
+    BidNextStatus(quality_card)
+    return simplejson.dumps({})
