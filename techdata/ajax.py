@@ -222,6 +222,7 @@ def autoSetInventoryLabel(request, id_work_order, inventory_type):
         for item in Materiel.objects.filter(order = work_order):
             if item.sub_index == "0" and item.index != "1": continue
             if not item.route().startswith("H1"): continue
+            if item.schematic_index and item.schematic_index.endswith(".00"): continue
             if DetailItem.objects.filter(materiel_belong = item).count() > 0: continue
             DetailItem(materiel_belong = item, remark = item.remark).save()
 
