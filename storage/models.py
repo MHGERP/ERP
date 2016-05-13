@@ -577,7 +577,7 @@ class OutsideApplyCard(models.Model):
     work_order = models.ForeignKey(SubWorkOrder,verbose_name=u"工作令")
     create_time = models.DateField(verbose_name=u"日期",auto_now_add=True)
     department = models.CharField(verbose_name = u"领用单位",max_length=20,null=True,blank=True)
-    
+
     class Meta:
         verbose_name = u"外购件领用单"
         verbose_name_plural = u"外购件领用单"
@@ -594,7 +594,7 @@ class OutsideApplyCardItems(models.Model):
     unit =  models.CharField(verbose_name=u"单位",max_length=20,blank=True,null=True)
     count = models.IntegerField(verbose_name=u"数量",default=0)
     remark =  models.CharField(verbose_name=u"备注",max_length=50,blank=True,null=True)
-    
+
     class Meta:
         verbose_name = u"外购件领用单材料"
         verbose_name_plural = u"外购件领用单材料"

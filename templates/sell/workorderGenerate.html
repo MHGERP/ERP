@@ -1,0 +1,36 @@
+{% extends "sell/base/none_nav_base.html"%}
+
+{% block title %}
+<h1>工作令生成</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="#" class="current">工作令生成</a>
+{% endblock %}
+
+{% block inner_content%}
+
+<div class="widget-box" id="ordeing-box">
+</div>
+
+<div class="widget-box" id="ordered-box">
+</div>
+
+<div id="workorder_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.5">
+  <div class="modal-header">
+    <h2 id="groupLabel">生成工作令</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+		<form id="audit_form" class="form-horizontal">
+		</form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" id="id_save">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+<script type="text/javascript" src={{STATIC_URL}}js/sell/workorderGenerate.js></script>
+<script type='text/javascript' src="{{ STATIC_URL  }}jquery/jquery.form.js"></script>
+{% endblock%}

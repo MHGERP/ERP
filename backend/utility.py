@@ -89,6 +89,8 @@ def rowContentGenerator(content, ROW_LEN):
     """
     row_content = u""
     row_width = 0
+    if not content:
+        return
     for uch in content:
         row_content += uch
         row_width += uchwidth(uch)
@@ -99,7 +101,7 @@ def rowContentGenerator(content, ROW_LEN):
     if row_content:
         yield row_content
 
-def transferCardProcessPaginator(process_list, page, ROW_LEN = 84):
+def transferCardProcessPaginator(process_list, page, ROW_LEN):
     """
     JunHU
     summary: the paginator for transfer card process list
@@ -124,19 +126,22 @@ def transferCardProcessPaginator(process_list, page, ROW_LEN = 84):
                 ret_list.append(RowItem(None, None, row))
             start += ROW_LEN
     total_page = 1 if len(ret_list) <= 8 else 2 + (len(ret_list) - 8 - 1) / 15
+    if page > total_page:
+        page = total_page
+
     if page == 1:
         ret_list = ret_list[0 : 8]
         while len(ret_list) < 8:
             ret_list.append(RowItem())
 
-        return total_page, ret_list
+        return page, total_page, ret_list
     else:
         start_row = 8 + (page - 2) * 15
         ret_list = ret_list[start_row : start_row + 15]
         while len(ret_list) < 15:
             ret_list.append(RowItem())
 
-        return total_page, ret_list
+        return page, total_page, ret_list
 
 def make_uuid():
     """

@@ -16,7 +16,7 @@ from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
 from purchasing.forms import *
 from django.db.models import Q
-from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems,BidNextStatus
+from purchasing.utility import *
 from storage.models import *
 from storage.forms import EntryTypeForm
 from storage.utils import AutoGenEntry
@@ -75,7 +75,7 @@ def ArrivalCheckAdd(request,aid,form):
 
 @dajaxice_register
 @transaction.commit_manually
-def genEntry(request,bid,selected,entry_type):
+def genEntry(request,selected,bid,entry_type):
 #    print selected
 #    flag = False
 #    message = ""
@@ -84,25 +84,38 @@ def genEntry(request,bid,selected,entry_type):
         user = request.user
         accept_supplier=bidform.bidacceptance.accept_supplier.supplier_name
         create_time=datetime.now()
-        entry_code=time.strftime("%Y%m%d%H%M%S",create_time)
-        entry_status=STORAGESTATUS_KEEPER
-
+        entry_code=create_time.strftime("%Y%m%d%H%M%S")
+        entry_status=STORAGESTATUS_PURCHASER
+        print entry_type
         if entry_type=="entrytype_board":
             steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,purchaser=user,entry_status=entry_status,steel_type=ENTRYTYPE_BOARD)
             steel_entry.save()
-            #SteelEntryItemAdd(steel_entry,selected)
+            SteelEntryItemAdd(steel_entry,selected)
         elif entry_type=="entrytype_bar":
             steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,purchaser=user,entry_status=entry_status,steel_type=ENTRYTYPE_BAR)
             steel_entry.save()
-            #SteelEntryItemAdd(steel_entry,selected)
+            SteelEntryItemAdd(steel_entry,selected)
         elif entry_type=="standard_outsidebuy":
+            print "######"
             outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=STANDARD_OUTSIDEBUY)
             outside_entry.save()
-            #OutsideEntryItemAdd(outside_entry,selected)
+            OutsideEntryItemAdd(outside_entry,selected)
         elif entry_type=="forging":
-            outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=STANDARD_OUTSIDEBUY)
+            outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=FORGING_OUTSIDEBUY)
             outside_entry.save()
-            #OutsideEntryItemAdd(outside_entry,selected)
+            OutsideEntryItemAdd(outside_entry,selected)
+        elif entry_type=="cooperation_outsidebuy":
+            outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=COOPERATION_OUTSIDEBUY)
+            outside_entry.save()
+            OutsideEntryItemAdd(outside_entry,selected)
+        elif entry_type=="welding":
+            welding_entry=WeldMaterialEntry(purchaser=user,entry_status=entry_status,entry_code=entry_code,create_time=create_time)
+            outside_entry.save()
+            WeldingEntryItemAdd(welding_entry,selected)
+        elif entry_type=="auxiliary":
+            auxiliary_entry=AuxiliaryToolEntry(purchaser=user,entry_status=entry_status,entry_code=entry_code,create_time=create_time)
+            auxiliary_entry.save()
+            AuxiliaryEntryItemAdd(welding_entry,selected,accept_supplier)
 
             
 #        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
@@ -114,11 +127,12 @@ def genEntry(request,bid,selected,entry_type):
 #            message = u"入库单已经存在，请勿重复提交"
     except Exception, e:
         transaction.rollback()
-#        print e
+        print "*******************############*************"
+        print e
 #
 #    flag = flag and isAllChecked(bid,purchasingentry)
 #    if flag:
-#        transaction.commit()
+    transaction.commit()
 #        message = u"入库单生成成功"
 #    else:
 #        transaction.rollback()
@@ -129,7 +143,7 @@ def genEntry(request,bid,selected,entry_type):
 #        'flag':flag,
 #        'message':message,
 #    }
-    return simplejson.dumps(data)
+    return simplejson.dumps({})
 
 @dajaxice_register
 def SupplierUpdate(request,supplier_id):
@@ -210,14 +224,17 @@ def getRelatedModel(request, index):
     print "这是一个测试: "
     print index
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        f1 = set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.all())
+        f1 = set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.filter( entry_item__material__isnull= False))
         f2 = set(item.entry_item.specification for item in SteelMaterialStoreList.objects.all())
         f3 = set(item.entry_item.materiel for item in SteelMaterialStoreList.objects.all())
     elif index == FIRST_FEEDING:
         print index
     elif index == OUT_PURCHASED:
-        f1 = set(item.specification for item in OutsideStorageList.objects.all())
-        f2 = set(item.texture for item in OutsideStorageList.objects.all())
+        item = OutsideStandardItem.objects.all()
+        print "sdfsfsfdsdf"
+        print len(item)
+        f1 = set(item.entry_item.specification for item in OutsideStorageList.objects.all())
+        f2 = set(item.entry_item.material_mark for item in OutsideStorageList.objects.all())
         f3 = set()
     elif index == COOPERANT:
         print index
@@ -239,6 +256,30 @@ def getRelatedModel(request, index):
     return render_to_string("purchasing/related_model/%s.html" % idtable[index], context)
 
 @dajaxice_register
+def defaultRelated(request, index, mid):
+    idtable = {
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        COOPERANT: "forging",
+        WELD_MATERIAL: "weld_material",
+    }
+    item = Materiel.objects.get(id = mid)
+    data = []
+    if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
+        data = SteelMaterialStoreList.objects.filter(entry_item__specification = item.specification, entry_item__material_mark = item.material.name)
+    # elif index == OUT_PURCHASED:
+    #     data = OutsideStorageList.objects.filter(specification = f1, texture = f2)
+    #     print data
+    elif index == WELD_MATERIAL:
+        data = WeldStoreList.objects.filter(entry_item__material__name = f1, entry_item__material_mark = f2, entry_item__specification = f3)
+    context = {
+        "data" : data,
+    }
+    return render_to_string("purchasing/related_table/%s.html" % idtable[index], context)
+
+@dajaxice_register
 def getRelatedTable(request, index, f1, f2, f3):
     idtable = {
         MAIN_MATERIEL: "main_materiel",
@@ -250,7 +291,7 @@ def getRelatedTable(request, index, f1, f2, f3):
     }
     data = []
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        data = SteelMaterialStoreList.objects.filter(entry_item__material__name = f1, entry_item__specification = f2, entry_item__materiel = f3)
+        data = SteelMaterialStoreList.objects.filter(entry_item__specification = f2, entry_item__material_mark = f3)
     elif index == OUT_PURCHASED:
         data = OutsideStorageList.objects.filter(specification = f1, texture = f2)
         print data
@@ -268,6 +309,69 @@ def addToForeign(request, index):
     item.inventory_type.add(InventoryType.objects.get(name = OUT_PURCHASED))
     return ""
 
+@dajaxice_register
+def getQuotingList(requset, supid):
+    item = QuotingPrice.objects.filter(the_supplier__id = supid)
+    print "获得报价单"
+    print item.count()
+    context = {
+        "quotingList" : item,
+    }
+    return render_to_string("purchasing/supplier/quote_table.html", context)
+
+@dajaxice_register
+def quotingDelete(requset, quoteid):
+    print "删除报价"
+    print quoteid
+    one = QuotingPrice.objects.get(id = quoteid)
+    supid = one.the_supplier.id
+    one.delete()
+    item = QuotingPrice.objects.filter(the_supplier__id = supid)
+    print item.count()
+    context = {
+        "quotingList" : item,
+    }
+    return render_to_string("purchasing/supplier/quote_table.html", context)
+
+@dajaxice_register
+def quotingAdd(requset, supid, quoteid):
+    print "增加报价"
+    f0 = InventoryType.objects.all()
+    context = {
+        "f0" : f0,
+        "f1" : "",
+        "f2" : "",
+        "f3" : "",
+        "f4" : "",
+        "f5" : "",
+        "supid" : supid,
+        "quoteid" : quoteid,
+    }
+    if int(quoteid):
+        one = QuotingPrice.objects.get(id = quoteid)
+        context["f1"] = one.inventory_type.id
+        context["f2"] = one.nameorspacification
+        context["f3"] = one.material_mark
+        context["f4"] = one.per_fee
+        context["f5"] = one.unit
+    print context
+    return render_to_string("purchasing/supplier/add_edit.html", context)
+
+@dajaxice_register
+def quotingSave(requset, supid, quoteid, f1, f2, f3, f4, f5):
+    print "保存"
+    if int(quoteid):
+        one = QuotingPrice.objects.get(id = quoteid)
+        one.inventory_type = InventoryType.objects.get(id = f1)
+        one.nameorspacification = f2
+        one.material_mark = f3
+        one.per_fee = f4
+        one.unit = f5
+        one.save()
+    else:
+        one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
+        one.save()
+    return ""
 
 @dajaxice_register
 def pendingOrderSearch(request, order_index):
@@ -305,7 +409,7 @@ def getInventoryTable(request, table_id, order_index):
         WELD_MATERIAL: "weld_material",
 
     }
-    
+
     items = Materiel.objects.filter(sub_workorder__id = order_index, inventory_type__name = table_id)
     context = {
         "items": items,

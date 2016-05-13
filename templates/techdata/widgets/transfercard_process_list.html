@@ -6,13 +6,15 @@
 	    <th>序号</th>
 	    <th>工序</th>
 	    <th>工艺过程及技术要求</th>
+	    <th>操作</th>
 	</thead>
 	<tbody>
 	    {% for process in process_list %}
 	    <tr pid="{{process.id}}" class="tr_process">
-	        <td style="vertical-align: middle"><input type="text" value="{{process.index}}" class="input-mini" /></td>
-	        <td style="vertical-align: middle"><input type="text" value="{{process.name}}" class="input-mini" /></td>
-	        <td><textarea rows="2" cols="90" style="width: 95%">{{process.detail}}</textarea></td>
+	        <td style="vertical-align: middle"><input type="text" value="{{process.index|default_if_none:''}}" class="input-mini" /></td>
+	        <td style="vertical-align: middle"><input type="text" value="{{process.name|default_if_none:''}}" class="input-mini" /></td>
+	        <td><textarea rows="2" cols="90" style="width: 95%">{{process.detail|default_if_none:''}}</textarea></td>
+	        <td style="vertical-align: middle"><span class="btn btn-danger btn-small btn_remove_process">删除</span></td>
 	    </tr>
 	    {% endfor %}
 	</tbody>

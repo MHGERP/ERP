@@ -1,0 +1,40 @@
+<div class="row-fluid" style="margin-top: 0px">
+    <div class="span6">
+        <div class="input-prepend">
+            <span class="add-on">工作令编号:</span>
+            {{form.order_index}}
+        </div>
+        {% if form.errors.order_index %}
+            {{form.errors.order_index }}
+        {% endif %}
+    </div>
+    <div class="span6">
+        <div class="input-prepend">
+            <span class="add-on">销售类型:</span>
+            {{form.sell_type}}
+        </div>
+        {% if form.errors.sell_type %}
+            {{form.errors.sell_type }}
+        {% endif %}
+    </div>
+</div>
+<div class="row-fluid" style="margin-top: 0px">
+    <div class="span6">
+        <div class="input-prepend">
+            <span class="add-on">数量:</span>
+            {{form.count}}
+        </div>
+        {% if form.errors.count %}
+            {{form.errors.count }}
+        {% endif %}
+    </div>
+    <div class="span6">
+        <div class="input-prepend">
+            <span class="add-on">客户名称:</span>
+            {{form.client_name}}
+        </div>
+        {% if form.errors.client_name %}
+            {{form.errors.client_name}}
+        {% endif %}
+    </div>
+</div>
