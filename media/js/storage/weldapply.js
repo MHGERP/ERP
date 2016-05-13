@@ -1,8 +1,3 @@
-$('#date').datetimepicker({
-    format: 'yyyy-mm-dd',
-    autoclose:true,
-    minView:'month',
-});
 var aid;
 $(document).ready(function(){
   $(document).on("click","button#search_submit",function(){
@@ -93,8 +88,7 @@ $(document).ready(function(){
         }
     })
     $(document).on("click","#search_material_btn",function(){
-        var table_path = $("table#store_items_table").attr("table_path");
-        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"weld","table_path":table_path});
+        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"weld",});
     })
     $(document).on("click","span[name='weldapply']",function(){
         var role = $(this).attr("role");
