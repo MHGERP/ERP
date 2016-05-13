@@ -236,6 +236,7 @@ class TransferCardInfoForm(forms.ModelForm):
             "container_type": forms.TextInput(attrs = {"class": "input-medium"}),
             "parent_name": forms.TextInput(attrs = {"class": "input-medium"}),
             "weld_test_plate_index": forms.TextInput(attrs = {"class": "input-medium"}),
+            "parent_test_plate_index": forms.TextInput(attrs = {"class": "input-medium"}),
             "material_index": forms.TextInput(attrs = {"class": "input-medium"}),
         }
 class TransferCardForm(forms.Form):

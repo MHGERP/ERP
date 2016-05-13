@@ -1,6 +1,6 @@
 <input type="text" style="display:none;" name="card_id" id="id_card_input" value="{{card.id}}">
 <div class="row-fluid" style="margin-top: 0px">
-    <div class="span6">
+    <div class="span4">
 		<div class="input-prepend">
 			<span class="add-on">容器类别</span>
 			{{form.container_type}}
@@ -9,7 +9,7 @@
             {{ form.errors.container_type }}
         {% endif %}
 	</div>
-    <div class="span6">
+    <div class="span4">
 		<div class="input-prepend">
 			<span class="add-on">所属部件名称</span>
 			{{form.parent_name}}
@@ -18,9 +18,18 @@
             {{ form.errors.parent_name }}
         {% endif %}
 	</div>
+    <div class="span4">
+		<div class="input-prepend">
+			<span class="add-on">材质标记</span>
+			{{form.material_index}}
+		</div>
+        {% if form.errors.material_index %}
+            {{ form.errors.material_index }}
+        {% endif %}
+	</div>
 </div>
 <div class="row-fluid">
-    <div class="span6">
+    <div class="span4">
 		<div class="input-prepend">
 			<span class="add-on">焊接试板图号</span>
 			{{form.weld_test_plate_index}}
@@ -29,13 +38,13 @@
             {{ form.errors.weld_test_plate_index }}
         {% endif %}
 	</div>
-    <div class="span6">
+    <div class="span4">
 		<div class="input-prepend">
-			<span class="add-on">材质标记</span>
-			{{form.material_index}}
+			<span class="add-on">母材试板图号</span>
+			{{form.parent_test_plate_index}}
 		</div>
-        {% if form.errors.material_index %}
-            {{ form.errors.material_index }}
+        {% if form.errors.parent_test_plate_index %}
+            {{ form.errors.parent_test_plate_index }}
         {% endif %}
 	</div>
 </div>
