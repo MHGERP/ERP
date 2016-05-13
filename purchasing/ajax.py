@@ -117,7 +117,7 @@ def genEntry(request,selected,bid,entry_type):
             auxiliary_entry.save()
             AuxiliaryEntryItemAdd(welding_entry,selected,accept_supplier)
 
-            
+
 #        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
 #            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user)
 #            purchasingentry.save()
@@ -311,6 +311,8 @@ def addToForeign(request, index):
 
 @dajaxice_register
 def getQuotingList(requset, supid):
+    print "在这里啊"
+    print supid
     item = QuotingPrice.objects.filter(the_supplier__id = supid)
     print "获得报价单"
     print item.count()
@@ -368,9 +370,9 @@ def quotingSave(requset, supid, quoteid, f1, f2, f3, f4, f5):
         one.per_fee = f4
         one.unit = f5
         one.save()
-    else:
-        one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
-        one.save()
+    # else:
+    #     one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
+    #     one.save()
     return ""
 
 @dajaxice_register
