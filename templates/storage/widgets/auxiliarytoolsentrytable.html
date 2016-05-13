@@ -6,13 +6,13 @@
    <th>检查员</th>
    <th>操作</th>
    </tr>
-   {% for item in entry_list %}
+   {% for entry in entry_list %}
    <tr>
-   <td>{{item.entry_code}}</td>
-   <td>{{item.create_time|date:'Y年m月d日'}}</td>
-   <td>{{item.purchaser.userinfo.name}}</td>
-   <td>{{item.inspector.userinfo.name}}</td>
-   <td><a href="/storage/auxiliarytools/entry?id={{item.id}}">
+   <td>{{entry.entry_code}}</td>
+   <td>{{entry.create_time|date:'Y年m月d日'}}</td>
+   <td>{{entry.purchaser.userinfo.name}}</td>
+   <td>{{entry.inspector.userinfo.name}}</td>
+   <td><a href="/storage/auxiliarytools/entry?id={{entry.id}}">
     {% ifequal entry.entry_status STORAGESTATUS_KEEPER %}
         <button type="button" class="btn btn-warning">待处理</button>
     {% else %}
