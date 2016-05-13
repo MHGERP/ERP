@@ -43,13 +43,13 @@ def saveProduct(request, form):
 @dajaxice_register
 def getBidFile_issuance(request, param):
     if param == "bidFile_to_manufacture":
-        productions = Product.objects.filter(manufacture_file_down__isnull = False)
+        productions = Product.objects.filter(manufacture_file_down__isnull = False).exclude(is_approval = 0)
         path = "sell/widgets/bidFile_to_manufacture_table.html"
     elif param == "bidFile_to_techdata":
-        productions = Product.objects.filter(techdata_file_down__isnull = False)
+        productions = Product.objects.filter(techdata_file_down__isnull = False).exclude(is_approval = 0)
         path = "sell/widgets/bidFile_to_techdata_table.html"
     else:
-        productions = Product.objects.filter(purchasing_file_down__isnull = False)
+        productions = Product.objects.filter(purchasing_file_down__isnull = False).exclude(is_approval = 0)
         path = "sell/widgets/bidFile_to_purchasing_table.html"
     context = {
         "productions" : productions,
