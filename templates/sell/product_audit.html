@@ -14,17 +14,35 @@
 <div class="widget-box" id="widget-box">
 </div>
 
+<div class="widget-box" id="workorder-box">
+</div>
+
 <div id="audit_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.5">
   <div class="modal-header">
     <h2 id="groupLabel">文件审核</h2>
   </div>
 
   <div class="modal-body" style="clear:both;">
-		<form id="audit_form" class="form-horizontal">
+		<form id="audit_form">
 		</form>
   </div>
   <div class="modal-footer">
     <button class="btn" id="id_save">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+<div id="workorder_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.5">
+  <div class="modal-header">
+    <h2 id="groupLabel">工作令</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+		<form id="workorder_form">
+		</form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" id="id_generate">保存</button>
     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
   </div>
 </div>
