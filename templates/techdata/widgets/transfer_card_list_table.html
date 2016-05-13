@@ -1,0 +1,31 @@
+<div class="widget-title">
+	<span class="icon"><i class="icon-th"></i></span>
+	<h5>工作令：{{work_order.order_index}}</h5>
+	<h5>产品名称：{{work_order.product_name}}</h5>
+</div>
+<div class="widget-content nopadding" style="max-height:800px; overflow-y:auto;">
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+                <th>序号</th>
+                <th>票号</th>
+                <th>零件名</th>
+                <th>流转卡类型</th>
+                <th>流转卡文件编号</th>
+                <th>操作</th>
+			</tr>
+		<thead>
+		<tbody>
+			{% for card in card_list %}
+			<tr iid="{{item.id}}" class="tr_card">
+                <td>{{forloop.counter}}</td>
+                <td>{{card.materiel_belong.index}}</td>
+                <td>{{card.materiel_belong}}</td>
+                <td>{{card.get_card_type_display}}</td>
+                <td>{{card}}</td>
+                <td><a class="btn btn-small" href="/techdata/transferCardEdit?iid={{card.materiel_belong.id}}&label=1">查看</a></td>
+            </tr>
+			{% endfor %}
+		<tbody>
+	</table>
+</div>

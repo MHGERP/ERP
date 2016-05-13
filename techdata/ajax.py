@@ -1115,6 +1115,19 @@ def transferCardMark(request, iid, step):
         }
     return simplejson.dumps(context)
 
+@dajaxice_register
+def getTransferCardList(request, id_work_order):
+    """
+    JunHU
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    card_list = TransferCard.objects.filter(materiel_belong__order = work_order)
+    context = {
+        "work_order": work_order,
+        "card_list": card_list,
+    }
+    html = render_to_string("techdata/widgets/transfer_card_list_table.html", context)
+    return html
 
 @dajaxice_register
 def saveProcessRequirement(request, id, content):

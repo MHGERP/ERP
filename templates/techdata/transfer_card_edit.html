@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block sub_ref %}
-<a href="/techdata/processBOM" class="tip-bottom" data-original-title="工艺库编辑">工艺库编辑</a>
+<a href="/techdata/processBOM" class="tip-bottom" data-original-title="工艺库">工艺库</a>
+{%if label %}<a href="/techdata/transferCardList?id_work_order={{order.id}}" class="tip-bottom" data-original-title="流转卡列表">流转卡列表</a> {% endif %}
 <a href="#" class="current">流转卡编辑</a>
 {% endblock %}
 
