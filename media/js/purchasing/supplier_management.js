@@ -78,6 +78,7 @@ $(document).on("click", "#add_quoting", function() {
       //alert(data);
       $("#quote_table").html(data);
     }, {"supid" : supid, "quoteid" : quoteid});
+    $("#add_quoting").attr({"style":"display:none"});
 });
 
 $(document).on("click", "#edit_quoting", function() {
@@ -87,6 +88,7 @@ $(document).on("click", "#edit_quoting", function() {
       //alert(data);
       $("#quote_table").html(data);
     }, {"supid" : supid, "quoteid" : quoteid});
+    $("#add_quoting").attr({"style":"display:none"});
 });
 
 $(document).on("click", "#add_edit_save", function() {
@@ -102,4 +104,5 @@ $(document).on("click", "#add_edit_save", function() {
           $("#quote_table").html(data);
         }, {"supid" : supid});
     }, {"supid" : supid, "quoteid" : quoteid, "f1" : f1, "f2" : f2, "f3" : f3, "f4": f4, "f5" : f5});
+    $("#add_quoting").removeAttr("style");
 });

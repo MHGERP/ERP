@@ -25,7 +25,7 @@ from random import randint
 def weldMaterialHomeViews(request):
     hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("-date");
     todayDate = datetime.datetime.now().date()
-    if hum_set[0].date == todayDate:
+    if hum_set and hum_set[0].date == todayDate:
         flag = True
     else:
         flag = False
@@ -46,7 +46,7 @@ def steelRefundViews(request):
     context={
             "search_form":search_form,
             "refund_cards":refund_cards,
-            "STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER,
+            "STORAGESTATUS_KEEPER":ENTRYSTATUS_CHOICES_KEEPER,
     }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
@@ -104,7 +104,7 @@ def weldEntryHomeViews(request):
     weldentry_set = weldentry_set.order_by("-entry_status","-create_time","-entry_code")
     context = {
             "entry_set":weldentry_set,
-            "ENTRYSTATUS_END":STORAGESTATUS_END,
+            "ENTRYSTATUS_END":ENTRYSTATUS_CHOICES_END,
             "search_form":search_form,
             "entryurl":"storage/weldentryconfirm",
             }
@@ -118,12 +118,12 @@ def steelEntryHomeViews(request):
         else:
             print search_form.errors
     else:
-        steelentry_set = SteelMaterialEntry.objects.filter(entry_status = STORAGESTATUS_KEEPER)
+        steelentry_set = SteelMaterialEntry.objects.filter(entry_status__gte = ENTRYSTATUS_CHOICES_KEEPER)
         search_form = SteelEntrySearchForm()
     steelentry_set = steelentry_set.order_by("steel_type","-entry_status","-create_time")
     context = {
         "steel_entry_set":steelentry_set,
-        "ENTRYSTATUS_END":STORAGESTATUS_END,
+        "ENTRYSTATUS_END":ENTRYSTATUS_CHOICES_END,
         "search_form":search_form,
     }
     return render(request,"storage/steelmaterial/steelentryhome.html",context)
@@ -132,15 +132,13 @@ def weldEntryConfirmViews(request,eid):
     entry = WeldMaterialEntry.objects.get(id = eid)
     items = WeldMaterialEntryItems.objects.filter(entry = entry)
     entryitem_form = EntryItemsForm()
-    is_show = entry.entry_status == STORAGESTATUS_KEEPER
-    redict_path = getUrlByViewMode(request,"/storage/weldentryhome")
+    is_show = entry.entry_status >= ENTRYSTATUS_CHOICES_KEEPER
 
     context = {
             "entry":entry,
             "items":items,
             "item_form":entryitem_form,
             "is_show":is_show,
-            "redict_path":redict_path,
             }
     return render(request,"storage/weldmaterial/weldentryconfirm.html",context)
 
@@ -403,18 +401,18 @@ def weldapplyrefundDetail(request,index):
 
 def weldRefundViews(request):
     search_form = RefundSearchForm()
-    refund_set = WeldRefund.objects.filter(weldrefund_status = STORAGESTATUS_KEEPER)
+    refund_set = WeldRefund.objects.filter(weldrefund_status = REFUNDSTATUS_CHOICES_KEEPER)
     
     context = {
             "search_form":search_form,
             "refund_set":refund_set,
-            "STORAGESTATUS_END":STORAGESTATUS_END,
+            "STORAGESTATUS_END":REFUNDSTATUS_CHOICES_END,
             }
     return render(request,"storage/weldmaterial/weldrefundhome.html",context )
 
 def weldRefundDetailViews(request,rid):
     ref_obj = WeldRefund.objects.get(id = rid)
-    is_show = ref_obj.weldrefund_status == STORAGESTATUS_KEEPER
+    is_show = ref_obj.weldrefund_status == ENTRYSTATUS_CHOICES_KEEPER
     reform = WeldRefundConfirmForm() 
     context = {
             "refund_form":reform,
@@ -453,7 +451,7 @@ def AuxiliaryToolsEntryListView(request):
             context['entry_list']=[]
             print search_form.errors
     context['search_form'] = AuxiliaryEntrySearchForm()
-    context['STORAGESTATUS_KEEPER'] = STORAGESTATUS_KEEPER
+    context['STORAGESTATUS_KEEPER'] = ENTRYSTATUS_CHOICES_KEEPER
     return render(request,'storage/auxiliarytools/auxiliarytoolsentry_list.html',context)
 
 
@@ -536,7 +534,7 @@ def AuxiliaryToolsLedgerEntryView(request):
         if search_form.is_valid():
             context['rets'] = get_weld_filter(AuxiliaryToolEntryCardList,
                                               search_form.cleaned_data)\
-                    .filter(status=STORAGESTATUS_END)
+                    .filter(status=ENTRYSTATUS_CHOICES_END)
         else:
             context['rets'] = []
             print search_form.errors
@@ -570,7 +568,7 @@ def AuxiliaryToolsLedgerApplyView(request):
     """
     context={}
     context['search_form']=AuxiliaryToolsSearchForm()
-    context['rets']=AuxiliaryToolApplyCard.objects.filter(status=AUXILIARY_TOOL_APPLY_CARD_COMMITED)
+    context['rets']=AuxiliaryToolApplyCard.objects.filter(status=AUXILIARY_TOOL_APPLY_CARD_KEEPER)
     return render(request,'storage/auxiliarytools/ledger_apply.html',context)
 
 def AuxiliaryToolsLedgerApplyCardView(request):
@@ -664,11 +662,11 @@ def outsideHomeViews(request):
 
 def outsideEntryHomeViews(request):
     
-    entry_set = OutsideStandardEntry.objects.filter(entry_status__gte = STORAGESTATUS_KEEPER)
+    entry_set = OutsideStandardEntry.objects.filter(entry_status__gte = ENTRYSTATUS_CHOICES_KEEPER)
     search_form = OutsideEntrySearchForm()
     context = {
         "card_set":entry_set,
-        "STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER,
+        "STORAGESTATUS_KEEPER":ENTRYSTATUS_CHOICES_END,
         "search_form":search_form,
     }
     return render(request,"storage/outside/outsideentryhome.html",context)
@@ -707,7 +705,7 @@ def getEntryConfirmContext(request,eid,_Model,_Inform,_Reform,entry_url):
     entry_obj = _Model.objects.get(id = eid)
     inform = _Inform(instance = entry_obj)
     reform = _Reform(instance = entry_obj)
-    is_show = entry_obj.entry_status == STORAGESTATUS_KEEPER
+    is_show = entry_obj.entry_status == ENTRYSTATUS_CHOICES_END
     entry_set = OutsideStandardItem.objects.filter(entry = entry_obj)
     context = {
         "inform":inform,
@@ -736,11 +734,11 @@ def StoreThreadViews(request):
     return render(request,"storage/storethread/storethread.html",context)
 
 def outsideApplyCardHomeViews(request):
-    applycard_set = OutsideApplyCard.objects.filter(status__gt = STORAGESTATUS_KEEPER)
+    applycard_set = OutsideApplyCard.objects.filter(status__gte = APPLYCARD_KEEPER)
     search_form = OutsideApplyCardSearchForm()
     context = {
         "card_set":applycard_set,
-        "STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER,
+        "STORAGESTATUS_KEEPER":APPLYCARD_KEEPER,
         "search_form":search_form,
     }
     return render(request,"storage/outside/applycardhome.html",context)
