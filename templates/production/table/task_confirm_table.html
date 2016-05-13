@@ -6,28 +6,38 @@
         <th>工序编号</th>
         <th>工序</th>
         <th>工时</th>
+        <th>计划开始时间</th>
+        <th>计划完成时间</th>
         <th>分配组</th>
         <th>完成确认</th>
-        <th>查看</th>
+        <th>操作
+        
     </thead>
     <tbody>
     {% for item in items_list %}
         <tr>
-            <td>{{item.materiel_belong.index}}</td>
-            <td>{{item.materiel_belong.order.order_index}}</td>
+            <td>{{item.sub_materiel_belong.materiel_belong.index}}</td>
+            <td>{{item.sub_materiel_belong.sub_order}}</td>
             <td>{{item.process_id}}</td>
             <td>{{item.processname}}</td>
             <td>{{item.work_hour}}</td>
+            <td>{{item.plan_startdate|date:"Y-m-d"}}</td>
+            <td>{{item.plan_enddate|date:"Y-m-d"}}</td>
             <td>{{item.productionworkgroup}}</td>
-            {% if item.complete_date = None %}
-                <td>
-                    <button class="btn btn-primary" type="button" onclick="task_confirm_finish({{item.id}})">确认</button>
-                </td>
-            {% else %}
-                <td>{{item.complete_date|date:"Y-m-d"}}</td>
-            {% endif %}
             <td>
-                <button class="btn" onclick="task_confirm_view({{item.id}})">查看</button>
+                {% if item.complete_process_date = None %}
+                    <button class="btn btn-primary" type="button" onclick="task_confirm_finish({{item.id}})">确认</button>
+                {% else %}
+                    {{item.complete_process_date|date:"Y-m-d"}}
+                {% endif %}
+            </td>
+            <td>
+                {% if item.complete_process_date = None %}
+                {% elif item.check_user = None %}
+                <button class="btn btn-primary" onclick="task_confirm_check({{item.id}})">检查</button>
+                {% else %}
+                    <button class="btn" onclick="task_confirm_view({{item.id}})">查看</button>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}

@@ -1,5 +1,86 @@
-<table id="task_view_table">
-    <tr>
-        <td>{{item.processname}}</td>
+<table class="MsoNormalTable" id="task_view_table" value="{{item.id}}">
+    <tr style="height:35px;font-family:宋体;color:rgb(0,0,0);font-style:normal;font-size:12.0000pt;">
+        <td align=center valign=center  colspan=2  style="width:85.2000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:1.0000pt solid rgb(0,0,0);mso-border-left-alt:0.5000pt solid rgb(0,0,0);border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:1.0000pt solid rgb(0,0,0);;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);" >
+            工作令
+        </td>
+        <td align=center valign=center  colspan=8  style="width:458.0000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:1.0000pt solid rgb(0,0,0);;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);" >
+            {{item.sub_materiel_belong.sub_order}}
+        </td>
+        <td align=center valign=center  colspan=2  style="width:102.4000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:1.0000pt solid rgb(0,0,0);;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);" >
+            工作票号
+        </td>
+        <td align=center valign=center  colspan=2  style="width:110.0500pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:1.0000pt solid rgb(0,0,0);mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);" >
+            {{item.sub_materiel_belong.materiel_belong.index}}
+        </td>
+    </tr>
+    <tr style="height:35px;font-family:宋体;color:rgb(0,0,0);font-style:normal;font-size:12.0000pt;" >
+        <td align=center valign=center  colspan=2  style="width:85.2000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:1.0000pt solid rgb(0,0,0);mso-border-left-alt:0.5000pt solid rgb(0,0,0);border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);" >
+            工序号
+        </td>
+        <td align=center valign=center  colspan=3  style="width:186.4000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);" >
+            {{item.process_id}}
+        </td>
+        <td align=center valign=center  colspan=2  style="width:85.2000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:1.0000pt solid rgb(0,0,0);mso-border-left-alt:0.5000pt solid rgb(0,0,0);border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);" >
+            工序
+        </td>
+        <td align=center valign=center  colspan=3  style="width:186.4000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);" >
+            {{item.processname}}
+        </td>
+        <td align=center valign=center  colspan=2  style="width:102.4000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);" >
+            工时
+        </td>
+        <td align=center valign=center  colspan=2  style="width:110.0500pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);" >
+            {{item.work_hour}}
+        </td>
+    </tr>
+    <tr style="height:35px;font-family:宋体;color:rgb(0,0,0);font-style:normal;font-size:12.0000pt;">
+        <td  align=center valign=center  colspan=3  style="width:162.1500pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:1.0000pt solid rgb(0,0,0);mso-border-left-alt:0.5000pt solid rgb(0,0,0);;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            计划开始时间
+        </td>
+        <td  align=center valign=center  colspan=4  style="width:216.2000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            {{item.plan_startdate|date:"Y-m-d"}}
+        </td>
+        <td  align=center valign=center  colspan=3  style="width:162.1500pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            计划完成时间
+        </td>
+        <td  align=center valign=center  colspan=4  style="width:216.2000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            {{item.plan_enddate|date:"Y-m-d"}}
+        </td>
+    </tr>
+    <tr style="height:35px;font-family:宋体;color:rgb(0,0,0);font-style:normal;font-size:12.0000pt;">
+        <td  align=center valign=center  colspan=3  style="width:162.1500pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:1.0000pt solid rgb(0,0,0);mso-border-left-alt:0.5000pt solid rgb(0,0,0);;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            操作组
+        </td>
+        <td  align=center valign=center  colspan=4  style="width:216.2000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            {{item.productionworkgroup}}
+        </td>
+        <td  align=center valign=center  colspan=3  style="width:162.1500pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            实际完成时间
+        </td>
+        <td  align=center valign=center  colspan=4  style="width:216.2000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            {{item.complete_process_date|date:"Y-m-d"}}
+        </td>
+    </tr>
+     <tr style="height:200px;font-family:宋体;color:rgb(0,0,0);font-style:normal;font-size:12.0000pt;">
+        <td  align=center valign=center  colspan=1  style="width:42.6000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:1.0000pt solid rgb(0,0,0);mso-border-left-alt:0.5000pt solid rgb(0,0,0);;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            检查内容
+        </td>
+        <td  id="td_check_content" align=lift valign=top  colspan=13  style="width:713.0500pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            {{item.check_content|default_if_none:""}}
+        </td>
+    </tr>
+    <tr style="height:35px;font-family:宋体;color:rgb(0,0,0);font-style:normal;font-size:12.0000pt;">
+        <td  align=center valign=center  colspan=3  style="width:162.1500pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:1.0000pt solid rgb(0,0,0);mso-border-left-alt:0.5000pt solid rgb(0,0,0);;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            检查者
+        </td>
+        <td  align=center valign=center  colspan=4  style="width:216.2000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            {{item.check_user|default_if_none:""}}
+        </td>
+        <td  align=center valign=center  colspan=3  style="width:162.1500pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            检查时间
+        </td>
+        <td  align=center valign=center  colspan=4  style="width:216.2000pt;padding:0.7500pt 0.7500pt 0.7500pt 0.7500pt ;border-left:none;;mso-border-left-alt:none;;border-right:1.0000pt solid rgb(0,0,0);mso-border-right-alt:0.5000pt solid rgb(0,0,0);border-top:none;;mso-border-top-alt:0.5000pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);">
+            {{item.check_date|date:"Y-m-d"}}
+        </td>
     </tr>
 </table>

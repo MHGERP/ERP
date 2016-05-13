@@ -47,7 +47,10 @@ function task_confirm_view(mid){
 
 function task_Confirm_view_callback(data){
     $('#task_view_modal').modal('show');
-    $('#task_view_table').html(data.html);
+    $('#task_plan_table').html(data.html);
+    var btn = document.getElementById('task_check_button');
+    btn.style.visibility = "hidden"; 
+
 }
 
 function task_plan_search(){
@@ -94,4 +97,28 @@ function task_plan_submit_callback(data){
     $('#task_plan_modal').modal('hide');
     alert("修改成功");
     $('#item_table').html(data.html);
+}
+
+function task_confirm_check(mid){
+ Dajaxice.production.taskConfirmView(task_Confirm_check_callback,{"mid":mid})
+}
+
+function task_Confirm_check_callback(data){
+    $('#task_view_modal').modal('show');
+    $('#task_plan_table').html(data.html);
+    var btn = document.getElementById('task_check_button');
+    btn.style.visibility = "visible"
+    $('#td_check_content').html('<textarea style="width:98%; height:200px;" id="input_check_content" type="text" >在此处输入检查内容：</textarea>');
+}
+
+function task_check(){
+    mid = $('#task_view_table').attr('value');
+    check_content = $('#input_check_content').attr('value'); 
+    Dajaxice.production.taskCheck(task_check_callback,{"mid":mid,"check_content":check_content});
+}
+
+function task_check_callback(data){
+    $('#task_plan_table').html(data.html);
+    var btn = document.getElementById('task_check_button');
+    btn.style.visibility = "hidden"; 
 }
