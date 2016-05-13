@@ -74,11 +74,23 @@ class OrderIndexForm(forms.Form):
 
 class TaskAllocationSearchForm(forms.Form):
     sub_materiel_belong__sub_order= forms.ChoiceField(required = False, widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
-    sub_materiel_belong__materiel_belong__index = forms.CharField(required=False, label=u"编号")
+    sub_materiel_belong__materiel_belong__index = forms.CharField(required=False, label=u"工作票号")
     processname__name = forms.ChoiceField(required=False, label=u"工序")
     productionworkgroup__name__contains = forms.CharField(required=False,label=u"操作组")
     def __init__(self, *args, **kwargs):
         super(TaskAllocationSearchForm, self).__init__(*args, **kwargs)
+        ORDER_INDEX_CHOICES = tuple([("", u"----------")]  + [(item.id,item) for item in SubWorkOrder.objects.all()])
+        self.fields["sub_materiel_belong__sub_order"].choices = ORDER_INDEX_CHOICES
+        PROCESS_NAME_CHIOCES = tuple([("",u"----------")] + [(item.name,item.get_name_display()) for item in ProcessingName.objects.all()])
+        self.fields["processname__name"].choices = PROCESS_NAME_CHIOCES
+
+class TaskPlanForm(forms.Form):
+    sub_materiel_belong__sub_order= forms.ChoiceField(required = False, widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
+    sub_materiel_belong__materiel_belong__index = forms.CharField(required=False, label=u"工作票号")
+    processname__name = forms.ChoiceField(required=False, label=u"工序")
+    plan_startdate__isnull = forms.ChoiceField(choices=TASK_PLAN_STATUS_CHOICES, required=False, label=u"任务计划状态")
+    def __init__(self, *args, **kwargs):
+        super(TaskPlanForm, self).__init__(*args, **kwargs)
         ORDER_INDEX_CHOICES = tuple([("", u"----------")]  + [(item.id,item) for item in SubWorkOrder.objects.all()])
         self.fields["sub_materiel_belong__sub_order"].choices = ORDER_INDEX_CHOICES
         PROCESS_NAME_CHIOCES = tuple([("",u"----------")] + [(item.name,item.get_name_display()) for item in ProcessingName.objects.all()])

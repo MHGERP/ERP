@@ -49,3 +49,49 @@ function task_Confirm_view_callback(data){
     $('#task_view_modal').modal('show');
     $('#task_view_table').html(data.html);
 }
+
+function task_plan_search(){
+    Dajaxice.production.taskPlanSearch(task_plan_search_callback,{"form":$("#search_form").serialize()});
+}
+
+function task_plan_search_callback(data){
+    $('#item_table').html(data.html);
+}
+
+function task_plan_change(mid){
+    Dajaxice.production.taskPlanChange(task_plan_change_callback,{"mid":mid});
+}
+
+function task_plan_change_callback(data){
+    $('#task_plan_modal').modal('show');
+    $('#task_plan_table').html(data.html);
+    $('#id_startdate').datetimepicker({
+        format:'yyyy-mm-dd',
+        minView: 2,
+        autoclose: true,
+    });
+    $('#id_enddate').datetimepicker({
+        format:'yyyy-mm-dd',
+        minView: 2,
+        autoclose: true,
+    });
+}
+
+
+function task_plan_submit(){
+    mid = $('#task_plantime_table').attr("value");
+   startdate = $('#id_startdate').attr("value");
+   enddate = $('#id_enddate').attr("value");
+   if(startdate =="" | enddate == "")
+   {
+        alert("日期不能为空！");
+        return ; 
+   }
+   Dajaxice.production.taskPlanSubmit(task_plan_submit_callback,{"form":$("#search_form").serialize(),"mid":mid,"startdate":startdate,"enddate":enddate});
+}
+
+function task_plan_submit_callback(data){
+    $('#task_plan_modal').modal('hide');
+    alert("修改成功");
+    $('#item_table').html(data.html);
+}
