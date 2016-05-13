@@ -56,7 +56,7 @@ function gen_entry(bid){
         return false;
     }
 
-    Dajaxice.purchasing.genEntry(gen_entry_callback,{'items_set':selected,'bid':bid,"entry_type":$("#entry_type").val()});
+    Dajaxice.purchasing.genEntry(gen_entry_callback,{'selected':selected,'bid':bid,"entry_type":$("#entry_type").val()});
 }
 
 function gen_entry_callback(data){

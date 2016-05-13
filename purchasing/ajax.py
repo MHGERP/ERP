@@ -16,7 +16,7 @@ from const.forms import InventoryTypeForm
 from django.http import HttpResponseRedirect
 from purchasing.forms import *
 from django.db.models import Q
-from purchasing.utility import goNextStatus,goStopStatus,buildArrivalItems,BidNextStatus
+from purchasing.utility import *
 from storage.models import *
 from storage.forms import EntryTypeForm
 from storage.utils import AutoGenEntry
@@ -75,7 +75,7 @@ def ArrivalCheckAdd(request,aid,form):
 
 @dajaxice_register
 @transaction.commit_manually
-def genEntry(request,bid,selected,entry_type):
+def genEntry(request,selected,bid,entry_type):
 #    print selected
 #    flag = False
 #    message = ""
@@ -84,25 +84,38 @@ def genEntry(request,bid,selected,entry_type):
         user = request.user
         accept_supplier=bidform.bidacceptance.accept_supplier.supplier_name
         create_time=datetime.now()
-        entry_code=time.strftime("%Y%m%d%H%M%S",create_time)
-        entry_status=STORAGESTATUS_KEEPER
-
+        entry_code=create_time.strftime("%Y%m%d%H%M%S")
+        entry_status=STORAGESTATUS_PURCHASER
+        print entry_type
         if entry_type=="entrytype_board":
             steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,purchaser=user,entry_status=entry_status,steel_type=ENTRYTYPE_BOARD)
             steel_entry.save()
-            #SteelEntryItemAdd(steel_entry,selected)
+            SteelEntryItemAdd(steel_entry,selected)
         elif entry_type=="entrytype_bar":
             steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,purchaser=user,entry_status=entry_status,steel_type=ENTRYTYPE_BAR)
             steel_entry.save()
-            #SteelEntryItemAdd(steel_entry,selected)
+            SteelEntryItemAdd(steel_entry,selected)
         elif entry_type=="standard_outsidebuy":
+            print "######"
             outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=STANDARD_OUTSIDEBUY)
             outside_entry.save()
-            #OutsideEntryItemAdd(outside_entry,selected)
+            OutsideEntryItemAdd(outside_entry,selected)
         elif entry_type=="forging":
-            outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=STANDARD_OUTSIDEBUY)
+            outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=FORGING_OUTSIDEBUY)
             outside_entry.save()
-            #OutsideEntryItemAdd(outside_entry,selected)
+            OutsideEntryItemAdd(outside_entry,selected)
+        elif entry_type=="cooperation_outsidebuy":
+            outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=COOPERATION_OUTSIDEBUY)
+            outside_entry.save()
+            OutsideEntryItemAdd(outside_entry,selected)
+        elif entry_type=="welding":
+            welding_entry=WeldMaterialEntry(purchaser=user,entry_status=entry_status,entry_code=entry_code,create_time=create_time)
+            outside_entry.save()
+            WeldingEntryItemAdd(welding_entry,selected)
+        elif entry_type=="auxiliary":
+            auxiliary_entry=AuxiliaryToolEntry(purchaser=user,entry_status=entry_status,entry_code=entry_code,create_time=create_time)
+            auxiliary_entry.save()
+            AuxiliaryEntryItemAdd(welding_entry,selected,accept_supplier)
 
             
 #        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
@@ -114,7 +127,8 @@ def genEntry(request,bid,selected,entry_type):
 #            message = u"入库单已经存在，请勿重复提交"
     except Exception, e:
         transaction.rollback()
-#        print e
+        print "*******************############*************"
+        print e
 #
 #    flag = flag and isAllChecked(bid,purchasingentry)
 #    if flag:
@@ -129,7 +143,7 @@ def genEntry(request,bid,selected,entry_type):
 #        'flag':flag,
 #        'message':message,
 #    }
-    return simplejson.dumps(data)
+    return simplejson.dumps({})
 
 @dajaxice_register
 def SupplierUpdate(request,supplier_id):
