@@ -19,7 +19,6 @@ from django.db import transaction
 
 from users.decorators import authority_required
 from users import *
-from storage.forms import EntryTypeForm
 from storage.models import *
 from datetime import datetime
 def purchasingFollowingViews(request):
@@ -572,10 +571,11 @@ def arrivalCheckViews(request,bid):
     """
     cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid,check_pass=False)
     is_show = BidForm.objects.filter(bid_id = bid , bid_status__part_status = BIDFORM_PART_STATUS_CHECK).count() > 0
-    entrytypeform = EntryTypeForm()
+    bidform=BidForm.objects.get(bid_id=bid)
+    entrytypeform = EntryTypeForm(bidform=bidform)
     context = {
         "cargo_set":cargo_set,
-        "bidform":BidForm.objects.get(bid_id=bid),
+        "bidform":bidform,
         "is_show":is_show,
         "entrytype":entrytypeform,
     }

@@ -12,6 +12,12 @@ TASK_CONFIRM_STATUS_CHOICES = (
   (0,u"已完成"),
 )
 
+TASK_PLAN_STATUS_CHOICES = (
+    ("",u"任务计划状态"),
+    (1,u"未完成"),
+    (0,u"已完成")
+)
+
 
 PRODUCTION_=40
 

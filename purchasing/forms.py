@@ -203,3 +203,25 @@ class OrderFormTwo(ModelForm):
     class Meta:
         model=MaterielCopy
         fields={'index','name','schematic_index','material','count','remark'}
+
+
+class EntryTypeForm(forms.Form):
+    entry_type=forms.ChoiceField(label=u'入库单类型',choices=(),required=True,widget=forms.Select(attrs={'class':'form-control span2','id':'entry_type'}))
+    def __init__(self,*args,**kwargs):
+        bidform=kwargs.pop("bidform",None)
+        super(EntryTypeForm,self).__init__(*args,**kwargs)
+        if bidform != None:
+            ENTRYTYPE_BOARD=("entrytype_board",u"板材")
+            ENTRYTYPE_BAR=("entrytrpe_bar",u"型材")
+            STANDARD_OUTSIDEBUY=("standard_outsidebuy",u"标准件")
+            FORGING_OUTSIDEBUY=("forging",u"外协加工")
+            COOPERATION_OUTSIDEBUY=("cooperation_outsidebuy",u"锻件")
+            WELDING=("welding",u"焊材")
+            AUXILIARY_TOOL=("auxiliary",u"辅助工具")
+            if bidform.order_form.order_mod == 0:
+                self.fields["entry_type"].choices=(ENTRYTYPE_BOARD,ENTRYTYPE_BAR)
+            elif bidform.order_form.order_mod == 1:
+                self.fields["entry_type"].choices=(ENTRYTYPE_BOARD,ENTRYTYPE_BAR,STANDARD_OUTSIDEBUY,FORGING_OUTSIDEBUY,COOPERATION_OUTSIDEBUY)
+            elif bidform.order_form.order_mod == 2:
+                self.fields["entry_type"].choices=(WELDING)
+

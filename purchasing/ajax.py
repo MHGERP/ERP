@@ -64,13 +64,17 @@ def checkArrival(request,aid,cid):
 
 #@dajaxice_register
 #@transaction.commit_manually
-#def genEntry(request,bid,selected):
+#def genEntry(request,bid,selected,entry_type):
 #    print selected
 #    flag = False
 #    message = ""
 #    try:
 #        bidform = BidForm.objects.get(bid_id = bid)
 #        user = request.user
+#        if entry_type=="entrytype_board":
+#            pass
+
+            
 #        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
 #            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user)
 #            purchasingentry.save()
