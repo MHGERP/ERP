@@ -132,7 +132,7 @@ def genEntry(request,selected,bid,entry_type):
 #
 #    flag = flag and isAllChecked(bid,purchasingentry)
 #    if flag:
-#        transaction.commit()
+    transaction.commit()
 #        message = u"入库单生成成功"
 #    else:
 #        transaction.rollback()
