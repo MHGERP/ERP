@@ -42,7 +42,7 @@ $("#add_or_update_supplier").click(function(){
     Dajaxice.purchasing.SupplierAddorChange(add_or_change_supplier_callback,{
         "mod":mod,
         "supplier_form":$("#supplier_info_form").serialize(true),
-        
+
     });
 });
 
@@ -54,3 +54,52 @@ function supplier_delete_callback(data){
     alert("删除成功！");
     window.location.reload();
 }
+
+$(document).on("click", "#quote_supplier", function() {
+    supid = $(this).closest("tr").attr('id');
+    Dajaxice.purchasing.getQuotingList(function(data) {
+      $("#quote_table").html(data);
+    }, {"supid" : supid});
+    $("#add_quoting").val(supid);
+});
+
+$(document).on("click", "#delete_quoting", function() {
+    quoteid = $(this).closest("tr").attr('id');
+    //alert(quoteid);
+    Dajaxice.purchasing.quotingDelete(function(data) {
+      $("#quote_table").html(data);
+    }, {"quoteid" : quoteid});
+});
+
+$(document).on("click", "#add_quoting", function() {
+    supid = $(this).val();
+    quoteid = "0";
+    Dajaxice.purchasing.quotingAdd(function(data) {
+      //alert(data);
+      $("#quote_table").html(data);
+    }, {"supid" : supid, "quoteid" : quoteid});
+});
+
+$(document).on("click", "#edit_quoting", function() {
+    quoteid = $(this).closest("tr").attr('id');
+    // alert(quoteid);
+    Dajaxice.purchasing.quotingAdd(function(data) {
+      //alert(data);
+      $("#quote_table").html(data);
+    }, {"supid" : supid, "quoteid" : quoteid});
+});
+
+$(document).on("click", "#add_edit_save", function() {
+    supid = $(this).val();
+    quoteid = $(this).attr("name");
+    f1 = $("#add_edit1").val();
+    f2 = $("#add_edit2").val();
+    f3 = $("#add_edit3").val();
+    f4 = $("#add_edit4").val();
+    f5 = $("#add_edit5").val();
+    Dajaxice.purchasing.quotingSave(function(data) {
+        Dajaxice.purchasing.getQuotingList(function(data) {
+          $("#quote_table").html(data);
+        }, {"supid" : supid});
+    }, {"supid" : supid, "quoteid" : quoteid, "f1" : f1, "f2" : f2, "f3" : f3, "f4": f4, "f5" : f5});
+});

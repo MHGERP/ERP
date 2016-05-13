@@ -85,6 +85,7 @@ $(document).on("click", "#id_save", function() {
 function updateAuxiliaryCallBack(data){
     if(data=="ok"){
         alert("保存成功");
+        refresh();
     }
     else{
         alert("保存失败");

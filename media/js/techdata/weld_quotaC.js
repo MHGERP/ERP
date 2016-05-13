@@ -63,11 +63,7 @@ function getMaterialCallBack(data){
 }
 $(document).on("click", "#add_save", function() {
     var work_order = $("#id_work_order").val();
-    // var weld_material = $("#id_weld_material2").val();
-    // var size = $("#id_size2").val();
-    // var stardard = $("#id_stardard2").val();
-    // var quota = $("#id_quota2").val();
-    // var remark = $("#id_remark2").val();
+
     Dajaxice.techdata.addWeldQuota(addWeldQuotaCallBack, {      "form": $("#widget_box3").serialize(),
                                                                 "work_order":work_order,})
     
@@ -100,18 +96,12 @@ function saveWeldQuotaCallBack(data){
 
 $(document).on("click", "#id_save", function() {
     var categories = $("#id_categories").val();
-    var weld_material = $("#id_weld_material").val();
-    var size = $("#id_size").val();
-    var stardard = $("#id_stardard").val();
-    var quota = $("#id_quota").val();
-    var remark = $("#id_remark").val();
-    Dajaxice.techdata.updateWeldQuota(updateWeldQuotaCallBack, {"iid": iid,
-                                                                "categories":categories,
-                                                                "weld_material":weld_material,
-                                                                "size":size,
-                                                                "stardard":stardard,
-                                                                "quota":quota,
-                                                                "remark":remark,})
+    var work_order = $("#id_work_order").val();
+    iid =$("#card_modal").attr("iid");
+    Dajaxice.techdata.updateWeldQuota(updateWeldQuotaCallBack, {
+                                                                "form":$("#weld_quota_card").serialize(),
+                                                                "work_order":work_order,
+                                                                "iid":iid,})
 });
 
 function updateWeldQuotaCallBack(data){
@@ -145,7 +135,7 @@ $("#id_goto_next").click(function() {
     var row = $("tr[iid='" + cur_iid + "']");
     var row_next = row.next(".tr_materiel");
     if(!row_next.html()) alert("本条为最后一条！");
-    else fill(row_next.attr("iid"));
+    else {fill(row_next.attr("iid"));}
 });
 
 $("#id_goto_prev").click(function() {
@@ -153,5 +143,5 @@ $("#id_goto_prev").click(function() {
     var row = $("tr[iid='" + cur_iid + "']");
     var row_prev = row.prev(".tr_materiel");
     if(!row_prev.html()) alert("本条为第一条！");
-    else fill(row_prev.attr("iid"));
+    else {fill(row_prev.attr("iid"));}
 });
