@@ -941,7 +941,7 @@ def getTransferCard(request, iid, page = "1", is_print = False):
     context["card"] = card
     process_list = TransferCardProcess.objects.filter(card_belong = card)
     page = int(page)
-    total_page, process_list = transferCardProcessPaginator(process_list, page)
+    page, total_page, process_list = transferCardProcessPaginator(process_list, page, 82)
     context["total_page"] = total_page
     context["current_page"] = page
     context["process_list"] = process_list
@@ -976,6 +976,7 @@ def importTransferCardProcessTemplate(request, iid):
         process_list.append(TransferCardProcess(card_belong = card, index = item["index"], name = item["name"], detail = item["detail"]))
 
     TransferCardProcess.objects.bulk_create(process_list)
+    process_list = TransferCardProcess.objects.filter(card_belong = card)
     html = render_to_string("techdata/widgets/transfercard_process_list.html", {"process_list": process_list})
     return html
    
@@ -996,6 +997,7 @@ def saveTransferCardProcess(request, arr):
     JunHU
     """
     for item in arr:
+        print item["pid"]
         process = TransferCardProcess.objects.get(id = item["pid"])
         process.index = item["index"]
         process.name = item["name"]

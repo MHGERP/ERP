@@ -9,6 +9,7 @@ class WorkOrder(models.Model):
     client_name = models.CharField(blank = False, max_length = 20, verbose_name = "客户名称")
     product_name = models.CharField(blank = False, max_length = 20, verbose_name = "产品名称")
     count = models.CharField(blank = False, max_length = 20, verbose_name = u"数量")
+    is_finish = models.BooleanField(default = False, verbose_name = u"是否结束")
     class Meta:
         verbose_name = u"工作令"
         verbose_name_plural = u"工作令"
