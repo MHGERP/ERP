@@ -673,19 +673,21 @@ def saveWeldQuota(request, id_work_order):
 
     return "ok"
 @dajaxice_register
-def updateWeldQuota(request, iid,categories,weld_material,size,stardard,quota,remark):
+def updateWeldQuota(request,form,work_order,iid):
     """
     MH Chen
     """
-    weld_quota = WeldQuota.objects.get(id = iid)
-    weld_quota.categories = categories
-    weld_quota.weld_material = Material.objects.get(id = weld_material)
-    weld_quota.size = size
-    weld_quota.stardard = stardard
-    weld_quota.quota = quota
-    weld_quota.remark = remark
-    weld_quota.save()
-    return "ok"
+    print form
+    order = WorkOrder.objects.get(id = work_order)
+    quota_form = WeldQuotaForm(deserialize_form(form),instance = WeldQuota.objects.get(id = iid))
+    print form
+    if quota_form.is_valid():
+        quota = quota_form.save(commit = False)
+        quota.order = order
+        quota.save()
+        return  "ok"
+    else:
+        return "fail"
 
 @dajaxice_register
 def deleteWeldQuota(request,did):
