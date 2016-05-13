@@ -350,6 +350,7 @@ class TransferCard(models.Model):
     container_type = models.CharField(blank = True, null = True, verbose_name = u"容器类别", max_length = 100)
     parent_name = models.CharField(blank = True, null = True, verbose_name = u"所属部件名称", max_length = 100)
     weld_test_plate_index = models.CharField(blank = True, null = True, verbose_name = u"焊接试板图号", max_length = 100)
+    parent_test_plate_index = models.CharField(blank = True, null = True, verbose_name = u"母材试板图号", max_length = 100)
     material_index = models.CharField(blank = True, null = True, verbose_name = u"材质标记", max_length = 100)
     file_obj = models.FileField(null = True, blank = True, upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"简图")
     class Meta:
@@ -359,7 +360,7 @@ class TransferCard(models.Model):
         if self.card_type == CYLIDER_TRANSFER_CARD:
             return "RH04-" + self.materiel_belong.order.suffix() + "- -" + str(self.file_index)
         elif self.card_type == CAP_TRANSFER_CARD:
-            return "RH04-" + self.materiel_belong.order.suffix() + "- -" + str(self.file_index)
+            return "RH03-" + self.materiel_belong.order.suffix() + "- -" + str(self.file_index)
 
 class TransferCardProcess(models.Model):
     card_belong = models.ForeignKey(TransferCard, verbose_name = u"所属流转卡")
