@@ -69,7 +69,33 @@ $("#btn_save_info").click(function() {
 });
 
 $(document).on("dblclick", ".process_area", function() {
-    $("#process_modal").modal("show");
+    Dajaxice.techdata.getTransferCardProcessList(function(data) {
+        $("#process_table").html(data);
+        $("#process_modal").modal("show");
+    }, {
+        "iid": $("#div_card").attr("iid"),
+    });
+});
+$("#btn_save_process").click(function() {
+    var arr = new Array();
+    $(".tr_process").each(function() {
+        var pid = $(this).attr("pid");
+        var index = $(this).find("input:eq(0)").val();
+        var name = $(this).find("input:eq(1)").val();
+        var detail = $(this).find("textarea:eq(0)").val();
+        arr.push({
+            "pid": pid,
+            "index": index,
+            "name": name,
+            "detail": detail,
+        });
+    });
+    Dajaxice.techdata.saveTransferCardProcess(function(data) {
+        alert("保存成功！");
+        refresh();
+    }, {
+        "arr": arr,
+    });
 });
 $(document).on("dblclick", ".pic_area", function() {
     $("#iid_input").val($("#div_card").attr("iid"));
@@ -82,7 +108,7 @@ $("#btn_save_pic").click(function() {
         clearForm: true,
         resetForm: true,
         error: function(data) {
-            
+
         },
         success: function(data) {
             if(data.file_upload_error == 2) {

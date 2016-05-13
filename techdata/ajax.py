@@ -945,6 +945,28 @@ def getTransferCard(request, iid, page = "1"):
     html = render_to_string(CARD_TYPE_TO_HTML[card.card_type], context)
     return html
 
+@dajaxice_register
+def getTransferCardProcessList(request, iid):
+    """
+    JunHU
+    """
+    card = TransferCard.objects.get(materiel_belong__id = iid)
+    process_list = TransferCardProcess.objects.filter(card_belong = card)
+    html = render_to_string("techdata/widgets/transfercard_process_list.html", {"process_list": process_list})
+    return html
+
+@dajaxice_register
+def saveTransferCardProcess(request, arr):
+    """
+    JunHU
+    """
+    print arr
+    for item in arr:
+        process = TransferCardProcess.objects.get(id = item["pid"])
+        process.index = item["index"]
+        process.name = item["name"]
+        process.detail = item["detail"]
+        process.save()
 
 @dajaxice_register
 def getTransferCardInfoForm(request, iid):
