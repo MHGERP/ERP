@@ -141,3 +141,22 @@ function markCallBack(data) {
         alert(data.warning);
     }
 }
+
+
+//for print test
+$(document).on("click", "#btn_print", function() {
+    var iid = $("#div_card").attr("iid")
+    var page = "1";
+    Dajaxice.techdata.getTransferCard(function(data) {
+        alert(data);
+        var bodyHTML = window.document.body.innerHTML;
+        window.document.body.innerHTML = data;
+        window.print();
+        window.document.body.innerHTML = bodyHTML;
+    }, {
+        "iid": iid,
+        "page": page,
+        "is_print": true,
+    });
+    
+});
