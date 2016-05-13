@@ -261,6 +261,69 @@ def addToForeign(request, index):
     item.inventory_type.add(InventoryType.objects.get(name = OUT_PURCHASED))
     return ""
 
+@dajaxice_register
+def getQuotingList(requset, supid):
+    item = QuotingPrice.objects.filter(the_supplier__id = supid)
+    print "获得报价单"
+    print item.count()
+    context = {
+        "quotingList" : item,
+    }
+    return render_to_string("purchasing/supplier/quote_table.html", context)
+
+@dajaxice_register
+def quotingDelete(requset, quoteid):
+    print "删除报价"
+    print quoteid
+    one = QuotingPrice.objects.get(id = quoteid)
+    supid = one.the_supplier.id
+    one.delete()
+    item = QuotingPrice.objects.filter(the_supplier__id = supid)
+    print item.count()
+    context = {
+        "quotingList" : item,
+    }
+    return render_to_string("purchasing/supplier/quote_table.html", context)
+
+@dajaxice_register
+def quotingAdd(requset, supid, quoteid):
+    print "增加报价"
+    f0 = InventoryType.objects.all()
+    context = {
+        "f0" : f0,
+        "f1" : "",
+        "f2" : "",
+        "f3" : "",
+        "f4" : "",
+        "f5" : "",
+        "supid" : supid,
+        "quoteid" : quoteid,
+    }
+    if int(quoteid):
+        one = QuotingPrice.objects.get(id = quoteid)
+        context["f1"] = one.inventory_type.id
+        context["f2"] = one.nameorspacification
+        context["f3"] = one.material_mark
+        context["f4"] = one.per_fee
+        context["f5"] = one.unit
+    print context
+    return render_to_string("purchasing/supplier/add_edit.html", context)
+
+@dajaxice_register
+def quotingSave(requset, supid, quoteid, f1, f2, f3, f4, f5):
+    print "保存"
+    if int(quoteid):
+        one = QuotingPrice.objects.get(id = quoteid)
+        one.inventory_type = InventoryType.objects.get(id = f1)
+        one.nameorspacification = f2
+        one.material_mark = f3
+        one.per_fee = f4
+        one.unit = f5
+        one.save()
+    else:
+        one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
+        one.save()
+    return ""
 
 @dajaxice_register
 def pendingOrderSearch(request, order_index):

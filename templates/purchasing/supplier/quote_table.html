@@ -1,0 +1,30 @@
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>库存</th>
+            <th>规格及名称</th>
+            <th>材质</th>
+            <th>单价</th>
+            <th>单位</th>
+            <th>编辑</th>
+            <th>删除</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for item in quotingList %}
+      <tr id = "{{item.id}}">
+          <th>{{item.inventory_type}}</th>
+          <th>{{item.nameorspacification}}</th>
+          <th>{{item.material_mark}}</th>
+          <th>{{item.per_fee}}</th>
+          <th>{{item.unit}}</th>
+          <td>
+              <button class='btn btn-primary' id="edit_quoting" >编辑</button>
+          </td>
+          <td>
+              <button class="btn btn-danger" id="delete_quoting">删除</button>
+          </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>

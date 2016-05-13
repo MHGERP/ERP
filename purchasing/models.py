@@ -363,6 +363,7 @@ class BidAcceptance(models.Model):
         return '%s' % (self.bid.bid_id)
 
 class QuotingPrice(models.Model):
+    inventory_type = models.ForeignKey(InventoryType, verbose_name=u"库存")
     nameorspacification = models.CharField(max_length=50,blank=True,null=True,verbose_name=u"规格及名称")
     material_mark = models.CharField(max_length=50,blank=True,null=True,verbose_name=u"材质或牌号")
     per_fee = models.CharField(max_length=50,blank=True,null=True,verbose_name=u"单价")
