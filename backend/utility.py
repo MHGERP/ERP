@@ -72,6 +72,10 @@ def getContext(contentList, page=1, name="context", add_index = 1, page_elems=PA
              }
 
 def uchwidth(uch):
+    """
+    JunHU
+    summary: calculate the display width of unicode character
+    """
     if (uch >= u"\u0041" and uch <= u"\u005a") or (uch >= u"\u0061" and uch <= u"\u007a"):
         return 1
     if (uch >= u"\u0030" and uch <= u"\u0039"):
@@ -81,6 +85,7 @@ def uchwidth(uch):
 def rowContentGenerator(content, ROW_LEN):
     """
     JunHU
+    summary: the generator to split the unicode string with constant width
     """
     row_content = u""
     row_width = 0
@@ -89,7 +94,7 @@ def rowContentGenerator(content, ROW_LEN):
         row_width += uchwidth(uch)
         if row_width == ROW_LEN or row_width == ROW_LEN - 1:
             yield row_content
-            row_content = ""
+            row_content = u""
             row_width = 0
     if row_content:
         yield row_content
@@ -97,7 +102,9 @@ def rowContentGenerator(content, ROW_LEN):
 def transferCardProcessPaginator(process_list, page, ROW_LEN = 84):
     """
     JunHU
-    流转卡工序分页
+    summary: the paginator for transfer card process list
+    params: page: the page in request; ROW_LEN: the width in split row
+    return: the list of RowItem 
     """
     class RowItem(object):
         def __init__(self, index = None, name = None, row_content = None):
