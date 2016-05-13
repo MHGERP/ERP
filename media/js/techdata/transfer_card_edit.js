@@ -108,12 +108,14 @@ $("#btn_push").click(function() {
 });
 $(document).on("click", ".btn_remove_process", function() {
     var pid = $(this).parent().parent().attr("pid");
+    var row_obj = $(this).parent().parent();
     Dajaxice.techdata.removeTransferCardProcess(function(data) {
         alert("删除成功！");
+        refresh();
+        row_obj.remove();
     }, {
         "pid": pid,
     });
-    $(this).parent().parent().remove();
 });
 $("#btn_import_template").click(function() {
     var iid = $("#div_card").attr("iid");   

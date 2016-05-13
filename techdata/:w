@@ -939,7 +939,7 @@ def getTransferCard(request, iid, page = "1", is_print = False):
     context["card"] = card
     process_list = TransferCardProcess.objects.filter(card_belong = card)
     page = int(page)
-    page, total_page, process_list = transferCardProcessPaginator(process_list, page, 82)
+    total_page, process_list = transferCardProcessPaginator(process_list, page, 82)
     context["total_page"] = total_page
     context["current_page"] = page
     context["process_list"] = process_list
