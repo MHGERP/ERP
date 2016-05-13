@@ -146,7 +146,7 @@ function markCallBack(data) {
 //for print test
 $(document).on("click", "#btn_print", function() {
     var iid = $("#div_card").attr("iid")
-    var page = "1";
+    var page = $("#paginator_div").attr("page");
     Dajaxice.techdata.getTransferCard(function(data) {
         var bodyHTML = window.document.body.innerHTML;
         window.document.body.innerHTML = data;
