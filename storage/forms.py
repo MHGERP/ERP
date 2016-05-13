@@ -21,17 +21,16 @@ def set_form_input_width(dict,style=("style","width:100px;")):
 
 class ApplyCardHistorySearchForm(forms.Form):
     workorder = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"id":"workorder","class":"form_control","select2":"true"}))
-    weld_bead_number = forms.CharField(label=u"焊缝编号",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
+    #weld_bead_number = forms.CharField(label=u"焊缝编号",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
     material_mark = forms.CharField(label=u"焊材牌号",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
     model_number = forms.CharField(label=u"型号",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
-    specification = forms.CharField(label=u"规格",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
-    #department = forms.CharField(label=u"领用单位",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
-    #applycard_code = forms.CharField(label=u"领用单编号",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
+    #specification = forms.CharField(label=u"规格",required=False,widget=forms.TextInput(attrs={"class":"form_control"}))
     create_time__gte = forms.DateField(label=u"起始日期",required=False,widget=forms.TextInput(attrs={"class":'form_control','date_picker':"true"}))
     create_time__lte = forms.DateField(label=u"终止日期",required=False,widget=forms.TextInput(attrs={"class":'form_control','date_picker':"true"}))
     def __init__(self,*args,**kwargs):
         super(ApplyCardHistorySearchForm,self).__init__(*args,**kwargs)
-        self.fields["workorder"].choices = getChoiceList(getDistinctSet(WeldingMaterialApplyCard,SubWorkOrder,'workorder'),'order_index')
+        workorder_list = SubWorkOrder.objects.all()
+        self.fields["workorder"].choices = getChoiceList(workorder_list)
         style = ("style","width:120px;margin-bottom:10px;")
         set_form_input_width(self.fields,style)
 class ApplyCardForm(ModelForm):
@@ -216,7 +215,7 @@ class RefundSearchForm(forms.Form):
         style = ("style","width:120px;")
         set_form_input_width(self.fields,style)
         workorder_list = SubWorkOrder.objects.all()
-        self.fields["apply_card__workorder"].choices = getChoiceList(workorder_list,"order_index")
+        self.fields["apply_card__workorder"].choices = getChoiceList(workorder_list)
 class WeldRefundForm(ModelForm):
     class Meta:
         model = WeldRefund
@@ -494,7 +493,7 @@ class WeldRefundConfirmForm(ModelForm):
         fields = ("refund_weight","refund_status")
 
 class SteelMaterialSearchForm(forms.Form):
-    entry_item__work_order__order_index = forms.CharField(label=u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__work_order__ = forms.CharField(label=u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     specification = forms.CharField(label=u"名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     entry_item__material_mark = forms.CharField(label=u"材质",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     def __init__(self,*args,**kwargs):
@@ -509,7 +508,7 @@ class SteelRefundSearchForm(forms.Form):
     def __init__(self,*args,**kwargs):
         super(SteelRefundSearchForm,self).__init__(*args,**kwargs)
         workorder_list = SubWorkOrder.objects.all()
-        self.fields["work_order"].choices = getChoiceList(workorder_list,"order_index")
+        self.fields["work_order"].choices = getChoiceList(workorder_list)
         set_form_input_width(self.fields)
 
 class OutsideEntrySearchForm(forms.Form):
@@ -551,7 +550,8 @@ class OutsideApplyCardSearchForm(forms.Form):
         super(OutsideApplyCardSearchForm,self).__init__(*args,**kwargs)
         set_form_input_width(self.fields)
         workorder_set = SubWorkOrder.objects.all()
-        self.fields["work_order"].choices = getChoiceList(workorder_set,"order_index")
+        self.fields["work_order"].choices = getChoiceList(workorder_set)
+        self.fields["work_order"].widget.attrs["style"] = "width:150px;"
 
 class OutsideMaterialSearchForm(forms.Form):
     entry_item__work_order__order_index = forms.CharField(label=u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
@@ -566,6 +566,16 @@ class OutsideMaterialSearchForm(forms.Form):
         outsidetypes.extend(OUTSIDEBUY_TYPE)
         self.fields["outsidebuy_type"].choices = tuple(outsidetypes)
 
+class WeldMaterialSearchForm(forms.Form):
+    entry_item__material__name = forms.CharField(label=u"名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__material_mark = forms.CharField(label=u"牌号",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__model_number = forms.CharField(label=u"型号",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__specification = forms.CharField(label=u"规格",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__material_code = forms.CharField(label=u"材质编号",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    def __init__(self,*args,**kwargs):
+        super(WeldMaterialSearchForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields)
+
 class OutsideRefundSearchForm(forms.Form):
     create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
     create_time__lte  = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker', 'date_picker':'true'}))
@@ -576,7 +586,8 @@ class OutsideRefundSearchForm(forms.Form):
         super(OutsideRefundSearchForm,self).__init__(*args,**kwargs)
         set_form_input_width(self.fields)
         workorder_set = SubWorkOrder.objects.all()
-        self.fields["work_order"].choices = getChoiceList(workorder_set,"order_index")
+        self.fields["work_order"].choices = getChoiceList(workorder_set)
+        self.fields["work_order"].widget.attrs["style"] = "width:150px;"
 
 class AuxiliaryToolMaterialSearchForm(forms.Form):
     entry_item__name = forms.CharField(label=u"名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))

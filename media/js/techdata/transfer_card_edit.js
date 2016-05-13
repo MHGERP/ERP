@@ -97,6 +97,36 @@ $("#btn_save_process").click(function() {
         "arr": arr,
     });
 });
+$("#btn_push").click(function() {
+    var iid = $("#div_card").attr("iid");   
+    Dajaxice.techdata.addTransferCardProcess(function(data) {
+        alert("添加成功！");
+        $("#process_table").html(data);
+    }, {
+        "iid": iid,
+    })
+});
+$(document).on("click", ".btn_remove_process", function() {
+    var pid = $(this).parent().parent().attr("pid");
+    var row_obj = $(this).parent().parent();
+    Dajaxice.techdata.removeTransferCardProcess(function(data) {
+        alert("删除成功！");
+        refresh();
+        row_obj.remove();
+    }, {
+        "pid": pid,
+    });
+});
+$("#btn_import_template").click(function() {
+    var iid = $("#div_card").attr("iid");   
+    Dajaxice.techdata.importTransferCardProcessTemplate(function(data) {
+        alert("导入成功！");
+        $("#process_table").html(data);
+        refresh();
+    }, {
+        "iid": iid,
+    })
+});
 $(document).on("dblclick", ".pic_area", function() {
     $("#iid_input").val($("#div_card").attr("iid"));
     $("#pic_modal").modal("show");

@@ -90,6 +90,7 @@ def WeldingEntryItemAdd(wilding_entry,selected):
                    remark=item.remark,
                     total_weight=item.total_weight_cal(),
                     entry=wilding_entry,
+                    count=item.count,
                     material_code=item.quality_number,
                     material_mark=item.material.name,
                     specification=item.specification

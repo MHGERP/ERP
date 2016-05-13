@@ -228,28 +228,17 @@ NEW_CATEGORY_CHOICES = (
 
 NEWS_MAX_LENGTH = 10000000
 #-------------库存管理----------------#
-STORAGESTATUS_PURCHASER = 0
-STORAGESTATUS_INSPECTOR = 1
-STORAGESTATUS_KEEPER = 2
-STORAGESTATUS_REFUNDER = 3
-STORAGESTATUS_AUDITOR = 4
-STORAGESTATUS_PROPOSER = 5
-
-STORAGESTATUS_END = -2
+ENTRYSTATUS_CHOICES_PUCAHSER = 0
+ENTRYSTATUS_CHOICES_INSPECTOR = 1
+ENTRYSTATUS_CHOICES_KEEPER = 2
+ENTRYSTATUS_CHOICES_END = 3
 ENTRYSTATUS_CHOICES = (
-    (STORAGESTATUS_PURCHASER,u"待采购员确认"),
-    (STORAGESTATUS_INSPECTOR,u"待检查确认"),
-    (STORAGESTATUS_KEEPER,u"待库管确认"),
-    (STORAGESTATUS_END,u"结束"),
+    (ENTRYSTATUS_CHOICES_PUCAHSER,u"待采购员确认"),
+    (ENTRYSTATUS_CHOICES_INSPECTOR,u"待检查确认"),
+    (ENTRYSTATUS_CHOICES_KEEPER,u"待库管确认"),
+    (ENTRYSTATUS_CHOICES_END,u"结束"),
 )
-ENTRYSTATUS_LIST = [x[0] for x in ENTRYTYPE_CHOICES]
-APPLYCARDSTATUS_CHOICES = (
-    (STORAGESTATUS_AUDITOR,u"待审核人确认"),
-    (STORAGESTATUS_INSPECTOR,u"待检查确认"),
-    (STORAGESTATUS_KEEPER,u"待库管确认"),
-    (STORAGESTATUS_END,u"结束"),
-)
-APPLYCARDSTATUS_LIST = [ x[0] for x in APPLYCARDSTATUS_CHOICES ]
+
 APPLYCARD_APPLICANT=0
 APPLYCARD_AUDITOR=1
 APPLYCARD_INSPECTOR=2
@@ -274,18 +263,25 @@ AUXILIARY_TOOL_APPLY_CARD_STATUS=(
         (AUXILIARY_TOOL_APPLY_CARD_END,u'完成'),
         )
 
+REFUNDSTATUS_STEEL_CHOICES_REFUNDER = 0
+REFUNDSTATUS_STEEL_CHOICES_INSPECTOR = 1
+REFUNDSTATUS_STEEL_CHOICES_KEEPER = 2
+REFUNDSTATUS_STEEL_CHOICES_END = 3
 REFUNDSTATUS_STEEL_CHOICES = (
-    (STORAGESTATUS_REFUNDER,u"退库人"),
-    (STORAGESTATUS_INSPECTOR,u"检查员"),
-    (STORAGESTATUS_KEEPER,u"库管员"),
-    (STORAGESTATUS_END,u"结束"),
+    (REFUNDSTATUS_STEEL_CHOICES_REFUNDER,u"退库人"),
+    (REFUNDSTATUS_STEEL_CHOICES_INSPECTOR,u"检查员"),
+    (REFUNDSTATUS_STEEL_CHOICES_KEEPER,u"库管员"),
+    (REFUNDSTATUS_STEEL_CHOICES_END,u"结束"),
 )
 
 
+REFUNDSTATUS_CHOICES_REFUNDER = 0
+REFUNDSTATUS_CHOICES_KEEPER = 1
+REFUNDSTATUS_CHOICES_END = 2
 REFUNDSTATUS_CHOICES = (
-    (STORAGESTATUS_REFUNDER,u"退库人"),
-    (STORAGESTATUS_KEEPER,u"库管员"),
-    (STORAGESTATUS_END,u"结束"),
+    (REFUNDSTATUS_CHOICES_REFUNDER,u"退库人"),
+    (REFUNDSTATUS_CHOICES_KEEPER,u"库管员"),
+    (REFUNDSTATUS_CHOICES_END,u"结束"),
 )
 
 STORAGEDEPARTMENT_CHOICES=( 
@@ -329,6 +325,40 @@ WELD_ITEM_STATUS_CHOICES = (
 )
 
 #技术资料管理
+
+#for test
+capProcessTemplate = [
+{"index": u"1", "name": u"下  料", "detail": u"1.1  下料前认真核对钢板的材质、规格，热处理状态，并移植材质标记（不许打钢印）          1.2  封头坯料尺寸 -34×D1850"},
+{"index": u"2", "name": u"数控切割", "detail": u"切割坯料外圆，切割前预热 120℃，割后清除熔渣，毛刺等，与R3041.05共带一块母材试板"},
+{"index": u"3", "name": u"热压", "detail": u"对封头毛坯热压成形（外协）。"},
+{"index": u"4", "name": u"热处理", "detail": u"封头进行恢复材料状态的正火热处理，注意与R3041.05同炉热处理，热处理后母材试板进行力学性能试验，实验结果确认合格后，将部分试板回厂，经复验合格后，再按图纸加工好坡口（外协）。剩余试板随封头回厂。"},
+{"index": u"5", "name": u"检 查", "detail": u"5.1.封头表面凹凸量  -6～+12mm；5.2. 封头最小壁厚不得小于27.7mm；      5.3.封头主要尺寸允差见下表规定:大口内直径允差：-4～+5；总高度公差：-3～+4；大口外圆周长公差：-12～+15；大小口同心度：≤2mm。"},
+{"index": u"6", "name": u"入 库", "detail": u"检验及试板性能合格后入库。"},
+]
+cyliderProcessTemplate = [
+{"index": u"1", "name": u"预 备", "detail": u"认真核对钢板的材质、规格，并移植材质标记，不许打钢印"},
+{"index": u"2", "name": u"切 割", "detail": u"采用数控切割，均分两端下料，1/2下料尺寸：-46×2364-4214(宽度2364两端各含5mm加工余量，长度4214两端各含150mm压头余量)，保证对角线公差不超过2mm"},
+{"index": u"3", "name": u"修 磨", "detail": u"割后清除熔渣、毛刺及氧化皮等"},
+{"index": u"4", "name": u"划 线", "detail": u"按筒体理论展开长划压头切割线及压制线，并在压头切割线上打样冲"},
+{"index": u"5", "name": u"压 头", "detail": u"根据环缝坡口形式确定压弯方向，压制弧度，并用样板检测压制弧度，间隙≤2mm"},
+{"index": u"6", "name": u"切 割", "detail": u"封头回厂后确定筒体实际展开长，划出实际压头切割线，用半自动切割机割压头余量，并开对接坡口"},
+{"index": u"7", "name": u"修 磨", "detail": u"割后清除熔渣、毛刺及氧化皮等，使其呈现金属光泽，坡口表面不得有裂纹、分层、夹杂等缺陷"},
+{"index": u"8", "name": u"探 伤", "detail": u"坡口表面按JB/T4730.4-2005《压力容器无损检测》标准进行100% MT检测，Ⅰ级合格"},
+{"index": u"9", "name": u"圈 圆", "detail": u"在中三辊上卷制圆筒，并用样板检测压制弧度，间隙≤2mm"},
+{"index": u"10", "name": u"对 接", "detail": u"10.1 纵缝对口错边量b≤2mm，外圆周长允差-3mm≤C≤6mm 10.2 清理坡口两侧表面30mm范围内的氧化物、油污、熔渣、及其它影响焊缝质量的有害杂质"},
+{"index": u"11", "name": u"焊 接", "detail": u"筒体纵缝A2、A3的装配点焊与焊接均执行RH09-015007B焊接工艺指导书，并与纵缝焊接试板一同焊接，焊接产品试板执行R05-015007B- -01《压力容器产品试板工艺卡（流转）》"},
+{"index": u"12", "name": u"探 伤", "detail": u"对焊接试板进行鉴证。"},
+{"index": u"13", "name": u"切 割", "detail": u"将试板从筒体上切割下来，不得伤及筒体，试板交试板库"},
+{"index": u"14", "name": u"修 磨", "detail": u"割后清除熔渣、毛刺及氧化皮等"},
+{"index": u"15", "name": u"校 圆", "detail": u"用样板检查纵缝处所形成的棱角，E≤3mm；同一断面的最大最小直径差e≤3mm"},
+{"index": u"16", "name": u"探 伤", "detail": u"纵缝按JB/T4730-2005《压力容器无损检测》标准进行100% RT检测，Ⅱ级合格，技术等级为AB级；合格后进行≥20%UT检测，Ⅰ级合格，技术等级为B级；焊缝内外表面100%MT检测，Ⅰ级合格"},
+{"index": u"17", "name": u"修 磨", "detail": u"使焊缝与母材光滑过渡，焊缝余高不得高于3mm"},
+{"index": u"18", "name": u"坡 口", "detail": u"检验合格后按图纸要求机加工出环缝坡口及过渡段（加工坡口前筒体上下端需加工装支撑）。"},
+{"index": u"19", "name": u"修 磨", "detail": u"加工后清除毛刺及油污等，坡口表面不得有裂纹、分层、夹杂等缺陷。"},
+{"index": u"20", "name": u"探 伤", "detail": u"坡口按JB/T4730-2005《压力容器无损检测》标准执行100% MT检测，I级合格。"},
+{"index": u"21", "name": u"入 库", "detail": u"筒体及试板经检验合格后筒体入半成品库。"},
+]
+
 H1 = "0"
 J = "2"
 R = "3"

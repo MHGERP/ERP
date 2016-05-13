@@ -43,6 +43,10 @@ $(document).ready(function(){
 function entry_confirm(eid){
     
 }
+function weld_search_callback(data){
+    $("#search_table").html(data.html);
+}
+
 function change_item(tr){
     var a = $(tr).find("td");
     $("input#id_remark").val(a.eq(11).children("p").eq(0).text());
@@ -51,6 +55,8 @@ function change_item(tr){
     var price = parseFloat(a.eq(12).text());
     if(!isNaN(price))
         $("input#id_price").val(price);
+    else
+        $("input#id_price").val("");
 }
 function save_item(){
     Dajaxice.storage.entryItemSave(save_item_callback,{"form":$("#entry_item_form").serialize(),"mid":mid});

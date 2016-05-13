@@ -205,7 +205,7 @@
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:23.85pt'>
-  <p class=MsoNormal align=center style='text-align:center;margin-top:10px;'>{% ifequal entry.purchaser None %}<span class="btn btn-mark" name="weldentry" role="purchaser">签字</span>{% else %}{{entry.purchaser}}{% endifequal %}</p>
+  <p class=MsoNormal align=center style='text-align:center;margin-top:10px;'>{% ifequal entry.purchaser None %}<span class="btn btn-mark" name="weldentry" role="purchaser">签字</span>{% else %}{{entry.purchaser.userinfo}}{% endifequal %}</p>
   </td>
   <td width=85 style='width:63.55pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -219,7 +219,7 @@
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:23.85pt'>
-  <p class=MsoNormal align=center style='text-align:center;margin-top:10px;'>{% ifequal entry.inspector None %}<span class="btn btn-mark" name="weldentry" role = "inspector">签字</span>{% else %}{{entry.inspector}}{% endifequal %}</p>
+  <p class=MsoNormal align=center style='text-align:center;margin-top:10px;'>{% ifequal entry.inspector None %}<span class="btn btn-mark" name="weldentry" role = "inspector">签字</span>{% else %}{{entry.inspector.userinfo}}{% endifequal %}</p>
   </td>
   <td width=95 style='width:71.6pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
@@ -233,7 +233,7 @@
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:23.85pt'>
-  <p class=MsoNormal align=center style='text-align:center;margin-top:10px;'>{% ifequal entry.keeper None %}<span class="btn btn-mark" name="weldentry" role="keeper">签字</span>{% else %}{{entry.keeper}}{% endifequal %}</p>
+  <p class=MsoNormal align=center style='text-align:center;margin-top:10px;'>{% ifequal entry.keeper None %}<span class="btn btn-mark" name="weldentry" role="keeper">签字</span>{% else %}{{entry.keeper.userinfo}}{% endifequal %}</p>
   </td>
   {% if is_show %}
   <td colspan=2 style='width:124.75pt;border-top:none;border-left:

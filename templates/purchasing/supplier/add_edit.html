@@ -1,0 +1,28 @@
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>物料类型</th>
+            <th>规格及名称</th>
+            <th>材质</th>
+            <th>单价</th>
+            <th>单位</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr>
+          <th>
+            <select id="add_edit1" class="form-control input" name="guige">
+              {% for item in f0 %}
+              <option value="{{item.id}}" {% if f1 == item.id %} selected="selected" {% endif %}>{{item}}</option>
+              {% endfor %}
+            </select>
+          </th>
+          <th><input id = "add_edit2" value="{{f2}}"></th>
+          <th><input id = "add_edit3" value="{{f3}}"></th>
+          <th><input id = "add_edit4" value="{{f4}}"></th>
+          <th><input id = "add_edit5" value="{{f5}}"></th>
+          <th><button class="btn btn-primary" id="add_edit_save" value="{{supid}}" name="{{quoteid}}">保存</button></th>
+      </tr>
+    </tbody>
+</table>

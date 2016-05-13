@@ -22,9 +22,9 @@
             <td>{{item.plan_enddate|date:"Y-m-d"}}</td>
             <td>
                 {% if item.plan_startdate = None %}
-                    <button class="btn btn-primary" type="button" onclick="task_plan_change({{item.id}})">添加计划时间</button>
+                    <button class="btn btn-primary" type="button" onclick="task_plan_change({{item.id}})">添加时间</button>
                 {% else %}
-                <button class="btn btn-primary" type="button" onclick="task_plan_change({{item.id}})">修改计划时间</button>
+                <button class="btn btn-primary" type="button" onclick="task_plan_change({{item.id}})">修改时间</button>
                 {% endif %}
             </td>
         </tr>
