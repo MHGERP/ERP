@@ -1,0 +1,11 @@
+{% for field in apply_form %}
+<div class="control-group {% if field.errors %} error {% endif %}">
+    <label class="control-label" style="text-align:left;width:60px;margin-left:0px;">{{field.label_tag}}</label>
+    <div class="controls" style="margin-left:60px;">
+    {{field}}
+    {% if field.errors %}
+    <span class="help-inline">{{field.errors}}</span>
+    {% endif %}
+    </div>
+</div>
+{% endfor %}

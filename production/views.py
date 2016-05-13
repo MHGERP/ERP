@@ -4,13 +4,11 @@ from production.forms import *
 from production.models import *
 from const.forms import WorkOrderForm
 def taskPlanViews(request):
-    search_form = TaskAllocationForm()
-    items_list = ProcessDetail.objects.filter(complete_process_date = None).order_by('-productionworkgroup')
-    for item in items_list:
-        item.groups = ProductionWorkGroup.objects.filter(processname = item.processname)
+    search_form = TaskPlanForm()
+    items_list = ProcessDetail.objects.filter(productionworkgroup = None).order_by('sub_materiel_belong').order_by('-plan_startdate')
 
     context={
-        "taskallocationform":search_form,
+        "taskplanform":search_form,
         "items_list":items_list,
     }
 

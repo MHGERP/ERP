@@ -22,6 +22,8 @@ from storage.forms import EntryTypeForm
 from storage.utils import AutoGenEntry
 from purchasing.models import MaterielCopy as Materiel
 from datetime import datetime
+import time
+
 @dajaxice_register
 def searchPurchasingFollowing(request,bidid):
     bidform_processing=BidForm.objects.filter(bid_id__contains=bidid)
@@ -62,15 +64,47 @@ def checkArrival(request,aid,cid):
     }
     return simplejson.dumps(data)
 
-#@dajaxice_register
-#@transaction.commit_manually
-#def genEntry(request,bid,selected):
+@dajaxice_register
+def ArrivalCheckAdd(request,aid,form):
+    arrival_inspection=ArrivalInspection.objects.get(id=aid)
+    materiel=arrival_inspection.material
+    form=QualityCheckAddForm(deserialize_form(form),instance=materiel)
+    form.save()
+    return simplejson.dumps({})
+
+
+@dajaxice_register
+@transaction.commit_manually
+def genEntry(request,bid,selected,entry_type):
 #    print selected
 #    flag = False
 #    message = ""
-#    try:
-#        bidform = BidForm.objects.get(bid_id = bid)
-#        user = request.user
+    try:
+        bidform = BidForm.objects.get(bid_id = bid)
+        user = request.user
+        accept_supplier=bidform.bidacceptance.accept_supplier.supplier_name
+        create_time=datetime.now()
+        entry_code=time.strftime("%Y%m%d%H%M%S",create_time)
+        entry_status=STORAGESTATUS_KEEPER
+
+        if entry_type=="entrytype_board":
+            steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,purchaser=user,entry_status=entry_status,steel_type=ENTRYTYPE_BOARD)
+            steel_entry.save()
+            #SteelEntryItemAdd(steel_entry,selected)
+        elif entry_type=="entrytype_bar":
+            steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,purchaser=user,entry_status=entry_status,steel_type=ENTRYTYPE_BAR)
+            steel_entry.save()
+            #SteelEntryItemAdd(steel_entry,selected)
+        elif entry_type=="standard_outsidebuy":
+            outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=STANDARD_OUTSIDEBUY)
+            outside_entry.save()
+            #OutsideEntryItemAdd(outside_entry,selected)
+        elif entry_type=="forging":
+            outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=STANDARD_OUTSIDEBUY)
+            outside_entry.save()
+            #OutsideEntryItemAdd(outside_entry,selected)
+
+            
 #        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
 #            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user)
 #            purchasingentry.save()
@@ -78,8 +112,8 @@ def checkArrival(request,aid,cid):
 #            flag = True
 #        else:
 #            message = u"入库单已经存在，请勿重复提交"
-#    except Exception, e:
-#        transaction.rollback()
+    except Exception, e:
+        transaction.rollback()
 #        print e
 #
 #    flag = flag and isAllChecked(bid,purchasingentry)
@@ -95,7 +129,7 @@ def checkArrival(request,aid,cid):
 #        'flag':flag,
 #        'message':message,
 #    }
-#    return simplejson.dumps(data)
+    return simplejson.dumps(data)
 
 @dajaxice_register
 def SupplierUpdate(request,supplier_id):

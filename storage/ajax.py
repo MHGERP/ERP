@@ -317,7 +317,7 @@ def auToolEntryConfirm(request, role, eid):
         message = u"入库单不存在";
     entry = AuxiliaryToolEntry.objects.get(id = eid);
     items = AuxiliaryToolEntryItems.objects.filter(entry = entry);
-    html = render_to_string("storage/wordhtml/auxiliaryToolEntryTable.html", {"items":items, "entry":entry});
+    html = render_to_string("storage/wordhtml/auxiliaryToolEntry.html", {"items":items, "entry":entry});
     data = {
         "html":html,
         "message":message,
@@ -1002,6 +1002,8 @@ def searchMaterial(request,search_form,search_type):
             store_items = get_weld_filter(storelist_model,search_form.cleaned_data,replace_dic).filter(item_status = ITEM_STATUS_NORMAL).order_by("create_time")
         else:
             store_items = get_weld_filter(storelist_model,search_form.cleaned_data)
+            if search_type != "steel":
+                store_items = store_items.order_by("entry_item__entry__create_time")
     html = render_to_string(table_path,{"store_items":store_items,})
     return simplejson.dumps({"html":html})
 
@@ -1231,3 +1233,44 @@ def outsideRefundCardConfirm(request,role,fid):
     }
     html = render_to_string("storage/wordhtml/outsiderefund.html",context)
     return simplejson.dumps({"html":html,"message":message})
+
+@dajaxice_register
+def auxiliaryToolMaterialApply(request,select_item,aid,form):
+    storelist = AuxiliaryToolStoreList.objects.get(id=select_item)
+    applycard = AuxiliaryToolApplyCard.objects.get(id=aid)
+    form = AuxiliaryToolsApplyItemForm(deserialize_form(form),instance=applycard)
+    if applycard.status == STORAGESTATUS_KEEPER:
+        if form.is_valid():
+            applycard = form.save(commit=False)
+            if applycard.actual_quantity <= storelist.inventory_count:
+                applycard.actual_storelist = storelist
+                applycard.save()
+                message = u"材料选择成功"
+            else:
+                message = u"所选库存材料数量不足"
+        else:
+            print form.errors
+            message = u"材料选择失败"
+    else:
+        message = u"领用卡已经确认过，不能修改材料"
+    form_html = render_to_string("storage/auxiliarytools/auxiliarytoolsapplyform.html",{"apply_form":form})
+    card_html = render_to_string("storage/wordhtml/auxiliarytoolapplycard.html",{"applycard":applycard})
+    return simplejson.dumps({'message':message,'form_html':form_html,'card_html':card_html})
+   
+@dajaxice_register
+def auToolApplyCardConfirm(request,role,aid):
+    applycard = AuxiliaryToolApplyCard.objects.get(id=aid)
+    if role == "keeper":
+        if applycard.status == STORAGESTATUS_KEEPER:
+            storelist = applycard.actual_storelist
+            storelist.inventory_count -= applycard.actual_quantity
+            storelist.save()
+            applycard.status = AUXILIARY_TOOL_APPLY_CARD_END
+            applycard.keeper = request.user
+            applycard.save()
+            message = u"领用卡确认成功"
+        else:
+            message = u"领用卡已经确认过"
+    
+    card_html = render_to_string("storage/wordhtml/auxiliarytoolapplycard.html",{"applycard":applycard})
+    return simplejson.dumps({"card_html":card_html,"message":message})

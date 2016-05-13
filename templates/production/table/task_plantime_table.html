@@ -1,0 +1,12 @@
+<div id="task_plantime_table" value="{{item.id}}">
+    <div>工作票号：</div>
+    <input type="text" value="{{item.sub_materiel_belong.materiel_belong.index}}" readonly></input>
+    <div>工作令：</div>
+    <input type="text" value="{{item.sub_materiel_belong.sub_order}}" readonly></input>
+    <div>工序号：</div>
+    <input type="text" value="{{item.process_id}}" readonly></input>
+    <div>计划开始时间：</div>
+    <input id="id_startdate" type="text" value="{{item.plan_startdate|date:"Y-m-d"}}"/>
+    <div>计划完成时间：</div>
+    <input id="id_enddate" type="text" value="{{item.plan_enddate|date:"Y-m-d"}}"/>
+</div>
