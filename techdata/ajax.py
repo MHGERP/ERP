@@ -921,7 +921,7 @@ def createTransferCard(request, iid, card_type):
 
 
 @dajaxice_register
-def getTransferCard(request, iid, page = "1"):
+def getTransferCard(request, iid, page = "1", is_print = False):
     """
     JunHU
     """
@@ -933,6 +933,7 @@ def getTransferCard(request, iid, page = "1"):
         "MARK_REVIEW": MARK_REVIEW,
         "MARK_PROOFREAD": MARK_PROOFREAD,
         "MARK_APPROVE": MARK_APPROVE,
+        "is_print": is_print,
     }
     card = TransferCard.objects.get(materiel_belong = item)
     context["card"] = card
