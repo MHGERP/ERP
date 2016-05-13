@@ -15,6 +15,8 @@ class MaterielCopy(Materiel):
     work_order=models.CharField(blank=True,null=True,max_length=100,verbose_name=u"工作令号")
     sub_workorder=models.ForeignKey(SubWorkOrder,blank=True,null=True,verbose_name=u"子工作令")
     inventory_type = models.ForeignKey(InventoryType, blank = True, null = True, verbose_name = "明细表类型")
+    batch_number=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"炉批号")
+    quality_number=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"材质编号")
     class Meta:
         verbose_name = u"伪物料"
         verbose_name_plural = u"伪物料"
@@ -343,7 +345,7 @@ class MaterielExecuteDetail(models.Model):
         verbose_name = u"材料执行表详细"
         verbose_name_plural = u"材料执行表详细"
     def __unicode__(self):
-        return '%s' % (self.materiel.index)
+        return '%s' % (self.materiel.name)
 
 class BidAcceptance(models.Model):
     bid=models.OneToOneField(BidForm,verbose_name=u"标单")
@@ -361,5 +363,16 @@ class BidAcceptance(models.Model):
         verbose_name_plural = u"中标通知书"
     def __unicode__(self):
         return '%s' % (self.bid.bid_id)
-    
 
+class QuotingPrice(models.Model):
+    inventory_type = models.ForeignKey(InventoryType, verbose_name=u"库存")
+    nameorspacification = models.CharField(max_length=50,blank=True,null=True,verbose_name=u"规格及名称")
+    material_mark = models.CharField(max_length=50,blank=True,null=True,verbose_name=u"材质或牌号")
+    per_fee = models.CharField(max_length=50,blank=True,null=True,verbose_name=u"单价")
+    unit = models.CharField(max_length=50,blank=True,null=True,verbose_name=u"单位")
+    the_supplier=models.ForeignKey(Supplier,verbose_name=u"供应商")
+    class Meta:
+        verbose_name = u"报价单"
+        verbose_name_plural = u"报价单"
+    def __unicode__(self):
+        return '%s' % (self.per_fee)

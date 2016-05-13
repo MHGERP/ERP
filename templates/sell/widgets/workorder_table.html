@@ -1,0 +1,20 @@
+<div class="widget-content nopadding" style="max-height:800px;overflow-y:auto">    
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>工作令编号</th>
+                <th>销售类型</th>
+                <th>客户名称</th>
+                <th>产品名称</th>
+                <th>数量</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in workorders %}
+            <tr iid={{item.id}} class="workorder_row">
+                {% include "sell/widgets/workorder_table_row.html" %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -1,12 +1,15 @@
 <center class=WordSection style='layout-grid:15.6pt'>
+{% if not is_print %}
 <div id="paginator_div" total_page = "{{total_page}}" page= "{{current_page}}" width="1008" style='width:756.0pt;margin-left:5.4pt;margin-bottom:5.4pt;border-collapse:collapse;border:none;
  mso-border-alt:solid windowtext 1.5pt;mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
  mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext'>
-	<span class="btn pull-left prev-page turnpage">上一页</span>
-	<span class="btn pull-right next-page turnpage">下一页</span>
+	<span class="btn pull-left prev-page turnpage"><i class="icon-chevron-left"></i>上一页</span>
+	<span class="btn pull-right next-page turnpage">下一页<i class="icon-chevron-right"></i></span>
+	<span class="btn" id="btn_print"><i class="icon-print"></i>打印</a>
 </div>
+{% endif %}
 <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=1008
- style='width:756.0pt;margin-left:5.4pt;border-collapse:collapse;border:none;
+ style='width:756.0pt;margin-left:5.4pt; margin-top:10pt; border-collapse:collapse;border:none;
  mso-border-alt:solid windowtext 1.5pt;mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
  mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext'>
 
@@ -50,7 +53,7 @@
   mso-border-top-alt:solid windowtext 1.5pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:13.9pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold' id="file_index_span">RH04-{{card.materiel_belong.order.suffix}}- -{{card.file_index}}<o:p></o:p></span></p>
+  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold' id="file_index_span">{{card}}<o:p></o:p></span></p>
   </td>
   <td width=108 colspan=5 style='width:81.25pt;border-top:solid windowtext 1.5pt;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -172,7 +175,7 @@
   mso-border-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext 1.5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:14.0pt;font-family:宋体;color:red;mso-bidi-font-weight:
+  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:
   bold'><o:p>{{item.schematic_index}}</o:p></span></p>
   </td>
  </tr>
@@ -223,7 +226,7 @@
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{card.container_type}}</o:p></span></p>
+  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{card.container_type|default_if_none:""}}</o:p></span></p>
   </td>
   <td class="info_area" width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -239,7 +242,7 @@
   mso-border-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext 1.5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{item.count}}</o:p></span></p>
+  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{item.count|default_if_none:""}}</o:p></span></p>
   </td>
  </tr>
  <tr class="info_area" style='mso-yfti-irow:6;page-break-inside:avoid;height:22.75pt'>
@@ -256,7 +259,7 @@
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.75pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{card.parent_name}}</o:p></span></p>
+  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{card.parent_name|default_if_none:""}}</o:p></span></p>
   </td>
   <td class="info_area" width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -273,7 +276,7 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:22.75pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
   style='mso-bidi-font-size:14.0pt;font-family:宋体;color:black;mso-bidi-font-weight:
-  bold'><o:p>{{item.remark}}</o:p></span></p>
+  bold'><o:p>{{item.remark|default_if_none:""}}</o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:7;page-break-inside:avoid;height:22.7pt'>
@@ -291,7 +294,7 @@
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
   style='mso-bidi-font-size:14.0pt;font-family:宋体;color:black;mso-bidi-font-weight:
-  bold'><o:p>{{item.parent_schematic_index}}</o:p></span></p>
+  bold'><o:p>{{item.parent_schematic_index|default_if_none:""}}</o:p></span></p>
   </td>
   <td class="info_area" width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -309,7 +312,7 @@
   mso-border-alt:solid windowtext .5pt;mso-border-right-alt:solid windowtext 1.5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
-  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{item.material}}</o:p></span></p>
+  style='mso-bidi-font-size:14.0pt;font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{item.material|default_if_none:""}}</o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:8;page-break-inside:avoid;height:22.7pt'>
@@ -327,8 +330,8 @@
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal align=center style='margin-right:-3.8pt;text-align:center'><span
-  lang=EN-US style='mso-bidi-font-size:14.0pt;font-family:宋体;color:red;
-  mso-bidi-font-weight:bold'><o:p>{{card.weld_test_plate_index}}</o:p></span></p>
+  lang=EN-US style='mso-bidi-font-size:14.0pt;font-family:宋体;
+  mso-bidi-font-weight:bold'><o:p>{{card.weld_test_plate_index|default_if_none:""}}</o:p></span></p>
   </td>
   <td class="info_area" width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -363,7 +366,7 @@
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.75pt'>
   <p class=MsoNormal align=center style='margin-right:-3.8pt;mso-para-margin-right:
   -.36gd;text-align:center'><span lang=EN-US style='mso-bidi-font-size:14.0pt;
-  font-family:宋体;mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
+  font-family:宋体;mso-bidi-font-weight:bold'><o:p>{{card.parent_test_plate_index|default_if_none:""}}</o:p></span></p>
   </td>
   <td class="info_area" width=103 colspan=5 style='width:77.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;

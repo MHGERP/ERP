@@ -72,6 +72,10 @@ def getContext(contentList, page=1, name="context", add_index = 1, page_elems=PA
              }
 
 def uchwidth(uch):
+    """
+    JunHU
+    summary: calculate the display width of unicode character
+    """
     if (uch >= u"\u0041" and uch <= u"\u005a") or (uch >= u"\u0061" and uch <= u"\u007a"):
         return 1
     if (uch >= u"\u0030" and uch <= u"\u0039"):
@@ -81,23 +85,28 @@ def uchwidth(uch):
 def rowContentGenerator(content, ROW_LEN):
     """
     JunHU
+    summary: the generator to split the unicode string with constant width
     """
     row_content = u""
     row_width = 0
+    if not content:
+        return
     for uch in content:
         row_content += uch
         row_width += uchwidth(uch)
         if row_width == ROW_LEN or row_width == ROW_LEN - 1:
             yield row_content
-            row_content = ""
+            row_content = u""
             row_width = 0
     if row_content:
         yield row_content
 
-def transferCardProcessPaginator(process_list, page, ROW_LEN = 84):
+def transferCardProcessPaginator(process_list, page, ROW_LEN):
     """
     JunHU
-    流转卡工序分页
+    summary: the paginator for transfer card process list
+    params: page: the page in request; ROW_LEN: the width in split row
+    return: the list of RowItem 
     """
     class RowItem(object):
         def __init__(self, index = None, name = None, row_content = None):
@@ -117,19 +126,22 @@ def transferCardProcessPaginator(process_list, page, ROW_LEN = 84):
                 ret_list.append(RowItem(None, None, row))
             start += ROW_LEN
     total_page = 1 if len(ret_list) <= 8 else 2 + (len(ret_list) - 8 - 1) / 15
+    if page > total_page:
+        page = total_page
+
     if page == 1:
         ret_list = ret_list[0 : 8]
         while len(ret_list) < 8:
             ret_list.append(RowItem())
 
-        return total_page, ret_list
+        return page, total_page, ret_list
     else:
         start_row = 8 + (page - 2) * 15
         ret_list = ret_list[start_row : start_row + 15]
         while len(ret_list) < 15:
             ret_list.append(RowItem())
 
-        return total_page, ret_list
+        return page, total_page, ret_list
 
 def make_uuid():
     """

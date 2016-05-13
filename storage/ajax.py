@@ -37,7 +37,7 @@ def searchApplyCard(request,form):
     context={}
     if form.is_valid():
         steel_apply_cards = get_weld_filter(SteelMaterialApplyCard,form.cleaned_data)
-        result_table = render_to_string("storage/widgets/apply_card_table.html",{"apply_cards":steel_apply_cards})
+        result_table = render_to_string("storage/widgets/apply_card_table.html",{"apply_cards":steel_apply_cards,"APPLYCARD_KEEPER":APPLYCARD_KEEPER})
         message = "success"
         context["result_table"]=result_table
     else:
@@ -304,9 +304,9 @@ def auToolEntryConfirm(request, role, eid):
     try:
         entry = AuxiliaryToolEntry.objects.get(id = eid);
         if role == "keeper":
-            if entry.entry_status == STORAGESTATUS_KEEPER:
+            if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
                 entry.keeper = request.user;
-                entry.entry_status = STORAGESTATUS_END;
+                entry.entry_status = ENTRYSTATUS_CHOICES_END;
                 entry.save();
                 createAuxiliaryToolStoreList(entry)
                 message = u"入库单确认成功";
@@ -317,7 +317,7 @@ def auToolEntryConfirm(request, role, eid):
         message = u"入库单不存在";
     entry = AuxiliaryToolEntry.objects.get(id = eid);
     items = AuxiliaryToolEntryItems.objects.filter(entry = entry);
-    html = render_to_string("storage/wordhtml/auxiliaryToolEntryTable.html", {"items":items, "entry":entry});
+    html = render_to_string("storage/wordhtml/auxiliaryToolEntry.html", {"items":items, "entry":entry});
     data = {
         "html":html,
         "message":message,
@@ -354,7 +354,7 @@ def Auxiliary_Tools_Apply_Create(request,data):
     apply_card=AuxiliaryToolsCardCommitForm(form_data,instance=ins)
     save_ins=apply_card.save(commit=False)
     save_ins.applicant=request.user
-    save_ins.status=AUXILIARY_TOOL_APPLY_CARD_APPLYED
+    save_ins.status=AUXILIARY_TOOL_APPLY_CARD_APPLICANT
     save_ins.save()
     return HttpResponse('[SUCCESS] create apply card succeed')
 
@@ -389,6 +389,8 @@ def Auxiliary_Tools_Apply_Commit(request,data):
         print apply_card.errors
     return HttpResponse('[SUCCESS] commit apply card succeed')
 
+
+"""
 @dajaxice_register
 def Auxiliary_Tools_Entry(request,data):
     form_data = deserialize_form(data)
@@ -405,7 +407,7 @@ def Auxiliary_Tools_Entry(request,data):
     auxiliary_card_list.keeper=request.user
     auxiliary_card_list.save()
     return HttpResponse('[SUCCESS] entry succeed')
- 
+"""
 
 @dajaxice_register
 def Search_Auxiliary_Tools_Records(request,data,search_type):
@@ -464,7 +466,7 @@ def entryItemSave(request,form,mid):
     entry_form = EntryItemsForm(deserialize_form(form),instance = item) 
     entry = item.entry
     flag = False
-    if entry.auth_status(STORAGESTATUS_KEEPER):
+    if entry.auth_status(ENTRYSTATUS_CHOICES_KEEPER):
         if entry_form.is_valid():
             entry_form.save()
             flag = True
@@ -474,7 +476,7 @@ def entryItemSave(request,form,mid):
             message = u"修改失败"
     else:
         message = u"修改失败，入库单已确认过"
-    is_show = entry.entry_status == STORAGESTATUS_KEEPER
+    is_show = entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER
     items = WeldMaterialEntryItems.objects.filter(entry = entry)
     html = render_to_string("storage/wordhtml/weldentryitemstable.html",{"items":items,"is_show":is_show,"entry":entry})
     data = {
@@ -493,7 +495,7 @@ def saveSteelEntryStoreRoom(request,form,mid):
     if form.is_valid():
         storeroom_id = form.cleaned_data['store_room']
         store_room = StoreRoom.objects.get(id = storeroom_id)
-        if entry.entry_status == STORAGESTATUS_KEEPER:
+        if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
             item.store_room = store_room
             item.save()
             message = u"修改成功"
@@ -512,7 +514,7 @@ def saveSteelEntryRemark(request,form,eid):
     form = steelEntryRemarkForm(deserialize_form(form),instance=entry)
     items = entry.steelmaterialentryitems_set.all() 
     if form.is_valid():
-        if entry.entry_status == STORAGESTATUS_KEEPER:
+        if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
             form.save()
             message = u"修改成功"
         else:
@@ -542,15 +544,15 @@ def entryConfirm(request,role,eid):
     return simplejson.dumps(data)    
 
 def handleEntryConfirm_Keeper(request,entry):
-    if entry.entry_status == STORAGESTATUS_KEEPER:
+    if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
         entry.keeper = request.user
-        entry.entry_status = STORAGESTATUS_END
+        entry.entry_status = ENTRYSTATUS_CHOICES_END
         entry.save()
         weldStoreItemsCreate(entry)
         message = u"入库单确认成功"
     else:
         message = u"入库单已经确认过,不能重复确认"
-    is_show = entry.entry_status == STORAGESTATUS_KEEPER 
+    is_show = entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER 
     return {"message":message},is_show
 
 @dajaxice_register
@@ -558,9 +560,9 @@ def steelEntryConfirm(request,eid,role):
     try:
         entry = SteelMaterialEntry.objects.get(id = eid)
         if role == "keeper": 
-            if entry.entry_status == STORAGESTATUS_KEEPER:
+            if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
                 createSteelMaterialStoreList(entry)
-                entry.entry_status = STORAGESTATUS_END
+                entry.entry_status = ENTRYSTATUS_CHOICES_END
                 entry.keeper = request.user
                 entry.save()
                 message =u"入库单确认成功"
@@ -696,11 +698,11 @@ def outsideEntryConfirm(request,eid):
     items = OutsideStandardItem.objects.filter(entry = entry)
     flag = False
     try:
-        if entry.entry_status == STORAGESTATUS_KEEPER:
+        if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
             for item in items:
                 new_storelist = OutsideStorageList(entry_item=item,count=item.count,outsidebuy_type=entry.outsidebuy_type)
                 new_storelist.save()
-            entry.entry_status = STORAGESTATUS_END
+            entry.entry_status = ENTRYSTATUS_CHOICES_END
             entry.keeper = request.user
             entry.save()
             flag = True
@@ -716,7 +718,8 @@ def outsideEntryConfirm(request,eid):
         transaction.rollback()
     return simplejson.dumps({"html":html,"message":message})
 
-def getEntryData(request,eid,form,_Model,_ItemModel,_Inform,_Reform,entryhomeurl,role,status_list,entry_status=STORAGESTATUS_KEEPER):
+"""
+def getEntryData(request,eid,form,_Model,_ItemModel,_Inform,_Reform,entryhomeurl,role,status_list,entry_status=ENTRYSTATUS_CHOICES_KEEPER):
     entry_obj = _Model.objects.get(id = eid)
     form = deserialize_form(form)
     inform = _Inform(form,instance=entry_obj)
@@ -724,12 +727,12 @@ def getEntryData(request,eid,form,_Model,_ItemModel,_Inform,_Reform,entryhomeurl
     form_list = [("inform",inform),("reform",reform)]
     entryobject = EntryObject(status_list,_Model,eid) 
     context = entryobject.save_entry(entry_obj,role,request.user,form_list)
-    is_show = entryobject.checkShow(entry_obj,STORAGESTATUS_KEEPER)
+    is_show = entryobject.checkShow(entry_obj,ENTRYSTATUS_CHOICES_KEEPER)
     context["entryhomeurl"] = entryhomeurl
     context["is_show"]=is_show
     context["entry_set"] = _ItemModel.objects.filter(entry=entry_obj)
     return render_to_string("storage/widgets/entryAbody.html",context),entryobject.flag,context
-
+"""
 
 def genOutsideStoreList(items_set):
     try:
@@ -849,7 +852,7 @@ def outsideAccountApplyCardSearch(request,form):
             items_set = OutsideApplyCardItem.objects.filter(query_conditions)
         else:
             items_set = OutsideApplyCardItem.objects.all()
-        items_set.filter(applycard__entry_status = STORAGESTATUS_END)
+        items_set.filter(applycard__entry_status = APPLYCARD_END)
         sorted_items_set = sorted(items_set,key=attrgetter('applycard.workorder.order_index','specification'))
     context = {
             'items_set':sorted_items_set,
@@ -920,7 +923,7 @@ def weldRefundCommit(request,rid,form):
         storageitem.count += ref_obj.refund_count
         storageitem.save()
         
-        ref_obj.weldrefund_status = STORAGESTATUS_END
+        ref_obj.weldrefund_status = REFUNDSTATUS_CHOICES_END
         ref_obj.save()
         message = u"退库成功，信息已记录"
     else:
@@ -979,16 +982,18 @@ def getSearchMaterielContext(request,form,is_production = True):
     context["is_production"] = is_production
     return context
 """
+
+
 @dajaxice_register
 def searchWeldEntry(request,searchform):
     form = WeldEntrySearchForm(deserialize_form(searchform))
     if form.is_valid():
-        entry_set = get_set_filter(WeldMaterialEntry,form.cleaned_data,replace_dic).order_by("-create_time")
+        entry_set = get_weld_filter(WeldMaterialEntry,form.cleaned_data).order_by("-create_time")
     else:
         print form.errors
         entry_set = []
     print entry_set 
-    html = render_to_string("storage/widgets/storageentryhomemain.html",{"entry_set":entry_set,"ENTRYSTATUS_END":STORAGESTATUS_END,"entryurl":"storage/weldentryconfirm"})
+    html = render_to_string("storage/widgets/storageentryhomemain.html",{"entry_set":entry_set,"ENTRYSTATUS_END":ENTRYSTATUS_CHOICES_END,"entryurl":"storage/weldentryconfirm"})
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
@@ -998,10 +1003,13 @@ def searchMaterial(request,search_form,search_type):
     search_form = form_type(deserialize_form(search_form))
     if search_form.is_valid():
         if search_type=="weld":
-            replace_dic = gen_replace_dic(search_form.cleaned_data,"entry_item")
-            store_items = get_weld_filter(storelist_model,search_form.cleaned_data,replace_dic).filter(item_status = ITEM_STATUS_NORMAL).order_by("create_time")
+            replace_dic = gen_replace_dic(search_form.cleaned_data)
+            print  replace_dic 
+            store_items = get_weld_filter(storelist_model,search_form.cleaned_data,replace_dic).order_by("entry_time")
         else:
             store_items = get_weld_filter(storelist_model,search_form.cleaned_data)
+            if search_type != "steel":
+                store_items = store_items.order_by("entry_item__entry__create_time")
     html = render_to_string(table_path,{"store_items":store_items,})
     return simplejson.dumps({"html":html})
 
@@ -1030,29 +1038,31 @@ def searchWeldRefund(request,search_form):
     search_form = RefundSearchForm(deserialize_form(search_form))
     if search_form.is_valid():
         refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data)
-        html = render_to_string("storage/widgets/weldrefundhistorytable.html",{"refund_set":refund_set})
+        html = render_to_string("storage/widgets/weldrefundhistorytable.html",{"refund_set":refund_set,"STORAGESTATUS_END":REFUNDSTATUS_CHOICES_END})
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
 def refundKeeperModify(request,form,rid):
     ref_obj = WeldRefund.objects.get(id = rid)
     form = WeldRefundConfirmForm(deserialize_form(form),instance = ref_obj)
-    if form.is_valid():
-        form.save()
-        flag = True
-        message = u"信息修改成功"
+    flag = False
+    if ref_obj.weldrefund_status == REFUNDSTATUS_CHOICES_KEEPER:
+        if form.is_valid():
+            form.save()
+            flag = True
+            message = u"信息修改成功"
+        else:
+            message = u"信息修改失败"
     else:
-        flag = False
-        message = u"信息修改失败"
-
+        message = u"退库已经确认过，不能再次修改"
     html = render_to_string("storage/wordhtml/weldrefundconfirm.html",{"ref_obj":ref_obj})
     return simplejson.dumps({"html":html,"message":message,"flag":flag})
 
 @dajaxice_register
 def weldRefundConfirm(request,rid,role):
     ref_obj = WeldRefund.objects.get(id = rid)
-    if role == "keeper" and ref_obj.weldrefund_status == STORAGESTATUS_KEEPER :
-        ref_obj.weldrefund_status = STORAGESTATUS_END
+    if role == "keeper" and ref_obj.weldrefund_status == REFUNDSTATUS_CHOICES_KEEPER :
+        ref_obj.weldrefund_status = REFUNDSTATUS_CHOICES_END
         ref_obj.keeper = request.user
         ref_obj.save()
         storelist_obj = ref_obj.apply_card.storelist
@@ -1131,7 +1141,7 @@ def steelRefundConfirm(request,rid):
             items = refund.barsteelmaterialrefunditems_set.all()
             items_table_path = "steelbarrefund.html"
         updateSteelStoreList(refund,items)
-        refund.status = STORAGESTATUS_END
+        refund.status = REFUNDSTATUS_STEEL_CHOICES_END
         refund.keeper = request.user
         refund.save()
         message = u"退库成功"
@@ -1155,6 +1165,7 @@ def updateSteelStoreList(refund,items):
             new_storelist = SteelMaterialStoreList(entry_item=old_storelist.entry_item, specification=item.specification, steel_type=old_storelist.steel_type, count=item.count, return_time=return_time, weight=item.weight, length=item.length, refund=refund.id)
             new_storelist.save()
 
+
 @dajaxice_register
 def outsideCardSearch(request,role,form):
     OutsideCardDict = {"entry":OutsideStandardEntry,"applycard":OutsideApplyCard,"refund":OutsideRefundCard}
@@ -1164,7 +1175,7 @@ def outsideCardSearch(request,role,form):
     html_path = "storage/widgets/outside"+role+"hometable.html"
     if form.is_valid():
         card_set = get_weld_filter(card_model,form.cleaned_data)
-    html = render_to_string(html_path,{"card_set":card_set,"STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER})
+    html = render_to_string(html_path,{"card_set":card_set,"STORAGESTATUS_KEEPER":ENTRYSTATUS_CHOICES_KEEPER})
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
@@ -1172,7 +1183,7 @@ def outsideEntryItemSave(request,form,mid):
     item = OutsideStandardItems.objects.get(id=mid)
     form = OutsideEntryItemForm(deserialize_form(form),instance = item)
     flag = False
-    if item.entry.entry_status == STORAGESTATUS_KEEPER:
+    if item.entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
         if form.is_valid():
             form.save()
             flag = True
@@ -1213,12 +1224,12 @@ def outsideRefundCardConfirm(request,role,fid):
     refundcard = OutsideRefundCard.objects.get(id=fid)
     items = refundcard.outsiderefundcarditems_set.all()
     if role == "keeper":
-        if refundcard.status == STORAGESTATUS_KEEPER:
+        if refundcard.status == ENTRYSTATUS_CHOICES_KEEPER:
             for item in items:
                 storelist = item.applyitem.storelist
                 storelist.count += item.count
                 storelist.save()
-            refundcard.status = STORAGESTATUS_END
+            refundcard.status = REFUNDSTATUS_CHOICES_END
             refundcard.keeper = request.user
             refundcard.save()
             message = u"退库单确认成功"
@@ -1231,3 +1242,44 @@ def outsideRefundCardConfirm(request,role,fid):
     }
     html = render_to_string("storage/wordhtml/outsiderefund.html",context)
     return simplejson.dumps({"html":html,"message":message})
+
+@dajaxice_register
+def auxiliaryToolMaterialApply(request,select_item,aid,form):
+    storelist = AuxiliaryToolStoreList.objects.get(id=select_item)
+    applycard = AuxiliaryToolApplyCard.objects.get(id=aid)
+    form = AuxiliaryToolsApplyItemForm(deserialize_form(form),instance=applycard)
+    if applycard.status == AUXILIARY_TOOL_APPLY_CARD_KEEPER:
+        if form.is_valid():
+            applycard = form.save(commit=False)
+            if applycard.actual_quantity <= storelist.inventory_count:
+                applycard.actual_storelist = storelist
+                applycard.save()
+                message = u"材料选择成功"
+            else:
+                message = u"所选库存材料数量不足"
+        else:
+            print form.errors
+            message = u"材料选择失败"
+    else:
+        message = u"领用卡已经确认过，不能修改材料"
+    form_html = render_to_string("storage/auxiliarytools/auxiliarytoolsapplyform.html",{"apply_form":form})
+    card_html = render_to_string("storage/wordhtml/auxiliarytoolapplycard.html",{"applycard":applycard})
+    return simplejson.dumps({'message':message,'form_html':form_html,'card_html':card_html})
+   
+@dajaxice_register
+def auToolApplyCardConfirm(request,role,aid):
+    applycard = AuxiliaryToolApplyCard.objects.get(id=aid)
+    if role == "keeper":
+        if applycard.status == ENTRYSTATUS_CHOICES_KEEPER:
+            storelist = applycard.actual_storelist
+            storelist.inventory_count -= applycard.actual_quantity
+            storelist.save()
+            applycard.status = AUXILIARY_TOOL_APPLY_CARD_END
+            applycard.keeper = request.user
+            applycard.save()
+            message = u"领用卡确认成功"
+        else:
+            message = u"领用卡已经确认过"
+    
+    card_html = render_to_string("storage/wordhtml/auxiliarytoolapplycard.html",{"applycard":applycard})
+    return simplejson.dumps({"card_html":card_html,"message":message})

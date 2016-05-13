@@ -133,4 +133,8 @@ urlpatterns=patterns('',
         r'^transferCardPicUpload$',
         techdata_views.transferCardPicUpload,
     ),
+    url(
+        r'^transferCardList$',
+        techdata_views.transferCardListViews,
+    ),
 )

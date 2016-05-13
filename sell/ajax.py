@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.utils import simplejson
 from const import *
+from const.models import WorkOrder
 from backend.utility import getContext
 from sell.forms import *
 from sell.models import *
@@ -42,13 +43,13 @@ def saveProduct(request, form):
 @dajaxice_register
 def getBidFile_issuance(request, param):
     if param == "bidFile_to_manufacture":
-        productions = Product.objects.filter(manufacture_file_down__isnull = False)
+        productions = Product.objects.filter(manufacture_file_down__isnull = False).exclude(is_approval = 0)
         path = "sell/widgets/bidFile_to_manufacture_table.html"
     elif param == "bidFile_to_techdata":
-        productions = Product.objects.filter(techdata_file_down__isnull = False)
+        productions = Product.objects.filter(techdata_file_down__isnull = False).exclude(is_approval = 0)
         path = "sell/widgets/bidFile_to_techdata_table.html"
     else:
-        productions = Product.objects.filter(purchasing_file_down__isnull = False)
+        productions = Product.objects.filter(purchasing_file_down__isnull = False).exclude(is_approval = 0)
         path = "sell/widgets/bidFile_to_purchasing_table.html"
     context = {
         "productions" : productions,
@@ -78,12 +79,54 @@ def saveBidFileStatus(request, bid, sta):
     bidfile.save()
     return "ok"
 
+#@dajaxice_register
+#def saveProductStatus(request, pid):
+#    product = Product.objects.get(id = pid)
+#    if product.manufacture_file_up and product.manufacture_file_up.is_approval == 0 and product.techdata_file_up and product.techdata_file_up.is_approval == 0 and product.purchasing_file_up and product.purchasing_file_up.is_approval == 0:
+#        product.is_approval = 0
+#        product.save()
+#        return "ok"
+#    else:
+#        return "err"
+
 @dajaxice_register
-def saveProductStatus(request, pid):
+def getWorkOrderList(request):
+    workorders = WorkOrder.objects.all()
+    context = {
+        "workorders" : workorders
+    }
+    return render_to_string("sell/widgets/workorder_table.html", context)
+
+@dajaxice_register
+def getWorkOrderForm(request):
+    form = WorkOrderGenerateForm()
+    context = {
+        "form" : form,
+    }
+    return render_to_string("sell/widgets/workorderGenerate_form.html", context)
+
+
+@dajaxice_register
+def generateWorkOrder(request, pid, form):
+    print "====="
+    print pid
+    print form
     product = Product.objects.get(id = pid)
     if product.manufacture_file_up and product.manufacture_file_up.is_approval == 0 and product.techdata_file_up and product.techdata_file_up.is_approval == 0 and product.purchasing_file_up and product.purchasing_file_up.is_approval == 0:
-        product.is_approval = 0
-        product.save()
-        return "ok"
+        form = WorkOrderGenerateForm(deserialize_form(form))
+        if form.is_valid():
+            workorder = form.save(commit = False)
+            workorder.product_name = product.name
+            workorder.save()
+            product.is_approval = 0
+            product.save()
+            return simplejson.dumps({"status" : "ok"})
+        else:
+            context = {
+                "form" : form,
+            }
+            html = render_to_string("sell/widgets/workorderGenerate_form.html", context)
+            return simplejson.dumps({"html" : html, "status" : "invalid"})
     else:
-        return "err"
+        return simplejson.dumps({"status" : "err"})
+

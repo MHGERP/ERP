@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block sub_ref %}
-<a href="/techdata/processBOM" class="tip-bottom" data-original-title="工艺库编辑">工艺库编辑</a>
+<a href="/techdata/processBOM" class="tip-bottom" data-original-title="工艺库">工艺库</a>
+{%if label %}<a href="/techdata/transferCardList?id_work_order={{order.id}}" class="tip-bottom" data-original-title="流转卡列表">流转卡列表</a> {% endif %}
 <a href="#" class="current">流转卡编辑</a>
 {% endblock %}
 
@@ -22,7 +23,7 @@
 <div id="div_card" iid="{{iid}}">
 </div>
 
-<div id="info_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.4" >
+<div id="info_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.55" >
   <div class="modal-header">
     <h2 id="groupLabel">基础信息</h2>
   </div>
@@ -37,16 +38,19 @@
     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
   </div>
 </div>
-<div id="process_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.4" >
+<div id="process_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.7" >
   <div class="modal-header">
     <h2 id="groupLabel">工序列表</h2>
   </div>
 
   <div class="modal-body" style="clear:both;">
-
+    <div id="process_table">
+    </div>
   </div>
   <div class="modal-footer">
-	<button class="btn btn-primary" id="btn_save_info">保存</button>
+    <button class="btn btn-primary pull-left" id="btn_push">添加新工序</button>
+    <button class="btn btn-primary pull-left" id="btn_import_template">导入工序模板</button>
+  	<button class="btn btn-primary" id="btn_save_process">保存</button>
     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
   </div>
 </div>

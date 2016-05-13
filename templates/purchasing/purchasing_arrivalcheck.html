@@ -11,8 +11,31 @@
 {% if is_show %}
 <div>
     {{entrytype.entry_type}}
-    <button id="genbtn" class="btn btn-primary" onclick="gen_entry({{bid}});">生成入库单</button>
+    <button id="genbtn" class="btn btn-primary" onclick="gen_entry({{bidform.bid_id}});">生成入库单</button>
 </div>
 {% endif %}
+<div id="check_add_mark" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h2 id="myModalLabel">物料信息填写</h2>
+    </div>
+    <div class="modal-body">
+        <form action="" id="add_form">
+        <div class="form-inline" style="margin-bottom:10px;">
+            <label class=" span1"> {{add_form.batch_number.label}}</label>
+            {{add_form.batch_number}}
+        </div>
+        <div class="from-inline">
+            <label class="span1"> {{add_form.quality_number.label}}</label>
+            {{add_form.quality_number}}
+        </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success " data-dismiss="modal" id="check_add_confirm">确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/purchasing_following.js"></script>
 {% endblock%}

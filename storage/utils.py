@@ -236,10 +236,11 @@ def checkStorage(db_type,sorce=None):
     return DB_MAP[db_type]
 
 def getDbMap(sorce):
-    weld_tuple = (WeldStoreList,WeldStorageSearchForm,WeldingMaterialApplyCard)
+    weld_tuple = (WeldStoreList,WeldMaterialSearchForm,WeldingMaterialApplyCard)
     steel_tuple = (SteelMaterialStoreList,SteelMaterialSearchForm,SteelMaterialApplyCard)
     outside_tuple = (OutsideStorageList,OutsideMaterialSearchForm,OutsideApplyCard)
-    DB_MAP = {"weld":weld_tuple,"steel":steel_tuple,"outside":outside_tuple,"auxiliary_tool":steel_tuple}
+    auxiliarytool_tuple = (AuxiliaryToolStoreList,AuxiliaryToolMaterialSearchForm,AuxiliaryToolApplyCard)
+    DB_MAP = {"weld":weld_tuple,"steel":steel_tuple,"outside":outside_tuple,"auxiliarytool":auxiliarytool_tuple}
     return DB_MAP
 
 def modify_weld_item_status(items):
@@ -254,10 +255,13 @@ def modify_weld_item_status(items):
             filter_items.append(item)
     return filter_items
 
-def gen_replace_dic(dict,fk_model):
+def gen_replace_dic(dict,fk_model = None):
     replace_dic = {}
     for k,v in dict.items():
-        replace_dic[k] = fk_model+"__"+k+"__contains"
+        if fk_model:
+            replace_dic[k] = fk_model+"__"+k+"__contains"
+        else:
+            replace_dic[k] = k+"__contains"
     return replace_dic
 
 def createAuxiliaryToolStoreList(entry):
@@ -265,7 +269,7 @@ def createAuxiliaryToolStoreList(entry):
     辅助工具入库单台账更新
     """
     for item in entry.auxiliarytoolentryitems_set.all():
-        AuxiliaryToolStoreList(entry_item = item , inventory_count = item.count,entry_time=entry.create_time).save()
+        AuxiliaryToolStoreList(entry_item = item , inventory_count = item.count).save()
 
 def createSteelMaterialStoreList(entry):
     for item in entry.steelmaterialentryitems_set.all():
