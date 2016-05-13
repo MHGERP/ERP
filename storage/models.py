@@ -3,7 +3,7 @@ import datetime
 from const import *
 from django.db import models
 from django.db.models import Sum
-from const.models import WorkOrder,Materiel
+from const.models import WorkOrder,Materiel,SubWorkOrder
 from django.contrib.auth.models import User
 from users.models import UserInfo,Group
 from django.utils import timezone
@@ -82,7 +82,7 @@ class ApplyCardBase(models.Model):
     change_code = models.CharField(verbose_name=u"修改号",max_length=20,blank=True,null=True)
     sample_report = models.CharField(verbose_name=u"样表",max_length=20,blank=True,null=True)
     entry_code = models.CharField(verbose_name=u"编号",max_length=20,unique=True)
-    workorder = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
+    workorder = models.ForeignKey(SubWorkOrder,verbose_name=u"工作令")
     create_time = models.DateField(verbose_name=u"日期")
     department = models.CharField(verbose_name = u"领用单位",max_length=20)
     class Meta:
@@ -171,7 +171,7 @@ class WeldingMaterialApplyCard(models.Model):
     department = models.CharField(verbose_name=u'领用单位',max_length=20,blank=False)
     applycard_code = models.CharField(verbose_name=u'编号',max_length=20,blank=False,unique=True)
     create_time=models.DateField(verbose_name=u'填写时间',auto_now_add=True)
-    workorder=models.ForeignKey(WorkOrder,verbose_name=u'工作令',blank=False)
+    workorder=models.ForeignKey(SubWorkOrder,verbose_name=u'工作令',blank=False)
     weld_bead_number=models.CharField(verbose_name=u'焊缝编号',max_length=20,blank=False)
     material_mark=models.CharField(verbose_name=u'焊材牌号',max_length=50,blank=False)
     model_number=models.CharField(verbose_name=u'型号',max_length=50,blank=True)
@@ -278,7 +278,7 @@ class SteelMaterialEntryItems(models.Model):
     material_code = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'标记号')
     weight = models.FloatField(blank=False,null=False,verbose_name=u"重量")
     unit = models.CharField(blank=True,null=True,max_length=20,verbose_name=u"单位")
-    work_order = models.ManyToManyField(WorkOrder,blank=False,null=False,verbose_name=u'工作令')
+    work_order = models.ManyToManyField(SubWorkOrder,blank=False,null=False,verbose_name=u'工作令')
     store_room = models.ForeignKey(StoreRoom,blank=False,null=False,verbose_name=u'库房位置')
     count = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
     length = models.FloatField(blank=True,null=True,verbose_name=u"长度")
@@ -344,7 +344,7 @@ class SteelMaterialApplyCardItems(models.Model):
     material_mark = models.CharField(max_length=20,blank=False,null=True,verbose_name=u'钢号')
     material_code = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'材质编号')
     component = models.CharField(max_length=100,blank=True,null=True,verbose_name=u"零件编号")
-    work_order=models.ForeignKey(WorkOrder,blank=False,null=False,verbose_name=u"工作令")
+    work_order=models.ForeignKey(SubWorkOrder,blank=False,null=False,verbose_name=u"工作令")
     specification = models.CharField(max_length=50,blank=False,null=False,verbose_name=u'规格')
     def __unicode__(self):
         return "%s" % self.material_mark
@@ -354,7 +354,7 @@ class SteelMaterialApplyCardItems(models.Model):
         verbose_name_plural=u"钢材领用单材料"
 
 class SteelMaterialRefundCard(models.Model):
-    work_order=models.ForeignKey(WorkOrder,blank=False,null=False,verbose_name=u"工作令")
+    work_order=models.ForeignKey(SubWorkOrder,blank=False,null=False,verbose_name=u"工作令")
     create_time = models.DateField(blank=False,null=False,auto_now_add=True,verbose_name=u"日期")
     refund_code = models.CharField(max_length=20,blank=False,null=False,verbose_name=u"编号")
     refunder = models.ForeignKey(User,blank=False,null=True,verbose_name=u'退料人',related_name="steel_refund_refunder")
@@ -547,7 +547,7 @@ class OutsideStandardItems(models.Model):
     remark = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'备注')
     factory = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'生产厂家')
     ticket_number = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'票号')
-    work_order=models.ForeignKey(WorkOrder,blank=False,null=False,verbose_name=u"工作令")
+    work_order=models.ForeignKey(SubWorkOrder,blank=False,null=False,verbose_name=u"工作令")
     class Meta:
         verbose_name = u"外购件入库材料"
         verbose_name_plural = u"外购件入库材料"
@@ -576,7 +576,7 @@ class OutsideApplyCard(models.Model):
     change_code = models.CharField(verbose_name=u"修改号",max_length=50,blank=True,null=True)
     sample_report = models.CharField(verbose_name=u"样表",max_length=50,blank=True,null=True)
     applycard_code = models.CharField(verbose_name=u"编号",max_length=20)
-    work_order = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
+    work_order = models.ForeignKey(SubWorkOrder,verbose_name=u"工作令")
     create_time = models.DateField(verbose_name=u"日期",auto_now_add=True)
     department = models.CharField(verbose_name = u"领用单位",max_length=20,null=True,blank=True)
     
@@ -609,7 +609,7 @@ class OutsideRefundCard(models.Model):
     status = models.IntegerField(choices=REFUNDSTATUS_CHOICES,default=STORAGESTATUS_REFUNDER,verbose_name=u"退库单状态")
     applycard = models.ForeignKey(OutsideApplyCard,verbose_name=u"外购件领用单")
     refundcard_code = models.CharField(verbose_name=u"退库单编号",max_length=20)
-    work_order = models.ForeignKey(WorkOrder,verbose_name=u"工作令")
+    work_order = models.ForeignKey(SubWorkOrder,verbose_name=u"工作令")
     create_time = models.DateField(verbose_name=u"日期",auto_now_add=True)
     
     class Meta:
