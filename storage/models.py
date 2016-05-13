@@ -448,9 +448,10 @@ class AuxiliaryToolEntry(models.Model):
         return '%s' % self.entry_code
 
 class AuxiliaryToolEntryItems(models.Model):
-    name = models.CharField(blank=False, max_length=20,verbose_name=u"名称")
-    specification = models.CharField(blank=True,max_length=20,verbose_name=u"规格")
+    name = models.CharField(blank=False, max_length=50,verbose_name=u"名称")
+    specification = models.CharField(blank=True,max_length=50,verbose_name=u"规格")
     count = models.FloatField(verbose_name=u'入库数量',blank=False)
+    unit = models.CharField(blank=True,max_length=50,verbose_name=u"单位")
     factory = models.CharField(blank=True, null=True, max_length=100,verbose_name=u"厂家")
     supplier = models.CharField(blank=True, null=True, max_length=100,verbose_name=u"供货商")
     remark = models.CharField(blank=True, null=True,default="", max_length=100,verbose_name=u"备注")
@@ -467,13 +468,12 @@ class AuxiliaryToolStoreList(models.Model):
     entry_item = models.ForeignKey(AuxiliaryToolEntryItems,verbose_name=u"辅助工具入库材料")
     inventory_count = models.FloatField(verbose_name=u"数量",blank=True,null=True)
     item_status = models.IntegerField(choices=WELD_ITEM_STATUS_CHOICES,default=0,verbose_name=u"材料状态",blank=False)
-    entry_time=models.DateField(verbose_name=u'入库时间',blank=True,null=True)
     class Meta:
         verbose_name=u'辅助库存材料'
         verbose_name_plural=u'辅助库存材料'
 
     def __unicode__(self):
-        return "%s(%s)" % (self.entry_item.name,self.entry_time)
+        return "%s" % self.entry_item.name
 
     def save(self,*args,**kwargs):
         if self.inventory_count > 0 and self.item_status == ITEM_STATUS_SPENT:
@@ -489,8 +489,8 @@ class AuxiliaryToolApplyCard(models.Model):
     apply_storelist=models.ForeignKey(AuxiliaryToolStoreList,verbose_name=u'申请材料',blank=False,null=True,related_name="auap_apply_storelist")
     apply_quantity=models.IntegerField(verbose_name=u'申请数量',blank=False)
     actual_storelist = models.ForeignKey(AuxiliaryToolStoreList,verbose_name=u'实发材料',null=True,blank=True,related_name="auap_actual_storelist")
-    actual_quantity=models.IntegerField(verbose_name=u'实发数量',default=0,blank=False)
-    status=models.IntegerField(verbose_name=u'领用单状态',choices=AUXILIARY_TOOL_APPLY_CARD_STATUS,default=AUXILIARY_TOOL_APPLY_CARD_CREATED)
+    actual_quantity=models.IntegerField(verbose_name=u'实发数量',null=True,blank=True)
+    status=models.IntegerField(verbose_name=u'领用单状态',choices=AUXILIARY_TOOL_APPLY_CARD_STATUS,default=AUXILIARY_TOOL_APPLY_CARD_APPLICANT)
     applicant=models.ForeignKey(User,verbose_name=u'领料',blank=True,null=True,related_name="at_applicants")
     auditor = models.ForeignKey(User,verbose_name=u"主管",null=True,blank=True,related_name="at_auditor")
     keeper=models.ForeignKey(User,verbose_name=u'发料',blank=True,null=True,related_name="at_keeper")

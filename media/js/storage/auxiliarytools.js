@@ -21,11 +21,11 @@ $(document).ready(function(){
         Dajaxice.storage.auEntryUpdate(updateCallback, {"aid":aid, "remark":remark});
     });
     $(document).on("click", "span[name='autool']", function(){
-       var role = $(this).attr("role");
-       var eid = $("#items_table").attr("eid");
-       if(confirm("请确认所有内容已经填写完毕，签字后不能修改！")){
-           Dajaxice.storage.auToolEntryConfirm(entryConfirmCallback, {"role":role, "eid":eid});
-       }
+        var role = $(this).attr("role");
+        var eid = $("#items_table").attr("eid");
+        if(confirm("请确认所有内容已经填写完毕，签字后不能修改！")){
+            Dajaxice.storage.auToolEntryConfirm(entryConfirmCallback, {"role":role, "eid":eid});
+        }
     });
     $("#inventory_form").submit(function(e){
         e.preventDefault();
@@ -46,11 +46,11 @@ $(document).ready(function(){
             alert(msg);
             msg_type=msg.substr(0,9);
             if(msg_type=="[SUCCESS]")
-            {
-                $("#confirm").attr('disabled','disabled');
-                $("#confirm").hide();
-                $("#confirm").after('<a type="button" href="/storage/auxiliarytools/entrylist" class="btn btn-primary">返回</a>');
-            }
+                {
+                    $("#confirm").attr('disabled','disabled');
+                    $("#confirm").hide();
+                    $("#confirm").after('<a type="button" href="/storage/auxiliarytools/entrylist" class="btn btn-primary">返回</a>');
+                }
         },
         {
             'data':data,
@@ -63,11 +63,11 @@ $(document).ready(function(){
             alert(msg);
             msg_type=msg.substr(0,9);
             if(msg_type=="[SUCCESS]")
-            {
-                $("#confirm").attr('disabled','disabled');
-                $("#confirm").hide();
-                $("#confirm").after('<a type="button" href="/storage/auxiliarytools/applylist" class="btn btn-primary">返回</a>');
-            }
+                {
+                    $("#confirm").attr('disabled','disabled');
+                    $("#confirm").hide();
+                    $("#confirm").after('<a type="button" href="/storage/auxiliarytools/applylist" class="btn btn-primary">返回</a>');
+                }
         },
         {
             'data':data,
@@ -98,8 +98,41 @@ $(document).ready(function(){
         {
             'data':data,
         });
-    });  
+    });
+    $(document).on("dblclick","#applycard_table",function(){
+        $("#myModal").modal('show');
+    });
+    $(document).on("click","#search_material_btn",function(){
+        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"auxiliarytool",});
+    })
+    $(document).on("click","#apply_item_save",function(){
+        var select_item = $("input[type='radio']:checked").val();
+        if(select_item != null){
+            var aid = $("#applycard_table").attr("aid");
+            Dajaxice.storage.auxiliaryToolMaterialApply(auxiliarytoolapply_callback,{"select_item":select_item,"aid":aid,"form":$("#apply_form").serialize()});
+        }
+        else{
+            alert("请选择领用材料");
+        }
+    })
+    $(document).on("click", "span[name='autool_apply']", function(){
+        var role = $(this).attr("role");
+        var aid = $(this).attr("aid");
+        if(confirm("请确认所有内容已经填写完毕，签字后不能修改！")){
+            Dajaxice.storage.auToolApplyCardConfirm(applycardConfirm_callback, {"role":role, "aid":aid});
+        }
+    });
 });
+function auxiliarytoolapply_callback(data){
+    $("#apply_form").html(data.form_html);
+    $("#applycard").html(data.card_html);
+    alert(data.message);
+}
+function applycardConfirm_callback(data){
+    $("#applycard").html(data.card_html);
+    alert(data.message);
+}
+
 function SetValue(obj,model,measurement_unit,unit_price)
 {
     model=model||'未选择';
@@ -113,20 +146,22 @@ function SetValue(obj,model,measurement_unit,unit_price)
     var value=target.children('td:nth-child(5)').children('input').val();
     target.children('td:nth-child(7)').html(value*unit_price);
 }
-
+function search_material_callback(data){
+    $("#store_items_table").html(data.html); 
+}
 $('select').change(function(){
     var obj=$(this);
     var id=obj.val();
     if(id)
-    {
-        Dajaxice.storage.Auxiliary_Detail_Query(function(data){
-            SetValue(obj,data['model'],data['measurement_unit'],data['unit_price']);
-        },
         {
-            'id':id,
-        });
-    }
-    SetValue(obj);
+            Dajaxice.storage.Auxiliary_Detail_Query(function(data){
+                SetValue(obj,data['model'],data['measurement_unit'],data['unit_price']);
+            },
+            {
+                'id':id,
+            });
+        }
+        SetValue(obj);
 })
 
 $('input[type=text]').keyup(function(){
@@ -144,6 +179,6 @@ function updateCallback(data){
 }
 
 function entryConfirmCallback(data){
+    $("#auxiliarytools_entry").html(data.html);
     alert(data.message);
-    $("#items_table").html(data.html);
 }

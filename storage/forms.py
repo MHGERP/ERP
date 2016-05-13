@@ -287,7 +287,7 @@ class AuxiliaryToolsApplyCardSearchForm(forms.Form):
     create_time__gte=forms.DateField(label=u'起始日期',required=False,widget=forms.TextInput(attrs={'class':'form-control','date_picker':'true'}))
     create_time__lte=forms.DateField(label=u'终止日期',required=False,widget=forms.TextInput(attrs={'class':'form-control','date_picker':'true'}))
     apply_storelist__entry_item__name =forms.CharField(label=u'申请物资',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
-    department=forms.CharField(label=u'领用人',required=False,widget=forms.TextInput(attrs={'class':'form-control',}))
+    department=forms.CharField(label=u'领用单位',required=False,widget=forms.TextInput(attrs={'class':'form-control',}))
     applycard_code=forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
 
 
@@ -577,3 +577,24 @@ class OutsideRefundSearchForm(forms.Form):
         set_form_input_width(self.fields)
         workorder_set = WorkOrder.objects.all()
         self.fields["work_order"].choices = getChoiceList(workorder_set,"order_index")
+
+class AuxiliaryToolMaterialSearchForm(forms.Form):
+    entry_item__name = forms.CharField(label=u"名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__specification = forms.CharField(label=u"规格",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__factory = forms.CharField(label=u"厂家",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__supplier = forms.CharField(label=u"供货商",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    def __init__(self,*args,**kwargs):
+        super(AuxiliaryToolMaterialSearchForm,self).__init__(*args,**kwargs) 
+        set_form_input_width(self.fields)
+
+class AuxiliaryToolsApplyItemForm(ModelForm):
+    class Meta:
+        model = AuxiliaryToolApplyCard
+        fields = ("actual_quantity",)
+        widgets =  {
+            "actual_quantity":forms.TextInput(attrs={"class":"span2","style":"width:150px;"}),
+        }
+    def __init__(self,*args,**kwargs):
+        super(AuxiliaryToolsApplyItemForm,self).__init__(*args,**kwargs)
+        self.fields["actual_quantity"].required = True
+
