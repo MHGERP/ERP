@@ -3,21 +3,16 @@
         <th>入库单编号</th>
         <th>日期</th>
         <th>采购员</th>
-        <th>检查员</th>
         <th>操作</th>
     </thead>
     </tbody>
         {% for entry in entry_set %}
         <tr>
             <td>{{entry.entry_code}}</td>
-            <td>{{entry.entry_time|date:"Y年m月d日"}}</td>
+            <td>{{entry.create_time|date:"Y年m月d日"}}</td>
             <td>{{entry.purchaser.userinfo}}</td>
-            <td>{{entry.inspector.userinfo}}</td>
-            <td>{% ifequal entry.entry_status  STORAGESTATUS_PURCHASER %}
-                    <a class="btn btn-warning" href="/purchasing/{{entryurl}}/{{entry_type}}/{{entry.id}}/{{entry.steel_type}}">待处理</a>
-                {% else %}
-                    <a class="btn" href="/purchasing/{{entryurl}}/{{entry_type}}/{{entry.id}}/{{entry.steel_type}}">查看</a>
-                {% endifequal %}
+            <td>
+            <a class="btn btn-warning" href="/purchasing/arrivalInspectionConfirm/{{entry_type}}/{{entry.id}}">待处理</a>
             </td>
         </tr>
         {% endfor %}

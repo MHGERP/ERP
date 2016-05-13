@@ -226,69 +226,29 @@ def contractFinanceViews(request):
     }
     return render(request,"purchasing/contract_finance.html",context)
 
-def arrivalInspectionConfirmViews(request,entry_typeid,eid,steel_typeid):
+def arrivalInspectionConfirmViews(request,entry_typeid,eid):
     """
     Liu Guochao
     """
-    entry = []
-    items = []
     entry_typeid = int(entry_typeid)
     if entry_typeid == 1:
-        message = weldMaterialEntryConfirm(request,eid,entry_typeid)
+        entry=WeldMaterialEntry.objects.get(pk=eid)
+        items=WeldMaterialEntryItems.objects.filter(entry=entry)
     elif entry_typeid == 2:
-        message = steelMaterialEntryConfirm(request,eid,steel_typeid,entry_typeid)
+        entry=SteelMaterialEntry.objects.get(pk=eid)
+        items=SteelMaterialEntryItems.filter(entry=entry)
     elif entry_typeid == 3:
-        message = auxiliaryToolEntryConfirm(request,eid,entry_typeid)
+        entry=AuxiliaryToolEntry.objects.get(pk=eid)
+        items=AuxiliaryToolEntryItems.objects.filter(entry=entry)
     elif entry_typeid == 4:
-        message = outsideEntryConfirm(request,eid,entry_typeid)
-    return message
-def weldMaterialEntryConfirm(request,eid,entry_typeid):
-    entry = WeldMaterialEntry.objects.get(id = eid)
-    items = WeldMaterialEntryItems.objects.filter(entry = entry)
-    context = {
-            "entry":entry,
-            "entry_set":items,
-            "entry_type":entry_typeid,
+        entry=OutsideStandardEntry.objects.get(pk=eid)
+        items=OutsideStandardItems.objects.filter(entry=entry)
+    context={
+        "entry":entry,
+        "items":items,
+        "entry_type":entry_typeid
     }
-    return render(request,"purchasing/widgets/purchasing_arrival_confirm_weld.html",context)
-def steelMaterialEntryConfirm(request,eid,steel_typeid,entry_typeid):
-    entry = SteelMaterialPurchasingEntry.objects.get(id = eid)
-    entry.entry_code = entry.form_code
-    steel_typeid = int(steel_typeid)
-    if steel_typeid == 1:
-        items = entry.barsteelmaterialpurchasingentry_set.all()
-    elif steel_typeid == 0:
-        items = entry.boardsteelmaterialpurchasingentry_set.all()
-    context = {
-            "entry":entry,
-            "entry_set":items,
-            "entry_type":entry_typeid,
-    }
-    print steel_typeid
-    if steel_typeid:
-        return render(request,"purchasing/widgets/purchasing_arrival_confirm_bar.html",context)
-    else:
-        return render(request,"purchasing/widgets/purchasing_arrival_confirm_board.html",context)
-def auxiliaryToolEntryConfirm(request,eid,entry_typeid):
-    entry = AuxiliaryToolEntryCardList.objects.get(id = eid)
-    entry.entry_code = entry.index
-    entry.entry_status = entry.status
-    items = AuxiliaryToolEntryCard.objects.filter(card_list = entry)
-    context = {
-            "entry":entry,
-            "sub_objects":items,
-            "entry_type":entry_typeid,
-    }
-    return render(request,"purchasing/widgets/purchasing_arrival_confirm_auxi.html",context)
-def outsideEntryConfirm(request,eid,entry_typeid):
-    entry = OutsideStandardEntry.objects.get(id = eid)
-    items = OutsideStandardItem.objects.filter(entry = entry)
-    context = {
-            "entry":entry,
-            "entry_set":items,
-            "entry_type":entry_typeid,
-    }
-    return render(request,"purchasing/widgets/purchasing_arrival_confirm_outside.html",context)
+    return render(request,"purchasing/purchasing_arrival_confirm.html",context)
 
 def inventoryTableViews(request):
     order_index = request.GET.get("order_index")

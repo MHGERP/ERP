@@ -20,3 +20,10 @@ function entry_inspection_confirm_callback(data){
         alert("入库单确认失败");
     }
 }
+$(document).on("dblclick","tr[name='entry_item_tr']",function(){
+    mid = $(this).attr("id");
+    entrytype=$("#entrybody").attr("entrytype");
+   // Dajaxice.storage.getOutsideEntryItemFormInfo(getforminfo_callback,{"mid":mid});
+    $("#myModal").modal('show');
+                                
+});
