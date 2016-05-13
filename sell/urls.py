@@ -35,4 +35,8 @@ urlpatterns=patterns('',
         r'^productions_audit$',
         sell_views.productions_audit, 
     ),
+    url (
+        r'^workorderGenerate$',
+        sell_views.workorderGenerate,
+    ),
 )

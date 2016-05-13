@@ -483,9 +483,10 @@ def AuxiliaryToolsApplyListView(request):
     return: NULL
     """
     context={}
-    apply_cards=AuxiliaryToolApplyCard.objects.all().order_by('-create_time')
+    apply_cards=AuxiliaryToolApplyCard.objects.filter(status__gte = AUXILIARY_TOOL_APPLY_CARD_KEEPER ).order_by('-create_time')
     context['search_form']=AuxiliaryToolsApplyCardSearchForm()
     context['apply_cards']=apply_cards
+    context['default_status'] = AUXILIARY_TOOL_APPLY_CARD_KEEPER
     return render(request,'storage/auxiliarytools/auxiliarytoolsapply_list.html',context)
 
 
@@ -497,16 +498,15 @@ def AuxiliaryToolsApplyView(request):
     return: NULL
     """
     context={}
-    ins_index=int(request.GET['index']) 
-    ins=AuxiliaryToolApplyCard.objects.get(index=ins_index) if ins_index!=0 else None
-
-    if checkAuthority(STORAGE_KEEPER,request.user):
-        context['instance']=ins
-        context['storage_keeper']=True
-        context['apply_form']=AuxiliaryToolsCardCommitForm(instance=ins)
-    else:
-        context['storage_keeper']=False
-        context['apply_form']=AuxiliaryToolsCardApplyForm()
+    id=int(request.GET['id']) 
+    applycard=AuxiliaryToolApplyCard.objects.get(id=id)
+    search_material_form = AuxiliaryToolMaterialSearchForm()
+    context = {
+        "applycard":applycard,
+        "search_table_path":"storage/searchmaterial/store_auxiliarytool_items_table.html",
+        "search_material_form":search_material_form,
+        "apply_form":AuxiliaryToolsApplyItemForm(instance=applycard),
+    }
 
     return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
 

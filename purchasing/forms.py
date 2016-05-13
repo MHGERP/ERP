@@ -94,6 +94,11 @@ class ProcessFollowingForm(ModelForm):
             "following_feedback":forms.Textarea(attrs={"rows":5})
         }
 
+class QualityCheckAddForm(ModelForm):
+    class Meta:
+        model = MaterielCopy
+        fields = ('batch_number',"quality_number" )
+
 # class MaterielChoiceForm(forms.Form):
 #     materiel_chice_select = forms.ChoiceField(choices=MATERIEL_CHOICE, required=True, label=u"材料选择", widget = forms.Select(attrs={"id" : "materiel_choice_select"}))
 
@@ -183,9 +188,8 @@ class OrderInfoForm(ModelForm):
 class MeterielExcecuteForm(ModelForm):
     class Meta:
         model = MaterielExecuteDetail
-        fields = {'batch_number','quota','part','oddments','remark',}
+        fields = {'quota','part','oddments','remark',}
         widgets = {
-            'batch_number':forms.TextInput(attrs={'class':'form-control','id':'batch_number'}),
             'quota':forms.TextInput(attrs={'class':'form-control','id':'quota'}),
             'part':forms.TextInput(attrs={'class':'form-control','id':'part'}),
             'oddments':forms.TextInput(attrs={'class':'form-control','id':'oddments'}),
@@ -214,8 +218,8 @@ class EntryTypeForm(forms.Form):
             ENTRYTYPE_BOARD=("entrytype_board",u"板材")
             ENTRYTYPE_BAR=("entrytrpe_bar",u"型材")
             STANDARD_OUTSIDEBUY=("standard_outsidebuy",u"标准件")
-            FORGING_OUTSIDEBUY=("forging",u"外协加工")
-            COOPERATION_OUTSIDEBUY=("cooperation_outsidebuy",u"锻件")
+            FORGING_OUTSIDEBUY=("forging",u"锻件")
+            COOPERATION_OUTSIDEBUY=("cooperation_outsidebuy",u"外协加工")
             WELDING=("welding",u"焊材")
             AUXILIARY_TOOL=("auxiliary",u"辅助工具")
             if bidform.order_form.order_mod == 0:

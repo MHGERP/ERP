@@ -573,11 +573,13 @@ def arrivalCheckViews(request,bid):
     is_show = BidForm.objects.filter(bid_id = bid , bid_status__part_status = BIDFORM_PART_STATUS_CHECK).count() > 0
     bidform=BidForm.objects.get(bid_id=bid)
     entrytypeform = EntryTypeForm(bidform=bidform)
+    quality_check_add_form=QualityCheckAddForm()
     context = {
         "cargo_set":cargo_set,
         "bidform":bidform,
         "is_show":is_show,
         "entrytype":entrytypeform,
+        "add_form":quality_check_add_form
     }
     return render(request,"purchasing/purchasing_arrivalcheck.html",context)
 

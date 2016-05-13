@@ -10,6 +10,7 @@ from django.db import transaction
 from django.contrib.auth.models import User
 from backend.utility import getContext
 from sell.models import *
+from const.models import *
 from users.models import Group
 
 def productionsView(request):
@@ -105,3 +106,9 @@ def productions_audit(request):
         
     }
     return render(request, "sell/product_audit.html", context)
+
+def workorderGenerate(request):
+    context = {
+        
+    }
+    return render(request, "sell/workorderGenerate.html", context)
