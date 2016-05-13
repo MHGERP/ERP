@@ -6,14 +6,38 @@
 <a href="#" class="current">生产任务计划时间</a>
 {% endblock %}
 {% block inner_content %}
+
+
+<link rel="stylesheet" href="{{ STATIC_URL }}style/man_hour_summarize.css" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}bootstrap-datepicker/css/bootstrap-datetimepicker.css" />
+<script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/production/task.js"></script>
+
 <div class="form-inline" style="padding:20px; margin-bottom:20px;">
     <form id="search_form">
-        {{ taskallocationform }}
-        <button class="btn btn-primary" type="button" onclick="task_allocation_search()">检索</button>
+        {{ taskplanform }}
+        <button class="btn btn-primary" type="button" onclick="task_plan_search()">检索</button>
     </form>
 </div>
 <div style="margin-top:20px" id="item_table">
-{% include "production/table/task_allocation_table.html"%}
+{% include "production/table/task_plan_table.html"%}
 </div>
+<div class="modal hide fade" id="task_plan_modal" style="width:15%;left:60%">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="modal_title">工序计划时间</h3>
+            </div>
+            <div class="modal-body" id="task_plan_table">
+                {% include "production/table/task_plantime_table.html" %} 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="task_plan_submit()">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="close">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

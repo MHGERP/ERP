@@ -483,9 +483,10 @@ def AuxiliaryToolsApplyListView(request):
     return: NULL
     """
     context={}
-    apply_cards=AuxiliaryToolApplyCard.objects.all().order_by('-create_time')
+    apply_cards=AuxiliaryToolApplyCard.objects.filter(status__gte = AUXILIARY_TOOL_APPLY_CARD_KEEPER ).order_by('-create_time')
     context['search_form']=AuxiliaryToolsApplyCardSearchForm()
     context['apply_cards']=apply_cards
+    context['default_status'] = AUXILIARY_TOOL_APPLY_CARD_KEEPER
     return render(request,'storage/auxiliarytools/auxiliarytoolsapply_list.html',context)
 
 
@@ -497,16 +498,15 @@ def AuxiliaryToolsApplyView(request):
     return: NULL
     """
     context={}
-    ins_index=int(request.GET['index']) 
-    ins=AuxiliaryToolApplyCard.objects.get(index=ins_index) if ins_index!=0 else None
-
-    if checkAuthority(STORAGE_KEEPER,request.user):
-        context['instance']=ins
-        context['storage_keeper']=True
-        context['apply_form']=AuxiliaryToolsCardCommitForm(instance=ins)
-    else:
-        context['storage_keeper']=False
-        context['apply_form']=AuxiliaryToolsCardApplyForm()
+    id=int(request.GET['id']) 
+    applycard=AuxiliaryToolApplyCard.objects.get(id=id)
+    search_material_form = AuxiliaryToolMaterialSearchForm()
+    context = {
+        "applycard":applycard,
+        "search_table_path":"storage/searchmaterial/store_auxiliarytool_items_table.html",
+        "search_material_form":search_material_form,
+        "apply_form":AuxiliaryToolsApplyItemForm(instance=applycard),
+    }
 
     return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
 
@@ -736,9 +736,6 @@ def StoreThreadViews(request):
     return render(request,"storage/storethread/storethread.html",context)
 
 def outsideApplyCardHomeViews(request):
-    #applyurl = "storage/outside/applycardconfirm"
-    #key_list = ["card_set","applyurl","APPLYSTATUS_END"]
-    #context = getStorageHomeContext(request,OutsideApplyCard,OutsideApplyCardSearchForm,STORAGESTATUS_KEEPER,applyurl,key_list,"date")
     applycard_set = OutsideApplyCard.objects.filter(status__gt = STORAGESTATUS_KEEPER)
     search_form = OutsideApplyCardSearchForm()
     context = {
@@ -828,3 +825,22 @@ def storeRoomManageViews(request):
         "new_room":new_room,
     }
     return render(request,"storage/basedata/storeroommanage.html", context)
+
+def outsideRefundHomeViews(request):
+    refund_cards = OutsideRefundCard.objects.exclude(status = STORAGESTATUS_REFUNDER)
+    search_form = OutsideRefundSearchForm()
+    context = {
+        "card_set":refund_cards,
+        "STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER,
+        "search_form":search_form,
+    }
+    return render(request,"storage/outside/outsiderefundhome.html", context)
+
+def outsideRefundConfirmViews(request,fid):
+    refundcard = OutsideRefundCard.objects.get(id=fid)
+    items = OutsideRefundCardItems.objects.filter(refundcard = refundcard)
+    context = {
+        "refundcard":refundcard,
+        "items":items,
+    }
+    return render(request,"storage/outside/refundcardconfirm.html", context)

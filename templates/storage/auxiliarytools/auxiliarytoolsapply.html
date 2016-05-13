@@ -10,7 +10,8 @@
 
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
-   <h3 style="text-align:center">辅助工具领用卡</h3>
+{% comment %}
+<h3 style="text-align:center">辅助工具领用卡</h3>
     <form id="detail_form" method="POST">
         {% csrf_token %}
         {% include 'storage/auxiliarytools/auxiliarytoolsapply_table.html' %}
@@ -19,5 +20,25 @@
     <button type="submit" id="confirm" class="btn btn-primary">确认</button>
     </div>
 </form>
+{% endcomment %}
+<div id="applycard">
+    {% include "storage/wordhtml/auxiliarytoolapplycard.html"%}
+</div>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width=0.7>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">添加</h3>
+    </div>
+    <div class="modal-body">
+        <form id="apply_form" action="" class="form-horizontal">
+            {% include "storage/auxiliarytools/auxiliarytoolsapplyform.html" %}
+        </form>
+        {% include "storage/widgets/search_material.html" %}
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" id="apply_item_save">保存</button>
+    </div>
+</div>
 {% endblock%}
 

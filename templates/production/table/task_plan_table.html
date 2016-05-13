@@ -1,0 +1,33 @@
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <th>工作票号</th>
+        <th>工作令</th>
+        <th>工序编号</th>
+        <th>工序</th>
+        <th>工时</th>
+        <th>计划开始时间</th>
+        <th>计划完成时间</th>
+        <th>操作</th>
+    </thead>
+    <tbody>
+        {% for item in items_list %}
+        <tr>
+            <td>{{item.sub_materiel_belong.materiel_belong.index}}</td>
+            <td>{{item.sub_materiel_belong.sub_order}}</td>
+            <td>{{item.process_id}}</td>
+            <td>{{item.processname}}</td>
+            <td>{{item.work_hour}}</td>
+            <td>{{item.plan_startdate|date:"Y-m-d"}}</td>
+            <td>{{item.plan_enddate|date:"Y-m-d"}}</td>
+            <td>
+                {% if item.plan_startdate = None %}
+                    <button class="btn btn-primary" type="button" onclick="task_plan_change({{item.id}})">添加计划时间</button>
+                {% else %}
+                <button class="btn btn-primary" type="button" onclick="task_plan_change({{item.id}})">修改计划时间</button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

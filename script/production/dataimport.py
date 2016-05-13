@@ -28,6 +28,9 @@ PRODUCTIONGROUP_PROCESS = (
         ("Z",  "z"),
         ("H",  "h"),
         ("L",  "l"),
+        ("R",  "r"),
+        ("D2", "182"),
+        ("G5", "123"),
 )
 
 
@@ -54,5 +57,5 @@ def importProcessDetail():
         item.save()
     print "help"
 
-importProcessDetail()
+importProductionWorkGroup()
 print "hello"

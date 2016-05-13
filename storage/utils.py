@@ -239,7 +239,8 @@ def getDbMap(sorce):
     weld_tuple = (WeldStoreList,WeldStorageSearchForm,WeldingMaterialApplyCard)
     steel_tuple = (SteelMaterialStoreList,SteelMaterialSearchForm,SteelMaterialApplyCard)
     outside_tuple = (OutsideStorageList,OutsideMaterialSearchForm,OutsideApplyCard)
-    DB_MAP = {"weld":weld_tuple,"steel":steel_tuple,"outside":outside_tuple,"auxiliary_tool":steel_tuple}
+    auxiliarytool_tuple = (AuxiliaryToolStoreList,AuxiliaryToolMaterialSearchForm,AuxiliaryToolApplyCard)
+    DB_MAP = {"weld":weld_tuple,"steel":steel_tuple,"outside":outside_tuple,"auxiliarytool":auxiliarytool_tuple}
     return DB_MAP
 
 def modify_weld_item_status(items):
@@ -265,7 +266,7 @@ def createAuxiliaryToolStoreList(entry):
     辅助工具入库单台账更新
     """
     for item in entry.auxiliarytoolentryitems_set.all():
-        AuxiliaryToolStoreList(entry_item = item , inventory_count = item.count,entry_time=entry.create_time).save()
+        AuxiliaryToolStoreList(entry_item = item , inventory_count = item.count).save()
 
 def createSteelMaterialStoreList(entry):
     for item in entry.steelmaterialentryitems_set.all():

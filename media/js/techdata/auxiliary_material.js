@@ -63,7 +63,9 @@ function getAuxiliaryCallBack(data) {
 $("#id_goto_next").click(function() {
     var cur_iid = $("#card_modal").attr("iid");
     var row = $("tr[iid='" + cur_iid + "']");
+    console.log(row);
     var row_next = row.next(".tr_materiel");
+    console.log(row_next);
     if(!row_next.html()) alert("本条为最后一条！");
     else fill(row_next.attr("iid"));
 });
@@ -83,10 +85,12 @@ $(document).on("click", "#id_save", function() {
 function updateAuxiliaryCallBack(data){
     if(data=="ok"){
         alert("保存成功");
+        refresh();
     }
     else{
         alert("保存失败");
     }
+
 }
 
 

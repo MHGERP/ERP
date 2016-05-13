@@ -1,0 +1,29 @@
+<table class="table table-bordered">
+    <thead>
+        <th>工作令</th>
+        <th>退库单编号</th>
+        <th>日期</th>
+        <th>退库人</th>
+        <th>领用单位</th>
+        <th>操作</th>
+    </thead>
+    </tbody>
+        {% for refund in card_set %}
+        <tr>
+            <td>{{refund.work_order}}</td>
+            <td>{{refund.refundcard_code}}</td>
+            <td>{{refund.create_time|date:"Y年m月d日"}}</td>
+            <td>{{refund.refunder.userinfo}}</td>
+            <td>{{refund.applycard.department}}</td>
+            <td>
+                {% ifequal refund.status  STORAGESTATUS_KEEPER %}
+                <a class="btn btn-warning" href="/storage/outside/refundconfirm/{{refund.id}}">待处理</a>
+                {% else %}
+                <a class="btn" href="/storage/outside/refundconfirm/{{refund.id}}">查看</a>
+                {% endifequal %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+

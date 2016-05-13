@@ -13,10 +13,17 @@ $("#card_open").click(function() {
 });
 function refresh() {
     var iid = $("#div_card").attr("iid")
-    Dajaxice.techdata.getTransferCard(refreshCallBack, {"iid": iid});
+    var page = $("#paginator_div").attr("page");
+    getCard(iid, page);
 }
-function refreshCallBack(data) {
-    $("#div_card").html(data);
+
+function getCard(iid, page) {
+    Dajaxice.techdata.getTransferCard(function(data) {
+        $("#div_card").html(data);
+    }, {
+        "iid": iid,
+        "page": page,
+    });
 }
 
 $(document).on("dblclick", ".info_area", function() {
@@ -26,6 +33,24 @@ $(document).on("dblclick", ".info_area", function() {
     }, {
         "iid": $("#div_card").attr("iid"),
     });
+});
+
+$(document).on("click", ".turnpage", function() {
+    var page = $("#paginator_div").attr("page");
+    var total_page = $("#paginator_div").attr("total_page");
+    var iid = $("#div_card").attr("iid")
+    if($(this).hasClass("next-page")) {
+        if(page == total_page) alert("已到最后一页");
+        else {
+            getCard(iid, parseInt(page) + 1);
+        }
+    }
+    else {
+        if(page == "1") alert("已到第一页");
+        else {
+            getCard(iid, parseInt(page) - 1);
+        }
+    }
 });
 $("#btn_save_info").click(function() {
     Dajaxice.techdata.saveTransferCardInfoForm(function(data) {
@@ -43,6 +68,63 @@ $("#btn_save_info").click(function() {
     })
 });
 
+$(document).on("dblclick", ".process_area", function() {
+    Dajaxice.techdata.getTransferCardProcessList(function(data) {
+        $("#process_table").html(data);
+        $("#process_modal").modal("show");
+    }, {
+        "iid": $("#div_card").attr("iid"),
+    });
+});
+$("#btn_save_process").click(function() {
+    var arr = new Array();
+    $(".tr_process").each(function() {
+        var pid = $(this).attr("pid");
+        var index = $(this).find("input:eq(0)").val();
+        var name = $(this).find("input:eq(1)").val();
+        var detail = $(this).find("textarea:eq(0)").val();
+        arr.push({
+            "pid": pid,
+            "index": index,
+            "name": name,
+            "detail": detail,
+        });
+    });
+    Dajaxice.techdata.saveTransferCardProcess(function(data) {
+        alert("保存成功！");
+        refresh();
+    }, {
+        "arr": arr,
+    });
+});
+$("#btn_push").click(function() {
+    var iid = $("#div_card").attr("iid");   
+    Dajaxice.techdata.addTransferCardProcess(function(data) {
+        alert("添加成功！");
+        $("#process_table").html(data);
+    }, {
+        "iid": iid,
+    })
+});
+$(document).on("click", ".btn_remove_process", function() {
+    var pid = $(this).parent().parent().attr("pid");
+    Dajaxice.techdata.removeTransferCardProcess(function(data) {
+        alert("删除成功！");
+    }, {
+        "pid": pid,
+    });
+    $(this).parent().parent().remove();
+});
+$("#btn_import_template").click(function() {
+    var iid = $("#div_card").attr("iid");   
+    Dajaxice.techdata.importTransferCardProcessTemplate(function(data) {
+        alert("导入成功！");
+        $("#process_table").html(data);
+        refresh();
+    }, {
+        "iid": iid,
+    })
+});
 $(document).on("dblclick", ".pic_area", function() {
     $("#iid_input").val($("#div_card").attr("iid"));
     $("#pic_modal").modal("show");
@@ -54,7 +136,7 @@ $("#btn_save_pic").click(function() {
         clearForm: true,
         resetForm: true,
         error: function(data) {
-            
+
         },
         success: function(data) {
             if(data.file_upload_error == 2) {
@@ -87,3 +169,21 @@ function markCallBack(data) {
         alert(data.warning);
     }
 }
+
+
+//for print test
+$(document).on("click", "#btn_print", function() {
+    var iid = $("#div_card").attr("iid")
+    var page = $("#paginator_div").attr("page");
+    Dajaxice.techdata.getTransferCard(function(data) {
+        var bodyHTML = window.document.body.innerHTML;
+        window.document.body.innerHTML = data;
+        window.print();
+        window.document.body.innerHTML = bodyHTML;
+    }, {
+        "iid": iid,
+        "page": page,
+        "is_print": true,
+    });
+    
+});

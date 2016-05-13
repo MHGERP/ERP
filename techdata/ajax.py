@@ -11,7 +11,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 
 from const import *
-from backend.utility import getContext
+from backend.utility import getContext, transferCardProcessPaginator
 from const.models import *
 from forms import MaterielForm
 
@@ -22,7 +22,7 @@ from const.utils import getMaterialQuerySet
 from techdata.utility import batchDecentialization, processDetailGenerate
 
 from purchasing.models import MaterielExecute, MaterielExecuteDetail
-import datetime
+import datetime, re
 
 
 def markGenerateFactory(order, inventory_type):
@@ -673,19 +673,21 @@ def saveWeldQuota(request, id_work_order):
 
     return "ok"
 @dajaxice_register
-def updateWeldQuota(request, iid,categories,weld_material,size,stardard,quota,remark):
+def updateWeldQuota(request,form,work_order,iid):
     """
     MH Chen
     """
-    weld_quota = WeldQuota.objects.get(id = iid)
-    weld_quota.categories = categories
-    weld_quota.weld_material = Material.objects.get(id = weld_material)
-    weld_quota.size = size
-    weld_quota.stardard = stardard
-    weld_quota.quota = quota
-    weld_quota.remark = remark
-    weld_quota.save()
-    return "ok"
+    print form
+    order = WorkOrder.objects.get(id = work_order)
+    quota_form = WeldQuotaForm(deserialize_form(form),instance = WeldQuota.objects.get(id = iid))
+    print form
+    if quota_form.is_valid():
+        quota = quota_form.save(commit = False)
+        quota.order = order
+        quota.save()
+        return  "ok"
+    else:
+        return "fail"
 
 @dajaxice_register
 def deleteWeldQuota(request,did):
@@ -919,8 +921,9 @@ def createTransferCard(request, iid, card_type):
     mark = TransferCardMark(card = card)
     mark.save()
 
+
 @dajaxice_register
-def getTransferCard(request, iid):
+def getTransferCard(request, iid, page = "1", is_print = False):
     """
     JunHU
     """
@@ -932,12 +935,80 @@ def getTransferCard(request, iid):
         "MARK_REVIEW": MARK_REVIEW,
         "MARK_PROOFREAD": MARK_PROOFREAD,
         "MARK_APPROVE": MARK_APPROVE,
+        "is_print": is_print,
     }
-
     card = TransferCard.objects.get(materiel_belong = item)
     context["card"] = card
+    process_list = TransferCardProcess.objects.filter(card_belong = card)
+    page = int(page)
+    total_page, process_list = transferCardProcessPaginator(process_list, page)
+    context["total_page"] = total_page
+    context["current_page"] = page
+    context["process_list"] = process_list
     html = render_to_string(CARD_TYPE_TO_HTML[card.card_type], context)
     return html
+
+@dajaxice_register
+def getTransferCardProcessList(request, iid):
+    """
+    JunHU
+    """
+    card = TransferCard.objects.get(materiel_belong__id = iid)
+    process_list = TransferCardProcess.objects.filter(card_belong = card)
+    html = render_to_string("techdata/widgets/transfercard_process_list.html", {"process_list": process_list})
+    return html
+
+@dajaxice_register
+def importTransferCardProcessTemplate(request, iid):
+    """
+    JunHU
+    """
+    card = TransferCard.objects.get(materiel_belong__id = iid)
+    card.transfercardprocess_set.all().delete()
+    
+    process_list = []
+    template = {
+        CYLIDER_TRANSFER_CARD: cyliderProcessTemplate,
+        CAP_TRANSFER_CARD: capProcessTemplate,
+    }[card.card_type]
+
+    for item in template:
+        process_list.append(TransferCardProcess(card_belong = card, index = item["index"], name = item["name"], detail = item["detail"]))
+
+    TransferCardProcess.objects.bulk_create(process_list)
+    html = render_to_string("techdata/widgets/transfercard_process_list.html", {"process_list": process_list})
+    return html
+   
+@dajaxice_register
+def addTransferCardProcess(request, iid):
+    """
+    JunHU
+    """
+    card = TransferCard.objects.get(materiel_belong__id = iid)
+    TransferCardProcess(card_belong = card).save()
+    process_list = TransferCardProcess.objects.filter(card_belong = card)
+    html = render_to_string("techdata/widgets/transfercard_process_list.html", {"process_list": process_list})
+    return html
+
+@dajaxice_register
+def saveTransferCardProcess(request, arr):
+    """
+    JunHU
+    """
+    for item in arr:
+        process = TransferCardProcess.objects.get(id = item["pid"])
+        process.index = item["index"]
+        process.name = item["name"]
+        process.detail = item["detail"]
+        process.save()
+
+@dajaxice_register
+def removeTransferCardProcess(request, pid):
+    """
+    JunHU
+    """
+    process = TransferCardProcess.objects.get(id = pid)
+    process.delete()
 
 @dajaxice_register
 def getTransferCardInfoForm(request, iid):
@@ -975,6 +1046,9 @@ def transferCardMark(request, iid, step):
     context = {}
     if step == MARK_WRITE:
         card = TransferCard.objects.get(materiel_belong = item)
+        card.transfercardmark.writer = request.user
+        card.transfercardmark.write_date = datetime.datetime.today()
+        card.transfercardmark.save()
         context = {
             "ret": True,
             "file_index": unicode(card),
@@ -983,7 +1057,7 @@ def transferCardMark(request, iid, step):
         }
     elif step == MARK_PROOFREAD:
         card = TransferCard.objects.get(materiel_belong = item)
-        if cards.transfercardmark.writer == None:
+        if card.transfercardmark.writer == None:
             context = {
                 "ret": False,
                 "warning": u"该流转卡还未完成编制",
@@ -1000,7 +1074,7 @@ def transferCardMark(request, iid, step):
         }
     elif step == MARK_REVIEW:
         card = TransferCard.objects.get(materiel_belong = item)
-        if cards.transfercardmark.proofreader == None:
+        if card.transfercardmark.proofreader == None:
             context = {
                 "ret": False,
                 "warning": u"该流转卡还未完成校对",
@@ -1017,7 +1091,7 @@ def transferCardMark(request, iid, step):
         }
     elif step == MARK_APPROVE:
         card = TransferCard.objects.get(materiel_belong = item)
-        if cards.transfercardmark.reviewer == None:
+        if card.transfercardmark.reviewer == None:
             context = {
                 "ret": False,
                 "warning": u"该流转卡还未完成审核",

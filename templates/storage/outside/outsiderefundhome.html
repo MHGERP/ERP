@@ -1,0 +1,26 @@
+{% extends "storage/base/outsidebase.html" %}
+{% block title %}
+<h1>外购件退库管理</h1>
+{% endblock%}
+
+{% block sub_sec %}
+<a href="/storage/outsidehome" class="current">外购件退库管理</a>
+{% endblock %}
+{% block inner_content %}
+<div>
+<h3>外购件退库单</h3>
+<form class="form-inline" id="search_form">
+    {% csrf_token %}
+    {% for field in search_form %}
+    {{field.label}}
+    {{field}}
+    {% endfor %}
+    <button type="button" class="btn btn-success" id="search_btn" role="refund">检索</button> 
+</form>
+<br/>
+<div id="card_table" style="width:80%;">
+{% include "storage/widgets/outsiderefundhometable.html"%}
+</div>
+</div>
+
+{% endblock %}

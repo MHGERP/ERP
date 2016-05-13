@@ -21,6 +21,8 @@ class WorkOrder(models.Model):
         return self.order_index[2:]
     def __unicode__(self):
         return self.order_index
+    def getSellType(self):
+        return self.get_sell_type_display
 
 class SubWorkOrder(models.Model):
     order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
