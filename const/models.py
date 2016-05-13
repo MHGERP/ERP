@@ -15,8 +15,10 @@ class WorkOrder(models.Model):
 
     def save(self, *args, **kwargs):
         super(WorkOrder, self).save(*args, **kwargs)
+        if self.count == "1":
+            SubWorkOrder(order = self, index = "1",name = self.order_index).save()
         for i in xrange(int(self.count)):
-            SubWorkOrder(order = self, index = str(i + 1)).save()
+            SubWorkOrder(order = self, index = str(i + 1),name=self.order_index+"-"+str(i+1)).save()
     def suffix(self):
         return self.order_index[2:]
     def __unicode__(self):
@@ -25,6 +27,7 @@ class WorkOrder(models.Model):
 class SubWorkOrder(models.Model):
     order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
     index = models.CharField(max_length = 100, verbose_name = "序号")
+    name = models.CharField(max_length = 100, verbose_name = "工作令名")
     class Meta:
         verbose_name = u"子工作令"
         verbose_name_plural = u"子工作令"

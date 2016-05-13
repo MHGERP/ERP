@@ -25,7 +25,7 @@ def checkAuthority(authority,user):
     """
     return getUserByAuthority(authority).filter(id = user.id).count() > 0 
 
-def getChoiceList(obj_set,field):
+def getChoiceList(obj_set,field=None):
     """
     author: Shen Lian
     func:   get form choice through model set
@@ -33,8 +33,13 @@ def getChoiceList(obj_set,field):
     return: model tuple 
     """
     obj_list = [("-1","------")]
+
     for obj in obj_set:
-        obj_list.append((obj.id,getattr(obj,field)))
+        if field == None:
+            show_value = obj.__unicode__()
+        else:
+            show_value = getattr(obj,field)
+        obj_list.append((obj.id,show_value))
     return tuple(obj_list)
 
 def getDistinctSet(_Model,_FModel,field,**kwargs):
