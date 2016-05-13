@@ -9,17 +9,25 @@ function search_purchasing_callback(data){
     $("#following_table").html(data.html);
 }
 
-var btn;
+var btn,aid;
 
 $("table[name='confirm']").find("button").live("click",function(){
     var cid=$(this).attr("cid");
-    var aid=$(this).parents("tr").attr("aid");
     btn = $(this);
+    aid=$(this).parents("tr").attr("aid");
+    if(cid=="ins")return false;
     if(btn.attr("Class").replace(" ","") == "btn"){
     Dajaxice.purchasing.checkArrival(check_arrival_callback,{'aid':aid,'cid':cid});
     }
-})
-
+});
+$("#check_add_confirm").click(function(){
+    Dajaxice.purchasing.ArrivalCheckAdd(function(data){
+        Dajaxice.purchasing.checkArrival(check_arrival_callback,{'aid':aid,'cid':'ins'});
+    },{
+        'aid':aid,
+        'form':$("#add_form").serialize(true)
+    });
+});
 function check_arrival_callback(data){
     if(data.isOk){
         btn.removeClass().addClass("btn btn-success");

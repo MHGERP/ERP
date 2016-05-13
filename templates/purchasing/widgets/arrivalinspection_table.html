@@ -39,7 +39,7 @@
             {% endif%}
             <td><button cid="mat" class="btn {% if cargo.material_confirm %} btn-success {%endif%}">实&nbsp&nbsp物</button></td>
             <td><button cid="sof" class="btn {% if cargo.soft_confirm %} btn-success {%endif%}">软&nbsp&nbsp件</button></td>
-            <td><button cid="ins" class="btn {% if cargo.inspect_confirm %} btn-success {%endif%}">检&nbsp&nbsp验</button></td>
+            <td><button cid="ins" class="btn {% if cargo.inspect_confirm %} btn-success"{% else%}" href="#check_add_mark" data-toggle="modal"{%endif%}>检&nbsp&nbsp验</button></td>
         </tr>
         {% endfor %}
     </tbody>

@@ -62,6 +62,15 @@ def checkArrival(request,aid,cid):
     }
     return simplejson.dumps(data)
 
+@dajaxice_register
+def ArrivalCheckAdd(request,aid,form):
+    arrival_inspection=ArrivalInspection.objects.get(id=aid)
+    materiel=arrival_inspection.material
+    form=QualityCheckAddForm(deserialize_form(form),instance=materiel)
+    form.save()
+    return simplejson.dumps({})
+
+
 #@dajaxice_register
 #@transaction.commit_manually
 #def genEntry(request,bid,selected,entry_type):
