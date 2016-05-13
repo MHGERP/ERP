@@ -96,7 +96,6 @@ def genEntry(request,selected,bid,entry_type):
             steel_entry.save()
             SteelEntryItemAdd(steel_entry,selected)
         elif entry_type=="standard_outsidebuy":
-            print "######"
             outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=STANDARD_OUTSIDEBUY)
             outside_entry.save()
             OutsideEntryItemAdd(outside_entry,selected)
@@ -132,7 +131,7 @@ def genEntry(request,selected,bid,entry_type):
 #
 #    flag = flag and isAllChecked(bid,purchasingentry)
 #    if flag:
-#        transaction.commit()
+    transaction.commit()
 #        message = u"入库单生成成功"
 #    else:
 #        transaction.rollback()

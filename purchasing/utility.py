@@ -37,6 +37,8 @@ def BidNextStatus(bid_apply):
 def SteelEntryItemAdd(steel_entry,selected):
     for aid in selected:
         arrival_inspection=ArrivalInspection.objects.get(id=aid)
+        arrival_inspection.check_pass=True
+        arrival_inspection.save()
         item=arrival_inspection.material
         entry_item=SteelMaterialEntryItems(specification=item.specification, 
                                 batch_number=item.batch_number,
@@ -59,10 +61,13 @@ def SteelEntryItemAdd(steel_entry,selected):
 def OutsideEntryItemAdd(outside_entry,selected):
     for aid in selected:
         arrival_inspection=ArrivalInspection.objects.get(id=aid)
+        arrival_inspection.check_pass=True
+        arrival_inspection.save()
         item=arrival_inspection.material
         entry_item=OutsideStandardItems(entry=outside_entry,
                                         materiel=item,
                                         schematic_index=item.schematic_index,
+                                        specification=item.name,
                                         material_mark=item.material.name,
                                        material_code=item.quality_number,
                                        batch_number=item.batch_number,
@@ -78,11 +83,12 @@ def OutsideEntryItemAdd(outside_entry,selected):
 def WeldingEntryItemAdd(wilding_entry,selected):
     for aid in selected:
         arrival_inspection=ArrivalInspection.objects.get(id=aid)
+        arrival_inspection.check_pass=True
+        arrival_inspection.save()
         item=arrival_inspection.material
         entry_item=WeldMaterialEntryItems(material=item,
                    remark=item.remark,
-                    total_weight=item.total_weight,
-                    count=item.count,
+                    total_weight=item.total_weight_cal(),
                     entry=wilding_entry,
                     material_code=item.quality_number,
                     material_mark=item.material.name,
@@ -93,6 +99,8 @@ def WeldingEntryItemAdd(wilding_entry,selected):
 def AuxiliaryEntryItemAdd(auxiliary_entry,selected,accept_supplier):
     for aid in selected:
         arrival_inspection=ArrivalInspection.objects.get(id=aid)
+        arrival_inspection.check_pass=True
+        arrival_inspection.save()
         item=arrival_inspection.material
         entry_item=AuxiliaryToolEntryItems(name=item.name,
                                            specification=item.specification,
