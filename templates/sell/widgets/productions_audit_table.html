@@ -2,9 +2,10 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th rowspan="2">产品名称</th>
+                <th rowspan="2" style="height:50px;line-height:50px">产品名称</th>
                 <th colspan="6">招标文件</th>
-                <th rowspan="2">产品审核</th>
+                <!--th rowspan="2" style="height:50px;line-height:50px">产品审核</th-->
+                <th rowspan="2" style="height:50px;line-height:50px">生成工作令</th>
             </tr>
             <tr>
                 <th colspan="2">生产</th>
@@ -26,7 +27,7 @@
                     {% if item.manufacture_file_up.is_approval == -1 %}
                         <span class="btn btn-success bidfile_audit" group="manufacture">审核</span>
                     {% elif item.manufacture_file_up.is_approval == 0 %}
-                        <span>审核通过</span>
+                        <span>通过</span>
                     {% else %}
                         <span>未通过</span>
                     {% endif %}
@@ -43,7 +44,7 @@
                     {% if item.techdata_file_up.is_approval == -1 %}
                         <span class="btn btn-success bidfile_audit" group="techdata">审核</span>
                     {% elif item.techdata_file_up.is_approval == 0 %}
-                        <span>审核通过</span>
+                        <span>通过</span>
                     {% else %}
                         <span>未通过</span>
                     {% endif %}
@@ -60,15 +61,18 @@
                     {% if item.purchasing_file_up.is_approval == -1 %}
                         <span class="btn btn-success bidfile_audit" group="purchasing">审核</span>
                     {% elif item.purchasing_file_up.is_approval == 0 %}
-                        <span>审核通过</span>
+                        <span>通过</span>
                     {% else %}
                         <span>未通过</span>
                     {% endif %}
                     {% else %}<span>未上传文件</span>
                     {% endif %}
                 </td>
-                <td>
+                <!--td>
                     <span class="btn btn-primary product_audit">审核通过</span>
+                </td-->
+                <td>
+                    <span class="btn btn-success workorder_generate">生成工作令</span>
                 </td>
             </tr>
             {% endfor %}
