@@ -37,8 +37,6 @@ $(document).ready(function(){
         var role = $(this).attr('role');
         Dajaxice.storage.weldRefundConfirm(weldrefundconfirm_callback,{"rid":rid,"role":role})
     })
-        
-        
 })
 function entry_confirm(eid){
     

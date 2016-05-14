@@ -142,7 +142,7 @@ class WeldStoreList(models.Model):
         verbose_name_plural = u"焊材库存清单"
 
     def __unicode__(self):
-        return "%s(%s)" % (self.entry_item.material.name,self.entry_time)
+        return "%s(%s)" % (self.entry_item.specification,self.entry_time)
 
     def save(self,*args,**kwargs):
         if self.inventory_count > 0 and self.item_status == ITEM_STATUS_SPENT:

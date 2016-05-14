@@ -10,46 +10,6 @@
 {% block inner_content %}
 <h3>焊材出库台账</h3>
 <div>
-<form class="form-inline" method="post">
-    {% csrf_token %}
-    {% for field in search_form %}
-    {{field.label}}
-    {{field}}
-    {% endfor %}
-    <button class="btn btn-success">检索</button> 
-</form>
-<br>
-<table class="table table-bordered">
-    <thead>
-        <th>工作令</th>
-        <th>焊缝编号</th>
-        <th>数量</th>
-        <th>领用时间</th>
-        <th>领用人</th>
-        <th>领用小组</th>
-        <th>领单编号</th>
-        <th>操作</th>
-    </thead>
-    </tbody>
-        {% for card in apply_set %}
-        <tr>
-            <td>{{card.workorder}}</td>
-            <td>{{card.weld_bead_number}}</td>
-            <td>{{card.apply_quantity}}</td>
-            <td>{{card.create_time}}</td>
-            <td>{{card.applicant.userinfo}}</td>
-            <td>{{card.department}}</td>
-            <td>{{card.index}}</td>
-            <td><a href="/storage/weldapply/detail?index={{card.index}}&redict_path=/storage/weldapplyaccount" class="btn">查看领用单</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    {% include "storage/accountsearch/accountbody.html" %}
 </div>
-<script>
-    $(function(){
-                        $('#create_time').datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true});
-                                    
-            });
-</script>
 {% endblock %}

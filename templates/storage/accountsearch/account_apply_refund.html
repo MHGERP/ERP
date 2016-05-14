@@ -1,0 +1,20 @@
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width=0.8>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">查看材料领用历史</h3>
+    </div>
+    <div class="modal-body">
+        {% if account_item_form %}
+        <form id="account_item_form" action="" class="form-inline">
+            {% include "storage/accountsearch/account_item_form.html" %}
+        </form>
+        <br/>
+        {% endif %}
+        <div id="account_apply_refund_table">
+        {% include account_apply_refund_table %}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
