@@ -79,6 +79,10 @@ function addWeldSeamCallBack(data) {
     }
 }
 
+$("#open_card_list").click(function() {
+    var id_work_order = $("#id_work_order").val();
+    location.href = "/techdata/transferCardList?id_work_order=" + id_work_order;   
+});
 $("#id_goto_next").click(function() {
     var cur_iid = $("#card_modal").attr("iid");
     var row = $("tr[iid='" + cur_iid + "']");

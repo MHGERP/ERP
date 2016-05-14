@@ -159,8 +159,12 @@ def transferCardEditViews(request):
     JunHU
     """
     iid = request.GET.get("iid")
+    materiel = Materiel.objects.get(id = iid)
+    label = request.GET.get("label")
     context = {
         "iid": iid,
+        "label": label,
+        "order": materiel.order,
     }
     cards = TransferCard.objects.filter(materiel_belong__id = iid)   
     if cards.count() == 0:
@@ -184,6 +188,15 @@ def programmeEditViews(request):
         "form": form,
     }
     return render(request, "techdata/programme_edit.html", context)
+
+def transferCardListViews(request):
+    id_work_order = request.GET.get("id_work_order")
+    print id_work_order
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    context = {
+        "work_order": work_order,
+    }
+    return render(request, "techdata/transfer_card_list.html", context)
 
 def transferCardPicUpload(request):
     if request.is_ajax():
@@ -408,3 +421,11 @@ def weldJointTechView(request, orderid):
         "weld_joint_details" : weld_joint_details,
     }
     return render(request, "techdata/weld_joint.html", context)
+
+def weldingProcessSpecificationViews(request):
+    id_work_order = request.GET.get("id_work_order")
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    context = {
+        "work_order": work_order,
+    }
+    return render(request, "techdata/welding_process_specification.html", context)

@@ -1,0 +1,17 @@
+{% extends "techdata/base/none_nav_base.html" %}
+
+{% block title%}
+<h1>焊接工艺规程</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="/techdata/weldList" class="tip-bottom">焊缝明细</a>
+<a href="#" class="current">焊接工艺规程</a>
+{% endblock %}
+
+{% block inner_content %}
+<div id="div_card" id_work_order="{{work_order.id}}">
+   
+</div>
+<script type='text/javascript' src="{{STATIC_URL}}js/techdata/welding_process_specification_base.js"></script>
+{% endblock %}

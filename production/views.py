@@ -16,7 +16,7 @@ def taskPlanViews(request):
 
 def taskAllocationViews(request):
     search_form = TaskAllocationForm()
-    items_list = ProcessDetail.objects.filter(complete_process_date = None).order_by('-productionworkgroup')
+    items_list = ProcessDetail.objects.exclude(plan_startdate = None).filter(complete_process_date = None).order_by('-productionworkgroup')
     for item in items_list:
         item.groups = ProductionWorkGroup.objects.filter(processname = item.processname)
 

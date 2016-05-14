@@ -6,6 +6,8 @@
         <th>工序编号</th>
         <th>工序</th>
         <th>工时</th>
+        <th>计划开始时间</th>
+        <th>计划完成时间</th>
         <th>分配组</th>
         <th>操作</th>
     </thead>
@@ -17,6 +19,8 @@
             <td>{{item.process_id}}</td>
             <td>{{item.processname}}</td>
             <td>{{item.work_hour}}</td>
+            <td>{{item.plan_startdate|date:"Y-m-d"}}</td>
+            <td>{{item.plan_enddate|date:"Y-m-d"}}</td>
             <td>
                 {% if item.productionworkgroup = None %}
                 <select id="table_select{{item.id}}">

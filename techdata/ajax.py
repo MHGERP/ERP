@@ -1115,6 +1115,19 @@ def transferCardMark(request, iid, step):
         }
     return simplejson.dumps(context)
 
+@dajaxice_register
+def getTransferCardList(request, id_work_order):
+    """
+    JunHU
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    card_list = TransferCard.objects.filter(materiel_belong__order = work_order)
+    context = {
+        "work_order": work_order,
+        "card_list": card_list,
+    }
+    html = render_to_string("techdata/widgets/transfer_card_list_table.html", context)
+    return html
 
 @dajaxice_register
 def saveProcessRequirement(request, id, content):
@@ -1611,3 +1624,25 @@ def deleteWeldJointDetail(request, uid):
     weld_joint_detail = WeldJointTechDetail.objects.get(id = uid)
     weld_joint_detail.delete()
     return "ok"
+
+
+
+@dajaxice_register
+def getWeldingProcessSpecification(request, id_work_order, page = "1"):
+    """
+    JunHU
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    page = int(page)
+    context = {
+        "work_order": work_order,
+        "current_page": page,
+        "total_page": 2,
+    }
+    if page == 1:
+        html = render_to_string("techdata/welding_process_specification/cover.html", context)
+    elif page == 2:
+        context["display_current_page"] = context["current_page"] - 1
+        context["display_total_page"] = context["total_page"] - 1
+        html = render_to_string("techdata/welding_process_specification/graph_page.html", context)
+    return html

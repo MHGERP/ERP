@@ -133,4 +133,12 @@ urlpatterns=patterns('',
         r'^transferCardPicUpload$',
         techdata_views.transferCardPicUpload,
     ),
+    url(
+        r'^transferCardList$',
+        techdata_views.transferCardListViews,
+    ),
+    url(
+        r'^weldingProcessSpecification$',
+        techdata_views.weldingProcessSpecificationViews,
+    ),
 )

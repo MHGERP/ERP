@@ -8,33 +8,33 @@
 <a href="#" class="current">入库单确认</a>
 {% endblock %}
 {% block inner_content%}
-{% block table_title %}
-{% endblock %}
-<form class="form form-inline" method="post">
-    {% csrf_token%}
-    <div class="row" style="margin-bottom:10px;">
-        <div class="span4">
-            <label class="hz-align">单据编号：</label>
-            <strong>{{entry.entry_code}}</strong>
-        </div>
+<link rel="stylesheet" href="{{ STATIC_URL }}style/orderform.css" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}bootstrap-datepicker/css/bootstrap-datetimepicker.css" >
+<div id="entrybody" entrytype={{entry_type}} entryid={{entry.id}}>
+    {% if entry_type == 1%}
+    {% include "storage/wordhtml/weldentry.html"%}
+    {% elif entry_type == 2%}
+    {% include "storage/wordhtml/steelentry.html"%}
+    {% elif entry_type == 3%}
+    {% include "storage/wordhtml/auxiliaryToolEntry.html"%}
+    {% elif entry_type == 4%}
+    {% include "storage/wordhtml/outsideentry.html"%}
+    {% endif%}
+</div>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.6">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h2 id="myModalLabel">修改</h2>
     </div>
-    {% block entry_table_detail %}
-    {% endblock %}
-    <div class="control-group span12" style="margin-top:20px;margin-left:0px;">
-        <div class="rows span4 purcher">
-            采购员：<strong>{{entry.purchaser.userinfo}}</strong>
-        </div>
-        <div class="span4 purcher">
-            检查员：<strong>{{entry.inspector.userinfo}}</strong>
-        </div>
+    <div class="modal-body">
+        <form id="entry_item_form" action=""  iid={{is_show}}>
+        </form>
     </div>
-    <center style="margin:90px;">
-    {% if entry.entry_status == 0 %}
-    <button  id="entry_confirm" style="width:15%;height:30px;" class="btn btn-primary" type="button" onclick="purchasing_entry_confirm({{entry.id}},{{entry_type}});">入库单确认</button>
-    {% elif entry.entry_status == 2  %}
-    <a style="width:15%;height:20px;" class="btn btn-primary" type="button" href="/purchasing/arrivalInspection">返回</a>
-    {% endif %}
-    </center>
-</form>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" id="save_entry_item">保存</button>
+    </div>
+</div>
+<script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/purchasing/arrival_inspection.js"></script>
 {% endblock%}

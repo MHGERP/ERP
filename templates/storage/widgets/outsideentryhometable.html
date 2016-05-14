@@ -16,7 +16,7 @@
             <td>{{entry.get_outsidebuy_type_display}}</td>
             <td>{{entry.purchaser.userinfo}}</td>
             <td>
-                {% ifequal entry.entry_status  STORAGESTATUS_KEEPER %}
+                {% ifequal entry.entry_status  default_status %}
                 <a class="btn btn-warning" href="/storage/outside/entryconfirm/{{entry.id}}">待处理</a>
                 {% else %}
                 <a class="btn" href="/storage/outside/entryconfirm/{{entry.id}}">查看</a>
