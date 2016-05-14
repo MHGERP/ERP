@@ -142,6 +142,7 @@ function search_material_callback(data){
 function steelapply_callback(data){
     if(data.flag){
         $("#myModal").modal('hide');
+        $("#steelapplycard").html(data.html);
     }
     alert(data.message);
 }

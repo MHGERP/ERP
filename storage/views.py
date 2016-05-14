@@ -46,7 +46,7 @@ def steelRefundViews(request):
     context={
             "search_form":search_form,
             "refund_cards":refund_cards,
-            "STORAGESTATUS_KEEPER":ENTRYSTATUS_CHOICES_KEEPER,
+            "default_status":REFUNDSTATUS_STEEL_CHOICES_KEEPER,
     }
     return render(request,"storage/steelmaterial/steelrefundhome.html",context)
 
@@ -406,7 +406,7 @@ def weldRefundViews(request):
     context = {
             "search_form":search_form,
             "refund_set":refund_set,
-            "STORAGESTATUS_END":REFUNDSTATUS_CHOICES_END,
+            "default_status":REFUNDSTATUS_CHOICES_KEEPER,
             }
     return render(request,"storage/weldmaterial/weldrefundhome.html",context )
 
@@ -441,7 +441,7 @@ def AuxiliaryToolsEntryListView(request):
     context={}
     if request.method=='GET':
         context['entry_list']=AuxiliaryToolEntry.objects.filter(
-            entry_status=STORAGESTATUS_KEEPER).order_by('create_time')
+            entry_status=ENTRYSTATUS_CHOICES_KEEPER).order_by('create_time')
     else:
         search_form = AuxiliaryEntrySearchForm(request.POST)
         if search_form.is_valid():
@@ -666,7 +666,7 @@ def outsideEntryHomeViews(request):
     search_form = OutsideEntrySearchForm()
     context = {
         "card_set":entry_set,
-        "STORAGESTATUS_KEEPER":ENTRYSTATUS_CHOICES_END,
+        "STORAGESTATUS_KEEPER":ENTRYSTATUS_CHOICES_KEEPER,
         "search_form":search_form,
     }
     return render(request,"storage/outside/outsideentryhome.html",context)
@@ -825,11 +825,11 @@ def storeRoomManageViews(request):
     return render(request,"storage/basedata/storeroommanage.html", context)
 
 def outsideRefundHomeViews(request):
-    refund_cards = OutsideRefundCard.objects.exclude(status = STORAGESTATUS_REFUNDER)
+    refund_cards = OutsideRefundCard.objects.filter(status__gte = REFUNDSTATUS_CHOICES_KEEPER)
     search_form = OutsideRefundSearchForm()
     context = {
         "card_set":refund_cards,
-        "STORAGESTATUS_KEEPER":STORAGESTATUS_KEEPER,
+        "STORAGESTATUS_KEEPER":REFUNDSTATUS_CHOICES_KEEPER,
         "search_form":search_form,
     }
     return render(request,"storage/outside/outsiderefundhome.html", context)
