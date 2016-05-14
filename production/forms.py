@@ -100,7 +100,7 @@ class TaskAllocationForm(TaskAllocationSearchForm):
     productionworkgroup__isnull  = forms.ChoiceField(choices=TASK_ALLOCATION_STATUS_CHOICES, required=False, label=u"任务分配状态")
 
 class TaskConfirmForm(TaskAllocationSearchForm):
-    conplete_process_date__isnull  = forms.ChoiceField(choices=TASK_CONFIRM_STATUS_CHOICES, required=False, label=u"任务完成状态")
+    complete_process_date__isnull  = forms.ChoiceField(choices=TASK_CONFIRM_STATUS_CHOICES, required=False, label=u"任务完成状态")
 
 class MaterialPlantimeChangeForm(ModelForm):
     class Meta:

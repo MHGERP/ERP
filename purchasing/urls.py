@@ -32,7 +32,7 @@ urlpatterns=patterns('',
         purchasing_views.arrivalInspectionViews,
     ),
    url(
-        r'^arrivalInspectionConfirm/(?P<entry_typeid>\d+)/(?P<eid>\d+)/(?P<steel_typeid>\d*)$',
+        r'^arrivalInspectionConfirm/(?P<entry_typeid>\d+)/(?P<eid>\d+)/$',
         purchasing_views.arrivalInspectionConfirmViews,
     ),
     url(

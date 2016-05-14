@@ -1389,20 +1389,17 @@ def saveOrderformExecute(request,orderform_id,form):
 def entryConfirmQuery(request,entry_select):
     #Liuguochao
 
-    replace_dic = {}
-    filter_dic = {"entry_status":STORAGESTATUS_PURCHASER}
     if entry_select == "1":
         _Model = WeldMaterialEntry
     elif entry_select == "2":
-        _Model = SteelMaterialPurchasingEntry
-        replace_dic = {"entry_code":"form_code",}
+        _Model = SteelMaterialEntry
     elif entry_select == "3":
-        _Model = AuxiliaryToolEntryCardList
-        replace_dic = {"entry_status":"status","entry_time":"create_time","entry_code":"index"}
-        filter_dic = {"status":STORAGESTATUS_PURCHASER,}
+        _Model = AuxiliaryToolEntry
     elif entry_select == "4":
         _Model = OutsideStandardEntry
-    html = handleProcess(_Model,filter_dic,entry_select, replace_dic)
+    entry_set=_Model.objects.filter(entry_status=STORAGESTATUS_PURCHASER)
+    entry_set.order_by("-create_time")
+    html = render_to_string("purchasing/widgets/purchasing_entry_table.html",{'entry_set':entry_set,'entry_type':entry_select})
     data = {
         "html":html,
     }
