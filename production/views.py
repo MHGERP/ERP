@@ -42,9 +42,9 @@ def materielUseViews(request):
     return render(request,"production/materiel_use.html",context)
 
 def synthesizeFileListViews(request):
-    workOrderForm = WorkOrderForm();
+    subWorkOrderForm = SubWorkOrderForm();
     context={
-        "workOrderForm":workOrderForm,
+        "subWorkOrderForm":subWorkOrderForm,
     }
     return render(request,"production/synthesize_filelist.html",context)
 

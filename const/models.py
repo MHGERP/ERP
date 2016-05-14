@@ -6,8 +6,9 @@ from django.contrib.auth.models import User
 class WorkOrder(models.Model):
     order_index = models.CharField(blank = False, unique = True, max_length = 20, verbose_name = u"工作令编号")
     sell_type = models.IntegerField(blank = False, choices = SELL_TYPE, verbose_name = "销售类型")
-    client_name = models.CharField(blank = False, max_length = 20, verbose_name = "客户名称")
-    product_name = models.CharField(blank = False, max_length = 20, verbose_name = "产品名称")
+    client_name = models.CharField(blank = False, max_length = 100, verbose_name = "客户名称")
+    project_name = models.CharField(blank = False, max_length = 100, verbose_name = "项目名称")
+    product_name = models.CharField(blank = False, max_length = 100, verbose_name = "产品名称")
     count = models.CharField(blank = False, max_length = 20, verbose_name = u"数量")
     is_finish = models.BooleanField(default = False, verbose_name = u"是否结束")
     class Meta:

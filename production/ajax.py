@@ -29,11 +29,13 @@ def getQ(con):
     return query_set
 
 @dajaxice_register
-def getFileList(request, id_work_order):
+def getFileList(request, form):
     """
     Lei
     """
-    syn_size_file_list_status = SynthesizeFileListStatus.objects.filter(order_id__id = id_work_order)
+    sub_work_order_form = SubWorkOrderForm(deserialize_form(form))
+    if sub_work_order_form.is_valid():
+        syn_size_file_list_status = SynthesizeFileListStatus.objects.filter(getQ(sub_work_order_form.cleaned_data))
     syn_size_file_list = []
     for item in syn_size_file_list_status:
         syn_size_file_list.append([(status, getattr(item,status)) for status in SYNSIZE_FILE_LIST_STATUS])
@@ -48,7 +50,7 @@ def changeFileList(request, status, workorder_id, is_check):
     """
     Lei
     """
-    syn_size_file_status = SynthesizeFileListStatus.objects.get(order = workorder_id)
+    syn_size_file_status = SynthesizeFileListStatus.objects.get(sub_order = workorder_id)
     setattr(syn_size_file_status,status,is_check)
     syn_size_file_status.save()
     return 
@@ -79,7 +81,7 @@ def getHourSummarize(request, form):
     if hour_summarize_form.is_valid():
         select = {'month': connection.ops.date_trunc_sql('month', 'complete_process_date')}
         process_detail_list  = ProcessDetail.objects.exclude(complete_process_date = None).filter(getQ(hour_summarize_form.cleaned_data))\
-        .extra(select=select).values('month','materiel_belong__order','materiel_belong__order__order_index', 'productionworkgroup', 'productionworkgroup__name').annotate(Sum('work_hour'))
+        .extra(select=select).values('month','sub_materiel_belong__sub_order','sub_materiel_belong__sub_order__name', 'productionworkgroup', 'productionworkgroup__name').annotate(Sum('work_hour'))
     else:
         print hour_message_search_form.errors
     context = {
@@ -94,8 +96,8 @@ def getSummarizeTicket(request, work_order_id, groupNumId, date):
     Lei
     """
     year,month = date.split("-")
-    process_detail_list = ProcessDetail.objects.filter(Q(materiel_belong__order=work_order_id)&Q(productionworkgroup=groupNumId)&Q(complete_process_date__year=year)&Q(complete_process_date__month=month)).order_by('complete_process_date')
-    work_order = process_detail_list[0].materiel_belong.order.order_index
+    process_detail_list = ProcessDetail.objects.filter(Q(sub_materiel_belong__sub_order__id=work_order_id)&Q(productionworkgroup=groupNumId)&Q(complete_process_date__year=year)&Q(complete_process_date__month=month)).order_by('complete_process_date')
+    work_order = process_detail_list[0].sub_materiel_belong.sub_order.name
     group_num = process_detail_list[0].productionworkgroup.name
     context = {
         "work_order":work_order,
@@ -111,8 +113,8 @@ def getPartTicket(request, work_order_id, groupNumId, date):
     Lei
     """
     year,month = date.split("-")
-    process_detail_list = list(ProcessDetail.objects.filter(Q(materiel_belong__order=work_order_id)&Q(productionworkgroup=groupNumId)&Q(complete_process_date__year=year)&Q(complete_process_date__month=month)).order_by('materiel_belong'))
-    work_order = process_detail_list[0].materiel_belong.order.order_index
+    process_detail_list = list(ProcessDetail.objects.filter(Q(sub_materiel_belong__sub_order__id=work_order_id)&Q(productionworkgroup=groupNumId)&Q(complete_process_date__year=year)&Q(complete_process_date__month=month)).order_by('sub_materiel_belong'))
+    work_order = process_detail_list[0].sub_materiel_belong.sub_order.name
     group_num = process_detail_list[0].productionworkgroup.name
     process_detail_list.extend([ProcessDetail()] * ((4-len(process_detail_list))%4))
     context = {
@@ -226,14 +228,6 @@ def taskAllocationSearch(request, form):
     if form.is_valid():
         conditions = form.cleaned_data
         items_list = ProcessDetail.objects.exclude(plan_startdate = None).filter(complete_process_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
-        #task_allocation_status = conditions['task_allocation_status']
-        #del conditions['task_allocation_status']
-        #if task_allocation_status == "-1":
-        #    items_list = ProcessDetail.objects.filter(complete_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
-        #elif task_allocation_status == "0":
-        #    items_list = ProcessDetail.objects.filter(complete_date = None).filter(productionworkgroup = None).filter(getQ(conditions));
-        #else:
-        #    items_list = ProcessDetail.objects.filter(complete_date = None).exclude(productionworkgroup = None).filter(getQ(conditions)).order_by('-productionworkgroup');
         for item in items_list:
             item.groups = ProductionWorkGroup.objects.filter(processname = item.processname);
     context = {
@@ -269,9 +263,7 @@ def taskPlanSearch(request, form):
     items_list = {}
     if form.is_valid():
         conditions = form.cleaned_data
-        #del conditions['plan_startdate__isnull']
         items_list = ProcessDetail.objects.filter(productionworkgroup = None).filter(getQ(conditions)).order_by('sub_materiel_belong').order_by('-plan_startdate');
-        
     context = {
         "items_list":items_list,
         "taskplanform":form,
@@ -303,7 +295,6 @@ def taskPlanChange(request, mid):
     html = render_to_string("production/table/task_plantime_table.html",context)
     return simplejson.dumps({"html":html})
     
-
 @dajaxice_register
 def taskAllocationRemove(request, form, mid):
     """
@@ -362,7 +353,6 @@ def taskCheck(request, mid, check_content):
     html = render_to_string("production/table/task_view_table.html",context)
     return simplejson.dumps({"html":html})
     
-
 @dajaxice_register
 def ledgerTimeChange(request, mid):
     """
@@ -385,9 +375,6 @@ def materialPlantimeChange(request, mid, date):
     materielObj.processDetailObj.extend([ProcessDetail()] * (12-len(materielObj.processDetailObj)))
     html = render_to_string("production/widgets/weld_part_order_info_table.html",{"materielObj":materielObj})
     return simplejson.dumps({ "html" : html})
-
-
-
 
 @dajaxice_register
 def ledgerSearch(request, form):
@@ -471,29 +458,3 @@ def addProdUser(request, checkUserList):
         prod_user_obj.production_user_id = userInfor_obj
         prod_user_obj.save()
     return
-
-    # prodplan_set = ProductionPlan.objects.all()
-    # html = render_to_string("production/widgets/production_plan_table.html", {"prodplan_set":prodplan_set})
-    # data = {
-    #     "html":html,
-    # }
-# def addProductionUser(request, form):
-#     """
-#     Lei
-#     """
-#     production_user_search_form = productionUserSearchForm(deserialize_form(form))
-#     if production_user_search_form.is_valid():
-#         print production_user_search_form.cleaned_data
-#         production_user_name = roduction_user_search_form.cleaned_data["production_user_id__username__contains"]
-#         users=User.objects.all()
-#         productionUser = ProductionUser()
-#         productionUser.production_user_id.username = production_user_search_form.cleaned_data["production_user_id__username__contains"]
-#         productionUser.production_work_group.name = production_user_search_form.cleaned_data["production_work_group"]
-#         productionUser.save()
-#         message = u"生产人员添加成功"
-#         print "ssssssssssss"
-        
-#         print "ddddddddddddd"
-#     else:
-#         message=u"添加失败,生产人员用户名不能为空！"
-#     return message

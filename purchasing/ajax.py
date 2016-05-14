@@ -88,36 +88,37 @@ def genEntry(request,selected,bid,entry_type):
         entry_status=ENTRYSTATUS_CHOICES_PUCAHSER
         print entry_type
         if entry_type=="entrytype_board":
-            steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,purchaser=user,entry_status=entry_status,steel_type=ENTRYTYPE_BOARD)
+            steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,entry_status=entry_status,steel_type=ENTRYTYPE_BOARD)
             steel_entry.save()
             SteelEntryItemAdd(steel_entry,selected)
         elif entry_type=="entrytype_bar":
-            steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,purchaser=user,entry_status=entry_status,steel_type=ENTRYTYPE_BAR)
+            steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,entry_status=entry_status,steel_type=ENTRYTYPE_BAR)
             steel_entry.save()
             SteelEntryItemAdd(steel_entry,selected)
         elif entry_type=="standard_outsidebuy":
             print "######"
-            outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=STANDARD_OUTSIDEBUY)
+            outside_entry=OutsideStandardEntry(entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=STANDARD_OUTSIDEBUY)
             outside_entry.save()
             OutsideEntryItemAdd(outside_entry,selected)
         elif entry_type=="forging":
-            outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=FORGING_OUTSIDEBUY)
+            outside_entry=OutsideStandardEntry(entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=FORGING_OUTSIDEBUY)
             outside_entry.save()
             OutsideEntryItemAdd(outside_entry,selected)
         elif entry_type=="cooperation_outsidebuy":
-            outside_entry=OutsideStandardEntry(purchaser=user,entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=COOPERATION_OUTSIDEBUY)
+            outside_entry=OutsideStandardEntry(entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=COOPERATION_OUTSIDEBUY)
             outside_entry.save()
             OutsideEntryItemAdd(outside_entry,selected)
         elif entry_type=="welding":
-            welding_entry=WeldMaterialEntry(purchaser=user,entry_status=entry_status,entry_code=entry_code,create_time=create_time)
+            welding_entry=WeldMaterialEntry(entry_status=entry_status,entry_code=entry_code,create_time=create_time)
             outside_entry.save()
             WeldingEntryItemAdd(welding_entry,selected)
         elif entry_type=="auxiliary":
-            auxiliary_entry=AuxiliaryToolEntry(purchaser=user,entry_status=entry_status,entry_code=entry_code,create_time=create_time)
+            auxiliary_entry=AuxiliaryToolEntry(entry_status=entry_status,entry_code=entry_code,create_time=create_time)
             auxiliary_entry.save()
             AuxiliaryEntryItemAdd(welding_entry,selected,accept_supplier)
+        message = u"入库单生成成功"
 
-
+        
 #        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
 #            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user)
 #            purchasingentry.save()
@@ -126,8 +127,8 @@ def genEntry(request,selected,bid,entry_type):
 #        else:
 #            message = u"入库单已经存在，请勿重复提交"
     except Exception, e:
-        transaction.rollback()
-        print "*******************############*************"
+        transaction.rollback() 
+        message = u"入库单生成失败，请仔细检查"
         print e
 #
 #    flag = flag and isAllChecked(bid,purchasingentry)
@@ -143,7 +144,7 @@ def genEntry(request,selected,bid,entry_type):
 #        'flag':flag,
 #        'message':message,
 #    }
-    return simplejson.dumps({})
+    return simplejson.dumps({"message":message})
 
 @dajaxice_register
 def SupplierUpdate(request,supplier_id):
@@ -911,9 +912,12 @@ def getOrderFormItems(request, index, can_choose = False):
         "items": items,
         "order_form":order_form,
         "can_choose": can_choose,
+        "can_edit":True
     }
     if order_form.order_mod==1:
         html = render_to_string("purchasing/orderform/orderform_item_list.html", context)
+    elif order_form.order_mod ==2 :
+        html=render_to_string("purchasing/orderform/orderform_weld_list.html",context)
     else:
         html =render_to_string("purchasing/orderform/orderform_raw_list.html",context)
     return html
@@ -957,7 +961,7 @@ def getOngoingOrderList(request,order_type):
     Lei
     """
     if int(order_type)==6:
-        order_type=2
+        order_mod=2
     elif int(order_type) >2 :
         order_mod=1
     else:
@@ -1094,6 +1098,7 @@ def newOrderDelete(request,id):
     """
     order_form = OrderForm.objects.get(id = id)
     order_form.delete()
+    return simplejson.dumps({})
 
 @dajaxice_register
 def getBidForm(request, bid_id, pendingArray):
@@ -1123,7 +1128,10 @@ def getOrderForm(request, order_id, pendingArray):
     """
     Lei
     """
-    order_form = OrderForm.objects.get(id = order_id)
+    try:
+        order_form = OrderForm.objects.get(id = order_id)
+    except:
+        return simplejson.dumps({"status":1})
     items = Materiel.objects.filter(materielformconnection__order_form = order_form)
     for item in items:
         item.order_status = u"已加入"
@@ -1133,9 +1141,11 @@ def getOrderForm(request, order_id, pendingArray):
         item.order_status = u"待加入"
 
     if order_form.order_mod == 1:
-        html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items, "can_choose": False, "items_pending": items_pending, })
+        html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items, "can_choose": False, "items_pending": items_pending,"can_edit":False })
+    elif order_form.order_mod == 2:
+        html=render_to_string("purchasing/orderform/orderform_weld_list.html",{"item":items,"can_choose":False,"items_pending":items_pending,"can_edit":False})
     else:
-        html=render_to_string("purchasing/orderform/orderform_raw_list.html",{"items":items,"can_choose":False,"items_pending":items_pending})
+        html=render_to_string("purchasing/orderform/orderform_raw_list.html",{"items":items,"can_choose":False,"items_pending":items_pending,"can_edit":False})
     context = {
             "order_id": order_form.order_id,
             "id": order_form.id,
@@ -1186,11 +1196,12 @@ def GetOrderInfoForm(request,uid):
         orderForm = OrderFormOne(instance=order)
         html="purchasing/orderform/order_form.html"
     elif order.inventory_type.name=="weld_material":
-        html=""
+        orderForm = OrderFormThree(instance=order)
+        html="purchasing/orderform/order_weld_form.html"
     else:
         orderForm = OrderFormTwo(instance=order)
         html="purchasing/orderform/order_normal_form.html"
-    form_html = render_to_string(html,{'order_form':orderForm,'count':count,'purchasing':purchasing})
+    form_html = render_to_string(html,{'order_form':orderForm})
     return simplejson.dumps({'form':form_html})
 
 @dajaxice_register
@@ -1202,7 +1213,7 @@ def OrderInfo(request,uid,form):
     if materiel.inventory_type.name =="main_materiel" or materiel.inventory_type.name=="auxiliary_materiel":
         materielform = OrderFormOne(deserialize_form(form),instance=materiel)
     elif materiel.inventory_type.name=="weld_material":
-        pass
+        materielform=OrderFormThree(deserialize_form(form),instance=materiel)
     else:
         materielform=OrderFormTwo(deserialize_form(form),instance=materiel)
     #order_obj = orderForm.save(commit = False)
@@ -1316,19 +1327,6 @@ def selectEntryType(request,bid,selected,selectentryform):
         html = render_to_string("purchasing/addentryitems.html",{"items":items_set,"entrytype":entrytypedict[int(selectvalue)]})
         return simplejson.dumps({"html":html,"items_set":selected,"selectvalue":selectvalue,"bid":bid})
 
-@dajaxice_register
-def genEntry(request,items_set,bid):
-    items_set = getArrivalInspections(items_set)
-    try:
-        bidform = BidForm.objects.get(bid_id = bid)
-        entry_factory = AutoGenEntry(request.user,items_set,bidform)
-        isOk = True
-    except Exception,e:
-        isOk = False
-        print e
-    cargo_set = ArrivalInspection.objects.filter(bidform__bid_id = bid,check_pass = False)
-    html = render_to_string("purchasing/widgets/arrivalinspection_table.html",{"cargo_set":cargo_set})
-    return simplejson.dumps({"html":html,"isOk":isOk})
 
 
 def getArrivalInspections(selected_id_set):
@@ -1621,4 +1619,65 @@ def QualityCardComment(request,quality_card_id,usertitle,comment):
     bid_comment=BidComment(user=request.user,comment=comment,bid=quality_card.bid,submit_date=datetime.today(),user_title=usertitle)
     bid_comment.save()
     BidNextStatus(quality_card)
+    return simplejson.dumps({})
+
+@dajaxice_register
+def getEntryFormInfo(request,mid,entrytype):
+    entrytype = int(entrytype)
+    if entrytype ==  1:
+        entry_item=WeldMaterialEntryItems.objects.get(pk=mid)
+        form=WeldEntryForm(instance=entry_item)
+        html=render_to_string("purchasing/storageform/weld_form.html",{"form":form})
+    elif entrytype == 2:
+        entry_item=SteelMaterialEntryItems.objects.get(pk=mid)
+        form=SteelEntryForm(instance=entry_item)
+        html=render_to_string("purchasing/storageform/steelmaterial_form.html",{"form":form})
+    elif entrytype == 3:
+        entry_item=AuxiliaryToolEntryItems.objects.get(pk=mid)
+        form=AuxiliaryEntryForm(instance=entry_item)
+        html=render_to_string("purchasing/storageform/auxiliarytool_form.html",{"form":form})
+    elif entrytype == 4:
+        entry_item=OutsideStandardItems.objects.get(pk=mid)
+        form=OutsideEntryForm(instance=entry_item)
+        html=render_to_string("purchasing/storageform/outsidestandard_form.html",{"form":form})
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def saveEntryItem(request,form,mid,entrytype):
+    entrytype=int(entrytype)
+    if entrytype ==  1:
+        entry_item=WeldMaterialEntryItems.objects.get(pk=mid)
+        form=WeldEntryForm(deserialize_form(form),instance=entry_item)
+    elif entrytype == 2:
+        entry_item=SteelMaterialEntryItems.objects.get(pk=mid)
+        form=SteelEntryForm(deserialize_form(form),instance=entry_item)
+    elif entrytype == 3:
+        entry_item=AuxiliaryToolEntryItems.objects.get(pk=mid)
+        form=AuxiliaryEntryForm(deserialize_form(form),instance=entry_item)
+    elif entrytype == 4:
+        entry_item=OutsideStandardItems.objects.get(pk=mid)
+        form=OutsideEntryForm(deserialize_form(form),instance=entry_item)
+    if form.is_valid():
+        form.save()
+        message=u"保存成功"
+        status=0
+    else:
+        message=u"表单保存失败！"
+        status=1
+    return simplejson.dumps({"status":status,"message":message})
+
+@dajaxice_register
+def entryPurchaserConfirm(request,eid,entrytype):
+    entrytype=int(entrytype)
+    if entrytype ==  1:
+        entry=WeldMaterialEntry.objects.get(pk=eid) 
+    if entrytype ==  2:
+        entry=SteelMaterialEntry.objects.get(pk=eid)
+    if entrytype ==  3:
+        entry=AuxiliaryToolEntry.objects.get(pk=eid)
+    if entrytype ==  4:
+        entry=OutsideStandardEntry.objects.get(pk=eid)
+    entry.purchaser=request.user
+    entry.entry_status=ENTRYSTATUS_CHOICES_INSPECTOR
+    entry.save()
     return simplejson.dumps({})

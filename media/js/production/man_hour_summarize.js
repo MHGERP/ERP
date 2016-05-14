@@ -1,10 +1,10 @@
-$("#id_complete_date__gte").datetimepicker({
+$("#id_complete_process_date__gte").datetimepicker({
     format : 'yyyy-mm-dd',
     minView : 2,
     autoclose : true,
 });
 
-$("#id_complete_date__lte").datetimepicker({
+$("#id_complete_process_date__lte").datetimepicker({
   format : 'yyyy-mm-dd',
   minView : 2,
   autoclose : true,

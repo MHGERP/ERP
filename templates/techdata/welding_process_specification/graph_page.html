@@ -1,0 +1,294 @@
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-alt:SimSun;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 680460288 22 0 262145 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-pitch:variable;
+	mso-font-signature:-536870145 1107305727 0 0 415 0;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 680460288 22 0 262145 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	mso-pagination:none;
+	font-size:10.5pt;
+	mso-bidi-font-size:12.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:宋体;
+	mso-font-kerning:1.0pt;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-unhide:no;
+	mso-style-link:"页眉 Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:center;
+	mso-pagination:none;
+	tab-stops:center 207.65pt right 415.3pt;
+	layout-grid-mode:char;
+	border:none;
+	mso-border-bottom-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 1.0pt 0cm;
+	font-size:9.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:宋体;
+	mso-font-kerning:1.0pt;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-unhide:no;
+	mso-style-link:"页脚 Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:none;
+	tab-stops:center 207.65pt right 415.3pt;
+	layout-grid-mode:char;
+	font-size:9.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:宋体;
+	mso-font-kerning:1.0pt;}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	mso-pagination:none;
+	font-size:9.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:宋体;
+	mso-font-kerning:1.0pt;}
+p.Char, li.Char, div.Char
+	{mso-style-name:" Char";
+	mso-style-unhide:no;
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	mso-pagination:none;
+	font-size:10.5pt;
+	mso-bidi-font-size:12.0pt;
+	font-family:"Times New Roman","serif";
+	mso-fareast-font-family:宋体;
+	mso-font-kerning:1.0pt;}
+span.Char0
+	{mso-style-name:"页眉 Char";
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:页眉;
+	mso-ansi-font-size:9.0pt;
+	mso-bidi-font-size:9.0pt;
+	mso-font-kerning:1.0pt;}
+span.Char1
+	{mso-style-name:"页脚 Char";
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:页脚;
+	mso-ansi-font-size:9.0pt;
+	mso-bidi-font-size:9.0pt;
+	mso-font-kerning:1.0pt;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	mso-default-props:yes;
+	mso-fareast-font-family:宋体;}
+ /* Page Definitions */
+ @page
+	{mso-page-border-surround-header:no;
+	mso-page-border-surround-footer:no;
+	mso-footnote-separator:url("RH09焊接工艺规程.files/header.htm") fs;
+	mso-footnote-continuation-separator:url("RH09焊接工艺规程.files/header.htm") fcs;
+	mso-endnote-separator:url("RH09焊接工艺规程.files/header.htm") es;
+	mso-endnote-continuation-separator:url("RH09焊接工艺规程.files/header.htm") ecs;}
+@page WordSection1
+	{size:842.0pt 21.0cm;
+	mso-page-orientation:landscape;
+	margin:59.55pt 45.35pt 45.35pt 45.35pt;
+	mso-header-margin:42.55pt;
+	mso-footer-margin:49.6pt;
+	mso-paper-source:0;
+	layout-grid:15.6pt;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+{% if not is_print %}
+<div id="paginator_div" total_page = "{{total_page}}" page= "{{current_page}}" style='layout-grid:15.6pt'>
+	<span class="btn pull-left prev-page turnpage"><i class="icon-chevron-left"></i>上一页</span>
+	<span class="btn pull-right next-page turnpage">下一页<i class="icon-chevron-right"></i></span>
+</div>
+{% endif %}
+<div class=WordSection style='layout-grid:15.6pt'>
+
+<div align=center>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:.5pt solid windowtext;
+ mso-border-insidev:.5pt solid windowtext'>
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;height:22.7pt'>
+  <td width=341 colspan=2 style='width:255.45pt;border-top:1.5pt;border-left:
+  1.5pt;border-bottom:1.0pt;border-right:1.0pt;border-color:windowtext;
+  border-style:solid;mso-border-top-alt:1.5pt;mso-border-left-alt:1.5pt;
+  mso-border-bottom-alt:.5pt;mso-border-right-alt:.5pt;mso-border-color-alt:
+  windowtext;mso-border-style-alt:solid;padding:0cm 5.4pt 0cm 5.4pt;height:
+  22.7pt'>
+  <p class=MsoNormal align=center style='text-align:center'><b
+  style='mso-bidi-font-weight:normal'><span style='font-size:14.0pt;font-family:
+  宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>产品焊接接头编号示意图</span></b><b
+  style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:14.0pt'><o:p></o:p></span></b></p>
+  </td>
+  <td width=80 style='width:59.95pt;border-top:solid windowtext 1.5pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  mso-border-top-alt:solid windowtext 1.5pt;padding:0cm 5.4pt 0cm 5.4pt;
+  height:22.7pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>工作令</span><b style='mso-bidi-font-weight:
+  normal'><span lang=EN-US style='font-size:14.0pt'><o:p></o:p></span></b></p>
+  </td>
+  <td width=150 colspan=2 style='width:112.25pt;border-top:solid windowtext 1.5pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  mso-border-top-alt:solid windowtext 1.5pt;padding:0cm 5.4pt 0cm 5.4pt;
+  height:22.7pt'>
+  <p class=MsoNormal align=center style='text-align:center'><b
+  style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:14.0pt'><o:p>{{work_order}}</o:p></span></b></p>
+  </td>
+  <td width=69 style='width:52.1pt;border-top:solid windowtext 1.5pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  mso-border-top-alt:solid windowtext 1.5pt;padding:0cm 5.4pt 0cm 5.4pt;
+  height:22.7pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>编号</span><span lang=EN-US
+  style='font-size:12.0pt'><o:p></o:p></span></p>
+  </td>
+  <td width=195 colspan=2 style='width:145.95pt;border-top:solid windowtext 1.5pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  mso-border-top-alt:solid windowtext 1.5pt;padding:0cm 5.4pt 0cm 5.4pt;
+  height:22.7pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=EN-US
+  style='font-size:12.0pt'>RH09<b style='mso-bidi-font-weight:normal'>-</b><o:p>{{work_order.suffix}}</o:p></span></p>
+  </td>
+  <td width=182 style='width:136.4pt;border-top:solid windowtext 1.5pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
+  mso-border-left-alt:solid windowtext .5pt;mso-border-top-alt:1.5pt;
+  mso-border-left-alt:.5pt;mso-border-bottom-alt:.5pt;mso-border-right-alt:
+  1.5pt;mso-border-color-alt:windowtext;mso-border-style-alt:solid;padding:
+  0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>第</span><span lang=EN-US
+  style='font-size:12.0pt'><span style='mso-spacerun:yes'>{{display_current_page}} </span></span><span
+  style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>页</span><span lang=EN-US
+  style='font-size:12.0pt'><span style='mso-spacerun:yes'>&nbsp; </span></span><span
+  style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>共</span><span style='font-size:12.0pt'>{{display_total_page}}
+  </span><span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:
+  "Times New Roman";mso-hansi-font-family:"Times New Roman"'>页</span><span
+  lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:1;height:411.1pt'>
+  <td width=1016 colspan=9 valign=top style='width:762.1pt;border-top:none;
+  border-left:solid windowtext 1.5pt;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.5pt;mso-border-top-alt:solid windowtext .5pt;
+  mso-border-top-alt:.5pt;mso-border-left-alt:1.5pt;mso-border-bottom-alt:.5pt;
+  mso-border-right-alt:1.5pt;mso-border-color-alt:windowtext;mso-border-style-alt:
+  solid;padding:0cm 5.4pt 0cm 5.4pt;height:411.1pt'>
+  <p class=MsoNormal><span style='mso-bidi-font-size:10.5pt;font-family:宋体;
+  mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>接头编号示意图：</span><span
+  lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p></o:p></span></p>
+  <p class=MsoNormal><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+  style='mso-bidi-font-size:10.5pt'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:2;mso-yfti-lastrow:yes;height:23.5pt'>
+  <td width=211 style='width:158.05pt;border-top:none;border-left:solid windowtext 1.5pt;
+  border-bottom:solid windowtext 1.5pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-top-alt:.5pt;mso-border-left-alt:
+  1.5pt;mso-border-bottom-alt:1.5pt;mso-border-right-alt:.5pt;mso-border-color-alt:
+  windowtext;mso-border-style-alt:solid;padding:0cm 5.4pt 0cm 5.4pt;height:
+  23.5pt'>
+  <p class=MsoNormal><span style='mso-bidi-font-size:10.5pt;font-family:宋体;
+  mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>阶段：</span><span
+  lang=EN-US style='mso-bidi-font-size:10.5pt'>A<o:p></o:p></span></p>
+  </td>
+  <td width=271 colspan=3 style='width:203.35pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.5pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;mso-border-bottom-alt:solid windowtext 1.5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:23.5pt'>
+  <p class=MsoNormal><span style='mso-bidi-font-size:10.5pt;font-family:宋体;
+  mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>编制：</span><span
+  lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p></o:p></span></p>
+  </td>
+  <td width=300 colspan=3 style='width:225.35pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.5pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;mso-border-bottom-alt:solid windowtext 1.5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:23.5pt'>
+  <p class=MsoNormal><span style='mso-bidi-font-size:10.5pt;font-family:宋体;
+  mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>审核：</span><span
+  lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p></o:p></span></p>
+  </td>
+  <td width=234 colspan=2 style='width:175.35pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.5pt;border-right:solid windowtext 1.5pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:23.5pt'>
+  <p class=MsoNormal><span style='mso-bidi-font-size:10.5pt;font-family:宋体;
+  mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>批准：</span><span
+  lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <![if !supportMisalignedColumns]>
+ <tr height=0>
+  <td width=154 style='border:none'></td>
+  <td width=87 style='border:none'></td>
+  <td width=64 style='border:none'></td>
+  <td width=44 style='border:none'></td>
+  <td width=61 style='border:none'></td>
+  <td width=56 style='border:none'></td>
+  <td width=111 style='border:none'></td>
+  <td width=38 style='border:none'></td>
+  <td width=131 style='border:none'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</div>
+
+<p class=MsoNormal><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+
+</div>
+
+

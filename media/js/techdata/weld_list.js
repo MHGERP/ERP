@@ -6,7 +6,6 @@ $("#order_search").click(refresh);
 function refresh() {
    // alert("我要刷新了！");
     var id_work_order = $("#id_work_order").val();
-    $("#weldjointTechView").attr("href", "weldJointTechView/" + id_work_order);
     Dajaxice.techdata.getWeldSeamList(refreshCallBack, {"id_work_order": id_work_order, });
 }
 function refreshCallBack(data) {
@@ -187,14 +186,7 @@ $("#weld_joint_detail_dismiss").click(function(){
     );
 });
 
-/*$("#weldjointTechView").click(function(){
-    Dajaxice.techdata.weldJointTechView(
-        function(data) {
-            
-        },
-        {
-            "id_work_order" : $("#id_work_order").val(),
-        }
-    );
-});*/
-
+$("#weldingProcessSpecificationView").click(function() {
+    var id_work_order = $("#id_work_order").val();
+    location.href = "/techdata/weldingProcessSpecification?id_work_order=" + id_work_order;
+});

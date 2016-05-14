@@ -20,9 +20,9 @@
             <td>{{forloop.counter}}</td>
             <td>{{item.name}}</td>
             <td>{{item.specification}}</td>
-            <td>{{item.material.id}}</td>
+            <td>{{item.material}}</td>
             <td>{{item.quota}}</td>
-            <td>{{item.standard}}</td>
+            <td>{{item.stardard}}</td>
             <td>{{item.remark}}</td>
             {% if not item.materielpurchasingstatus.add_to_detail %}
             <td><span class="btn btn-small btn-primary btn-add_to_detail" args="{{item.id}}">加入物料汇总</span></td>

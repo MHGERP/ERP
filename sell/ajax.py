@@ -14,6 +14,7 @@ from const.models import WorkOrder
 from backend.utility import getContext
 from sell.forms import *
 from sell.models import *
+from techdata.utility import techdataOrderInitialize
 
 @dajaxice_register
 def getProductionList(request, type):
@@ -118,6 +119,9 @@ def generateWorkOrder(request, pid, form):
             workorder = form.save(commit = False)
             workorder.product_name = product.name
             workorder.save()
+
+            techdataOrderInitialize(workorder)
+
             product.is_approval = 0
             product.save()
             return simplejson.dumps({"status" : "ok"})

@@ -285,8 +285,8 @@ class WeldJointTechDetail(models.Model):
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
     is_save = models.BooleanField(default = True, verbose_name = u"是否保存")
     class Meta:
-        verbose_name = u"焊接接头"
-        verbose_name_plural = u"焊接接头"
+        verbose_name = u"焊接接头工艺分析"
+        verbose_name_plural = u"焊接接头工艺分析"
     def __unicode__(self):
         return self.joint_index
 
