@@ -421,3 +421,11 @@ def weldJointTechView(request, orderid):
         "weld_joint_details" : weld_joint_details,
     }
     return render(request, "techdata/weld_joint.html", context)
+
+def weldingProcessSpecificationViews(request):
+    id_work_order = request.GET.get("id_work_order")
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    context = {
+        "work_order": work_order,
+    }
+    return render(request, "techdata/welding_process_specification.html", context)

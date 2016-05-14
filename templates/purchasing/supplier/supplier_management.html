@@ -7,6 +7,7 @@
 <a href="#" class="current">供应商管理</a>
 {% endblock %}
 {% block inner_content%}
+<link rel="stylesheet" href="{{ STATIC_URL }}style/orderform.css" type="text/css" media="screen" />
 <a class="btn btn-primary" id="add_new_supplier" href="#supplier_info" data-toggle="modal">添加供应商</a>
 <div id="supplier_table">
 {% include "purchasing/supplier/supplier_table.html"%}
