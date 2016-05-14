@@ -118,7 +118,7 @@ def genEntry(request,selected,bid,entry_type):
             AuxiliaryEntryItemAdd(welding_entry,selected,accept_supplier)
         message = u"入库单生成成功"
 
-        
+
 #        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
 #            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user)
 #            purchasingentry.save()
@@ -127,7 +127,7 @@ def genEntry(request,selected,bid,entry_type):
 #        else:
 #            message = u"入库单已经存在，请勿重复提交"
     except Exception, e:
-        transaction.rollback() 
+        transaction.rollback()
         message = u"入库单生成失败，请仔细检查"
         print e
 #
@@ -1660,7 +1660,7 @@ def saveEntryItem(request,form,mid,entrytype):
 def entryPurchaserConfirm(request,eid,entrytype):
     entrytype=int(entrytype)
     if entrytype ==  1:
-        entry=WeldMaterialEntry.objects.get(pk=eid) 
+        entry=WeldMaterialEntry.objects.get(pk=eid)
     if entrytype ==  2:
         entry=SteelMaterialEntry.objects.get(pk=eid)
     if entrytype ==  3:
