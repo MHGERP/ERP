@@ -218,6 +218,25 @@ class CirculationRoute(models.Model):
     def __unicode__(self):
         return self.materiel_belong.name
 
+class WeldingProcessSpecification(models.Model):
+    order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
+
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "weldingprocessspecification_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "weldingprocessspecification_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+
+    approver = models.ForeignKey(User, blank = True, null = True, verbose_name = u"批准人", related_name = "weldingprocessspecification_approver")
+    approve_date = models.DateField(blank = True, null = True, verbose_name = u"批准日期")
+
+    file_obj = models.FileField(null = True, blank = True, upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"示意图")
+    class Meta:
+        verbose_name = u"焊接工艺规程"
+        verbose_name_plural = u"焊接工艺规程"
+    def __unicode__(self):
+        return "RH09-" + self.order.suffix()
+
 class WeldSeamType(models.Model):
     name = models.CharField(blank = False, max_length = 100, verbose_name = u"类型名")
     class Meta:

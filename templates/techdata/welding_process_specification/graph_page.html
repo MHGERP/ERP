@@ -215,7 +215,7 @@ div.WordSection1
   lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></p>
   </td>
  </tr>
- <tr style='mso-yfti-irow:1;height:411.1pt'>
+ <tr style='mso-yfti-irow:1;height:411.1pt' id="pic_area">
   <td width=1016 colspan=9 valign=top style='width:762.1pt;border-top:none;
   border-left:solid windowtext 1.5pt;border-bottom:solid windowtext 1.0pt;
   border-right:solid windowtext 1.5pt;mso-border-top-alt:solid windowtext .5pt;
@@ -229,7 +229,11 @@ div.WordSection1
   <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
   style='mso-bidi-font-size:10.5pt'><span
   style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  </span><span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><o:p></o:p></span></p>
+  </span><span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><o:p><p align=center>
+    {% if specification.file_obj %}
+  <img align="center" id="mypic" src="{{specification.file_obj.url}}">
+    {% endif %}
+  </p></o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:2;mso-yfti-lastrow:yes;height:23.5pt'>
@@ -289,6 +293,26 @@ div.WordSection1
 
 <p class=MsoNormal><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
 
+</div>
+
+
+
+<div id="pic_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.4" >
+  <div class="modal-header">
+    <h2 id="groupLabel">示意图上传</h2>
+  </div>
+
+  <div class="modal-body" style="clear:both;">
+        <form method="POST" action="" class="form-inline" enctype="multipart/form-data" id="pic_form">
+            {% csrf_token%}
+            <input type="text" style="display:none;" name="id_work_order" id="id_input">
+            <input type='file' class='filestyle' name='pic_file' data-ButtonName='btn btn-primary'  data-buttonBefore='true' data-buttonText='浏览..' id="filestyle_input">
+        </form>
+  </div>
+  <div class="modal-footer">
+	<button class="btn btn-primary" id="btn_save_pic">保存</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
 </div>
 
 

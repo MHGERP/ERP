@@ -43,6 +43,7 @@ RegisterClass = (
     PrincipalItem,
     PrincipalMark,
     TransferCardProcess,
+    WeldingProcessSpecification,
 )
 
 for item in RegisterClass:

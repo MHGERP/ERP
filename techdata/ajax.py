@@ -1633,16 +1633,21 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1"):
     JunHU
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
+    specification = WeldingProcessSpecification.objects.get(order = work_order)
     page = int(page)
     context = {
         "work_order": work_order,
+        "specification": specification,
         "current_page": page,
-        "total_page": 2,
+        "total_page": 3,
     }
+    context["display_current_page"] = context["current_page"] - 1
+    context["display_total_page"] = context["total_page"] - 1
+
     if page == 1:
         html = render_to_string("techdata/welding_process_specification/cover.html", context)
     elif page == 2:
-        context["display_current_page"] = context["current_page"] - 1
-        context["display_total_page"] = context["total_page"] - 1
         html = render_to_string("techdata/welding_process_specification/graph_page.html", context)
+    elif page == 3:
+        html = render_to_string("techdata/welding_process_specification/weld_analysis_table.html", context)
     return html
