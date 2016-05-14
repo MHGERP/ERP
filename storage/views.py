@@ -451,7 +451,7 @@ def AuxiliaryToolsEntryListView(request):
             context['entry_list']=[]
             print search_form.errors
     context['search_form'] = AuxiliaryEntrySearchForm()
-    context['STORAGESTATUS_KEEPER'] = ENTRYSTATUS_CHOICES_KEEPER
+    context['default_status'] = ENTRYSTATUS_CHOICES_KEEPER
     return render(request,'storage/auxiliarytools/auxiliarytoolsentry_list.html',context)
 
 
@@ -528,13 +528,13 @@ def AuxiliaryToolsLedgerEntryView(request):
     context = {}
     if request.method == 'GET':
         context['rets'] = AuxiliaryToolEntryCardList.objects.filter(
-            status=STORAGESTATUS_END).order_by('-create_time')
+            status=ENTRYSTATUS_CHOICES_KEEPER).order_by('-create_time')
     else:
         search_form = AuxiliaryEntrySearchForm(request.POST)
         if search_form.is_valid():
             context['rets'] = get_weld_filter(AuxiliaryToolEntryCardList,
                                               search_form.cleaned_data)\
-                    .filter(status=ENTRYSTATUS_CHOICES_END)
+                    .filter(status=ENTRYSTATUS_CHOICES_KEEPER)
         else:
             context['rets'] = []
             print search_form.errors
@@ -662,11 +662,11 @@ def outsideHomeViews(request):
 
 def outsideEntryHomeViews(request):
     
-    entry_set = OutsideStandardEntry.objects.filter(entry_status__gte = ENTRYSTATUS_CHOICES_KEEPER)
+    entry_set = OutsideStandardEntry.objects.filter(entry_status = ENTRYSTATUS_CHOICES_KEEPER)
     search_form = OutsideEntrySearchForm()
     context = {
         "card_set":entry_set,
-        "STORAGESTATUS_KEEPER":ENTRYSTATUS_CHOICES_KEEPER,
+        "default_status":ENTRYSTATUS_CHOICES_KEEPER,
         "search_form":search_form,
     }
     return render(request,"storage/outside/outsideentryhome.html",context)
@@ -734,11 +734,11 @@ def StoreThreadViews(request):
     return render(request,"storage/storethread/storethread.html",context)
 
 def outsideApplyCardHomeViews(request):
-    applycard_set = OutsideApplyCard.objects.filter(status__gte = APPLYCARD_KEEPER)
+    applycard_set = OutsideApplyCard.objects.filter(status = APPLYCARD_KEEPER)
     search_form = OutsideApplyCardSearchForm()
     context = {
         "card_set":applycard_set,
-        "STORAGESTATUS_KEEPER":APPLYCARD_KEEPER,
+        "default_status":APPLYCARD_KEEPER,
         "search_form":search_form,
     }
     return render(request,"storage/outside/applycardhome.html",context)
@@ -825,11 +825,11 @@ def storeRoomManageViews(request):
     return render(request,"storage/basedata/storeroommanage.html", context)
 
 def outsideRefundHomeViews(request):
-    refund_cards = OutsideRefundCard.objects.filter(status__gte = REFUNDSTATUS_CHOICES_KEEPER)
+    refund_cards = OutsideRefundCard.objects.filter(status = REFUNDSTATUS_CHOICES_KEEPER)
     search_form = OutsideRefundSearchForm()
     context = {
         "card_set":refund_cards,
-        "STORAGESTATUS_KEEPER":REFUNDSTATUS_CHOICES_KEEPER,
+        "default_status":REFUNDSTATUS_CHOICES_KEEPER,
         "search_form":search_form,
     }
     return render(request,"storage/outside/outsiderefundhome.html", context)
