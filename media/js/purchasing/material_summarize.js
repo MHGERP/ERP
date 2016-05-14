@@ -105,7 +105,7 @@ $(document).on("click",".btn-open",function(){
         pendingArray = Array();
     }
     var id = $($(this).attr("data-source")).val();
-    Dajaxice.purchasing.getOrderForm(getOrderCallBack,{"order_id":id,"pendingArray":pendingArray,})
+    Dajaxice.purchasing.getOrderForm(getOrderCallBack,{"order_id":id,"pendingArray":pendingArray,});
 });
 
 //new purchase button
@@ -114,6 +114,10 @@ $(document).on("click","#new_purchase_btn",function(){
 });
 
 function getOrderCallBack(data){
+    if(data.status==1){
+        alert("没有所选订购单");
+        return false;
+    }
     $("input#order_number").val(data.order_id);
     $("div.table-div").html(data.html);
     $("#new_order_modal").attr("args", data.id);
@@ -146,7 +150,7 @@ $("#btn-delete").click(function(){
 
 });
 function deleteCallBack(){
-    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack, {"order_type":dic_type[$("#id_inventory_type".val())]});
+    Dajaxice.purchasing.getOngoingOrderList(getOrderListCallBack,{"order_type":dic_type[$("#id_inventory_type").val()]});
 }
 
 

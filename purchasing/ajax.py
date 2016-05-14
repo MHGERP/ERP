@@ -912,9 +912,12 @@ def getOrderFormItems(request, index, can_choose = False):
         "items": items,
         "order_form":order_form,
         "can_choose": can_choose,
+        "can_edit":True
     }
     if order_form.order_mod==1:
         html = render_to_string("purchasing/orderform/orderform_item_list.html", context)
+    elif order_form.order_mod ==2 :
+        html=render_to_string("purchasing/orderform/orderform_weld_list.html",context)
     else:
         html =render_to_string("purchasing/orderform/orderform_raw_list.html",context)
     return html
@@ -958,7 +961,7 @@ def getOngoingOrderList(request,order_type):
     Lei
     """
     if int(order_type)==6:
-        order_type=2
+        order_mod=2
     elif int(order_type) >2 :
         order_mod=1
     else:
@@ -1095,6 +1098,7 @@ def newOrderDelete(request,id):
     """
     order_form = OrderForm.objects.get(id = id)
     order_form.delete()
+    return simplejson.dumps({})
 
 @dajaxice_register
 def getBidForm(request, bid_id, pendingArray):
@@ -1124,7 +1128,10 @@ def getOrderForm(request, order_id, pendingArray):
     """
     Lei
     """
-    order_form = OrderForm.objects.get(id = order_id)
+    try:
+        order_form = OrderForm.objects.get(id = order_id)
+    except:
+        return simplejson.dumps({"status":1})
     items = Materiel.objects.filter(materielformconnection__order_form = order_form)
     for item in items:
         item.order_status = u"已加入"
@@ -1134,9 +1141,11 @@ def getOrderForm(request, order_id, pendingArray):
         item.order_status = u"待加入"
 
     if order_form.order_mod == 1:
-        html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items, "can_choose": False, "items_pending": items_pending, })
+        html = render_to_string("purchasing/orderform/orderform_item_list.html", {"items": items, "can_choose": False, "items_pending": items_pending,"can_edit":False })
+    elif order_form.order_mod == 2:
+        html=render_to_string("purchasing/orderform/orderform_weld_list.html",{"item":items,"can_choose":False,"items_pending":items_pending,"can_edit":False})
     else:
-        html=render_to_string("purchasing/orderform/orderform_raw_list.html",{"items":items,"can_choose":False,"items_pending":items_pending})
+        html=render_to_string("purchasing/orderform/orderform_raw_list.html",{"items":items,"can_choose":False,"items_pending":items_pending,"can_edit":False})
     context = {
             "order_id": order_form.order_id,
             "id": order_form.id,
@@ -1191,7 +1200,7 @@ def GetOrderInfoForm(request,uid):
     else:
         orderForm = OrderFormTwo(instance=order)
         html="purchasing/orderform/order_normal_form.html"
-    form_html = render_to_string(html,{'order_form':orderForm,'count':count,'purchasing':purchasing})
+    form_html = render_to_string(html,{'order_form':orderForm})
     return simplejson.dumps({'form':form_html})
 
 @dajaxice_register

@@ -13,14 +13,14 @@
 	</thead>
 	{%for it in process_detail_list%}
 		<tr>
-			<td>{{it.materiel_belong.order}}</td>
-			<td>{{it.materiel_belong.index}}</td>
+			<td>{{it.sub_materiel_belong.sub_order.name}}</td>
+			<td>{{it.sub_materiel_belong.materiel_belong.index}}</td>
 			<td>{{it.productionworkgroup.name|default:""}}</td>
 			<td>{{it.processname}}</td>
 			<td>{{it.work_hour}}</td>
 			<td></td>
 			<td></td>
-			<td>{{it.complete_date|default:""}}</td>
+			<td>{{it.complete_process_date|default:""}}</td>
 		</tr>
 	{%endfor%}	
 </table>
