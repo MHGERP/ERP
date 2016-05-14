@@ -61,6 +61,7 @@ $(document).on("click", "#quote_supplier", function() {
       $("#quote_table").html(data);
     }, {"supid" : supid});
     $("#add_quoting").val(supid);
+    $("#add_quoting").removeAttr("style");
 });
 
 $(document).on("click", "#delete_quoting", function() {
