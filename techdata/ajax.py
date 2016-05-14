@@ -1624,3 +1624,25 @@ def deleteWeldJointDetail(request, uid):
     weld_joint_detail = WeldJointTechDetail.objects.get(id = uid)
     weld_joint_detail.delete()
     return "ok"
+
+
+
+@dajaxice_register
+def getWeldingProcessSpecification(request, id_work_order, page = "1"):
+    """
+    JunHU
+    """
+    work_order = WorkOrder.objects.get(id = id_work_order)
+    page = int(page)
+    context = {
+        "work_order": work_order,
+        "current_page": page,
+        "total_page": 2,
+    }
+    if page == 1:
+        html = render_to_string("techdata/welding_process_specification/cover.html", context)
+    elif page == 2:
+        context["display_current_page"] = context["current_page"] - 1
+        context["display_total_page"] = context["total_page"] - 1
+        html = render_to_string("techdata/welding_process_specification/graph_page.html", context)
+    return html

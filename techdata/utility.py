@@ -65,3 +65,18 @@ def processDetailGenerate(order):
                 detail.process_id = i
                 detail.work_hour = 0
                 detail.save()
+
+def techdataOrderInitialize(order):
+    """
+    JunHU
+    """
+    AuxiliaryMark(order = order).save()
+    PrincipalMark(order = order).save()
+    CooperantMark(order = order).save()
+    FirstFeedingMark(order = order).save()
+    OutPurchasedMark(order = order).save()
+    WeldQuotaPageMark(order = order).save()
+    TransferCardMark(order = order).save()
+    ProcessBOMPageMark(order = order).save()
+    DesignBOMMark(order = order).save()
+    WeldJointTech(order = order).save()
