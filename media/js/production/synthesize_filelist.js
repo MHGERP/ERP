@@ -1,8 +1,7 @@
 $(document).ready(refresh);
 
 function refresh(){
-	var id_work_order = $('#id_work_order').val();
-	Dajaxice.production.getFileList(getFileListCallBack,{"id_work_order":id_work_order});
+	Dajaxice.production.getFileList(getFileListCallBack,{"form":$("#subWorkOrderForm").serialize()});
 }
 function getFileListCallBack(data){
 	$("#widget-content").html(data);

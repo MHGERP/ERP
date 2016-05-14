@@ -8,10 +8,8 @@
 {% block inner_content%}
 <link rel="stylesheet" href="{{STATIC_URL }}style/synthesize_filelist.css" type="text/css" 
 media="screen" />
-<form class="form-search ">
-   &nbsp&nbsp&nbsp&nbsp<font size="4px"><b>工作令</b>&nbsp&nbsp</font>
-   {{workOrderForm.work_order}}
-   
+<form class="form-search " id="subWorkOrderForm">
+   {{subWorkOrderForm}}
     <span class="btn" id="order_search">检索</span> 
 </form>
 <div class="widget-content" id="widget-content"></div>

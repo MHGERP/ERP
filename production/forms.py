@@ -117,27 +117,27 @@ class DateForm(forms.Form):
     operator = forms.ChoiceField(widget = forms.TextInput(attrs = {'class':'form-control input'}),label=u"操作员")
     date = forms.ChoiceField(widget = forms.Select(attrs = {'class':'form-control input-medium'}),label=u"日期")
 class HourSummarizeForm(forms.Form):
-    materiel_belong__order = forms.ChoiceField(required = False,widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
+    sub_materiel_belong__sub_order = forms.ChoiceField(required = False,widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
     productionworkgroup = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
-    complete_date__gte = forms.DateField(label = u"完成时间开始", required = False)
-    complete_date__lte = forms.DateField(label = u"完成时间结束", required = False)
+    complete_process_date__gte = forms.DateField(label = u"完成时间开始", required = False)
+    complete_process_date__lte = forms.DateField(label = u"完成时间结束", required = False)
     def __init__(self, *args, **kwargs):
         super(HourSummarizeForm, self).__init__(*args, **kwargs)
-        WORKORDER_CHOICES = tuple([("","------")]+[(item.id, item) for item in WorkOrder.objects.all()])
-        self.fields["materiel_belong__order"].choices = WORKORDER_CHOICES
+        WORKORDER_CHOICES = tuple([("", u"----------")]  + [(item.id, item) for item in SubWorkOrder.objects.all()])
+        self.fields["sub_materiel_belong__sub_order"].choices = WORKORDER_CHOICES
         GROUO_NUM_CHOICES = tuple([("","------")]+[(item.id, item.name) for item in ProductionWorkGroup.objects.all()])
         self.fields["productionworkgroup"].choices = GROUO_NUM_CHOICES
 
 class HourMessageSearchForm(forms.Form):
-    materiel_belong__order = forms.ChoiceField(label=u"工作令", widget = forms.Select(attrs = {"class": "form-control input"}))
-    materiel_belong__index__contains = forms.CharField(required=False, label=u"工作票号")
+    sub_materiel_belong__sub_order = forms.ChoiceField(label=u"工作令", required = False, widget = forms.Select(attrs = {"class": "form-control input"}))
+    sub_materiel_belong__materiel_belong__index__contains = forms.CharField(required=False, label=u"工作票号")
     productionworkgroup = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
     def __init__(self, *args, **kwargs):
          super(HourMessageSearchForm, self).__init__(*args, **kwargs)
          GROUO_NUM_CHOICES = tuple([("","------")]+[(item.id, item.name) for item in ProductionWorkGroup.objects.all()])
          self.fields["productionworkgroup"].choices = GROUO_NUM_CHOICES
-         WORKORDER_CHOICES = tuple((item.id, item) for item in WorkOrder.objects.all())
-         self.fields["materiel_belong__order"].choices = WORKORDER_CHOICES
+         WORKORDER_CHOICES = tuple([("", u"----------")]  + [(item.id, item) for item in SubWorkOrder.objects.all()])
+         self.fields["sub_materiel_belong__sub_order"].choices = WORKORDER_CHOICES
 
 class WorkGroupForm(forms.Form):
     production_work_group = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
