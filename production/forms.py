@@ -105,17 +105,17 @@ class TaskConfirmForm(TaskAllocationSearchForm):
 class MaterialPlantimeChangeForm(ModelForm):
     class Meta:
         model = SubMateriel
-        fields = {'materiel_belong','sub_order','complete_plandate'}
+        fields = ( 'materiel_belong','sub_order', 'complete_plandate',)
         widgets = { 
-            "materiel_belong": forms.TextInput(attrs={"readonly":"true"}), 
-            "sub_order": forms.TextInput(attrs={"readonly":"true"}), 
-           # "complete_plandate" : forms.DateInput(attrs={"id":"complete_plandate"}),
+            "materiel_belong": forms.Select(attrs={"disabled":"disabled"}), 
+            "sub_order": forms.Select(attrs={"disabled":"disabled"}), 
         }
 
 class DateForm(forms.Form):
     order_index = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
     operator = forms.ChoiceField(widget = forms.TextInput(attrs = {'class':'form-control input'}),label=u"操作员")
     date = forms.ChoiceField(widget = forms.Select(attrs = {'class':'form-control input-medium'}),label=u"日期")
+
 class HourSummarizeForm(forms.Form):
     materiel_belong__order = forms.ChoiceField(required = False,widget = forms.Select(attrs = {'class': 'form-control input-medium '}),label=u"工作令")
     productionworkgroup = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"组号")
