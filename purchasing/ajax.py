@@ -1196,7 +1196,8 @@ def GetOrderInfoForm(request,uid):
         orderForm = OrderFormOne(instance=order)
         html="purchasing/orderform/order_form.html"
     elif order.inventory_type.name=="weld_material":
-        html=""
+        orderForm = OrderFormThree(instance=order)
+        html="purchasing/orderform/order_weld_form.html"
     else:
         orderForm = OrderFormTwo(instance=order)
         html="purchasing/orderform/order_normal_form.html"
@@ -1212,7 +1213,7 @@ def OrderInfo(request,uid,form):
     if materiel.inventory_type.name =="main_materiel" or materiel.inventory_type.name=="auxiliary_materiel":
         materielform = OrderFormOne(deserialize_form(form),instance=materiel)
     elif materiel.inventory_type.name=="weld_material":
-        pass
+        materielform=OrderFormThree(deserialize_form(form),instance=materiel)
     else:
         materielform=OrderFormTwo(deserialize_form(form),instance=materiel)
     #order_obj = orderForm.save(commit = False)
