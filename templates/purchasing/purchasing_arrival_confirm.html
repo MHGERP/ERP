@@ -8,7 +8,8 @@
 <a href="#" class="current">入库单确认</a>
 {% endblock %}
 {% block inner_content%}
-<div id="entrybody" entrytype={{entry_type}}>
+<link rel="stylesheet" href="{{ STATIC_URL }}style/orderform.css" type="text/css" media="screen" />
+<div id="entrybody" entrytype={{entry_type}} entryid={{entry.id}}>
     {% if entry_type == 1%}
     {% include "storage/wordhtml/weldentry.html"%}
     {% elif entry_type == 2%}
@@ -19,14 +20,13 @@
     {% include "storage/wordhtml/outsideentry.html"%}
     {% endif%}
 </div>
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width="0.6">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h2 id="myModalLabel">修改</h2>
     </div>
     <div class="modal-body">
-        <form id="entry_item_form" action="" class="form-horizontal" iid={{is_show}}>
-            {% include "storage/outside/entryitemform.html" %}
+        <form id="entry_item_form" action=""  iid={{is_show}}>
         </form>
     </div>
     <div class="modal-footer">

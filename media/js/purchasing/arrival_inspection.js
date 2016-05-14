@@ -20,10 +20,39 @@ function entry_inspection_confirm_callback(data){
         alert("入库单确认失败");
     }
 }
+var mid,entrytype;
 $(document).on("dblclick","tr[name='entry_item_tr']",function(){
     mid = $(this).attr("id");
     entrytype=$("#entrybody").attr("entrytype");
-   // Dajaxice.storage.getOutsideEntryItemFormInfo(getforminfo_callback,{"mid":mid});
+    Dajaxice.purchasing.getEntryFormInfo(function(data){
     $("#myModal").modal('show');
+    $("#entry_item_form").html(data.html);
+    },{"mid":mid,"entrytype":entrytype});
                                 
+});
+
+$("#save_entry_item").click(function(){
+    form=$("#entry_item_form").serialize(true);
+    Dajaxice.purchasing.saveEntryItem(function(data){
+        alert(data.message);
+        if(data.status==0){
+            window.location.reload();
+        }
+    },{
+        "form":form,
+        "mid":mid,
+        "entrytype":entrytype
+
+    });
+});
+
+$("span[role='purchaser']").click(function(){
+    entrytype=$("#entrybody").attr("entrytype");
+    eid=$("#entrybody").attr("entryid");
+    Dajaxice.purchasing.entryPurchaserConfirm(function(data){
+        window.location.reload();
+    },{
+        "eid":eid,
+        "entrytype":entrytype
+    });
 });
