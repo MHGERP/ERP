@@ -13,7 +13,7 @@
    <td>{{entry.purchaser.userinfo.name}}</td>
    <td>{{entry.inspector.userinfo.name}}</td>
    <td><a href="/storage/auxiliarytools/entry?id={{entry.id}}">
-    {% ifequal entry.entry_status STORAGESTATUS_KEEPER %}
+    {% ifequal entry.entry_status default_status %}
         <button type="button" class="btn btn-warning">待处理</button>
     {% else %}
         <button type="button" class="btn">查看</button>

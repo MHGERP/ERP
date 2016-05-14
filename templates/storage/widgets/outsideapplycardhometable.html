@@ -16,7 +16,7 @@
             <td>{{card.applicant.userinfo|default_if_none:""}}</td>
             <td>{{card.department}}</td>
             <td>
-                {% ifequal card.entry_status  APPLYSTATUS_KEEPER %}
+                {% ifequal card.status default_status %}
                 <a class="btn btn-warning" href="/storage/outside/applycardconfirm/{{card.id}}">待处理</a>
                 {% else %}
                 <a class="btn" href="/storage/outside/applycardconfirm/{{card.id}}">查看</a>
