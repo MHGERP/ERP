@@ -7,6 +7,7 @@ from const import ORDERFORM_STATUS_CHOICES
 from const.models import Materiel
 from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE, RECHECK_CHOICE
 from purchasing.models import MaterielCopy
+from storage.models import *
 
 class SupplierForm(ModelForm):
     class Meta:
