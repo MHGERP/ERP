@@ -85,7 +85,7 @@ def genEntry(request,selected,bid,entry_type):
         accept_supplier=bidform.bidacceptance.accept_supplier.supplier_name
         create_time=datetime.now()
         entry_code=create_time.strftime("%Y%m%d%H%M%S")
-        entry_status=STORAGESTATUS_PURCHASER
+        entry_status=ENTRYSTATUS_CHOICES_PUCAHSER
         print entry_type
         if entry_type=="entrytype_board":
             steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,purchaser=user,entry_status=entry_status,steel_type=ENTRYTYPE_BOARD)
@@ -1397,7 +1397,7 @@ def entryConfirmQuery(request,entry_select):
         _Model = AuxiliaryToolEntry
     elif entry_select == "4":
         _Model = OutsideStandardEntry
-    entry_set=_Model.objects.filter(entry_status=STORAGESTATUS_PURCHASER)
+    entry_set=_Model.objects.filter(entry_status=ENTRYSTATUS_CHOICES_PUCAHSER)
     entry_set.order_by("-create_time")
     html = render_to_string("purchasing/widgets/purchasing_entry_table.html",{'entry_set':entry_set,'entry_type':entry_select})
     data = {
