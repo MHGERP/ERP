@@ -85,7 +85,7 @@ def genEntry(request,selected,bid,entry_type):
         accept_supplier=bidform.bidacceptance.accept_supplier.supplier_name
         create_time=datetime.now()
         entry_code=create_time.strftime("%Y%m%d%H%M%S")
-        entry_status=STORAGESTATUS_PURCHASER
+        entry_status=ENTRYSTATUS_CHOICES_PUCAHSER
         print entry_type
         if entry_type=="entrytype_board":
             steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,purchaser=user,entry_status=entry_status,steel_type=ENTRYTYPE_BOARD)
@@ -1389,20 +1389,17 @@ def saveOrderformExecute(request,orderform_id,form):
 def entryConfirmQuery(request,entry_select):
     #Liuguochao
 
-    replace_dic = {}
-    filter_dic = {"entry_status":STORAGESTATUS_PURCHASER}
     if entry_select == "1":
         _Model = WeldMaterialEntry
     elif entry_select == "2":
-        _Model = SteelMaterialPurchasingEntry
-        replace_dic = {"entry_code":"form_code",}
+        _Model = SteelMaterialEntry
     elif entry_select == "3":
-        _Model = AuxiliaryToolEntryCardList
-        replace_dic = {"entry_status":"status","entry_time":"create_time","entry_code":"index"}
-        filter_dic = {"status":STORAGESTATUS_PURCHASER,}
+        _Model = AuxiliaryToolEntry
     elif entry_select == "4":
         _Model = OutsideStandardEntry
-    html = handleProcess(_Model,filter_dic,entry_select, replace_dic)
+    entry_set=_Model.objects.filter(entry_status=ENTRYSTATUS_CHOICES_PUCAHSER)
+    entry_set.order_by("-create_time")
+    html = render_to_string("purchasing/widgets/purchasing_entry_table.html",{'entry_set':entry_set,'entry_type':entry_select})
     data = {
         "html":html,
     }

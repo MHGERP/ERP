@@ -58,7 +58,7 @@ def searchSteelRefundCard(request,form):
     if form.is_valid():
         conditions = form.cleaned_data
         steel_refund_cards = get_weld_filter(SteelMaterialRefundCard,conditions)
-        result_table = render_to_string("storage/widgets/refund_card_table.html",{"refund_cards":steel_refund_cards})
+        result_table = render_to_string("storage/widgets/refund_card_table.html",{"refund_cards":steel_refund_cards,"default_status":REFUNDSTATUS_STEEL_CHOICES_KEEPER})
         message = "success"
         context["result_table"]=result_table
     else:
@@ -390,24 +390,6 @@ def Auxiliary_Tools_Apply_Commit(request,data):
     return HttpResponse('[SUCCESS] commit apply card succeed')
 
 
-"""
-@dajaxice_register
-def Auxiliary_Tools_Entry(request,data):
-    form_data = deserialize_form(data)
-    object_id = int(form_data['object_id'])
-    auxiliary_card_list = AuxiliaryToolEntryCardList.objects.get(id=object_id)
-    auxiliarytools = AuxiliaryToolEntryCard.objects.filter(card_list__id=object_id)
-    for at in auxiliarytools:
-        if at.quantity<0:
-            return HttpResponse('[ERROR]Auxiliary tools entry quantity error')
-        at.auxiliary_tool.quantity=F('quantity')+at.quantity
-    for at in auxiliarytools:
-        at.auxiliary_tool.save()
-    auxiliary_card_list.status=STORAGESTATUS_END
-    auxiliary_card_list.keeper=request.user
-    auxiliary_card_list.save()
-    return HttpResponse('[SUCCESS] entry succeed')
-"""
 
 @dajaxice_register
 def Search_Auxiliary_Tools_Records(request,data,search_type):
@@ -424,18 +406,21 @@ def Search_Auxiliary_Tools_Records(request,data,search_type):
                 return render_to_string('storage/auxiliarytools/apply_table.html',context)
 
 @dajaxice_register
-def Search_Auxiliary_Tools_Apply_Card(request,data):
-    context={}
-    print data
-    form=AuxiliaryToolsApplyCardSearchForm(deserialize_form(data))
+def Search_Auxiliary_Tools_Apply_Card(request,form):
+    apply_cards = []
+    form=AuxiliaryToolsApplyCardSearchForm(deserialize_form(form))
     if form.is_valid():
         conditions=form.cleaned_data
-        print conditions
-        context['apply_cards']=get_weld_filter(AuxiliaryToolApplyCard,conditions)
-        print context['apply_cards']
+        apply_cards = get_weld_filter(AuxiliaryToolApplyCard,conditions)
     else:
         print form.errors
-    return render_to_string('storage/auxiliarytools/apply_card_table.html',context)    
+    
+    context = {
+        "apply_cards":apply_cards,
+        "default_status":AUXILIARY_TOOL_APPLY_CARD_KEEPER,
+    } 
+    html = render_to_string('storage/auxiliarytools/apply_card_table.html',context)
+    return simplejson.dumps({"html":html})
 
 """
 @dajaxice_register
@@ -692,30 +677,21 @@ def bakeSave(request,bakeform,bid=None):
     return simplejson.dumps({"html":html,"message":message})
 
 @dajaxice_register
-@transaction.commit_manually
 def outsideEntryConfirm(request,eid):
     entry = OutsideStandardEntry.objects.get(id=eid)
-    items = OutsideStandardItem.objects.filter(entry = entry)
-    flag = False
-    try:
-        if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
-            for item in items:
-                new_storelist = OutsideStorageList(entry_item=item,count=item.count,outsidebuy_type=entry.outsidebuy_type)
-                new_storelist.save()
-            entry.entry_status = ENTRYSTATUS_CHOICES_END
-            entry.keeper = request.user
-            entry.save()
-            flag = True
-    except Exception,e:
-        entry.keeper = None
-        print e
-    html = render_to_string("storage/wordhtml/outsideentry.html",{"entry":entry,"items":items})
-    if flag:
+    items = OutsideStandardItems.objects.filter(entry = entry)
+    if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
+        for item in items:
+            new_storelist = OutsideStorageList(entry_item=item,count=item.count,outsidebuy_type=entry.outsidebuy_type)
+            new_storelist.save()
+        entry.entry_status = ENTRYSTATUS_CHOICES_END
+        entry.keeper = request.user
+        entry.save()
         message = u"入库单确认成功"
-        transaction.commit()
     else:
         message = u"入库单确认失败"
-        transaction.rollback()
+    html = render_to_string("storage/wordhtml/outsideentry.html",{"entry":entry,"items":items})
+    
     return simplejson.dumps({"html":html,"message":message})
 
 """
@@ -914,27 +890,6 @@ def weldMaterialApply(request,apply_form,select_item,aid):
     return simplejson.dumps({'message':message,'flag':flag,"html":html})
 
 @dajaxice_register
-def weldRefundCommit(request,rid,form):
-    ref_obj = WeldRefund.objects.get(id = rid)
-    reform = WeldRefundForm(deserialize_form(form),instance = ref_obj)
-    if reform.is_valid():
-        reform.save()
-        storageitem = ref_obj.receipts_code.storelist
-        storageitem.count += ref_obj.refund_count
-        storageitem.save()
-        
-        ref_obj.weldrefund_status = REFUNDSTATUS_CHOICES_END
-        ref_obj.save()
-        message = u"退库成功，信息已记录"
-    else:
-        message = u"退库失败，退库单信息未填写完整"
-        print reform.errors
-        
-    is_show = ref_obj.weldrefund_status == STORAGESTATUS_END
-    print is_show
-    return simplejson.dumps({"is_show":is_show,"message":message})
-
-@dajaxice_register
 def changeStorageDb(request,db_type,form):
     db_model = checkStorage(db_type)
     context = {}
@@ -1002,12 +957,11 @@ def searchMaterial(request,search_form,search_type):
     table_path = "storage/searchmaterial/store_"+search_type+"_items_table.html"
     search_form = form_type(deserialize_form(search_form))
     if search_form.is_valid():
+        replace_dic = gen_replace_dic(search_form.cleaned_data)
         if search_type=="weld":
-            replace_dic = gen_replace_dic(search_form.cleaned_data)
-            print  replace_dic 
             store_items = get_weld_filter(storelist_model,search_form.cleaned_data,replace_dic).order_by("entry_time")
         else:
-            store_items = get_weld_filter(storelist_model,search_form.cleaned_data)
+            store_items = get_weld_filter(storelist_model,search_form.cleaned_data,replace_dic)
             if search_type != "steel":
                 store_items = store_items.order_by("entry_item__entry__create_time")
     html = render_to_string(table_path,{"store_items":store_items,})
@@ -1038,7 +992,7 @@ def searchWeldRefund(request,search_form):
     search_form = RefundSearchForm(deserialize_form(search_form))
     if search_form.is_valid():
         refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data)
-        html = render_to_string("storage/widgets/weldrefundhistorytable.html",{"refund_set":refund_set,"STORAGESTATUS_END":REFUNDSTATUS_CHOICES_END})
+        html = render_to_string("storage/widgets/weldrefundhistorytable.html",{"refund_set":refund_set,"default_status":REFUNDSTATUS_CHOICES_KEEPER})
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
@@ -1082,6 +1036,8 @@ def steelMaterialApply(request,select_item,mid):
         storelist = SteelMaterialStoreList.objects.get(id=select_item)
         applyitem = SteelMaterialApplyCardItems.objects.get(id=mid)
         applyitem.storelist = storelist
+        applycard = applyitem.apply_card
+        items = SteelMaterialApplyCardItems.objects.filter(apply_card=applycard)
         if applyitem.apply_card.status == APPLYCARD_KEEPER:
             if applyitem.apply_count <= storelist.count:
                 applyitem.save()
@@ -1094,8 +1050,9 @@ def steelMaterialApply(request,select_item,mid):
     except Exception,e:
         message = u"材料选择失败"
         print e
-        
-    return simplejson.dumps({"message":message,"flag":flag})
+    
+    html = render_to_string("storage/wordhtml/steelapplycard.html",{"applycard":applycard,"items":items})
+    return simplejson.dumps({"message":message,"flag":flag,"html":html})
 
 @dajaxice_register
 @transaction.commit_manually
@@ -1170,12 +1127,13 @@ def updateSteelStoreList(refund,items):
 def outsideCardSearch(request,role,form):
     OutsideCardDict = {"entry":OutsideStandardEntry,"applycard":OutsideApplyCard,"refund":OutsideRefundCard}
     OutsideSearchFormDict = {"entry":OutsideEntrySearchForm,"applycard":OutsideApplyCardSearchForm,"refund":OutsideRefundSearchForm}
+    OutsideKeepperStatusDict = {"entry":ENTRYSTATUS_CHOICES_KEEPER,"applycard":APPLYCARD_KEEPER,"refund":REFUNDSTATUS_CHOICES_KEEPER}
     form = OutsideSearchFormDict[role](deserialize_form(form))
     card_model = OutsideCardDict[role]
     html_path = "storage/widgets/outside"+role+"hometable.html"
     if form.is_valid():
         card_set = get_weld_filter(card_model,form.cleaned_data)
-    html = render_to_string(html_path,{"card_set":card_set,"STORAGESTATUS_KEEPER":ENTRYSTATUS_CHOICES_KEEPER})
+    html = render_to_string(html_path,{"card_set":card_set,"default_status":OutsideKeepperStatusDict[role]})
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
@@ -1224,7 +1182,7 @@ def outsideRefundCardConfirm(request,role,fid):
     refundcard = OutsideRefundCard.objects.get(id=fid)
     items = refundcard.outsiderefundcarditems_set.all()
     if role == "keeper":
-        if refundcard.status == ENTRYSTATUS_CHOICES_KEEPER:
+        if refundcard.status == REFUNDSTATUS_CHOICES_KEEPER:
             for item in items:
                 storelist = item.applyitem.storelist
                 storelist.count += item.count

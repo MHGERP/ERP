@@ -493,7 +493,7 @@ class WeldRefundConfirmForm(ModelForm):
         fields = ("refund_weight","refund_status")
 
 class SteelMaterialSearchForm(forms.Form):
-    entry_item__work_order__ = forms.CharField(label=u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__work_order__name = forms.CharField(label=u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     specification = forms.CharField(label=u"名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     entry_item__material_mark = forms.CharField(label=u"材质",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     def __init__(self,*args,**kwargs):
@@ -509,7 +509,7 @@ class SteelRefundSearchForm(forms.Form):
         super(SteelRefundSearchForm,self).__init__(*args,**kwargs)
         workorder_list = SubWorkOrder.objects.all()
         self.fields["work_order"].choices = getChoiceList(workorder_list)
-        set_form_input_width(self.fields)
+        set_form_input_width(self.fields,("style","width:130px;"))
 
 class OutsideEntrySearchForm(forms.Form):
     create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))

@@ -18,8 +18,9 @@ class WorkOrder(models.Model):
         super(WorkOrder, self).save(*args, **kwargs)
         if self.count == "1":
             SubWorkOrder(order = self, index = "1",name = self.order_index).save()
-        for i in xrange(int(self.count)):
-            SubWorkOrder(order = self, index = str(i + 1),name=self.order_index+"-"+str(i+1)).save()
+        else:
+            for i in xrange(int(self.count)):
+                SubWorkOrder(order = self, index = str(i + 1),name=self.order_index+"-"+str(i+1)).save()
     def suffix(self):
         return self.order_index[2:]
     def __unicode__(self):

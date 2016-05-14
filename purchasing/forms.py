@@ -7,6 +7,7 @@ from const import ORDERFORM_STATUS_CHOICES
 from const.models import Materiel
 from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE, RECHECK_CHOICE
 from purchasing.models import MaterielCopy
+from storage.models import *
 
 class SupplierForm(ModelForm):
     class Meta:
@@ -229,3 +230,21 @@ class EntryTypeForm(forms.Form):
             elif bidform.order_form.order_mod == 2:
                 self.fields["entry_type"].choices=(WELDING)
 
+
+class WeldEntryForm(ModelForm):
+    class Meta:
+        model=WeldMaterialEntryItems
+        fields={"price","total_weight","single_weight","production_date","factory","count","material_charge_number","model_number","remark"}
+
+class SteelEntryForm(ModelForm):
+    class Meta:
+        model=SteelMaterialEntryItems
+        fields={"weight","unit","store_room","length","material_code","batch_number"}
+class AuxiliaryEntryForm(ModelForm):
+    class Meta:
+        model=AuxiliaryToolEntryItems
+        fields={"unit","factory","supplier","remark"}
+class OutsideEntryForm(ModelForm):
+    class Meta:
+        model=OutsideStandardItems
+        fields={"material_code","batch_number","unit","weight","count","heatnum","factory","remark"}

@@ -225,7 +225,7 @@ def taskAllocationSearch(request, form):
     items_list = {}
     if form.is_valid():
         conditions = form.cleaned_data
-        items_list = ProcessDetail.objects.filter(complete_process_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
+        items_list = ProcessDetail.objects.exclude(plan_startdate = None).filter(complete_process_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
         #task_allocation_status = conditions['task_allocation_status']
         #del conditions['task_allocation_status']
         #if task_allocation_status == "-1":
@@ -252,16 +252,7 @@ def taskConfirmSearch(request, form):
     items_list = {}
     if form.is_valid():
         conditions = form.cleaned_data
-        
-        task_confirm_status = conditions['task_confirm_status']
-        del conditions['task_confirm_status']
-        if task_confirm_status == "-1":
-            items_list = ProcessDetail.objects.exclude(productionworkgroup = None).filter(getQ(conditions)).order_by('complete_date');
-        elif task_confirm_status == "0":
-            items_list = ProcessDetail.objects.exclude(productionworkgroup = None).filter(complete_date = None).filter(getQ(conditions));
-        else:
-            items_list = ProcessDetail.objects.exclude(productionworkgroup = None).exclude(complete_date = None).filter(getQ(conditions)).order_by('complete_date');
-    
+        items_list = ProcessDetail.objects.exclude(productionworkgroup = None).filter(getQ(conditions)).order_by('complete_process_date');
     context = {
         "items_list":items_list,
         "taskallocationform":form,
@@ -341,7 +332,7 @@ def taskConfirmFinish(request, form, mid):
     """
     item = ProcessDetail.objects.get(id = mid)
     import datetime
-    item.complete_date = datetime.datetime.today();
+    item.complete_process_date = datetime.datetime.today();
     print datetime.datetime.today()
     item.save()
     return taskConfirmSearch(request, form)
@@ -357,6 +348,20 @@ def taskConfirmView(request,mid):
     }
     html = render_to_string("production/table/task_view_table.html",context)
     return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def taskCheck(request, mid, check_content):
+    item = ProcessDetail.objects.get(id = mid)
+    item.check_content = check_content
+    item.check_date = datetime.datetime.today()
+    item.check_user = request.user
+    item.save()
+    context = {
+        "item":item,
+    }
+    html = render_to_string("production/table/task_view_table.html",context)
+    return simplejson.dumps({"html":html})
+    
 
 @dajaxice_register
 def ledgerTimeChange(request, mid):
