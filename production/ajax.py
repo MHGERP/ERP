@@ -228,14 +228,6 @@ def taskAllocationSearch(request, form):
     if form.is_valid():
         conditions = form.cleaned_data
         items_list = ProcessDetail.objects.exclude(plan_startdate = None).filter(complete_process_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
-        #task_allocation_status = conditions['task_allocation_status']
-        #del conditions['task_allocation_status']
-        #if task_allocation_status == "-1":
-        #    items_list = ProcessDetail.objects.filter(complete_date = None).filter(getQ(conditions)).order_by('-productionworkgroup');
-        #elif task_allocation_status == "0":
-        #    items_list = ProcessDetail.objects.filter(complete_date = None).filter(productionworkgroup = None).filter(getQ(conditions));
-        #else:
-        #    items_list = ProcessDetail.objects.filter(complete_date = None).exclude(productionworkgroup = None).filter(getQ(conditions)).order_by('-productionworkgroup');
         for item in items_list:
             item.groups = ProductionWorkGroup.objects.filter(processname = item.processname);
     context = {
@@ -271,9 +263,7 @@ def taskPlanSearch(request, form):
     items_list = {}
     if form.is_valid():
         conditions = form.cleaned_data
-        #del conditions['plan_startdate__isnull']
         items_list = ProcessDetail.objects.filter(productionworkgroup = None).filter(getQ(conditions)).order_by('sub_materiel_belong').order_by('-plan_startdate');
-        
     context = {
         "items_list":items_list,
         "taskplanform":form,
@@ -305,7 +295,6 @@ def taskPlanChange(request, mid):
     html = render_to_string("production/table/task_plantime_table.html",context)
     return simplejson.dumps({"html":html})
     
-
 @dajaxice_register
 def taskAllocationRemove(request, form, mid):
     """
@@ -364,7 +353,6 @@ def taskCheck(request, mid, check_content):
     html = render_to_string("production/table/task_view_table.html",context)
     return simplejson.dumps({"html":html})
     
-
 @dajaxice_register
 def ledgerTimeChange(request, mid):
     """
@@ -387,9 +375,6 @@ def materialPlantimeChange(request, mid, date):
     materielObj.processDetailObj.extend([ProcessDetail()] * (12-len(materielObj.processDetailObj)))
     html = render_to_string("production/widgets/weld_part_order_info_table.html",{"materielObj":materielObj})
     return simplejson.dumps({ "html" : html})
-
-
-
 
 @dajaxice_register
 def ledgerSearch(request, form):
@@ -473,29 +458,3 @@ def addProdUser(request, checkUserList):
         prod_user_obj.production_user_id = userInfor_obj
         prod_user_obj.save()
     return
-
-    # prodplan_set = ProductionPlan.objects.all()
-    # html = render_to_string("production/widgets/production_plan_table.html", {"prodplan_set":prodplan_set})
-    # data = {
-    #     "html":html,
-    # }
-# def addProductionUser(request, form):
-#     """
-#     Lei
-#     """
-#     production_user_search_form = productionUserSearchForm(deserialize_form(form))
-#     if production_user_search_form.is_valid():
-#         print production_user_search_form.cleaned_data
-#         production_user_name = roduction_user_search_form.cleaned_data["production_user_id__username__contains"]
-#         users=User.objects.all()
-#         productionUser = ProductionUser()
-#         productionUser.production_user_id.username = production_user_search_form.cleaned_data["production_user_id__username__contains"]
-#         productionUser.production_work_group.name = production_user_search_form.cleaned_data["production_work_group"]
-#         productionUser.save()
-#         message = u"生产人员添加成功"
-#         print "ssssssssssss"
-        
-#         print "ddddddddddddd"
-#     else:
-#         message=u"添加失败,生产人员用户名不能为空！"
-#     return message
