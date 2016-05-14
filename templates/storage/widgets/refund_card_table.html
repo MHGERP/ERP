@@ -16,7 +16,7 @@
             <td>{{ref_obj.get_steel_type_display}}</td>
             <td>{{ref_obj.refunder.userinfo}}</td>
             <td>
-                {% ifequal ref_obj.status STORAGESTATUS_KEEPER %}
+                {% ifequal ref_obj.status default_status %}
                     <a class="btn btn-warning" href="/storage/steelrefunddetail/{{ref_obj.id}}">待处理</a>
                 {% else %}
                     <a class="btn btn-primary" href="/storage/steelrefunddetail/{{ref_obj.id}}">查看</a>

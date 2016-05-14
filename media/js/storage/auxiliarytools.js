@@ -87,16 +87,12 @@ $(document).ready(function(){
     });
     $("#apply_card_form").submit(function(e){
         e.preventDefault();
-        var data=$("#apply_card_form").serialize();
+        var form=$("#apply_card_form").serialize();
         Dajaxice.storage.Search_Auxiliary_Tools_Apply_Card(function(data){
-            $('#apply_card_table').html(data);
-            $('#create_time').val('');
-            $('#apply_item').val('');
-            $('#applicant').val('');
-            $('#index').val('');
+            $('#apply_card_table').html(data.html);
         },
         {
-            'data':data,
+            'form':form,
         });
     });
     $(document).on("dblclick","#applycard_table",function(){
