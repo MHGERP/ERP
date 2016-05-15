@@ -10,25 +10,10 @@
 {% block inner_content %}
 <h3>焊材库存台账</h3>
 <div>
-<form class="form-inline" method="post">
-    {% csrf_token %}
-    {% for field in search_form %}
-    {{field.label}}
-    {{field}}
-    {% endfor %}
-    <button class="btn btn-success" type="submit">检索</button> 
-    <button class="btn btn-success" type="button" onclick="get_thread()">需采购</button> 
-    <button class="btn btn-success" type="button" onclick="get_overtime();">过期</button> 
-</form>
 <br>
-<div id = "item_table">
-    {% include "storage/widgets/item_table.html"%}
+<div>
+    {% include "storage/accountsearch/accountbody.html"%}
 </div>
+    {% include "storage/accountsearch/account_apply_refund.html"%}
 </div>
-<script>
-    $(function(){
-                        $('#entry_time').datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true});
-                                    
-            });
-</script>
 {% endblock %}

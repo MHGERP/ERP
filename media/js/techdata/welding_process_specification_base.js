@@ -31,3 +31,15 @@ $(document).on("click", ".turnpage", function() {
         }
     }
 });
+
+
+//for print test
+$(document).on("click", "#btn_print", function() {
+    var id_work_order = $("#div_card").attr("id_work_order");
+    var page = $("#paginator_div").attr("page");
+    Dajaxice.techdata.getWeldingProcessSpecification(pagePrint, {
+        "id_work_order": id_work_order,
+        "page": page,
+        "is_print": true,
+    });
+});

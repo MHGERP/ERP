@@ -274,3 +274,14 @@ def createAuxiliaryToolStoreList(entry):
 def createSteelMaterialStoreList(entry):
     for item in entry.steelmaterialentryitems_set.all():
         SteelMaterialStoreList(entry_item=item,specification=item.specification , steel_type=entry.steel_type ,count=item.count,length=item.length,weight=item.weight,store_room=item.store_room).save()
+
+def getAccountDataDict(card_type):
+    """
+    return: model_type,form_type,account_table_path
+    """
+    account_table_path = "storage/accountsearch/"+card_type+".html"
+    weldentry = (WeldStoreList,WeldStorageSearchForm)
+    weldapply = (WeldingMaterialApplyCard,WeldApplyAccountSearchForm)
+    weldstorage = (WeldStoreList,WeldStorageSearchForm)
+    model_dict = {"weldentry":weldentry,"weldapply":weldapply,"weldstorage":weldstorage}
+    return model_dict[card_type][0],model_dict[card_type][1],account_table_path

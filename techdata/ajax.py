@@ -1628,7 +1628,7 @@ def deleteWeldJointDetail(request, uid):
 
 
 @dajaxice_register
-def getWeldingProcessSpecification(request, id_work_order, page = "1"):
+def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print = False):
     """
     JunHU
     """
@@ -1642,13 +1642,14 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1"):
     
     detail_list_page = 1 if detail_list.count() == 0 else (detail_list.count() - 1) / 6 + 1
 
-    total_page = 2 + detail_list_page + 1
+    total_page = 2 + detail_list_page + 2
 
     context = {
         "work_order": work_order,
         "specification": specification,
         "current_page": page,
         "total_page": total_page,
+        "is_print": is_print,
     }
     context["display_current_page"] = context["current_page"] - 1
     context["display_total_page"] = context["total_page"] - 1
@@ -1661,6 +1662,9 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1"):
         detail_list = getContext(detail_list, page - 2, "item", 1, 6)["item_list"]
         context["empty_row"] = range(6 - len(detail_list))
         html = render_to_string("techdata/welding_process_specification/weld_analysis_table.html", context)
-    elif page > 2 + detail_list_page:
+    elif page <= 2 + detail_list_page + 1:
         html = render_to_string("techdata/welding_process_specification/welding_material_summary.html", context)
+    else:
+        context["empty_row"] = range(11)
+        html = render_to_string("techdata/welding_process_specification/NDE.html", context)
     return html

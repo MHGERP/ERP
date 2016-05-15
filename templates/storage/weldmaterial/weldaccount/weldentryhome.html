@@ -10,46 +10,6 @@
 {% block inner_content %}
 <h3>焊材入库台账</h3>
 <div>
-<form class="form-inline" method="post">
-    {% csrf_token %}
-    {% for field in search_form %}
-    {{field.label}}
-    {{field}}
-    {% endfor %}
-    <button class="btn btn-success">检索</button> 
-</form>
-<br>
-<table class="table table-bordered">
-    <thead>
-        <th>牌号</th>
-        <th>规格</th>
-        <th>入库数量</th>
-        <th>入库时间</th>
-        <th>材料批号</th>
-        <th>材质编号</th>
-        <th>厂家</th>
-        <th>操作</th>
-    </thead>
-    </tbody>
-        {% for item in items_set %}
-        <tr>
-            <td>{{item.brand}}</td>
-            <td>{{item.specification}}</td>
-            <td>{{item.entry_item.material.count}}</td>
-            <td>{{item.entry_time|date:"Y年m月d日"}}</td>
-            <td>{{item.charge_number}}</td>
-            <td>{{item.material_id}}</td>
-            <td>{{item.factory}}</td>
-            <td><a href="/storage/weldentryconfirm/{{item.entry_item.entry.id}}?redict_path=/storage/weldentryaccount" class="btn">查看入库单</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    {% include "storage/accountsearch/accountbody.html" %}
 </div>
-<script>
-    $(function(){
-                        $('#entry_time').datetimepicker({format:"yyyy-mm-dd",minView:2,autoclose:true});
-                                    
-            });
-</script>
 {% endblock %}

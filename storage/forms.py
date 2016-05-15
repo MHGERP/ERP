@@ -12,12 +12,19 @@ from const.utils import getChoiceList,getDistinctSet
 
 DEPARTMENT_CHOICES=STORAGEDEPARTMENT_CHOICES
 
-def set_form_input_width(dict,style=("style","width:100px;")):
+def set_form_input_style(dict,style=("style","width:100px;")):
     """
     设定form的样式
     """
     for k , v in dict.items():
         v.widget.attrs[style[0]] = style[1]
+
+def set_form_input_width(dict,width="100px"):
+    """
+    设定form的样式
+    """
+    for k , v in dict.items():
+        v.widget.attrs["style"] = "width:"+width+";"
 
 class ApplyCardHistorySearchForm(forms.Form):
     workorder = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"id":"workorder","class":"form_control","select2":"true"}))
@@ -32,7 +39,7 @@ class ApplyCardHistorySearchForm(forms.Form):
         workorder_list = SubWorkOrder.objects.all()
         self.fields["workorder"].choices = getChoiceList(workorder_list)
         style = ("style","width:120px;margin-bottom:10px;")
-        set_form_input_width(self.fields,style)
+        set_form_input_style(self.fields,style)
 class ApplyCardForm(ModelForm):
 
     class Meta:
@@ -212,8 +219,7 @@ class RefundSearchForm(forms.Form):
     create_time__lte = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control','date_picker':'true',}))
     def __init__(self,*args,**kwargs):
         super(RefundSearchForm,self).__init__(*args,**kwargs)
-        style = ("style","width:120px;")
-        set_form_input_width(self.fields,style)
+        set_form_input_width(self.fields,"120px")
         workorder_list = SubWorkOrder.objects.all()
         self.fields["apply_card__workorder"].choices = getChoiceList(workorder_list)
 class WeldRefundForm(ModelForm):
@@ -298,35 +304,39 @@ class AuxiliaryEntrySearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(AuxiliaryEntrySearchForm, self).__init__(*args, **kwargs)
-        style = ("style","width:120px;")
-        set_form_input_width(self.fields,style)
+        set_form_input_width(self.fields,"120px")
 
 class SteelApplyCardSearchForm(forms.Form):
     create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','date_picker':'true','id':'date'}))
     create_time__lte = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','date_picker':'true','id':'date'}))
     applycard_code = forms.CharField(label=u'编号',required=False,widget=forms.TextInput(attrs={'class':'form-control span2','id':'form_code'}))
 
-class WeldStorageSearchForm(forms.Form):
-    material_id = forms.CharField(label=u'材质编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'material_id'}))
-    brand=forms.CharField(label=u'牌号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'brand'}))
-    specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'specification'}))
-    charge_number=forms.CharField(label=u'材料批号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'charge_number'}))
 
-class WeldAccountSearchForm(WeldStorageSearchForm):
-    entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'entry_time'}))
 
-class WeldApplyAccountSearchForm(forms.Form):
-    workorder = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"class":'form-control search-in','id':'workorder'}))
-    weld_bead_number = forms.CharField(label=u"焊缝编号",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'weld_bead_number'}))
-    index = forms.CharField(label=u"编号",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'index'}))
-    create_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control search-in','id':'create_time'}))
+class AccountSearchForm(forms.Form):
+    entry_item__entry__create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','date_picker':'true',}))
+    entry_item__entry__create_time__lte = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','date_picker':'true',}))
+
+class AccountApplySearchForm(forms.Form):
+    create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','date_picker':'true',}))
+    create_time__lte = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','date_picker':'true',}))
+
+class WeldStorageSearchForm(AccountSearchForm):
+    entry_item__material_mark=forms.CharField(label=u'牌号',required=False,widget=forms.TextInput(attrs={'class':'form-control','id':'brand'}))
+    entry_item__specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control','id':'specification'}))
+    def __init__(self,*args,**kwargs):
+        super(WeldStorageSearchForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields)
+
+class WeldApplyAccountSearchForm(AccountApplySearchForm):
+    workorder = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"class":'form-control','id':'workorder','select2':'true'}))
+    weld_bead_number = forms.CharField(label=u"焊缝编号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    applycard_code = forms.CharField(label=u"编号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
     def __init__(self,*args,**kwargs):
         super(WeldApplyAccountSearchForm,self).__init__(*args,**kwargs)
-        workorder_list = WeldingMaterialApplyCard.objects.values("workorder").distinct()
-        work_order_set = []
-        for list_tmp in workorder_list:
-            work_order_set.append(SubWorkOrder.objects.get(id = list_tmp["workorder"]))
-        self.fields["workorder"].choices = getChoiceList(work_order_set,"order_index")
+        work_order_set = SubWorkOrder.objects.all()
+        self.fields["workorder"].choices = getChoiceList(work_order_set,"name")
+        set_form_input_width(self.fields,"130px")
 
 class SteelLedgerSearchForm(forms.Form):
     steel_type = forms.ChoiceField(label=u"钢材类型",required=False,widget=forms.Select(attrs={"class":'form-control'}))
@@ -481,12 +491,6 @@ class WeldApplyKeeperForm(ModelForm):
                 'remark':forms.TextInput(attrs={'class':'span2'}),
         }
 
-class WeldStorageSearchForm(forms.Form):
-    material_id = forms.CharField(label=u'材质编号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'material_id'}))
-    brand=forms.CharField(label=u'牌号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'brand'}))
-    specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'specification'}))
-    charge_number=forms.CharField(label=u'材料批号',required=False,widget=forms.TextInput(attrs={'class':'form-control search-in','id':'charge_number'}))
-
 class WeldRefundConfirmForm(ModelForm):
     class Meta:
         model = WeldRefund
@@ -509,7 +513,7 @@ class SteelRefundSearchForm(forms.Form):
         super(SteelRefundSearchForm,self).__init__(*args,**kwargs)
         workorder_list = SubWorkOrder.objects.all()
         self.fields["work_order"].choices = getChoiceList(workorder_list)
-        set_form_input_width(self.fields,("style","width:130px;"))
+        set_form_input_width(self.fields,"130px")
 
 class OutsideEntrySearchForm(forms.Form):
     create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
@@ -538,7 +542,7 @@ class OutsideEntryItemForm(ModelForm):
         }
     def __init__(self,*args,**kwargs):
         super(OutsideEntryItemForm,self).__init__(*args,**kwargs)
-        set_form_input_width(self.fields,("style","width:250px;"))
+        set_form_input_width(self.fields,"250px")
 
 class OutsideApplyCardSearchForm(forms.Form):
     create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
@@ -609,3 +613,10 @@ class AuxiliaryToolsApplyItemForm(ModelForm):
         super(AuxiliaryToolsApplyItemForm,self).__init__(*args,**kwargs)
         self.fields["actual_quantity"].required = True
 
+class WeldAccountItemForm(ModelForm):
+    class Meta:
+        model = WeldStoreList
+        fields = ("inventory_count","item_status")
+    def __init__(self,*args,**kwargs):
+        super(WeldAccountItemForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields,"150px;")

@@ -120,7 +120,7 @@ span.Char1
 	mso-footnote-continuation-separator:url("RH09焊接工艺规程.files/header.htm") fcs;
 	mso-endnote-separator:url("RH09焊接工艺规程.files/header.htm") es;
 	mso-endnote-continuation-separator:url("RH09焊接工艺规程.files/header.htm") ecs;}
-@page WordSection1
+@page WordSection
 	{size:842.0pt 21.0cm;
 	mso-page-orientation:landscape;
 	margin:59.55pt 45.35pt 45.35pt 45.35pt;
@@ -128,25 +128,27 @@ span.Char1
 	mso-footer-margin:49.6pt;
 	mso-paper-source:0;
 	layout-grid:15.6pt;}
-div.WordSection1
-	{page:WordSection1;}
+div.WordSection
+	{page:WordSection;}
 -->
 </style>
 
+<center class=WordSection style='layout-grid:15.6pt'>
 {% if not is_print %}
-<div id="paginator_div" total_page = "{{total_page}}" page= "{{current_page}}" style='layout-grid:15.6pt'>
+<div id="paginator_div" align=center total_page = "{{total_page}}" page= "{{current_page}}" width="1008" style='width:756.0pt;margin-left:5.4pt; margin-top:10pt; border-collapse:collapse;border:none;
+ mso-border-alt:solid windowtext 1.5pt;mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext'>
 	<span class="btn pull-left prev-page turnpage"><i class="icon-chevron-left"></i>上一页</span>
 	<span class="btn pull-right next-page turnpage">下一页<i class="icon-chevron-right"></i></span>
+	<span class="btn" id="btn_print"><i class="icon-print"></i>打印</a>
 </div>
 {% endif %}
-<div class=WordSection style='layout-grid:15.6pt'>
-
 <div align=center>
 
-<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
- style='border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
- mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:.5pt solid windowtext;
- mso-border-insidev:.5pt solid windowtext'>
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=1008
+ style='width:756.0pt;margin-left:5.4pt; margin-top:10pt; border-collapse:collapse;border:none;
+ mso-border-alt:solid windowtext 1.5pt;mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext'>
  <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;height:22.7pt'>
   <td width=341 colspan=2 style='width:255.45pt;border-top:1.5pt;border-left:
   1.5pt;border-bottom:1.0pt;border-right:1.0pt;border-color:windowtext;
@@ -192,8 +194,8 @@ div.WordSection1
   mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
   mso-border-top-alt:solid windowtext 1.5pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:22.7pt'>
-  <p class=MsoNormal align=left style='text-align:left'><span lang=EN-US
-  style='font-size:12.0pt'>RH09<b style='mso-bidi-font-weight:normal'>-</b><o:p>{{work_order.suffix}}</o:p></span></p>
+  <p class=MsoNormal align=left style='text-align:center'><span lang=EN-US
+  style='font-size:12.0pt'>{{specification}}</span></p>
   </td>
   <td width=182 style='width:136.4pt;border-top:solid windowtext 1.5pt;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
@@ -204,12 +206,12 @@ div.WordSection1
   <p class=MsoNormal align=center style='text-align:center'><span
   style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
   mso-hansi-font-family:"Times New Roman"'>第</span><span lang=EN-US
-  style='font-size:12.0pt'><span style='mso-spacerun:yes'>{{display_current_page}} </span></span><span
+  style='font-size:12.0pt'><span style='mso-spacerun:yes'>&nbsp;{{display_current_page}}&nbsp;</span></span><span
   style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
   mso-hansi-font-family:"Times New Roman"'>页</span><span lang=EN-US
   style='font-size:12.0pt'><span style='mso-spacerun:yes'>&nbsp; </span></span><span
   style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-  mso-hansi-font-family:"Times New Roman"'>共</span><span style='font-size:12.0pt'>{{display_total_page}}
+  mso-hansi-font-family:"Times New Roman"'>共</span><span style='font-size:12.0pt'>&nbsp;{{display_total_page}}&nbsp;
   </span><span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:
   "Times New Roman";mso-hansi-font-family:"Times New Roman"'>页</span><span
   lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></p>
@@ -293,7 +295,7 @@ div.WordSection1
 
 <p class=MsoNormal><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
 
-</div>
+</center>
 
 
 

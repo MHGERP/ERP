@@ -156,60 +156,16 @@ div.WordSection3
 	{page:WordSection3;}
 -->
 </style>
-<!--[if gte mso 10]>
-<style>
- /* Style Definitions */
- table.MsoNormalTable
-	{mso-style-name:普通表格;
-	mso-tstyle-rowband-size:0;
-	mso-tstyle-colband-size:0;
-	mso-style-noshow:yes;
-	mso-style-unhide:no;
-	mso-style-parent:"";
-	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
-	mso-para-margin:0cm;
-	mso-para-margin-bottom:.0001pt;
-	mso-pagination:widow-orphan;
-	font-size:10.0pt;
-	font-family:"Times New Roman","serif";}
-table.MsoTableGrid
-	{mso-style-name:网格型;
-	mso-tstyle-rowband-size:0;
-	mso-tstyle-colband-size:0;
-	mso-style-unhide:no;
-	border:solid windowtext 1.0pt;
-	mso-border-alt:solid windowtext .5pt;
-	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
-	mso-border-insideh:.5pt solid windowtext;
-	mso-border-insidev:.5pt solid windowtext;
-	mso-para-margin:0cm;
-	mso-para-margin-bottom:.0001pt;
-	text-align:justify;
-	text-justify:inter-ideograph;
-	mso-pagination:none;
-	font-size:10.0pt;
-	font-family:"Times New Roman","serif";}
-</style>
-<![endif]--><!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="3074" fillcolor="#9cbee0"
-  strokecolor="#739cc3">
-  <v:fill color="#9cbee0" color2="#bbd5f0" type="gradient">
-   <o:fill v:ext="view" type="gradientUnscaled"/>
-  </v:fill>
-  <v:stroke color="#739cc3" weight="1.25pt"/>
- </o:shapedefaults></xml><![endif]--><!--[if gte mso 9]><xml>
- <o:shapelayout v:ext="edit">
-  <o:idmap v:ext="edit" data="1"/>
- </o:shapelayout></xml><![endif]-->
-</head>
-
-<body lang=ZH-CN style='tab-interval:21.0pt;text-justify-trim:punctuation'>
-
 {% if not is_print %}
-<div id="paginator_div" total_page = "{{total_page}}" page= "{{current_page}}" style='layout-grid:15.6pt'>
+<center class=WordSection0 style='layout-grid:15.6pt'>
+<div id="paginator_div" align=center total_page = "{{total_page}}" page= "{{current_page}}" width="1008" style='width:756.0pt;margin-left:5.4pt;margin-bottom:5.4pt;border-collapse:collapse;border:none;
+ mso-border-alt:solid windowtext 1.5pt;mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext'>
 	<span class="btn pull-left prev-page turnpage"><i class="icon-chevron-left"></i>上一页</span>
 	<span class="btn pull-right next-page turnpage">下一页<i class="icon-chevron-right"></i></span>
+	<span class="btn" id="btn_print"><i class="icon-print"></i>打印</a>
 </div>
+</center>
 {% endif %}
 <div class=WordSection1 style='layout-grid:15.6pt'>
 
@@ -545,6 +501,5 @@ style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
 
 </div>
 
-</body>
 
 

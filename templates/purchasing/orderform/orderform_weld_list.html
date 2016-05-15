@@ -1,3 +1,4 @@
+
 <table class="table table-bordered table-striped table-hover">
   <thead>
 		<tr>
@@ -6,16 +7,14 @@
 			{% endif %}
 			<th>序号</th>
 			<th>工作令编号</th>
-			<th>票号</th>
-			<th>名称及规格</th>
-			<th>图号</th>
-			<th>材质</th>
-			<th>数量</th>
-			<th>单重</th>
-			<th>总重</th>
+			<th>名称</th>
+			<th>规格</th>
+			<th>牌号</th>
+			<th>定额</th>
+            <th>执行标准</th>
 			<th>备注</th>
 			<th>状态</th>
-			{% if can_edit %}
+			{% if  can_edit %}
 			<th>修改</th>
 			{% endif %}
 		</tr>
@@ -29,13 +28,11 @@
 			{% endif %}</td> {% endif %}
 			<td>{{forloop.counter}}</td>
         	<td>{{item.sub_workorder}}</th>
-			<td>{{item.index}}</td>
 			<td>{{item.name}}</td>
-			<td>{{item.schematic_index}}</td>
+			<td>{{item.specification}}</td>
 			<td>{{item.material}}</td>
-            <td>{{item.count}}</td>
-			<td>{{item.net_weight}}</td>
-			<td>{{item.total_weight_cal}}</td>
+            <td>{{item.quota}}</td>
+            <td>{{item.stardard}}</td>
             <td>{{item.remark}}</td>
 			<td>{{item.order_status}}</td>
             {% if can_edit %}
@@ -53,16 +50,14 @@
 			{% endif %}</td> {% endif %}
 			<td>{{forloop.counter}}</td>
         	<td>{{item.sub_workorder}}</th>
-			<td>{{item.index}}</td>
 			<td>{{item.name}}</td>
-			<td>{{item.schematic_index}}</td>
+			<td>{{item.specification}}</td>
 			<td>{{item.material}}</td>
-            <td>{{item.count}}</td>
-			<td>{{item.net_weight}}</td>
-			<td>{{item.total_weight_cal}}</td>
+            <td>{{item.quota}}</td>
+            <td>{{item.stardard}}</td>
             <td>{{item.remark}}</td>
 			<td>{{item.order_status}}</td>
-			{% if  can_edit%}
+			{% if  can_edit %}
 			<td>
 				<button class="btn btn-primary" id="edit" uid={{item.id}}>修改</button>
 			</td>
@@ -71,5 +66,6 @@
 		{% endfor %}
 	</tbody>
 </table>
+
 
 
