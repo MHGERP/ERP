@@ -1637,7 +1637,7 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1"):
     context = {
         "work_order": work_order,
         "current_page": page,
-        "total_page": 2,
+        "total_page": 3,
     }
     if page == 1:
         html = render_to_string("techdata/welding_process_specification/cover.html", context)
@@ -1645,4 +1645,8 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1"):
         context["display_current_page"] = context["current_page"] - 1
         context["display_total_page"] = context["total_page"] - 1
         html = render_to_string("techdata/welding_process_specification/graph_page.html", context)
+    elif page == 3:
+        context["display_current_page"] = context["current_page"] - 1
+        context["display_total_page"] = context["total_page"] - 1
+        html = render_to_string("techdata/welding_process_specification/NDE.html", context)
     return html
