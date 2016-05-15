@@ -14,8 +14,8 @@
     </thead>
     <tbody>
         {% for item, statuslist in syn_size_file_list %}
-            <tr uid="{{item.order.id}}">
-                <td>{{item.order.order_index}}</td>
+            <tr uid="{{item.sub_order.id}}">
+                <td>{{item.sub_order.name}}</td>
                 {% for status in statuslist %}
                     {% if not status.1 %}
                         <td>

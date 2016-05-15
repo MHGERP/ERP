@@ -2,4 +2,6 @@
 {% include "purchasing/orderform/order_form_raw.html"%}
 {% elif order_form.order_mod == 1%}
 {% include "purchasing/orderform/order_form_normal.html"%}
+{% elif order_form.order_mod == 2%}
+{% include "purchasing/orderform/order_form_weld.html"%}
 {% endif%}

@@ -21,7 +21,7 @@
 	</tr>
 	{%for item in process_detail_list%}
 	{% cycle '<tr>' '' '' ''%}
-	    <td>{{item.materiel_belong.index|default:""}}</td>
+	    <td>{{item.sub_materiel_belong.sub_order.name|default:""}}</td>
 	    <td>{{item.work_hour|default:""}}</td>
 	{% cycle '' '' '' '</tr>'%}
 	{%endfor%}

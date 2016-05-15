@@ -1241,3 +1241,55 @@ def auToolApplyCardConfirm(request,role,aid):
     
     card_html = render_to_string("storage/wordhtml/auxiliarytoolapplycard.html",{"applycard":applycard})
     return simplejson.dumps({"card_html":card_html,"message":message})
+
+@dajaxice_register
+def storageAccountSearch(request,card_type,search_form):
+    html = getAccountSearchContext(card_type,search_form)
+    return simplejson.dumps({"html":html})
+
+def getAccountSearchContext(card_type,search_form):
+    model_type,form_type,account_table_path = getAccountDataDict(card_type)
+    search_form = form_type(deserialize_form(search_form))
+    if search_form.is_valid():
+        items = get_weld_filter(model_type,search_form.cleaned_data)
+        if "apply" in card_type:
+            items = items.order_by("create_time")
+        else:
+            items = items.order_by("entry_item__entry__create_time")
+
+    html = render_to_string(account_table_path,{"items":items})
+    return html
+
+ModelTypeDict = {"weld":WeldStoreList,"auxiliarytool":AuxiliaryToolStoreList}
+AccountItemFormDict = {"weld":WeldAccountItemForm,}
+ApplyCardDict = {"weld":WeldingMaterialApplyCard,}
+@dajaxice_register
+def storageAccountItemForm(request,mid,role):
+    storeitem = ModelTypeDict[role].objects.get(id=mid)
+    account_item_form = AccountItemFormDict[role](instance = storeitem)
+    form_html = render_to_string("storage/accountsearch/account_item_form.html",{"account_item_form":account_item_form})
+    applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
+    refundcards = []
+    if role == "weld":
+        for applycard in applycards:
+            try:
+                refund = WeldRefund.objects.get(apply_card = applycard)
+                refundcards.append(refund)
+            except Exception,e:
+                print e
+    table_html = render_to_string("storage/accountsearch/"+role+"_account_apply_refund_table.html",{"applycards":applycards,"refundcards":refundcards})
+    return simplejson.dumps({"table_html":table_html,"form_html":form_html})
+
+@dajaxice_register
+def storageAccountItemModify(request,account_item_form,mid,search_form,card_type,role):
+    storeitem = ModelTypeDict[role].objects.get(id=mid)
+    account_item_form = AccountItemFormDict[role](deserialize_form(account_item_form),instance = storeitem)
+    if account_item_form.is_valid():
+        account_item_form.save()
+        message = u"库存信息修改成功"
+    else:
+        message = u"库存信息修改失败"
+        print account_item_form.errors
+    table_html = getAccountSearchContext(card_type,search_form)
+    form_html = render_to_string("storage/accountsearch/account_item_form.html",{"account_item_form":account_item_form})
+    return simplejson.dumps({"table_html":table_html,"message":message,"form_html":form_html})

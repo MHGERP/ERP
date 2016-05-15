@@ -9,6 +9,7 @@
 {% endblock %}
 {% block inner_content%}
 <link rel="stylesheet" href="{{ STATIC_URL }}style/orderform.css" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}bootstrap-datepicker/css/bootstrap-datetimepicker.css" >
 <div id="entrybody" entrytype={{entry_type}} entryid={{entry.id}}>
     {% if entry_type == 1%}
     {% include "storage/wordhtml/weldentry.html"%}
@@ -34,8 +35,6 @@
         <button class="btn btn-primary" id="save_entry_item">保存</button>
     </div>
 </div>
-    <center style="margin:90px;">
-    <button  id="entry_confirm" style="width:15%;height:30px;" class="btn btn-primary" type="button" onclick="purchasing_entry_confirm({{entry.id}},{{entry_type}});">入库单确认</button>
-    </center>
+<script type="text/javascript" src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/purchasing/arrival_inspection.js"></script>
 {% endblock%}

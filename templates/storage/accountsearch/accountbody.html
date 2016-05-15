@@ -1,0 +1,12 @@
+<form class="form-inline" id="account_search_form">
+    {% csrf_token %}
+    {% for field in search_form %}
+    {{field.label}}
+    {{field}}
+    {% endfor %}
+    <button class="btn btn-success" type="button"  id="account_search_btn"  card_type={{card_type}}>检索</button> 
+</form>
+<br/>
+<div id="account_table">
+    {% include account_table_path %}
+</div>
