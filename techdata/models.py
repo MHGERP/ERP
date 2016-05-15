@@ -296,6 +296,8 @@ class WeldJointTechDetail(models.Model):
         verbose_name_plural = u"焊接接头工艺分析"
     def __unicode__(self):
         return self.joint_index
+    def weld_method(self):
+        return ' + '.join((self.weld_method_1.name, self.weld_method_2.name))
 
 class WeldPositionType(models.Model):
     name = models.CharField(max_length = 100, choices = WELD_POSITION_CHOICES, verbose_name = u"焊接位置名")
