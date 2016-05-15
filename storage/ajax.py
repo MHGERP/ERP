@@ -1289,6 +1289,7 @@ def storageAccountItemModify(request,account_item_form,mid,search_form,card_type
         message = u"库存信息修改成功"
     else:
         message = u"库存信息修改失败"
-    html = getAccountSearchContext(card_type,search_form)
-    
-    return simplejson.dumps({"html":html,"message":message})
+        print account_item_form.errors
+    table_html = getAccountSearchContext(card_type,search_form)
+    form_html = render_to_string("storage/accountsearch/account_item_form.html",{"account_item_form":account_item_form})
+    return simplejson.dumps({"table_html":table_html,"message":message,"form_html":form_html})

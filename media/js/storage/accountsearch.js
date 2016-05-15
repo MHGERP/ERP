@@ -1,6 +1,6 @@
+var mid;
+var role;
 $(document).ready(function(){
-    var mid;
-    var role;
     $(document).on("click","#account_search_btn",function(){
         var card_type = $(this).attr("card_type");
         var search_form = $("#account_search_form").serialize();
@@ -18,15 +18,26 @@ $(document).ready(function(){
 })
 
 function storageaccountitemmodify_callback(data){
-    $("#account_table").html(data.html);
+    $("#account_table").html(data.table_html);
+    $("#account_item_form").html(data.form_html);
     update_accout_total_count();
+    getSelectItemInfo();
     alert(data.message);
 }
 
 function refreshaccountitemform_callback(data){
     $("#account_item_form").html(data.form_html);
-    $("div#account_apply_refund_table").html(data.table_html)
+    $("div#account_apply_refund_table").html(data.table_html);
+    getSelectItemInfo();
     $("#myModal").modal('show');
+}
+
+function getSelectItemInfo(){
+    var account_thead_html = $("#acoount_table_thead").html();
+    var account_select_item_html = $("tr#"+mid).html();
+    $("#show_select_account_item").empty();
+    $("#show_select_account_item").append(account_thead_html);
+    $("#show_select_account_item").append(account_select_item_html);     
 }
 
 function storageaccoutsearch_callback(data){
