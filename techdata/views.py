@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from backend.utility import getContext
 from techdata.forms import *
 from const.models import Materiel
-from techdata.models import TransferCard, Program, WeldJointTech
+from techdata.models import TransferCard, Program
 from purchasing.models import MaterielExecute
 from const.forms import WorkOrderForm
 

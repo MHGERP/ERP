@@ -1633,13 +1633,22 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1"):
     JunHU
     """
     work_order = WorkOrder.objects.get(id = id_work_order)
+
+    work_order.schematic_index = Materiel.objects.get(Q(order = work_order) & Q(index = "1")).schematic_index
     specification = WeldingProcessSpecification.objects.get(order = work_order)
     page = int(page)
+
+    detail_list = WeldJointTechDetail.objects.filter(Q(specification = specification) & Q(is_save = True))
+    
+    detail_list_page = 1 if detail_list.count() == 0 else (detail_list.count() - 1) / 6 + 1
+
+    total_page = 2 + detail_list_page + 1
+
     context = {
         "work_order": work_order,
         "specification": specification,
         "current_page": page,
-        "total_page": 3,
+        "total_page": total_page,
     }
     context["display_current_page"] = context["current_page"] - 1
     context["display_total_page"] = context["total_page"] - 1
@@ -1648,6 +1657,10 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1"):
         html = render_to_string("techdata/welding_process_specification/cover.html", context)
     elif page == 2:
         html = render_to_string("techdata/welding_process_specification/graph_page.html", context)
-    elif page == 3:
+    elif page <= 2 + detail_list_page:
+        detail_list = getContext(detail_list, page - 2, "item", 1, 6)["item_list"]
+        context["empty_row"] = range(6 - len(detail_list))
         html = render_to_string("techdata/welding_process_specification/weld_analysis_table.html", context)
+    elif page > 2 + detail_list_page:
+        html = render_to_string("techdata/welding_process_specification/welding_material_summary.html", context)
     return html

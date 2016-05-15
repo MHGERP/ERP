@@ -29,7 +29,6 @@ RegisterClass = (
     ConnectOrientation,
     WeldCertification,
     ProcedureQualificationIndex,
-    WeldJointTech,
     WeldJointTechDetail,
     OutPurchasedItem,
     WeldQuota,

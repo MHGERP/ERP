@@ -278,20 +278,8 @@ class ProcedureQualificationIndex(models.Model):
     def __unicode__(self):
         return self.name
 
-class WeldJointTech(models.Model):
-    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
-    index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"编号")
-    remark = models.CharField(blank = True, null = True,  max_length = 200, verbose_name = u"备注")
-    checker = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "weldjoint_checker")
-    approver = models.ForeignKey(User, blank = True, null = True, verbose_name = u"批准人", related_name = "weldjoint_approver")
-    class Meta:
-        verbose_name = u"焊接接头工艺分析表"
-        verbose_name_plural = u"焊接接头工艺分析表"
-    def __unicode__(self):
-        return self.order.order_index
-
 class WeldJointTechDetail(models.Model):
-    weld_joint = models.ForeignKey(WeldJointTech, verbose_name = u"焊接接头工艺分析表")
+    specification = models.ForeignKey(WeldingProcessSpecification, verbose_name = u"焊接工艺规程")
     joint_index = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"接头编号")
     bm_texture_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材材质1")
     bm_specification_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材规格1")
