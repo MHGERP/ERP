@@ -20,7 +20,7 @@ $(document).ready(function(){
         var form_code =$("table").attr("iid");
         Dajaxice.storage.steelApplyEnsure(steelApplyEnsureCallBack,{'form_code':form_code});
 	});
-    //$(document).on("dblclick","tr[name='item_tr']",function(){
+    //$(document).on("dblclick","tr[name='entry_item_tr']",function(){
     //    mid = $(this).attr("id");
     //    $("#myModal").modal('show');
     //})

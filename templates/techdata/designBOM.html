@@ -29,7 +29,7 @@
         <form method="POST" action="" class="form-inline" enctype="multipart/form-data" id="upload_form">
             {% csrf_token%}
             <input type="text" style="display:none;" name="work_order_id" id="work_order">
-            <input type='file' class='filestyle' name='BOM_file' data-ButtonName='btn btn-primary'  data-buttonBefore='true' data-buttonText='浏览..' id="filestyle_input">
+            <input type='file' class='filestyle' name='BOM_file' data-ButtonName='btn btn-primary'  data-buttonBefore='true' data-buttonText='浏览..' id="filestyle_input" multiple="true">
         </form>
     </div>
     <div class="modal-footer">
