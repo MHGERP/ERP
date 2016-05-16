@@ -584,6 +584,8 @@ Q_NEED_TECH=13
 Q_NEED_LEAD=14
 Q_COMPREHENSIVE=15
 Q_COMPANY=16
+
+
 COMMENT_USER_CHOICE=(
 	(Z_APPLY_OPERATOR,u"申请表经办人"),
 	(Z_APPLY_LEAD,u"申请表申请主管"),
@@ -600,7 +602,7 @@ COMMENT_USER_CHOICE=(
 	(Q_NEED_TECH,u"比质卡需求技术"),
 	(Q_NEED_LEAD,u"比质卡需求领导"),
 	(Q_COMPREHENSIVE,u"比质卡综合管理"),
-	(Q_COMPANY,u"比质卡公司")
+	(Q_COMPANY,u"比质卡公司意见")
 )
 
 COMMENT_USER_DICT={
