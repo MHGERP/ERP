@@ -1,0 +1,30 @@
+<table class="table table-bordered">
+    <thead>
+        <th>工作令</th>
+        <th>材质</th>
+        <th>规格</th>
+        <th>入库时间</th>
+        <th>材质编号</th>
+        <th>零件编号</th>
+        <th>数量</th>
+    </thead>
+    </tbody>
+        {% for item in items %}
+        <tr name="item_tr">
+            <td>{{item.work_order}}</td>
+            <td>{{item.storelist.entry_item.material_mark}}</td>
+            <td>{{item.storelist.specification}}</td>
+            <td>{{item.apply_card.create_time|date:"Y年m月d日"}}</td>
+            <td>{{item.material_code}}</td>
+            <td>{{item.component}}</td>
+            <td>{{item.actual_count}}</td>
+        </tr>
+        {% endfor %}
+        {% comment %}
+        <tr>
+            <td colspan="5" style="text-align:right">合计：</td>
+            <td id="account_total_count"></td>
+        </tr>
+        {% endcomment %}
+    </tbody>
+</table>

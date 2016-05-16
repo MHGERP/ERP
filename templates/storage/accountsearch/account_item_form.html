@@ -1,0 +1,20 @@
+<div class="row">
+{% for field in account_item_form %}
+<div class="control-group span3 {% if field.errors %} error {% endif %}">
+    <label style="text-align:right;width:100px;">{{field.label}}</label>
+{{field}}
+</div>
+{% endfor %}
+<button class="btn btn-primary" id="account_item_save" type="button">保存</button>
+</div>
+{% if account_item_form.errors %}
+<div class="alert alert-error">
+    <ul>
+    {% for field in account_item_form %}
+    {% if field.errors %}
+    <li><strong>[{{field.label}}]</strong>输入有误:{{field.errors.as_text}}</li>
+    {% endif %}
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}

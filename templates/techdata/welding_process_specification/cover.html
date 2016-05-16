@@ -156,60 +156,16 @@ div.WordSection3
 	{page:WordSection3;}
 -->
 </style>
-<!--[if gte mso 10]>
-<style>
- /* Style Definitions */
- table.MsoNormalTable
-	{mso-style-name:普通表格;
-	mso-tstyle-rowband-size:0;
-	mso-tstyle-colband-size:0;
-	mso-style-noshow:yes;
-	mso-style-unhide:no;
-	mso-style-parent:"";
-	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
-	mso-para-margin:0cm;
-	mso-para-margin-bottom:.0001pt;
-	mso-pagination:widow-orphan;
-	font-size:10.0pt;
-	font-family:"Times New Roman","serif";}
-table.MsoTableGrid
-	{mso-style-name:网格型;
-	mso-tstyle-rowband-size:0;
-	mso-tstyle-colband-size:0;
-	mso-style-unhide:no;
-	border:solid windowtext 1.0pt;
-	mso-border-alt:solid windowtext .5pt;
-	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
-	mso-border-insideh:.5pt solid windowtext;
-	mso-border-insidev:.5pt solid windowtext;
-	mso-para-margin:0cm;
-	mso-para-margin-bottom:.0001pt;
-	text-align:justify;
-	text-justify:inter-ideograph;
-	mso-pagination:none;
-	font-size:10.0pt;
-	font-family:"Times New Roman","serif";}
-</style>
-<![endif]--><!--[if gte mso 9]><xml>
- <o:shapedefaults v:ext="edit" spidmax="3074" fillcolor="#9cbee0"
-  strokecolor="#739cc3">
-  <v:fill color="#9cbee0" color2="#bbd5f0" type="gradient">
-   <o:fill v:ext="view" type="gradientUnscaled"/>
-  </v:fill>
-  <v:stroke color="#739cc3" weight="1.25pt"/>
- </o:shapedefaults></xml><![endif]--><!--[if gte mso 9]><xml>
- <o:shapelayout v:ext="edit">
-  <o:idmap v:ext="edit" data="1"/>
- </o:shapelayout></xml><![endif]-->
-</head>
-
-<body lang=ZH-CN style='tab-interval:21.0pt;text-justify-trim:punctuation'>
-
 {% if not is_print %}
-<div id="paginator_div" total_page = "{{total_page}}" page= "{{current_page}}" style='layout-grid:15.6pt'>
+<center class=WordSection0 style='layout-grid:15.6pt'>
+<div id="paginator_div" align=center total_page = "{{total_page}}" page= "{{current_page}}" width="1008" style='width:756.0pt;margin-left:5.4pt;margin-bottom:5.4pt;border-collapse:collapse;border:none;
+ mso-border-alt:solid windowtext 1.5pt;mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext'>
 	<span class="btn pull-left prev-page turnpage"><i class="icon-chevron-left"></i>上一页</span>
 	<span class="btn pull-right next-page turnpage">下一页<i class="icon-chevron-right"></i></span>
+	<span class="btn" id="btn_print"><i class="icon-print"></i>打印</a>
 </div>
+</center>
 {% endif %}
 <div class=WordSection1 style='layout-grid:15.6pt'>
 
@@ -286,9 +242,11 @@ mso-fareast-language:ZH-CN;mso-bidi-language:AR-SA'><br clear=all
 style='page-break-before:auto;mso-break-type:section-break'>
 </span>
 
-<div class=WordSection2 style='layout-grid:15.6pt'>
-<div>
-    <p class=MsoNormal align=left style='display:inline;margin-left:300.45pt;mso-para-margin-left:
+<div class=WordSection2 style='layout-grid:15.6pt;'>
+<div style="margin-left:350pt;margin-right:250pt">
+<div class="row-fluid">
+	<div class="span6">
+    <p class=MsoNormal align=left style='mso-para-margin-left:
     21.66gd;text-align:left;line-height:150%'><span style='font-size:12.0pt;
     line-height:150%;font-family:宋体;mso-ascii-font-family:"Times New Roman";
     mso-hansi-font-family:"Times New Roman"'>项</span><span lang=EN-US
@@ -297,15 +255,18 @@ style='page-break-before:auto;mso-break-type:section-break'>
     mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>目：</span><span
     lang=EN-US style='font-size:12.0pt;line-height:150%'><span
     style='mso-spacerun:yes'>{{work_order.project_name}}</span><o:p></o:p></span></p>
-
-    <p class="MsoNormal" style='display:inline; margin-left:200pt;text-indent:30.0pt;mso-char-indent-count:2.5;line-height:
+	</div>
+	<div class="span6">
+    <p class="MsoNormal" style='mtext-indent:30.0pt;mso-char-indent-count:2.5;line-height:
     150%'><span style='font-size:12.0pt;line-height:150%;font-family:宋体;mso-ascii-font-family:
     "Times New Roman";mso-hansi-font-family:"Times New Roman"'>工作令：</span><span lang=EN-US
     style='font-size:12.0pt;line-height:150%'><span
     style='mso-spacerun:yes'>{{work_order}} </span><o:p></o:p></span></p>
+	</div>
 </div>
-<div>
-    <p class=MsoNormal align=left style='display:inline;margin-left:300.45pt;mso-para-margin-left:
+<div class="row-fluid">
+	<div class="span6">
+    <p class=MsoNormal align=left style='mso-para-margin-left:
     21.66gd;text-align:left;line-height:150%'><span style='font-size:12.0pt;
     line-height:150%;font-family:宋体;mso-ascii-font-family:"Times New Roman";
     mso-hansi-font-family:"Times New Roman"'>图</span><span lang=EN-US
@@ -313,18 +274,20 @@ style='page-break-before:auto;mso-break-type:section-break'>
     </span></span><span style='font-size:12.0pt;line-height:150%;font-family:宋体;
     mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>号：</span><span
     lang=EN-US style='font-size:12.0pt;line-height:150%'><span
-    style='mso-spacerun:yes'>&nbsp;&nbsp; </span><o:p></o:p></span></p>
-
-    <p class="MsoNormal" style='display:inline;margin-left:200pt;text-indent:30.0pt;mso-char-indent-count:2.5;line-height:
-    150%'><span style='font-size:12.0pt;line-height:150%;font-family:宋体;mso-ascii-font-family:
-    "Times New Roman";mso-hansi-font-family:"Times New Roman"'> 名</span><span
-    lang=EN-US style='font-size:12.0pt;line-height:150%'><span
-    style='mso-spacerun:yes'>&nbsp; </span></span><span style='font-size:12.0pt;
+    style='mso-spacerun:yes'>{{work_order.schematic_index}}</span><o:p></o:p></span></p>
+	</div>
+	<div class="span6">
+    <p class=MsoNormal align=left style='mso-para-margin-left:
+    21.66gd;text-align:left;line-height:150%'><span style='font-size:12.0pt;
     line-height:150%;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-    mso-hansi-font-family:"Times New Roman"'>称：</span><span lang=EN-US
-    style='font-size:12.0pt;line-height:150%'><span
-    style='mso-spacerun:yes'>{{work_order.product_name}} </span><o:p></o:p></span></p>
-
+    mso-hansi-font-family:"Times New Roman"'>名</span><span lang=EN-US
+    style='font-size:12.0pt;line-height:150%'><span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+    </span></span><span style='font-size:12.0pt;line-height:150%;font-family:宋体;
+    mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>称：</span><span
+    lang=EN-US style='font-size:12.0pt;line-height:150%'><span
+    style='mso-spacerun:yes'>{{work_order.product_name}}</span><o:p></o:p></span></p>
+	</div>
+</div>
 </div>
 
 <span lang=EN-US style='font-size:12.0pt;line-height:150%;font-family:"Times New Roman","serif";
@@ -538,6 +501,5 @@ style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
 
 </div>
 
-</body>
 
 

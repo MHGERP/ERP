@@ -218,6 +218,25 @@ class CirculationRoute(models.Model):
     def __unicode__(self):
         return self.materiel_belong.name
 
+class WeldingProcessSpecification(models.Model):
+    order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
+
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "weldingprocessspecification_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "weldingprocessspecification_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+
+    approver = models.ForeignKey(User, blank = True, null = True, verbose_name = u"批准人", related_name = "weldingprocessspecification_approver")
+    approve_date = models.DateField(blank = True, null = True, verbose_name = u"批准日期")
+
+    file_obj = models.FileField(null = True, blank = True, upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"示意图")
+    class Meta:
+        verbose_name = u"焊接工艺规程"
+        verbose_name_plural = u"焊接工艺规程"
+    def __unicode__(self):
+        return "RH09-" + self.order.suffix()
+
 class WeldSeamType(models.Model):
     name = models.CharField(blank = False, max_length = 100, verbose_name = u"类型名")
     class Meta:
@@ -259,28 +278,25 @@ class ProcedureQualificationIndex(models.Model):
     def __unicode__(self):
         return self.name
 
-class WeldJointTech(models.Model):
-    order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
-    index = models.CharField(blank = True, null = True, max_length = 50, verbose_name = u"编号")
-    remark = models.CharField(blank = True, null = True,  max_length = 200, verbose_name = u"备注")
-    checker = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "weldjoint_checker")
-    approver = models.ForeignKey(User, blank = True, null = True, verbose_name = u"批准人", related_name = "weldjoint_approver")
+class WeldPositionType(models.Model):
+    name = models.CharField(max_length = 100, choices = WELD_POSITION_CHOICES, verbose_name = u"焊接位置名")
     class Meta:
-        verbose_name = u"焊接接头工艺分析表"
-        verbose_name_plural = u"焊接接头工艺分析表"
+        verbose_name = u"焊接位置"
+        verbose_name_plural = u"焊接位置"
     def __unicode__(self):
-        return self.order.order_index
+        return self.get_name_display()
 
 class WeldJointTechDetail(models.Model):
-    weld_joint = models.ForeignKey(WeldJointTech, verbose_name = u"焊接接头工艺分析表")
+    specification = models.ForeignKey(WeldingProcessSpecification, verbose_name = u"焊接工艺规程")
     joint_index = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"接头编号")
     bm_texture_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材材质1")
     bm_specification_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材规格1")
     bm_texture_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材材质2")
     bm_specification_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name =  u"母材材质2")
-    weld_method_1 = models.ForeignKey(WeldMethod,null = True, blank = True, verbose_name = u"焊接方法", related_name = u"joint_weld_method1")
-    weld_method_2 = models.ForeignKey(WeldMethod, null = True, blank = True, verbose_name = u"焊接方法", related_name = u"joint_weld_method2")
-    procedureQualification_index = models.ForeignKey(ProcedureQualificationIndex, blank = True, null = True,max_length = 100, verbose_name = u"焊接工艺评定编号")
+    weld_position = models.ForeignKey(WeldPositionType, verbose_name = u"焊接位置")
+    weld_method_1 = models.ForeignKey(WeldMethod,null = True, blank = True, verbose_name = u"焊接方法_1", related_name = u"joint_weld_method1")
+    weld_method_2 = models.ForeignKey(WeldMethod, null = True, blank = True, verbose_name = u"焊接方法_2", related_name = u"joint_weld_method2")
+    procedureQualification_index = models.CharField(blank = True, null = True,max_length = 100, verbose_name = u"焊接工艺评定编号")
     weld_certification = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目", related_name = "weld_certification")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
     is_save = models.BooleanField(default = True, verbose_name = u"是否保存")
@@ -289,14 +305,30 @@ class WeldJointTechDetail(models.Model):
         verbose_name_plural = u"焊接接头工艺分析"
     def __unicode__(self):
         return self.joint_index
+    def weld_method(self):
+        return ' + '.join((self.weld_method_1.name, self.weld_method_2.name))
 
-class WeldPositionType(models.Model):
-    name = models.CharField(max_length = 100, choices = WELD_POSITION_CHOICES, verbose_name = u"焊接位置名")
+class WeldingWorkInstruction(models.Model):
+    detail = models.OneToOneField(WeldJointTechDetail, verbose_name = "所属接头分析")
+    writer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"编制人", related_name = "wwi_writer")
+    write_date = models.DateField(blank = True, null = True, verbose_name = u"编制日期")
+
+    reviewer = models.ForeignKey(User, blank = True, null = True, verbose_name = u"审核人", related_name = "wwi_reviewer")
+    review_date = models.DateField(blank = True, null = True, verbose_name = u"审核日期")
+
+    proofreader = models.ForeignKey(User, blank = True, null = True, verbose_name = u"校对人", related_name = "wwi_proofreader")
+    proofread_date = models.DateField(blank = True, null = True, verbose_name = u"校对日期")
+
+    approver = models.ForeignKey(User, blank = True, null = True, verbose_name = u"批准人", related_name = "wwi_approver")
+    approve_date = models.DateField(blank = True, null = True, verbose_name = u"批准日期")
+    
+    file_index = models.CharField(max_length = 100, blank = True, null = True, verbose_name = u"文件编号")
+    file_obj = models.FileField(null = True, blank = True, upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"简图")
     class Meta:
-        verbose_name = u"焊接位置"
-        verbose_name_plural = u"焊接位置"
+        verbose_name = u"焊接作业指导书"
+        verbose_name_plural = u"焊接作业指导书"
     def __unicode__(self):
-        return self.get_name_display()
+        return "RH20-" + self.detail.specification.order.suffix() + "-" + str(self.file_index)
 
 class WeldSeam(models.Model):
     materiel_belong = models.ForeignKey(Materiel, verbose_name = u"所属物料")

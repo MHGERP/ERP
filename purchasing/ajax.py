@@ -119,7 +119,7 @@ def genEntry(request,selected,bid,entry_type):
             AuxiliaryEntryItemAdd(welding_entry,selected,accept_supplier)
         message = u"入库单生成成功"
 
-        
+
 #        if PurchasingEntry.objects.filter(bidform = bidform).count() == 0:
 #            purchasingentry = PurchasingEntry(bidform = bidform,purchaser=user,inspector = user , keeper = user)
 #            purchasingentry.save()
@@ -128,7 +128,7 @@ def genEntry(request,selected,bid,entry_type):
 #        else:
 #            message = u"入库单已经存在，请勿重复提交"
     except Exception, e:
-        transaction.rollback() 
+        transaction.rollback()
         message = u"入库单生成失败，请仔细检查"
         print e
 #
@@ -226,17 +226,14 @@ def getRelatedModel(request, index):
     print "这是一个测试: "
     print index
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        f1 = set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.filter( entry_item__material__isnull= False))
+        f1 = set()#set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.filter( entry_item__material__isnull= False))
         f2 = set(item.entry_item.specification for item in SteelMaterialStoreList.objects.all())
-        f3 = set(item.entry_item.materiel for item in SteelMaterialStoreList.objects.all())
+        f3 = set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.all())
     elif index == FIRST_FEEDING:
         print index
     elif index == OUT_PURCHASED:
-        item = OutsideStandardItem.objects.all()
-        print "sdfsfsfdsdf"
-        print len(item)
         f1 = set(item.entry_item.specification for item in OutsideStorageList.objects.all())
-        f2 = set(item.entry_item.material_mark for item in OutsideStorageList.objects.all())
+        f2 = set(item.entry_item.materiel.name for item in OutsideStorageList.objects.all())
         f3 = set()
     elif index == COOPERANT:
         print index
@@ -270,12 +267,13 @@ def defaultRelated(request, index, mid):
     item = Materiel.objects.get(id = mid)
     data = []
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        data = SteelMaterialStoreList.objects.filter(entry_item__specification = item.specification, entry_item__material_mark = item.material.name)
-    # elif index == OUT_PURCHASED:
-    #     data = OutsideStorageList.objects.filter(specification = f1, texture = f2)
-    #     print data
+        data = SteelMaterialStoreList.objects.filter(entry_item__specification = item.specification, entry_item__material__name = item.name)
+    elif index == OUT_PURCHASED:
+        data = OutsideStorageList.objects.filter(specification = item.specification, texture = f2)
     elif index == WELD_MATERIAL:
-        data = WeldStoreList.objects.filter(entry_item__material__name = f1, entry_item__material_mark = f2, entry_item__specification = f3)
+        data = WeldStoreList.objects.filter(entry_item__material__name = item.name, entry_item__material_mark = item.material.name, entry_item__specification = item.specification)
+    print "data:"
+    print data
     context = {
         "data" : data,
     }
@@ -293,7 +291,7 @@ def getRelatedTable(request, index, f1, f2, f3):
     }
     data = []
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        data = SteelMaterialStoreList.objects.filter(entry_item__specification = f2, entry_item__material_mark = f3)
+        data = SteelMaterialStoreList.objects.filter(entry_item__specification = f2, entry_item__material__name = f3)
     elif index == OUT_PURCHASED:
         data = OutsideStorageList.objects.filter(specification = f1, texture = f2)
         print data
@@ -1671,7 +1669,7 @@ def saveEntryItem(request,form,mid,entrytype):
 def entryPurchaserConfirm(request,eid,entrytype):
     entrytype=int(entrytype)
     if entrytype ==  1:
-        entry=WeldMaterialEntry.objects.get(pk=eid) 
+        entry=WeldMaterialEntry.objects.get(pk=eid)
     if entrytype ==  2:
         entry=SteelMaterialEntry.objects.get(pk=eid)
     if entrytype ==  3:

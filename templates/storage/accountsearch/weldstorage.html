@@ -1,0 +1,32 @@
+<table class="table table-bordered">
+    <thead id="account_table_thead">
+        <th>牌号</th>
+        <th>规格</th>
+        <th>入库数量</th>
+        <th>入库时间</th>
+        <th>材料批号</th>
+        <th>材质编号</th>
+        <th>厂家</th>
+        <th>状态</th>
+        <th>库存数量</th>
+    </thead>
+    </tbody>
+        {% for item in items %}
+        <tr name="item_tr" store="true" id={{item.id}} role="weld">
+            <td>{{item.entry_item.material_mark|default_if_none:""}}</td>
+            <td>{{item.entry_item.specification}}</td>
+            <td>{{item.entry_item.total_weight}}</td>
+            <td>{{item.entry_item.entry.create_time|date:'Y年m月d日'}}</td>
+            <td>{{item.entry_item.material_charge_number|default_if_none:""}}</td>
+            <td>{{item.entry_item.material_code}}</td>
+            <td>{{item.entry_item.factory|default_if_none:""}}</td>
+            <td>{{item.get_item_status_display}}</td>
+            <td>{{item.inventory_count}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="8" style="text-align:right">合计：</td>
+            <td id="account_total_count"></td>
+        </tr>
+    </tbody>
+</table>

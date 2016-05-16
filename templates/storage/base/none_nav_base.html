@@ -2,6 +2,7 @@
 {% extends "storage/base/_content.html"%}
 {% block outter_content%}
 <div class="mycontent no-nav">
-        {% block inner_content%}{%endblock%}
+<script type="text/javascript" src="{{STATIC_URL}}js/storage/accountsearch.js"></script>
+    {% block inner_content%}{%endblock%}
 </div> 
 {%endblock%}

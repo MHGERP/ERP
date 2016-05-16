@@ -258,6 +258,8 @@ def modify_weld_item_status(items):
 def gen_replace_dic(dict,fk_model = None):
     replace_dic = {}
     for k,v in dict.items():
+        if "create_time" in k or "work_order" in k:
+            continue
         if fk_model:
             replace_dic[k] = fk_model+"__"+k+"__contains"
         else:
@@ -274,3 +276,22 @@ def createAuxiliaryToolStoreList(entry):
 def createSteelMaterialStoreList(entry):
     for item in entry.steelmaterialentryitems_set.all():
         SteelMaterialStoreList(entry_item=item,specification=item.specification , steel_type=entry.steel_type ,count=item.count,length=item.length,weight=item.weight,store_room=item.store_room).save()
+
+def getAccountDataDict(card_type):
+    """
+    return: model_type,form_type,account_table_path
+    """
+    account_table_path = "storage/accountsearch/"+card_type+".html"
+    weldentry = (WeldMaterialEntryItems,WeldEntryAccountSearchForm)
+    weldapply = (WeldingMaterialApplyCard,WeldApplyAccountSearchForm)
+    weldstorage = (WeldStoreList,WeldStorageSearchForm)
+    steelentry = (SteelMaterialEntryItems,SteelEntryAccountSearchForm)
+    steelapply = (SteelMaterialApplyCardItems,SteelApplyAccountSearchForm)
+    steelstorage = (SteelMaterialStoreList,SteelStorageAccountSearchForm)
+    model_dict = {"weldentry":weldentry,"weldapply":weldapply,"weldstorage":weldstorage,"steelentry":steelentry,'steelapply':steelapply,"steelstorage":steelstorage}
+    return model_dict[card_type][0],model_dict[card_type][1],account_table_path
+
+def getAccountItemDataDict(role):
+    ModelTypeDict = {"weld":WeldStoreList,"auxiliarytool":AuxiliaryToolStoreList,"steel":SteelMaterialStoreList}
+    AccountItemFormDict = {"weld":WeldAccountItemForm,'steel':SteelAccountItemForm}
+    return ModelTypeDict[role],AccountItemFormDict[role]

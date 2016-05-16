@@ -736,7 +736,7 @@ def outsideApplyCardItemRemarkChange(request,itemid,remark):
 @dajaxice_register
 def outsideApplyCardConfirm(request,aid):
     applycard = OutsideApplyCard.objects.get(id = aid)
-    items = OutsideApplyCardItems.objects.filter(applycard = applycard)
+    items = OutsideApplyCardItems.objects.filter(apply_card = applycard)
     if applycard.status == APPLYCARD_KEEPER:
         if items.filter(storelist__isnull = True).count() > 0:
             message = u"还有领用项未分配库存材料"
@@ -761,7 +761,7 @@ def outsideApplyCardConfirm(request,aid):
 
 def getOutsideApplyCardContext(applycard,inform,url,default_status):
     is_show = applycard.entry_status == default_status
-    items_set = OutsideApplyCardItem.objects.filter(applycard = applycard)
+    items_set = OutsideApplyCardItems.objects.filter(apply_card = applycard)
     context = {
                "inform":inform,
                "applycard":applycard,
@@ -1165,7 +1165,7 @@ def getOutsideEntryItemFormInfo(request,mid):
 def outsideMaterialApply(request,select_item,mid):
     applyitem = OutsideApplyCardItems.objects.get(id=mid)
     storelist = OutsideStorageList.objects.get(id=select_item)
-    if applyitem.applycard.status == APPLYCARD_KEEPER:
+    if applyitem.apply_card.status == APPLYCARD_KEEPER:
         if applyitem.count <= storelist.count:
             applyitem.storelist = storelist
             applyitem.save()
@@ -1241,3 +1241,60 @@ def auToolApplyCardConfirm(request,role,aid):
     
     card_html = render_to_string("storage/wordhtml/auxiliarytoolapplycard.html",{"applycard":applycard})
     return simplejson.dumps({"card_html":card_html,"message":message})
+
+@dajaxice_register
+def storageAccountSearch(request,card_type,search_form):
+    html = getAccountSearchContext(card_type,search_form)
+    return simplejson.dumps({"html":html})
+
+def getAccountSearchContext(card_type,search_form):
+    model_type,form_type,account_table_path = getAccountDataDict(card_type)
+    search_form = form_type(deserialize_form(search_form))
+    if search_form.is_valid():
+        replace_dic = gen_replace_dic(search_form.cleaned_data)
+        if "weldapply" in card_type:
+            order_field = "create_time"
+        elif "entry" in card_type:
+            order_field = "entry__create_time"
+        elif "apply" in card_type:
+            order_field = "apply_card__create_time"
+        else:
+            order_field = "entry_item__entry__create_time"
+        items = get_weld_filter(model_type,search_form.cleaned_data,replace_dic).order_by(order_field)
+    html = render_to_string(account_table_path,{"items":items})
+    return html
+
+ApplyCardDict = {"weld":WeldingMaterialApplyCard,}
+@dajaxice_register
+def storageAccountItemForm(request,mid,role):
+    storeitem,account_item_form = getAccountItemDataDict(role)
+    storeitem = storeitem.objects.get(id=mid)
+    account_item_form = account_item_form(instance = storeitem)
+    form_html = render_to_string("storage/accountsearch/account_item_form.html",{"account_item_form":account_item_form})
+    refundcards = []
+    applycards = []
+    if role == "weld":
+        applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
+        for applycard in applycards:
+            try:
+                refund = WeldRefund.objects.get(apply_card = applycard)
+                refundcards.append(refund)
+            except Exception,e:
+                print e
+    table_html = render_to_string("storage/accountsearch/"+role+"_account_apply_refund_table.html",{"applycards":applycards,"refundcards":refundcards})
+    return simplejson.dumps({"table_html":table_html,"form_html":form_html})
+
+@dajaxice_register
+def storageAccountItemModify(request,account_item_form,mid,search_form,card_type,role):
+    storeitem_model,account_item_form_model = getAccountItemDataDict(role)
+    storeitem = storeitem_model.objects.get(id=mid)
+    account_item_form = account_item_form_model(deserialize_form(account_item_form),instance = storeitem)
+    if account_item_form.is_valid():
+        account_item_form.save()
+        message = u"库存信息修改成功"
+    else:
+        message = u"库存信息修改失败"
+        print account_item_form.errors
+    table_html = getAccountSearchContext(card_type,search_form)
+    form_html = render_to_string("storage/accountsearch/account_item_form.html",{"account_item_form":account_item_form})
+    return simplejson.dumps({"table_html":table_html,"message":message,"form_html":form_html})

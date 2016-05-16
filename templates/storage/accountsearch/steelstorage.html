@@ -1,0 +1,35 @@
+<table class="table table-bordered">
+    <thead id="account_table_thead">
+        <th>材质</th>
+        <th>炉批号</th>
+        <th>规格</th>
+        <th>入库时间</th>
+        <th>材质编号</th>
+        <th>工作令</th>
+        <th>库房位置</th>
+        <th>退库次数</th>
+        <th>数量</th>
+    </thead>
+    </tbody>
+        {% for item in items %}
+        <tr name="item_tr" store="true" id={{item.id}} role="steel">
+            <td>{{item.entry_item.material_mark}}</td>
+            <td>{{item.entry_item.batch_number}}</td>
+            <td>{{item.specification}}</td>
+            <td>{{item.entry_item.entry.create_time|date:"Y年m月d日"}}</td>
+            <td>{{item.entry_item.material_code}}</td>
+            <td>{{item.entry_item.show_workorder}}</td>
+            <td>{{item.store_room|default_if_none:"未分配"}}</td>
+            <td>{{item.return_time}}</td>
+            <td>{{item.count}}</td>
+        </tr>
+        {% endfor %}
+        {% comment %}
+        <tr>
+            <td colspan="5" style="text-align:right">合计：</td>
+            <td id="account_total_count"></td>
+        </tr>
+        {% endcomment %}
+    </tbody>
+</table>
+

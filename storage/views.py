@@ -4,7 +4,6 @@ import datetime
 from django.shortcuts import render
 
 from const import *
-from const import MATERIAL_TYPE
 from const.forms import InventoryTypeForm
 from const.utils import *
 from datetime import datetime
@@ -89,15 +88,27 @@ def steelApplyDetailViews(request,aid):
     }
     return render(request,"storage/steelmaterial/steelapplydetail.html",context)
 
-def steelLedgerViews(request):
-    search_form = SteelLedgerSearchForm()
-    steel_set = SteelMaterial.objects.all().order_by("steel_type")
-    context={
-        "search_form":search_form,
-        "steel_set":steel_set,
-    }
-    return render(request,"storage/steelmaterial/steelledger.html",context)
-    
+ 
+def steelAccountHomeViews(request):
+    context = {}
+    return render(request,"storage/steelmaterial/steelaccount/steelaccounthome.html",context)
+
+def steelEntryAccountViews(request):
+    card_type = "steelentry"
+    context = getAccountContext(card_type)
+    return render(request,"storage/steelmaterial/steelaccount/steelentryhome.html",context)  
+
+
+def steelApplyAccountViews(request):
+    card_type = "steelapply"
+    context = getAccountContext(card_type)
+    return render(request,"storage/steelmaterial/steelaccount/steelapplyhome.html",context)  
+
+def steelStorageAccountHomeViews(request):
+    card_type = "steelstorage"
+    context = getAccountContext(card_type)
+    return render(request,"storage/steelmaterial/steelaccount/steelstoragehome.html",context)  
+
 def weldEntryHomeViews(request):
     weldentry_set = WeldMaterialEntry.objects.all()
     search_form = WeldEntrySearchForm()
@@ -603,54 +614,34 @@ def AuxiliaryToolsEntryApplyDetailView(request):
     """
     pass
 
+def getAccountContext(card_type):
+    model_type,form_type,account_table_path = getAccountDataDict(card_type) 
+    context = {
+            "search_form":form_type(),
+            "card_type":card_type,
+            "account_table_path":account_table_path,
+            }
+    return context
 def weldAccountHomeViews(request):
     context = {}
     return render(request,"storage/weldmaterial/weldaccount/weldaccounthome.html",context)
 
 def weldEntryAccountViews(request):
-    items_set = WeldStoreList.objects.all().order_by("specification","entry_time")
-    if request.method == "POST":
-        search_form = WeldAccountSearchForm(request.POST)
-        if search_form.is_valid():
-            items_set = get_weld_filter(WeldStoreList,search_form.cleaned_data)
-    else:
-        search_form = WeldAccountSearchForm()
-        items_set = items_set.order_by("entry_time")
-    context = {
-            "items_set":items_set,
-            "search_form":search_form,
-            }
+    card_type = "weldentry"
+    context = getAccountContext(card_type)
+    print context
     return render(request,"storage/weldmaterial/weldaccount/weldentryhome.html",context)
 
 def weldStorageAccountHomeViews(request):
-    if request.method == "POST":
-        search_form = WeldStorageSearchForm(request.POST)
-        if search_form.is_valid():
-            items_set = get_weld_filter(WeldStoreList,search_form.cleaned_data)
-    else:
-        items_set = WeldStoreList.objects.qualified_set().order_by('specification')
-        search_form = WeldStorageSearchForm()
-    items_set = items_set.order_by("entry_time")
-    context = {
-            "items_set":items_set,
-            "search_form":search_form,
-            }
+    card_type = "weldstorage"
+    context = getAccountContext(card_type)
+    context["account_apply_refund_table"] = "storage/accountsearch/weld_account_apply_refund_table.html"
+    context["account_item_form"] = WeldAccountItemForm()
     return render(request,"storage/weldmaterial/weldaccount/weldstoragehome.html",context)
 
 def weldApplyAccountViews(request):
-    apply_set = WeldingMaterialApplyCard.objects.all()
-    if request.method == "POST":
-        search_form =  WeldApplyAccountSearchForm(request.POST)
-        if search_form.is_valid():
-            apply_set = get_weld_filter(WeldingMaterialApplyCard,search_form.cleaned_data)
-        else:
-            print search_form.errors
-    else:
-        search_form = WeldApplyAccountSearchForm()
-    context = {
-        "apply_set":apply_set,
-        "search_form":search_form,
-    }
+    card_type = "weldapply"
+    context = getAccountContext(card_type)
     return render(request,"storage/weldmaterial/weldaccount/weldapplyhome.html",context)
 
 
@@ -842,3 +833,4 @@ def outsideRefundConfirmViews(request,fid):
         "items":items,
     }
     return render(request,"storage/outside/refundcardconfirm.html", context)
+

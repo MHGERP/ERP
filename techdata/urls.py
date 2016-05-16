@@ -141,4 +141,12 @@ urlpatterns=patterns('',
         r'^weldingProcessSpecification$',
         techdata_views.weldingProcessSpecificationViews,
     ),
+    url(
+        r'^weldingProcessSpecificationPicUpload$',
+        techdata_views.weldingProcessSpecificationPicUpload,
+    ),
+    url(
+        r'^weldingWorkInstruction$',
+        techdata_views.weldingWorkInstructionViews,
+    ),
 )
