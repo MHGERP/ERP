@@ -254,7 +254,7 @@ $(document).on("click", "#related_search", function() {
       //alert(f1+" "+f2+" "+f3);
       Dajaxice.purchasing.getRelatedTable(function(data) {
           $("#related_table").html(data);
-      }, {"index" : val, "f1" : f1, "f2" : f2, "f3" : f3});
+      }, {"index" : val, "f1" : "", "f2" : f2, "f3" : f3});
     }
     else if (ch == 4) {
       f1 = $("#id_mingcheng").val();
