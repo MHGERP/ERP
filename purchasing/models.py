@@ -17,6 +17,7 @@ class MaterielCopy(Materiel):
     inventory_type = models.ForeignKey(InventoryType, blank = True, null = True, verbose_name = "明细表类型")
     batch_number=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"炉批号")
     quality_number=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"材质编号")
+    delivery_time=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"交货期")
     class Meta:
         verbose_name = u"伪物料"
         verbose_name_plural = u"伪物料"
@@ -263,13 +264,10 @@ class SupplierSelect(models.Model):
 class MaterialSubApply(models.Model):
     receipts_code = models.CharField(max_length = 100, unique = True, blank = False ,null = True, verbose_name = u"单据编号")
     pic_code =  models.CharField(max_length = 100, blank = False , null = True, verbose_name = u"图号")
-    work_order = models.ForeignKey(WorkOrder,verbose_name = u"工作令" , blank = True , null = True)
-    bidform = models.ForeignKey(BidForm,blank = True , null = True, verbose_name = u"对应标单")
+    work_order = models.CharField(max_length=50,verbose_name = u"工作令" , blank = True , null = True)
     reasons = models.CharField(max_length = 1000,blank = False , null = True, verbose_name = u"代用原因和理由")
     proposer = models.ForeignKey(User,verbose_name = u"申请人",blank = True)
     is_submit = models.BooleanField(default = False,verbose_name = u"是否提交")
-    comments = models.CharField(max_length=1000,blank = True , null = True, verbose_name = u"评审意见")
-    is_approval = models.IntegerField(choices = REVIEW_COMMENTS_CHOICES,default = -1 ,verbose_name = u"评审结果",blank = False)
     class Meta:
         verbose_name = u"材料代用申请单"
         verbose_name_plural = u"材料代用申请单"
