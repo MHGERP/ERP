@@ -267,7 +267,7 @@ class MaterialSubApply(models.Model):
     work_order = models.CharField(max_length=50,verbose_name = u"工作令" , blank = True , null = True)
     reasons = models.CharField(max_length = 1000,blank = False , null = True, verbose_name = u"代用原因和理由")
     proposer = models.ForeignKey(User,verbose_name = u"申请人",blank = True)
-    is_submit = models.BooleanField(default = False,verbose_name = u"是否提交")
+    status=models.ForeignKey(CommentStatus,verbose_name=u"招标申请表状态")
     class Meta:
         verbose_name = u"材料代用申请单"
         verbose_name_plural = u"材料代用申请单"

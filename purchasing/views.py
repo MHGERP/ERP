@@ -553,7 +553,7 @@ def bidApplyFormViews(request,bid):
     bidApplyForm = BidApplyForm(instance=bid_apply)
     supplier_set=bidform.supplierselect_set.all()
     comment_dict={}
-    for k in COMMENT_USER_DICT:
+    for k in COMMENT_USER_APPLY_DICT:
         comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
         if comment.count()>0:
             comment_dict[k]=comment[0]
@@ -582,7 +582,7 @@ def SupplierCheckViews(request,bid):
     supplier_check_form=SupplierCheckForm(instance=supplier_check)
     supplier_set=bidform.supplierselect_set.all()
     comment_dict={}
-    for k in COMMENT_USER_DICT:
+    for k in COMMENT_USER_CHECK_DICT:
         comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
         if comment.count()>0:
             comment_dict[k]=comment[0]
@@ -610,7 +610,7 @@ def QualityCardViews(request,bid):
     quality_card_form=QualityPriceCardForm(instance=quality_card)
     supplier_set=bidform.supplierselect_set.all()
     comment_dict={}
-    for k in COMMENT_USER_DICT:
+    for k in COMMENT_USER_QUALITY_DICT:
         comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
         if comment.count()>0:
             comment_dict[k]=comment[0]
