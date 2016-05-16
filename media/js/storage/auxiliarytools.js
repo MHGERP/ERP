@@ -10,7 +10,7 @@ $('input[id$=time]').datetimepicker({
 });
 $(document).ready(function(){
     var aid;
-    $(document).on("dblclick", "tr[name='entry_item']", function(){
+    $(document).on("dblclick", "tr[name='entry_item_tr']", function(){
         aid = $(this).attr("id");
         var remark = $(this).find("td").eq(5).children("p").eq(0).text();
         $("#myModal").modal('show');
