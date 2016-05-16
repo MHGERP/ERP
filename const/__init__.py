@@ -439,6 +439,16 @@ PROCESSING_CHOICES = (
     (K, "K"),
 )
 
+SMAW = "SMAW"
+SAW = "SAW"
+GMAW = "GMAW"
+GTAW = "GTAW"
+WELD_METHOD = (
+    (SMAW, "焊条电弧焊"),
+    (SAW, "埋弧焊"),
+    (GMAW, "气体保护焊"),
+    (GTAW, "氩弧焊"),
+)
 
 WELD_ROD = "weld_rod"
 WELD_WIRE = "weld_wire"

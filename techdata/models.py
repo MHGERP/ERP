@@ -246,12 +246,12 @@ class WeldSeamType(models.Model):
         return self.name
 
 class WeldMethod(models.Model):
-    name = models.CharField(blank = False, max_length = 100, verbose_name = u"方法名")
+    name = models.CharField(blank = False, choices = WELD_METHOD, max_length = 100, verbose_name = u"方法名")
     class Meta:
         verbose_name = u"焊接方法"
         verbose_name_plural = u"焊接方法"
     def __unicode__(self):
-        return self.name
+        return self.get_name_display()
 
 
 class NondestructiveInspection(models.Model):
@@ -342,11 +342,13 @@ class WeldSeam(models.Model):
     base_metal_thin_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材厚度1")
     base_metal_thin_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"母材厚度2")
     length = models.CharField(blank = False, max_length = 100, verbose_name = u"长度")
-    weld_material_1 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊材1", related_name = "weld_material_1")
+    weld_material_1 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊丝/焊条1", related_name = "weld_material_1")
+    weld_flux_1 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊剂1", related_name = "weld_flux_1")
     thin_1 = models.CharField(max_length = 100, blank = True, null = True, verbose_name = u"焊材厚度1")
     size_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"规格1")
     weight_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"重量1")
-    weld_material_2 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊材2", related_name = "weld_material_2")
+    weld_material_2 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊丝/焊条2", related_name = "weld_material_2")
+    weld_flux_2 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊剂2", related_name = "weld_flux_2")
     thin_2 = models.CharField(max_length = 100, blank = True, null = True, verbose_name = u"焊材厚度2")
     size_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"规格2")
     weight_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"重量2")
