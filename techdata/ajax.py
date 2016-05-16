@@ -1626,7 +1626,7 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
     specification = WeldingProcessSpecification.objects.get(order = work_order)
     page = int(page)
 
-    detail_list = WeldJointTechDetail.objects.filter(Q(specification = specification) & Q(is_save = True))
+    detail_list = WeldJointTechDetail.objects.filter(Q(specification = specification))
     
     detail_list_page = 1 if detail_list.count() == 0 else (detail_list.count() - 1) / 6 + 1
 
