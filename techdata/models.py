@@ -263,7 +263,7 @@ class NondestructiveInspection(models.Model):
         return self.name
 
 class WeldCertification(models.Model):
-    name = models.CharField(blank = False,max_length = 100, choices = WELD_CERTIFICATION, verbose_name = u"焊工持证项目")
+    name = models.CharField(blank = False, max_length = 100,  verbose_name = u"焊工持证项目")
     weld_method = models.ForeignKey(WeldMethod, max_length = 100, verbose_name = u"所属焊接方法")
     class Meta:
         verbose_name = u"焊工持证项目"
