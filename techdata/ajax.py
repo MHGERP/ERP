@@ -441,16 +441,16 @@ def getWeldSeamCard(request, full = False, iid = None):
         form = WeldSeamForm(instance = weld_seam)
     else:
         form = WeldSeamForm()
-    material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE, WELD_RIBBON, WELD_FLUX)
+    material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE)
     form.fields["weld_material_1"].queryset = material_set
     form.fields["weld_material_2"].queryset = material_set
+    material_set = getMaterialQuerySet(WELD_FLUX)
+    form.fields["weld_flux_1"].queryset = material_set
+    form.fields["weld_flux_2"].queryset = material_set
     context = {
         "form": form,
     }
-    if full:
-        html = render_to_string("techdata/widgets/weld_seam_full_card.html", context)
-    else:
-        html = render_to_string("techdata/widgets/weld_seam_card.html", context)
+    html = render_to_string("techdata/widgets/weld_seam_full_card.html", context)
     return html
 @dajaxice_register
 def getWeldQuotaCard(request,iid = None):

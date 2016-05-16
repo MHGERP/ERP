@@ -264,6 +264,7 @@ class NondestructiveInspection(models.Model):
 
 class WeldCertification(models.Model):
     name = models.CharField(blank = False,max_length = 100, choices = WELD_CERTIFICATION, verbose_name = u"焊工持证项目")
+    weld_method = models.ForeignKey(WeldMethod, max_length = 100, verbose_name = u"所属焊接方法")
     class Meta:
         verbose_name = u"焊工持证项目"
         verbose_name_plural = u"焊工持证项目"
@@ -297,7 +298,9 @@ class WeldJointTechDetail(models.Model):
     weld_method_1 = models.ForeignKey(WeldMethod,null = True, blank = True, verbose_name = u"焊接方法_1", related_name = u"joint_weld_method1")
     weld_method_2 = models.ForeignKey(WeldMethod, null = True, blank = True, verbose_name = u"焊接方法_2", related_name = u"joint_weld_method2")
     procedureQualification_index = models.CharField(blank = True, null = True,max_length = 100, verbose_name = u"焊接工艺评定编号")
-    weld_certification = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目", related_name = "weld_certification")
+#    weld_certification = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目", related_name = "weld_certification")
+    weld_certification_1 = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目1", related_name = "weld_certification_1")
+    weld_certification_2 = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目2", related_name = "weld_certification_2")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
     is_save = models.BooleanField(default = True, verbose_name = u"是否保存")
     class Meta:
@@ -306,7 +309,7 @@ class WeldJointTechDetail(models.Model):
     def __unicode__(self):
         return self.joint_index
     def weld_method(self):
-        return ' + '.join((self.weld_method_1.name, self.weld_method_2.name))
+        return ' + '.join((self.weld_method_1.get_name_display(), self.weld_method_2.get_name_display()))
 
 class WeldingWorkInstruction(models.Model):
     detail = models.OneToOneField(WeldJointTechDetail, verbose_name = "所属接头分析")
@@ -346,12 +349,14 @@ class WeldSeam(models.Model):
     weld_flux_1 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊剂1", related_name = "weld_flux_1")
     thin_1 = models.CharField(max_length = 100, blank = True, null = True, verbose_name = u"焊材厚度1")
     size_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"规格1")
-    weight_1 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"重量1")
+    weight_1 = models.FloatField(blank = True, default = 0, verbose_name = u"重量1")
+    flux_weight_1 = models.FloatField(blank = True, default = 0, verbose_name = u"焊剂重量1")
     weld_material_2 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊丝/焊条2", related_name = "weld_material_2")
     weld_flux_2 = models.ForeignKey(Material, blank = True, null = True, verbose_name = u"焊剂2", related_name = "weld_flux_2")
     thin_2 = models.CharField(max_length = 100, blank = True, null = True, verbose_name = u"焊材厚度2")
     size_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"规格2")
-    weight_2 = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"重量2")
+    weight_2 = models.FloatField(blank = True, default = 0, verbose_name = u"重量2")
+    flux_weight_2 = models.FloatField(blank = True, default = 0, verbose_name = u"焊剂重量2")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
     
     weld_joint_detail = models.ForeignKey(WeldJointTechDetail, blank = True, null = True, verbose_name = u"焊接接头", on_delete = models.SET_NULL, related_name = "weld_joint_detail")
