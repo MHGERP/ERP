@@ -159,6 +159,7 @@ $("#weld_joint_detail_save").click(function() {
     var id_work_order = $("#id_work_order").val();
     $("#id_weld_method_1").attr("disabled", false);
     $("#id_weld_method_2").attr("disabled", false);
+    $("#id_weld_position").attr("disabled", false);
     Dajaxice.techdata.saveJointDetail(
         function(data) {
             alert("添加成功！");
@@ -166,10 +167,12 @@ $("#weld_joint_detail_save").click(function() {
             $("#weldjoint_detail_modal").modal("hide");
             $("#id_weld_method_1").attr("disabled", true);
             $("#id_weld_method_2").attr("disabled", true);
+            $("#id_weld_position").attr("disabled", true);
         },
         {
             "weld_joint_detail_form" : $("#weldjoint_detail_form").serialize(),
             "jointArray" : jointArray,
+            "id_work_order" : id_work_order,
         }
     );
 });

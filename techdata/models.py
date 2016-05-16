@@ -307,7 +307,15 @@ class WeldJointTechDetail(models.Model):
     def __unicode__(self):
         return self.joint_index
     def weld_method(self):
-        return ' + '.join((self.weld_method_1.get_name_display(), self.weld_method_2.get_name_display()))
+        if self.weld_method_2:
+            return ' + '.join((self.weld_method_1.get_name_display(), self.weld_method_2.get_name_display()))
+        else:
+            return self.weld_method_1.get_name_display()
+    def get_weld_certification_1(self):
+        print self.weld_certification_1.all()
+        return "或".join(self.weld_certification_1.all())
+    def get_weld_certification_2(self):
+        return "或".join(self.weld_certification_2.all())
 
 class WeldingWorkInstruction(models.Model):
     detail = models.OneToOneField(WeldJointTechDetail, verbose_name = "所属接头分析")
