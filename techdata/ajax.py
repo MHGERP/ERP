@@ -1554,6 +1554,7 @@ def getWeldJointDetailFormAndSave(request, jointArray, id_work_order):
             bm_2 = seam.base_metal_2
             bm_thin1 = seam.base_metal_thin_1
             bm_thin2 = seam.base_metal_thin_2
+            weld_position = seam.weld_position
         else:
             if seam.weld_method_1 != md1 or seam.weld_method_2 != md2 or seam.base_metal_1 != bm_1 or seam.base_metal_2 != bm_2 or seam.base_metal_thin_1 != bm_thin1 or seam.base_metal_thin_2 != bm_thin2:
                 ret = "err"
@@ -1564,10 +1565,19 @@ def getWeldJointDetailFormAndSave(request, jointArray, id_work_order):
         weld_joint_detail = WeldSeam.objects.get(id = jointArray[0]).weld_joint_detail
         if weld_joint_detail:
             weld_joint_detail.joint_index = joint_index
+            weld_joint_detail.save()
+
         else:
-            weld_joint_detail = WeldJointTechDetail(specification = specification, joint_index = joint_index,  bm_texture_1 = bm_1, bm_texture_2 = bm_2, bm_specification_1 = bm_thin1, bm_specification_2 = bm_thin2, weld_method_1 = md1, weld_method_2 = md2)
-        weld_joint_detail.is_save = True
-        weld_joint_detail.save()
+            weld_joint_detail = WeldJointTechDetail(specification = specification, 
+                                                    joint_index = joint_index,  
+                                                    bm_texture_1 = bm_1, 
+                                                    bm_texture_2 = bm_2, 
+                                                    bm_specification_1 = bm_thin1, 
+                                                    bm_specification_2 = bm_thin2, 
+                                                    weld_method_1 = md1, 
+                                                    weld_method_2 = md2,
+                                                    weld_position = weld_position)
+            weld_joint_detail.save()      
         weld_joint_detail_form = WeldJointTechDetailForm(instance = weld_joint_detail)
         context = {
             "form" : weld_joint_detail_form
