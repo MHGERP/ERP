@@ -139,17 +139,18 @@ class WeldJointTechDetailForm(forms.ModelForm):
     """
     class Meta:
         model = WeldJointTechDetail
-        exclude = ('id', 'specification', 'is_save', "weld_position")
+        exclude = ('id', 'specification', 'is_save')
         widgets = {
+            "weld_position" : forms.Select(attrs = {"class" : "input-small", "disabled": "disabled"}),
             "joint_index" : forms.TextInput(attrs = {"class" : "input-small"}),
             "bm_texture_1" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),
             "bm_texture_2" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),
             "bm_specification_1" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),
             "bm_specification_2" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),
-            "weld_method_1" : forms.Select(attrs = {"class" : "input-small", "disabled" : "disabled"}),
-            "weld_method_2" : forms.Select(attrs = {"class" : "input-small", "disabled" : "disabled"}),
+            "weld_method_1" : forms.Select(attrs = {"class" : "input-large", "disabled" : "disabled"}),
+            "weld_method_2" : forms.Select(attrs = {"class" : "input-large", "disabled" : "disabled"}),
             "joint_index" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),
-            "procedureQualification_index" : forms.Select(attrs = {"class" : "input-small"}),
+            "procedureQualification_index" : forms.TextInput(attrs = {"class" : "input-small"}),
             "weld_certification_1" : forms.SelectMultiple(attrs = {"class" : "input-xlarge"}),
             "weld_certification_2" : forms.SelectMultiple(attrs = {"class" : "input-xlarge"}),
             "remark" : forms.TextInput(attrs = {"class" : "input-small"}),

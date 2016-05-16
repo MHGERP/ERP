@@ -298,18 +298,24 @@ class WeldJointTechDetail(models.Model):
     weld_method_1 = models.ForeignKey(WeldMethod,null = True, blank = True, verbose_name = u"焊接方法_1", related_name = u"joint_weld_method1")
     weld_method_2 = models.ForeignKey(WeldMethod, null = True, blank = True, verbose_name = u"焊接方法_2", related_name = u"joint_weld_method2")
     procedureQualification_index = models.CharField(blank = True, null = True,max_length = 100, verbose_name = u"焊接工艺评定编号")
-#    weld_certification = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目", related_name = "weld_certification")
     weld_certification_1 = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目1", related_name = "weld_certification_1")
     weld_certification_2 = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目2", related_name = "weld_certification_2")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
-  #  is_save = models.BooleanField(default = True, verbose_name = u"是否保存")
     class Meta:
         verbose_name = u"焊接接头工艺分析"
         verbose_name_plural = u"焊接接头工艺分析"
     def __unicode__(self):
         return self.joint_index
     def weld_method(self):
-        return ' + '.join((self.weld_method_1.get_name_display(), self.weld_method_2.get_name_display()))
+        if self.weld_method_2:
+            return ' + '.join((self.weld_method_1.get_name_display(), self.weld_method_2.get_name_display()))
+        else:
+            return self.weld_method_1.get_name_display()
+    def get_weld_certification_1(self):
+        print self.weld_certification_1.all()
+        return "或".join(self.weld_certification_1.all())
+    def get_weld_certification_2(self):
+        return "或".join(self.weld_certification_2.all())
 
 class WeldingWorkInstruction(models.Model):
     detail = models.OneToOneField(WeldJointTechDetail, verbose_name = "所属接头分析")
