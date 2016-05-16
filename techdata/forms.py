@@ -143,7 +143,7 @@ class WeldJointTechDetailForm(forms.ModelForm):
             "joint_index" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),
             "procedureQualification_index" : forms.Select(attrs = {"class" : "input-small"}),
             "weld_certification" : forms.SelectMultiple(attrs = {"class" : "input-xlarge"}),
-            "remark" : forms.TextInput(attrs = {"class" : "input-xxlarge"}),
+            "remark" : forms.TextInput(attrs = {"class" : "input-small"}),
         }
 
 class ProcessingRouteForm(forms.ModelForm):
