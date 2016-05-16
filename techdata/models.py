@@ -298,11 +298,9 @@ class WeldJointTechDetail(models.Model):
     weld_method_1 = models.ForeignKey(WeldMethod,null = True, blank = True, verbose_name = u"焊接方法_1", related_name = u"joint_weld_method1")
     weld_method_2 = models.ForeignKey(WeldMethod, null = True, blank = True, verbose_name = u"焊接方法_2", related_name = u"joint_weld_method2")
     procedureQualification_index = models.CharField(blank = True, null = True,max_length = 100, verbose_name = u"焊接工艺评定编号")
-#    weld_certification = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目", related_name = "weld_certification")
     weld_certification_1 = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目1", related_name = "weld_certification_1")
     weld_certification_2 = models.ManyToManyField(WeldCertification, blank = True, null = True, verbose_name = u"焊工持证项目2", related_name = "weld_certification_2")
     remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
-  #  is_save = models.BooleanField(default = True, verbose_name = u"是否保存")
     class Meta:
         verbose_name = u"焊接接头工艺分析"
         verbose_name_plural = u"焊接接头工艺分析"
