@@ -1562,14 +1562,22 @@ def getWeldJointDetailForm(request, jointArray):
     if weldseam == None:
         return simplejson.dumps({"ret" : "err"})
     else:
-        fields = ['base_metal_1', 'base_metal_2', 'base_metal_thin_1', 'base_metal_thin_2']
-        map = {'base_metal_1' : 'bm_texture_1', 'base_metal_2' : 'bm_texture_2', 'base_metal_thin_1' : 'bm_specification_1', 'base_metal_thin_2' : 'bm_specification_2'}
+        fields = ['base_metal_1', 'base_metal_2', 'base_metal_thin_1', 'base_metal_thin_2', "weld_position"]
+        map = {
+            'base_metal_1' : 'bm_texture_1', 
+            'base_metal_2' : 'bm_texture_2', 
+            'base_metal_thin_1' : 'bm_specification_1', 
+            'base_metal_thin_2' : 'bm_specification_2',
+            "weld_position": "weld_position",
+        }
+        print weldseam.weld_position
         data = {}
         for field in fields:
             data[map[field]] = getattr(weldseam, field)
         data['joint_index'] = joint_index
         weld_joint_detail_form = WeldJointTechDetailForm(data)
-
+#        weld_joint_detail_form.fields["weld_certification_1"].queryset = WeldCertification.objects.filter(weld_method = weldseam.weld_method_1)
+#        weld_joint_detail_form.fields["weld_certification_2"].queryset = WeldCertification.objects.filter(weld_method = weldseam.weld_method_2)
         context = {
             "form" : weld_joint_detail_form,
         }
@@ -1577,13 +1585,19 @@ def getWeldJointDetailForm(request, jointArray):
         return simplejson.dumps({"ret" : "ok", "html" : html, "weld_method_1" : weldseam.weld_method_1.id if weldseam.weld_method_1 else -1, "weld_method_2" : weldseam.weld_method_2.id if weldseam.weld_method_2 else -1})
 
 @dajaxice_register
-def saveJointDetail(request, weld_joint_detail_form, jointArray):
+def saveJointDetail(request, weld_joint_detail_form, jointArray, id_work_order):
     """
     mxl
     """
     weld_joint_detail_form = WeldJointTechDetailForm(deserialize_form(weld_joint_detail_form))
     if weld_joint_detail_form.is_valid():
-        weld_joint_detail = weld_joint_detail_form.save()
+        weld_joint_detail = weld_joint_detail_form.save(commit = False)
+        weld_joint_detail.specification = WeldingProcessSpecification.objects.get(order__id = id_work_order)
+        weld_joint_detail.save()
+
+        wwi = WeldingWorkInstruction(detail = weld_joint_detail)
+        wwi.file_index = WeldingWorkInstruction.objects.filter(detail__specification__order = weld_joint_detail.specification.order).count() + 1
+        wwi.save()
     else:
         context = {
             "form" : weld_joint_detail_form
@@ -1597,18 +1611,18 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray):
     return simplejson.dumps({"ret" : "ok"})
 
 
-@dajaxice_register
-def saveWeldJointIndex(request, id_work_order, index):
-    weld_joint = WeldJointTech.objects.get(order__id = id_work_order)
-    weld_joint.index = index
-    weld_joint.save()
-    return "ok"
-
-@dajaxice_register
-def deleteWeldJointDetail(request, uid):
-    weld_joint_detail = WeldJointTechDetail.objects.get(id = uid)
-    weld_joint_detail.delete()
-    return "ok"
+#@dajaxice_register
+#def saveWeldJointIndex(request, id_work_order, index):
+#    weld_joint = WeldJointTech.objects.get(order__id = id_work_order)
+#    weld_joint.index = index
+#    weld_joint.save()
+#    return "ok"
+#
+#@dajaxice_register
+#def deleteWeldJointDetail(request, uid):
+#    weld_joint_detail = WeldJointTechDetail.objects.get(id = uid)
+#    weld_joint_detail.delete()
+#    return "ok"
 
 
 
@@ -1623,7 +1637,7 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
     specification = WeldingProcessSpecification.objects.get(order = work_order)
     page = int(page)
 
-    detail_list = WeldJointTechDetail.objects.filter(Q(specification = specification) & Q(is_save = True))
+    detail_list = WeldJointTechDetail.objects.filter(Q(specification = specification))
     
     detail_list_page = 1 if detail_list.count() == 0 else (detail_list.count() - 1) / 6 + 1
 
