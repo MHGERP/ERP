@@ -150,7 +150,8 @@ class WeldJointTechDetailForm(forms.ModelForm):
             "weld_method_2" : forms.Select(attrs = {"class" : "input-small", "disabled" : "disabled"}),
             "joint_index" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),
             "procedureQualification_index" : forms.Select(attrs = {"class" : "input-small"}),
-            "weld_certification" : forms.SelectMultiple(attrs = {"class" : "input-xlarge"}),
+            "weld_certification_1" : forms.SelectMultiple(attrs = {"class" : "input-xlarge"}),
+            "weld_certification_2" : forms.SelectMultiple(attrs = {"class" : "input-xlarge"}),
             "remark" : forms.TextInput(attrs = {"class" : "input-small"}),
         }
 
