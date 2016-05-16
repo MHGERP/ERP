@@ -137,10 +137,11 @@ $("#joint_btn").click(function(){
         return;
     }
     if(err == false) {
-        Dajaxice.techdata.getWeldJointDetailFormAndSave(function(data) {
+        Dajaxice.techdata.getWeldJointDetailForm(function(data) {
             if(data.ret == "ok"){
-                $("#weldjoint_detail_modal").attr("iid" , data.id);
                 $("#weldjoint_detail_form").html(data.html);
+                $("#id_weld_method_1").val(data.weld_method_1);
+                $("#id_weld_method_2").val(data.weld_method_2);
                 $("#weldjoint_detail_modal").modal();
             }
             else{
@@ -149,7 +150,6 @@ $("#joint_btn").click(function(){
         },
         {
             "jointArray" : jointArray,
-            "id_work_order" : $("#id_work_order").val(),
         });
     }
 });
@@ -170,20 +170,12 @@ $("#weld_joint_detail_save").click(function() {
         {
             "weld_joint_detail_form" : $("#weldjoint_detail_form").serialize(),
             "jointArray" : jointArray,
-            "iid" : $("#weldjoint_detail_modal").attr("iid"),
         }
     );
 });
 
 $("#weld_joint_detail_dismiss").click(function(){
-    Dajaxice.techdata.dismissWeldJointDetailSave(
-        function(data){
-                $("#weldjoint_detail_modal").modal("hide");
-        },
-        {
-            "iid" : $("#weldjoint_detail_modal").attr("iid"),
-        }
-    );
+    $("#weldjoint_detail_modal").modal("hide");
 });
 
 $("#weldingProcessSpecificationView").click(function() {

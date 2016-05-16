@@ -31,6 +31,7 @@ class Product(models.Model):
     techdata_file_up = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"工艺科回传文件", related_name = "techdata_file_up")
     purchasing_file_up = models.OneToOneField(BidFile, null = True, blank = True, verbose_name = u"采购科回传文件", related_name = "purchasing_file_up")
     is_approval = models.IntegerField(choices = REVIEW_COMMENTS_CHOICES, default = -1, verbose_name = u"产品审核结果", blank = False)
+    is_finish = models.BooleanField(default = False, verbose_name = u"是否终止")
     class Meta:
         verbose_name = u"产品"
         verbose_name_plural = u"产品"
