@@ -394,7 +394,6 @@ def BOMadd(request):
                                     ))
                 total += 1
 
-        print len(materiel_list)
         Materiel.objects.bulk_create(materiel_list)
         for item in Materiel.objects.filter(order = work_order):
             CirculationRoute(materiel_belong = item).save()

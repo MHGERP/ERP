@@ -111,9 +111,14 @@ function reviewerConfirmCallBack(data) {
     }
 }
 
-
+$(document).on("click", "#btn-import", function() {
+    $("#BOM_upload").modal("show");
+});
 
 $("#btn-upload").click(function() {
+    $("#BOM_upload").modal("hide");
+    //$("#progress").modal("show");
+    return 0;
     $("#upload_form").ajaxSubmit({
         url: "/techdata/BOMadd",
         type: "POST",
@@ -128,6 +133,7 @@ $("#btn-upload").click(function() {
             }
             else {
                 refresh();
+                $("#progress").modal("hide");
             }
         }
     });
