@@ -1584,6 +1584,9 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray):
     weld_joint_detail_form = WeldJointTechDetailForm(deserialize_form(weld_joint_detail_form))
     if weld_joint_detail_form.is_valid():
         weld_joint_detail = weld_joint_detail_form.save()
+        wwi = WeldingWorkInstruction(detail = weld_joint_detail)
+        wwi.file_index = WeldingWorkInstruction.objects.filter(detail__specification__order = weld_joint_detail.specification.order).count() + 1
+        wwi.save()
     else:
         context = {
             "form" : weld_joint_detail_form
