@@ -325,17 +325,13 @@ def BOMadd(request):
     JunHU
     """
     if request.is_ajax():
-        if request.FILES['BOM_file'].size > 10*1024*1024:
-            file_upload_error = 2
-        else:
-            file = request.FILES['BOM_file']
-            work_order_id = request.POST['work_order_id']
-            work_order = WorkOrder.objects.get(id = work_order_id)
+        total = 1
+        work_order_id = request.POST['work_order_id']
+        work_order = WorkOrder.objects.get(id = work_order_id)
+        materiel_list = []
+        for file in request.FILES.getlist("BOM_file"):
             book = xlrd.open_workbook(file_contents = file.read())
             table = book.sheets()[0]
-            total = Materiel.objects.filter(order = work_order).count() + 1
-            materiel_list = []
-            
             
             #处理部件
             try:
@@ -346,7 +342,8 @@ def BOMadd(request):
                 except:
                     weight = None
             if total != 1:
-                main_materiel = Materiel.objects.get(schematic_index = table.cell(2, 1).value)
+                main_materiel = [materiel for materiel in materiel_list if materiel.schematic_index == table.cell(2, 1).value][0]
+#                main_materiel = Materiel.objects.get(schematic_index = table.cell(2, 1).value)
                 origin_count = int(main_materiel.count)
                 materiel_list.append(Materiel(order = work_order, 
                                              index = 0, 
@@ -396,12 +393,14 @@ def BOMadd(request):
                                              remark = table.cell(rownum, 8).value
                                     ))
                 total += 1
-            for item in materiel_list:
-                item.save()
-                CirculationRoute(materiel_belong = item).save()
-                Processing(materiel_belong = item).save()
 
-            file_upload_error = 1
+        print len(materiel_list)
+        Materiel.objects.bulk_create(materiel_list)
+        for item in Materiel.objects.filter(order = work_order):
+            CirculationRoute(materiel_belong = item).save()
+            Processing(materiel_belong = item).save()
+
+        file_upload_error = 1
         return HttpResponse(json.dumps({'file_upload_error' : file_upload_error}))
 
 
