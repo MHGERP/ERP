@@ -29,7 +29,6 @@ RegisterClass = (
     ConnectOrientation,
     WeldCertification,
     ProcedureQualificationIndex,
-    WeldJointTech,
     WeldJointTechDetail,
     OutPurchasedItem,
     WeldQuota,
@@ -43,6 +42,7 @@ RegisterClass = (
     PrincipalItem,
     PrincipalMark,
     TransferCardProcess,
+    WeldingProcessSpecification,
 )
 
 for item in RegisterClass:
