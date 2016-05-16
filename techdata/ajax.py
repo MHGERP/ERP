@@ -1600,18 +1600,18 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray):
     return simplejson.dumps({"ret" : "ok"})
 
 
-@dajaxice_register
-def saveWeldJointIndex(request, id_work_order, index):
-    weld_joint = WeldJointTech.objects.get(order__id = id_work_order)
-    weld_joint.index = index
-    weld_joint.save()
-    return "ok"
-
-@dajaxice_register
-def deleteWeldJointDetail(request, uid):
-    weld_joint_detail = WeldJointTechDetail.objects.get(id = uid)
-    weld_joint_detail.delete()
-    return "ok"
+#@dajaxice_register
+#def saveWeldJointIndex(request, id_work_order, index):
+#    weld_joint = WeldJointTech.objects.get(order__id = id_work_order)
+#    weld_joint.index = index
+#    weld_joint.save()
+#    return "ok"
+#
+#@dajaxice_register
+#def deleteWeldJointDetail(request, uid):
+#    weld_joint_detail = WeldJointTechDetail.objects.get(id = uid)
+#    weld_joint_detail.delete()
+#    return "ok"
 
 
 
@@ -1626,7 +1626,7 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
     specification = WeldingProcessSpecification.objects.get(order = work_order)
     page = int(page)
 
-    detail_list = WeldJointTechDetail.objects.filter(Q(specification = specification) & Q(is_save = True))
+    detail_list = WeldJointTechDetail.objects.filter(Q(specification = specification))
     
     detail_list_page = 1 if detail_list.count() == 0 else (detail_list.count() - 1) / 6 + 1
 
