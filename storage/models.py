@@ -198,7 +198,7 @@ class WeldingMaterialApplyCard(models.Model):
 class StoreRoom(models.Model):
     name = models.CharField(max_length=20,verbose_name=u"库房名称",blank = False)
     position = models.CharField(max_length=50,verbose_name=u"位置",blank = True)
-    material_type = models.IntegerField(choices=MATERIAL_TYPE,blank=False,null=False,default=0,verbose_name=u"材料类型")
+    material_type = models.IntegerField(choices=STOREROOM_CHOICES,blank=False,null=False,default=STOREROOM_CHOICES_WELD,verbose_name=u"材料类型")
 
     def __unicode__(self):
         return "%s"  % self.name

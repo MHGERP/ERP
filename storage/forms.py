@@ -4,7 +4,7 @@ from django import  forms
 from django.forms import ModelForm
 from storage.models import *
 from const.models import Materiel,SubWorkOrder
-from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES,STEEL_TYPE,STEEL,STORAGE_ENTRY_TYPECHOICES,MATERIAL_TYPE
+from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES,STEEL_TYPE,STEEL,STORAGE_ENTRY_TYPECHOICES,STOREROOM_CHOICES
 from django.contrib.auth.models import User
 from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
@@ -653,4 +653,14 @@ class WeldAccountItemForm(ModelForm):
         fields = ("inventory_count","item_status")
     def __init__(self,*args,**kwargs):
         super(WeldAccountItemForm,self).__init__(*args,**kwargs)
-        set_form_input_width(self.fields,"150px;")
+        set_form_input_width(self.fields,"150px")
+
+class SteelAccountItemForm(ModelForm):
+    class Meta:
+        model = SteelMaterialStoreList
+        fields = ("specification","length","count","weight","store_room")
+    def __init__(self,*args,**kwargs):
+        super(SteelAccountItemForm,self).__init__(*args,**kwargs)
+        self.fields["store_room"].queryset = StoreRoom.objects.filter(material_type = STOREROOM_CHOICES_STEEL)
+        set_form_input_width(self.fields,"150px")
+
