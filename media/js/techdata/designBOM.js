@@ -117,8 +117,7 @@ $(document).on("click", "#btn-import", function() {
 
 $("#btn-upload").click(function() {
     $("#BOM_upload").modal("hide");
-    //$("#progress").modal("show");
-    return 0;
+    $("#progress").modal("show");
     $("#upload_form").ajaxSubmit({
         url: "/techdata/BOMadd",
         type: "POST",
