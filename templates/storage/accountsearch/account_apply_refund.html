@@ -13,9 +13,11 @@
         </form>
         <br/>
         {% endif %}
+        {% if account_apply_refund_table %}
         <div id="account_apply_refund_table">
         {% include account_apply_refund_table %}
         </div>
+        {% endif %}
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>

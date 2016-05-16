@@ -243,7 +243,7 @@ class WeldEntryForm(ModelForm):
 class SteelEntryForm(ModelForm):
     class Meta:
         model=SteelMaterialEntryItems
-        fields={"weight","unit","store_room","length","material_code","batch_number"}
+        fields={"weight","unit","length","material_code","batch_number"}
 class AuxiliaryEntryForm(ModelForm):
     class Meta:
         model=AuxiliaryToolEntryItems
