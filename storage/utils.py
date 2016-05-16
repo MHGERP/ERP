@@ -291,7 +291,7 @@ def getAccountDataDict(card_type):
     model_dict = {"weldentry":weldentry,"weldapply":weldapply,"weldstorage":weldstorage,"steelentry":steelentry,'steelapply':steelapply,"steelstorage":steelstorage}
     return model_dict[card_type][0],model_dict[card_type][1],account_table_path
 
-def getAccountItemDataDict(card_type):
-#ModelTypeDict = {"weld":WeldStoreList,"auxiliarytool":AuxiliaryToolStoreList}
-#AccountItemFormDict = {"weld":WeldAccountItemForm,}
-    pass
+def getAccountItemDataDict(role):
+    ModelTypeDict = {"weld":WeldStoreList,"auxiliarytool":AuxiliaryToolStoreList,"steel":SteelMaterialStoreList}
+    AccountItemFormDict = {"weld":WeldAccountItemForm,'steel':SteelAccountItemForm}
+    return ModelTypeDict[role],AccountItemFormDict[role]

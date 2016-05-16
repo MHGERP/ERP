@@ -110,7 +110,8 @@ def genEntry(request,selected,bid,entry_type):
             OutsideEntryItemAdd(outside_entry,selected)
         elif entry_type=="welding":
             welding_entry=WeldMaterialEntry(entry_status=entry_status,entry_code=entry_code,create_time=create_time)
-            outside_entry.save()
+            welding_entry.save()
+            print "$$$$$$$"
             WeldingEntryItemAdd(welding_entry,selected)
         elif entry_type=="auxiliary":
             auxiliary_entry=AuxiliaryToolEntry(entry_status=entry_status,entry_code=entry_code,create_time=create_time)

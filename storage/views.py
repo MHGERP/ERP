@@ -4,7 +4,6 @@ import datetime
 from django.shortcuts import render
 
 from const import *
-from const import MATERIAL_TYPE
 from const.forms import InventoryTypeForm
 from const.utils import *
 from datetime import datetime

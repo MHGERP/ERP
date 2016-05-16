@@ -1,9 +1,9 @@
 # coding: UTF-8
-from datetime import datetime
 from purchasing.models import StatusChange,ArrivalInspection,MaterielFormConnection
 from const.models import BidFormStatus
 from const import *
 from storage.models import *
+from datetime import datetime
 
 def goNextStatus(bidform,user):
     original_status=bidform.bid_status
@@ -88,9 +88,8 @@ def WeldingEntryItemAdd(wilding_entry,selected):
         item=arrival_inspection.material
         entry_item=WeldMaterialEntryItems(material=item,
                    remark=item.remark,
-                    total_weight=item.total_weight_cal(),
+                    total_weight=item.quota,
                     entry=wilding_entry,
-                    count=item.count,
                     material_code=item.quality_number,
                     material_mark=item.material.name,
                     specification=item.specification

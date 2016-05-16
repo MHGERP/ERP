@@ -4,15 +4,15 @@
         <h3 id="myModalLabel">查看材料领用历史</h3>
     </div>
     <div class="modal-body">
-        <h4> 当前产看的库存材料信息：</h4>
+        <h4> 当前查看的库存材料信息：</h4>
         <table class="table table-bordered" id="show_select_account_item">
         </table>
-        {% if account_item_form %}
         <form id="account_item_form" action="" class="form-inline">
+        {% if account_item_form %}
             {% include "storage/accountsearch/account_item_form.html" %}
+        {% endif %}
         </form>
         <br/>
-        {% endif %}
         {% if account_apply_refund_table %}
         <div id="account_apply_refund_table">
         {% include account_apply_refund_table %}
