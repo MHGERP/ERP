@@ -441,16 +441,16 @@ def getWeldSeamCard(request, full = False, iid = None):
         form = WeldSeamForm(instance = weld_seam)
     else:
         form = WeldSeamForm()
-    material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE, WELD_RIBBON, WELD_FLUX)
+    material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE)
     form.fields["weld_material_1"].queryset = material_set
     form.fields["weld_material_2"].queryset = material_set
+    material_set = getMaterialQuerySet(WELD_FLUX)
+    form.fields["weld_flux_1"].queryset = material_set
+    form.fields["weld_flux_2"].queryset = material_set
     context = {
         "form": form,
     }
-    if full:
-        html = render_to_string("techdata/widgets/weld_seam_full_card.html", context)
-    else:
-        html = render_to_string("techdata/widgets/weld_seam_card.html", context)
+    html = render_to_string("techdata/widgets/weld_seam_full_card.html", context)
     return html
 @dajaxice_register
 def getWeldQuotaCard(request,iid = None):
@@ -1569,6 +1569,7 @@ def getWeldJointDetailForm(request, jointArray):
             data[map[field]] = getattr(weldseam, field)
         data['joint_index'] = joint_index
         weld_joint_detail_form = WeldJointTechDetailForm(data)
+
         context = {
             "form" : weld_joint_detail_form,
         }
@@ -1644,6 +1645,7 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
         html = render_to_string("techdata/welding_process_specification/graph_page.html", context)
     elif page <= 2 + detail_list_page:
         detail_list = getContext(detail_list, page - 2, "item", 1, 6)["item_list"]
+        context["detail_list"] = detail_list
         context["empty_row"] = range(6 - len(detail_list))
         html = render_to_string("techdata/welding_process_specification/weld_analysis_table.html", context)
     elif page <= 2 + detail_list_page + 1:
@@ -1651,4 +1653,13 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
     else:
         context["empty_row"] = range(11)
         html = render_to_string("techdata/welding_process_specification/NDE.html", context)
+    return html
+
+@dajaxice_register
+def getCard(request):
+    """
+    MH Chen
+    """
+    context = {"STATIC_URL": settings.STATIC_URL,}
+    html = render_to_string("techdata/widgets/weld_instruction_book.html",context)
     return html

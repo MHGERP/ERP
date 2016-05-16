@@ -21,7 +21,7 @@ function entry_inspection_confirm_callback(data){
     }
 }
 var mid,entrytype;
-$(document).on("dblclick","tr[name='entry_item_tr']",function(){
+$(document).on("dblclick","tr[name='item_tr']",function(){
     mid = $(this).attr("id");
     entrytype=$("#entrybody").attr("entrytype");
     Dajaxice.purchasing.getEntryFormInfo(function(data){

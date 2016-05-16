@@ -430,6 +430,14 @@ def weldingProcessSpecificationViews(request):
     }
     return render(request, "techdata/welding_process_specification.html", context)
 
+def weldingWorkInstructionViews(request):
+    wwi_id = request.GET.get("id")
+    wwi = WeldingWorkInstruction.objects.get(id = wwi_id)
+    context = {
+        "wwi": wwi,
+    }
+    return render(request, "techdata/welding_work_instruction.html", context)
+
 def weldingProcessSpecificationPicUpload(request):
     if request.is_ajax():
         if request.FILES['pic_file'].size > 10*1024*1024:

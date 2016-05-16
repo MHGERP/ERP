@@ -94,15 +94,23 @@ class WeldSeamForm(forms.ModelForm):
             "base_metal_thin_2": forms.TextInput(attrs = {"class": "input-small"}),
             "length": forms.TextInput(attrs = {"class": "input-small"}),
             "weight_1": forms.TextInput(attrs = {"class": "input-small"}),
+            "flux_weight_1": forms.TextInput(attrs = {"class": "input-small"}),
+            "flux_weight_2": forms.TextInput(attrs = {"class": "input-small"}),
+
             "weight_2": forms.TextInput(attrs = {"class": "input-small"}),
             "weld_material_1": forms.Select(attrs = {"class": "input-small"}),
             "weld_material_2": forms.Select(attrs = {"class": "input-small"}),
+            "weld_flux_1": forms.Select(attrs = {"class": "input-small"}),
+            "weld_flux_2": forms.Select(attrs = {"class": "input-small"}),
             "weld_method_1": forms.Select(attrs = {"class": "input-small"}),
             "weld_method_2": forms.Select(attrs = {"class": "input-small"}),
             "weldseam_type": forms.Select(attrs = {"class": "input-small"}),
             "weld_position": forms.Select(attrs = {"class": "input-small"}),
             "size_1": forms.TextInput(attrs = {"class": "input-small"}),
             "size_2": forms.TextInput(attrs = {"class": "input-small"}),
+            "thin_1": forms.TextInput(attrs = {"class": "input-small"}),
+            "thin_2": forms.TextInput(attrs = {"class": "input-small"}),
+           
             "remark": forms.TextInput(attrs = {"class": "input-medium"}),
             "groove_inspction": forms.SelectMultiple(attrs = {"class": "input-small"}),
             "welded_status_inspection": forms.SelectMultiple(attrs = {"class": "input-small"}),
@@ -131,7 +139,7 @@ class WeldJointTechDetailForm(forms.ModelForm):
     """
     class Meta:
         model = WeldJointTechDetail
-        exclude = ('id', 'weld_joint', 'is_save')
+        exclude = ('id', 'specification', 'is_save', "weld_position")
         widgets = {
             "joint_index" : forms.TextInput(attrs = {"class" : "input-small"}),
             "bm_texture_1" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),

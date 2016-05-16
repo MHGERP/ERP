@@ -1264,17 +1264,17 @@ def getAccountSearchContext(card_type,search_form):
     html = render_to_string(account_table_path,{"items":items})
     return html
 
-ModelTypeDict = {"weld":WeldStoreList,"auxiliarytool":AuxiliaryToolStoreList}
-AccountItemFormDict = {"weld":WeldAccountItemForm,}
 ApplyCardDict = {"weld":WeldingMaterialApplyCard,}
 @dajaxice_register
 def storageAccountItemForm(request,mid,role):
-    storeitem = ModelTypeDict[role].objects.get(id=mid)
-    account_item_form = AccountItemFormDict[role](instance = storeitem)
+    storeitem,account_item_form = getAccountItemDataDict(role)
+    storeitem = storeitem.objects.get(id=mid)
+    account_item_form = account_item_form(instance = storeitem)
     form_html = render_to_string("storage/accountsearch/account_item_form.html",{"account_item_form":account_item_form})
-    applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
     refundcards = []
+    applycards = []
     if role == "weld":
+        applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
         for applycard in applycards:
             try:
                 refund = WeldRefund.objects.get(apply_card = applycard)
@@ -1286,8 +1286,9 @@ def storageAccountItemForm(request,mid,role):
 
 @dajaxice_register
 def storageAccountItemModify(request,account_item_form,mid,search_form,card_type,role):
-    storeitem = ModelTypeDict[role].objects.get(id=mid)
-    account_item_form = AccountItemFormDict[role](deserialize_form(account_item_form),instance = storeitem)
+    storeitem_model,account_item_form_model = getAccountItemDataDict(role)
+    storeitem = storeitem_model.objects.get(id=mid)
+    account_item_form = account_item_form_model(deserialize_form(account_item_form),instance = storeitem)
     if account_item_form.is_valid():
         account_item_form.save()
         message = u"库存信息修改成功"

@@ -13,7 +13,7 @@ $(document).ready(function(){
     })
     $(document).on("click","#account_item_save",function(){
         var card_type = $("#account_search_btn").attr("card_type");
-        Dajaxice.storage.storageAccountItemModify(storageaccountitemmodify_callback,{"account_item_form":$("#account_item_form").serialize(),"mid":mid,"search_form":$("#account_item_form").serialize(),"card_type":card_type,"role":role});
+        Dajaxice.storage.storageAccountItemModify(storageaccountitemmodify_callback,{"account_item_form":$("#account_item_form").serialize(),"mid":mid,"search_form":$("#account_search_form").serialize(),"card_type":card_type,"role":role});
     })
 })
 
@@ -33,7 +33,7 @@ function refreshaccountitemform_callback(data){
 }
 
 function getSelectItemInfo(){
-    var account_thead_html = $("#acoount_table_thead").html();
+    var account_thead_html = $("#account_table_thead").html();
     var account_select_item_html = $("tr#"+mid).html();
     $("#show_select_account_item").empty();
     $("#show_select_account_item").append(account_thead_html);
