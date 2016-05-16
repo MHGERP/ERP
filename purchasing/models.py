@@ -104,17 +104,23 @@ class ContractDetail(models.Model):
     def __unicode__(self):
         return '%s'% (self.amount)
 
-class BidComment(models.Model):
+class CommentBase(models.Model):
     user = models.ForeignKey(User, blank = False)
     comment = models.CharField(max_length=400,blank=False,verbose_name=u"审批意见")
-    bid = models.ForeignKey(BidForm, blank = False)
     submit_date=models.DateField(blank=True,null=True,default=lambda: datetime.datetime.today(),verbose_name=u"提交日期")
+    class Meta:
+        abstract=True
+        verbose_name=u"评审意见基本"
+
+class BidComment(CommentBase):
+    bid = models.ForeignKey(BidForm, blank = False)
     user_title=models.IntegerField(choices=COMMENT_USER_CHOICE,verbose_name=u"审批人属性")
     class Meta:
         verbose_name = u"标单评审意见"
         verbose_name_plural = u"标单评审意见"
     def __unicode__(self):
         return '%s'% (self.id)
+
 
 class MaterielFormConnection(models.Model):
     materiel = models.OneToOneField(MaterielCopy, blank = False, verbose_name = u"物料")
@@ -265,18 +271,25 @@ class MaterialSubApply(models.Model):
     receipts_code = models.CharField(max_length = 100, unique = True, blank = False ,null = True, verbose_name = u"单据编号")
     pic_code =  models.CharField(max_length = 100, blank = False , null = True, verbose_name = u"图号")
     work_order = models.CharField(max_length=50,verbose_name = u"工作令" , blank = True , null = True)
-    reasons = models.CharField(max_length = 1000,blank = False , null = True, verbose_name = u"代用原因和理由")
+    production_name = models.CharField(max_length=50,verbose_name = u"产品名称" , blank = True , null = True)
+    reasons = models.CharField(max_length = 1000,blank = True, null = True, verbose_name = u"代用原因和理由")
     proposer = models.ForeignKey(User,verbose_name = u"申请人",blank = True)
     status=models.ForeignKey(CommentStatus,verbose_name=u"招标申请表状态")
     class Meta:
         verbose_name = u"材料代用申请单"
         verbose_name_plural = u"材料代用申请单"
     def __unicode__(self):
-        if self.bidform == None:
-            bid_show = self.bidform
-        else:
-            bid_show = self.bidform.bid_id
-        return "%s(%s)" % (bid_show,self.receipts_code)
+        return "%s" % (self.receipts_code)
+
+class SubApplyComment(CommentBase):
+    subapply=models.ForeignKey(MaterialSubApply,blank=False)
+    user_title=models.IntegerField(choices=COMMENT_USER_CHOICE,verbose_name=u"审批人属性")
+    class Meta:
+        verbose_name = u"材料代用评审意见"
+        verbose_name_plural = u"材料代用评审意见"
+    def __unicode__(self):
+        return '%s'% (self.id)
+    
 
 class MaterialSubApplyItems(models.Model):
     mat_pic_code = models.CharField(max_length = 100, blank = False , verbose_name = u"部件图号")
