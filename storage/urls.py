@@ -29,8 +29,20 @@ urlpatterns = patterns('',
         storage_views.steelApplyDetailViews,
     ),
     url(
-        r'^steelledger$',
-        storage_views.steelLedgerViews,
+        r'^steelaccounthome$',
+        storage_views.steelAccountHomeViews,
+    ),
+    url(
+        r'^steelentryaccount$',
+        storage_views.steelEntryAccountViews,
+    ),   
+    url(
+        r'^steelapplyaccount$',
+        storage_views.steelApplyAccountViews,
+    ),   
+    url(
+        r'^steelstorageaccount$',
+        storage_views.steelStorageAccountHomeViews,
     ),
     url(
         r'^weldentryhome$',

@@ -1,0 +1,12 @@
+<div class="row-fluid">
+{% for field in account_item_form %}
+<div class="control-group span3 {% if field.errors %} error {% endif %}">
+{{field.label_tag}}
+{{field}}
+{% if field.errors %}
+<span class="help-inline">{{field.errors}}</span>
+{% endif %}
+</div>
+{% endfor %}
+<button class="btn btn-primary" id="account_item_save" type="button">保存</button>
+</div>

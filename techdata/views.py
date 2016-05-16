@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from backend.utility import getContext
 from techdata.forms import *
 from const.models import Materiel
-from techdata.models import TransferCard, Program, WeldJointTech
+from techdata.models import TransferCard, Program
 from purchasing.models import MaterielExecute
 from const.forms import WorkOrderForm
 
@@ -429,3 +429,16 @@ def weldingProcessSpecificationViews(request):
         "work_order": work_order,
     }
     return render(request, "techdata/welding_process_specification.html", context)
+
+def weldingProcessSpecificationPicUpload(request):
+    if request.is_ajax():
+        if request.FILES['pic_file'].size > 10*1024*1024:
+            file_upload_error = 2
+        else:
+            id_work_order = request.POST['id_work_order']
+            specification = WeldingProcessSpecification.objects.get(order__id = id_work_order)
+            specification.file_obj = request.FILES['pic_file']
+            specification.save()
+            file_upload_error = 1
+        return HttpResponse(json.dumps({"file_upload_error": file_upload_error, }))
+

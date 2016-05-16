@@ -209,6 +209,10 @@ class OrderFormTwo(ModelForm):
         model=MaterielCopy
         fields={'index','name','schematic_index','material','count','remark'}
 
+class OrderFormThree(ModelForm):
+    class Meta:
+        model=MaterielCopy
+        fields={'name','specification','material','quota','remark','standard'}
 
 class EntryTypeForm(forms.Form):
     entry_type=forms.ChoiceField(label=u'入库单类型',choices=(),required=True,widget=forms.Select(attrs={'class':'form-control span2','id':'entry_type'}))
@@ -239,7 +243,7 @@ class WeldEntryForm(ModelForm):
 class SteelEntryForm(ModelForm):
     class Meta:
         model=SteelMaterialEntryItems
-        fields={"weight","unit","store_room","length","material_code","batch_number"}
+        fields={"weight","unit","length","material_code","batch_number"}
 class AuxiliaryEntryForm(ModelForm):
     class Meta:
         model=AuxiliaryToolEntryItems
