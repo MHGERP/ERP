@@ -47,7 +47,7 @@ class StorageEntryItemBaseA(models.Model):
         return '%s(%s)' % (self.specification,self.materiel.order)
 
 class StorageEntryBaseB(models.Model):
-    workorder = models.CharField(verbose_name=u"工作令",max_length=100)
+    work_order = models.CharField(verbose_name=u"工作令",max_length=100)
     entry_time = models.DateField(verbose_name="日期",auto_now=True)
     entry_code = models.CharField(verbose_name=u"单据编号",max_length=20,unique=True)
 
@@ -80,7 +80,7 @@ class ApplyCardBase(models.Model):
     change_code = models.CharField(verbose_name=u"修改号",max_length=20,blank=True,null=True)
     sample_report = models.CharField(verbose_name=u"样表",max_length=20,blank=True,null=True)
     entry_code = models.CharField(verbose_name=u"编号",max_length=20,unique=True)
-    workorder = models.ForeignKey(SubWorkOrder,verbose_name=u"工作令")
+    work_order = models.ForeignKey(SubWorkOrder,verbose_name=u"工作令")
     create_time = models.DateField(verbose_name=u"日期")
     department = models.CharField(verbose_name = u"领用单位",max_length=20)
     class Meta:
@@ -169,7 +169,7 @@ class WeldingMaterialApplyCard(models.Model):
     department = models.CharField(verbose_name=u'领用单位',max_length=20,blank=False)
     applycard_code = models.CharField(verbose_name=u'编号',max_length=20,blank=False,unique=True)
     create_time=models.DateField(verbose_name=u'填写时间',auto_now_add=True)
-    workorder=models.ForeignKey(SubWorkOrder,verbose_name=u'工作令',blank=False)
+    work_order=models.ForeignKey(SubWorkOrder,verbose_name=u'工作令',blank=False)
     weld_bead_number=models.CharField(verbose_name=u'焊缝编号',max_length=20,blank=False)
     material_mark=models.CharField(verbose_name=u'焊材牌号',max_length=50,blank=False)
     model_number=models.CharField(verbose_name=u'型号',max_length=50,blank=True)
@@ -208,7 +208,6 @@ class StoreRoom(models.Model):
         verbose_name_plural = u"库房"
 
 class WeldingMaterialHumitureRecord(models.Model):
-    storeRoom = models.ForeignKey(StoreRoom,verbose_name=u"库房")
     storeMan = models.ForeignKey(User,verbose_name=u'库管员',blank=False,related_name="humitureStoreMan")
     demandTemperature = models.CharField(verbose_name=u'要求温度', max_length=20,blank=False)
     demandHumidity = models.CharField(verbose_name=u'要求湿度', max_length=20,blank=False)
@@ -277,7 +276,6 @@ class SteelMaterialEntryItems(models.Model):
     weight = models.FloatField(blank=False,null=False,verbose_name=u"重量")
     unit = models.CharField(blank=True,null=True,max_length=20,verbose_name=u"单位")
     work_order = models.ManyToManyField(SubWorkOrder,blank=False,null=False,verbose_name=u'工作令')
-    store_room = models.ForeignKey(StoreRoom,blank=False,null=False,verbose_name=u'库房位置')
     count = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
     length = models.FloatField(blank=True,null=True,verbose_name=u"长度")
     entry = models.ForeignKey(SteelMaterialEntry,verbose_name=u"钢材入库单")
@@ -587,7 +585,7 @@ class OutsideApplyCard(models.Model):
         return self.applycard_code
 
 class OutsideApplyCardItems(models.Model):
-    applycard = models.ForeignKey(OutsideApplyCard,verbose_name=u"领用单")
+    apply_card = models.ForeignKey(OutsideApplyCard,verbose_name=u"领用单")
     storelist = models.ForeignKey(OutsideStorageList,verbose_name=u"外购件库存材料",null=True,blank=True)
     schematic_index = models.CharField(verbose_name=u"标准号或图号",max_length=50,blank=True,null=True)
     specification = models.CharField(verbose_name=u"名称及规格",max_length=50,blank=True,null=True)

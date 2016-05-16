@@ -89,15 +89,27 @@ def steelApplyDetailViews(request,aid):
     }
     return render(request,"storage/steelmaterial/steelapplydetail.html",context)
 
-def steelLedgerViews(request):
-    search_form = SteelLedgerSearchForm()
-    steel_set = SteelMaterial.objects.all().order_by("steel_type")
-    context={
-        "search_form":search_form,
-        "steel_set":steel_set,
-    }
-    return render(request,"storage/steelmaterial/steelledger.html",context)
-    
+ 
+def steelAccountHomeViews(request):
+    context = {}
+    return render(request,"storage/steelmaterial/steelaccount/steelaccounthome.html",context)
+
+def steelEntryAccountViews(request):
+    card_type = "steelentry"
+    context = getAccountContext(card_type)
+    return render(request,"storage/steelmaterial/steelaccount/steelentryhome.html",context)  
+
+
+def steelApplyAccountViews(request):
+    card_type = "steelapply"
+    context = getAccountContext(card_type)
+    return render(request,"storage/steelmaterial/steelaccount/steelapplyhome.html",context)  
+
+def steelStorageAccountHomeViews(request):
+    card_type = "steelstorage"
+    context = getAccountContext(card_type)
+    return render(request,"storage/steelmaterial/steelaccount/steelstoragehome.html",context)  
+
 def weldEntryHomeViews(request):
     weldentry_set = WeldMaterialEntry.objects.all()
     search_form = WeldEntrySearchForm()
@@ -606,7 +618,7 @@ def AuxiliaryToolsEntryApplyDetailView(request):
 def getAccountContext(card_type):
     model_type,form_type,account_table_path = getAccountDataDict(card_type) 
     context = {
-            "search_form":form_type,
+            "search_form":form_type(),
             "card_type":card_type,
             "account_table_path":account_table_path,
             }
@@ -618,6 +630,7 @@ def weldAccountHomeViews(request):
 def weldEntryAccountViews(request):
     card_type = "weldentry"
     context = getAccountContext(card_type)
+    print context
     return render(request,"storage/weldmaterial/weldaccount/weldentryhome.html",context)
 
 def weldStorageAccountHomeViews(request):
@@ -821,3 +834,4 @@ def outsideRefundConfirmViews(request,fid):
         "items":items,
     }
     return render(request,"storage/outside/refundcardconfirm.html", context)
+

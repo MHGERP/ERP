@@ -1,11 +1,11 @@
 <table class="table table-bordered">
     <thead>
-        <th>牌号</th>
+        <th>材质</th>
         <th>规格</th>
         <th>入库时间</th>
-        <th>材料批号</th>
         <th>材质编号</th>
-        <th>厂家</th>
+        <th>工作令</th>
+        <th>入库数量</th>
         <th>入库重量</th>
     </thead>
     </tbody>
@@ -14,15 +14,17 @@
             <td>{{item.material_mark}}</td>
             <td>{{item.specification}}</td>
             <td>{{item.entry.create_time|date:"Y年m月d日"}}</td>
-            <td>{{item.material_charge_number}}</td>
             <td>{{item.material_code}}</td>
-            <td>{{item.factory}}</td>
-            <td>{{item.total_weight}}</td>
+            <td>{{item.show_workorder}}</td>
+            <td>{{item.count}}</td>
+            <td>{{item.weight}}</td>
         </tr>
         {% endfor %}
+        {% comment %}
         <tr>
-            <td colspan="6" style="text-align:right">合计：</td>
+            <td colspan="5" style="text-align:right">合计：</td>
             <td id="account_total_count"></td>
         </tr>
+        {% endcomment %}
     </tbody>
 </table>

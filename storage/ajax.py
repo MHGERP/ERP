@@ -736,7 +736,7 @@ def outsideApplyCardItemRemarkChange(request,itemid,remark):
 @dajaxice_register
 def outsideApplyCardConfirm(request,aid):
     applycard = OutsideApplyCard.objects.get(id = aid)
-    items = OutsideApplyCardItems.objects.filter(applycard = applycard)
+    items = OutsideApplyCardItems.objects.filter(apply_card = applycard)
     if applycard.status == APPLYCARD_KEEPER:
         if items.filter(storelist__isnull = True).count() > 0:
             message = u"还有领用项未分配库存材料"
@@ -761,7 +761,7 @@ def outsideApplyCardConfirm(request,aid):
 
 def getOutsideApplyCardContext(applycard,inform,url,default_status):
     is_show = applycard.entry_status == default_status
-    items_set = OutsideApplyCardItem.objects.filter(applycard = applycard)
+    items_set = OutsideApplyCardItems.objects.filter(apply_card = applycard)
     context = {
                "inform":inform,
                "applycard":applycard,
@@ -1165,7 +1165,7 @@ def getOutsideEntryItemFormInfo(request,mid):
 def outsideMaterialApply(request,select_item,mid):
     applyitem = OutsideApplyCardItems.objects.get(id=mid)
     storelist = OutsideStorageList.objects.get(id=select_item)
-    if applyitem.applycard.status == APPLYCARD_KEEPER:
+    if applyitem.apply_card.status == APPLYCARD_KEEPER:
         if applyitem.count <= storelist.count:
             applyitem.storelist = storelist
             applyitem.save()
@@ -1251,12 +1251,16 @@ def getAccountSearchContext(card_type,search_form):
     model_type,form_type,account_table_path = getAccountDataDict(card_type)
     search_form = form_type(deserialize_form(search_form))
     if search_form.is_valid():
-        items = get_weld_filter(model_type,search_form.cleaned_data)
-        if "apply" in card_type:
-            items = items.order_by("create_time")
+        replace_dic = gen_replace_dic(search_form.cleaned_data)
+        if "weldapply" in card_type:
+            order_field = "create_time"
+        elif "entry" in card_type:
+            order_field = "entry__create_time"
+        elif "apply" in card_type:
+            order_field = "apply_card__create_time"
         else:
-            items = items.order_by("entry_item__entry__create_time")
-
+            order_field = "entry_item__entry__create_time"
+        items = get_weld_filter(model_type,search_form.cleaned_data,replace_dic).order_by(order_field)
     html = render_to_string(account_table_path,{"items":items})
     return html
 

@@ -1,0 +1,26 @@
+{% extends "storage/base/weldbase.html" %}
+
+{% block title %}
+<h1>钢材库存管理</h1>
+
+{% endblock %}
+
+{% block sub_sec %}
+<a href="/storage/steelaccounthome" class="current">钢材台账</a>
+{% endblock %}
+{% block inner_content%}
+<div class="row span12" id="storage-weld-menu">
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/steelentryaccount">钢材入库台账</a>
+    </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/steelapplyaccount">钢材出库台账</a>
+    </div>
+    <div class="e3">
+        <img class="storage-icon" src="{{STATIC_URL}}/img/storage-entry.png"/>
+        <a href="/storage/steelstorageaccount">钢材库存台账</a>
+    </div>
+</div>
+{% endblock%}
