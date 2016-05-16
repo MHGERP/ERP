@@ -1600,18 +1600,18 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray):
     return simplejson.dumps({"ret" : "ok"})
 
 
-@dajaxice_register
-def saveWeldJointIndex(request, id_work_order, index):
-    weld_joint = WeldJointTech.objects.get(order__id = id_work_order)
-    weld_joint.index = index
-    weld_joint.save()
-    return "ok"
-
-@dajaxice_register
-def deleteWeldJointDetail(request, uid):
-    weld_joint_detail = WeldJointTechDetail.objects.get(id = uid)
-    weld_joint_detail.delete()
-    return "ok"
+#@dajaxice_register
+#def saveWeldJointIndex(request, id_work_order, index):
+#    weld_joint = WeldJointTech.objects.get(order__id = id_work_order)
+#    weld_joint.index = index
+#    weld_joint.save()
+#    return "ok"
+#
+#@dajaxice_register
+#def deleteWeldJointDetail(request, uid):
+#    weld_joint_detail = WeldJointTechDetail.objects.get(id = uid)
+#    weld_joint_detail.delete()
+#    return "ok"
 
 
 
