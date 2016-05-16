@@ -131,7 +131,7 @@ class WeldJointTechDetailForm(forms.ModelForm):
     """
     class Meta:
         model = WeldJointTechDetail
-        exclude = ('id', 'weld_joint', 'is_save')
+        exclude = ('id', 'specification', 'is_save', "weld_position")
         widgets = {
             "joint_index" : forms.TextInput(attrs = {"class" : "input-small"}),
             "bm_texture_1" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),

@@ -1,0 +1,19 @@
+{% extends "techdata/base/none_nav_base.html" %}
+
+{% block title%}
+<h1>焊接作业指导书</h1>
+{% endblock %}
+
+{% block sub_ref %}
+<a href="/techdata/weldList" class="tip-bottom" data-original-title="焊缝明细">焊缝明细</a>
+<a href="/techdata/weldingProcessSpecification?id_work_order={{wwi.detail.specification.order.id}}" class="tip-bottom" data-original-title="焊接工艺规程">焊接工艺规程</a>
+<a href="#" class="current">焊接作业指导书</a>
+{% endblock %}
+
+{% block inner_content %}
+<div id="div_card" wwi_id="{{wwi.id}}" style="text-align:center">
+    
+</div>
+<script type='text/javascript' src="{{ STATIC_URL  }}js/techdata/weld_instruction_book.js"></script>
+{% endblock %}
+

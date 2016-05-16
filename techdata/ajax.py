@@ -1542,13 +1542,11 @@ def removeConnectOrientation(request, pid):
 def getWeldJointDetailFormAndSave(request, jointArray, id_work_order):
     ret = "ok"
     md1, md2, bm_1, bm_2, bm_thin1, bm_thin2 = None, None, None, None, None, None
-    joint_index = ""
-    #seam_list = []
+    joint_index_list = []
     for i in xrange(len(jointArray)):
         seam_id = jointArray[i]
         seam = WeldSeam.objects.get(id = seam_id)
-        #seam_list.append(seam)
-        joint_index = joint_index + seam.weld_index
+        joint_index_list.append(seam.weld_index)
         if i == 0:
             md1 = seam.weld_method_1
             md2 = seam.weld_method_2
@@ -1556,27 +1554,30 @@ def getWeldJointDetailFormAndSave(request, jointArray, id_work_order):
             bm_2 = seam.base_metal_2
             bm_thin1 = seam.base_metal_thin_1
             bm_thin2 = seam.base_metal_thin_2
+            weld_position = seam.weld_position
         else:
             if seam.weld_method_1 != md1 or seam.weld_method_2 != md2 or seam.base_metal_1 != bm_1 or seam.base_metal_2 != bm_2 or seam.base_metal_thin_1 != bm_thin1 or seam.base_metal_thin_2 != bm_thin2:
                 ret = "err"
+    joint_index = ', '.join(joint_index_list)
     if ret == "ok":
         workorder = WorkOrder.objects.get(id = id_work_order)
-        if WeldJointTech.objects.filter(order = workorder).count() == 0:
-            weld_joint = WeldJointTech(order = workorder)
-            weld_joint.save()
-        else:
-            weld_joint = WeldJointTech.objects.filter(order = workorder)[0]
+        specification = WeldingProcessSpecification.objects.get(order = workorder)
         weld_joint_detail = WeldSeam.objects.get(id = jointArray[0]).weld_joint_detail
         if weld_joint_detail:
-            weld_joint_detail.weld_joint = joint_index
+            weld_joint_detail.joint_index = joint_index
+            weld_joint_detail.save()
+
         else:
-            weld_joint_detail = WeldJointTechDetail(weld_joint = weld_joint, joint_index = joint_index,  bm_texture_1 = bm_1, bm_texture_2 = bm_2, bm_specification_1 = bm_thin1, bm_specification_2 = bm_thin2, weld_method_1 = md1, weld_method_2 = md2)
-        weld_joint_detail.is_save = True
-        print weld_joint_detail.is_save
-        weld_joint_detail.save()
-        #for seam in seam_list:
-        #    seam.weld_joint_detail = weld_joint_detail
-        #    seam.save()
+            weld_joint_detail = WeldJointTechDetail(specification = specification, 
+                                                    joint_index = joint_index,  
+                                                    bm_texture_1 = bm_1, 
+                                                    bm_texture_2 = bm_2, 
+                                                    bm_specification_1 = bm_thin1, 
+                                                    bm_specification_2 = bm_thin2, 
+                                                    weld_method_1 = md1, 
+                                                    weld_method_2 = md2,
+                                                    weld_position = weld_position)
+            weld_joint_detail.save()      
         weld_joint_detail_form = WeldJointTechDetailForm(instance = weld_joint_detail)
         context = {
             "form" : weld_joint_detail_form
@@ -1660,6 +1661,7 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
         html = render_to_string("techdata/welding_process_specification/graph_page.html", context)
     elif page <= 2 + detail_list_page:
         detail_list = getContext(detail_list, page - 2, "item", 1, 6)["item_list"]
+        context["detail_list"] = detail_list
         context["empty_row"] = range(6 - len(detail_list))
         html = render_to_string("techdata/welding_process_specification/weld_analysis_table.html", context)
     elif page <= 2 + detail_list_page + 1:
@@ -1667,4 +1669,13 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
     else:
         context["empty_row"] = range(11)
         html = render_to_string("techdata/welding_process_specification/NDE.html", context)
+    return html
+
+@dajaxice_register
+def getCard(request):
+    """
+    MH Chen
+    """
+    context = {"STATIC_URL": settings.STATIC_URL,}
+    html = render_to_string("techdata/widgets/weld_instruction_book.html",context)
     return html
