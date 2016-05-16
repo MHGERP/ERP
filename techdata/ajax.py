@@ -1670,3 +1670,12 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
         context["empty_row"] = range(11)
         html = render_to_string("techdata/welding_process_specification/NDE.html", context)
     return html
+
+@dajaxice_register
+def getCard(request):
+    """
+    MH Chen
+    """
+    context = {"STATIC_URL": settings.STATIC_URL,}
+    html = render_to_string("techdata/widgets/weld_instruction_book.html",context)
+    return html
