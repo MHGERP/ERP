@@ -13,6 +13,10 @@
             <th>材质</th>
             <th>标准号/图号</th>
             <th>数量</th>
+            {% else%}
+            <th>名称</th>
+            <th>牌号</th>
+            <th>规格</th>
             {%endif%}
             <th>实物确认</th>
             <th>软件确认</th>
@@ -35,6 +39,10 @@
             <td>{{cargo.material.material}}</td>
             <td>{{cargo.material.schematic_index}}</td>
             <td>{{cargo.material.count}}</td>
+            {% else%}
+            <td>{{ cargo.material.name }}</td>
+            <td>{{ cargo.material.material }}</td>
+            <td>{{ cargo.material.specification }}</td>
 
             {% endif%}
             <td><button cid="mat" class="btn {% if cargo.material_confirm %} btn-success {%endif%}">实&nbsp&nbsp物</button></td>
