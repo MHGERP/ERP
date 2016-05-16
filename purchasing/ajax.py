@@ -273,7 +273,7 @@ def defaultRelated(request, index, mid):
     # elif index == OUT_PURCHASED:
     #     data = OutsideStorageList.objects.filter(specification = f1, texture = f2)
     #     print data
-    elif index == WELD_MATERIAL:
+elif index == WELD_MATERIAL:1
         data = WeldStoreList.objects.filter(entry_item__material__name = f1, entry_item__material_mark = f2, entry_item__specification = f3)
     context = {
         "data" : data,

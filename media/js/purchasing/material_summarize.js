@@ -238,9 +238,9 @@ $(document).on("click", ".btn-primary", function() {
     key = $("#search_key").val();
     Dajaxice.purchasing.getRelatedModel(function (data) {
       $("#related_html").html(data);
-      // Dajaxice.purchasing.defaultRelated(function (data) {
-      //   $("#related_table").html(data);
-      // }, {"index" : val, "mid" : mid});
+      Dajaxice.purchasing.defaultRelated(function (data) {
+        $("#related_table").html(data);
+      }, {"index" : val, "mid" : mid});
     }, {"index" : val});
 });
 
