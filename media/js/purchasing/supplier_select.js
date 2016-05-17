@@ -22,7 +22,7 @@ $(document).on("click","#select_confirm",function(){
 
 $(document).on("click","#select_reset",function(){
     Dajaxice.purchasing.SelectSupplierReset(select_supplier_callback,{
-        "bid":$("#supplier_select_table").attr("bid")      
+        "bid":$("#supplier_select_table").attr("bid")
     })
 });
 function select_supplier_callback(data){
@@ -35,7 +35,7 @@ $("#supplier_search").click(function(){
     var sid =$("#search_input").val();
     Dajaxice.purchasing.searchSupplier(search_supplier_callback,{
         'sid':sid,
-        "bid":$("#supplier_select_table").attr("bid")      
+        "bid":$("#supplier_select_table").attr("bid")
     });
 });
 
@@ -58,3 +58,12 @@ function select_submit_callback(data){
     }
     else alert("状态更改有误！")
 }
+
+$(document).on("click", "#quotingbid", function() {
+    supid = $(this).closest("tr").attr("id");
+    bidid = $("#supplier_select_table").attr("bid");
+    alert("供应商报价id:"+supid+" "+"标单id:"+bidid);
+    Dajaxice.purchasing.selectSupplier(function() {
+
+    }, {"supid" : supid, "bidid" : bidid});
+});
