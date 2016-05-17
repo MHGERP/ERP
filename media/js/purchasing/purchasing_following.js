@@ -67,6 +67,7 @@ function gen_entry_callback(data){
     // else{
     //    alert(data.message);
     // }
+    alert(data.message);
     window.location.reload();
 }
 

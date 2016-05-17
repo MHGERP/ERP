@@ -441,16 +441,16 @@ def getWeldSeamCard(request, full = False, iid = None):
         form = WeldSeamForm(instance = weld_seam)
     else:
         form = WeldSeamForm()
-    material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE, WELD_RIBBON, WELD_FLUX)
+    material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE)
     form.fields["weld_material_1"].queryset = material_set
     form.fields["weld_material_2"].queryset = material_set
+    material_set = getMaterialQuerySet(WELD_FLUX)
+    form.fields["weld_flux_1"].queryset = material_set
+    form.fields["weld_flux_2"].queryset = material_set
     context = {
         "form": form,
     }
-    if full:
-        html = render_to_string("techdata/widgets/weld_seam_full_card.html", context)
-    else:
-        html = render_to_string("techdata/widgets/weld_seam_card.html", context)
+    html = render_to_string("techdata/widgets/weld_seam_full_card.html", context)
     return html
 @dajaxice_register
 def getWeldQuotaCard(request,iid = None):
@@ -935,16 +935,41 @@ def getTransferCard(request, iid, page = "1", is_print = False):
         "MARK_REVIEW": MARK_REVIEW,
         "MARK_PROOFREAD": MARK_PROOFREAD,
         "MARK_APPROVE": MARK_APPROVE,
+        "CYLIDER_TRANSFER_CARD": CYLIDER_TRANSFER_CARD,
+        "CAP_TRANSFER_CARD": CAP_TRANSFER_CARD,
+        "WELD_TEST_PLATE_CARD": WELD_TEST_PLATE_CARD,
+        "PARENT_TEST_PLATE_CARD": PARENT_TEST_PLATE_CARD,
         "is_print": is_print,
     }
     card = TransferCard.objects.get(materiel_belong = item)
     context["card"] = card
     process_list = TransferCardProcess.objects.filter(card_belong = card)
-    page = int(page)
-    page, total_page, process_list = transferCardProcessPaginator(process_list, page, 82)
-    context["total_page"] = total_page
-    context["current_page"] = page
-    context["process_list"] = process_list
+    if card.card_type == CYLIDER_TRANSFER_CARD or card.card_type == CAP_TRANSFER_CARD:
+        page = int(page)
+        page, total_page, process_list = transferCardProcessPaginator(process_list, page, 82, 8, 15)
+        context["total_page"] = total_page
+        context["current_page"] = page
+        context["process_list"] = process_list
+    elif card.card_type == PARENT_TEST_PLATE_CARD or card.card_type == WELD_TEST_PLATE_CARD:
+        page, total_page, process_list = transferCardProcessPaginator(process_list, page, 100, 7, 7)
+        
+        context["total_page"] = total_page
+        context["current_page"] = page
+
+        context["process_list"] = process_list
+
+        if card.card_type == PARENT_TEST_PLATE_CARD:
+            context["test_type"] = "母材"
+        if card.card_type == WELD_TEST_PLATE_CARD:
+            context["test_type"] = "试板"
+    elif card.card_type == PRESSURE_PART_TRANSFER_CARD or card.card_type == SPECIAL_PART_TRANSFER_CARD:
+        page = int(page)
+        page, total_page, process_list = transferCardProcessPaginator(process_list, page, 82, 12, 12)
+        context["total_page"] = total_page
+        context["current_page"] = page
+
+        context["process_list"] = process_list
+
     html = render_to_string(CARD_TYPE_TO_HTML[card.card_type], context)
     return html
 
@@ -954,8 +979,15 @@ def getTransferCardProcessList(request, iid):
     JunHU
     """
     card = TransferCard.objects.get(materiel_belong__id = iid)
+    print card.card_type
     process_list = TransferCardProcess.objects.filter(card_belong = card)
-    html = render_to_string("techdata/widgets/transfercard_process_list.html", {"process_list": process_list})
+    context = {
+        "process_list": process_list,
+    }
+    if card.card_type == CYLIDER_TRANSFER_CARD or card.card_type == CAP_TRANSFER_CARD or \
+       card.card_type == PRESSURE_PART_TRANSFER_CARD or card.card_type == SPECIAL_PART_TRANSFER_CARD:
+        context["has_process_name"] = True
+    html = render_to_string("techdata/widgets/transfercard_process_list.html", context)
     return html
 
 @dajaxice_register
@@ -977,7 +1009,15 @@ def importTransferCardProcessTemplate(request, iid):
 
     TransferCardProcess.objects.bulk_create(process_list)
     process_list = TransferCardProcess.objects.filter(card_belong = card)
-    html = render_to_string("techdata/widgets/transfercard_process_list.html", {"process_list": process_list})
+
+    context = {
+        "process_list": process_list,
+    }
+    if card.card_type == CYLIDER_TRANSFER_CARD or card.card_type == CAP_TRANSFER_CARD or \
+       card.card_type == PRESSURE_PART_TRANSFER_CARD or card.card_type == SPECIAL_PART_TRANSFER_CARD:
+        context["has_process_name"] = True
+
+    html = render_to_string("techdata/widgets/transfercard_process_list.html", context)
     return html
    
 @dajaxice_register
@@ -988,8 +1028,21 @@ def addTransferCardProcess(request, iid):
     card = TransferCard.objects.get(materiel_belong__id = iid)
     TransferCardProcess(card_belong = card).save()
     process_list = TransferCardProcess.objects.filter(card_belong = card)
-    html = render_to_string("techdata/widgets/transfercard_process_list.html", {"process_list": process_list})
+    context = {
+        "process_list": process_list,
+    }
+    if card.card_type == CYLIDER_TRANSFER_CARD or card.card_type == CAP_TRANSFER_CARD or \
+       card.card_type == PRESSURE_PART_TRANSFER_CARD or card.card_type == SPECIAL_PART_TRANSFER_CARD:
+        context["has_process_name"] = True
+
+    html = render_to_string("techdata/widgets/transfercard_process_list.html", context)
     return html
+
+@dajaxice_register
+def saveTransferCardRequirement(request, iid, requirement):
+    card = TransferCard.objects.get(materiel_belong__id = iid)
+    card.tech_requirement = requirement
+    card.save()
 
 @dajaxice_register
 def saveTransferCardProcess(request, arr):
@@ -997,11 +1050,10 @@ def saveTransferCardProcess(request, arr):
     JunHU
     """
     for item in arr:
-        print item["pid"]
-        process = TransferCardProcess.objects.get(id = item["pid"])
-        process.index = item["index"]
-        process.name = item["name"]
-        process.detail = item["detail"]
+        process = TransferCardProcess.objects.get(id = item.get("pid", None))
+        process.index = item.get("index", None)
+        process.name = item.get("name", None)
+        process.detail = item.get("detail", None)
         process.save()
 
 @dajaxice_register
@@ -1128,6 +1180,15 @@ def getTransferCardList(request, id_work_order):
     }
     html = render_to_string("techdata/widgets/transfer_card_list_table.html", context)
     return html
+
+@dajaxice_register
+def removeTransferCard(request, iid):
+    """
+    JunHU
+    """
+    print iid
+    card = TransferCard.objects.get(id = iid)
+    card.delete()
 
 @dajaxice_register
 def saveProcessRequirement(request, id, content):
@@ -1538,74 +1599,73 @@ def removeConnectOrientation(request, pid):
     except:
         return simplejson.dumps({"ret": False})
 
-@dajaxice_register
-def getWeldJointDetailFormAndSave(request, jointArray, id_work_order):
-    ret = "ok"
-    md1, md2, bm_1, bm_2, bm_thin1, bm_thin2 = None, None, None, None, None, None
+
+def validateWeldSeams(jointArray):
+    if len(jointArray) == 0:
+        return None
+    fields = ['weld_method_1', 'weld_method_2', 'base_metal_1', 'base_metal_2', 'base_metal_thin_1', 'base_metal_thin_2']
+    weldseam = WeldSeam.objects.get(id = jointArray[0])
     joint_index_list = []
-    for i in xrange(len(jointArray)):
+    joint_index_list.append(weldseam.weld_index)
+    for i in range(1, len(jointArray)):
         seam_id = jointArray[i]
         seam = WeldSeam.objects.get(id = seam_id)
         joint_index_list.append(seam.weld_index)
-        if i == 0:
-            md1 = seam.weld_method_1
-            md2 = seam.weld_method_2
-            bm_1 = seam.base_metal_1
-            bm_2 = seam.base_metal_2
-            bm_thin1 = seam.base_metal_thin_1
-            bm_thin2 = seam.base_metal_thin_2
-            weld_position = seam.weld_position
-        else:
-            if seam.weld_method_1 != md1 or seam.weld_method_2 != md2 or seam.base_metal_1 != bm_1 or seam.base_metal_2 != bm_2 or seam.base_metal_thin_1 != bm_thin1 or seam.base_metal_thin_2 != bm_thin2:
-                ret = "err"
-    joint_index = ', '.join(joint_index_list)
-    if ret == "ok":
-        workorder = WorkOrder.objects.get(id = id_work_order)
-        specification = WeldingProcessSpecification.objects.get(order = workorder)
-        weld_joint_detail = WeldSeam.objects.get(id = jointArray[0]).weld_joint_detail
-        if weld_joint_detail:
-            weld_joint_detail.joint_index = joint_index
-            weld_joint_detail.save()
+        for field in fields:
+            if getattr(weldseam, field) != getattr(seam, field):
+                return None
+    return weldseam, ','.join(joint_index_list)
 
-        else:
-            weld_joint_detail = WeldJointTechDetail(specification = specification, 
-                                                    joint_index = joint_index,  
-                                                    bm_texture_1 = bm_1, 
-                                                    bm_texture_2 = bm_2, 
-                                                    bm_specification_1 = bm_thin1, 
-                                                    bm_specification_2 = bm_thin2, 
-                                                    weld_method_1 = md1, 
-                                                    weld_method_2 = md2,
-                                                    weld_position = weld_position)
-            weld_joint_detail.save()      
-        weld_joint_detail_form = WeldJointTechDetailForm(instance = weld_joint_detail)
+
+@dajaxice_register
+def getWeldJointDetailForm(request, jointArray):
+    weldseam, joint_index = validateWeldSeams(jointArray)
+    if weldseam == None:
+        return simplejson.dumps({"ret" : "err"})
+    else:
+        fields = ['base_metal_1', 'base_metal_2', 'base_metal_thin_1', 'base_metal_thin_2', "weld_position"]
+        map = {
+            'base_metal_1' : 'bm_texture_1', 
+            'base_metal_2' : 'bm_texture_2', 
+            'base_metal_thin_1' : 'bm_specification_1', 
+            'base_metal_thin_2' : 'bm_specification_2',
+            "weld_position": "weld_position",
+        }
+        print weldseam.weld_position
+        data = {}
+        for field in fields:
+            data[map[field]] = getattr(weldseam, field)
+        data['joint_index'] = joint_index
+        weld_joint_detail_form = WeldJointTechDetailForm(data)
+#        weld_joint_detail_form.fields["weld_certification_1"].queryset = WeldCertification.objects.filter(weld_method = weldseam.weld_method_1)
+#        weld_joint_detail_form.fields["weld_certification_2"].queryset = WeldCertification.objects.filter(weld_method = weldseam.weld_method_2)
+        context = {
+            "form" : weld_joint_detail_form,
+        }
+        html = render_to_string("techdata/widgets/weldjoint_detail.html", context)
+        return simplejson.dumps({"ret" : "ok", "html" : html, "weld_method_1" : weldseam.weld_method_1.id if weldseam.weld_method_1 else -1, "weld_method_2" : weldseam.weld_method_2.id if weldseam.weld_method_2 else -1})
+
+@dajaxice_register
+def saveJointDetail(request, weld_joint_detail_form, jointArray, id_work_order):
+    """
+    mxl
+    """
+    weld_joint_detail_form = WeldJointTechDetailForm(deserialize_form(weld_joint_detail_form))
+    if weld_joint_detail_form.is_valid():
+        weld_joint_detail = weld_joint_detail_form.save(commit = False)
+        weld_joint_detail.specification = WeldingProcessSpecification.objects.get(order__id = id_work_order)
+        weld_joint_detail.save()
+        weld_joint_detail_form.save_m2m()
+
+        wwi = WeldingWorkInstruction(detail = weld_joint_detail)
+        wwi.file_index = WeldingWorkInstruction.objects.filter(detail__specification__order = weld_joint_detail.specification.order).count() + 1
+        wwi.save()
+    else:
         context = {
             "form" : weld_joint_detail_form
         }
         html = render_to_string("techdata/widgets/weldjoint_detail.html", context)
-        return simplejson.dumps({"ret" : ret, "html" : html, "id" : weld_joint_detail.id})
-    else:
-        return simplejson.dumps({"ret" : ret})
-
-@dajaxice_register
-def dismissWeldJointDetailSave(request, iid):
-    weld_joint_detail = WeldJointTechDetail.objects.get(id = iid)
-    weld_joint_detail.is_save = False
-    return "ok"
-
-@dajaxice_register
-def saveJointDetail(request, weld_joint_detail_form, jointArray, iid):
-    """
-    mxl
-    """
-    #workorder = WorkOrder.objects.get(id = id_work_order)
-    #weld_joint = WeldJointTech.objects.filter(order = workorder)[0]
-    #weld_seam = WeldSeam.objects.get(id = jointArray[0])
-    #weld_joint_detail = WeldJointTechDetail(weld_joint = weld_joint, bm_texture_1 = weld_seam.base_metal_1, bm_texture_2 = weld_seam.base_metal_2, bm_specification_1 = weld_seam.base_metal_1, bm_specification_2 = weld_seam.base_metal_2, weld_method_1 = weld_seam.weld_method_1, weld_method_2 = weld_seam.weld_method_2)
-    #weld_joint_detail.save()
-    weld_joint_detail = WeldJointTechDetail.objects.get(id = iid)
-    weld_joint_detail_form = WeldJointTechDetailForm(deserialize_form(weld_joint_detail_form), instance = weld_joint_detail)
-    weld_joint_detail_form.save()
+        return simplejson.dumps({"ret" : "err", "html" : html})
     for seam_id in jointArray:
         seam = WeldSeam.objects.get(id = seam_id)
         seam.weld_joint_detail = weld_joint_detail
@@ -1613,18 +1673,18 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray, iid):
     return simplejson.dumps({"ret" : "ok"})
 
 
-@dajaxice_register
-def saveWeldJointIndex(request, id_work_order, index):
-    weld_joint = WeldJointTech.objects.get(order__id = id_work_order)
-    weld_joint.index = index
-    weld_joint.save()
-    return "ok"
-
-@dajaxice_register
-def deleteWeldJointDetail(request, uid):
-    weld_joint_detail = WeldJointTechDetail.objects.get(id = uid)
-    weld_joint_detail.delete()
-    return "ok"
+#@dajaxice_register
+#def saveWeldJointIndex(request, id_work_order, index):
+#    weld_joint = WeldJointTech.objects.get(order__id = id_work_order)
+#    weld_joint.index = index
+#    weld_joint.save()
+#    return "ok"
+#
+#@dajaxice_register
+#def deleteWeldJointDetail(request, uid):
+#    weld_joint_detail = WeldJointTechDetail.objects.get(id = uid)
+#    weld_joint_detail.delete()
+#    return "ok"
 
 
 
@@ -1639,7 +1699,7 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
     specification = WeldingProcessSpecification.objects.get(order = work_order)
     page = int(page)
 
-    detail_list = WeldJointTechDetail.objects.filter(Q(specification = specification) & Q(is_save = True))
+    detail_list = WeldJointTechDetail.objects.filter(Q(specification = specification))
     
     detail_list_page = 1 if detail_list.count() == 0 else (detail_list.count() - 1) / 6 + 1
 
@@ -1669,4 +1729,13 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
     else:
         context["empty_row"] = range(11)
         html = render_to_string("techdata/welding_process_specification/NDE.html", context)
+    return html
+
+@dajaxice_register
+def getCard(request):
+    """
+    MH Chen
+    """
+    context = {"STATIC_URL": settings.STATIC_URL,}
+    html = render_to_string("techdata/widgets/weld_instruction_book.html",context)
     return html
