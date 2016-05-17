@@ -139,7 +139,7 @@ class WeldJointTechDetailForm(forms.ModelForm):
     """
     class Meta:
         model = WeldJointTechDetail
-        exclude = ('id', 'specification', 'is_save')
+        exclude = ('id', 'specification')
         widgets = {
             "weld_position" : forms.Select(attrs = {"class" : "input-small", "disabled": "disabled"}),
             "joint_index" : forms.TextInput(attrs = {"class" : "input-small"}),
@@ -151,8 +151,8 @@ class WeldJointTechDetailForm(forms.ModelForm):
             "weld_method_2" : forms.Select(attrs = {"class" : "input-large", "disabled" : "disabled"}),
             "joint_index" : forms.TextInput(attrs = {"class" : "input-small", "readonly" : "true"}),
             "procedureQualification_index" : forms.TextInput(attrs = {"class" : "input-small"}),
-            "weld_certification_1" : forms.SelectMultiple(attrs = {"class" : "input-xlarge"}),
-            "weld_certification_2" : forms.SelectMultiple(attrs = {"class" : "input-xlarge"}),
+            "weld_certification1" : forms.SelectMultiple(attrs = {"class" : "input-xlarge"}),
+            "weld_certification2" : forms.SelectMultiple(attrs = {"class" : "input-xlarge"}),
             "remark" : forms.TextInput(attrs = {"class" : "input-small"}),
         }
 

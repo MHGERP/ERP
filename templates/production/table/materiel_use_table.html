@@ -1,32 +1,22 @@
 <table class="table table=bordered table=striped">
-    <thead>
-        <tr>
-            <th>序号</th>
-            <th>工作令号</th>
-            <th>零件图、标准</th>
-            <th>名称及规格</th>
-            <th>材料牌号</th>
-            <th>单位</th>
-            <th>数量</th>
-            <th>标记号</th>
-            <th>备注</th>
-            <th>删除</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>1</td>
-            <td>NX48CP70 113004 0001</td>
-            <td>R35 939 1.00</td>
-            <td>14</td>
-            <td>Q345R</td>
-            <td>装焊工部</td>
-            <td>2</td>
-            <td>Z</td>
-            <td></td>
-            <td>
-                <button class="btn btn-danger">删除</button>
-            </td>
-        </tr>
-    </tbody>
+  <thead>
+    <tr>
+      <th>领料单编号</th>
+      <th>工作令号</th>
+      <th>领料单位</th>
+      <th>日期</th>
+      <th>领用状态</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in applyCards%}
+    <tr>
+      <td>{{item.applycard_code}}</td>
+      <td>{{item.work_order|default:""}}</td>
+      <td>{{item.department}}</td>
+      <td>{{item.create_time|date:"Y-m-d"}}</td>
+      <td>{{item.get_status_display}}</td>
+    </tr>
+    {% endfor%}
+  </tbody>
 </table>

@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block inner_content%}
+{% comment %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
         <form id="entry_form" method="POST" class="form-inline">
             {%csrf_token%}
@@ -19,5 +20,10 @@
     <div id="entry_table">
     {% include 'storage/auxiliarytools/entry_table.html' %}
     </div>
+{% endcomment %}
+<h3>辅助工具入库台账</h3>
+<div>
+    {% include "storage/accountsearch/accountbody.html" %}
+</div>
 {% endblock%}
 

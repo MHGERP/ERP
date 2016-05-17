@@ -1,0 +1,34 @@
+<table class="table table-bordered">
+    <thead id="account_table_thead">
+        <th>工作令</th>
+        <th>标准号/图号</th>
+        <th>名称规格</th>
+        <th>材质</th>
+        <th>入库时间</th>
+        <th>材质编号</th>
+        <th>入库单号</th>
+        <th>材料类别</th>
+        <th>数量</th>
+    </thead>
+    </tbody>
+        {% for item in items %}
+        <tr name="item_tr"  store="true" id={{item.id}} role="outside">
+            <td>{{item.entry_item.work_order}}</td>
+            <td>{{item.entry_item.schematic_index}}</td>
+            <td>{{item.entry_item.specification}}</td>
+            <td>{{item.entry_item.material_mark}}</td>
+            <td>{{item.entry_item.entry.create_time|date:"Y年m月d日"}}</td>
+            <td>{{item.entry_item.material_code}}</td>
+            <td>{{item.entry_item.entry.entry_code}}</td>
+            <td>{{item.get_outsidebuy_type_display}}</td>
+            <td>{{item.count}}</td>
+        </tr>
+        {% endfor %}
+        {% comment %}
+        <tr>
+            <td colspan="5" style="text-align:right">合计：</td>
+            <td id="account_total_count"></td>
+        </tr>
+        {% endcomment %}
+    </tbody>
+</table>

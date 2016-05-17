@@ -1655,6 +1655,7 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray, id_work_order):
         weld_joint_detail = weld_joint_detail_form.save(commit = False)
         weld_joint_detail.specification = WeldingProcessSpecification.objects.get(order__id = id_work_order)
         weld_joint_detail.save()
+        weld_joint_detail_form.save_m2m()
 
         wwi = WeldingWorkInstruction(detail = weld_joint_detail)
         wwi.file_index = WeldingWorkInstruction.objects.filter(detail__specification__order = weld_joint_detail.specification.order).count() + 1

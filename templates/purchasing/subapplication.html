@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="{{STATIC_URL}}style/subapply.css" type="text/css" media="screen" />
 <div style="float:right">
-    {% if bid_apply.status.status == status_dic.FILL%}
+    {% if subapply.status.status == status_dic.FILL%}
     <a href="#materiel_substitude_table" data-toggle="modal" data-target="#materiel_substitute_table">填写</a>
     <a href="#materiel_substitude_table" data-toggle="modal" data-target="#materiel_substitute_table">添加</a>
     {% endif%}
