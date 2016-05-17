@@ -579,15 +579,7 @@ class WeldEntrySearchForm(forms.Form):
     create_time__lte  = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker', 'date_picker':'true'}))
     entry_code=forms.CharField(label=u'入库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control date_picker','id':'entry_code'}))
 
-class WeldApplyKeeperForm(ModelForm):
-    class Meta:
-        model = WeldingMaterialApplyCard
-        fields = ("actual_weight","actual_quantity","remark")
-        widgets={
-                'actual_weight':forms.TextInput(attrs={'class':'span2'}),
-                'actual_quantity':forms.TextInput(attrs={'class':'span2'}),
-                'remark':forms.TextInput(attrs={'class':'span2'}),
-        }
+
 
 class WeldRefundConfirmForm(ModelForm):
     class Meta:
@@ -703,18 +695,18 @@ class AuxiliaryToolMaterialSearchForm(forms.Form):
 class AuxiliaryToolsApplyItemForm(ModelForm):
     class Meta:
         model = AuxiliaryToolApplyCard
-        fields = ("actual_quantity",)
+        fields = ("actual_count",)
         widgets =  {
-            "actual_quantity":forms.TextInput(attrs={"class":"span2","style":"width:150px;"}),
+            "actual_count":forms.TextInput(attrs={"class":"span2","style":"width:150px;"}),
         }
     def __init__(self,*args,**kwargs):
         super(AuxiliaryToolsApplyItemForm,self).__init__(*args,**kwargs)
-        self.fields["actual_quantity"].required = True
+        self.fields["actual_count"].required = True
 
 class WeldAccountItemForm(ModelForm):
     class Meta:
         model = WeldStoreList
-        fields = ("inventory_count","item_status")
+        fields = ("count","item_status")
     def __init__(self,*args,**kwargs):
         super(WeldAccountItemForm,self).__init__(*args,**kwargs)
         set_form_input_width(self.fields,"150px")
@@ -739,9 +731,16 @@ class OutsideAccountItemForm(ModelForm):
 class AuxiliaryToolAccountItemForm(ModelForm):
     class Meta:
         model = AuxiliaryToolStoreList
-        fields = ("inventory_count",)
+        fields = ("count",)
     def __init__(self,*args,**kwargs):
         super(AuxiliaryToolAccountItemForm,self).__init__(*args,**kwargs)
         set_form_input_width(self.fields,"150px")
 
-
+class WeldApplyKeeperForm(ModelForm):
+    class Meta:
+        model = WeldingMaterialApplyCard
+        fields = ("actual_weight","actual_count","remark")
+    def __init__(self,*args,**kwargs):
+            super(WeldApplyKeeperForm,self).__init__(*args,**kwargs)
+            set_form_input_width(self.fields,"150px")
+            
