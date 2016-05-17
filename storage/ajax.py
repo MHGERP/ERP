@@ -1252,7 +1252,7 @@ def getAccountSearchContext(card_type,search_form):
     search_form = form_type(deserialize_form(search_form))
     if search_form.is_valid():
         replace_dic = gen_replace_dic(search_form.cleaned_data)
-        if "weldapply" in card_type:
+        if card_type in ["weldapply","auxiliarytoolapply"]:
             order_field = "create_time"
         elif "entry" in card_type:
             order_field = "entry__create_time"
@@ -1264,7 +1264,7 @@ def getAccountSearchContext(card_type,search_form):
     html = render_to_string(account_table_path,{"items":items})
     return html
 
-ApplyCardDict = {"weld":WeldingMaterialApplyCard,}
+ApplyCardDict = {"weld":WeldingMaterialApplyCard,"auxiliarytool":AuxiliaryToolApplyCard}
 @dajaxice_register
 def storageAccountItemForm(request,mid,role):
     storeitem,account_item_form = getAccountItemDataDict(role)
@@ -1273,14 +1273,17 @@ def storageAccountItemForm(request,mid,role):
     form_html = render_to_string("storage/accountsearch/account_item_form.html",{"account_item_form":account_item_form})
     refundcards = []
     applycards = []
-    if role == "weld":
-        applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
-        for applycard in applycards:
-            try:
-                refund = WeldRefund.objects.get(apply_card = applycard)
-                refundcards.append(refund)
-            except Exception,e:
-                print e
+    if ApplyCardDict.has_key(role):
+        if role == "auxiliarytool":
+            applycards = ApplyCardDict[role].objects.filter(actual_storelist = storeitem).order_by("create_time")
+        else:
+            applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
+            for applycard in applycards:
+                try:
+                    refund = WeldRefund.objects.get(apply_card = applycard)
+                    refundcards.append(refund)
+                except Exception,e:
+                    print e
     table_html = render_to_string("storage/accountsearch/"+role+"_account_apply_refund_table.html",{"applycards":applycards,"refundcards":refundcards})
     return simplejson.dumps({"table_html":table_html,"form_html":form_html})
 

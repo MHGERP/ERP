@@ -1,0 +1,20 @@
+<table class="table table-bordered">
+    {% if applycards %}
+    <tr>
+        <th>领用人</th>
+        <th>领用时间</th>
+        <th>领用单位</th>
+        <th>领单编号</th>
+        <th>领用数量</th>
+    </tr>
+    {% for applycard in applycards %}
+    <tr>
+        <td>{{applycard.applicant.userinfo}}</td>
+        <td>{{applycard.create_time|date:'Y年m月d日'}}</td>
+        <td>{{applycard.department}}</td>
+        <td>{{applycard.applycard_code}}</td>
+        <td>{{applycard.actual_quantity}}</td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+</table>

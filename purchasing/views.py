@@ -271,7 +271,7 @@ def subApplyHomeViews(request):
         receipts_code = request.POST["subapply_search"]
         subapply_set = MaterialSubApply.objects.filter(receipts_code = receipts_code)
     else:
-        subapply_set = MaterialSubApply.objects.filter(is_submit = True)
+        subapply_set = MaterialSubApply.objects.all()
     context = {
         "subapply_set":subapply_set,
         "is_show":is_show,
@@ -281,7 +281,7 @@ def subApplyHomeViews(request):
 @csrf.csrf_protect
 def subApplyViews(request,sid = None):
     subapply_obj = MaterialSubApply.objects.get(id = sid)
-    is_show = not subapply_obj.is_submit
+    is_show =  subapply_obj.status.status == MATERIEL_SUBSTITUDE_FILL
     if request.method == "POST":
         subapply_form = SubApplyForm(request.POST,instance = subapply_obj)
         if subapply_form.is_valid():
@@ -296,12 +296,14 @@ def subApplyViews(request,sid = None):
         subapply_form = SubApplyForm(instance = subapply_obj)
     sub_set = MaterialSubApplyItems.objects.filter(sub_apply__id = sid)
     subitem_form = SubApplyItemForm()
+    print subapply_obj
     context = {
         "subapply_form":subapply_form,
         "is_show":is_show,
         "sub_set":sub_set,
         "subitem_form":subitem_form,
         "subapply":subapply_obj,
+        "status_dic":MATERIEL_SUBSTITUDE_STATUS_DICT
     }
     return render(request,"purchasing/subapplication.html",context)
 
@@ -554,7 +556,7 @@ def bidApplyFormViews(request,bid):
     supplier_set=bidform.supplierselect_set.all()
     comment_dict={}
     for k in COMMENT_USER_APPLY_DICT:
-        comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
+        comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_APPLY_DICT[k])
         if comment.count()>0:
             comment_dict[k]=comment[0]
     for item in supplier_set:
@@ -566,7 +568,7 @@ def bidApplyFormViews(request,bid):
         "BidLogisticalForm":BidLogisticalForm,
         "supplier_set":supplier_set,
         "status_dic":BIDFORM_INVITE_BID_APPLY_DIC,
-        "comment_user_dict":COMMENT_USER_DICT,
+        "comment_user_dict":COMMENT_USER_APPLY_DICT,
         "comment_dict":comment_dict
     }
     return render(request,"purchasing/bid_invite/bid_apply_page.html",context)
@@ -583,7 +585,7 @@ def SupplierCheckViews(request,bid):
     supplier_set=bidform.supplierselect_set.all()
     comment_dict={}
     for k in COMMENT_USER_CHECK_DICT:
-        comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
+        comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_CHECK_DICT[k])
         if comment.count()>0:
             comment_dict[k]=comment[0]
 
@@ -594,7 +596,7 @@ def SupplierCheckViews(request,bid):
         "supplier_check_form":supplier_check_form,
         "supplier_set":supplier_set,
         "status_dic":BIDFORM_INVITE_BID_SUPPLIER_DIC,
-        "comment_user_dict":COMMENT_USER_DICT,
+        "comment_user_dict":COMMENT_USER_CHECK_DICT,
         "comment_dict":comment_dict
     }
     return render(request,"purchasing/bid_invite/supplier_check_page.html",context)
@@ -611,7 +613,7 @@ def QualityCardViews(request,bid):
     supplier_set=bidform.supplierselect_set.all()
     comment_dict={}
     for k in COMMENT_USER_QUALITY_DICT:
-        comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_DICT[k])
+        comment=BidComment.objects.filter(bid=bidform,user_title=COMMENT_USER_QUALITY_DICT[k])
         if comment.count()>0:
             comment_dict[k]=comment[0]
 
