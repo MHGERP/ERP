@@ -135,6 +135,15 @@ function add_subapply_callback(data){
     window.location.href=data.url;
 }
 
+function delete_subapply(id){
+    if( confirm("是否确认删除这个材料代用表?")){
+        Dajaxice.purchasing.deleteSubapply(function(data){
+            window.location.reload();
+        },{
+            "subapply_id":id
+        });
+    }
+}
 function change_item(id){
     item_id = id;
     a = $("tr#"+item_id).find("td");
