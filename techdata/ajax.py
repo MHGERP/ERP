@@ -1221,9 +1221,9 @@ def getExcuteList(request):
     """
     JunHU
     """
-    execute_list = MaterielExecute.objects.filter(is_save = True)
+    execute_list = MaterielExecuteDetail.objects.all()
     for execute in execute_list:
-        execute.program_list = Program.objects.filter(execute = execute)
+        execute.program_list = Program.objects.filter(execute_detail = execute)
     context = {
         "execute_list": execute_list,
     }
