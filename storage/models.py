@@ -209,8 +209,6 @@ class StoreRoom(models.Model):
 
 class WeldingMaterialHumitureRecord(models.Model):
     storeMan = models.ForeignKey(User,verbose_name=u'库管员',blank=False,related_name="humitureStoreMan")
-    demandTemperature = models.CharField(verbose_name=u'要求温度', max_length=20,blank=False)
-    demandHumidity = models.CharField(verbose_name=u'要求湿度', max_length=20,blank=False)
     actualTemperature1 = models.FloatField(verbose_name=u'实际温度(10:00)',blank=False)
     actualHumidity1 = models.FloatField(verbose_name=u'实际湿度(10:00)',blank=False)
     actualTemperature2 = models.FloatField(verbose_name=u'实际温度(16:00)',blank=False)

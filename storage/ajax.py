@@ -1,4 +1,5 @@
 # coding: UTF-8
+import pprint, pickle
 import datetime
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
@@ -301,6 +302,9 @@ def auEntryUpdate(request, aid, remark):
 
 @dajaxice_register
 def auToolEntryConfirm(request, role, eid):
+    """
+    kad
+    """
     try:
         entry = AuxiliaryToolEntry.objects.get(id = eid);
         if role == "keeper":
@@ -324,6 +328,25 @@ def auToolEntryConfirm(request, role, eid):
     }
     return simplejson.dumps(data);
 
+
+@dajaxice_register
+def weldDemandDataUpdate(request, temp, humi):
+    """
+    kad
+    """
+    pk_file = open("weldDemandData.txt","rb");
+    weldDemandData = pickle.load(pk_file);
+    pk_file.close();
+
+    weldDemandData["demandTemperature"] = temp;
+    weldDemandData["demandHumidity"] = humi;
+    output = open("weldDemandData.txt", "wb");
+    pickle.dump(weldDemandData, output);
+    output.close();
+    data = {
+        "message": u"修改成功", 
+    }
+    return simplejson.dumps(data);
 
 
 
