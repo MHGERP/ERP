@@ -1,0 +1,28 @@
+<table class="table table-bordered">
+    <thead>
+        <th>名称</th>
+        <th>规格</th>
+        <th>入库时间</th>
+        <th>入库单号</th>
+        <th>厂家</th>
+        <th>供货商</th>
+        <th>数量</th>
+    </thead>
+    </tbody>
+        {% for item in items %}
+        <tr name="item_tr">
+            <td>{{item.name}}</td>
+            <td>{{item.specification}}</td>
+            <td>{{item.entry.create_time|date:"Y年m月d日"}}</td>
+            <td>{{item.entry.entry_code}}</td>
+            <td>{{item.factory}}</td>
+            <td>{{item.supplier}}</td>
+            <td>{{item.count}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="6" style="text-align:right">合计：</td>
+            <td id="account_total_count"></td>
+        </tr>
+    </tbody>
+</table>

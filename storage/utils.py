@@ -288,10 +288,18 @@ def getAccountDataDict(card_type):
     steelentry = (SteelMaterialEntryItems,SteelEntryAccountSearchForm)
     steelapply = (SteelMaterialApplyCardItems,SteelApplyAccountSearchForm)
     steelstorage = (SteelMaterialStoreList,SteelStorageAccountSearchForm)
-    model_dict = {"weldentry":weldentry,"weldapply":weldapply,"weldstorage":weldstorage,"steelentry":steelentry,'steelapply':steelapply,"steelstorage":steelstorage}
+    outsideentry = (OutsideStandardItems,OutsideEntryAccountSearchForm)
+    outsideapply = (OutsideApplyCardItems,OutsideApplyAccountSearchForm)
+    outsidestorage = (OutsideStorageList,OutsideStorageAccountSearchForm)
+    auxiliarytoolentry = (AuxiliaryToolEntryItems,AuxiliaryToolEntryAccountSearchForm)
+    auxiliarytoolapply = (AuxiliaryToolApplyCard,AuxiliaryToolApplyAccountSearchForm)
+    auxiliarytoolstorage = (AuxiliaryToolStoreList,AuxiliaryToolStorageAccountSearchForm)
+
+    model_dict = {"weldentry":weldentry,"weldapply":weldapply,"weldstorage":weldstorage,"steelentry":steelentry,'steelapply':steelapply,"steelstorage":steelstorage,"outsideentry":outsideentry,"outsideapply":outsideapply,"outsidestorage":outsidestorage,"auxiliarytoolentry":auxiliarytoolentry}
+    model_dict = {"weldentry":weldentry,"weldapply":weldapply,"weldstorage":weldstorage,"steelentry":steelentry,'steelapply':steelapply,"steelstorage":steelstorage,"outsideentry":outsideentry,"outsideapply":outsideapply,"outsidestorage":outsidestorage,"auxiliarytoolentry":auxiliarytoolentry,"auxiliarytoolapply":auxiliarytoolapply,"auxiliarytoolstorage":auxiliarytoolstorage}
     return model_dict[card_type][0],model_dict[card_type][1],account_table_path
 
-def getAccountItemDataDict(card_type):
-#ModelTypeDict = {"weld":WeldStoreList,"auxiliarytool":AuxiliaryToolStoreList}
-#AccountItemFormDict = {"weld":WeldAccountItemForm,}
-    pass
+def getAccountItemDataDict(role):
+    ModelTypeDict = {"weld":WeldStoreList,"auxiliarytool":AuxiliaryToolStoreList,"steel":SteelMaterialStoreList,"outside":OutsideStorageList,"auxiliarytool":AuxiliaryToolStoreList}
+    AccountItemFormDict = {"weld":WeldAccountItemForm,'steel':SteelAccountItemForm,"outside":OutsideAccountItemForm,"auxiliarytool":AuxiliaryToolAccountItemForm}
+    return ModelTypeDict[role],AccountItemFormDict[role]

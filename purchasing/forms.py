@@ -232,7 +232,7 @@ class EntryTypeForm(forms.Form):
             elif bidform.order_form.order_mod == 1:
                 self.fields["entry_type"].choices=(ENTRYTYPE_BOARD,ENTRYTYPE_BAR,STANDARD_OUTSIDEBUY,FORGING_OUTSIDEBUY,COOPERATION_OUTSIDEBUY)
             elif bidform.order_form.order_mod == 2:
-                self.fields["entry_type"].choices=(WELDING)
+                self.fields["entry_type"].choices=(WELDING,AUXILIARY_TOOL)
 
 
 class WeldEntryForm(ModelForm):

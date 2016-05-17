@@ -68,6 +68,19 @@ $("#btn_save_info").click(function() {
     })
 });
 
+$(document).on("dblclick", ".requirement_area", function() {
+    $("#requirement_modal").modal("show");
+});
+$(document).on("click", "#btn_save_requirement", function() {
+    Dajaxice.techdata.saveTransferCardRequirement(function(data) {
+        alert("保存成功！");
+        refresh();
+        $("#requirement_modal").modal("hide");
+    }, {
+        "iid": $("#div_card").attr("iid"),       
+        "requirement": $("#textarea-requirement").val()
+    })
+})
 $(document).on("dblclick", ".process_area", function() {
     Dajaxice.techdata.getTransferCardProcessList(function(data) {
         $("#process_table").html(data);

@@ -4,7 +4,7 @@ from django import  forms
 from django.forms import ModelForm
 from storage.models import *
 from const.models import Materiel,SubWorkOrder
-from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES,STEEL_TYPE,STEEL,STORAGE_ENTRY_TYPECHOICES,MATERIAL_TYPE
+from const import ORDERFORM_STATUS_CHOICES, MATERIEL_CHOICE,STORAGEDEPARTMENT_CHOICES,STEEL_TYPE,STEEL,STORAGE_ENTRY_TYPECHOICES,STOREROOM_CHOICES
 from django.contrib.auth.models import User
 from users.utility import getUserByAuthority
 from users import STORAGE_KEEPER
@@ -352,7 +352,7 @@ class WeldApplyAccountSearchForm(AccountWeldApplySearchForm):
 
 class SteelEntryAccountSearchForm(AccountEntrySearchForm):
     work_order = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"class":'form-control','id':'workorder','select2':'true'}))
-    material_mark = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'材料牌号')
+    material_mark = forms.CharField(label=u"材料牌号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
     specification =  forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
     material_code = forms.CharField(label=u"标记号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
     def __init__(self,*args,**kwargs):
@@ -363,7 +363,7 @@ class SteelEntryAccountSearchForm(AccountEntrySearchForm):
 
 class SteelApplyAccountSearchForm(AccountApplySearchForm):
     work_order = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"class":'form-control','id':'workorder','select2':'true'}))
-    material_mark = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'材料牌号')
+    material_mark = forms.CharField(label=u"材料牌号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
     specification =  forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
     material_code = forms.CharField(label=u"材质编号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
     def __init__(self,*args,**kwargs):
@@ -372,16 +372,80 @@ class SteelApplyAccountSearchForm(AccountApplySearchForm):
         self.fields["work_order"].choices = getChoiceList(work_order_set,"name")
         set_form_input_width(self.fields,"130px")
 
-class SteelStorageAccountSearchForm(AccountEntrySearchForm):
+class SteelStorageAccountSearchForm(AccountSearchForm):
     entry_item__work_order = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"class":'form-control','id':'workorder','select2':'true'}))
-    entry_item__material_mark = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'材料牌号')
+    entry_item__material_mark = forms.CharField(label=u"材料牌号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
     specification =  forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
     entry_item__material_code = forms.CharField(label=u"标记号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
     def __init__(self,*args,**kwargs):
         super(SteelStorageAccountSearchForm,self).__init__(*args,**kwargs)
         work_order_set = SubWorkOrder.objects.all()
         self.fields["entry_item__work_order"].choices = getChoiceList(work_order_set,"name")
-        set_form_input_width(self.fields,"130px")
+        set_form_input_width(self.fields,"100px")
+        self.fields["entry_item__work_order"].widget.attrs["style"] ="width:130px;"
+
+class OutsideEntryAccountSearchForm(AccountEntrySearchForm):
+    work_order = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"class":'form-control','id':'workorder','select2':'true'}))
+    schematic_index = forms.CharField(label=u"标准号/图号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    specification =  forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    material_code = forms.CharField(label=u"标记号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideEntryAccountSearchForm,self).__init__(*args,**kwargs)
+        work_order_set = SubWorkOrder.objects.all()
+        self.fields["work_order"].choices = getChoiceList(work_order_set,"name")
+        set_form_input_width(self.fields,"100px")
+        self.fields["work_order"].widget.attrs["style"] ="width:130px;"
+
+class OutsideApplyAccountSearchForm(AccountApplySearchForm):
+    work_order = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"class":'form-control','id':'workorder','select2':'true'}))
+    schematic_index = forms.CharField(label=u"标准号/图号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    specification =  forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    material_code = forms.CharField(label=u"标记号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideApplyAccountSearchForm,self).__init__(*args,**kwargs)
+        work_order_set = SubWorkOrder.objects.all()
+        self.fields["work_order"].choices = getChoiceList(work_order_set,"name")
+        set_form_input_width(self.fields,"100px")
+        self.fields["work_order"].widget.attrs["style"] ="width:130px;"
+
+class OutsideStorageAccountSearchForm(AccountSearchForm):
+    entry_item__work_order = forms.ChoiceField(label=u"工作令",required = False,widget=forms.Select(attrs={"class":'form-control','id':'workorder','select2':'true'}))
+    entry_item__schematic_index =  forms.CharField(label=u"标准号/图号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__specification =  forms.CharField(label=u"规格",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__material_code = forms.CharField(label=u"标记号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    def __init__(self,*args,**kwargs):
+        super(OutsideStorageAccountSearchForm,self).__init__(*args,**kwargs)
+        work_order_set = SubWorkOrder.objects.all()
+        self.fields["entry_item__work_order"].choices = getChoiceList(work_order_set,"name")
+        set_form_input_width(self.fields,"100px")
+        self.fields["entry_item__work_order"].widget.attrs["style"] ="width:130px;"
+
+
+class AuxiliaryToolStorageAccountSearchForm(AccountSearchForm):
+    entry_item__material_mark=forms.CharField(label=u'牌号',required=False,widget=forms.TextInput(attrs={'class':'form-control','id':'brand'}))
+    entry_item__specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control','id':'specification'}))
+    entry_item__factory=forms.CharField(label=u'厂家',required=False,widget=forms.TextInput(attrs={'class':'form-control',}))
+    entry_item__supplier=forms.CharField(label=u'供货商',required=False,widget=forms.TextInput(attrs={'class':'form-control',}))
+    def __init__(self,*args,**kwargs):
+        super(AuxiliaryToolStorageAccountSearchForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields)
+
+class AuxiliaryToolEntryAccountSearchForm(AccountEntrySearchForm):
+    name=forms.CharField(label=u'名称',required=False,widget=forms.TextInput(attrs={'class':'form-control',}))
+    specification=forms.CharField(label=u'规格',required=False,widget=forms.TextInput(attrs={'class':'form-control',}))
+    factory=forms.CharField(label=u'厂家',required=False,widget=forms.TextInput(attrs={'class':'form-control',}))
+    supplier=forms.CharField(label=u'供货商',required=False,widget=forms.TextInput(attrs={'class':'form-control',}))
+    def __init__(self,*args,**kwargs):
+        super(AuxiliaryToolEntryAccountSearchForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields)
+
+class AuxiliaryToolApplyAccountSearchForm(AccountWeldApplySearchForm):
+    department = forms.CharField(label=u"领用单位",required = False,widget=forms.TextInput(attrs={"class":'form-control',}))
+    actual_storelist__entry_item__name = forms.CharField(label=u"材料名称",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    applycard_code = forms.CharField(label=u"料单编号",required = False,widget=forms.TextInput(attrs={"class":'form-control'}))
+    def __init__(self,*args,**kwargs):
+        super(AuxiliaryToolApplyAccountSearchForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields,"100px")
 
 
 class EntryTypeForm(forms.Form):
@@ -648,4 +712,31 @@ class WeldAccountItemForm(ModelForm):
         fields = ("inventory_count","item_status")
     def __init__(self,*args,**kwargs):
         super(WeldAccountItemForm,self).__init__(*args,**kwargs)
-        set_form_input_width(self.fields,"150px;")
+        set_form_input_width(self.fields,"150px")
+
+class SteelAccountItemForm(ModelForm):
+    class Meta:
+        model = SteelMaterialStoreList
+        fields = ("specification","length","count","weight","store_room")
+    def __init__(self,*args,**kwargs):
+        super(SteelAccountItemForm,self).__init__(*args,**kwargs)
+        self.fields["store_room"].queryset = StoreRoom.objects.filter(material_type = STOREROOM_CHOICES_STEEL)
+        set_form_input_width(self.fields,"150px")
+
+class OutsideAccountItemForm(ModelForm):
+    class Meta:
+        model = OutsideStorageList
+        fields = ("count",)
+    def __init__(self,*args,**kwargs):
+        super(OutsideAccountItemForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields,"150px")
+
+class AuxiliaryToolAccountItemForm(ModelForm):
+    class Meta:
+        model = AuxiliaryToolStoreList
+        fields = ("inventory_count",)
+    def __init__(self,*args,**kwargs):
+        super(AuxiliaryToolAccountItemForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields,"150px")
+
+

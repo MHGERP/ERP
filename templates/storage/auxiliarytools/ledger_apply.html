@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block inner_content%}
+{% comment %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
         <form id="apply_form" class="form-inline">
         {{search_form}}
@@ -18,5 +19,7 @@
     <div id="apply_table">
     {% include 'storage/auxiliarytools/apply_table.html' %}
     </div>
+{% endcomment %}
+{% include "storage/accountsearch/accountbody.html" %}
 {% endblock%}
 
