@@ -1,0 +1,19 @@
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width=0.8>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">添加</h3>
+    </div>
+    <div class="modal-body">
+        <div id="show_select_item_div">
+        {% include "storage/searchmaterial/show_select_item.html" %}
+        </div>
+        <form id="apply_form" action="" class="form-inline">
+            {% include "storage/searchmaterial/apply_item_form.html" %}
+        </form>
+        {% include "storage/widgets/search_material.html" %}
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" id="apply_item_save">保存</button>
+    </div>
+</div>

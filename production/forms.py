@@ -166,3 +166,6 @@ class ProductionUserForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProductionUserForm,self).__init__(*args,**kwargs)
         self.fields["production_work_group"].choices = tuple((item.id, item.name) for item in ProductionWorkGroup.objects.all()) 
+
+class ApplyCardForm(forms.Form):
+    applycard_code__contains = forms.CharField(required=False, label=u"领用单编号",)

@@ -1,4 +1,5 @@
 # coding: UTF-8
+import pprint, pickle
 import datetime
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
@@ -301,6 +302,9 @@ def auEntryUpdate(request, aid, remark):
 
 @dajaxice_register
 def auToolEntryConfirm(request, role, eid):
+    """
+    kad
+    """
     try:
         entry = AuxiliaryToolEntry.objects.get(id = eid);
         if role == "keeper":
@@ -324,6 +328,25 @@ def auToolEntryConfirm(request, role, eid):
     }
     return simplejson.dumps(data);
 
+
+@dajaxice_register
+def weldDemandDataUpdate(request, temp, humi):
+    """
+    kad
+    """
+    pk_file = open("weldDemandData.txt","rb");
+    weldDemandData = pickle.load(pk_file);
+    pk_file.close();
+
+    weldDemandData["demandTemperature"] = temp;
+    weldDemandData["demandHumidity"] = humi;
+    output = open("weldDemandData.txt", "wb");
+    pickle.dump(weldDemandData, output);
+    output.close();
+    data = {
+        "message": u"修改成功", 
+    }
+    return simplejson.dumps(data);
 
 
 
@@ -952,19 +975,19 @@ def searchWeldEntry(request,searchform):
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
-def searchMaterial(request,search_form,search_type):
-    (storelist_model,form_type,applycard_model) = checkStorage(search_type)
-    table_path = "storage/searchmaterial/store_"+search_type+"_items_table.html"
-    search_form = form_type(deserialize_form(search_form))
+def searchMaterial(request,search_form,apply_type):
+    table_path = "storage/searchmaterial/store_"+apply_type+"_items_table.html"
+    store_model,search_material_form_model,apply_item_model,apply_item_form_model,search_table_path = getApplyDataDict(apply_type)
+    search_form = search_material_form_model(deserialize_form(search_form))
     if search_form.is_valid():
         replace_dic = gen_replace_dic(search_form.cleaned_data)
-        if search_type=="weld":
-            store_items = get_weld_filter(storelist_model,search_form.cleaned_data,replace_dic).order_by("entry_time")
+        if apply_type=="weld":
+            store_items = get_weld_filter(store_model,search_form.cleaned_data,replace_dic).order_by("entry_time")
         else:
-            store_items = get_weld_filter(storelist_model,search_form.cleaned_data,replace_dic)
+            store_items = get_weld_filter(store_model,search_form.cleaned_data,replace_dic)
             if search_type != "steel":
                 store_items = store_items.order_by("entry_item__entry__create_time")
-    html = render_to_string(table_path,{"store_items":store_items,})
+    html = render_to_string(table_path,{"store_items":store_items})
     return simplejson.dumps({"html":html})
 
 @dajaxice_register
@@ -1252,7 +1275,7 @@ def getAccountSearchContext(card_type,search_form):
     search_form = form_type(deserialize_form(search_form))
     if search_form.is_valid():
         replace_dic = gen_replace_dic(search_form.cleaned_data)
-        if "weldapply" in card_type:
+        if card_type in ["weldapply","auxiliarytoolapply"]:
             order_field = "create_time"
         elif "entry" in card_type:
             order_field = "entry__create_time"
@@ -1264,7 +1287,7 @@ def getAccountSearchContext(card_type,search_form):
     html = render_to_string(account_table_path,{"items":items})
     return html
 
-ApplyCardDict = {"weld":WeldingMaterialApplyCard,}
+ApplyCardDict = {"weld":WeldingMaterialApplyCard,"auxiliarytool":AuxiliaryToolApplyCard}
 @dajaxice_register
 def storageAccountItemForm(request,mid,role):
     storeitem,account_item_form = getAccountItemDataDict(role)
@@ -1273,14 +1296,17 @@ def storageAccountItemForm(request,mid,role):
     form_html = render_to_string("storage/accountsearch/account_item_form.html",{"account_item_form":account_item_form})
     refundcards = []
     applycards = []
-    if role == "weld":
-        applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
-        for applycard in applycards:
-            try:
-                refund = WeldRefund.objects.get(apply_card = applycard)
-                refundcards.append(refund)
-            except Exception,e:
-                print e
+    if ApplyCardDict.has_key(role):
+        if role == "auxiliarytool":
+            applycards = ApplyCardDict[role].objects.filter(actual_storelist = storeitem).order_by("create_time")
+        else:
+            applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
+            for applycard in applycards:
+                try:
+                    refund = WeldRefund.objects.get(apply_card = applycard)
+                    refundcards.append(refund)
+                except Exception,e:
+                    print e
     table_html = render_to_string("storage/accountsearch/"+role+"_account_apply_refund_table.html",{"applycards":applycards,"refundcards":refundcards})
     return simplejson.dumps({"table_html":table_html,"form_html":form_html})
 
@@ -1298,3 +1324,41 @@ def storageAccountItemModify(request,account_item_form,mid,search_form,card_type
     table_html = getAccountSearchContext(card_type,search_form)
     form_html = render_to_string("storage/accountsearch/account_item_form.html",{"account_item_form":account_item_form})
     return simplejson.dumps({"table_html":table_html,"message":message,"form_html":form_html})
+
+@dajaxice_register
+def applyItemRefresh(request,mid,apply_type):
+    store_model,search_material_form_model,apply_item_model,apply_item_form_model,search_table_path = getApplyDataDict(apply_type)
+    apply_item = apply_item_model.objects.get(id=mid)
+    apply_item_form = apply_item_form_model(instance = apply_item)
+    form_html = render_to_string("storage/searchmaterial/apply_item_form.html",{"apply_item_form":apply_item_form})
+    select_item = apply_item.storelist
+    show_html = render_to_string("storage/searchmaterial/show_select_item.html",{"select_item":select_item})
+    table_html = render_to_string(search_table_path,{"select_item":select_item})
+    return simplejson.dumps({"form_html":form_html,"show_html":show_html,"table_html":table_html})
+
+@dajaxice_register
+def searchMaterialApply(request,apply_form,select_item,mid,apply_type):
+    store_model,search_material_form_model,apply_item_model,apply_item_form_model,search_table_path = getApplyDataDict(apply_type)
+    apply_item = apply_item_model.objects.get(id=aid)
+    apply_card = apply_item if apply_type in ["weld","auxiliarytool"] else apply_item.apply_card
+    APPLYCARD_KEEPER = AUXILIARY_TOOL_APPLY_CARD_KEEPER if apply_type == "auxiliarytool" else APPLYCARD_KEEPER
+    count_field = {"weld":"apply_weight",}
+    form = apply_item_form_model(deserialize_form(apply_form),instance=apply_item)
+    if form.is_valid():
+        if apply_card.status == APPLYCARD_KEEPER:
+            if storageitem.inventory_count >= form.cleaned_data[count_field[apply_type]]:
+                apply_item.storelist = storageitem
+                apply_item.save()
+                form.save()
+                message = u"领用单材料选择成功"
+                flag = True
+            else:
+                message = u"领用确认失败，所选库存材料数量不足"
+                flag = False
+        else:
+            flag = False
+            message = u"领用卡已经确认，不能修改材料"
+    html = render_to_string("storage/wordhtml/weldapply.html",{"apply_card":applycard})   
+    return simplejson.dumps({'message':message,'flag':flag,"html":html})
+
+

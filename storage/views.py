@@ -1,5 +1,5 @@
 # coding:UTF-8
-
+import pprint, pickle
 import datetime
 from django.shortcuts import render
 
@@ -182,6 +182,20 @@ def Weld_Apply_Card_List(request):
     }
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
 
+def getApplyContext(apply_type,aid):
+    store_model,search_material_form_model,apply_card_model,apply_item_model,search_table_path = getApplyDataDict(apply_type)
+    apply_card = apply_card_model.objects.get(id=aid)
+    apply_item_form = apply_item_model()
+    search_material_form = search_material_form_model()
+    context = {
+        "apply_card":apply_card,
+        "apply_item_form":apply_item_form,
+        "search_material_form":search_material_form,
+        "search_table_path":search_table_path,
+        "apply_type":apply_type,
+    }
+    return context
+
 def Weld_Apply_Card_Detail(request):
     """
     Time1ess
@@ -189,21 +203,9 @@ def Weld_Apply_Card_Detail(request):
     params: index(GET)
     return: NULL
     """
-    card_index=int(request.GET['index'])
-    apply_card=WeldingMaterialApplyCard.objects.get(id=card_index)
-    apply_form = WeldApplyKeeperForm()
-    store_items = WeldStoreList.objects.filter(inventory_count__gt = 0 )
-    store_items = modify_weld_item_status(store_items)
-    search_material_form = WeldMaterialSearchForm()
-    context = {
-        "apply_card":apply_card,
-        "apply_form":apply_form,
-        "APPLYCARD_KEEPER":APPLYCARD_KEEPER,
-        "store_items":store_items,
-        "ITEM_STATUS_NORMAL":ITEM_STATUS_NORMAL,
-        "search_material_form":search_material_form,
-        "search_table_path":"storage/searchmaterial/store_weld_items_table.html",
-    }
+    aid = int(request.GET['index'])
+    apply_type = "weld"
+    context = getApplyContext(apply_type,aid)
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
 
 def Handle_Apply_Card_Form(request):
@@ -297,7 +299,12 @@ def weldhumNewRecord(request):
             print form.errors
     else:
         form = HumRecordForm()
+    
+    pk_file = open("weldDemandData.txt", "rb");
+    weldDemandData = pickle.load(pk_file);
+    
     context = {
+            "weldDemandData": weldDemandData,
             "form":form,
             "changeEnable":False,
             }
@@ -310,12 +317,55 @@ def weldhumDetail(request,eid):
     hum_detail = WeldingMaterialHumitureRecord.objects.get(id = eid)
     form = HumRecordForm(instance = hum_detail)
     changeEnable = hum_detail.date == get_today()
+    
+    pk_file = open("weldDemandData.txt", "rb");
+    weldDemandData = pickle.load(pk_file);
+    
     context = {
+            "weldDemandData":weldDemandData,
             "form":form,
             "humRecordDate":hum_detail,
             "changeEnable":changeEnable,
             }
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
+
+
+def weldDemandData(request):
+    """
+    kad
+    """
+    """
+    weldDemandData = {
+        "demandTemperature":60,
+        "demandHumidity":70,
+    }
+    output = open("weldDemandData.txt", "wb");
+    pickle.dump(weldDemandData, output)
+    output.close()
+    """
+    pk_file = open("weldDemandData.txt", "rb");
+    weldDemandData = pickle.load(pk_file);
+    pprint.pprint(weldDemandData);
+    context = {
+        "weldDemandData":weldDemandData,
+    }
+    return render(request, "storage/basedata/weldDemandData.html", context)
+
+
+def storeRoomManageViews(request):
+    """
+    kad
+    """
+    new_room = StoreRoomForm()
+    room_set = StoreRoom.objects.all().order_by('-id')
+    search_form = StoreRoomSearchForm()
+    context = {
+        "room_set":room_set,
+        "search_form":search_form,
+        "new_room":new_room,
+    }
+    return render(request,"storage/basedata/storeroommanage.html", context)
+
 
 def weldbakeHomeViews(request):
     """
@@ -536,20 +586,8 @@ def AuxiliaryToolsLedgerEntryView(request):
     params: NULL
     return: NULL
     """
-    context = {}
-    if request.method == 'GET':
-        context['rets'] = AuxiliaryToolEntryCardList.objects.filter(
-            status=ENTRYSTATUS_CHOICES_KEEPER).order_by('-create_time')
-    else:
-        search_form = AuxiliaryEntrySearchForm(request.POST)
-        if search_form.is_valid():
-            context['rets'] = get_weld_filter(AuxiliaryToolEntryCardList,
-                                              search_form.cleaned_data)\
-                    .filter(status=ENTRYSTATUS_CHOICES_KEEPER)
-        else:
-            context['rets'] = []
-            print search_form.errors
-    context['search_form'] = AuxiliaryEntrySearchForm()
+    card_type = "auxiliarytoolentry"
+    context = getAccountContext(card_type)
     return render(request, 'storage/auxiliarytools/ledger_entry.html', context)
 
 def AuxiliaryToolsLedgerEntryCardView(request):
@@ -577,9 +615,8 @@ def AuxiliaryToolsLedgerApplyView(request):
     params: NULL
     return: NULL
     """
-    context={}
-    context['search_form']=AuxiliaryToolsSearchForm()
-    context['rets']=AuxiliaryToolApplyCard.objects.filter(status=AUXILIARY_TOOL_APPLY_CARD_KEEPER)
+    card_type = "auxiliarytoolapply"
+    context = getAccountContext(card_type)
     return render(request,'storage/auxiliarytools/ledger_apply.html',context)
 
 def AuxiliaryToolsLedgerApplyCardView(request):
@@ -602,9 +639,9 @@ def AuxiliaryToolsLedgerInventoryView(request):
     params: NULL
     return: NULL
     """
-    context={}
-    context['search_form']=AuxiliaryToolsSearchForm()
-    context['rets']=AuxiliaryTool.objects.all()
+    card_type = "auxiliarytoolstorage"
+    context = getAccountContext(card_type)
+    context["account_apply_refund_table"] = "storage/accountsearch/auxiliarytool_account_apply_refund_table.html"
     return render(request,'storage/auxiliarytools/ledger_inventory.html',context)
 
 def AuxiliaryToolsEntryApplyDetailView(request):
@@ -629,7 +666,6 @@ def weldAccountHomeViews(request):
 def weldEntryAccountViews(request):
     card_type = "weldentry"
     context = getAccountContext(card_type)
-    print context
     return render(request,"storage/weldmaterial/weldaccount/weldentryhome.html",context)
 
 def weldStorageAccountHomeViews(request):
@@ -765,55 +801,21 @@ def outsideAccountHomeViews(request):
     return render(request,"storage/outside/accounthome.html",context)
 
 def outsideStorageAccountViews(request):
-    items_set = OutsideStorageList.objects.order_by('specification')
-    search_form = OutsideStorageSearchForm()
-    items_set = items_set.order_by('specification')
-    context = {
-        "items_set":items_set,
-        "search_form":search_form,
-    }
-    return render(request,"storage/outside/outsidestorageaccount.html",context)
+    card_type = "outsidestorage"
+    context = getAccountContext(card_type)
+    return render(request,"storage/outside/account/outsidestorageaccount.html",context)
+
 def outsideEntryAccountHomeViews(request):
-    search_form = OutsideAccountEntrySearchForm()
-    entry_set = OutsideStandardEntry.objects.filter(entry_status = STORAGESTATUS_END)
-    items_set = OutsideStandardItem.objects.filter(entry__in = entry_set)
-    from operator import attrgetter
-    sorted_items_set = sorted(items_set,key=attrgetter('materiel.order.order_index','specification'))
-    context = {
-        "search_form":search_form,
-        "items_set":sorted_items_set,
-        "STORAGESTATUS_END":STORAGESTATUS_END,
-    }
-    
+    card_type = "outsideentry"
+    context = getAccountContext(card_type)
     return render(request,"storage/outside/account/entryhome.html",context)
 
 def outsideApplyCardAccountHomeViews(request):
-    search_form = OutsideAccountApplyCardSearchForm()
-    card_set = OutsideApplyCard.objects.filter(entry_status = STORAGESTATUS_END)
-    items_set = OutsideApplyCardItem.objects.filter(applycard__in = card_set)
-    from operator import attrgetter
-    sorted_items_set = sorted(items_set,key=attrgetter('applycard.workorder.order_index','specification'))
-    context = {
-        "search_form":search_form,
-        "items_set":sorted_items_set,
-    }
-
+    card_type = "outsideapply"
+    context = getAccountContext(card_type)
     return render(request,"storage/outside/account/applycardhome.html",context)
 
 
-def storeRoomManageViews(request):
-    """
-    kad
-    """
-    new_room = StoreRoomForm()
-    room_set = StoreRoom.objects.all().order_by('-id')
-    search_form = StoreRoomSearchForm()
-    context = {
-        "room_set":room_set,
-        "search_form":search_form,
-        "new_room":new_room,
-    }
-    return render(request,"storage/basedata/storeroommanage.html", context)
 
 def outsideRefundHomeViews(request):
     refund_cards = OutsideRefundCard.objects.filter(status = REFUNDSTATUS_CHOICES_KEEPER)

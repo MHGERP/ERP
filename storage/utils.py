@@ -288,10 +288,23 @@ def getAccountDataDict(card_type):
     steelentry = (SteelMaterialEntryItems,SteelEntryAccountSearchForm)
     steelapply = (SteelMaterialApplyCardItems,SteelApplyAccountSearchForm)
     steelstorage = (SteelMaterialStoreList,SteelStorageAccountSearchForm)
-    model_dict = {"weldentry":weldentry,"weldapply":weldapply,"weldstorage":weldstorage,"steelentry":steelentry,'steelapply':steelapply,"steelstorage":steelstorage}
+    outsideentry = (OutsideStandardItems,OutsideEntryAccountSearchForm)
+    outsideapply = (OutsideApplyCardItems,OutsideApplyAccountSearchForm)
+    outsidestorage = (OutsideStorageList,OutsideStorageAccountSearchForm)
+    auxiliarytoolentry = (AuxiliaryToolEntryItems,AuxiliaryToolEntryAccountSearchForm)
+    auxiliarytoolapply = (AuxiliaryToolApplyCard,AuxiliaryToolApplyAccountSearchForm)
+    auxiliarytoolstorage = (AuxiliaryToolStoreList,AuxiliaryToolStorageAccountSearchForm)
+
+    model_dict = {"weldentry":weldentry,"weldapply":weldapply,"weldstorage":weldstorage,"steelentry":steelentry,'steelapply':steelapply,"steelstorage":steelstorage,"outsideentry":outsideentry,"outsideapply":outsideapply,"outsidestorage":outsidestorage,"auxiliarytoolentry":auxiliarytoolentry,"auxiliarytoolapply":auxiliarytoolapply,"auxiliarytoolstorage":auxiliarytoolstorage}
     return model_dict[card_type][0],model_dict[card_type][1],account_table_path
 
 def getAccountItemDataDict(role):
-    ModelTypeDict = {"weld":WeldStoreList,"auxiliarytool":AuxiliaryToolStoreList,"steel":SteelMaterialStoreList}
-    AccountItemFormDict = {"weld":WeldAccountItemForm,'steel':SteelAccountItemForm}
+    ModelTypeDict = {"weld":WeldStoreList,"auxiliarytool":AuxiliaryToolStoreList,"steel":SteelMaterialStoreList,"outside":OutsideStorageList,"auxiliarytool":AuxiliaryToolStoreList}
+    AccountItemFormDict = {"weld":WeldAccountItemForm,'steel':SteelAccountItemForm,"outside":OutsideAccountItemForm,"auxiliarytool":AuxiliaryToolAccountItemForm}
     return ModelTypeDict[role],AccountItemFormDict[role]
+
+def getApplyDataDict(apply_type):
+    search_table_path = "storage/searchmaterial/store_"+apply_type+"_items_table.html"
+    weld = (WeldStoreList,WeldMaterialSearchForm,WeldingMaterialApplyCard,WeldApplyKeeperForm)
+    model_dict = {"weld":weld,}
+    return model_dict[apply_type][0],model_dict[apply_type][1],model_dict[apply_type][2],model_dict[apply_type][3],search_table_path

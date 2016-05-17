@@ -2,6 +2,7 @@
 	
 	<thead>
 		<th>材料执行表编号</th>
+		<th>物料</th>
 		<th>操作</th>
 		<th>文件列表</th>
 		<th>反馈</th>
@@ -9,7 +10,8 @@
 	<tbody>
 	{% for item in execute_list %}
 		<tr iid="{{item.id}}">
-			<td>{{item.document_number}}</td>
+			<td>{{item.materiel_execute.document_number}}</td>
+			<td>{{item.materiel}}</td>
 			<td>
                 <a class="btn btn-small" href="/purchasing/materielExecuteDetail/0/1/{{item.id}}">查看</a>
 				<span class="btn btn-primary btn-small btn-upload" href="#program_upload" data-toggle="modal">上传</span>

@@ -17,6 +17,7 @@ from const.forms import WorkOrderForm
 from production.forms import *
 from django.contrib.auth.models import User
 from users.models import UserInfo
+from storage.models import *
 from const import *
 
 def getQ(con):
@@ -458,3 +459,16 @@ def addProdUser(request, checkUserList):
         prod_user_obj.production_user_id = userInfor_obj
         prod_user_obj.save()
     return
+
+@dajaxice_register
+def applyCardSearch(request, form):
+    search_form = ApplyCardForm(deserialize_form(form))
+    if search_form.is_valid():
+        applyCards = []
+        for applyCardModel in [SteelMaterialApplyCard, AuxiliaryToolApplyCard, OutsideApplyCard, WeldingMaterialApplyCard]:
+            materiel_list  = applyCards.extend(list(applyCardModel.objects.filter(getQ(search_form.cleaned_data))))
+            html = render_to_string("production/table/materiel_use_table.html",{"applyCards":applyCards})
+    else:
+        print search_form.errors
+    return simplejson.dumps({ "html" : html})
+

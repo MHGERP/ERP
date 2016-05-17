@@ -238,4 +238,8 @@ urlpatterns = patterns('',
         r'^storeroommanage$',
         storage_views.storeRoomManageViews,
     ),
+    url(
+        r'^weldDemandData$',
+        storage_views.weldDemandData,
+       )
 )

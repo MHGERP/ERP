@@ -935,16 +935,41 @@ def getTransferCard(request, iid, page = "1", is_print = False):
         "MARK_REVIEW": MARK_REVIEW,
         "MARK_PROOFREAD": MARK_PROOFREAD,
         "MARK_APPROVE": MARK_APPROVE,
+        "CYLIDER_TRANSFER_CARD": CYLIDER_TRANSFER_CARD,
+        "CAP_TRANSFER_CARD": CAP_TRANSFER_CARD,
+        "WELD_TEST_PLATE_CARD": WELD_TEST_PLATE_CARD,
+        "PARENT_TEST_PLATE_CARD": PARENT_TEST_PLATE_CARD,
         "is_print": is_print,
     }
     card = TransferCard.objects.get(materiel_belong = item)
     context["card"] = card
     process_list = TransferCardProcess.objects.filter(card_belong = card)
-    page = int(page)
-    page, total_page, process_list = transferCardProcessPaginator(process_list, page, 82)
-    context["total_page"] = total_page
-    context["current_page"] = page
-    context["process_list"] = process_list
+    if card.card_type == CYLIDER_TRANSFER_CARD or card.card_type == CAP_TRANSFER_CARD:
+        page = int(page)
+        page, total_page, process_list = transferCardProcessPaginator(process_list, page, 82, 8, 15)
+        context["total_page"] = total_page
+        context["current_page"] = page
+        context["process_list"] = process_list
+    elif card.card_type == PARENT_TEST_PLATE_CARD or card.card_type == WELD_TEST_PLATE_CARD:
+        page, total_page, process_list = transferCardProcessPaginator(process_list, page, 100, 7, 7)
+        
+        context["total_page"] = total_page
+        context["current_page"] = page
+
+        context["process_list"] = process_list
+
+        if card.card_type == PARENT_TEST_PLATE_CARD:
+            context["test_type"] = "母材"
+        if card.card_type == WELD_TEST_PLATE_CARD:
+            context["test_type"] = "试板"
+    elif card.card_type == PRESSURE_PART_TRANSFER_CARD or card.card_type == SPECIAL_PART_TRANSFER_CARD:
+        page = int(page)
+        page, total_page, process_list = transferCardProcessPaginator(process_list, page, 82, 12, 12)
+        context["total_page"] = total_page
+        context["current_page"] = page
+
+        context["process_list"] = process_list
+
     html = render_to_string(CARD_TYPE_TO_HTML[card.card_type], context)
     return html
 
@@ -954,8 +979,15 @@ def getTransferCardProcessList(request, iid):
     JunHU
     """
     card = TransferCard.objects.get(materiel_belong__id = iid)
+    print card.card_type
     process_list = TransferCardProcess.objects.filter(card_belong = card)
-    html = render_to_string("techdata/widgets/transfercard_process_list.html", {"process_list": process_list})
+    context = {
+        "process_list": process_list,
+    }
+    if card.card_type == CYLIDER_TRANSFER_CARD or card.card_type == CAP_TRANSFER_CARD or \
+       card.card_type == PRESSURE_PART_TRANSFER_CARD or card.card_type == SPECIAL_PART_TRANSFER_CARD:
+        context["has_process_name"] = True
+    html = render_to_string("techdata/widgets/transfercard_process_list.html", context)
     return html
 
 @dajaxice_register
@@ -977,7 +1009,15 @@ def importTransferCardProcessTemplate(request, iid):
 
     TransferCardProcess.objects.bulk_create(process_list)
     process_list = TransferCardProcess.objects.filter(card_belong = card)
-    html = render_to_string("techdata/widgets/transfercard_process_list.html", {"process_list": process_list})
+
+    context = {
+        "process_list": process_list,
+    }
+    if card.card_type == CYLIDER_TRANSFER_CARD or card.card_type == CAP_TRANSFER_CARD or \
+       card.card_type == PRESSURE_PART_TRANSFER_CARD or card.card_type == SPECIAL_PART_TRANSFER_CARD:
+        context["has_process_name"] = True
+
+    html = render_to_string("techdata/widgets/transfercard_process_list.html", context)
     return html
    
 @dajaxice_register
@@ -988,8 +1028,21 @@ def addTransferCardProcess(request, iid):
     card = TransferCard.objects.get(materiel_belong__id = iid)
     TransferCardProcess(card_belong = card).save()
     process_list = TransferCardProcess.objects.filter(card_belong = card)
-    html = render_to_string("techdata/widgets/transfercard_process_list.html", {"process_list": process_list})
+    context = {
+        "process_list": process_list,
+    }
+    if card.card_type == CYLIDER_TRANSFER_CARD or card.card_type == CAP_TRANSFER_CARD or \
+       card.card_type == PRESSURE_PART_TRANSFER_CARD or card.card_type == SPECIAL_PART_TRANSFER_CARD:
+        context["has_process_name"] = True
+
+    html = render_to_string("techdata/widgets/transfercard_process_list.html", context)
     return html
+
+@dajaxice_register
+def saveTransferCardRequirement(request, iid, requirement):
+    card = TransferCard.objects.get(materiel_belong__id = iid)
+    card.tech_requirement = requirement
+    card.save()
 
 @dajaxice_register
 def saveTransferCardProcess(request, arr):
@@ -997,11 +1050,10 @@ def saveTransferCardProcess(request, arr):
     JunHU
     """
     for item in arr:
-        print item["pid"]
-        process = TransferCardProcess.objects.get(id = item["pid"])
-        process.index = item["index"]
-        process.name = item["name"]
-        process.detail = item["detail"]
+        process = TransferCardProcess.objects.get(id = item.get("pid", None))
+        process.index = item.get("index", None)
+        process.name = item.get("name", None)
+        process.detail = item.get("detail", None)
         process.save()
 
 @dajaxice_register
@@ -1130,6 +1182,15 @@ def getTransferCardList(request, id_work_order):
     return html
 
 @dajaxice_register
+def removeTransferCard(request, iid):
+    """
+    JunHU
+    """
+    print iid
+    card = TransferCard.objects.get(id = iid)
+    card.delete()
+
+@dajaxice_register
 def saveProcessRequirement(request, id, content):
     """
     JunHU
@@ -1160,9 +1221,9 @@ def getExcuteList(request):
     """
     JunHU
     """
-    execute_list = MaterielExecute.objects.filter(is_save = True)
+    execute_list = MaterielExecuteDetail.objects.all()
     for execute in execute_list:
-        execute.program_list = Program.objects.filter(execute = execute)
+        execute.program_list = Program.objects.filter(execute_detail = execute)
     context = {
         "execute_list": execute_list,
     }
@@ -1594,6 +1655,7 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray, id_work_order):
         weld_joint_detail = weld_joint_detail_form.save(commit = False)
         weld_joint_detail.specification = WeldingProcessSpecification.objects.get(order__id = id_work_order)
         weld_joint_detail.save()
+        weld_joint_detail_form.save_m2m()
 
         wwi = WeldingWorkInstruction(detail = weld_joint_detail)
         wwi.file_index = WeldingWorkInstruction.objects.filter(detail__specification__order = weld_joint_detail.specification.order).count() + 1

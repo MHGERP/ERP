@@ -81,10 +81,10 @@
 		<thead>
 		<tbody>
 			{% for item in BOM %}
-			<tr iid="{{item.id}}" class="tr_materiel row_1">
+			<tr iid="{{item.id}}" class="tr_materiel row_1" {%if item.sub_index == "0" %}style="font-weight: bold; color: red"{% endif %}>
 				{% include "techdata/widgets/processBOM_row.html" %}
 			</tr>		
-            <tr iid="{{item.id}}" class="tr_materiel row_2">
+            <tr iid="{{item.id}}" class="tr_materiel row_2" {%if item.sub_index == "0" %}style="font-weight: bold; color: red"{% endif %}>
                 {% include "techdata/widgets/processBOM_row_2.html" %}
             </tr>
 			{% endfor %}
