@@ -238,7 +238,7 @@ def getRelatedModel(request, index):
     elif index == COOPERANT:
         print index
     elif index == WELD_MATERIAL:
-        f1 = set((item.entry_item.id, entry_item.material.name) for item in WeldStoreList.objects.all())
+        f1 = set((item.entry_item.id, item.entry_item.material.name) for item in WeldStoreList.objects.all())
         f2 = set(item.entry_item.material_mark for item in WeldStoreList.objects.all())
         f3 = set(item.entry_item.specification for item in WeldStoreList.objects.all())
     if "" in f1:
@@ -298,7 +298,7 @@ def getRelatedTable(request, index, f1, f2, f3):
         data = OutsideStorageList.objects.filter(entry_item__materiel__name = OutsideStandardItems.objects.get(id = f1).materiel.name, entry_item__materiel__material__name = f2)
         print data
     elif index == WELD_MATERIAL:
-        data = WeldStoreList.objects.filter(entry_item__material__name = WeldMaterialEntryItems.objects.get(id = f1).materiel.name, entry_item__material_mark = f2, entry_item__specification = f3)
+        data = WeldStoreList.objects.filter(entry_item__material__name = WeldMaterialEntryItems.objects.get(id = f1).material.name, entry_item__material_mark = f2, entry_item__specification = f3)
     context = {
         "data" : data,
     }
