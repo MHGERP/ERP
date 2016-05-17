@@ -16,7 +16,7 @@
   </thead>
   <tbody>
     {% for item in BOM %}
-    <tr iid="{{item.id}}" class="designBOM_row">
+    <tr iid="{{item.id}}" class="designBOM_row" {%if item.sub_index == "0" %}style="font-weight: bold; color: red"{% endif %}>
       {% include "techdata/widgets/designBOM_row.html" %}
     </tr>
     {% endfor %}

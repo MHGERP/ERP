@@ -1,0 +1,29 @@
+{% extends "storage/base/basedatabase.html" %}
+
+{% block title %}
+<h1>焊材温湿度数据管理</h1>
+{% endblock %}
+
+{% block sub_sec %}
+<a href="/storage/weldDemandData" class="current">焊材温湿度数据管理</a>
+{% endblock %}
+
+{% block inner_content%}
+<div class="span12">
+    <form class="form-inline well" enctype="multipart/form-data" style="width:600px">
+        <div class="row">
+            <div class="span4 control-group">
+                <button type="button" class="btn btn-default bl">要求温度</button>
+                <input type="text" id="temp" value="{{weldDemandData.demandTemperature}}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="span4 control-group">
+                <button type="button" class="btn btn-default bl">要求湿度</button>
+                <input type="text" id="humi" value="{{weldDemandData.demandHumidity}}">
+            </div>
+        </div>
+        <button type="button"  class="btn btn-primary" id="saveWeldDataBtn">保存</button>
+    </form>
+</div>
+{% endblock%}

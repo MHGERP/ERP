@@ -26,7 +26,6 @@
 <table class="table table-bordered">
     <thead>
         <th>日期</th>
-        <th>库房</th>
         <th>库管员</th>
         <th>操作</th>
     </thead>
@@ -34,7 +33,6 @@
         {% for index in hum_set %}
         <tr>
             <td>{{index.date|date:'Y年m月d日'}}</td>
-            <td>{{index.storeRoom}}</td>
             <td>{{index.storeMan.userinfo}}</td>
             <td><a class="btn btn-warning" href="/storage/weldhumDetail/{{index.id}}">查看详情</a></td>
         </tr>

@@ -1,5 +1,5 @@
 # coding:UTF-8
-
+import pprint, pickle
 import datetime
 from django.shortcuts import render
 
@@ -299,7 +299,12 @@ def weldhumNewRecord(request):
             print form.errors
     else:
         form = HumRecordForm()
+    
+    pk_file = open("weldDemandData.txt", "rb");
+    weldDemandData = pickle.load(pk_file);
+    
     context = {
+            "weldDemandData": weldDemandData,
             "form":form,
             "changeEnable":False,
             }
@@ -312,12 +317,55 @@ def weldhumDetail(request,eid):
     hum_detail = WeldingMaterialHumitureRecord.objects.get(id = eid)
     form = HumRecordForm(instance = hum_detail)
     changeEnable = hum_detail.date == get_today()
+    
+    pk_file = open("weldDemandData.txt", "rb");
+    weldDemandData = pickle.load(pk_file);
+    
     context = {
+            "weldDemandData":weldDemandData,
             "form":form,
             "humRecordDate":hum_detail,
             "changeEnable":changeEnable,
             }
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
+
+
+def weldDemandData(request):
+    """
+    kad
+    """
+    """
+    weldDemandData = {
+        "demandTemperature":60,
+        "demandHumidity":70,
+    }
+    output = open("weldDemandData.txt", "wb");
+    pickle.dump(weldDemandData, output)
+    output.close()
+    """
+    pk_file = open("weldDemandData.txt", "rb");
+    weldDemandData = pickle.load(pk_file);
+    pprint.pprint(weldDemandData);
+    context = {
+        "weldDemandData":weldDemandData,
+    }
+    return render(request, "storage/basedata/weldDemandData.html", context)
+
+
+def storeRoomManageViews(request):
+    """
+    kad
+    """
+    new_room = StoreRoomForm()
+    room_set = StoreRoom.objects.all().order_by('-id')
+    search_form = StoreRoomSearchForm()
+    context = {
+        "room_set":room_set,
+        "search_form":search_form,
+        "new_room":new_room,
+    }
+    return render(request,"storage/basedata/storeroommanage.html", context)
+
 
 def weldbakeHomeViews(request):
     """
@@ -768,19 +816,6 @@ def outsideApplyCardAccountHomeViews(request):
     return render(request,"storage/outside/account/applycardhome.html",context)
 
 
-def storeRoomManageViews(request):
-    """
-    kad
-    """
-    new_room = StoreRoomForm()
-    room_set = StoreRoom.objects.all().order_by('-id')
-    search_form = StoreRoomSearchForm()
-    context = {
-        "room_set":room_set,
-        "search_form":search_form,
-        "new_room":new_room,
-    }
-    return render(request,"storage/basedata/storeroommanage.html", context)
 
 def outsideRefundHomeViews(request):
     refund_cards = OutsideRefundCard.objects.filter(status = REFUNDSTATUS_CHOICES_KEEPER)
