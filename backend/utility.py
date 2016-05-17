@@ -101,7 +101,7 @@ def rowContentGenerator(content, ROW_LEN):
     if row_content:
         yield row_content
 
-def transferCardProcessPaginator(process_list, page, ROW_LEN):
+def transferCardProcessPaginator(process_list, page, ROW_LEN, FIRST_PAGE_ROW, NORMAL_PAGE_ROW):
     """
     JunHU
     summary: the paginator for transfer card process list
@@ -125,20 +125,20 @@ def transferCardProcessPaginator(process_list, page, ROW_LEN):
             else:
                 ret_list.append(RowItem(None, None, row))
             start += ROW_LEN
-    total_page = 1 if len(ret_list) <= 8 else 2 + (len(ret_list) - 8 - 1) / 15
+    total_page = 1 if len(ret_list) <= FIRST_PAGE_ROW else 2 + (len(ret_list) - FIRST_PAGE_ROW - 1) / NORMAL_PAGE_ROW
     if page > total_page:
         page = total_page
 
     if page == 1:
-        ret_list = ret_list[0 : 8]
-        while len(ret_list) < 8:
+        ret_list = ret_list[0 : FIRST_PAGE_ROW]
+        while len(ret_list) < FIRST_PAGE_ROW:
             ret_list.append(RowItem())
 
         return page, total_page, ret_list
     else:
-        start_row = 8 + (page - 2) * 15
-        ret_list = ret_list[start_row : start_row + 15]
-        while len(ret_list) < 15:
+        start_row = FIRST_PAGE_ROW + (page - 2) * NORMAL_PAGE_ROW
+        ret_list = ret_list[start_row : start_row + NORMAL_PAGE_ROW]
+        while len(ret_list) < NORMAL_PAGE_ROW:
             ret_list.append(RowItem())
 
         return page, total_page, ret_list

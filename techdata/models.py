@@ -398,6 +398,7 @@ class TransferCard(models.Model):
     parent_test_plate_index = models.CharField(blank = True, null = True, verbose_name = u"母材试板图号", max_length = 100)
     material_index = models.CharField(blank = True, null = True, verbose_name = u"材质标记", max_length = 100)
     file_obj = models.FileField(null = True, blank = True, upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"简图")
+    tech_requirement = models.CharField(null = True, blank = True, max_length = 1000, verbose_name = u"技术要求")
     class Meta:
         verbose_name = u"流转卡"
         verbose_name_plural = u"流转卡"
@@ -406,6 +407,12 @@ class TransferCard(models.Model):
             return "RH04-" + self.materiel_belong.order.suffix() + "- -" + str(self.file_index)
         elif self.card_type == CAP_TRANSFER_CARD:
             return "RH03-" + self.materiel_belong.order.suffix() + "- -" + str(self.file_index)
+        elif self.card_type == PRESSURE_PART_TRANSFER_CARD:
+            return "RH02-" + self.materiel_belong.order.suffix() + "- -" + str(self.file_index)
+        elif self.card_type == SPECIAL_PART_TRANSFER_CARD:
+            return "RH16-" + self.materiel_belong.order.suffix() + "- -" + str(self.file_index)
+        else:
+            return "RH05-" + self.materiel_belong.order.suffix() + "- -" + str(self.file_index)
 
 class TransferCardProcess(models.Model):
     card_belong = models.ForeignKey(TransferCard, verbose_name = u"所属流转卡")
@@ -438,7 +445,17 @@ class TransferCardMark(models.Model):
         verbose_name_plural = u"流转卡签章"
     def __unicode__(self):
         return unicode(self.card)
-
+    def status(self):
+        if self.approver:
+            return u"已批准"
+        elif self.reviewer:
+            return u"已审核"
+        elif self.proofreader:
+            return u"已校对"
+        elif self.writer:
+            return u"已编制"
+        else:
+            return u"初创建"
 
 class ProcessBOMPageMark(models.Model):
     order = models.OneToOneField(WorkOrder, verbose_name = u"所属工作令")
