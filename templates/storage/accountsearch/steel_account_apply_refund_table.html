@@ -1,0 +1,49 @@
+<table class="table table-bordered">
+    {% comment %}
+    {% if applycards %}
+    <!--如果需要使用请替换table内容，去掉注释即可-->
+    <tr>
+        <th>工作令</th>
+        <th>焊缝编号</th>
+        <th>数量</th>
+        <th>领用时间</th>
+        <th>领用小组</th>
+        <th>领单编号</th>
+        <th>类别</th>
+    </tr>
+    {% for applycard in applycards %}
+    <tr>
+        <td>{{applycard.workorder}}</td>
+        <td>{{applycard.weld_bead_number}}</td>
+        <td>{{applycard.actual_weight}}</td>
+        <td>{{applycard.create_time|date:'Y年m月d日'}}</td>
+        <td>{{applycard.department}}</td>
+        <td>{{applycard.applycard_code}}</td>
+        <td>领用</td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    {% if refundcards %}
+    <tr>
+        <th>工作令</th>
+        <th>退库单编号</th>
+        <th>数量</th>
+        <th>退库时间</th>
+        <th>领用小组</th>
+        <th>领单编号</th>
+        <th>类别</th>
+    </tr>
+    {% for refund in refundcards %}
+    <tr>
+        <td>{{refund.apply_card.workorder}}</td>
+        <td>{{refund.refund_code}}</td>
+        <td>{{refund.refund_weight}}</td>
+        <td>{{refund.create_time|date:'Y年m月d日'}}</td>
+        <td>{{refund.department}}</td>
+        <td>{{refund.apply_card.applycard_code}}</td>
+        <td>退库</td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    {% endcomment %}
+</table>

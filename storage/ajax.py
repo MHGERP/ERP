@@ -1252,7 +1252,7 @@ def getAccountSearchContext(card_type,search_form):
     search_form = form_type(deserialize_form(search_form))
     if search_form.is_valid():
         replace_dic = gen_replace_dic(search_form.cleaned_data)
-        if "weldapply" in card_type:
+        if card_type in ["weldapply","auxiliarytoolapply"]:
             order_field = "create_time"
         elif "entry" in card_type:
             order_field = "entry__create_time"
@@ -1264,30 +1264,34 @@ def getAccountSearchContext(card_type,search_form):
     html = render_to_string(account_table_path,{"items":items})
     return html
 
-ModelTypeDict = {"weld":WeldStoreList,"auxiliarytool":AuxiliaryToolStoreList}
-AccountItemFormDict = {"weld":WeldAccountItemForm,}
-ApplyCardDict = {"weld":WeldingMaterialApplyCard,}
+ApplyCardDict = {"weld":WeldingMaterialApplyCard,"auxiliarytool":AuxiliaryToolApplyCard}
 @dajaxice_register
 def storageAccountItemForm(request,mid,role):
-    storeitem = ModelTypeDict[role].objects.get(id=mid)
-    account_item_form = AccountItemFormDict[role](instance = storeitem)
+    storeitem,account_item_form = getAccountItemDataDict(role)
+    storeitem = storeitem.objects.get(id=mid)
+    account_item_form = account_item_form(instance = storeitem)
     form_html = render_to_string("storage/accountsearch/account_item_form.html",{"account_item_form":account_item_form})
-    applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
     refundcards = []
-    if role == "weld":
-        for applycard in applycards:
-            try:
-                refund = WeldRefund.objects.get(apply_card = applycard)
-                refundcards.append(refund)
-            except Exception,e:
-                print e
+    applycards = []
+    if ApplyCardDict.has_key(role):
+        if role == "auxiliarytool":
+            applycards = ApplyCardDict[role].objects.filter(actual_storelist = storeitem).order_by("create_time")
+        else:
+            applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
+            for applycard in applycards:
+                try:
+                    refund = WeldRefund.objects.get(apply_card = applycard)
+                    refundcards.append(refund)
+                except Exception,e:
+                    print e
     table_html = render_to_string("storage/accountsearch/"+role+"_account_apply_refund_table.html",{"applycards":applycards,"refundcards":refundcards})
     return simplejson.dumps({"table_html":table_html,"form_html":form_html})
 
 @dajaxice_register
 def storageAccountItemModify(request,account_item_form,mid,search_form,card_type,role):
-    storeitem = ModelTypeDict[role].objects.get(id=mid)
-    account_item_form = AccountItemFormDict[role](deserialize_form(account_item_form),instance = storeitem)
+    storeitem_model,account_item_form_model = getAccountItemDataDict(role)
+    storeitem = storeitem_model.objects.get(id=mid)
+    account_item_form = account_item_form_model(deserialize_form(account_item_form),instance = storeitem)
     if account_item_form.is_valid():
         account_item_form.save()
         message = u"库存信息修改成功"

@@ -4,7 +4,6 @@ import datetime
 from django.shortcuts import render
 
 from const import *
-from const import MATERIAL_TYPE
 from const.forms import InventoryTypeForm
 from const.utils import *
 from datetime import datetime
@@ -537,20 +536,8 @@ def AuxiliaryToolsLedgerEntryView(request):
     params: NULL
     return: NULL
     """
-    context = {}
-    if request.method == 'GET':
-        context['rets'] = AuxiliaryToolEntryCardList.objects.filter(
-            status=ENTRYSTATUS_CHOICES_KEEPER).order_by('-create_time')
-    else:
-        search_form = AuxiliaryEntrySearchForm(request.POST)
-        if search_form.is_valid():
-            context['rets'] = get_weld_filter(AuxiliaryToolEntryCardList,
-                                              search_form.cleaned_data)\
-                    .filter(status=ENTRYSTATUS_CHOICES_KEEPER)
-        else:
-            context['rets'] = []
-            print search_form.errors
-    context['search_form'] = AuxiliaryEntrySearchForm()
+    card_type = "auxiliarytoolentry"
+    context = getAccountContext(card_type)
     return render(request, 'storage/auxiliarytools/ledger_entry.html', context)
 
 def AuxiliaryToolsLedgerEntryCardView(request):
@@ -578,9 +565,8 @@ def AuxiliaryToolsLedgerApplyView(request):
     params: NULL
     return: NULL
     """
-    context={}
-    context['search_form']=AuxiliaryToolsSearchForm()
-    context['rets']=AuxiliaryToolApplyCard.objects.filter(status=AUXILIARY_TOOL_APPLY_CARD_KEEPER)
+    card_type = "auxiliarytoolapply"
+    context = getAccountContext(card_type)
     return render(request,'storage/auxiliarytools/ledger_apply.html',context)
 
 def AuxiliaryToolsLedgerApplyCardView(request):
@@ -603,9 +589,9 @@ def AuxiliaryToolsLedgerInventoryView(request):
     params: NULL
     return: NULL
     """
-    context={}
-    context['search_form']=AuxiliaryToolsSearchForm()
-    context['rets']=AuxiliaryTool.objects.all()
+    card_type = "auxiliarytoolstorage"
+    context = getAccountContext(card_type)
+    context["account_apply_refund_table"] = "storage/accountsearch/auxiliarytool_account_apply_refund_table.html"
     return render(request,'storage/auxiliarytools/ledger_inventory.html',context)
 
 def AuxiliaryToolsEntryApplyDetailView(request):
@@ -630,7 +616,6 @@ def weldAccountHomeViews(request):
 def weldEntryAccountViews(request):
     card_type = "weldentry"
     context = getAccountContext(card_type)
-    print context
     return render(request,"storage/weldmaterial/weldaccount/weldentryhome.html",context)
 
 def weldStorageAccountHomeViews(request):
@@ -766,39 +751,18 @@ def outsideAccountHomeViews(request):
     return render(request,"storage/outside/accounthome.html",context)
 
 def outsideStorageAccountViews(request):
-    items_set = OutsideStorageList.objects.order_by('specification')
-    search_form = OutsideStorageSearchForm()
-    items_set = items_set.order_by('specification')
-    context = {
-        "items_set":items_set,
-        "search_form":search_form,
-    }
-    return render(request,"storage/outside/outsidestorageaccount.html",context)
+    card_type = "outsidestorage"
+    context = getAccountContext(card_type)
+    return render(request,"storage/outside/account/outsidestorageaccount.html",context)
+
 def outsideEntryAccountHomeViews(request):
-    search_form = OutsideAccountEntrySearchForm()
-    entry_set = OutsideStandardEntry.objects.filter(entry_status = STORAGESTATUS_END)
-    items_set = OutsideStandardItem.objects.filter(entry__in = entry_set)
-    from operator import attrgetter
-    sorted_items_set = sorted(items_set,key=attrgetter('materiel.order.order_index','specification'))
-    context = {
-        "search_form":search_form,
-        "items_set":sorted_items_set,
-        "STORAGESTATUS_END":STORAGESTATUS_END,
-    }
-    
+    card_type = "outsideentry"
+    context = getAccountContext(card_type)
     return render(request,"storage/outside/account/entryhome.html",context)
 
 def outsideApplyCardAccountHomeViews(request):
-    search_form = OutsideAccountApplyCardSearchForm()
-    card_set = OutsideApplyCard.objects.filter(entry_status = STORAGESTATUS_END)
-    items_set = OutsideApplyCardItem.objects.filter(applycard__in = card_set)
-    from operator import attrgetter
-    sorted_items_set = sorted(items_set,key=attrgetter('applycard.workorder.order_index','specification'))
-    context = {
-        "search_form":search_form,
-        "items_set":sorted_items_set,
-    }
-
+    card_type = "outsideapply"
+    context = getAccountContext(card_type)
     return render(request,"storage/outside/account/applycardhome.html",context)
 
 

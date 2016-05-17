@@ -198,7 +198,7 @@ class WeldingMaterialApplyCard(models.Model):
 class StoreRoom(models.Model):
     name = models.CharField(max_length=20,verbose_name=u"库房名称",blank = False)
     position = models.CharField(max_length=50,verbose_name=u"位置",blank = True)
-    material_type = models.IntegerField(choices=MATERIAL_TYPE,blank=False,null=False,default=0,verbose_name=u"材料类型")
+    material_type = models.IntegerField(choices=STOREROOM_CHOICES,blank=False,null=False,default=STOREROOM_CHOICES_WELD,verbose_name=u"材料类型")
 
     def __unicode__(self):
         return "%s"  % self.name
@@ -609,7 +609,7 @@ class OutsideRefundCard(models.Model):
     refundcard_code = models.CharField(verbose_name=u"退库单编号",max_length=20)
     work_order = models.ForeignKey(SubWorkOrder,verbose_name=u"工作令")
     create_time = models.DateField(verbose_name=u"日期",auto_now_add=True)
-    
+
     class Meta:
         verbose_name = u"外购件退库单"
         verbose_name_plural = u"外购件退库单"
@@ -621,7 +621,7 @@ class OutsideRefundCardItems(models.Model):
     applyitem = models.ForeignKey(OutsideApplyCardItems,verbose_name=u"领用材料")
     count = models.IntegerField(verbose_name=u"数量",default=0)
     remark =  models.CharField(verbose_name=u"备注",max_length=50,blank=True,null=True)
-    
+
     class Meta:
         verbose_name = u"外购件退库单材料"
         verbose_name_plural = u"外购件退库单材料"

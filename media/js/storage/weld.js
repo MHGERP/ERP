@@ -9,7 +9,7 @@ $(document).ready(function(){
             Dajaxice.storage.entryConfirm(entry_confirm_callback,{"role":role,"eid":eid});
         }
     })
-    $(document).on("dblclick","tr[name='entry_item']",function(){
+    $(document).on("dblclick","tr[name='entry_item_tr']",function(){
         mid = $(this).attr("id");
         change_item(this);
         $("#myModal").modal('show');
