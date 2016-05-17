@@ -118,7 +118,7 @@ function subitem_save(){
 
 function subitem_save_callback(data){
     if(data.flag){
-        $('#subtable').html(data.html);      
+        $('#subtable').html(data.html);
         alert(data.message);
     }
     else{
@@ -139,7 +139,7 @@ function change_item(id){
     a = $("tr#"+item_id).find("td");
     for(var i = 0 ; i < 8 ; i++){
         var did = 'div#div'+(i+1);
-        var in_obj = $(did).find("input"); 
+        var in_obj = $(did).find("input");
         in_obj.val(a.eq(i).text());
     }
     is_add = false;
@@ -185,7 +185,7 @@ var items_set;
 var selectvalue;
 var bid;
 function select_entry_type_callback(data){
-    $("#additemstable").html(data.html); 
+    $("#additemstable").html(data.html);
     items_set = data.items_set;
     selectvalue = data.selectvalue;
     bid = data.bid;

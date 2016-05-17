@@ -227,17 +227,17 @@ def getRelatedModel(request, index):
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
         f1 = set()#set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.filter( entry_item__material__isnull= False))
         f2 = set(item.entry_item.specification for item in SteelMaterialStoreList.objects.all())
-        f3 = set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.all())
+        f3 = set((item.entry_item.material.id, item.entry_item.material.material.name) for item in SteelMaterialStoreList.objects.all())
     elif index == FIRST_FEEDING:
         print index
     elif index == OUT_PURCHASED:
-        f1 = set(item.entry_item.specification for item in OutsideStorageList.objects.all())
-        f2 = set(item.entry_item.materiel.name for item in OutsideStorageList.objects.all())
+        f1 = set((item.entry_item.id, item.entry_item.materiel.name) for item in OutsideStorageList.objects.all())
+        f2 = set((item.entry_item.materiel.id, item.entry_item.materiel.material.name) for item in OutsideStorageList.objects.all())
         f3 = set()
     elif index == COOPERANT:
         print index
     elif index == WELD_MATERIAL:
-        f1 = set(item.entry_item.material.name for item in WeldStoreList.objects.all())
+        f1 = set((item.entry_item.id, entry_item.material.name) for item in WeldStoreList.objects.all())
         f2 = set(item.entry_item.material_mark for item in WeldStoreList.objects.all())
         f3 = set(item.entry_item.specification for item in WeldStoreList.objects.all())
     if "" in f1:
@@ -266,9 +266,9 @@ def defaultRelated(request, index, mid):
     item = Materiel.objects.get(id = mid)
     data = []
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        data = SteelMaterialStoreList.objects.filter(entry_item__specification = item.specification, entry_item__material__name = item.name)
+        data = SteelMaterialStoreList.objects.filter(entry_item__specification = item.specification, entry_item__material__material__name = item.material.name)
     elif index == OUT_PURCHASED:
-        data = OutsideStorageList.objects.filter(specification = item.specification, texture = f2)
+        data = OutsideStorageList.objects.filter(entry_item__materiel__name = item.name, entry_item__materiel__material__name = item.material.name)
     elif index == WELD_MATERIAL:
         data = WeldStoreList.objects.filter(entry_item__material__name = item.name, entry_item__material_mark = item.material.name, entry_item__specification = item.specification)
     print "data:"
@@ -289,13 +289,15 @@ def getRelatedTable(request, index, f1, f2, f3):
         WELD_MATERIAL: "weld_material",
     }
     data = []
+    print f2
+    print f3
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
-        data = SteelMaterialStoreList.objects.filter(entry_item__specification = f2, entry_item__material__name = f3)
+        data = SteelMaterialStoreList.objects.filter(entry_item__specification = f2, entry_item__material__material__name = Material.objects.get(id = f3).name)
     elif index == OUT_PURCHASED:
-        data = OutsideStorageList.objects.filter(specification = f1, texture = f2)
+        data = OutsideStorageList.objects.filter(entry_item__materiel__name = OutsideStandardItems.objects.get(id = f1).materiel.name, entry_item__materiel__material__name = f2)
         print data
     elif index == WELD_MATERIAL:
-        data = WeldStoreList.objects.filter(entry_item__material__name = f1, entry_item__material_mark = f2, entry_item__specification = f3)
+        data = WeldStoreList.objects.filter(entry_item__material__name = WeldMaterialEntryItems.objects.get(id = f1).materiel.name, entry_item__material_mark = f2, entry_item__specification = f3)
     context = {
         "data" : data,
     }
@@ -373,6 +375,14 @@ def quotingSave(requset, supid, quoteid, f1, f2, f3, f4, f5):
     #     one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
     #     one.save()
     return ""
+
+@dajaxice_register
+def selectSupplier(requset, supid, bidid):
+    bid = BidForm.objects.get(id = bidid)
+    materiel_set = set(item.materiel for item in MaterielFormConnection.objects.filter(order_form = bid.order_form))
+    sup = Supplier.objects.get(id = supid)
+    quoting_set = set(item for item in QuotingPrice.objects.filter(the_supplier = sup))
+
 
 @dajaxice_register
 def pendingOrderSearch(request, order_index):
