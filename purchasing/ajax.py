@@ -819,18 +819,15 @@ def deleteSubapply(request,subapply_id):
     subapply.delete()
 
 @dajaxice_register
-def deleteItem(request,item_id,sid):
-    item_obj = MaterialSubApplyItems.objects.get(id = item_id)
-    subapply = MaterialSubApply.objects.get(id = sid)
-    if item_obj.sub_apply.id == subapply.id:
-        try:
-            item_obj.delete()
-            flag = True
-        except Exception,e:
-            print e
-    else:
-        flag = False
-    return simplejson.dumps({"item_id":item_obj.id,"flag":flag})
+def deleteItem(request,sid):
+    item_obj = MaterialSubApplyItems.objects.get(id = sid)
+    try:
+        item_obj.delete()
+        flag = 0
+    except Exception,e:
+        print e
+        flag = 1
+    return simplejson.dumps({"flag":flag})
 
 @dajaxice_register
 def deleteDetail(request,uid):

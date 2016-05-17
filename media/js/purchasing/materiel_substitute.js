@@ -37,7 +37,25 @@ $(document).on("dblclick","tr[name='subapply_item']",function(){
         "sid":sid
     });
 });
-
+$("#subapply_item_delete").click(function(){
+    if(sid==-1){
+        alert("新建条目没有保存！");
+        return false;
+    }
+    if(confirm("是否确定删除这条材料代用申请条目？")){
+        Dajaxice.purchasing.deleteItem(function(data){
+            if(data.flag==0){
+                alert("删除成功！");
+                window.location.reload();
+            }
+            else{
+                alert("删除失败！");
+            }
+        },{
+            "sid":sid
+        });
+    }
+});
 $("#subapply_item_confirm").click(function(){
     Dajaxice.purchasing.UpdateSubapplyItem(function(data){
         if(data.status ==1 ){

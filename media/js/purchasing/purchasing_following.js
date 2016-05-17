@@ -144,32 +144,8 @@ function delete_subapply(id){
         });
     }
 }
-function change_item(id){
-    item_id = id;
-    a = $("tr#"+item_id).find("td");
-    for(var i = 0 ; i < 8 ; i++){
-        var did = 'div#div'+(i+1);
-        var in_obj = $(did).find("input");
-        in_obj.val(a.eq(i).text());
-    }
-    is_add = false;
-}
 
-function delete_item(id){
-    item_id = id;
-    var sid = $("#subapply").attr("sid");
-    Dajaxice.purchasing.deleteItem(delete_item_callback,{"item_id":item_id,"sid":sid});
-}
 
-function delete_item_callback(data){
-    if(data.flag){
-        $("tr#"+item_id).remove();
-        alert("删除成功");
-    }
-    else{
-        alert("删除失败");
-    }
-}
 
 function select_entry_type(bid){
     btn = $(this);
