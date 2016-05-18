@@ -79,4 +79,4 @@ def techdataOrderInitialize(order):
     TransferCardMark(order = order).save()
     ProcessBOMPageMark(order = order).save()
     DesignBOMMark(order = order).save()
-    WeldJointTech(order = order).save()
+    WeldingProcessSpecification(order = order).save()
