@@ -84,7 +84,7 @@ def genEntry(request,selected,bid,entry_type):
         user = request.user
         accept_supplier=bidform.bidacceptance.accept_supplier.supplier_name
         create_time=datetime.now()
-        entry_code=create_time.strftime("%Y%m%d%H%M%S")
+        entry_code=getEntryCode(create_time.strftime("%Y%m%d"))
         entry_status=ENTRYSTATUS_CHOICES_PUCAHSER
         print entry_type
         if entry_type=="entrytype_board":
@@ -96,7 +96,6 @@ def genEntry(request,selected,bid,entry_type):
             steel_entry.save()
             SteelEntryItemAdd(steel_entry,selected)
         elif entry_type=="standard_outsidebuy":
-            print "######"
             outside_entry=OutsideStandardEntry(entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=STANDARD_OUTSIDEBUY)
             outside_entry.save()
             OutsideEntryItemAdd(outside_entry,selected)
