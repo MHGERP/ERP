@@ -44,15 +44,6 @@
   mso-hansi-font-family:"Times New Roman"'>数量</span><span lang=EN-US
   style='font-size:9.0pt'><o:p></o:p></span></p>
   </td>
-  <td width=113 style='width:3.0cm;border:solid windowtext 1.0pt;border-left:
-  none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:39.0pt'>
-  <p class=MsoNormal align=center style='text-align:center;line-height:14.0pt;
-  mso-line-height-rule:exactly'><span style='font-size:9.0pt;mso-bidi-font-size:
-  10.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-  "Times New Roman"'>实发规格</span><span lang=EN-US style='font-size:9.0pt;
-  mso-bidi-font-size:10.0pt'><o:p></o:p></span></p>
-  </td>
   <td width=194 style='width:145.5pt;border:solid windowtext 1.0pt;border-left:
   none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:39.0pt'>
@@ -63,7 +54,7 @@
   </td>
  </tr>
  {% for item in items %}
- <tr style='mso-yfti-irow:5;mso-yfti-lastrow:yes;height:19.25pt' name="item_tr" id="{{item.id}}">
+ <tr style='mso-yfti-irow:5;mso-yfti-lastrow:yes;height:19.25pt' name="apply_item_tr" mid="{{item.id}}">
   <td width=83 style='width:62.1pt;border:solid windowtext 1.0pt;border-top:
   none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:19.25pt'>
@@ -96,14 +87,7 @@
   solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.25pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.apply_count}}</span></p>
-  </td>
-  <td width=113 style='width:3.0cm;border-top:none;border-left:none;border-bottom:
-  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
-  solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
-  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:19.25pt'>
-  <p class=MsoNormal align=center style='text-align:center;line-height:22.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.storelist.specification}}</span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:9.0pt'>{{item.count}}</span></p>
   </td>
   <td width=194 style='width:145.5pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
