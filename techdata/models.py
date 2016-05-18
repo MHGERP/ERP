@@ -312,10 +312,9 @@ class WeldJointTechDetail(models.Model):
         else:
             return self.weld_method_1.get_name_display()
     def get_weld_certification1(self):
-        print self.weld_certification1.all()
-        return "或".join(self.weld_certification1.all())
+        return u"或".join(map(unicode, self.weld_certification1.all()))
     def get_weld_certification2(self):
-        return "或".join(self.weld_certification2.all())
+        return u"或".join(map(unicode, self.weld_certification2.all()))
 
 class WeldingWorkInstruction(models.Model):
     detail = models.OneToOneField(WeldJointTechDetail, verbose_name = "所属接头分析")
