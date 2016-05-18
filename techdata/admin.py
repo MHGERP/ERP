@@ -44,6 +44,7 @@ RegisterClass = (
     TransferCardProcess,
     WeldingProcessSpecification,
     WeldingWorkInstruction,
+    WeldingWorkInstructionProcess,
 )
 
 for item in RegisterClass:
