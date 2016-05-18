@@ -678,7 +678,7 @@ def UpdateSubapplyInfo(request,form,subapply_id):
     else:
         status=1
     return simplejson.dumps({'status':status})
-    
+
 @dajaxice_register
 def getSubApplyItemForm(request,sid):
     if sid==-1:
