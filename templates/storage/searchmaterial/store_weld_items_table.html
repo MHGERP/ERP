@@ -1,4 +1,4 @@
-<thead>
+<thead id="apply_store_thead">
     <th>选择</th>
     <th>名称</th>
     <th>牌号</th>
@@ -14,7 +14,7 @@
 </thead>
 <tbody>
     {% for item in store_items %}
-    <tr>
+    <tr >
         <td><input type="radio" name="radion_item" value = "{{item.id}}" {% ifequal apply_card.storelist.id item.id %} checked = "checked" {% endifequal %} /></td>
         <td>{{item.entry_item.material}}</td>
         <td>{{item.entry_item.material_mark}}</td>
@@ -25,8 +25,26 @@
         <td>{{item.entry_time|date:'Y.m.d'}}</td>
         <td>{{item.entry_item.production_date|date:'Y.m.d'}}</td>
         <td>{{item.entry_item.factory}}</td>
-        <td>{{item.inventory_count}}</td>
+        <td>{{item.count}}</td>
         <td>{{item.get_item_status_display}}</td>
     </tr>
     {% endfor %}
+    <tfoot style="display:none">
+    {% if select_item %}
+    <tr id="select_item">
+        <td><input type="radio"  value = "{{item.id}}" {% ifequal apply_card.storelist.id item.id %} checked = "checked" {% endifequal %} /></td>
+        <td>{{select_item.entry_item.material}}</td>
+        <td>{{select_item.entry_item.material_mark}}</td>
+        <td>{{select_item.entry_item.model_number}}</td>
+        <td>{{select_item.entry_item.specification}}</td>
+        <td>{{select_item.entry_item.material_charge_number}}</td>
+        <td>{{select_item.entry_item.material_code}}</td>
+        <td>{{select_item.entry_time|date:'Y.m.d'}}</td>
+        <td>{{select_item.entry_item.production_date|date:'Y.m.d'}}</td>
+        <td>{{select_item.entry_item.factory}}</td>
+        <td>{{select_item.count}}</td>
+        <td>{{select_item.get_item_status_display}}</td>
+    </tr>
+    {% endif %}
+    </tfoot>
 </tbody>

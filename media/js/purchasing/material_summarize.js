@@ -232,7 +232,7 @@ function add_to_material_execute_callback(data){
 
 
 $(document).on("click", ".btn-primary", function() {
-    alert("在这里");
+    // alert("在这里");
     mid = $(this).closest("tr").attr("iid");
     val = $("#id_inventory_type").val();
     key = $("#search_key").val();

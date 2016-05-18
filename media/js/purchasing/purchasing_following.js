@@ -119,7 +119,7 @@ function subitem_save(){
 
 function subitem_save_callback(data){
     if(data.flag){
-        $('#subtable').html(data.html);      
+        $('#subtable').html(data.html);
         alert(data.message);
     }
     else{
@@ -135,32 +135,17 @@ function add_subapply_callback(data){
     window.location.href=data.url;
 }
 
-function change_item(id){
-    item_id = id;
-    a = $("tr#"+item_id).find("td");
-    for(var i = 0 ; i < 8 ; i++){
-        var did = 'div#div'+(i+1);
-        var in_obj = $(did).find("input"); 
-        in_obj.val(a.eq(i).text());
+function delete_subapply(id){
+    if( confirm("是否确认删除这个材料代用表?")){
+        Dajaxice.purchasing.deleteSubapply(function(data){
+            window.location.reload();
+        },{
+            "subapply_id":id
+        });
     }
-    is_add = false;
 }
 
-function delete_item(id){
-    item_id = id;
-    var sid = $("#subapply").attr("sid");
-    Dajaxice.purchasing.deleteItem(delete_item_callback,{"item_id":item_id,"sid":sid});
-}
 
-function delete_item_callback(data){
-    if(data.flag){
-        $("tr#"+item_id).remove();
-        alert("删除成功");
-    }
-    else{
-        alert("删除失败");
-    }
-}
 
 function select_entry_type(bid){
     btn = $(this);
@@ -186,7 +171,7 @@ var items_set;
 var selectvalue;
 var bid;
 function select_entry_type_callback(data){
-    $("#additemstable").html(data.html); 
+    $("#additemstable").html(data.html);
     items_set = data.items_set;
     selectvalue = data.selectvalue;
     bid = data.bid;

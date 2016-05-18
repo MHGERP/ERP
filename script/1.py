@@ -6,11 +6,15 @@ from purchasing.models import *
 from django.contrib.auth.models import User
 from production.models import *
 from const.models import Materiel
+from production.utility import get_applycard_code
+from storage.models import SteelMaterialApplyCard, OutsideApplyCard
 
-items_list = ProcessDetail.objects.filter(complete_process_date__isnull = 1).order_by('-productionworkgroup');
-print items_list.count()
-items_list = ProcessDetail.objects.filter(complete_process_date__isnull = 0).order_by('-productionworkgroup');
-print items_list.count()
+print get_applycard_code(OutsideApplyCard)
+print "hello"
+# items_list = ProcessDetail.objects.filter(complete_process_date__isnull = 1).order_by('-productionworkgroup');
+# print items_list.count()
+# items_list = ProcessDetail.objects.filter(complete_process_date__isnull = 0).order_by('-productionworkgroup');
+# print items_list.count()
 # synthesize = SynthesizeFileListStatus.objects.filter(order_id = 1).values("sketch","encasement_list", "coating_detail")
 # print synthesize
 # for k,v in synthesize[0].items():

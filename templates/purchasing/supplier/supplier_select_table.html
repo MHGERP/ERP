@@ -7,6 +7,7 @@
                     <th>供应商编号</th>
                     <th>供应商名称</th>
                     <th>相关文件下载</th>
+                    <th>供应商报价</th>
                     <th>选择</th>
                 </tr>
             </thead>
@@ -19,7 +20,10 @@
                         {% for file in supplier.supplierfile_set.all%}
                         <a href="{{file.file_obj.url}}">{{file}}</a>
                         {% endfor%}
-                    </td> 
+                    </td>
+                    <td>
+                      <button class="btn btn-primary" id="quotingbid">供应商报价</button>
+                    </td>
                     <td>
                         {% if supplier.selected%}
                         <span class="label label-success">已选择</span>

@@ -216,9 +216,9 @@ def programAdd(request):
             file_upload_error = 2
         else:
             execute_id = request.POST['execute_id']
-            execute = MaterielExecute.objects.get(id = execute_id)
+            execute = MaterielExecuteDetail.objects.get(id = execute_id)
             file = Program()
-            file.execute = execute
+            file.execute_detail = execute
             file.file_obj = request.FILES['program_file']
             file.file_size = str(int(request.FILES['program_file'].size) / 1000) + "kb"
             file.name = request.FILES['program_file'].name

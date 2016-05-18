@@ -38,7 +38,9 @@ def taskConfirmViews(request):
     return render(request,"production/task_confirm.html",context)
 
 def materielUseViews(request):
-    context={}
+    context={
+        "applyCardForm":ApplyCardForm(),
+    }
     return render(request,"production/materiel_use.html",context)
 
 def synthesizeFileListViews(request):

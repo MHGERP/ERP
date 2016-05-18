@@ -502,16 +502,27 @@ NONDESTRUCTIVE_INSPECTION_TYPE = (
 
 CYLIDER_TRANSFER_CARD = "cylider_transfer_card"
 CAP_TRANSFER_CARD = "cap_transfer_card"
-
+WELD_TEST_PLATE_CARD = "weld_test_plate_card"
+PARENT_TEST_PLATE_CARD = "parent_test_plate_card"
+PRESSURE_PART_TRANSFER_CARD = "pressure_part_transfer_card"
+SPECIAL_PART_TRANSFER_CARD = "special_part_transfer_card"
 TRANSFER_CARD_TYPE_CHOICES = (
     (CYLIDER_TRANSFER_CARD, u"筒体流转卡"),  
     (CAP_TRANSFER_CARD, u"封头流转卡"),
+    (WELD_TEST_PLATE_CARD, u"焊接试板流转卡"),
+    (PARENT_TEST_PLATE_CARD, u"母材试板流转卡"),
+    (PRESSURE_PART_TRANSFER_CARD, u"受压元件流转卡"),
+    (SPECIAL_PART_TRANSFER_CARD, u"特别元件流转卡"),
 )
 
 
 CARD_TYPE_TO_HTML = {
     CYLIDER_TRANSFER_CARD: "techdata/widgets/cylider_transfer_card.html",
     CAP_TRANSFER_CARD: "techdata/widgets/cap_transfer_card.html",
+    WELD_TEST_PLATE_CARD: u"techdata/widgets/test_plate_transfer_card.html",
+    PARENT_TEST_PLATE_CARD: "techdata/widgets/test_plate_transfer_card.html",
+    PRESSURE_PART_TRANSFER_CARD: "techdata/widgets/normal_item_transfer_card.html",
+    SPECIAL_PART_TRANSFER_CARD: "techdata/widgets/normal_item_transfer_card.html",
 }
 
 MARK_WRITE = "mark_write"
@@ -585,7 +596,7 @@ Q_NEED_LEAD=14
 Q_COMPREHENSIVE=15
 Q_COMPANY=16
 
-S_MATERIAL=17
+S_MATERIEL=17
 S_PROCESS=18
 S_WELDING=19
 S_DESIGN=20
@@ -608,7 +619,7 @@ COMMENT_USER_CHOICE=(
 	(Q_NEED_LEAD,u"比质卡需求领导"),
 	(Q_COMPREHENSIVE,u"比质卡综合管理"),
 	(Q_COMPANY,u"比质卡公司意见"),
-    (S_MATERIAL,u"代用材料责任工程师"),
+    (S_MATERIEL,u"代用材料责任工程师"),
     (S_PROCESS,u"代用工艺责任工程师"),
     (S_WELDING,u"代用焊接责任工程师"),
     (S_DESIGN,u"代用设计责任工程师"),
@@ -633,7 +644,7 @@ COMMENT_USER_APPLY_DICT={
 }
 
 COMMENT_USER_SUBSTITUDE_DICT={
-    "S_MATERIAL":S_MATERIAL,
+    "S_MATERIEL":S_MATERIEL,
     "S_PROCESS":S_PROCESS,
     "S_WELDING":S_WELDING,
     "S_DESIGN":S_DESIGN,
