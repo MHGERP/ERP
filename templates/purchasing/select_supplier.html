@@ -20,11 +20,27 @@
 <div id="supplier_select_table" bid={{bidform.id}}>
     {% include "purchasing/supplier/supplier_select_table.html"%}
 </div>
+
 <div>
     <br>
         <button class="btn btn-primary btn-large"  id="select_confirm">供应商选择确认</button>
         <button class="btn btn-inverse btn-large"  id="select_reset">供应商选择重置</button>
         <button class="btn btn-success btn-large" id="select_submit" style="float:right">供应商选择提交</button>
 </div>
+
+<div class="modal hide fade"  id="price_info" modal-size-width="0.8">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>供应商报价</h3>
+    </div>
+    <div class="modal-body" id = "the_supplier_quoting">
+    </div>
+    <div class="modal-footer">
+        <a class="btn" data-dismiss="modal" >关闭</a>
+        <!-- <a class="btn btn-primary" data-dismiss="modal"
+            id="add_or_update_supplier">保存更新</a> -->
+    </div>
+</div>
+
 <script type='text/javascript' src="{{STATIC_URL}}js/purchasing/supplier_select.js"></script>
 {%endblock%}

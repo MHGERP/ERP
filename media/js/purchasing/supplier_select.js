@@ -63,7 +63,7 @@ $(document).on("click", "#quotingbid", function() {
     supid = $(this).closest("tr").attr("id");
     bidid = $("#supplier_select_table").attr("bid");
     alert("供应商报价id:"+supid+" "+"标单id:"+bidid);
-    Dajaxice.purchasing.selectSupplier(function() {
-
+    Dajaxice.purchasing.selectSupplier(function(data) {
+        $("#the_supplier_quoting").html(data);
     }, {"supid" : supid, "bidid" : bidid});
 });

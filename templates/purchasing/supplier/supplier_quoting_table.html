@@ -1,0 +1,31 @@
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>库存</th>
+            <th>规格及名称</th>
+            <th>材质</th>
+            <th>单价</th>
+            <th>单位</th>
+            <th>报价</th>
+            <!-- <th>删除</th> -->
+        </tr>
+    </thead>
+    <tbody>
+      {% for item in supset %}
+      <tr id = "{{item.id}}">
+          <td>{{item.inventory_type}}</td>
+          <td>{{item.nameorspacification}}</td>
+          <td>{{item.material_mark}}</td>
+          <td>{{item.per_fee}}</td>
+          <td>{{item.unit}}</td>
+          <td> </td>
+          <!-- <td>
+              <button class='btn btn-primary' id="edit_quoting" >编辑</button>
+          </td>
+          <td>
+              <button class="btn btn-danger" id="delete_quoting">删除</button>
+          </td> -->
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
