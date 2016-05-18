@@ -422,7 +422,7 @@ class TransferCardProcess(models.Model):
         verbose_name = u"流转卡工序"
         verbose_name_plural = u"流转卡工序"
     def __unicode__(self):
-        return unicode(self.card_belong) + "-" + self.index + "-" + self.name
+        return unicode(self.card_belong)
 
 class TransferCardMark(models.Model):
     card = models.OneToOneField(TransferCard, verbose_name = u"所属流转卡")

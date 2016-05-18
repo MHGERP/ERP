@@ -75,7 +75,7 @@ def detailMark(request, id_work_order, step, inventory_type):
     elif step == MARK_REVIEW:
         mark.reviewer = request.user
         mark.review_date = datetime.datetime.today()
-        #mark.save()
+        mark.save()
         batchDecentialization(order, inventory_type, DetailItem)
         context = {
             "ret": True,
@@ -1533,6 +1533,9 @@ def weldQuotaReviewerConfirm(request, id_work_order):
     order.weldquotapagemark.reviewer = request.user
     order.weldquotapagemark.reviewe_date = datetime.datetime.today()
     order.weldquotapagemark.save()
+
+    batchDecentialization(order, WELD_MATERIAL, WeldQuota)
+
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
 @dajaxice_register
