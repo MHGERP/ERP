@@ -17,6 +17,8 @@ class WorkOrder(models.Model):
 
     def save(self, *args, **kwargs):
         super(WorkOrder, self).save(*args, **kwargs)
+        if SubWorkOrder.objects.filter(order = self).count() > 0:
+            return
         if self.count == "1":
             SubWorkOrder(order = self, index = "1",name = self.order_index).save()
         else:

@@ -53,6 +53,8 @@ def detailItemGenerateFactory(inventory_type):
         return CooperantItem
     elif inventory_type == MAIN_MATERIEL:
         return PrincipalItem
+    elif inventory_type == AUXILIARY_MATERIEL:
+        return AuxiliaryItem
 
 @dajaxice_register
 def detailMark(request, id_work_order, step, inventory_type):
@@ -73,7 +75,7 @@ def detailMark(request, id_work_order, step, inventory_type):
     elif step == MARK_REVIEW:
         mark.reviewer = request.user
         mark.review_date = datetime.datetime.today()
-        mark.save()
+        #mark.save()
         batchDecentialization(order, inventory_type, DetailItem)
         context = {
             "ret": True,
@@ -85,20 +87,6 @@ def detailMark(request, id_work_order, step, inventory_type):
             "warning": u"后台保存错误"
         }
     return simplejson.dumps(context)
-def detailItemGenerateFactory(inventory_type):
-    """
-    JunHU
-    """
-    if inventory_type == OUT_PURCHASED:
-        return OutPurchasedItem
-    elif inventory_type == FIRST_FEEDING:
-        return FirstFeedingItem
-    elif inventory_type == COOPERANT:
-        return CooperantItem
-    elif inventory_type == MAIN_MATERIEL:
-        return PrincipalItem
-    elif inventory_type == AUXILIARY_MATERIEL:
-        return AuxiliaryItem
 
 @dajaxice_register
 def getInventoryTables(request, id_work_order, inventory_type):

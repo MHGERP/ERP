@@ -26,6 +26,28 @@ def batchDecentialization(order, inventory_type, DetailItem):
 
                 materielcopy.inventory_type = InventoryType.objects.get(name = inventory_type)
                 materielcopy.save()
+        elif inventory_type == AUXILIARY_MATERIEL:
+            for item in DetailItem.objects.filter(materiel_belong__order = order):
+                materiel = item.materiel_belong
+                fields = materiel._meta.get_all_field_names()
+                materielcopy = MaterielCopy()
+                for attr in fields:
+                    try:
+                        if attr != "id" or attr != "order":
+                            value = getattr(item.materiel_belong, attr)
+                            setattr(materielcopy, attr, value)
+                    except:
+                        pass
+                materielcopy.sub_workorder = sub_order
+                materielcopy.remark = item.remark
+                materielcopy.quota = item.quota
+                materielcopy.stardard = item.stardard
+                materielcopy.work_order = item.materiel_belong.order
+                materielcopy.origin_materiel = materiel
+                materielcopy.inventory_type = InventoryType.objects.get(name = inventory_type)
+                materielcopy.save()
+
+
         else:
             for item in DetailItem.objects.filter(materiel_belong__order = order):
                 #materiel = Materiel.objects.get(id = item.materiel_belong.id)
