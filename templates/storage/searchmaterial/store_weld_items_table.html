@@ -15,7 +15,7 @@
 <tbody>
     {% for item in store_items %}
     <tr >
-        <td><input type="radio" name="radion_item" value = "{{item.id}}" {% ifequal apply_card.storelist.id item.id %} checked = "checked" {% endifequal %} /></td>
+        <td><input type="radio" name="radio_item" value = "{{item.id}}" {% ifequal select_item.id item.id %} checked = "checked" {% endifequal %} /></td>
         <td>{{item.entry_item.material}}</td>
         <td>{{item.entry_item.material_mark}}</td>
         <td>{{item.entry_item.model_number}}</td>
@@ -29,10 +29,11 @@
         <td>{{item.get_item_status_display}}</td>
     </tr>
     {% endfor %}
-    <tfoot style="display:none">
+</tbody>
+<tfoot style="display:none">
     {% if select_item %}
-    <tr id="select_item">
-        <td><input type="radio"  value = "{{item.id}}" {% ifequal apply_card.storelist.id item.id %} checked = "checked" {% endifequal %} /></td>
+    <tr id="select_item" sid={{select_item.id}}>
+        <td><input type="radio"  value = "{{select_item.id}}" {% ifequal apply_card.storelist.id item.id %} checked = "checked" {% endifequal %} /></td>
         <td>{{select_item.entry_item.material}}</td>
         <td>{{select_item.entry_item.material_mark}}</td>
         <td>{{select_item.entry_item.model_number}}</td>
@@ -46,5 +47,4 @@
         <td>{{select_item.get_item_status_display}}</td>
     </tr>
     {% endif %}
-    </tfoot>
-</tbody>
+</tfoot>
