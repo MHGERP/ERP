@@ -1280,12 +1280,10 @@ def GetOrderInfoForm(request,uid):
     Lei
     """
     order = Materiel.objects.get(id=uid)
-    count = order.materielformconnection.count
-    purchasing=order.materielformconnection.purchasing
-    if order.inventory_type.name=="main_materiel" or order.inventory_type.name=="auxiliary":
+    if order.inventory_type.name==MAIN_MATERIEL or order.inventory_type.name==AUXILIARY_MATERIEL:
         orderForm = OrderFormOne(instance=order)
         html="purchasing/orderform/order_form.html"
-    elif order.inventory_type.name=="weld_material":
+    elif order.inventory_type.name==WELD_MATERIAL:
         orderForm = OrderFormThree(instance=order)
         html="purchasing/orderform/order_weld_form.html"
     else:
