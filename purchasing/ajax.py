@@ -371,18 +371,55 @@ def quotingSave(requset, supid, quoteid, f1, f2, f3, f4, f5):
         one.per_fee = f4
         one.unit = f5
         one.save()
-    # else:
-    #     one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
-    #     one.save()
+    else:
+        one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
+        one.save()
     return ""
 
 @dajaxice_register
 def selectSupplier(requset, supid, bidid):
+    idtable = {
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        COOPERANT: "forging",
+        WELD_MATERIAL: "weld_material",
+    }
     bid = BidForm.objects.get(id = bidid)
     materiel_set = set(item.materiel for item in MaterielFormConnection.objects.filter(order_form = bid.order_form))
     sup = Supplier.objects.get(id = supid)
     quoting_set = set(item for item in QuotingPrice.objects.filter(the_supplier = sup))
-
+    supset = set()
+    for one in materiel_set:
+        if one.inventory_type == MAIN_MATERIEL:
+            for two in quoting_set:
+                if two.inventory_type == MAIN_MATERIEL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        if one.inventory_type == AUXILIARY_MATERIEL:
+            for two in quoting_set:
+                if two.inventory_type == AUXILIARY_MATERIEL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        if one.inventory_type == FIRST_FEEDING:
+            for two in quoting_set:
+                if two.inventory_type == FIRST_FEEDING and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        if one.inventory_type == OUT_PURCHASED:
+            for two in quoting_set:
+                if two.inventory_type == OUT_PURCHASED and one.name == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        if one.inventory_type == COOPERANT:
+            for two in quoting_set:
+                if two.inventory_type == COOPERANT and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        if one.inventory_type == WELD_MATERIAL:
+            for two in quoting_set:
+                if two.inventory_type == WELD_MATERIAL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        context = {
+            "supset" : supset,
+        }
+        return render_to_string("purchasing/supplier/supplier_quoting_table.html", context)
 
 @dajaxice_register
 def pendingOrderSearch(request, order_index):
@@ -641,7 +678,7 @@ def UpdateSubapplyInfo(request,form,subapply_id):
     else:
         status=1
     return simplejson.dumps({'status':status})
-    
+
 @dajaxice_register
 def getSubApplyItemForm(request,sid):
     if sid==-1:
