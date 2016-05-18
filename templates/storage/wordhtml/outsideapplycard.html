@@ -34,20 +34,20 @@ lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></b></p>
 
 <p class=MsoNormal>
 <div class="row-fluid">
-<div class="span3">
+<div style="width:25%;float:left;">
 <span style='mso-bidi-font-size:10.5pt;font-family:宋体;
 mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>工作令号：{{apply_card.work_order}}</span>
 </div>
-<div class="span3">
+<div style="width:25%;float:left;">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
 mso-hansi-font-family:"Times New Roman"'>领用单位：{{apply_card.department}}</span>
 </div>
-<div class="span3">
+<div style="width:25%;float:left;">
 <span style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:
 "Times New Roman";mso-hansi-font-family:"Times New Roman"'>日期：{{apply_card.create_time|date:'Y.m.d.'}}</span>
 </div>
-<div class="span3">
+<div style="width:25%;float:left;">
 <span style='mso-bidi-font-size:
 10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
 "Times New Roman"'>编号：{{apply_card.applycard_code}}</span>
@@ -192,22 +192,22 @@ mso-hansi-font-family:"Times New Roman"'>领用单位：{{apply_card.department}
 
 <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'>
 <div class="row-fluid">
-<div class="span3">
+<div style="width:25%;float:left;">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
 mso-hansi-font-family:"Times New Roman"'>领用人：{% ifequal apply_card.applicant None %}<span class="btn btn-mark" name="outside_applycard" role="applicant">签字</span>{% else %}{{apply_card.applicant.userinfo}}{% endifequal %}</span>
 </div>
-<div class="span3">
+<div style="width:25%;float:left;">
 <span style='mso-bidi-font-size:
 10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
 "Times New Roman"'>审核人：{% ifequal apply_card.auditor None %}<span class="btn btn-mark" name="outside_applycard" role="auditor"  aid="{{apply_card.id}}">签字</span>{% else %}{{apply_card.auditor.userinfo}}{% endifequal %}</span>
 </div>
-<div class="span3">
+<div style="width:25%;float:left;">
 <span style='mso-bidi-font-size:
 10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
 "Times New Roman"'>检查员：{% ifequal apply_card.inspector None %}<span class="btn btn-mark" name="outside_applycard" role="inspector"  aid="{{apply_card.id}}">签字</span>{% else %}{{apply_card.inspector.userinfo}}{% endifequal %}</span>
 </div>
-<div class="span3">
+<div style="width:25%;float:left;">
 <span style='mso-bidi-font-size:
 10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
 "Times New Roman"'>库管员：{% ifequal apply_card.keeper None %}<span class="btn btn-mark" name="outside_applycard" role="keeper"  aid="{{apply_card.id}}">签字</span>{% else %}{{apply_card.keeper.userinfo}}{% endifequal %}</span>

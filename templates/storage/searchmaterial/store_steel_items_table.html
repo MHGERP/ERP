@@ -25,7 +25,7 @@
 <tfoot style="display:none">
     {% if select_item %}
     <tr id="select_item" sid={{select_item.id}}>
-        <td><input type="radio"  value = "{{select_item.id}}" {% ifequal apply_card.storelist.id item.id %} checked = "checked" {% endifequal %} /></td>
+        <td><input type="radio"  value = "{{select_item.id}}" checked = "checked"/></td>
         <td>{{select_item.entry_item.material_mark}}</td>
         <td>{{select_item.entry_item.show_workorder}}</td>
         <td>{{select_item.entry_item.batch_number}}</td>

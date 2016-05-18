@@ -758,9 +758,9 @@ def outsideApplyCardItemRemarkChange(request,itemid,remark):
 
 @dajaxice_register
 def outsideApplyCardConfirm(request,aid):
-    applycard = OutsideApplyCard.objects.get(id = aid)
-    items = OutsideApplyCardItems.objects.filter(apply_card = applycard)
-    if applycard.status == APPLYCARD_KEEPER:
+    apply_card = OutsideApplyCard.objects.get(id = aid)
+    items = OutsideApplyCardItems.objects.filter(apply_card = apply_card)
+    if apply_card.status == APPLYCARD_KEEPER:
         if items.filter(storelist__isnull = True).count() > 0:
             message = u"还有领用项未分配库存材料"
         else:
@@ -768,15 +768,15 @@ def outsideApplyCardConfirm(request,aid):
                 storelist = item.storelist
                 storelist.count -= item.count
                 storelist.save()
-            applycard.status = APPLYCARD_END
-            applycard.keeper = request.user
-            applycard.save()
+            apply_card.status = APPLYCARD_END
+            apply_card.keeper = request.user
+            apply_card.save()
             message = u"领用卡确认成功"
     else:
         message = u"领用卡已经确认过"
     
     context = {
-        "applycard":applycard,
+        "apply_card":apply_card,
         "items":items,
     }
     html = render_to_string("storage/wordhtml/outsideapplycard.html",context)
@@ -1384,5 +1384,7 @@ def getWordHtml(apply_type,apply_card):
         context = {"apply_card":apply_card}
     elif apply_type == "steel":
         context = {"apply_card":apply_card,"items":apply_card.steelmaterialapplycarditems_set.all()}
+    elif apply_type == "outside":
+        context = {"apply_card":apply_card,"items":apply_card.outsideapplycarditems_set.all()}
     word_html = render_to_string(wordhtml_path,context)  
     return word_html

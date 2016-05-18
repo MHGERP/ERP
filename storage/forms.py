@@ -646,7 +646,7 @@ class OutsideApplyCardSearchForm(forms.Form):
         self.fields["work_order"].widget.attrs["style"] = "width:150px;"
 
 class OutsideMaterialSearchForm(forms.Form):
-    entry_item__work_order__order_index = forms.CharField(label=u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    entry_item__work_order = forms.ChoiceField(label=u"工作令",required = False, widget = forms.Select(attrs={"class":'form-control'}))
     outsidebuy_type = forms.ChoiceField(label=u"材料类型",required = False, widget = forms.Select(attrs={"class":'form-control'}))
     entry_item__material_mark = forms.CharField(label=u"材质",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     entry_item__schematic_index = forms.CharField(label=u"零件图/标准",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
@@ -657,6 +657,10 @@ class OutsideMaterialSearchForm(forms.Form):
         outsidetypes = [("-1","------")]
         outsidetypes.extend(OUTSIDEBUY_TYPE)
         self.fields["outsidebuy_type"].choices = tuple(outsidetypes)
+        work_order_set = SubWorkOrder.objects.all()
+        self.fields["entry_item__work_order"].choices = getChoiceList(work_order_set,"name")
+        set_form_input_width(self.fields,"100px")
+        self.fields["entry_item__work_order"].widget.attrs["style"] ="width:130px"
 
 class WeldMaterialSearchForm(forms.Form):
     entry_item__material__name = forms.CharField(label=u"名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
