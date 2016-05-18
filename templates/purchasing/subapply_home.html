@@ -35,11 +35,8 @@
                     <th>图号</th>
                     <th>申请人</th>
                     <th>备注</th>
-                    <th>对应标单</th>
                     <th>查看</th>
-                    {% if is_show %}
-                    <th>评审</th>
-                    {% endif  %}
+                    <th>删除</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,15 +44,12 @@
                 <tr>
                     <td>{{sub_obj.receipts_code}}</td>
                     <td>{{sub_obj.work_order}}</td>
-                    <td>{{sub_obj.work_order.product_name}}</td>
+                    <td>{{sub_obj.production_name}}</td>
                     <td>{{sub_obj.pic_code}}</td>
-                    <td>{{sub_obj.proposer}}</td>
+                    <td>{{sub_obj.proposer.userinfo}}</td>
                     <td style="width:200px;">{{sub_obj.reasons}}</td>
-                    <td>{{sub_obj.bidform}}</td>
                     <td><a type="button" href="/purchasing/subApply/{{sub_obj.id}}" class="btn">查看</a></td>
-                    {% if is_show %}
-                    <td><a type="button" href="/purchasing/subApplyReview/{{sub_obj.id}}" class="btn">评审</a></td>
-                    {% endif %}
+                    <td><a type="button" onclick="delete_subapply({{sub_obj.id}});" class="btn btn-danger">删除</a></td>
                 </tr>
                 {%endfor%}
             </tbody>

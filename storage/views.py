@@ -1,5 +1,5 @@
 # coding:UTF-8
-
+import pprint, pickle
 import datetime
 from django.shortcuts import render
 
@@ -182,6 +182,20 @@ def Weld_Apply_Card_List(request):
     }
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
 
+def getApplyContext(apply_type,aid):
+    store_model,search_material_form_model,apply_card_model,apply_item_model,search_table_path = getApplyDataDict(apply_type)
+    apply_card = apply_card_model.objects.get(id=aid)
+    apply_item_form = apply_item_model()
+    search_material_form = search_material_form_model()
+    context = {
+        "apply_card":apply_card,
+        "apply_item_form":apply_item_form,
+        "search_material_form":search_material_form,
+        "search_table_path":search_table_path,
+        "apply_type":apply_type,
+    }
+    return context
+
 def Weld_Apply_Card_Detail(request):
     """
     Time1ess
@@ -189,21 +203,9 @@ def Weld_Apply_Card_Detail(request):
     params: index(GET)
     return: NULL
     """
-    card_index=int(request.GET['index'])
-    apply_card=WeldingMaterialApplyCard.objects.get(id=card_index)
-    apply_form = WeldApplyKeeperForm()
-    store_items = WeldStoreList.objects.filter(inventory_count__gt = 0 )
-    store_items = modify_weld_item_status(store_items)
-    search_material_form = WeldMaterialSearchForm()
-    context = {
-        "apply_card":apply_card,
-        "apply_form":apply_form,
-        "APPLYCARD_KEEPER":APPLYCARD_KEEPER,
-        "store_items":store_items,
-        "ITEM_STATUS_NORMAL":ITEM_STATUS_NORMAL,
-        "search_material_form":search_material_form,
-        "search_table_path":"storage/searchmaterial/store_weld_items_table.html",
-    }
+    aid = int(request.GET['index'])
+    apply_type = "weld"
+    context = getApplyContext(apply_type,aid)
     return render(request,'storage/weldapply/weldapplycarddetail.html',context)
 
 def Handle_Apply_Card_Form(request):
@@ -297,7 +299,12 @@ def weldhumNewRecord(request):
             print form.errors
     else:
         form = HumRecordForm()
+    
+    pk_file = open("weldDemandData.txt", "rb");
+    weldDemandData = pickle.load(pk_file);
+    
     context = {
+            "weldDemandData": weldDemandData,
             "form":form,
             "changeEnable":False,
             }
@@ -310,12 +317,55 @@ def weldhumDetail(request,eid):
     hum_detail = WeldingMaterialHumitureRecord.objects.get(id = eid)
     form = HumRecordForm(instance = hum_detail)
     changeEnable = hum_detail.date == get_today()
+    
+    pk_file = open("weldDemandData.txt", "rb");
+    weldDemandData = pickle.load(pk_file);
+    
     context = {
+            "weldDemandData":weldDemandData,
             "form":form,
             "humRecordDate":hum_detail,
             "changeEnable":changeEnable,
             }
     return render(request,"storage/weldhumi/weldhumDetail.html",context)
+
+
+def weldDemandData(request):
+    """
+    kad
+    """
+    """
+    weldDemandData = {
+        "demandTemperature":60,
+        "demandHumidity":70,
+    }
+    output = open("weldDemandData.txt", "wb");
+    pickle.dump(weldDemandData, output)
+    output.close()
+    """
+    pk_file = open("weldDemandData.txt", "rb");
+    weldDemandData = pickle.load(pk_file);
+    pprint.pprint(weldDemandData);
+    context = {
+        "weldDemandData":weldDemandData,
+    }
+    return render(request, "storage/basedata/weldDemandData.html", context)
+
+
+def storeRoomManageViews(request):
+    """
+    kad
+    """
+    new_room = StoreRoomForm()
+    room_set = StoreRoom.objects.all().order_by('-id')
+    search_form = StoreRoomSearchForm()
+    context = {
+        "room_set":room_set,
+        "search_form":search_form,
+        "new_room":new_room,
+    }
+    return render(request,"storage/basedata/storeroommanage.html", context)
+
 
 def weldbakeHomeViews(request):
     """
@@ -766,19 +816,6 @@ def outsideApplyCardAccountHomeViews(request):
     return render(request,"storage/outside/account/applycardhome.html",context)
 
 
-def storeRoomManageViews(request):
-    """
-    kad
-    """
-    new_room = StoreRoomForm()
-    room_set = StoreRoom.objects.all().order_by('-id')
-    search_form = StoreRoomSearchForm()
-    context = {
-        "room_set":room_set,
-        "search_form":search_form,
-        "new_room":new_room,
-    }
-    return render(request,"storage/basedata/storeroommanage.html", context)
 
 def outsideRefundHomeViews(request):
     refund_cards = OutsideRefundCard.objects.filter(status = REFUNDSTATUS_CHOICES_KEEPER)

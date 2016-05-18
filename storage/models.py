@@ -132,7 +132,7 @@ class WeldStoreListManager(models.Manager):
 
 class WeldStoreList(models.Model):
     deadline = models.DateField(verbose_name=u"最后期限",null = True)
-    inventory_count = models.FloatField(verbose_name=u"数量",default=0)
+    count = models.FloatField(verbose_name=u"数量",default=0)
     entry_item = models.ForeignKey(WeldMaterialEntryItems,verbose_name = u"焊材入库单材料")
     item_status = models.IntegerField(choices=WELD_ITEM_STATUS_CHOICES,default=0,verbose_name=u"材料状态",blank=False)
     entry_time = models.DateField(verbose_name=u"入库时间",null = True)
@@ -145,9 +145,9 @@ class WeldStoreList(models.Model):
         return "%s(%s)" % (self.entry_item.specification,self.entry_time)
 
     def save(self,*args,**kwargs):
-        if self.inventory_count > 0 and self.item_status == ITEM_STATUS_SPENT:
+        if self.count > 0 and self.item_status == ITEM_STATUS_SPENT:
             self.item_status = ITEM_STATUS_NORMAL #退库更新状态
-        if self.item_status == ITEM_STATUS_NORMAL and self. inventory_count == 0:
+        if self.item_status == ITEM_STATUS_NORMAL and self.count == 0:
             self.item_status = ITEM_STATUS_SPENT #领用更新状态
         super(WeldStoreList,self).save(*args,**kwargs)
 
@@ -175,10 +175,10 @@ class WeldingMaterialApplyCard(models.Model):
     model_number=models.CharField(verbose_name=u'型号',max_length=50,blank=True)
     specification=models.CharField(verbose_name=u'规格',max_length=20,blank=False)
     apply_weight=models.FloatField(verbose_name=u'领用重量',blank=False,null=True)
-    apply_quantity=models.FloatField(verbose_name=u'领用数量',blank=True,null=True)
+    apply_count=models.FloatField(verbose_name=u'领用数量',blank=True,null=True)
     material_code=models.CharField(verbose_name=u'材质标记',max_length=20,blank=True,null=True)
     actual_weight=models.FloatField(verbose_name=u'实发重量',blank=False,null=True)
-    actual_quantity=models.FloatField(verbose_name=u'实发数量',blank=True,null=True)
+    actual_count=models.FloatField(verbose_name=u'实发数量',blank=True,null=True)
     applicant=models.ForeignKey(User,verbose_name=u'领用人',blank=True,null=True,related_name="weld_applicant")
     auditor=models.ForeignKey(User,verbose_name=u'审核人',blank=True,null=True,related_name="weld_auditor")
     inspector=models.ForeignKey(User,verbose_name=u'检查员',blank=True,null=True,related_name="weld_inspector")
@@ -209,8 +209,6 @@ class StoreRoom(models.Model):
 
 class WeldingMaterialHumitureRecord(models.Model):
     storeMan = models.ForeignKey(User,verbose_name=u'库管员',blank=False,related_name="humitureStoreMan")
-    demandTemperature = models.CharField(verbose_name=u'要求温度', max_length=20,blank=False)
-    demandHumidity = models.CharField(verbose_name=u'要求湿度', max_length=20,blank=False)
     actualTemperature1 = models.FloatField(verbose_name=u'实际温度(10:00)',blank=False)
     actualHumidity1 = models.FloatField(verbose_name=u'实际湿度(10:00)',blank=False)
     actualTemperature2 = models.FloatField(verbose_name=u'实际温度(16:00)',blank=False)
@@ -463,7 +461,7 @@ class AuxiliaryToolEntryItems(models.Model):
 
 class AuxiliaryToolStoreList(models.Model):
     entry_item = models.ForeignKey(AuxiliaryToolEntryItems,verbose_name=u"辅助工具入库材料")
-    inventory_count = models.FloatField(verbose_name=u"数量",blank=True,null=True)
+    count = models.FloatField(verbose_name=u"数量",blank=True,null=True)
     item_status = models.IntegerField(choices=WELD_ITEM_STATUS_CHOICES,default=0,verbose_name=u"材料状态",blank=False)
     class Meta:
         verbose_name=u'辅助库存材料'
@@ -473,9 +471,9 @@ class AuxiliaryToolStoreList(models.Model):
         return "%s" % self.entry_item.name
 
     def save(self,*args,**kwargs):
-        if self.inventory_count > 0 and self.item_status == ITEM_STATUS_SPENT:
+        if self.count > 0 and self.item_status == ITEM_STATUS_SPENT:
             self.item_status = ITEM_STATUS_NORMAL #退库更新状态
-        if self.item_status == ITEM_STATUS_NORMAL and self. inventory_count == 0:
+        if self.item_status == ITEM_STATUS_NORMAL and self.count == 0:
             self.item_status = ITEM_STATUS_SPENT #领用更新状态
         super(AuxiliaryToolStoreList,self).save(*args,**kwargs)
 
@@ -484,9 +482,9 @@ class AuxiliaryToolApplyCard(models.Model):
     department = models.CharField(verbose_name=u"领用单位",max_length=50,blank=True,null=True)
     applycard_code = models.CharField(verbose_name=u"料单编号",max_length=20,blank=True,null=True)
     apply_storelist=models.ForeignKey(AuxiliaryToolStoreList,verbose_name=u'申请材料',blank=False,null=True,related_name="auap_apply_storelist")
-    apply_quantity=models.IntegerField(verbose_name=u'申请数量',blank=False)
-    actual_storelist = models.ForeignKey(AuxiliaryToolStoreList,verbose_name=u'实发材料',null=True,blank=True,related_name="auap_actual_storelist")
-    actual_quantity=models.IntegerField(verbose_name=u'实发数量',null=True,blank=True)
+    apply_count=models.IntegerField(verbose_name=u'申请数量',blank=False)
+    storelist = models.ForeignKey(AuxiliaryToolStoreList,verbose_name=u'实发材料',null=True,blank=True,related_name="auap_actual_storelist")
+    actual_count=models.IntegerField(verbose_name=u'实发数量',null=True,blank=True)
     status=models.IntegerField(verbose_name=u'领用单状态',choices=AUXILIARY_TOOL_APPLY_CARD_STATUS,default=AUXILIARY_TOOL_APPLY_CARD_APPLICANT)
     applicant=models.ForeignKey(User,verbose_name=u'领料',blank=True,null=True,related_name="at_applicants")
     auditor = models.ForeignKey(User,verbose_name=u"主管",null=True,blank=True,related_name="at_auditor")

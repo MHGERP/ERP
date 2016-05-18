@@ -28,6 +28,7 @@ RegisterClass = (
     SupplierCheck,
     qualityPriceCard,
     QuotingPrice,
+    SubApplyComment
 )
 
 for item in RegisterClass:
