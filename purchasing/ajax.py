@@ -371,9 +371,9 @@ def quotingSave(requset, supid, quoteid, f1, f2, f3, f4, f5):
         one.per_fee = f4
         one.unit = f5
         one.save()
-    # else:
-    #     one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
-    #     one.save()
+    else:
+        one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
+        one.save()
     return ""
 
 @dajaxice_register
