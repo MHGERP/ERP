@@ -305,6 +305,8 @@ def getAccountItemDataDict(role):
 
 def getApplyDataDict(apply_type):
     search_table_path = "storage/searchmaterial/store_"+apply_type+"_items_table.html"
-    weld = (WeldStoreList,WeldMaterialSearchForm,WeldingMaterialApplyCard,WeldApplyKeeperForm)
-    model_dict = {"weld":weld,}
-    return model_dict[apply_type][0],model_dict[apply_type][1],model_dict[apply_type][2],model_dict[apply_type][3],search_table_path
+    weld = (WeldStoreList,WeldMaterialSearchForm,WeldingMaterialApplyCard,WeldingMaterialApplyCard,WeldApplyKeeperForm)
+    steel = (SteelMaterialStoreList,SteelMaterialSearchForm,SteelMaterialApplyCard,SteelMaterialApplyCardItems,None)
+    outside = (OutsideStorageList,OutsideMaterialSearchForm,OutsideApplyCard,OutsideApplyCardItems,None)
+    model_dict = {"weld":weld,"steel":steel,"outside":outside}
+    return model_dict[apply_type][0],model_dict[apply_type][1],model_dict[apply_type][2],model_dict[apply_type][3],model_dict[apply_type][4],search_table_path

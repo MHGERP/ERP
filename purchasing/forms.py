@@ -207,12 +207,12 @@ class OrderFormOne(ModelForm):
 class OrderFormTwo(ModelForm):
     class Meta:
         model=MaterielCopy
-        fields={'index','name','schematic_index','material','count','remark'}
+        fields={'index','name','schematic_index','material','count','remark','delivery_time'}
 
 class OrderFormThree(ModelForm):
     class Meta:
         model=MaterielCopy
-        fields={'name','specification','material','quota','remark','standard'}
+        fields={'name','specification','material','quota','remark','standard','delivery_time'}
 
 class EntryTypeForm(forms.Form):
     entry_type=forms.ChoiceField(label=u'入库单类型',choices=(),required=True,widget=forms.Select(attrs={'class':'form-control span2','id':'entry_type'}))

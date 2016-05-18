@@ -42,25 +42,9 @@ $(document).ready(function(){
     $(document).on("click","span[name='steel_entry_confirm']",function(){
         Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":$("div#steelentry_items").attr('eid'),"role":$(this).attr("role")})
     })
-    $(document).on("dblclick","tr[name='apply_item_tr']",function(){
-        mid = $(this).attr("id");
-        $("#myModal").modal('show');
-    })
-    $(document).on("click","#search_material_btn",function(){
-        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"steel",});
-    })
-    $(document).on("click","#steel_select_save",function(){
-        var select_item = $("input[type='radio']:checked").val();
-        if(select_item != null){
-            Dajaxice.storage.steelMaterialApply(steelapply_callback,{"select_item":select_item,"mid":mid});
-        }
-        else{
-            alert("请选择领用材料");
-        }
-    })
     $(document).on("click","span[name='steel_applycard']",function(){
         var role = $(this).attr('role');
-        var aid = $("div#steelapplycard_table").attr('aid');
+        var aid = $(this).attr('aid');
         if(confirm("领用单确认后不能再修改")){
             Dajaxice.storage.steelApplyCardConfirm(steel_applycard_confirm_callback,{"aid":aid,"role":role});
         }

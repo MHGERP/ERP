@@ -68,39 +68,5 @@
 <div id="steelapplycard">
 {% include "storage/wordhtml/steelapplycard.html"%}
 </div>
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" modal-size-width=0.6>
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">添加</h3>
-    </div>
-    <div class="modal-body">
-        {% include "storage/widgets/search_material.html"%}
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-        <button class="btn btn-primary" id="steel_select_save">保存</button>
-    </div>
-</div>
-<div id="applycardRemarkModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">添加</h3>
-    </div>
-    <div class="modal-body">
-        <form id="applycard_remark_form" action="" class="form-horizontal">
-            <div class="control-group">
-                {% for field in remark_form%}
-                    <label class="control-label">{{field.label}}</label>
-                    <div class="controls">
-                        {{field}}
-                    </div>
-                {% endfor %}
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-        <button class="btn btn-primary" data-dismiss="modal" id="steel_applycard_remark">保存</button>
-    </div>
-</div>
+{% include "storage/searchmaterial/searchmaterialmodal.html" %}
 {% endblock %}

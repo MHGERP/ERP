@@ -75,17 +75,8 @@ def steelApplyViews(request):
     return render(request,"storage/steelmaterial/steelapplyhome.html",context)
 
 def steelApplyDetailViews(request,aid):
-    applycard = SteelMaterialApplyCard.objects.get(id=aid)
-    items = applycard.steelmaterialapplycarditems_set.all()
-    search_material_form = SteelMaterialSearchForm()
-    store_items = SteelMaterialStoreList.objects.all()
-    context={
-        'applycard':applycard,
-        'items':items,
-        'search_material_form':search_material_form,
-        'store_items':store_items,
-        "search_table_path":"storage/searchmaterial/store_steel_items_table.html",
-    }
+    apply_type = "steel"
+    context = getApplyContext(apply_type,aid)
     return render(request,"storage/steelmaterial/steelapplydetail.html",context)
 
  
@@ -183,17 +174,19 @@ def Weld_Apply_Card_List(request):
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
 
 def getApplyContext(apply_type,aid):
-    store_model,search_material_form_model,apply_card_model,apply_item_model,search_table_path = getApplyDataDict(apply_type)
+    store_model,search_material_form_model,apply_card_model,apply_item_model,apply_item_form_model,search_table_path = getApplyDataDict(apply_type)
     apply_card = apply_card_model.objects.get(id=aid)
-    apply_item_form = apply_item_model()
     search_material_form = search_material_form_model()
     context = {
         "apply_card":apply_card,
-        "apply_item_form":apply_item_form,
         "search_material_form":search_material_form,
         "search_table_path":search_table_path,
         "apply_type":apply_type,
     }
+    if apply_type in ["steel","outside"]:
+        context["items"] = apply_item_model.objects.filter(apply_card = apply_card)
+    if apply_item_form_model != None:
+        context["apply_item_form"] = apply_item_form_model()
     return context
 
 def Weld_Apply_Card_Detail(request):
@@ -771,15 +764,8 @@ def outsideApplyCardHomeViews(request):
     return render(request,"storage/outside/applycardhome.html",context)
 
 def outsideApplyCardConfirmViews(request,cid):
-    applycard = OutsideApplyCard.objects.get(id = cid)
-    items =  applycard.outsideapplycarditems_set.all()
-    search_material_form = OutsideMaterialSearchForm()
-    context = {
-        "applycard":applycard,
-        "items":items,
-        "search_material_form":search_material_form,
-        "search_table_path":"storage/searchmaterial/store_outside_items_table.html",
-    }
+    apply_type = "outside"
+    context = getApplyContext(apply_type,cid)
     return render(request,"storage/outside/applycardconfirm.html",context)
 
 def getOutsideApplyCardConfirmContext(cid,_Inform,url,default_status):

@@ -1,7 +1,7 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th><input type="checkbox" name="all" id="selectall"></th>
+            <!-- <th><input type="checkbox" name="all" id="selectall"></th> -->
             <th>序号</th>
             <th>名称</th>
             <th>规格</th>
@@ -11,7 +11,7 @@
     </thead>
     {% for item in data%}
     <tr iid="{{item.id}}">
-        <td>{%if item.can_choose %}<input type="checkbox" class="checkbox" args="{{item.id}}">{% endif %}</td>
+        <!-- <td>{%if item.can_choose %}<input type="checkbox" class="checkbox" args="{{item.id}}">{% endif %}</td> -->
         <td>{{forloop.counter}}</td>
         <td>{{item.entry_item.material.name}}</td>
         <td>{{item.entry_item.specification}}</td>

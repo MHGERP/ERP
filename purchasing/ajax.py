@@ -371,9 +371,9 @@ def quotingSave(requset, supid, quoteid, f1, f2, f3, f4, f5):
         one.per_fee = f4
         one.unit = f5
         one.save()
-    # else:
-    #     one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
-    #     one.save()
+    else:
+        one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
+        one.save()
     return ""
 
 @dajaxice_register
@@ -1280,12 +1280,10 @@ def GetOrderInfoForm(request,uid):
     Lei
     """
     order = Materiel.objects.get(id=uid)
-    count = order.materielformconnection.count
-    purchasing=order.materielformconnection.purchasing
-    if order.inventory_type.name=="main_materiel" or order.inventory_type.name=="auxiliary":
+    if order.inventory_type.name==MAIN_MATERIEL or order.inventory_type.name==AUXILIARY_MATERIEL:
         orderForm = OrderFormOne(instance=order)
         html="purchasing/orderform/order_form.html"
-    elif order.inventory_type.name=="weld_material":
+    elif order.inventory_type.name==WELD_MATERIAL:
         orderForm = OrderFormThree(instance=order)
         html="purchasing/orderform/order_weld_form.html"
     else:
