@@ -131,10 +131,10 @@ class SupportMaterielExecuteDetailForm(ModelForm):
 class SubApplyForm(ModelForm):
     class Meta:
         model = MaterialSubApply
-        exclude = ('id','is_submit','proposer','comments','is_approval')
-        widgets = {
-            "reasons":forms.Textarea(attrs={'cols':'80','rows':'5'}),
-        }
+        exclude = ('id','reasons','proposer','status')
+       # widgets = {
+       #     "reasons":forms.Textarea(attrs={'cols':'80','rows':'5'}),
+       # }
 
 class SubApplyInspectForm(ModelForm):
     class Meta:

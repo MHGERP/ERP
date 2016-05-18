@@ -1093,72 +1093,71 @@ def transferCardMark(request, iid, step):
     """
     JunHU
     """
+    item = Materiel.objects.get(id = iid)
+    card = TransferCard.objects.get(materiel_belong = item)
+    return cardMark(request, card.transfercardmark, step)
+
+def cardMark(request, cardmark, step):
     def date2str(date):
         return str(date.year) + "." + "%02d" % date.month + "." + str(date.day)
-    
-    item = Materiel.objects.get(id = iid)
+
     context = {}
     if step == MARK_WRITE:
-        card = TransferCard.objects.get(materiel_belong = item)
-        card.transfercardmark.writer = request.user
-        card.transfercardmark.write_date = datetime.datetime.today()
-        card.transfercardmark.save()
+        cardmark.writer = request.user
+        cardmark.write_date = datetime.datetime.today()
+        cardmark.save()
         context = {
             "ret": True,
-            "file_index": unicode(card),
-            "mark_user": unicode(card.transfercardmark.writer.userinfo),
-            "mark_date": date2str(card.transfercardmark.write_date)
+            "mark_user": unicode(cardmark.writer.userinfo),
+            "mark_date": date2str(cardmark.write_date)
         }
     elif step == MARK_PROOFREAD:
-        card = TransferCard.objects.get(materiel_belong = item)
-        if card.transfercardmark.writer == None:
+        if cardmark.writer == None:
             context = {
                 "ret": False,
-                "warning": u"该流转卡还未完成编制",
+                "warning": u"还未完成编制",
             }
             return simplejson.dumps(context)
 
-        card.transfercardmark.proofreader = request.user
-        card.transfercardmark.proofread_date = datetime.datetime.today()
-        card.transfercardmark.save()
+        cardmark.proofreader = request.user
+        cardmark.proofread_date = datetime.datetime.today()
+        cardmark.save()
         context = {
             "ret": True,
-            "mark_user": unicode(card.transfercardmark.proofreader.userinfo),
-            "mark_date": date2str(card.transfercardmark.proofread_date)
+            "mark_user": unicode(cardmark.proofreader.userinfo),
+            "mark_date": date2str(cardmark.proofread_date)
         }
     elif step == MARK_REVIEW:
-        card = TransferCard.objects.get(materiel_belong = item)
-        if card.transfercardmark.proofreader == None:
+        if cardmark.proofreader == None:
             context = {
                 "ret": False,
-                "warning": u"该流转卡还未完成校对",
+                "warning": u"还未完成校对",
             }
             return simplejson.dumps(context)
 
-        card.transfercardmark.reviewer = request.user
-        card.transfercardmark.review_date = datetime.datetime.today()
-        card.transfercardmark.save()
+        cardmark.reviewer = request.user
+        cardmark.review_date = datetime.datetime.today()
+        cardmark.save()
         context = {
             "ret": True,
-            "mark_user": unicode(card.transfercardmark.reviewer.userinfo),
-            "mark_date": date2str(card.transfercardmark.review_date)
+            "mark_user": unicode(cardmark.reviewer.userinfo),
+            "mark_date": date2str(cardmark.review_date)
         }
     elif step == MARK_APPROVE:
-        card = TransferCard.objects.get(materiel_belong = item)
-        if card.transfercardmark.reviewer == None:
+        if cardmark.reviewer == None:
             context = {
                 "ret": False,
-                "warning": u"该流转卡还未完成审核",
+                "warning": u"还未完成审核",
             }
             return simplejson.dumps(context)
 
-        card.transfercardmark.approver = request.user
-        card.transfercardmark.approve_date = datetime.datetime.today()
-        card.transfercardmark.save()
+        cardmark.approver = request.user
+        cardmark.approve_date = datetime.datetime.today()
+        cardmark.save()
         context = {
             "ret": True,
-            "mark_user": unicode(card.transfercardmark.approver.userinfo),
-            "mark_date": date2str(card.transfercardmark.approve_date)
+            "mark_user": unicode(cardmark.approver.userinfo),
+            "mark_date": date2str(cardmark.approve_date)
         }
     else:
         context = {
@@ -1732,10 +1731,23 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
     return html
 
 @dajaxice_register
-def getCard(request):
+def getCard(request,wwi_id):
     """
     MH Chen
     """
-    context = {"STATIC_URL": settings.STATIC_URL,}
+    weld_work_instruction = WeldingWorkInstruction.objects.get(id = wwi_id)
+    weldseam = WeldSeam.objects.filter(weld_joint_detail = weld_work_instruction.detail)[0]
+    name = weld_work_instruction.detail.weld_position.name
+    context = {"STATIC_URL": settings.STATIC_URL,
+               "weld_work_instruction":weld_work_instruction,
+               "FLUSH_WELD":FLUSH_WELD,
+               "HORIZONTAL_WELD":HORIZONTAL_WELD,
+               "OVERHEAD_WELD":OVERHEAD_WELD,
+               "VERTICAL_WELD":VERTICAL_WELD,
+               "WIDE_WELD":WIDE_WELD,
+               "weldseam":weldseam,
+               "name":name,
+               "GTAW":GTAW,
+               "GMAW":GMAW,}
     html = render_to_string("techdata/widgets/weld_instruction_book.html",context)
     return html

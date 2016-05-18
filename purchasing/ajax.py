@@ -84,7 +84,7 @@ def genEntry(request,selected,bid,entry_type):
         user = request.user
         accept_supplier=bidform.bidacceptance.accept_supplier.supplier_name
         create_time=datetime.now()
-        entry_code=create_time.strftime("%Y%m%d%H%M%S")
+        entry_code=getEntryCode(create_time.strftime("%Y%m%d"))
         entry_status=ENTRYSTATUS_CHOICES_PUCAHSER
         print entry_type
         if entry_type=="entrytype_board":
@@ -96,7 +96,6 @@ def genEntry(request,selected,bid,entry_type):
             steel_entry.save()
             SteelEntryItemAdd(steel_entry,selected)
         elif entry_type=="standard_outsidebuy":
-            print "######"
             outside_entry=OutsideStandardEntry(entry_status=entry_status,material_source=accept_supplier,bidform_code=bidform.bid_id,entry_code=entry_code,create_time=create_time,outsidebuy_type=STANDARD_OUTSIDEBUY)
             outside_entry.save()
             OutsideEntryItemAdd(outside_entry,selected)
@@ -372,18 +371,55 @@ def quotingSave(requset, supid, quoteid, f1, f2, f3, f4, f5):
         one.per_fee = f4
         one.unit = f5
         one.save()
-    # else:
-    #     one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
-    #     one.save()
+    else:
+        one = QuotingPrice(inventory_type = InventoryType.objects.get(id = f1), nameorspacification = f2, material_mark = f3, per_fee = f4, unit = f5, the_supplier = Supplier.objects.get(id = supid))
+        one.save()
     return ""
 
 @dajaxice_register
 def selectSupplier(requset, supid, bidid):
+    idtable = {
+        MAIN_MATERIEL: "main_materiel",
+        AUXILIARY_MATERIEL: "auxiliary_materiel",
+        FIRST_FEEDING: "first_feeding",
+        OUT_PURCHASED: "purchased",
+        COOPERANT: "forging",
+        WELD_MATERIAL: "weld_material",
+    }
     bid = BidForm.objects.get(id = bidid)
     materiel_set = set(item.materiel for item in MaterielFormConnection.objects.filter(order_form = bid.order_form))
     sup = Supplier.objects.get(id = supid)
     quoting_set = set(item for item in QuotingPrice.objects.filter(the_supplier = sup))
-
+    supset = set()
+    for one in materiel_set:
+        if one.inventory_type == MAIN_MATERIEL:
+            for two in quoting_set:
+                if two.inventory_type == MAIN_MATERIEL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        if one.inventory_type == AUXILIARY_MATERIEL:
+            for two in quoting_set:
+                if two.inventory_type == AUXILIARY_MATERIEL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        if one.inventory_type == FIRST_FEEDING:
+            for two in quoting_set:
+                if two.inventory_type == FIRST_FEEDING and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        if one.inventory_type == OUT_PURCHASED:
+            for two in quoting_set:
+                if two.inventory_type == OUT_PURCHASED and one.name == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        if one.inventory_type == COOPERANT:
+            for two in quoting_set:
+                if two.inventory_type == COOPERANT and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        if one.inventory_type == WELD_MATERIAL:
+            for two in quoting_set:
+                if two.inventory_type == WELD_MATERIAL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    supset.add(two)
+        context = {
+            "supset" : supset,
+        }
+        return render_to_string("purchasing/supplier/supplier_quoting_table.html", context)
 
 @dajaxice_register
 def pendingOrderSearch(request, order_index):
@@ -594,7 +630,6 @@ def SupplierDelete(request,supplier_id):
 @dajaxice_register
 def addChangeItem(request,subform,sid,item_id = None):
     subapply = MaterialSubApply.objects.get(id = sid)
-    is_pass = subapply.is_submit
     flag = True
     try:
         if item_id == None:
@@ -632,6 +667,49 @@ def addChangeItem(request,subform,sid,item_id = None):
         "message":message,
     }
     return simplejson.dumps(data)
+
+@dajaxice_register
+def UpdateSubapplyInfo(request,form,subapply_id):
+    subapply = MaterialSubApply.objects.get(id = subapply_id)
+    subapply_form=SubApplyForm(deserialize_form(form),instance=subapply)
+    if subapply_form.is_valid():
+        subapply_form.save()
+        status=0
+    else:
+        status=1
+    return simplejson.dumps({'status':status})
+
+@dajaxice_register
+def getSubApplyItemForm(request,sid):
+    if sid==-1:
+        form=SubApplyItemForm()
+    else:
+        item=MaterialSubApplyItems.objects.get(pk=sid)
+        form=SubApplyItemForm(instance=item)
+    html=render_to_string("purchasing/subapply/subapply_item_form.html",{"subitem_form":form})
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def UpdateSubapplyItem(request,form,sid,subapplyid):
+    if sid==-1:
+        subapply=MaterialSubApply.objects.get(pk=subapplyid)
+        item=MaterialSubApplyItems(sub_apply=subapply)
+    else:
+        item=MaterialSubApplyItems.objects.get(pk=sid)
+    form=SubApplyItemForm(deserialize_form(form),instance=item)
+    if form.is_valid():
+        form.save()
+        status=0
+    else:
+        status=1
+    return simplejson.dumps({"status":status})
+
+@dajaxice_register
+def submitSubapply(request,subapplyid):
+    subapply=MaterialSubApply.objects.get(pk=subapplyid)
+    BidNextStatus(subapply)
+
+
 @dajaxice_register
 def materielExecuteQuery(request,number):
     """
@@ -765,24 +843,27 @@ def searchSupplier(request,sid,bid):
 
 @dajaxice_register
 def addSubApply(request):
-    subapply = MaterialSubApply( proposer = request.user)
+    status=CommentStatus.objects.get(status=MATERIEL_SUBSTITUDE_FILL)
+    subapply = MaterialSubApply( proposer = request.user,status=status)
     subapply.save()
     url = "/purchasing/subApply/"+str(subapply.id)
     return simplejson.dumps({"url":url})
 
 @dajaxice_register
-def deleteItem(request,item_id,sid):
-    item_obj = MaterialSubApplyItems.objects.get(id = item_id)
-    subapply = MaterialSubApply.objects.get(id = sid)
-    if item_obj.sub_apply.id == subapply.id:
-        try:
-            item_obj.delete()
-            flag = True
-        except Exception,e:
-            print e
-    else:
-        flag = False
-    return simplejson.dumps({"item_id":item_obj.id,"flag":flag})
+def deleteSubapply(request,subapply_id):
+    subapply = MaterialSubApply.objects.get(pk=subapply_id)
+    subapply.delete()
+
+@dajaxice_register
+def deleteItem(request,sid):
+    item_obj = MaterialSubApplyItems.objects.get(id = sid)
+    try:
+        item_obj.delete()
+        flag = 0
+    except Exception,e:
+        print e
+        flag = 1
+    return simplejson.dumps({"flag":flag})
 
 @dajaxice_register
 def deleteDetail(request,uid):
@@ -1628,6 +1709,14 @@ def QualityCardComment(request,quality_card_id,usertitle,comment):
     bid_comment=BidComment(user=request.user,comment=comment,bid=quality_card.bid,submit_date=datetime.today(),user_title=usertitle)
     bid_comment.save()
     BidNextStatus(quality_card)
+    return simplejson.dumps({})
+
+@dajaxice_register
+def SubapplyComment(request,subapply_id,usertitle,comment):
+    subapply=MaterialSubApply.objects.get(pk=subapply_id)
+    subapply_comment=SubApplyComment(user=request.user,comment=comment,subapply=subapply,submit_date=datetime.today(),user_title=usertitle)
+    subapply_comment.save()
+    BidNextStatus(subapply)
     return simplejson.dumps({})
 
 @dajaxice_register

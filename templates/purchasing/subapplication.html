@@ -9,139 +9,60 @@
 {% block inner_content%}
 <link rel="stylesheet" href="{{STATIC_URL}}style/form-style.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="{{STATIC_URL}}style/subapply.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ STATIC_URL }}style/orderform.css" type="text/css" media="screen" />
 <div style="float:right">
     {% if subapply.status.status == status_dic.FILL%}
-    <a href="#materiel_substitude_table" data-toggle="modal" data-target="#materiel_substitute_table">填写</a>
-    <a href="#materiel_substitude_table" data-toggle="modal" data-target="#materiel_substitute_table">添加</a>
+    <a href="#" data-toggle="modal" data-target="#materiel_substitude_table">填写</a>
+    <a href="#" id="add_item">添加</a>
+    <a href="#" id="complete">完成</a>
     {% endif%}
 </div>
+<div id="subapply_body" subapplyid={{subapply.id}}>
 {% include "purchasing/materiel_substitute.html"%}
-<div   class="widget-box">
-    <div class="widget-title">
-        <span class="icon">
-            <i class="icon-th"></i>
-        </span>
-        <h5>材料代用申请单</h5>
+<div class="modal hide fade"  id="materiel_substitude_table" modal-size-width="0.8">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h2>材料代用申请单</h2>
     </div>
-    <div class="widget-content nopadding">
-        <form method="POST" class="form-horizontal" style="margin-bottom:30px;" sid={{subapply.id}}  id="subapply">
-            {% csrf_token %}
-            {% if subapply_form.errors %}
-            <div class="alert alert-error">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>注意!</strong>请确认全部内容填写正确后再提交..
-                {% for field in subapply_form %}
-                {% if field.errors  %}
-                <div class="control" id="error_div1">
-                    <label class="control-label" style="width:100px;">{{field.label}}</label>
-                    <div class="controls " id="error_list" style="margin-left:100px;">
-                    {{field.errors}}
-                    </div>
-                </div>
-                {% endif %}
-                {% endfor%}
-            </div>
-            {% endif %}
-            <div class="row">
-                <div class="span4">
-                    <div class="control-group {% if subapply_form.receipts_code.errors %} error {% endif %}">
-                        <label class="control-label">
-                            {{subapply_form.receipts_code.label}}
-                        </label>
-                        <div class="controls subapply">
-                            {{subapply_form.receipts_code}}
-                        </div>
-                    </div>
-                    <div class="control-group {% if subapply_form.pic_code.errors %} error {% endif %}">
-                        <label class="control-label">
-                            {{subapply_form.pic_code.label}}
-                        </label>
-                        <div class="controls subapply">
-                            {{subapply_form.pic_code}}
-                        </div>
-                    </div>
-                </div>
-                <div class="span4">
-                    <div class="control-group {% if subapply_form.work_order.errors %} error {% endif %}">
-                        <label class="control-label">
-                            {{subapply_form.work_order.label}}
-                        </label>
-                        <div class="controls subapply">
-                            {{subapply_form.work_order}}
-                        </div>
-                    </div>
-                    <div class="control-group {% if subapply_form.bidform.errors %} error {% endif %}">
-                        <label class="control-label">
-                            {{subapply_form.bidform.label}}
-                        </label>
-                        <div class="controls subapply">
-                            {{subapply_form.bidform}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="margin-left:50px;">
-                <a type="button" role="button" data-toggle="modal" class="btn btn-primary" href="#myModal" onclick="add_item()" >添加</a>
-            </div>
-            <div id = "subtable" >
-                {% include "purchasing/widgets/sub_table.html"  %}
-            </div>
-
-            <blockquote>
-                <fieldset>
-                    <legend>{{subapply_form.reasons.label}}</legend>
-                    <div class="control-group {% if subapply_form.reasons.errors %} error{% endif %}">
-                    {{subapply_form.reasons}}
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <legend>{{subapply_form.comments.label}}</legend>
-                    {{subapply_form.comments}}
-                </fieldset>
-            </blockquote>
-            <div class="control-group {% if subapply_form.is_approval.errors %} error {% endif %}">
-                <label class="control-label">
-                    {{subapply_form.is_approval.label}}
-                </label>
-                <div class="controls subapply">
-                    {{subapply_form.is_approval}}
-                </div>
-            </div>
-            {% if is_show %}
-            <div class="control-group">
-                <div class="subbtn">
-                    <button type="submit" class="btn btn-primary btn-block">提交</button>
-                </div>
-            </div>
-            {% endif %}
+    <div class="modal-body">
+        <form action="" id="subapply_info">
+        {%include "purchasing/subapply/subapply_info_form.html"%}
         </form>
-
-        <!-- Modal -->
-        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">添加</h3>
-            </div>
-            <div class="modal-body">
-                <form id="item_form" action="" class="form-horizontal">
-                    {% for field in subitem_form %}
-                    <div class="control-group">
-                        <label class="control-label">{{field.label_tag}}</label>
-                        <div class="controls" id="div{{forloop.counter}}">
-                            {{field}}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-                <button class="btn btn-primary" onclick="subitem_save();">保存</button>
-            </div>
-        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success " data-dismiss="modal" id="subapply_info_confirm">确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+<div class="modal hide fade"  id="materiel_substitude_item_modal" modal-size-width="0.8">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h2>材料代用申请条目</h2>
+    </div>
+    <div class="modal-body">
+        <form action="" id="subapply_item_form">
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button style="float:left;" class="btn btn-danger "  id="subapply_item_delete">删除</button>
+        <button class="btn btn-success " data-dismiss="modal" id="subapply_item_confirm">确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    </div>
+</div>
+<div class="modal hide fade"  id="subapply_comment" >
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h2>材料代用审核表意见</h2>
+    </div>
+    <div class="modal-body">
+        <textarea id ="comment_area" cols=40 rows=5 style="width:80%;"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success " data-dismiss="modal" id="subapply_comment_confirm">确认</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
     </div>
 </div>
 
-<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/purchasing_following.js"></script>
+<script type='text/javascript' src="{{STATIC_URL}}js/purchasing/materiel_substitute.js"></script>
 {% endblock%}
 
