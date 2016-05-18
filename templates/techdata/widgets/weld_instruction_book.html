@@ -181,10 +181,10 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   mso-border-left-alt:.5pt;mso-border-bottom-alt:.5pt;mso-border-right-alt:
   1.5pt;mso-border-color-alt:windowtext;mso-border-style-alt:solid;padding:
   0cm 5.4pt 0cm 5.4pt;height:18.7pt'>
-  <p class=MsoNormal align=left style='text-align:left;mso-element:frame;
+  <p class=MsoNormal align=left style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>RH20-<o:p></o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>{{weld_work_instruction}}<o:p></o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:1;height:20.65pt'>
@@ -210,7 +210,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   mso-element:frame;mso-element-frame-hspace:9.0pt;mso-element-wrap:around;
   mso-element-anchor-vertical:paragraph;mso-element-anchor-horizontal:margin;
   mso-element-top:-1.7pt;mso-height-rule:exactly'><span lang=EN-US
-  style='mso-bidi-font-size:10.5pt;line-height:150%'><o:p>&nbsp;</o:p></span></p>
+  style='mso-bidi-font-size:10.5pt;line-height:150%'>{{weld_work_instruction.detail.procedureQualification_index}}<o:p>&nbsp;</o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:2'>
@@ -276,7 +276,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>{{weld_work_instruction.detail.specification.order}}<o:p>&nbsp;</o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:3;height:16.05pt'>
@@ -321,7 +321,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   mso-line-height-rule:exactly;mso-element:frame;mso-element-frame-hspace:9.0pt;
   mso-element-wrap:around;mso-element-anchor-vertical:paragraph;mso-element-anchor-horizontal:
   margin;mso-element-top:-1.7pt;mso-height-rule:exactly'><span lang=EN-US
-  style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  style='mso-bidi-font-size:10.5pt'>{{weld_work_instruction.detail.joint_index}}<o:p>&nbsp;</o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:4'>
@@ -365,7 +365,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>{{weld_work_instruction.detail.get_weld_certification1}}<br/>{{weld_work_instruction.detail.get_weld_certification2}}<o:p>&nbsp;</o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:5'>
@@ -617,32 +617,63 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;line-height:16.0pt;
   mso-line-height-rule:exactly;mso-element:frame;mso-element-frame-hspace:9.0pt;
   mso-element-wrap:around;mso-element-anchor-vertical:paragraph;mso-element-anchor-horizontal:
-  margin;mso-element-top:-1.7pt;mso-height-rule:exactly'><span
-  style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-  mso-hansi-font-family:"Times New Roman"'>□</span><span style='mso-bidi-font-size:
+  margin;mso-element-top:-1.7pt;mso-height-rule:exactly'>
+  {% if name == FLUSH_WELD %}
+  <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>☑</span>
+  {% else %}
+  <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>□</span>
+  {% endif %}
+  <span style='mso-bidi-font-size:
   10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-  "Times New Roman"'>平焊</span><span style='mso-bidi-font-size:10.5pt'> </span><span
-  style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-  mso-hansi-font-family:"Times New Roman"'>□</span><span style='mso-bidi-font-size:
-  10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-  "Times New Roman"'>横焊</span><span style='mso-bidi-font-size:10.5pt'> </span><span
-  style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-  mso-hansi-font-family:"Times New Roman"'>□</span><span style='mso-bidi-font-size:
+  "Times New Roman"'>平焊</span><span style='mso-bidi-font-size:10.5pt'> </span>
+  {% if name == HORIZONTAL_WELD %}
+  <span  style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>☑</span>
+  {% else %}
+  <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>□</span>
+  {% endif %}
+  <span style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+  "Times New Roman"'>横焊</span><span style='mso-bidi-font-size:10.5pt'> </span>
+  {% if name == OVERHEAD_WELD %}
+  <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>☑</span>
+  {% else %}
+  <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>□</span>
+  {% endif %}
+  <span style='mso-bidi-font-size:
   10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
   "Times New Roman"'>仰焊</span><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p></o:p></span></p>
+  
+  
   <p class=MsoNormal align=center style='text-align:center;line-height:16.0pt;
   mso-line-height-rule:exactly;mso-element:frame;mso-element-frame-hspace:9.0pt;
   mso-element-wrap:around;mso-element-anchor-vertical:paragraph;mso-element-anchor-horizontal:
-  margin;mso-element-top:-1.7pt;mso-height-rule:exactly'><span
-  style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-  mso-hansi-font-family:"Times New Roman"'>□</span><span style='mso-bidi-font-size:
+  margin;mso-element-top:-1.7pt;mso-height-rule:exactly'>
+  {% if name == VERTICAL_WELD %}
+  <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>☑</span>
+  {% else %}
+  <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>□</span>
+  {% endif %}
+  <span style='mso-bidi-font-size:
   10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-  "Times New Roman"'>立向上焊</span><span style='mso-bidi-font-size:10.5pt'> </span><span
-  style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-  mso-hansi-font-family:"Times New Roman"'>□</span><span style='mso-bidi-font-size:
+  "Times New Roman"'>立向上焊</span><span style='mso-bidi-font-size:10.5pt'> </span>
+  {% if name == WIDE_WELD %}
+  <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>☑</span>
+  {% else %}
+  <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
+  mso-hansi-font-family:"Times New Roman"'>□</span>
+  {% endif %}
+  <span style='mso-bidi-font-size:
   10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
   "Times New Roman"'>全位置焊</span><span lang=EN-US style='mso-bidi-font-size:
   10.5pt'><o:p></o:p></span></p>
+
   </td>
  </tr>
  <tr style='mso-yfti-irow:11'>
@@ -686,7 +717,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>{{weld_work_instruction.detail.bm_texture_1}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=49 colspan=2 rowspan=2 style='width:37.0pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -711,7 +742,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>{{weld_work_instruction.detail.bm_specification_1}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=47 colspan=5 valign=top style='width:35.35pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -800,7 +831,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>{{weld_work_instruction.detail.bm_texture_2}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=62 valign=top style='width:46.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -810,7 +841,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>{{weld_work_instruction.detail.bm_specification_2}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=47 colspan=5 valign=top style='width:35.35pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -890,7 +921,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>{{weldseam.weld_material_1|default:""}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=49 colspan=2 rowspan=2 style='width:37.0pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -915,7 +946,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>{{weldseam.thin_1|default:""}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=47 colspan=5 valign=top style='width:35.35pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -983,7 +1014,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{weldseam.weld_material_2|default:""}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=62 valign=top style='width:46.25pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -993,7 +1024,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{weldseam.thin_2|default:""}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=47 colspan=5 valign=top style='width:35.35pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -1735,7 +1766,15 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'>
+  {% if weld_work_instruction.detail.weld_method_1.name == GMAW or weld_work_instruction.detail.weld_method_2.name == GMAW %}
+  <span lang=EN-US style='mso-bidi-font-size:10.5pt'>CO2<o:p>&nbsp;</o:p></span>
+  {% elif weld_work_instruction.detail.weld_method_1.name == GTAW or weld_work_instruction.detail.weld_method_2.name == GTAW %}
+  <span lang=EN-US style='mso-bidi-font-size:10.5pt'>Ar<o:p>&nbsp;</o:p></span>
+  {% else %}
+  <span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span>
+  {% endif %}
+</p>
   </td>
   <td width=44 colspan=3 rowspan=2 style='width:33.1pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;

@@ -112,3 +112,14 @@ def AuxiliaryEntryItemAdd(auxiliary_entry,selected,accept_supplier):
                                         )
         entry_item.save()
 
+def getEntryCode(code):
+    array=[item.entry_code for item in SteelMaterialEntry.objects.filter(entry_code__startswith=code)]
+    array=array+[item.entry_code for item in OutsideStandardEntry.objects.filter(entry_code__startswith=code)]
+    array=array+[item.entry_code for item in WeldMaterialEntry.objects.filter(entry_code__startswith=code)]
+    array=array+[item.entry_code for item in AuxiliaryToolEntry.objects.filter(entry_code__startswith=code)]
+    try:
+        ret= max(int(item.split("-",1)[1]) for item in array)
+        return code+"-"+str(ret+1)
+    except:
+        return code+"-1"
+

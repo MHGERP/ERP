@@ -282,28 +282,23 @@ def subApplyHomeViews(request):
 def subApplyViews(request,sid = None):
     subapply_obj = MaterialSubApply.objects.get(id = sid)
     is_show =  subapply_obj.status.status == MATERIEL_SUBSTITUDE_FILL
-    if request.method == "POST":
-        subapply_form = SubApplyForm(request.POST,instance = subapply_obj)
-        if subapply_form.is_valid():
-            if is_show:
-                subapply_form.save()
-                subapply_obj.is_submit = True
-                subapply_obj.save()
-            return HttpResponseRedirect("/purchasing/subApplyHome/")
-        else:
-            print subapply_form.errors
-    else:
-        subapply_form = SubApplyForm(instance = subapply_obj)
+    subapply_form = SubApplyForm(instance = subapply_obj)
     sub_set = MaterialSubApplyItems.objects.filter(sub_apply__id = sid)
     subitem_form = SubApplyItemForm()
-    print subapply_obj
+    comment_dict={}
+    for k in COMMENT_USER_SUBSTITUDE_DICT:
+        comment=SubApplyComment.objects.filter(subapply=subapply_obj,user_title=COMMENT_USER_SUBSTITUDE_DICT[k])
+        if comment.count()>0:
+            comment_dict[k]=comment[0]
     context = {
         "subapply_form":subapply_form,
         "is_show":is_show,
         "sub_set":sub_set,
         "subitem_form":subitem_form,
         "subapply":subapply_obj,
-        "status_dic":MATERIEL_SUBSTITUDE_STATUS_DICT
+        "status_dic":MATERIEL_SUBSTITUDE_STATUS_DICT,
+        "comment_user_dict":COMMENT_USER_SUBSTITUDE_DICT,
+        "comment_dict":comment_dict
     }
     return render(request,"purchasing/subapplication.html",context)
 
@@ -624,7 +619,7 @@ def QualityCardViews(request,bid):
         "quality_card_form":quality_card_form,
         "supplier_set":supplier_set,
         "status_dic":BIDFORM_INVITE_BID_QUALITY_DIC,
-        "comment_user_dict":COMMENT_USER_DICT,
+        "comment_user_dict":COMMENT_USER_QUALITY_DICT,
         "comment_dict":comment_dict
     }
     return render(request,"purchasing/bid_invite/quality_card_page.html",context)

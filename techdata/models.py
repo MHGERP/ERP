@@ -3,7 +3,7 @@ from django.db import models
 from const.models import *
 from django.contrib.auth.models import User
 from users.models import Group
-from purchasing.models import MaterielExecute
+from purchasing.models import MaterielExecuteDetail
 import settings
 
 class AuxiliaryMark(models.Model):
@@ -312,10 +312,9 @@ class WeldJointTechDetail(models.Model):
         else:
             return self.weld_method_1.get_name_display()
     def get_weld_certification1(self):
-        print self.weld_certification1.all()
-        return "或".join(self.weld_certification1.all())
+        return u"或".join(map(unicode, self.weld_certification1.all()))
     def get_weld_certification2(self):
-        return "或".join(self.weld_certification2.all())
+        return u"或".join(map(unicode, self.weld_certification2.all()))
 
 class WeldingWorkInstruction(models.Model):
     detail = models.OneToOneField(WeldJointTechDetail, verbose_name = "所属接头分析")
@@ -479,7 +478,7 @@ class ProcessBOMPageMark(models.Model):
         return unicode(self.order)
 
 class Program(models.Model):
-    execute = models.ForeignKey(MaterielExecute, verbose_name = u"所属执行表")
+    execute_detail = models.ForeignKey(MaterielExecuteDetail, verbose_name = u"所属执行")
     name = models.CharField(max_length = 100, blank = False, verbose_name = u"文件名称")
     file_obj = models.FileField(upload_to = settings.PROCESS_FILE_PATH + "/%Y/%m/%d", verbose_name = u"程序")
     upload_date = models.DateTimeField(null = True, blank = True, verbose_name = u"上传时间")
