@@ -1671,10 +1671,23 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
     return html
 
 @dajaxice_register
-def getCard(request):
+def getCard(request,wwi_id):
     """
     MH Chen
     """
-    context = {"STATIC_URL": settings.STATIC_URL,}
+    weld_work_instruction = WeldingWorkInstruction.objects.get(id = wwi_id)
+    weldseam = WeldSeam.objects.filter(weld_joint_detail = weld_work_instruction.detail)[0]
+    name = weld_work_instruction.detail.weld_position.name
+    context = {"STATIC_URL": settings.STATIC_URL,
+               "weld_work_instruction":weld_work_instruction,
+               "FLUSH_WELD":FLUSH_WELD,
+               "HORIZONTAL_WELD":HORIZONTAL_WELD,
+               "OVERHEAD_WELD":OVERHEAD_WELD,
+               "VERTICAL_WELD":VERTICAL_WELD,
+               "WIDE_WELD":WIDE_WELD,
+               "weldseam":weldseam,
+               "name":name,
+               "GTAW":GTAW,
+               "GMAW":GMAW,}
     html = render_to_string("techdata/widgets/weld_instruction_book.html",context)
     return html
