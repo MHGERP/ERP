@@ -1,8 +1,8 @@
 (dp0
-S'demandHumidity'
+S'demandTemperature'
 p1
-I60
-sS'demandTemperature'
+I20
+sS'demandHumidity'
 p2
-I5
+I70
 s.

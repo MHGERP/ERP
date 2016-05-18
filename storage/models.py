@@ -333,8 +333,7 @@ class SteelMaterialApplyCard(models.Model):
 class SteelMaterialApplyCardItems(models.Model):
     storelist = models.ForeignKey(SteelMaterialStoreList,blank=True,null=True,verbose_name=u"库存材料")
     apply_card = models.ForeignKey(SteelMaterialApplyCard,blank=False,null=False,verbose_name=u"钢材领用单")
-    apply_count = models.IntegerField(blank=False,null=False,verbose_name=u"申请数量")
-    actual_count = models.IntegerField(blank=True,null=True,verbose_name=u"实发数量")
+    count = models.IntegerField(blank=False,null=False,verbose_name=u"申请数量")
     material_mark = models.CharField(max_length=20,blank=False,null=True,verbose_name=u'钢号')
     material_code = models.CharField(max_length=20,blank=False,null=False,verbose_name=u'材质编号')
     component = models.CharField(max_length=100,blank=True,null=True,verbose_name=u"零件编号")
@@ -495,7 +494,7 @@ class AuxiliaryToolApplyCard(models.Model):
         verbose_name=u'辅助材料领用卡'
         verbose_name_plural=u'辅助材料领用卡'
     def __unicode__(self):
-        return "%s" % self.apply_storelist.entry_item.name
+        return "%s" % self.storelist.entry_item.name
 
 class WeldStoreThread(models.Model):
     specification = models.CharField(max_length=50,verbose_name=u"规格")
