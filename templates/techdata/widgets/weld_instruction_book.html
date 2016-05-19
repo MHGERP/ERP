@@ -2041,7 +2041,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;mso-border-top-alt:solid windowtext 1.0pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:23.1pt'>
+  padding:0cm 0cm 0cm 0cm;height:23.1pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
@@ -2065,7 +2065,7 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;mso-border-top-alt:solid windowtext 1.0pt;
-  padding:0cm 5.4pt 0cm 5.4pt;height:23.1pt'>
+  padding:0cm 0cm 0cm 0cm;height:23.1pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
@@ -2113,7 +2113,14 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>
+	{% if card.transfercardmark.writer %}
+	{{ card.transfercardmark.writer.userinfo }}
+	{% else %}
+	<span class="btn btn-small btn-mark" args="{{MARK_WRITE}}">签字</span>
+	{% endif %}
+	</span></p>
   </td>
   <td width=92 colspan=6 style='width:68.8pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -2129,16 +2136,23 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
   "Times New Roman"'>核</span><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p></o:p></span></p>
   </td>
-  <td width=177 colspan=5 valign=top style='width:132.4pt;border-top:none;
+  <td width=177 colspan=5 style='width:132.4pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
   mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-top-alt:1.0pt;mso-border-left-alt:.5pt;mso-border-bottom-alt:.5pt;
   mso-border-right-alt:1.5pt;mso-border-color-alt:windowtext;mso-border-style-alt:
   solid;padding:0cm 5.4pt 0cm 5.4pt;height:23.1pt'>
-  <p class=MsoNormal style='mso-element:frame;mso-element-frame-hspace:9.0pt;
-  mso-element-wrap:around;mso-element-anchor-vertical:paragraph;mso-element-anchor-horizontal:
-  margin;mso-element-top:-1.7pt;mso-height-rule:exactly'><span lang=EN-US
-  style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
+  mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
+  paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>
+	{% if card.transfercardmark.reviewer %}
+	{{ card.transfercardmark.reviewer.userinfo }}
+	{% else %}
+	<span class="btn btn-small btn-mark" args="{{MARK_REVIEW}}">签字</span>
+	{% endif %}
+	</span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:26;mso-yfti-lastrow:yes;height:23.1pt'>
@@ -2215,7 +2229,14 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>
+	{% if card.transfercardmark.proofreader %}
+	{{ card.transfercardmark.proofreader.userinfo }}
+	{% else %}
+	<span class="btn btn-small btn-mark" args="{{MARK_PROOFREAD}}">签字</span>
+	{% endif %}
+	</span></p>
   </td>
   <td width=92 colspan=6 style='width:68.8pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.5pt;border-right:solid windowtext 1.0pt;
@@ -2235,10 +2256,17 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   border-left:none;border-bottom:solid windowtext 1.5pt;border-right:solid windowtext 1.5pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:23.1pt'>
-  <p class=MsoNormal style='mso-element:frame;mso-element-frame-hspace:9.0pt;
-  mso-element-wrap:around;mso-element-anchor-vertical:paragraph;mso-element-anchor-horizontal:
-  margin;mso-element-top:-1.7pt;mso-height-rule:exactly'><span lang=EN-US
-  style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
+  mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
+  paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:
+  14.0pt;font-family:宋体;mso-bidi-font-weight:bold'>
+	{% if card.transfercardmark.approver %}
+	{{ card.transfercardmark.approver.userinfo }}
+	{% else %}
+	<span class="btn btn-small btn-mark" args="{{MARK_APPROVE}}">签字</span>
+	{% endif %}
+	</span></p>
   </td>
  </tr>
  <![if !supportMisalignedColumns]>
