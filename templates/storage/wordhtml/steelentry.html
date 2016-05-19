@@ -28,24 +28,24 @@ font-family:宋体'><o:p></o:p></span></b></p>
 
 <p class=MsoNormal>
 <div class="row-fluid">
-<div class="span3">
+<div style="width:20%;float:left;">
 <span style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";
     mso-hansi-font-family:"Arial Narrow"'>货物来源：{{entry.material_source}}</span><span lang=EN-US
 style='font-family:"Arial Narrow","sans-serif"'></span>
 </div>
-<div class="span3">
+<div style="width:25%;float:left;">
 <span style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";
 mso-hansi-font-family:"Arial Narrow"'>订购单编号</span><span style='font-family:
 宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>：</span>
 </div>
-<div class="span4">
+<div style="width:33%;float:left;">
 <span
 style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";mso-hansi-font-family:
 "Arial Narrow"'></span><span lang=EN-US style='font-family:"Arial Narrow","sans-serif"'></span><span
 style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";mso-hansi-font-family:
 "Arial Narrow"'>接收检查记录表编号：</span>
 </div>
-<div class="span2">
+<div style="width:22%;float:left;">
 <span style='font-family:宋体;mso-ascii-font-family:
     "Times New Roman";mso-hansi-font-family:"Times New Roman"'>编号：{{entry.entry_code}}</span><span
 lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p></o:p></span>
@@ -57,19 +57,19 @@ lang=EN-US style='font-family:"Arial Narrow","sans-serif"'><o:p></o:p></span>
     {% include "storage/wordhtml/steelentryitems.html"%}
 </div>
 <div class="row-fluid">
-<div class="span4">
+<div style="width:33%;float:left;">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
 mso-hansi-font-family:"Times New Roman"'>采购员：{% ifequal entry.purchaser None %}<span class="btn btn-mark" name="steel_entry_confirm" role="purchaser">签字</span>{% else %}{{entry.purchaser.userinfo}}{% endifequal %}</span><span lang=EN-US
 style='mso-bidi-font-size:10.5pt'></span>
 </div>
-<div class="span4">
+<div style="width:33%;float:left;">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
 mso-hansi-font-family:"Times New Roman"'>检查员：{% ifequal entry.inspector None %}<span class="btn btn-mark" name="steel_entry_confirm" role="inspector">签字</span>{% else %}{{entry.inspector.userinfo}}{% endifequal %}</span><span lang=EN-US
 style='mso-bidi-font-size:10.5pt'></span>
 </div>
-<div class="span4">
+<div style="width:33%;float:left;">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
 mso-hansi-font-family:"Times New Roman"'>库管：{% ifequal entry.keeper None %}<span class="btn btn-mark" name="steel_entry_confirm" role="keeper">签字</span>{% else %}{{entry.keeper.userinfo}}{% endifequal %}</span><span lang=EN-US

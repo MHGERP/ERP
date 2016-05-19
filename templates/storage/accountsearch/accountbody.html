@@ -4,7 +4,10 @@
     {{field.label}}
     {{field}}
     {% endfor %}
-    <button class="btn btn-success" type="button"  id="account_search_btn"  card_type={{card_type}}>检索</button> 
+    <button class="btn btn-success" type="button"  id="account_search_btn"  card_type={{card_type}}>检索</button>
+    {% if room_dispatch %}
+    <button class="btn btn-success" type="button"  id="account_room_dispatch_btn">待分配</button>
+    {% endif %}
 </form>
 <br/>
 <div id="account_table">

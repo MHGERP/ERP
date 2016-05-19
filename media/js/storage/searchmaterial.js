@@ -41,7 +41,7 @@ function refresh_select_item(data){
 }
 
 function weldapply_callback(data){
-    $("#word_contain").html(data.word_html);
+    $("#applycard").html(data.word_html);
     $("#apply_form").html(data.form_html)
     if(data.show_select){
         refresh_select_item(data);

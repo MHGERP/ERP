@@ -1,50 +1,31 @@
 <table class="table table=bordered table=striped">
-    <thead>
-        <tr>
-            <th>选择</th>
-            <th>工作令号</th>
-            <th>零件图、标准</th>
-            <th>名称及规格</th>
-            <th>材料牌号</th>
-            <th>单位</th>
-            <th>数量</th>
-            <th>标记号</th>
-            <th>备注</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><input type="checkbox" ></td>
-            <td>NX48CP70 113004 0001</td>
-            <td>R35 939 1.00</td>
-            <td>14</td>
-            <td>Q345R</td>
-            <td>装焊工部</td>
-            <td>2</td>
-            <td>Z</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" ></td>
-            <td>NX48CP70 113004 0001</td>
-            <td>R35 939 1.00</td>
-            <td>14</td>
-            <td>Q345R</td>
-            <td>装焊工部</td>
-            <td>2</td>
-            <td>Z</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" ></td>
-            <td>NX48CP70 113004 0001</td>
-            <td>R35 939 1.00</td>
-            <td>14</td>
-            <td>Q345R</td>
-            <td>装焊工部</td>
-            <td>2</td>
-            <td>Z</td>
-            <td></td>
-        </tr>
-    </tbody>
+  <thead>
+    <tr>
+      <th>选择</th>
+      <th>工作令号</th>
+      <th>工作票</th>
+      <th>工作票号</th>
+      <th>材料牌号</th>
+      <th>单位</th>
+      <th>数量</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      <td><input type="checkbox" ></td>
+      <td>{{item.sub_workorder}}</td>
+      {% if item.orgin_materiel %}
+      <td>{{item.orgin_materiel}}</td>
+      <td>{{item.orgin_materiel.index}}</td>
+      {% else %}
+      <td>{{item.relate_material.orgin_materiel}}</td>
+      <td>{{item.orgin_materiel.index}}</td>
+      {% endif%}
+      <td>{{item.material}}</td>
+      <td>{{item.unit}}</td>
+      <td>{{item.count}}</td>
+      {% endfor %}
+    </tr>
+  </tbody>
 </table>

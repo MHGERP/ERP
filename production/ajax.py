@@ -8,6 +8,7 @@ from dajaxice.utils import deserialize_form
 from django.utils import simplejson
 from const.models import WorkOrder,Materiel
 from production.models import *
+from purchasing.models import *
 from production.forms import *
 from techdata.models import Processing, CirculationRoute
 from django.db import connection
@@ -467,8 +468,18 @@ def applyCardSearch(request, form):
         applyCards = []
         for applyCardModel in [SteelMaterialApplyCard, AuxiliaryToolApplyCard, OutsideApplyCard, WeldingMaterialApplyCard]:
             materiel_list  = applyCards.extend(list(applyCardModel.objects.filter(getQ(search_form.cleaned_data))))
-            html = render_to_string("production/table/materiel_use_table.html",{"applyCards":applyCards})
+        html = render_to_string("production/table/materiel_use_table.html",{"applyCards":applyCards})
     else:
         print search_form.errors
     return simplejson.dumps({ "html" : html})
 
+@dajaxice_register
+def materialuseSearch(request, form):
+    search_form = MaterielCopyForm(deserialize_form(form))
+    if search_form.is_valid():
+        materiel_list  = MaterielCopy.objects.filter(getQ(search_form.cleaned_data))
+        print materiel_list.count()
+        html = render_to_string("production/table/materiel_use_select_table.html",{"items":materiel_list})
+    else:
+        print search_form.errors
+    return simplejson.dumps({ "html" : html})
