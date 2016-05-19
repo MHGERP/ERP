@@ -5,14 +5,7 @@
     </div>
     <div class="modal-body">
         <form id="card_status_form" action="" class="form-horizontal">
-            {% for field in card_status_form %}
-            <div class="control-group">
-                <label style="width:50px;float:left;text-align:right;">
-                {{field.label}}&nbsp;&nbsp;
-                </label>
-                {{field}}
-            </div>
-            {% endfor %}
+            {% include "storage/widgets/cardstatusstopform.html" %}
         </form>
     </div>
     <div class="modal-footer">

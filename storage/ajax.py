@@ -1428,16 +1428,20 @@ def cardStatusStop(request,stop_card_type,stop_role,form,fid):
                 record.card_type = stop_card_type
                 record.card_id = card_obj.id
                 record.save()
-            card_obj.save()
-            flag = True
-            message = u"流程终止成功"
+                card_obj.save()
+                flag = True
+                message = u"流程终止成功"
+            else:
+                message = u"流程终止失败，还没有填写原因"
     except Exception,e:
         print e
         message = u"流程终止失败"
 
-    if flag:
-        html = render_to_string("storage/wordhtml/"+html_path+".html",{"ref_obj":card_obj})
-    else:
-        html = ""
-        div_name = "" 
-    return simplejson.dumps({"message":message,"html":html,"flag":flag,"div_name":div_name})
+#    if flag:
+#        html = render_to_string("storage/wordhtml/"+html_path+".html",{"ref_obj":card_obj})
+#    else:
+#        html = ""
+#        div_name = ""
+
+    form_html = render_to_string("storage/widgets/cardstatusstopform.html",{"card_status_form":form})
+    return simplejson.dumps({"message":message,"form_html":form_html})

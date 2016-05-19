@@ -92,6 +92,9 @@ $("#btn_save_process2").click(function() {
         "arr": arr,
     });
 });
+$(document).on("dblclick", ".test_area", function() {
+    $("#test_modal").modal("show");
+});
 $(document).on("dblclick", ".pic_area", function() {
     $("#wwi_id_input").val($("#div_card").attr("wwi_id"));
     $("#pic_modal").modal("show");

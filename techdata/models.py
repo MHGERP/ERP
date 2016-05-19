@@ -423,6 +423,16 @@ class WeldingWorkInstructionProcess(models.Model):
     def __unicode__(self):
         return unicode(self.card_belong) + "-" + self.index + "-" + self.name
 
+class WeldingWorkInstructionTest(models.Model):
+    card_belong = models.ForeignKey(WeldingWorkInstruction, verbose_name = u"所属焊接作业指导书")
+    index = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"序号")
+    test_method = models.CharField(max_length = 100, null = True, blank = True, choices = WWI_TEST_METHOD_CHOICES, verbose_name = u"检验方")
+    class Meta:
+        verbose_name = u"焊接作业检验"
+        verbose_name_plural = u"焊接作业检验"
+    def __unicode__(self):
+        return unicode(self.card_belong) + "-" + self.index
+
 class TransferCardProcess(models.Model):
     card_belong = models.ForeignKey(TransferCard, verbose_name = u"所属流转卡")
     index = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"序号")
