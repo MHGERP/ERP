@@ -86,3 +86,17 @@ $("#btn_save_process2").click(function() {
         "arr": arr,
     });
 });
+
+$(document).on("click", ".btn-mark", function() {
+    var step = $(this).attr("args");
+    var wwi_id = $("#div_card").attr("wwi_id");
+    Dajaxice.techdata.WWICardMark(markCallBack, {"wwi_id": wwi_id, "step": step,});
+});
+function markCallBack(data) {
+    if(data.ret) {
+        refresh();
+    }
+    else {
+        alert(data.warning);
+    }
+}
