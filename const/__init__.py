@@ -500,6 +500,15 @@ NONDESTRUCTIVE_INSPECTION_TYPE = (
     (VT, "VT"),
 )
 
+LOCAL_FACTORY = "0"
+INSPECTION_UNIT = "1"
+THIRD_PARTY_OR_USER = "2"
+WWI_TEST_METHOD_CHOICES = (
+    (LOCAL_FACTORY, u"厂内"),
+    (INSPECTION_UNIT, u"检验机构"),
+    (THIRD_PARTY_OR_USER, u"第三方或用户"),
+)
+
 CYLIDER_TRANSFER_CARD = "cylider_transfer_card"
 CAP_TRANSFER_CARD = "cap_transfer_card"
 WELD_TEST_PLATE_CARD = "weld_test_plate_card"
