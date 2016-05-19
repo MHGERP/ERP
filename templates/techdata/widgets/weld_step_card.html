@@ -19,13 +19,24 @@
         <tr pid="{{step.id}}" class="tr_process2">
             <td style="vertical-align: middle"><input type="text" value="{{step.layer|default_if_none:""}}" class="input-mini" /></td>
             <td style="vertical-align: middle ;" >    
-                <select type="text" id="id_select"style="width:80px" class="input-mini" >
-            <option value ="-1">------</option>
-            <option value ="{{step.card_belong.detail.weld_method_1}}"></option>
-            {% if step.card_belong.detail.weld_method_2 != None %}
-            <option value ="{{step.card_belong.detail.weld_method_2}}"></option>
-            {% endif %}
-        </td>
+                <select type="text" id="id_select"style="width:109px" class="input-mini" >
+                    {% if step.weld_method != None %}
+                    <option value ="{{step.weld_method.id}}">{{step.weld_method}}</option>
+                    {% if step.card_belong.detail.weld_method_1 != step.weld_method %}
+                    <option value ="{{step.card_belong.detail.weld_method_1.id}}">{{step.card_belong.detail.weld_method_1}}</option>
+                    {% else %}
+                    {% if step.card_belong.detail.weld_method_2 != None %}
+                    <option value ="{{step.card_belong.detail.weld_method_2.id}}">{{step.card_belong.detail.weld_method_2}}</option>
+                    {% endif %}
+                    {% endif %}
+                    {% else %}
+                    <option value ="-1">-------</option>
+                    <option value ="{{step.card_belong.detail.weld_method_1.id}}">{{step.card_belong.detail.weld_method_1}}</option>
+                    {% if step.card_belong.detail.weld_method_2 != None %}
+                    <option value ="{{step.card_belong.detail.weld_method_2.id}}">{{step.card_belong.detail.weld_method_2}}</option>
+                    {% endif %}
+                    {% endif %}
+            </td>
             <td style="vertical-align: middle ;" >
                 <input type="text"  class="input-mini" /></td>
             <td style="vertical-align: middle ;" >
