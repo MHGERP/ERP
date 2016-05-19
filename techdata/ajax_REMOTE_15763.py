@@ -1810,7 +1810,7 @@ def saveWeldStep(request, arr):
         if item.get("pid", None) != None:
             step = WeldingStep.objects.get(id = item.get("pid", None))
             step.layer = item.get("layer", None)
-            step.weld_method = WeldMethod.objects.get(id = item.get("weld_method", None))
+            step.weld_method = item.get("weld_method", None)
             step.name = item.get("name", None)
             step.diameter = item.get("diameter", None)
             step.polarity = item.get("polarity", None)
@@ -1820,9 +1820,6 @@ def saveWeldStep(request, arr):
             step.heat_input = item.get("heat_input", None)
             step.remark = item.get("remark", None)
             step.save()
-            
-    return "ok"
-
 
 @dajaxice_register
 def WWICardMark(request, wwi_id, step):
@@ -1831,6 +1828,4 @@ def WWICardMark(request, wwi_id, step):
     """
     wwi = WeldingWorkInstruction.objects.get(id = wwi_id)
     return cardMark(request, wwi, step)
-
-
 

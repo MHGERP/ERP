@@ -1820,9 +1820,10 @@ def saveWeldStep(request, arr):
             step.heat_input = item.get("heat_input", None)
             step.remark = item.get("remark", None)
             step.save()
+<<<<<<< HEAD
             
     return "ok"
-
+=======
 
 @dajaxice_register
 def WWICardMark(request, wwi_id, step):
@@ -1832,5 +1833,4 @@ def WWICardMark(request, wwi_id, step):
     wwi = WeldingWorkInstruction.objects.get(id = wwi_id)
     return cardMark(request, wwi, step)
 
-
-
+>>>>>>> cdc50fd7fd95f80b1425f9815230a79e49fba6c8

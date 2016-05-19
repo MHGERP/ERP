@@ -1740,10 +1740,6 @@ def getCard(request, wwi_id, page = "1", is_print = False):
     name = weld_work_instruction.detail.weld_position.name
     page, total_page, process_list = transferCardProcessPaginator(process_list1, page, 100, 13, 13)
     context = {"STATIC_URL": settings.STATIC_URL,
-               "MARK_WRITE": MARK_WRITE,
-               "MARK_REVIEW": MARK_REVIEW,
-               "MARK_PROOFREAD": MARK_PROOFREAD,
-               "MARK_APPROVE": MARK_APPROVE,
                "weld_work_instruction":weld_work_instruction,
                "FLUSH_WELD":FLUSH_WELD,
                "HORIZONTAL_WELD":HORIZONTAL_WELD,
@@ -1791,6 +1787,7 @@ def getWeldStepList(request, wwi_id):
 def saveWeldWorkInstructionProcess(request, arr):
     """
     MH Chen
+
     """
     for item in arr:
         if item.get("pid", None) != None:
@@ -1805,6 +1802,7 @@ def saveWeldWorkInstructionProcess(request, arr):
 def saveWeldStep(request, arr):
     """
     MH Chen
+
     """
     for item in arr:
         if item.get("pid", None) != None:
@@ -1822,15 +1820,3 @@ def saveWeldStep(request, arr):
             step.save()
             
     return "ok"
-
-
-@dajaxice_register
-def WWICardMark(request, wwi_id, step):
-    """
-    JunHU
-    """
-    wwi = WeldingWorkInstruction.objects.get(id = wwi_id)
-    return cardMark(request, wwi, step)
-
-
-

@@ -210,6 +210,18 @@ def transferCardPicUpload(request):
             file_upload_error = 1
         return HttpResponse(json.dumps({"file_upload_error": file_upload_error, }))
 
+def WWIPicUpload(request):
+    if request.is_ajax():
+        if request.FILES['pic_file'].size > 10*1024*1024:
+            file_upload_error = 2
+        else:
+            wwi_id = request.POST['wwi_id']
+            wwi = WeldingWorkInstruction.objects.get(id = wwi_id)
+            wwi.file_obj = request.FILES['pic_file']
+            wwi.save()
+            file_upload_error = 1
+        return HttpResponse(json.dumps({"file_upload_error": file_upload_error, }))
+
 def programAdd(request):
     if request.is_ajax():
         if request.FILES['program_file'].size > 10*1024*1024:

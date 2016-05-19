@@ -90,3 +90,40 @@ $("#btn_save_process2").click(function() {
         "arr": arr,
     });
 });
+$(document).on("dblclick", ".pic_area", function() {
+    $("#wwi_id_input").val($("#div_card").attr("wwi_id"));
+    $("#pic_modal").modal("show");
+});
+$("#btn_save_pic").click(function() {
+    $("#pic_form").ajaxSubmit({
+        url: "/techdata/WWIPicUpload",
+        type: "POST",
+        clearForm: true,
+        resetForm: true,
+        error: function(data) {
+
+        },
+        success: function(data) {
+            if(data.file_upload_error == 2) {
+                alert("上传失败，请重试");
+            }
+            else {
+                refresh();
+                $("#pic_modal").modal("hide");
+            }
+        }
+    });
+})
+$(document).on("click", ".btn-mark", function() {
+    var step = $(this).attr("args");
+    var wwi_id = $("#div_card").attr("wwi_id");
+    Dajaxice.techdata.WWICardMark(markCallBack, {"wwi_id": wwi_id, "step": step,});
+});
+function markCallBack(data) {
+    if(data.ret) {
+        refresh();
+    }
+    else {
+        alert(data.warning);
+    }
+}

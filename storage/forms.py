@@ -167,9 +167,13 @@ class BakeSearchForm(forms.Form):
         super(BakeSearchForm,self).__init__(*args,**kwargs)
         set_form_input_width(self.fields)
 class ApplyRefundSearchForm(forms.Form):
-    order_index = forms.CharField(label = u"工作令",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'order_index'}))
-    product_name = forms.CharField(label = u"产品名称",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'product_name'}))
-
+    id = forms.ChoiceField(label = u"工作令",required = False, widget = forms.Select(attrs={"class":'form-control span2','select2':'true'}))
+    order__product_name__contains = forms.CharField(label = u"产品名称",required = False, widget = forms.TextInput(attrs={"class":'form-control span2','id':'product_name'}))
+    def __init__(self,*args,**kwargs):
+        super(ApplyRefundSearchForm,self).__init__(*args,**kwargs)
+        set_form_input_width(self.fields,"130px")
+        workorder_list = SubWorkOrder.objects.all()
+        self.fields["id"].choices = getChoiceList(workorder_list)
 class EntrySearchForm(forms.Form):
     entry_time = forms.DateField(label=u"日期",required = False,widget=forms.TextInput(attrs={"class":'form-control span2','id':'entry_time'}))
     purchaser = forms.ChoiceField(label=u"采购员",required=False,widget=forms.Select(attrs={"class":'form-control span2','id':'purchaser'}))
@@ -741,3 +745,10 @@ class WeldApplyKeeperForm(ModelForm):
             super(WeldApplyKeeperForm,self).__init__(*args,**kwargs)
             set_form_input_width(self.fields,"150px")
             
+class CardStatusStopForm(ModelForm):
+    class Meta:
+        model = CardStatusStopRecord
+        fields = ("remark",)
+        widgets = {
+            "remark":forms.Textarea(attrs={"rows":5,})
+        }
