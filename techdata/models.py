@@ -412,6 +412,16 @@ class TransferCard(models.Model):
             return "RH16-" + self.materiel_belong.order.suffix() + "- -" + str(self.file_index)
         else:
             return "RH05-" + self.materiel_belong.order.suffix() + "- -" + str(self.file_index)
+class WeldingWorkInstructionProcess(models.Model):
+    card_belong = models.ForeignKey(WeldingWorkInstruction, verbose_name = u"所属焊接作业指导书")
+    index = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"序号")
+    name = models.CharField(max_length = 100, null = True, blank = True, verbose_name = u"工序名")
+    detail = models.CharField(max_length = 1000, null = True, blank = True, verbose_name = u"工艺过程及技术要求")
+    class Meta:
+        verbose_name = u"焊接作业指导书工序"
+        verbose_name_plural = u"焊接作业指导书工序"
+    def __unicode__(self):
+        return unicode(self.card_belong) + "-" + self.index + "-" + self.name
 
 class TransferCardProcess(models.Model):
     card_belong = models.ForeignKey(TransferCard, verbose_name = u"所属流转卡")
@@ -422,7 +432,7 @@ class TransferCardProcess(models.Model):
         verbose_name = u"流转卡工序"
         verbose_name_plural = u"流转卡工序"
     def __unicode__(self):
-        return unicode(self.card_belong) + "-" + self.index + "-" + self.name
+        return unicode(self.card_belong)
 
 class TransferCardMark(models.Model):
     card = models.OneToOneField(TransferCard, verbose_name = u"所属流转卡")
