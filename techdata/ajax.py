@@ -1790,8 +1790,7 @@ def saveWeldWorkInstructionProcess(request, arr):
 
     """
     for item in arr:
-        print item.pid
-        if item.pid != None:
+        if item.get("pid", None) != None:
             process = WeldingWorkInstructionProcess.objects.get(id = item.get("pid", None))
             process.index = item.get("index", None)
             process.name = item.get("name", None)
