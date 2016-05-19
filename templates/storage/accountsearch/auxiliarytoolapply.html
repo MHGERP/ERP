@@ -13,15 +13,15 @@
     </tbody>
         {% for item in items %}
         <tr name="item_tr">
-            <td>{{item.actual_storelist.entry_item.name}}</td>
-            <td>{{item.actual_storelist.entry_item.specification}}</td>
+            <td>{{item.storelist.entry_item.name}}</td>
+            <td>{{item.storelist.entry_item.specification}}</td>
             <td>{{item.department}}</td>
             <td>{{item.apply_storelist.entry_item.name}}</td>
             <td>{{item.apply_storelist.entry_item.specification}}</td>
-            <td>{{item.apply_quantity}}</td>
+            <td>{{item.apply_count}}</td>
             <td>{{item.create_time|date:"Y年m月d日"}}</td>
             <td>{{item.applycard_code}}</td>
-            <td>{{item.actual_quantity}}</td>
+            <td>{{item.actual_count}}</td>
         </tr>
         {% endfor %}
         <tr>

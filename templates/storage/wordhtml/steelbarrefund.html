@@ -27,22 +27,21 @@
     mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>型材余料退库单</span><span
     lang=EN-US style='font-size:18.0pt'><o:p></o:p></span></p>
 
-    <p class=MsoNormal>
     <div class="row-fluid">
-        <div class="span4">
+        <div style="width:33%;float:left;">
             <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:
             "Times New Roman";mso-hansi-font-family:"Times New Roman"'>工作令：{{refund.work_order}}</span><span
              lang=EN-US style='font-size:12.0pt'></span>
         </div>
-        <div class="span4">
+        <div style="width:33%;float:left;">
             <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:
             "Times New Roman";mso-hansi-font-family:"Times New Roman"'>日期:{{refund.create_time|date:'Y年m月d日'}}</span><span
              lang=EN-US style='font-size:12.0pt'></span>
         </div>
-        <div class="span4">
+        <div style="width:33%;float:left;">
             <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:
             "Times New Roman";mso-hansi-font-family:"Times New Roman"'>单据编号：{{refund.refund_code}}</span><span
-             lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></p>
+             lang=EN-US style='font-size:12.0pt'><o:p></o:p></span>
         </div>
     </div>
     <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
@@ -103,6 +102,13 @@
             padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
                 <p class=MsoNormal align=center style='text-align:center'><span
              style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
+             "Times New Roman"'>重量</span></p>
+            </td>
+            <td width=107 style='width:53.3pt;border:solid windowtext 1.0pt;border-left:
+            none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+            padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
+                <p class=MsoNormal align=center style='text-align:center'><span
+             style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
              "Times New Roman"'>备注</span></p>
             </td>
         </tr>
@@ -153,6 +159,12 @@
             border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
             mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
             mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
+                <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>&nbsp;</o:p>{{item.weight}}</span></p>
+            </td>
+            <td width=107 style='width:53.3pt;border-top:none;border-left:none;
+            border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+            mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+            mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
                 <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US><o:p>&nbsp;</o:p>{{item.remark}}</span></p>
             </td>
         </tr>
@@ -193,7 +205,7 @@
              style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
              "Times New Roman"'>库管员</span></p>
             </td>
-            <td width=107 style='width:53.3pt;border-top:none;border-left:none;
+            <td width=107 colspan="2" style='width:53.3pt;border-top:none;border-left:none;
             border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
             mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
             mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>

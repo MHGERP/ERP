@@ -72,7 +72,7 @@ function save_item_callback(data){
 }
 
 function cal_entry_items_price(){
-    items = $("table#items_table").find("tr[name = 'entry_item']");
+    items = $("table#items_table").find("tr[name = 'entry_item_tr']");
     var entry_total_price = 0.0
     for( i = 0 ; i < items.length ; i++ )
     {   

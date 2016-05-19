@@ -1,0 +1,19 @@
+<table class="table table-bordered table-striped">
+    <colgroup span="1" align="left"></colgroup>
+    <colgroup span="1"></colgroup>
+    <colgroup align="right"></colgroup>
+    <thead>
+        <th>序号</th>
+        <th style="display:none">工序</th>
+        <th>工艺过程及技术要求</th>
+    </thead>
+    <tbody>
+        {% for process in process_list %}
+        <tr pid="{{process.id}}" class="tr_process">
+            <td style="vertical-align: middle"><input type="text" value="{{process.index|default_if_none:""}}" class="input-mini" /></td>
+            <td style="vertical-align: middle ;display:none" ><input type="text" value="{{process.name|default_if_none:''}}" class="input-mini" /></td>
+            <td><textarea rows="2" cols="90" style="width: 95%">{{process.detail|default_if_none:''}}</textarea></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

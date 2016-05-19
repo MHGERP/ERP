@@ -433,11 +433,10 @@ def Search_Auxiliary_Tools_Apply_Card(request,form):
     apply_cards = []
     form=AuxiliaryToolsApplyCardSearchForm(deserialize_form(form))
     if form.is_valid():
-        conditions=form.cleaned_data
-        apply_cards = get_weld_filter(AuxiliaryToolApplyCard,conditions)
+        replace_dic = gen_replace_dic(form.cleaned_data)
+        apply_cards = get_weld_filter(AuxiliaryToolApplyCard,form.cleaned_data,replace_dic)
     else:
         print form.errors
-    
     context = {
         "apply_cards":apply_cards,
         "default_status":AUXILIARY_TOOL_APPLY_CARD_KEEPER,
@@ -970,7 +969,6 @@ def searchWeldEntry(request,searchform):
     else:
         print form.errors
         entry_set = []
-    print entry_set 
     html = render_to_string("storage/widgets/storageentryhomemain.html",{"entry_set":entry_set,"ENTRYSTATUS_END":ENTRYSTATUS_CHOICES_END,"entryurl":"storage/weldentryconfirm"})
     return simplejson.dumps({"html":html})
 
@@ -981,9 +979,9 @@ def getSearchMaterialItems(search_form,apply_type,mid):
     if search_form.is_valid():
         replace_dic = gen_replace_dic(search_form.cleaned_data)
         if apply_type=="weld":
-            store_items = get_weld_filter(store_model,search_form.cleaned_data,replace_dic).order_by("entry_time")
+            store_items = get_weld_filter(store_model,search_form.cleaned_data,replace_dic,is_show_all=False).order_by("entry_time")
         else:
-            store_items = get_weld_filter(store_model,search_form.cleaned_data,replace_dic)
+            store_items = get_weld_filter(store_model,search_form.cleaned_data,replace_dic,is_show_all=False)
             if apply_type != "steel":
                 store_items = store_items.order_by("entry_item__entry__create_time")
     select_item = apply_item_model.objects.get(id=mid).storelist
@@ -1241,20 +1239,20 @@ def auxiliaryToolMaterialApply(request,select_item,aid,form):
    
 @dajaxice_register
 def auToolApplyCardConfirm(request,role,aid):
-    applycard = AuxiliaryToolApplyCard.objects.get(id=aid)
+    apply_card = AuxiliaryToolApplyCard.objects.get(id=aid)
     if role == "keeper":
-        if applycard.status == ENTRYSTATUS_CHOICES_KEEPER:
-            storelist = applycard.actual_storelist
-            storelist.count -= applycard.actual_count
+        if apply_card.status == AUXILIARY_TOOL_APPLY_CARD_KEEPER:
+            storelist = apply_card.storelist
+            storelist.count -= apply_card.actual_count
             storelist.save()
-            applycard.status = AUXILIARY_TOOL_APPLY_CARD_END
-            applycard.keeper = request.user
-            applycard.save()
+            apply_card.status = AUXILIARY_TOOL_APPLY_CARD_END
+            apply_card.keeper = request.user
+            apply_card.save()
             message = u"领用卡确认成功"
         else:
             message = u"领用卡已经确认过"
     
-    card_html = render_to_string("storage/wordhtml/auxiliarytoolapplycard.html",{"applycard":applycard})
+    card_html = render_to_string("storage/wordhtml/auxiliarytoolapplycard.html",{"apply_card":apply_card})
     return simplejson.dumps({"card_html":card_html,"message":message})
 
 @dajaxice_register
@@ -1289,16 +1287,13 @@ def storageAccountItemForm(request,mid,role):
     refundcards = []
     applycards = []
     if ApplyCardDict.has_key(role):
-        if role == "auxiliarytool":
-            applycards = ApplyCardDict[role].objects.filter(actual_storelist = storeitem).order_by("create_time")
-        else:
-            applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
-            for applycard in applycards:
-                try:
-                    refund = WeldRefund.objects.get(apply_card = applycard)
-                    refundcards.append(refund)
-                except Exception,e:
-                    print e
+        applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
+        for applycard in applycards:
+            try:
+                refund = WeldRefund.objects.get(apply_card = applycard)
+                refundcards.append(refund)
+            except Exception,e:
+                print e
     table_html = render_to_string("storage/accountsearch/"+role+"_account_apply_refund_table.html",{"applycards":applycards,"refundcards":refundcards})
     return simplejson.dumps({"table_html":table_html,"form_html":form_html})
 
@@ -1338,7 +1333,7 @@ def searchMaterialApply(request,apply_form,select_item,mid,apply_type,search_for
     storeitem = store_model.objects.get(id=select_item)
     apply_card = apply_item if apply_type in ["weld","auxiliarytool"] else apply_item.apply_card
     keeper_status = AUXILIARY_TOOL_APPLY_CARD_KEEPER if apply_type == "auxiliarytool" else APPLYCARD_KEEPER
-    message,form_html = handle_select_item_result(apply_item_form_model,apply_form,apply_item,keeper_status,storeitem,apply_card)
+    message,form_html = handle_select_item_result(apply_item_form_model,apply_form,apply_item,keeper_status,storeitem,apply_card,apply_type)
     word_html = getWordHtml(apply_type,apply_card)
     show_html = render_to_string("storage/searchmaterial/show_select_item.html",{"select_item":select_item})
     store_items,table_path,select_item = getSearchMaterialItems(search_form,apply_type,mid)
@@ -1346,8 +1341,8 @@ def searchMaterialApply(request,apply_form,select_item,mid,apply_type,search_for
     show_select = select_item != None
     return simplejson.dumps({'message':message,"word_html":word_html,"form_html":form_html,"show_html":show_html,"table_html":table_html,"show_select":show_select})
 
-def handle_select_item_result(apply_item_form_model,apply_form,apply_item,keeper_status,storeitem,apply_card):
-    count_field = {"weld":"actual_weight",}
+def handle_select_item_result(apply_item_form_model,apply_form,apply_item,keeper_status,storeitem,apply_card,apply_type):
+    count_field = {"weld":"actual_weight","auxiliarytool":"actual_count"}
     if apply_item_form_model != None:
         apply_item_form = apply_item_form_model(deserialize_form(apply_form),instance=apply_item)
         if apply_item_form.is_valid():
@@ -1386,5 +1381,26 @@ def getWordHtml(apply_type,apply_card):
         context = {"apply_card":apply_card,"items":apply_card.steelmaterialapplycarditems_set.all()}
     elif apply_type == "outside":
         context = {"apply_card":apply_card,"items":apply_card.outsideapplycarditems_set.all()}
+    elif apply_type == "auxiliarytool":
+        context = {"apply_card":apply_card}
     word_html = render_to_string(wordhtml_path,context)  
     return word_html
+
+@dajaxice_register
+def getAuxiliaryEntrySearch(request,form):
+    search_form = AuxiliaryEntrySearchForm(deserialize_form(form))
+    if search_form.is_valid():
+        replace_dic = gen_replace_dic(search_form.cleaned_data)
+        entry_list = get_weld_filter(AuxiliaryToolEntry,search_form.cleaned_data,replace_dic).order_by('create_time')
+    context = {
+        "entry_list":entry_list,
+        'default_status':ENTRYSTATUS_CHOICES_KEEPER,
+    }
+    html = render_to_string("storage/widgets/auxiliarytoolsentrytable.html",context)
+    return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def storageSteelRoomDispatchList(request):
+    items = SteelMaterialStoreList.objects.filter(store_room__isnull = True)
+    html = render_to_string("storage/accountsearch/steelstorage.html",{"items":items})
+    return simplejson.dumps({"html":html})

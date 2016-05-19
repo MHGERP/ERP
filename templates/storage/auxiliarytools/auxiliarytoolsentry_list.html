@@ -11,14 +11,16 @@
 {% block inner_content%}
 <link rel="stylesheet" type="text/css" media="screen" href="{{STATIC_URL}}style/storage/auxiliarytools/auxiliarytools.css"/>
    <h3>辅助材料清单</h3>
-   <form class="form-inline" method="post">
+   <form class="form-inline" id="au_entry_search_form">
     {% csrf_token %}
     {% for field in search_form %}
     {{field.label}}
     {{field}}
     {% endfor %}
-    <button class="btn btn-primary">检索</button> 
+    <button class="btn btn-primary" type="button" id="au_entry_search_btn">检索</button> 
    </form>
+<div id="entry_table">
 {% include "storage/widgets/auxiliarytoolsentrytable.html"%}
+</div>
 {% endblock%}
 
