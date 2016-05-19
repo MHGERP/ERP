@@ -54,8 +54,7 @@ $("#btn_save_process2").click(function() {
         var pid = $(this).attr("pid");
         var layer = $(this).find("input:eq(0)").val();
         var weld_method = $("tr[pid='"+pid+"'] select").val();
-        var weld_method2 = $("tr[pid='"+pid+"']").val();
-        alert(weld_method);
+        
         if (weld_method == -1)
             weld_method = null;
         var name = ""
