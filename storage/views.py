@@ -75,17 +75,8 @@ def steelApplyViews(request):
     return render(request,"storage/steelmaterial/steelapplyhome.html",context)
 
 def steelApplyDetailViews(request,aid):
-    applycard = SteelMaterialApplyCard.objects.get(id=aid)
-    items = applycard.steelmaterialapplycarditems_set.all()
-    search_material_form = SteelMaterialSearchForm()
-    store_items = SteelMaterialStoreList.objects.all()
-    context={
-        'applycard':applycard,
-        'items':items,
-        'search_material_form':search_material_form,
-        'store_items':store_items,
-        "search_table_path":"storage/searchmaterial/store_steel_items_table.html",
-    }
+    apply_type = "steel"
+    context = getApplyContext(apply_type,aid)
     return render(request,"storage/steelmaterial/steelapplydetail.html",context)
 
  
@@ -107,6 +98,7 @@ def steelApplyAccountViews(request):
 def steelStorageAccountHomeViews(request):
     card_type = "steelstorage"
     context = getAccountContext(card_type)
+    context["room_dispatch"] = True
     return render(request,"storage/steelmaterial/steelaccount/steelstoragehome.html",context)  
 
 def weldEntryHomeViews(request):
@@ -183,17 +175,19 @@ def Weld_Apply_Card_List(request):
     return render(request,'storage/weldapply/weldapplycardlist.html',context)
 
 def getApplyContext(apply_type,aid):
-    store_model,search_material_form_model,apply_card_model,apply_item_model,search_table_path = getApplyDataDict(apply_type)
+    store_model,search_material_form_model,apply_card_model,apply_item_model,apply_item_form_model,search_table_path = getApplyDataDict(apply_type)
     apply_card = apply_card_model.objects.get(id=aid)
-    apply_item_form = apply_item_model()
     search_material_form = search_material_form_model()
     context = {
         "apply_card":apply_card,
-        "apply_item_form":apply_item_form,
         "search_material_form":search_material_form,
         "search_table_path":search_table_path,
         "apply_type":apply_type,
     }
+    if apply_type in ["steel","outside"]:
+        context["items"] = apply_item_model.objects.filter(apply_card = apply_card)
+    if apply_item_form_model != None:
+        context["apply_item_form"] = apply_item_form_model()
     return context
 
 def Weld_Apply_Card_Detail(request):
@@ -278,6 +272,7 @@ def weldHumitureHomeViews(request):
     else:
         hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("-date")
         search_form = HumSearchForm()
+    hum_set = hum_set.order_by('-date')
     context = {
             "hum_set":hum_set,
             "search_form":search_form,
@@ -500,17 +495,7 @@ def AuxiliaryToolsEntryListView(request):
     return: NULL
     """
     context={}
-    if request.method=='GET':
-        context['entry_list']=AuxiliaryToolEntry.objects.filter(
-            entry_status=ENTRYSTATUS_CHOICES_KEEPER).order_by('create_time')
-    else:
-        search_form = AuxiliaryEntrySearchForm(request.POST)
-        if search_form.is_valid():
-            context['entry_list'] =\
-            get_weld_filter(AuxiliaryToolEntry,search_form.cleaned_data).order_by('create_time')
-        else:
-            context['entry_list']=[]
-            print search_form.errors
+    context['entry_list']=AuxiliaryToolEntry.objects.filter(entry_status=ENTRYSTATUS_CHOICES_KEEPER).order_by('create_time')
     context['search_form'] = AuxiliaryEntrySearchForm()
     context['default_status'] = ENTRYSTATUS_CHOICES_KEEPER
     return render(request,'storage/auxiliarytools/auxiliarytoolsentry_list.html',context)
@@ -556,17 +541,9 @@ def AuxiliaryToolsApplyView(request):
     params: index(GET)
     return: NULL
     """
-    context={}
     id=int(request.GET['id']) 
-    applycard=AuxiliaryToolApplyCard.objects.get(id=id)
-    search_material_form = AuxiliaryToolMaterialSearchForm()
-    context = {
-        "applycard":applycard,
-        "search_table_path":"storage/searchmaterial/store_auxiliarytool_items_table.html",
-        "search_material_form":search_material_form,
-        "apply_form":AuxiliaryToolsApplyItemForm(instance=applycard),
-    }
-
+    apply_type =  "auxiliarytool"
+    context = getApplyContext(apply_type,id)
     return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
 
 def AuxiliaryToolsLedgerView(request):
@@ -771,15 +748,8 @@ def outsideApplyCardHomeViews(request):
     return render(request,"storage/outside/applycardhome.html",context)
 
 def outsideApplyCardConfirmViews(request,cid):
-    applycard = OutsideApplyCard.objects.get(id = cid)
-    items =  applycard.outsideapplycarditems_set.all()
-    search_material_form = OutsideMaterialSearchForm()
-    context = {
-        "applycard":applycard,
-        "items":items,
-        "search_material_form":search_material_form,
-        "search_table_path":"storage/searchmaterial/store_outside_items_table.html",
-    }
+    apply_type = "outside"
+    context = getApplyContext(apply_type,cid)
     return render(request,"storage/outside/applycardconfirm.html",context)
 
 def getOutsideApplyCardConfirmContext(cid,_Inform,url,default_status):

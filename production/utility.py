@@ -7,13 +7,13 @@ from production.models import *
 import datetime
 
 ApplyCardModelDICT = {
-    SteelMaterialApplyCard:1,
-    AuxiliaryToolApplyCard:2,
-    OutsideApplyCard:3,
-    WeldingMaterialApplyCard:4
+    SteelMaterialApplyCard:"G",
+    AuxiliaryToolApplyCard:"F",
+    OutsideApplyCard:"W",
+    WeldingMaterialApplyCard:"H",
 }
 
 def get_applycard_code(ApplyCardModel):
     date_str = datetime.datetime.now().strftime("%Y%m%d")
     num = ApplyCardModel.objects.filter(applycard_code__startswith=date_str).count() + 1
-    return "%s%d%04d" % (date_str, ApplyCardModelDICT[ApplyCardModel], num)
+    return "%s%s%04d" % (ApplyCardModelDICT[ApplyCardModel], date_str, num)

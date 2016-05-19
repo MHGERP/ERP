@@ -169,3 +169,10 @@ class ProductionUserForm(ModelForm):
 
 class ApplyCardForm(forms.Form):
     applycard_code__contains = forms.CharField(required=False, label=u"领用单编号",)
+
+class MaterielCopyForm(forms.Form):
+    sub_workorder__name__contains = forms.CharField(required=False, label=u"工作令",)
+    inventory_type = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"明细表类型")
+    def __init__(self, *args, **kwargs):
+        super(MaterielCopyForm, self).__init__(*args,**kwargs)
+        self.fields["inventory_type"].choices = tuple((item.id, item) for item in InventoryType.objects.all()) 

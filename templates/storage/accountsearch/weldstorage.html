@@ -21,7 +21,7 @@
             <td>{{item.entry_item.material_code}}</td>
             <td>{{item.entry_item.factory|default_if_none:""}}</td>
             <td>{{item.get_item_status_display}}</td>
-            <td>{{item.inventory_count}}</td>
+            <td>{{item.count}}</td>
         </tr>
         {% endfor %}
         <tr>

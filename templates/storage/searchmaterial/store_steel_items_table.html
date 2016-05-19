@@ -1,4 +1,4 @@
-<thead>
+<thead id="apply_store_thead">
     <th>选择</th>
     <th>材质</th>
     <th>工作令</th>
@@ -11,15 +11,29 @@
 <tbody>
     {% for item in store_items %}
     <tr>
-        <td><input type="radio" name="radion_item" value = "{{item.id}}" /></td>
+        <td><input type="radio" name="radio_item" value = "{{item.id}}" {% ifequal select_item.id item.id %} checked = "checked" {% endifequal %} /></td>
         <td>{{item.entry_item.material_mark}}</td>
         <td>{{item.entry_item.show_workorder}}</td>
         <td>{{item.entry_item.batch_number}}</td>
         <td>{{item.specification}}</td>
         <td>{{item.count}}</td>
         <td>{{item.entry_item.material_code}}</td>
-        <td>{{item.store_room}}</td>
+        <td>{{item.store_room|default_if_none:"未分配"}}</td>
     </tr>
     {% endfor %}
 </tbody>
+<tfoot style="display:none">
+    {% if select_item %}
+    <tr id="select_item" sid={{select_item.id}}>
+        <td><input type="radio"  value = "{{select_item.id}}" checked = "checked"/></td>
+        <td>{{select_item.entry_item.material_mark}}</td>
+        <td>{{select_item.entry_item.show_workorder}}</td>
+        <td>{{select_item.entry_item.batch_number}}</td>
+        <td>{{select_item.specification}}</td>
+        <td>{{select_item.count}}</td>
+        <td>{{select_item.entry_item.material_code}}</td>
+        <td>{{select_item.store_room|default_if_none:"未分配"}}</td>
+    </tr>
+    {% endif %}
+</tfoot>
 

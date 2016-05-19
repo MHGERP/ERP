@@ -22,29 +22,28 @@ style='mso-spacerun:yes'>&nbsp;</span></span></span></b><span style='font-family
 style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:12.0pt;
 font-family:宋体'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal>
 <div class="row-fluid">
-<div class="span2">
+<div style="width:20%;float:left;">
 <span style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";
     mso-hansi-font-family:"Arial Narrow"'>货物来源：{{entry.material_source}}</span><span lang=EN-US
 style='font-family:"Arial Narrow","sans-serif"'></span>
 </div>
-<div class="span3">
+<div style="width:25%;float:left;">
 <span style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";
 mso-hansi-font-family:"Arial Narrow"'>订购单编号</span><span style='font-family:
 宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>：{{entry.bidform_code|default_if_none:""}}</span><span
 style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";mso-hansi-font-family:
 "Arial Narrow"'></span><span lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>
 </div>
-<div class="span4">
+<div style="width:33%;float:left;">
 <span
 style='font-family:宋体;mso-ascii-font-family:"Arial Narrow";mso-hansi-font-family:
 "Arial Narrow"'>接收检查记录表编号：{{entry.inspection_record|default_if_none:""}}</span>
 </div>
-<div class="span3">
+<div style="width:22%;float:left;">
 <span style='font-family:宋体;mso-ascii-font-family:
     "Times New Roman";mso-hansi-font-family:"Times New Roman"'>编号：{{entry.entry_code}}</span><span
-lang=EN-US style='font-family:"Arial Narrow","sans-serif"'></span></p>
+lang=EN-US style='font-family:"Arial Narrow","sans-serif"'></span>
 </div>
 </div>
 <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
@@ -60,7 +59,7 @@ lang=EN-US style='font-family:"Arial Narrow","sans-serif"'></span></p>
   "Arial Narrow"'>序号</span></b><b style='mso-bidi-font-weight:normal'><span
   lang=EN-US style='mso-bidi-font-size:10.5pt;font-family:"Arial Narrow","sans-serif"'><o:p></o:p></span></b></p>
   </td>
-  <td width=68 style='width:51.3pt;border:solid windowtext 1.0pt;border-left:
+  <td width=68 style='width:71.3pt;border:solid windowtext 1.0pt;border-left:
   none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:22.1pt'>
   <p class=MsoNormal align=center style='text-align:center'><b
@@ -212,27 +211,26 @@ lang=EN-US style='font-family:"Arial Narrow","sans-serif"'></span></p>
  </tr>
 </table>
 
-<p class=MsoNormal style='line-height:12.0pt;mso-line-height-rule:exactly'>
 <div class="row-fluid">
-<div class="span4">
+<div style="width:33%;float:left;">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
 mso-hansi-font-family:"Times New Roman"'>采购员：{% ifequal entry.purchaser None %}<span class="btn btn-mark" name="outside_entry_confirm" role="purchaser">签字</span>{% else %}{{entry.purchaser.userinfo}}{% endifequal %}</span></span>
 </div>
-<div class="span4">
+<div style="width:33%;float:left;">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
 mso-hansi-font-family:"Times New Roman"'>检查员：{% ifequal entry.inspector None %}<span class="btn btn-mark" name="outside_entry_confirm" role="inspector">签字</span>{% else %}{{entry.inspector.userinfo}}{% endifequal %}</span><span lang=EN-US
 style='mso-bidi-font-size:10.5pt'></span>
 </div>
-<div class="span4">
+<div style="width:33%;float:left;">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
 mso-hansi-font-family:"Times New Roman"'>库管员：{% ifequal entry.keeper None %}<span class="btn btn-mark" name="outside_entry_confirm" role="keeper" eid={{entry.id}}>签字</span>{% else %}{{entry.keeper.userinfo}}{% endifequal %}</span><span lang=EN-US
 style='mso-bidi-font-size:10.5pt'></span>
 </div>
 </div>
-</p>
+
 
 
 

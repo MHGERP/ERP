@@ -45,6 +45,6 @@ $(document).ready(function(){
 });
 
 function weldapplyconfirm_callback(data){
-    $("#word_contain").html(data.html);
+    $("#applycard").html(data.html);
     alert(data.message);
 }

@@ -7,7 +7,7 @@ from storage.models import *
 from storage.forms import *
 from purchasing.models import *
 from django.db.models import Q
-def get_weld_filter(model_type,dict,replace_dic=None):
+def get_weld_filter(model_type,dict,replace_dic=None,is_show_all = True):
     """
     author: Shen Lian
     summary:filter objects by search form
@@ -30,7 +30,10 @@ def get_weld_filter(model_type,dict,replace_dic=None):
         qset = reduce(lambda x,y:x & y ,qset)
         res_set = model_type.objects.filter(qset)
     else:
-        res_set = model_type.objects.all()
+        if is_show_all:
+            res_set = model_type.objects.all()
+        else:
+            res_set = model_type.objects.filter(id = -1)#为了获取空集合
     return res_set
 
 
@@ -39,7 +42,7 @@ def weldStoreItemsCreate(entry):
 
     for item in entry_items:
         try:
-            storeitem = WeldStoreList(entry_item = item , inventory_count = item.total_weight,entry_time = entry.create_time)        
+            storeitem = WeldStoreList(entry_item = item , count = item.total_weight,entry_time = entry.create_time)        
             if item.material.name == u"焊条" or item.material.name == u"焊剂":
                 production_date = item.production_date
                 storeitem.deadline = production_date.replace(production_date.year + 2)
@@ -271,7 +274,7 @@ def createAuxiliaryToolStoreList(entry):
     辅助工具入库单台账更新
     """
     for item in entry.auxiliarytoolentryitems_set.all():
-        AuxiliaryToolStoreList(entry_item = item , inventory_count = item.count).save()
+        AuxiliaryToolStoreList(entry_item = item , count = item.count).save()
 
 def createSteelMaterialStoreList(entry):
     for item in entry.steelmaterialentryitems_set.all():
@@ -305,6 +308,9 @@ def getAccountItemDataDict(role):
 
 def getApplyDataDict(apply_type):
     search_table_path = "storage/searchmaterial/store_"+apply_type+"_items_table.html"
-    weld = (WeldStoreList,WeldMaterialSearchForm,WeldingMaterialApplyCard,WeldApplyKeeperForm)
-    model_dict = {"weld":weld,}
-    return model_dict[apply_type][0],model_dict[apply_type][1],model_dict[apply_type][2],model_dict[apply_type][3],search_table_path
+    weld = (WeldStoreList,WeldMaterialSearchForm,WeldingMaterialApplyCard,WeldingMaterialApplyCard,WeldApplyKeeperForm)
+    steel = (SteelMaterialStoreList,SteelMaterialSearchForm,SteelMaterialApplyCard,SteelMaterialApplyCardItems,None)
+    outside = (OutsideStorageList,OutsideMaterialSearchForm,OutsideApplyCard,OutsideApplyCardItems,None)
+    auxiliarytool = (AuxiliaryToolStoreList,AuxiliaryToolMaterialSearchForm,AuxiliaryToolApplyCard,AuxiliaryToolApplyCard,AuxiliaryToolsApplyItemForm)
+    model_dict = {"weld":weld,"steel":steel,"outside":outside,"auxiliarytool":auxiliarytool}
+    return model_dict[apply_type][0],model_dict[apply_type][1],model_dict[apply_type][2],model_dict[apply_type][3],model_dict[apply_type][4],search_table_path

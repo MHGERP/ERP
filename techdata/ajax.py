@@ -53,6 +53,8 @@ def detailItemGenerateFactory(inventory_type):
         return CooperantItem
     elif inventory_type == MAIN_MATERIEL:
         return PrincipalItem
+    elif inventory_type == AUXILIARY_MATERIEL:
+        return AuxiliaryItem
 
 @dajaxice_register
 def detailMark(request, id_work_order, step, inventory_type):
@@ -85,20 +87,6 @@ def detailMark(request, id_work_order, step, inventory_type):
             "warning": u"后台保存错误"
         }
     return simplejson.dumps(context)
-def detailItemGenerateFactory(inventory_type):
-    """
-    JunHU
-    """
-    if inventory_type == OUT_PURCHASED:
-        return OutPurchasedItem
-    elif inventory_type == FIRST_FEEDING:
-        return FirstFeedingItem
-    elif inventory_type == COOPERANT:
-        return CooperantItem
-    elif inventory_type == MAIN_MATERIEL:
-        return PrincipalItem
-    elif inventory_type == AUXILIARY_MATERIEL:
-        return AuxiliaryItem
 
 @dajaxice_register
 def getInventoryTables(request, id_work_order, inventory_type):
@@ -1545,6 +1533,9 @@ def weldQuotaReviewerConfirm(request, id_work_order):
     order.weldquotapagemark.reviewer = request.user
     order.weldquotapagemark.reviewe_date = datetime.datetime.today()
     order.weldquotapagemark.save()
+
+    batchDecentialization(order, WELD_MATERIAL, WeldQuota)
+
     return simplejson.dumps({"ret": True, "user": unicode(request.user.userinfo)})
 
 @dajaxice_register
@@ -1731,13 +1722,16 @@ def getWeldingProcessSpecification(request, id_work_order, page = "1", is_print 
     return html
 
 @dajaxice_register
-def getCard(request,wwi_id):
+def getCard(request, wwi_id, page = "1", is_print = False):
     """
     MH Chen
     """
     weld_work_instruction = WeldingWorkInstruction.objects.get(id = wwi_id)
+    process_list1 = list(WeldingWorkInstructionProcess.objects.filter(card_belong = weld_work_instruction))
     weldseam = WeldSeam.objects.filter(weld_joint_detail = weld_work_instruction.detail)[0]
     name = weld_work_instruction.detail.weld_position.name
+    page, total_page, process_list = transferCardProcessPaginator(process_list1, page, 100, 13, 13)
+    print process_list[0].row_content
     context = {"STATIC_URL": settings.STATIC_URL,
                "weld_work_instruction":weld_work_instruction,
                "FLUSH_WELD":FLUSH_WELD,
@@ -1748,6 +1742,34 @@ def getCard(request,wwi_id):
                "weldseam":weldseam,
                "name":name,
                "GTAW":GTAW,
-               "GMAW":GMAW,}
+               "GMAW":GMAW,
+               "process_list":process_list,
+               "process_list1":process_list1,}
     html = render_to_string("techdata/widgets/weld_instruction_book.html",context)
     return html
+
+@dajaxice_register
+def getWeldingWorkInstructionProcessList(request, wwi_id, page = "1", is_print = False):
+    """
+    MH Chen
+    """
+    weld_work_instruction = WeldingWorkInstruction.objects.get(id = wwi_id)
+    process_list = WeldingWorkInstructionProcess.objects.filter(card_belong = weld_work_instruction)
+    context = {"process_list":process_list}
+    html = render_to_string("techdata/widgets/wwi_process_card.html", context)
+    return html
+
+@dajaxice_register
+def saveWeldWorkInstructionProcess(request, arr):
+    """
+    MH Chen
+
+    """
+    print arr
+    for item in arr:
+        process = WeldingWorkInstructionProcess.objects.get(id = item.get("pid", None))
+
+        process.index = item.get("index", None)
+        process.name = item.get("name", None)
+        process.detail = item.get("detail", None)
+        process.save()
