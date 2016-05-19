@@ -40,6 +40,7 @@ def taskConfirmViews(request):
 def materielUseViews(request):
     context={
         "applyCardForm":ApplyCardForm(),
+        "materielCopyForm":MaterielCopyForm()
     }
     return render(request,"production/materiel_use.html",context)
 
