@@ -24,6 +24,7 @@ $("#btn_save_process").click(function() {
         var name = "";
         var detail = $(this).find("textarea:eq(0)").val();
         arr.push({
+
             "pid": pid,
             "index": index,
             "name": name,
@@ -35,5 +36,14 @@ $("#btn_save_process").click(function() {
         refresh();
     }, {
         "arr": arr,
+    });
+});
+
+$(document).on("dblclick", ".step_area", function() {
+    Dajaxice.techdata.getWeldStepList(function(data) {
+        $("#process_table2").html(data);
+        $("#process_modal2").modal("show");
+    }, {
+        "wwi_id": $("#div_card").attr("wwi_id"),
     });
 });

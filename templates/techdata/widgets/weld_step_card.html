@@ -1,0 +1,42 @@
+<table class="table table-bordered table-striped">
+    <colgroup span="1" align="left"></colgroup>
+    <colgroup span="1"></colgroup>
+    <colgroup align="right"></colgroup>
+    <thead>
+        <th>层/道</th>
+        <th >焊接方法</th>
+        <th>牌号</th>
+        <th>直径</th>
+        <th>极性</th>
+        <th>电流(A)</th>
+        <th>电弧电压(V)</th>
+        <th>焊接速度(cm/min)</th>
+        <th>线能量(kJ/cm)</th>
+        <th>备注</th>
+    </thead>
+    <tbody>
+        {% for step in weld_step_list %}
+        <tr pid="{{step.id}}" class="tr_process">
+            <td style="vertical-align: middle"><input type="text" value="{{step.layer|default_if_none:""}}" class="input-mini" /></td>
+            <td style="vertical-align: middle ;" >    
+                <input type="text" value="{{step.weld_method|default_if_none:''}}"  style="width:80px" class="input-mini" /></td>
+            <td style="vertical-align: middle ;" >
+                <input type="text"  class="input-mini" /></td>
+            <td style="vertical-align: middle ;" >
+                <input type="text"  class="input-mini" /></td>
+            <td style="vertical-align: middle ;" >
+                <input type="text" value="{{step.polarity|default_if_none:''}}" class="input-mini" /></td>
+            <td style="vertical-align: middle ;" >
+                <input type="text" value="{{step.electric|default_if_none:''}}" class="input-mini" /></td>
+            <td style="vertical-align: middle ;" >
+                <input type="text" value="{{step.arc_voltage|default_if_none:''}}" class="input-mini" /></td>
+            <td style="vertical-align: middle ;" >
+                <input type="text" value="{{step.weld_speed|default_if_none:''}}" class="input-mini" /></td>
+            <td style="vertical-align: middle ;" >
+                <input type="text" value="{{step.heat_input|default_if_none:''}}" class="input-mini" /></td>
+            <td style="vertical-align: middle ;" >
+                <input type="text" value="{{step.remark|default_if_none:''}}" class="input-mini" /></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

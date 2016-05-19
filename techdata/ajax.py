@@ -1650,6 +1650,13 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray, id_work_order):
         wwi = WeldingWorkInstruction(detail = weld_joint_detail)
         wwi.file_index = WeldingWorkInstruction.objects.filter(detail__specification__order = weld_joint_detail.specification.order).count() + 1
         wwi.save()
+        for item in range(13):
+            weld_work_instruction_process = WeldingWorkInstructionProcess(card_belong = wwi)
+            weld_work_instruction_process.save()
+
+        for item in range(6):
+            weld_step = WeldingStep(card_belong = wwi)
+            weld_step.save()
     else:
         context = {
             "form" : weld_joint_detail_form
@@ -1727,11 +1734,11 @@ def getCard(request, wwi_id, page = "1", is_print = False):
     MH Chen
     """
     weld_work_instruction = WeldingWorkInstruction.objects.get(id = wwi_id)
+    weld_step_list = list(WeldingStep.objects.filter(card_belong = weld_work_instruction))
     process_list1 = list(WeldingWorkInstructionProcess.objects.filter(card_belong = weld_work_instruction))
     weldseam = WeldSeam.objects.filter(weld_joint_detail = weld_work_instruction.detail)[0]
     name = weld_work_instruction.detail.weld_position.name
     page, total_page, process_list = transferCardProcessPaginator(process_list1, page, 100, 13, 13)
-    print process_list[0].row_content
     context = {"STATIC_URL": settings.STATIC_URL,
                "weld_work_instruction":weld_work_instruction,
                "FLUSH_WELD":FLUSH_WELD,
@@ -1744,7 +1751,8 @@ def getCard(request, wwi_id, page = "1", is_print = False):
                "GTAW":GTAW,
                "GMAW":GMAW,
                "process_list":process_list,
-               "process_list1":process_list1,}
+               "process_list1":process_list1,
+               "weld_step_list":weld_step_list,}
     html = render_to_string("techdata/widgets/weld_instruction_book.html",context)
     return html
 
@@ -1755,21 +1763,38 @@ def getWeldingWorkInstructionProcessList(request, wwi_id, page = "1", is_print =
     """
     weld_work_instruction = WeldingWorkInstruction.objects.get(id = wwi_id)
     process_list = WeldingWorkInstructionProcess.objects.filter(card_belong = weld_work_instruction)
+    
     context = {"process_list":process_list}
     html = render_to_string("techdata/widgets/wwi_process_card.html", context)
     return html
 
+@dajaxice_register
+def getWeldStepList(request, wwi_id):
+    """
+    MH Chen
+    """
+    weld_work_instruction = WeldingWorkInstruction.objects.get(id = wwi_id)
+    weld_step_list = list(WeldingStep.objects.filter(card_belong = weld_work_instruction))
+    while len(weld_step_list) < 6:
+        weld_step = WeldingStep()
+        weld_step.save()
+        print weld_step.id
+        weld_step_list.append(weld_step)
+    context = {"weld_step_list":weld_step_list}
+    html = render_to_string("techdata/widgets/weld_step_card.html", context)
+    return html
 @dajaxice_register
 def saveWeldWorkInstructionProcess(request, arr):
     """
     MH Chen
 
     """
-    print arr
     for item in arr:
-        process = WeldingWorkInstructionProcess.objects.get(id = item.get("pid", None))
+        print item.pid
+        if item.pid != None:
+            process = WeldingWorkInstructionProcess.objects.get(id = item.get("pid", None))
+            process.index = item.get("index", None)
+            process.name = item.get("name", None)
+            process.detail = item.get("detail", None)
+            process.save()
 
-        process.index = item.get("index", None)
-        process.name = item.get("name", None)
-        process.detail = item.get("detail", None)
-        process.save()

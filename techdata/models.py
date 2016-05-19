@@ -614,3 +614,19 @@ class ConnectOrientation(models.Model):
         verbose_name_plural = u"管口方位图"
     def __unicode__(self):
         return self.name
+
+class WeldingStep(models.Model):
+    layer = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"层/道")
+    weld_method = models.ForeignKey(WeldMethod,blank = True, null = True, max_length = 100, verbose_name = u"所属焊接方法")
+    polarity = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"极性")
+    electric = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"电流")
+    arc_voltage = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"电流电压")
+    weld_speed = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"焊接速度")
+    heat_input = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"线能量")
+    remark = models.CharField(blank = True, null = True, max_length = 100, verbose_name = u"备注")
+    card_belong = models.ForeignKey(WeldingWorkInstruction, verbose_name = u"所属焊接作业指导书")
+    class Meta:
+        verbose_name = u"焊接层道卡"
+        verbose_name_plural = u"焊接层道卡"
+    def __unicode__(self):
+        return self.layer 
