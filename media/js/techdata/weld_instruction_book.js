@@ -54,7 +54,7 @@ $("#btn_save_process2").click(function() {
     $(".tr_process2").each(function() {
         var pid = $(this).attr("pid");
         var layer = $(this).find("input:eq(0)").val();
-        var weld_method = $(this).find("input:eq(1)").val();
+        var weld_method = $("#id_select").val();
         var name = ""
         var diameter = "";
         var polarity = $(this).find("input:eq(4)").val();
