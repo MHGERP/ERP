@@ -45,6 +45,7 @@ RegisterClass = (
     WeldingProcessSpecification,
     WeldingWorkInstruction,
     WeldingWorkInstructionProcess,
+    WeldingStep,
 )
 
 for item in RegisterClass:
