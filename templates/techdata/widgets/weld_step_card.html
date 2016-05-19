@@ -23,7 +23,7 @@
                     {% if step.weld_method != None %}
                     <option value ="{{step.weld_method.id}}">{{step.weld_method}}</option>
                     {% if step.card_belong.detail.weld_method_1 != step.weld_method %}
-                    <option value ="{{step.card_belong.detail.weld_method_1.id}}">{{step.card_belong.detail.weld_method_1}}</option>
+                     <option value ="{{step.card_belong.detail.weld_method_1.id}}">{{step.card_belong.detail.weld_method_1}}</option>
                     {% else %}
                     {% if step.card_belong.detail.weld_method_2 != None %}
                     <option value ="{{step.card_belong.detail.weld_method_2.id}}">{{step.card_belong.detail.weld_method_2}}</option>
