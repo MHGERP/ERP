@@ -18,6 +18,7 @@ class MaterielCopy(Materiel):
     batch_number=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"炉批号")
     quality_number=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"材质编号")
     delivery_time=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"交货期")
+    material_classify=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"材料分类")
     class Meta:
         verbose_name = u"伪物料"
         verbose_name_plural = u"伪物料"
