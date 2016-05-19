@@ -408,7 +408,7 @@ class WeldRefund(models.Model):
     refund_weight = models.FloatField(null=True,blank=False,verbose_name=u"退库量（重量）")
     refund_count = models.FloatField(null=True,blank=True,verbose_name=u"退库量（数量）")
     refund_status = models.CharField(max_length=20,blank=True,verbose_name=u"退库状态",default="")
-    weldrefund_status = models.IntegerField(default=REFUNDSTATUS_CHOICES_REFUNDER,choices=REFUNDSTATUS_CHOICES,verbose_name=u"退库单状态")
+    status = models.IntegerField(default=REFUNDSTATUS_CHOICES_REFUNDER,choices=REFUNDSTATUS_CHOICES,verbose_name=u"退库单状态")
     refunder =  models.ForeignKey(User,verbose_name=u"退库人",null=True,blank=True,related_name = "weldrefund_refunder")
     keeper = models.ForeignKey(User,verbose_name=u"库管人",null=True,blank=True,related_name = "weldrefund_keeper")
 
@@ -624,3 +624,17 @@ class OutsideRefundCardItems(models.Model):
         verbose_name_plural = u"外购件退库单材料"
     def __unicode__(self):
         return "%s" %  self.applyitem.specification
+
+class CardStatusStopRecord(models.Model):
+    user  = models.ForeignKey(User,verbose_name="操作者")
+    create_time = models.DateField(blank=False,null=True,verbose_name=u"日期",auto_now_add = True)
+    card_type = models.CharField(max_length=20,verbose_name=u"单据类型")
+    card_id = models.IntegerField(verbose_name=u"单据ID")
+    remark = models.TextField(max_length=1000,verbose_name=u"原因")
+    class Meta:
+        verbose_name = u"单据终止记录"
+        verbose_name_plural = u"单据终止记录"
+
+    def __unicode__(self):
+        return '%s' % self.card_type
+

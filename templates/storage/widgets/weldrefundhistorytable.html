@@ -5,6 +5,7 @@
         <th>日期</th>
         <th>退库单编号</th>
         <th>焊缝编号</th>
+        <th>退库单状态</th>
         <th>操作</th>
     </thead>
     </tbody>
@@ -15,8 +16,9 @@
             <td>{{ref_obj.create_time|date:"Y年m月d日"}}</td>
             <td>{{ref_obj.refund_code}}</td>
             <td>{{ref_obj.apply_card.weld_bead_number}}</td>
+            <td>{{ref_obj.get_status_display}}</td>
             <td>
-                {% ifequal ref_obj.weldrefund_status  default_status %}
+                {% ifequal ref_obj.status  default_status %}
                 <a class="btn btn-warning" href="/storage/weldrefunddetail/{{ref_obj.id}}">待处理</a>
                 {% else %}
                 <a class="btn" href="/storage/weldrefunddetail/{{ref_obj.id}}">查看</a>

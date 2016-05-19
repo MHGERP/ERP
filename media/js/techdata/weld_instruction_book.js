@@ -48,21 +48,22 @@ $(document).on("dblclick", ".step_area", function() {
     });
 });
 
-
 $("#btn_save_process2").click(function() {
     var arr = new Array();
     $(".tr_process2").each(function() {
         var pid = $(this).attr("pid");
         var layer = $(this).find("input:eq(0)").val();
         var weld_method = $("#id_select").val();
+        if (weld_method == -1)
+            weld_method = null;
         var name = ""
         var diameter = "";
-        var polarity = $(this).find("input:eq(4)").val();
-        var electric = $(this).find("input:eq(5)").val();
-        var arc_voltage = $(this).find("input:eq(6)").val();
-        var weld_speed = $(this).find("input:eq(7)").val();
-        var heat_input = $(this).find("input:eq(8)").val();
-        var remark = $(this).find("input:eq(9)").val();
+        var polarity = $(this).find("input:eq(3)").val();
+        var electric = $(this).find("input:eq(4)").val();
+        var arc_voltage = $(this).find("input:eq(5)").val();
+        var weld_speed = $(this).find("input:eq(6)").val();
+        var heat_input = $(this).find("input:eq(7)").val();
+        var remark = $(this).find("input:eq(8)").val();
         arr.push({
 
             "pid": pid,
@@ -80,7 +81,10 @@ $("#btn_save_process2").click(function() {
         });
     });
     Dajaxice.techdata.saveWeldStep(function(data) {
-        alert("保存成功！");
+        if (data = "ok")
+            alert("保存成功！");
+        else
+            alert("请完善所有信息后保存");
         refresh();
     }, {
         "arr": arr,
