@@ -16,7 +16,7 @@
     </thead>
     <tbody>
         {% for step in weld_step_list %}
-        <tr pid="{{step.id}}" class="tr_process">
+        <tr pid="{{step.id}}" class="tr_process2">
             <td style="vertical-align: middle"><input type="text" value="{{step.layer|default_if_none:""}}" class="input-mini" /></td>
             <td style="vertical-align: middle ;" >    
                 <input type="text" value="{{step.weld_method|default_if_none:''}}"  style="width:80px" class="input-mini" /></td>

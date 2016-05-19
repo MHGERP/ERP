@@ -1797,3 +1797,24 @@ def saveWeldWorkInstructionProcess(request, arr):
             process.detail = item.get("detail", None)
             process.save()
 
+
+@dajaxice_register
+def saveWeldStep(request, arr):
+    """
+    MH Chen
+
+    """
+    for item in arr:
+        if item.get("pid", None) != None:
+            step = WeldingStep.objects.get(id = item.get("pid", None))
+            step.layer = item.get("layer", None)
+            step.weld_method = item.get("weld_method", None)
+            step.name = item.get("name", None)
+            step.diameter = item.get("diameter", None)
+            step.polarity = item.get("polarity", None)
+            step.electric = item.get("electric", None)
+            step.arc_voltage = item.get("arc_voltage", None)
+            step.weld_speed = item.get("weld_speed", None)
+            step.heat_input = item.get("heat_input", None)
+            step.remark = item.get("remark", None)
+            step.save()
