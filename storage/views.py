@@ -98,6 +98,7 @@ def steelApplyAccountViews(request):
 def steelStorageAccountHomeViews(request):
     card_type = "steelstorage"
     context = getAccountContext(card_type)
+    context["room_dispatch"] = True
     return render(request,"storage/steelmaterial/steelaccount/steelstoragehome.html",context)  
 
 def weldEntryHomeViews(request):
@@ -271,6 +272,7 @@ def weldHumitureHomeViews(request):
     else:
         hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("-date")
         search_form = HumSearchForm()
+    hum_set = hum_set.order_by('-date')
     context = {
             "hum_set":hum_set,
             "search_form":search_form,
@@ -493,17 +495,7 @@ def AuxiliaryToolsEntryListView(request):
     return: NULL
     """
     context={}
-    if request.method=='GET':
-        context['entry_list']=AuxiliaryToolEntry.objects.filter(
-            entry_status=ENTRYSTATUS_CHOICES_KEEPER).order_by('create_time')
-    else:
-        search_form = AuxiliaryEntrySearchForm(request.POST)
-        if search_form.is_valid():
-            context['entry_list'] =\
-            get_weld_filter(AuxiliaryToolEntry,search_form.cleaned_data).order_by('create_time')
-        else:
-            context['entry_list']=[]
-            print search_form.errors
+    context['entry_list']=AuxiliaryToolEntry.objects.filter(entry_status=ENTRYSTATUS_CHOICES_KEEPER).order_by('create_time')
     context['search_form'] = AuxiliaryEntrySearchForm()
     context['default_status'] = ENTRYSTATUS_CHOICES_KEEPER
     return render(request,'storage/auxiliarytools/auxiliarytoolsentry_list.html',context)
@@ -549,17 +541,9 @@ def AuxiliaryToolsApplyView(request):
     params: index(GET)
     return: NULL
     """
-    context={}
     id=int(request.GET['id']) 
-    applycard=AuxiliaryToolApplyCard.objects.get(id=id)
-    search_material_form = AuxiliaryToolMaterialSearchForm()
-    context = {
-        "applycard":applycard,
-        "search_table_path":"storage/searchmaterial/store_auxiliarytool_items_table.html",
-        "search_material_form":search_material_form,
-        "apply_form":AuxiliaryToolsApplyItemForm(instance=applycard),
-    }
-
+    apply_type =  "auxiliarytool"
+    context = getApplyContext(apply_type,id)
     return render(request,'storage/auxiliarytools/auxiliarytoolsapply.html',context)
 
 def AuxiliaryToolsLedgerView(request):

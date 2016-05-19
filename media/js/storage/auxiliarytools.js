@@ -1,13 +1,3 @@
-$('#date').datetimepicker({
-    format: 'yyyy-mm-dd',
-    autoclose:true,
-    minView:'month',
-});
-$('input[id$=time]').datetimepicker({
-    format: 'yyyy-mm-dd',
-    autoclose:true,
-    minView:'month',
-});
 $(document).ready(function(){
     var aid;
     $(document).on("dblclick", "tr[name='entry_item_tr']", function(){
@@ -85,8 +75,7 @@ $(document).ready(function(){
             'search_type':'apply',
         });
     });
-    $("#apply_card_form").submit(function(e){
-        e.preventDefault();
+    $(document).on("click","#auxiliarytools_search_submit",function(){
         var form=$("#apply_card_form").serialize();
         Dajaxice.storage.Search_Auxiliary_Tools_Apply_Card(function(data){
             $('#apply_card_table').html(data.html);
@@ -94,23 +83,7 @@ $(document).ready(function(){
         {
             'form':form,
         });
-    });
-    $(document).on("dblclick","#applycard_table",function(){
-        $("#myModal").modal('show');
-    });
-    $(document).on("click","#search_material_btn",function(){
-        Dajaxice.storage.searchMaterial(search_material_callback,{"search_form":$("#search_material_form").serialize(),"search_type":"auxiliarytool",});
-    })
-    $(document).on("click","#apply_item_save",function(){
-        var select_item = $("input[type='radio']:checked").val();
-        if(select_item != null){
-            var aid = $("#applycard_table").attr("aid");
-            Dajaxice.storage.auxiliaryToolMaterialApply(auxiliarytoolapply_callback,{"select_item":select_item,"aid":aid,"form":$("#apply_form").serialize()});
-        }
-        else{
-            alert("请选择领用材料");
-        }
-    })
+    })    
     $(document).on("click", "span[name='autool_apply']", function(){
         var role = $(this).attr("role");
         var aid = $(this).attr("aid");
@@ -118,6 +91,13 @@ $(document).ready(function(){
             Dajaxice.storage.auToolApplyCardConfirm(applycardConfirm_callback, {"role":role, "aid":aid});
         }
     });
+    $(document).on("click","#au_entry_search_btn",function(){
+        Dajaxice.storage.getAuxiliaryEntrySearch(function(data){
+            $("#entry_table").html(data.html);
+        },{
+            "form":$("#au_entry_search_form").serialize(),
+        });
+    })
 });
 function auxiliarytoolapply_callback(data){
     $("#apply_form").html(data.form_html);
@@ -141,9 +121,6 @@ function SetValue(obj,model,measurement_unit,unit_price)
     var unit_price=parseInt(unit_price);
     var value=target.children('td:nth-child(5)').children('input').val();
     target.children('td:nth-child(7)').html(value*unit_price);
-}
-function search_material_callback(data){
-    $("#store_items_table").html(data.html); 
 }
 $('select').change(function(){
     var obj=$(this);

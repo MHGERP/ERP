@@ -1,6 +1,6 @@
 <body lang=ZH-CN style='tab-interval:21.0pt;text-justify-trim:punctuation'>
 
-<div class=WordSection1 style='layout-grid:15.6pt'>
+<div class=WordSection1 style='layout-grid:15.6pt;width:1000px;'>
 
 <p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
 mso-line-height-rule:exactly'><u><span style='font-size:16.0pt;mso-bidi-font-size:
@@ -24,28 +24,26 @@ lang=EN-US style='font-size:16.0pt'><span style='mso-spacerun:yes'>&nbsp;&nbsp;
 lang=EN-US style='font-size:16.0pt'><o:p></o:p></span></p>
 
 <div align=center>
-<p class=MsoNormal><span lang=EN-US><span
+<div style="width:50%;float:left;">
+    <span
 style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span><span style='font-family:宋体;mso-ascii-font-family:"Times New Roman";
-    mso-hansi-font-family:"Times New Roman"'>入库时间：{{entry.create_time|date:'Y年m月d日'}}</span><span lang=EN-US><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span><span
-style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span
+    mso-hansi-font-family:"Times New Roman"'>入库时间：{{entry.create_time|date:'Y年m月d日'}}</span>
+</div>
+<div style="width:50%;float:left;">
+<span
 style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>单据编号：{{entry.entry_code}}</span><span lang=EN-US><span
-style='mso-spacerun:yes'>&nbsp; </span></span></p>
- <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
+"Times New Roman"'>单据编号：{{entry.entry_code}}</span>
+</div>
+</div>
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
  style='border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
  mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:.5pt solid windowtext;
  mso-border-insidev:.5pt solid windowtext' id="items_table" eid = "{{entry.id}}">
 {% include "storage/wordhtml/weldentryitemstable.html" %}
 </table> 
 
-</div>
 
-<p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
-
-<p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
 
 </div>
 

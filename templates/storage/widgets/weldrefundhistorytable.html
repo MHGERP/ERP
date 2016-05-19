@@ -10,7 +10,7 @@
     </tbody>
         {% for ref_obj in refund_set %}
         <tr>
-            <td>{{ref_obj.apply_card.workorder}}</td>
+            <td>{{ref_obj.apply_card.work_order}}</td>
             <td>{{ref_obj.department}}</td>
             <td>{{ref_obj.create_time|date:"Y年m月d日"}}</td>
             <td>{{ref_obj.refund_code}}</td>

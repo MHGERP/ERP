@@ -15,6 +15,9 @@ $(document).ready(function(){
         var card_type = $("#account_search_btn").attr("card_type");
         Dajaxice.storage.storageAccountItemModify(storageaccountitemmodify_callback,{"account_item_form":$("#account_item_form").serialize(),"mid":mid,"search_form":$("#account_search_form").serialize(),"card_type":card_type,"role":role});
     })
+    $(document).on("click","#account_room_dispatch_btn",function(){
+        Dajaxice.storage.storageSteelRoomDispatchList(storageaccoutsearch_callback,{});
+    })
 })
 
 function storageaccountitemmodify_callback(data){

@@ -131,7 +131,7 @@ function steelapply_callback(data){
     alert(data.message);
 }
 function steel_applycard_confirm_callback(data){
-    $("div#steelapplycard").html(data.html);
+    $("div#applycard").html(data.html);
     alert(data.message);
 }
 function steel_refund_callback(data){

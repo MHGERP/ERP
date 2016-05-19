@@ -11,7 +11,7 @@
     </tbody>
         {% for card in items %}
         <tr name="item_tr">
-            <td>{{card.workorder}}</td>
+            <td>{{card.work_order}}</td>
             <td>{{card.weld_bead_number}}</td>
             <td>{{card.create_time|date:'Y年m月d日'}}</td>
             <td>{{card.applicant.userinfo}}</td>
