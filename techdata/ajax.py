@@ -1761,6 +1761,8 @@ def getCard(request, wwi_id, page = "1", is_print = False):
                "name":name,
                "GTAW":GTAW,
                "GMAW":GMAW,
+               "SMAW":SMAW,
+               "SAW":SAW,
                "LOCAL_FACTORY": LOCAL_FACTORY,
                "INSPECTION_UNIT": INSPECTION_UNIT,
                "THIRD_PARTY_OR_USER": THIRD_PARTY_OR_USER,

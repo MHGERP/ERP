@@ -5,8 +5,6 @@
     <thead>
         <th>层/道</th>
         <th >焊接方法</th>
-        <th>牌号</th>
-        <th>直径</th>
         <th>极性</th>
         <th>电流(A)</th>
         <th>电弧电压(V)</th>
@@ -37,10 +35,6 @@
                     {% endif %}
                     {% endif %}
             </td>
-            <td style="vertical-align: middle ;" >
-                <input type="text"  class="input-mini" /></td>
-            <td style="vertical-align: middle ;" >
-                <input type="text"  class="input-mini" /></td>
             <td style="vertical-align: middle ;" >
                 <input type="text" value="{{step.polarity|default_if_none:''}}" class="input-mini" /></td>
             <td style="vertical-align: middle ;" >

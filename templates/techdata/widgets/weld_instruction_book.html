@@ -1335,7 +1335,21 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.0.weld_method == weldseam.weld_method_1 %}
+  {% if weld_step_list.0.weld_method.name == SAW %}
+  {{weldseam.weld_material_1}}+{{weldseam.weld_flux_1}}
+  {% else %}
+  {{weldseam.weld_material_1}}
+  {% endif %}
+  {% elif weld_step_list.0.weld_method == weldseam.weld_method_2 %}
+  {% if weld_step_list.0.weld_method.name == SAW %}
+  {{weldseam.weld_material_2}}+{{weldseam.weld_flux_2}}
+  {% else %}
+  {{weldseam.weld_material_2}}
+  {% endif %}
+  {% endif %}
+  <o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=56 style='width:42.3pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
@@ -1344,7 +1358,12 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.0.weld_method == weldseam.weld_method_1 %}
+  {{weldseam.size_1}}
+  {% elif weld_step_list.0.weld_method == weldseam.weld_method_2 %}
+  {{weldseam.size_2}}
+  {% endif %}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=72 colspan=2 style='width:54.1pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -1451,7 +1470,21 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.1.weld_method == weldseam.weld_method_1 %}
+  {% if weld_step_list.1.weld_method.name == SAW %}
+  {{weldseam.weld_material_1}}+{{weldseam.weld_flux_1}}
+  {% else %}
+  {{weldseam.weld_material_1}}
+  {% endif %}
+  {% elif weld_step_list.1.weld_method == weldseam.weld_method_2 %}
+  {% if weld_step_list.1.weld_method.name == SAW %}
+  {{weldseam.weld_material_2}}+{{weldseam.weld_flux_2}}
+  {% else %}
+  {{weldseam.weld_material_2}}
+  {% endif %}
+  {% endif %}
+  <o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=56 style='width:42.3pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
@@ -1460,7 +1493,12 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.1.weld_method == weldseam.weld_method_1 %}
+  {{weldseam.size_1}}
+  {% elif weld_step_list.1.weld_method == weldseam.weld_method_2 %}
+  {{weldseam.size_2}}
+  {% endif %}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=72 colspan=2 style='width:54.1pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -1567,7 +1605,21 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.2.weld_method == weldseam.weld_method_1 %}
+  {% if weld_step_list.2.weld_method.name == SAW %}
+  {{weldseam.weld_material_1}}+{{weldseam.weld_flux_1}}
+  {% else %}
+  {{weldseam.weld_material_1}}
+  {% endif %}
+  {% elif weld_step_list.2.weld_method == weldseam.weld_method_2 %}
+  {% if weld_step_list.2.weld_method.name == SAW %}
+  {{weldseam.weld_material_2}}+{{weldseam.weld_flux_2}}
+  {% else %}
+  {{weldseam.weld_material_2}}
+  {% endif %}
+  {% endif %}
+  <o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=56 style='width:42.3pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
@@ -1576,7 +1628,12 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.2.weld_method == weldseam.weld_method_1 %}
+  {{weldseam.size_1}}
+  {% elif weld_step_list.2.weld_method == weldseam.weld_method_2 %}
+  {{weldseam.size_2}}
+  {% endif %}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=72 colspan=2 style='width:54.1pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -1683,7 +1740,21 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.3.weld_method == weldseam.weld_method_1 %}
+  {% if weld_step_list.3.weld_method.name == SAW %}
+  {{weldseam.weld_material_1}}+{{weldseam.weld_flux_1}}
+  {% else %}
+  {{weldseam.weld_material_1}}
+  {% endif %}
+  {% elif weld_step_list.3.weld_method == weldseam.weld_method_2 %}
+  {% if weld_step_list.3.weld_method.name == SAW %}
+  {{weldseam.weld_material_2}}+{{weldseam.weld_flux_2}}
+  {% else %}
+  {{weldseam.weld_material_2}}
+  {% endif %}
+  {% endif %}
+  <o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=56 style='width:42.3pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
@@ -1692,7 +1763,12 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.3.weld_method == weldseam.weld_method_1 %}
+  {{weldseam.size_1}}
+  {% elif weld_step_list.3.weld_method == weldseam.weld_method_2 %}
+  {{weldseam.size_2}}
+  {% endif %}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=72 colspan=2 style='width:54.1pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -1829,7 +1905,21 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.4.weld_method == weldseam.weld_method_1 %}
+  {% if weld_step_list.4.weld_method.name == SAW %}
+  {{weldseam.weld_material_1}}+{{weldseam.weld_flux_1}}
+  {% else %}
+  {{weldseam.weld_material_1}}
+  {% endif %}
+  {% elif weld_step_list.4.weld_method == weldseam.weld_method_2 %}
+  {% if weld_step_list.4.weld_method.name == SAW %}
+  {{weldseam.weld_material_2}}+{{weldseam.weld_flux_2}}
+  {% else %}
+  {{weldseam.weld_material_2}}
+  {% endif %}
+  {% endif %}
+  <o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=56 style='width:42.3pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
@@ -1838,7 +1928,12 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.4.weld_method == weldseam.weld_method_1 %}
+  {{weldseam.size_1}}
+  {% elif weld_step_list.4.weld_method == weldseam.weld_method_2 %}
+  {{weldseam.size_2}}
+  {% endif %}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=72 colspan=2 style='width:54.1pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -1935,7 +2030,21 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.5.weld_method == weldseam.weld_method_1 %}
+  {% if weld_step_list.5.weld_method.name == SAW %}
+  {{weldseam.weld_material_1}}+{{weldseam.weld_flux_1}}
+  {% else %}
+  {{weldseam.weld_material_1}}
+  {% endif %}
+  {% elif weld_step_list.5.weld_method == weldseam.weld_method_2 %}
+  {% if weld_step_list.5.weld_method.name == SAW %}
+  {{weldseam.weld_material_2}}+{{weldseam.weld_flux_2}}
+  {% else %}
+  {{weldseam.weld_material_2}}
+  {% endif %}
+  {% endif %}
+  <o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=56 style='width:42.3pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
@@ -1944,7 +2053,12 @@ lang=EN-US><o:p>&nbsp;</o:p></span></p>
   <p class=MsoNormal align=center style='text-align:center;mso-element:frame;
   mso-element-frame-hspace:9.0pt;mso-element-wrap:around;mso-element-anchor-vertical:
   paragraph;mso-element-anchor-horizontal:margin;mso-element-top:-1.7pt;
-  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'><o:p>&nbsp;</o:p></span></p>
+  mso-height-rule:exactly'><span lang=EN-US style='mso-bidi-font-size:10.5pt'>
+  {% if weld_step_list.5.weld_method == weldseam.weld_method_1 %}
+  {{weldseam.size_1}}
+  {% elif weld_step_list.5.weld_method == weldseam.weld_method_2 %}
+  {{weldseam.size_2}}
+  {% endif %}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=72 colspan=2 style='width:54.1pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
