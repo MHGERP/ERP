@@ -1761,6 +1761,8 @@ def getCard(request, wwi_id, page = "1", is_print = False):
                "name":name,
                "GTAW":GTAW,
                "GMAW":GMAW,
+               "SMAW":SMAW,
+               "SAW":SAW,
                "LOCAL_FACTORY": LOCAL_FACTORY,
                "INSPECTION_UNIT": INSPECTION_UNIT,
                "THIRD_PARTY_OR_USER": THIRD_PARTY_OR_USER,
@@ -1818,13 +1820,13 @@ def saveWeldStep(request, arr):
     MH Chen
     """
     for item in arr:
+        print item
+        print "_"*200
         if item.get("pid", None) != None:
             step = WeldingStep.objects.get(id = item.get("pid", None))
             step.layer = item.get("layer", None)
             if item.get("weld_method") != None:
                 step.weld_method = WeldMethod.objects.get(id = item.get("weld_method", None))
-            step.name = item.get("name", None)
-            step.diameter = item.get("diameter", None)
             step.polarity = item.get("polarity", None)
             step.electric = item.get("electric", None)
             step.arc_voltage = item.get("arc_voltage", None)
