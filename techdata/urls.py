@@ -149,4 +149,9 @@ urlpatterns=patterns('',
         r'^weldingWorkInstruction$',
         techdata_views.weldingWorkInstructionViews,
     ),
+    url(
+        r'^WWIPicUpload$',
+        techdata_views.WWIPicUpload,
+    ),
+
 )

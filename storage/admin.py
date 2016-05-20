@@ -32,6 +32,7 @@ Registers = (
     SteelMaterialRefundCard,
     BarSteelMaterialRefundItems,
     BoardSteelMaterialRefundItems,
+    CardStatusStopRecord,
 )
 
 for reg in Registers:

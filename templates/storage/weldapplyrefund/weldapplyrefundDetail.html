@@ -10,15 +10,15 @@
 
 {% block inner_content %}
 <div class="control-group" style="margin-top:20px">
-    <button type="button" class="btn btn-primary">工作令：{{workorder.order_index}}</button>
-    <button type="button" class="btn btn-primary">产品名称：{{workorder.product_name}}</button>
+    <button type="button" class="btn btn-primary">工作令：{{work_order.name}}</button>
+    <button type="button" class="btn btn-primary">产品名称：{{work_order.order.product_name}}</button>
 </div>
 <div>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th rowspan="2">焊缝编号</th>
-                <th rowspan="2">焊材标号</th>
+                <th rowspan="2">焊材牌号</th>
                 <th rowspan="2">焊材规格</th>
                 <th rowspan="2">材质编号</th>
                 <th colspan="4">发放</th>
@@ -38,15 +38,15 @@
             {% for i in applyrefund_set %}
             <tr>
                 <td>{{i.weld_bead_number}}</td>
-                <td>{{i.weld_material_number}}</td>
-                <td>{{i.standard}}</td>
-                <td>{{i.material_number}}</td>
-                <td>{{i.index}}</td>
-                <td>{{i.apply_quantity}}</td>
+                <td>{{i.material_mark}}</td>
+                <td>{{i.model_number}}</td>
+                <td>{{i.material_code}}</td>
+                <td>{{i.applycard_code}}</td>
+                <td>{{i.actual_weight}}</td>
                 <td>{{i.applicant.userinfo}}</td>
-                <td>{{i.commit_user.userinfo}}</td>
-                <td>{{i.weldrefund.code}}</td>
-                <td>{{i.weldrefund.refund_count}}</td>
+                <td>{{i.keeper.userinfo}}</td>
+                <td>{{i.weldrefund.refund_code}}</td>
+                <td>{{i.weldrefund.refund_weight}}</td>
                 <td>{{i.weldrefund.refunder.userinfo}}</td>
                 <td>{{i.weldrefund.keeper.userinfo}}</td>
             </tr>

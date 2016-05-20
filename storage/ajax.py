@@ -21,6 +21,7 @@ from storage.forms import *
 from storage.utils import *
 from django.shortcuts import render
 from operator import attrgetter
+from storage import *
 @dajaxice_register
 def get_apply_card_detail(request,apply_card_index):
     context={}
@@ -1025,7 +1026,7 @@ def refundKeeperModify(request,form,rid):
     ref_obj = WeldRefund.objects.get(id = rid)
     form = WeldRefundConfirmForm(deserialize_form(form),instance = ref_obj)
     flag = False
-    if ref_obj.weldrefund_status == REFUNDSTATUS_CHOICES_KEEPER:
+    if ref_obj.status == REFUNDSTATUS_CHOICES_KEEPER:
         if form.is_valid():
             form.save()
             flag = True
@@ -1040,8 +1041,8 @@ def refundKeeperModify(request,form,rid):
 @dajaxice_register
 def weldRefundConfirm(request,rid,role):
     ref_obj = WeldRefund.objects.get(id = rid)
-    if role == "keeper" and ref_obj.weldrefund_status == REFUNDSTATUS_CHOICES_KEEPER :
-        ref_obj.weldrefund_status = REFUNDSTATUS_CHOICES_END
+    if role == "keeper" and ref_obj.status == REFUNDSTATUS_CHOICES_KEEPER :
+        ref_obj.status = REFUNDSTATUS_CHOICES_END
         ref_obj.keeper = request.user
         ref_obj.save()
         storelist_obj = ref_obj.apply_card.storelist
@@ -1404,3 +1405,43 @@ def storageSteelRoomDispatchList(request):
     items = SteelMaterialStoreList.objects.filter(store_room__isnull = True)
     html = render_to_string("storage/accountsearch/steelstorage.html",{"items":items})
     return simplejson.dumps({"html":html})
+
+@dajaxice_register
+def cardStatusStop(request,stop_card_type,stop_role,form,fid):
+    flag = False
+    try:
+        card_model,div_name,html_path = STORAGE_CARD_DATA_DICT[stop_card_type]
+        card_obj = card_model.objects.get(id = fid)
+        form = CardStatusStopForm(deserialize_form(form))
+        if "entry" in stop_card_type:
+            status = card_obj.entry_status
+            card_obj.entry_status = STORAGE_CARD_STOP_STATUS
+        else:
+            status = card_obj.status
+            card_obj.status = STORAGE_CARD_STOP_STATUS
+        if status == STORAGE_CARD_STOP_STATUS:
+            message = u"流程已经终止过不能重复终止"
+        else:
+            if form.is_valid():
+                record = form.save( commit = False )
+                record.user = request.user
+                record.card_type = stop_card_type
+                record.card_id = card_obj.id
+                record.save()
+                card_obj.save()
+                flag = True
+                message = u"流程终止成功"
+            else:
+                message = u"流程终止失败，还没有填写原因"
+    except Exception,e:
+        print e
+        message = u"流程终止失败"
+
+#    if flag:
+#        html = render_to_string("storage/wordhtml/"+html_path+".html",{"ref_obj":card_obj})
+#    else:
+#        html = ""
+#        div_name = ""
+
+    form_html = render_to_string("storage/widgets/cardstatusstopform.html",{"card_status_form":form})
+    return simplejson.dumps({"message":message,"form_html":form_html})
