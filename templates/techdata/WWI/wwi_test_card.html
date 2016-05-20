@@ -1,0 +1,20 @@
+<table class="table table-bordered table-striped">
+    <thead>
+        <th>序号</th>
+        <th>检验方</th>
+    </thead>
+    <tbody>
+        {% for test in weld_test_list %}
+        <tr iid="{{test.id}}" class="tr_test">
+            <td style="vertical-align: middle"><input type="text" value="{{test.index|default_if_none:""}}" class="input-mini" /></td>
+            <td style="vertical-align: middle ;" >    
+                <select type="text" id="id_select"style="width:109px" class="input" >
+                    <option value ="-1">-------</option>
+                    <option value ="{{LOCAL_FACTORY}}" {% if test.test_method == LOCAL_FACTORY %} selected="selected"{% endif %}>本厂</option>
+                    <option value ="{{INSPECTION_UNIT}}"{% if test.test_method == INSPECTION_UNIT %} selected="selected"{% endif %}>监检单位</option>
+                    <option value ="{{THIRD_PARTY_OR_USER}}" {% if test.test_method == INSPECTION_UNIT %}selected="selected"{% endif %}>第三方或用户</option>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
