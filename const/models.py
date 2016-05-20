@@ -35,6 +35,7 @@ class SubWorkOrder(models.Model):
     order = models.ForeignKey(WorkOrder, verbose_name = u"所属工作令")
     index = models.CharField(max_length = 100, verbose_name = "序号")
     name = models.CharField(max_length = 100, verbose_name = "工作令名")
+    is_finish = models.BooleanField(default = False, verbose_name = u"是否结束")
     class Meta:
         verbose_name = u"子工作令"
         verbose_name_plural = u"子工作令"

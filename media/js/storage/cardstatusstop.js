@@ -17,6 +17,6 @@ $(document).ready(function(){
 })
 
 function cardstatusstop_callback(data){
-    $("#"+data.div_name).html(data.html);
+    $("#card_status_form").html(data.form_html);
     alert(data.message);
 }

@@ -430,7 +430,10 @@ def pendingOrderSearch(request, order_index):
     return: table html string
     """
     inventoryTypeForm = InventoryTypeForm()
-    orders =SubWorkOrder.objects.filter(order__order_index__startswith = order_index)
+    if order_index=="":
+        orders=SubWorkOrder.objects.filter(is_finish=False)
+    else:
+        orders =SubWorkOrder.objects.filter(order__order_index__startswith = order_index)
     context = {"inventoryTypeForm": inventoryTypeForm,
                "orders": orders
               }
@@ -1777,3 +1780,10 @@ def entryPurchaserConfirm(request,eid,entrytype):
     entry.entry_status=ENTRYSTATUS_CHOICES_KEEPER
     entry.save()
     return simplejson.dumps({})
+
+@dajaxice_register
+def SubOrderFinish(request,workorder_id):
+    sub_workorder=SubWorkOrder.objects.get(pk=workorder_id)
+    sub_workorder.is_finish=True
+    sub_workorder.save()
+    

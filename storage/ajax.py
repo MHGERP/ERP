@@ -979,12 +979,8 @@ def getSearchMaterialItems(search_form,apply_type,mid):
     search_form = search_material_form_model(deserialize_form(search_form))
     if search_form.is_valid():
         replace_dic = gen_replace_dic(search_form.cleaned_data)
-        if apply_type=="weld":
-            store_items = get_weld_filter(store_model,search_form.cleaned_data,replace_dic,is_show_all=False).order_by("entry_time")
-        else:
-            store_items = get_weld_filter(store_model,search_form.cleaned_data,replace_dic,is_show_all=False)
-            if apply_type != "steel":
-                store_items = store_items.order_by("entry_item__entry__create_time")
+        store_items = get_weld_filter(store_model,search_form.cleaned_data,replace_dic,is_show_all=False)
+        store_items = store_items.order_by("entry_item__entry__create_time")
     select_item = apply_item_model.objects.get(id=mid).storelist
     return store_items,table_path,select_item
 @dajaxice_register
@@ -1274,7 +1270,14 @@ def getAccountSearchContext(card_type,search_form):
             order_field = "apply_card__create_time"
         else:
             order_field = "entry_item__entry__create_time"
-        items = get_weld_filter(model_type,search_form.cleaned_data,replace_dic).order_by(order_field)
+        items = get_weld_filter(model_type,search_form.cleaned_data,replace_dic)
+        items = items.order_by(order_field)
+        if card_type == "steelstorage":
+            for item in items:
+                if item.steel_type == BOARD_STEEL and item.return_time > 0:
+                    refund = SteelMaterialRefundCard(id = item.refund) 
+                    item.graph = refund.boardsteelmaterialrefunditems.graph
+
     html = render_to_string(account_table_path,{"items":items})
     return html
 
@@ -1428,16 +1431,20 @@ def cardStatusStop(request,stop_card_type,stop_role,form,fid):
                 record.card_type = stop_card_type
                 record.card_id = card_obj.id
                 record.save()
-            card_obj.save()
-            flag = True
-            message = u"流程终止成功"
+                card_obj.save()
+                flag = True
+                message = u"流程终止成功"
+            else:
+                message = u"流程终止失败，还没有填写原因"
     except Exception,e:
         print e
         message = u"流程终止失败"
 
-    if flag:
-        html = render_to_string("storage/wordhtml/"+html_path+".html",{"ref_obj":card_obj})
-    else:
-        html = ""
-        div_name = "" 
-    return simplejson.dumps({"message":message,"html":html,"flag":flag,"div_name":div_name})
+#    if flag:
+#        html = render_to_string("storage/wordhtml/"+html_path+".html",{"ref_obj":card_obj})
+#    else:
+#        html = ""
+#        div_name = ""
+
+    form_html = render_to_string("storage/widgets/cardstatusstopform.html",{"card_status_form":form})
+    return simplejson.dumps({"message":message,"form_html":form_html})

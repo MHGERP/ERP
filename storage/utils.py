@@ -42,7 +42,7 @@ def weldStoreItemsCreate(entry):
 
     for item in entry_items:
         try:
-            storeitem = WeldStoreList(entry_item = item , count = item.total_weight,entry_time = entry.create_time)        
+            storeitem = WeldStoreList(entry_item = item , count = item.total_weight,)        
             if item.material.name == u"焊条" or item.material.name == u"焊剂":
                 production_date = item.production_date
                 storeitem.deadline = production_date.replace(production_date.year + 2)
@@ -139,7 +139,7 @@ def setObjAttr(obj,field,value):
     setattr(obj,field,value)
     obj.save()
 
-def updateStorageLits(items_set,_StorageModel):
+def updateStorageLits(items_setp_StorageModel):
     isOk = True
     exist_items = []
     for item in items_set:
@@ -278,7 +278,7 @@ def createAuxiliaryToolStoreList(entry):
 
 def createSteelMaterialStoreList(entry):
     for item in entry.steelmaterialentryitems_set.all():
-        SteelMaterialStoreList(entry_item=item,specification=item.specification , steel_type=entry.steel_type ,count=item.count,length=item.length,weight=item.weight,store_room=item.store_room).save()
+        SteelMaterialStoreList(entry_item=item,specification=item.specification , steel_type=entry.steel_type ,count=item.count,length=item.length,weight=item.weight,).save()
 
 def getAccountDataDict(card_type):
     """

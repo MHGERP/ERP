@@ -15,3 +15,11 @@ $(document).on("click", ".inventory_open", function(){
     var tableid = $(tem).val();
     location.href = "/purchasing/inventoryTable?order_index=" + order_index + "&tableid=" + tableid;
 });
+
+function order_finish(id){
+    Dajaxice.purchasing.SubOrderFinish(function(data){
+        window.location.reload();
+    },{
+        'workorder_id':id
+    });
+}
