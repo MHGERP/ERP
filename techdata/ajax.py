@@ -1820,6 +1820,8 @@ def saveWeldStep(request, arr):
     MH Chen
     """
     for item in arr:
+        print item
+        print "_"*200
         if item.get("pid", None) != None:
             step = WeldingStep.objects.get(id = item.get("pid", None))
             step.layer = item.get("layer", None)
