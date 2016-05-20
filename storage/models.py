@@ -135,7 +135,6 @@ class WeldStoreList(models.Model):
     count = models.FloatField(verbose_name=u"数量",default=0)
     entry_item = models.ForeignKey(WeldMaterialEntryItems,verbose_name = u"焊材入库单材料")
     item_status = models.IntegerField(choices=WELD_ITEM_STATUS_CHOICES,default=0,verbose_name=u"材料状态",blank=False)
-    entry_time = models.DateField(verbose_name=u"入库时间",null = True)
     objects = WeldStoreListManager()
     class Meta:
         verbose_name = u"焊材库存清单"
@@ -240,7 +239,7 @@ class WeldingMaterialBakeRecord(models.Model):
     keepheattemp = models.FloatField(verbose_name=u'保温温度',default = 0,blank=True)
     usetime = models.DateTimeField(verbose_name=u'领用时间',blank=True,null=True)
     storeMan = models.ForeignKey(User,verbose_name=u'库管员',related_name="weldbake_storeMan",blank=True)
-    weldengineer = models.ForeignKey(User,verbose_name=u'焊接工程师',related_name="weldbake_engineer",blank=True)
+    weldengineer = models.ForeignKey(User,verbose_name=u'焊接工程师',related_name="weldbake_engineer",blank=True,null=True)
     remark = models.CharField(verbose_name=u'备注', max_length=1000,blank=True)
     def __unicode__(self):
         return str(self.index)

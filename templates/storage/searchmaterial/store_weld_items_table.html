@@ -22,7 +22,7 @@
         <td>{{item.entry_item.specification}}</td>
         <td>{{item.entry_item.material_charge_number}}</td>
         <td>{{item.entry_item.material_code}}</td>
-        <td>{{item.entry_time|date:'Y.m.d'}}</td>
+        <td>{{item.entry_item.entry.create_time|date:'Y.m.d'}}</td>
         <td>{{item.entry_item.production_date|date:'Y.m.d'}}</td>
         <td>{{item.entry_item.factory}}</td>
         <td>{{item.count}}</td>
@@ -40,7 +40,7 @@
         <td>{{select_item.entry_item.specification}}</td>
         <td>{{select_item.entry_item.material_charge_number}}</td>
         <td>{{select_item.entry_item.material_code}}</td>
-        <td>{{select_item.entry_time|date:'Y.m.d'}}</td>
+        <td>{{select_item.entry_item.entry.create_time|date:'Y.m.d'}}</td>
         <td>{{select_item.entry_item.production_date|date:'Y.m.d'}}</td>
         <td>{{select_item.entry_item.factory}}</td>
         <td>{{select_item.count}}</td>
