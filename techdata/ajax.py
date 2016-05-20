@@ -1647,16 +1647,22 @@ def saveJointDetail(request, weld_joint_detail_form, jointArray, id_work_order):
         weld_joint_detail.save()
         weld_joint_detail_form.save_m2m()
 
+        # wwi build process
         wwi = WeldingWorkInstruction(detail = weld_joint_detail)
         wwi.file_index = WeldingWorkInstruction.objects.filter(detail__specification__order = weld_joint_detail.specification.order).count() + 1
         wwi.save()
-        for item in range(13):
+        for _ in xrange(13):
             weld_work_instruction_process = WeldingWorkInstructionProcess(card_belong = wwi)
             weld_work_instruction_process.save()
 
-        for item in range(6):
+        for _ in xrange(6):
             weld_step = WeldingStep(card_belong = wwi)
             weld_step.save()
+
+        for _ in xrange(3):
+            weld_test = WeldingWorkInstructionTest(card_belong = wwi)
+            weld_test.save()
+        # end process
     else:
         context = {
             "form" : weld_joint_detail_form
@@ -1736,10 +1742,15 @@ def getCard(request, wwi_id, page = "1", is_print = False):
     weld_work_instruction = WeldingWorkInstruction.objects.get(id = wwi_id)
     weld_step_list = list(WeldingStep.objects.filter(card_belong = weld_work_instruction))
     process_list1 = list(WeldingWorkInstructionProcess.objects.filter(card_belong = weld_work_instruction))
+    weld_test_list = list(WeldingWorkInstructionTest.objects.filter(card_belong = weld_work_instruction))
     weldseam = WeldSeam.objects.filter(weld_joint_detail = weld_work_instruction.detail)[0]
     name = weld_work_instruction.detail.weld_position.name
     page, total_page, process_list = transferCardProcessPaginator(process_list1, page, 100, 13, 13)
     context = {"STATIC_URL": settings.STATIC_URL,
+               "MARK_WRITE": MARK_WRITE,
+               "MARK_REVIEW": MARK_REVIEW,
+               "MARK_PROOFREAD": MARK_PROOFREAD,
+               "MARK_APPROVE": MARK_APPROVE,
                "weld_work_instruction":weld_work_instruction,
                "FLUSH_WELD":FLUSH_WELD,
                "HORIZONTAL_WELD":HORIZONTAL_WELD,
@@ -1750,10 +1761,30 @@ def getCard(request, wwi_id, page = "1", is_print = False):
                "name":name,
                "GTAW":GTAW,
                "GMAW":GMAW,
+               "SMAW":SMAW,
+               "SAW":SAW,
+               "LOCAL_FACTORY": LOCAL_FACTORY,
+               "INSPECTION_UNIT": INSPECTION_UNIT,
+               "THIRD_PARTY_OR_USER": THIRD_PARTY_OR_USER,
                "process_list":process_list,
                "process_list1":process_list1,
-               "weld_step_list":weld_step_list,}
-    html = render_to_string("techdata/widgets/weld_instruction_book.html",context)
+               "weld_step_list":weld_step_list,
+               "weld_test_list": weld_test_list,}
+    html = render_to_string("techdata/WWI/weld_instruction_book.html",context)
+    return html
+@dajaxice_register
+def getWeldingWorkInstructionTestList(request, wwi_id):
+    """
+    JunHU
+    """
+    weld_test_list = WeldingWorkInstructionTest.objects.filter(card_belong__id = wwi_id)
+    context = {
+        "weld_test_list": weld_test_list,
+        "LOCAL_FACTORY": LOCAL_FACTORY,
+        "INSPECTION_UNIT": INSPECTION_UNIT,
+        "THIRD_PARTY_OR_USER": THIRD_PARTY_OR_USER,
+    }
+    html = render_to_string("techdata/WWI/wwi_test_card.html",context)
     return html
 
 @dajaxice_register
@@ -1765,7 +1796,7 @@ def getWeldingWorkInstructionProcessList(request, wwi_id, page = "1", is_print =
     process_list = WeldingWorkInstructionProcess.objects.filter(card_belong = weld_work_instruction)
     
     context = {"process_list":process_list}
-    html = render_to_string("techdata/widgets/wwi_process_card.html", context)
+    html = render_to_string("techdata/WWI/wwi_process_card.html", context)
     return html
 
 @dajaxice_register
@@ -1781,13 +1812,12 @@ def getWeldStepList(request, wwi_id):
         print weld_step.id
         weld_step_list.append(weld_step)
     context = {"weld_step_list":weld_step_list}
-    html = render_to_string("techdata/widgets/weld_step_card.html", context)
+    html = render_to_string("techdata/WWI/weld_step_card.html", context)
     return html
 @dajaxice_register
 def saveWeldWorkInstructionProcess(request, arr):
     """
     MH Chen
-
     """
     for item in arr:
         if item.get("pid", None) != None:
@@ -1797,20 +1827,31 @@ def saveWeldWorkInstructionProcess(request, arr):
             process.detail = item.get("detail", None)
             process.save()
 
+@dajaxice_register
+def saveWeldTest(request, arr):
+    """
+    JunHU
+    """
+    for item in arr:
+        if item.get("iid", None) != None:
+            test = WeldingWorkInstructionTest.objects.get(id = item.get("iid", None))
+            test.index = item.get("index", None)
+            if item.get("test_method", None) != "-1":
+                test.test_method = item.get("test_method", None)
+            test.save()
+
 
 @dajaxice_register
 def saveWeldStep(request, arr):
     """
     MH Chen
-
     """
     for item in arr:
         if item.get("pid", None) != None:
             step = WeldingStep.objects.get(id = item.get("pid", None))
             step.layer = item.get("layer", None)
-            step.weld_method = item.get("weld_method", None)
-            step.name = item.get("name", None)
-            step.diameter = item.get("diameter", None)
+            if item.get("weld_method") != None:
+                step.weld_method = WeldMethod.objects.get(id = item.get("weld_method", None))
             step.polarity = item.get("polarity", None)
             step.electric = item.get("electric", None)
             step.arc_voltage = item.get("arc_voltage", None)
@@ -1818,3 +1859,17 @@ def saveWeldStep(request, arr):
             step.heat_input = item.get("heat_input", None)
             step.remark = item.get("remark", None)
             step.save()
+            
+    return "ok"
+
+
+@dajaxice_register
+def WWICardMark(request, wwi_id, step):
+    """
+    JunHU
+    """
+    wwi = WeldingWorkInstruction.objects.get(id = wwi_id)
+    return cardMark(request, wwi, step)
+
+
+

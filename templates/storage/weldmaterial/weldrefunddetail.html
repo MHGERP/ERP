@@ -92,9 +92,8 @@
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-        {% ifequal apply_card.status APPLYCARD_KEEPER %}
         <button class="btn btn-primary" id="refund_confirm_save">保存</button>
-        {% endifequal %}
     </div>
 </div>
+{% include "storage/widgets/cardstatusstop.html"%}
 {% endblock %}

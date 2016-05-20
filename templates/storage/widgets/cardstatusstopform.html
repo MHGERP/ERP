@@ -1,0 +1,11 @@
+{% for field in card_status_form %}
+<div class="control-group {% if field.errors %} error {% endif %}">
+    <label style="width:50px;float:left;text-align:right;">
+        {{field.label}}&nbsp;&nbsp;
+    </label>
+    {{field}}
+    {% if field.errors %}
+    <span class="help-inline">{{field.errors}}</span>
+    {% endif %}
+</div>
+{% endfor %}

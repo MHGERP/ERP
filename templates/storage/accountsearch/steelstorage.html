@@ -8,6 +8,7 @@
         <th>工作令</th>
         <th>库房位置</th>
         <th>退库次数</th>
+        <th>套料图</th>
         <th>数量</th>
     </thead>
     </tbody>
@@ -21,6 +22,7 @@
             <td>{{item.entry_item.show_workorder}}</td>
             <td>{{item.store_room|default_if_none:"未分配"}}</td>
             <td>{{item.return_time}}</td>
+            <td>{% if item.graph %} <a href="{{item.graph.url}}" target="_blank">下载</a> {% endif %}</td>
             <td>{{item.count}}</td>
         </tr>
         {% endfor %}

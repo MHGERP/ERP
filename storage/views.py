@@ -427,13 +427,13 @@ def weldapplyrefundHomeViews(request):
         search_form = ApplyRefundSearchForm(request.POST)
         workorder_set = []
         if search_form.is_valid():
-            workorder_set = get_weld_filter(WorkOrder,search_form.cleaned_data)
+            workorder_set = get_weld_filter(SubWorkOrder,search_form.cleaned_data)
     else:
         search_form = ApplyRefundSearchForm()
-        workorders = WeldingMaterialApplyCard.objects.values("workorder").distinct()
+        workorders = WeldingMaterialApplyCard.objects.values("work_order").distinct()
         workorder_set = []
         for i in workorders:
-            workorder_set.append(WorkOrder.objects.get(id = i["workorder"]))
+            workorder_set.append(SubWorkOrder.objects.get(id = i["work_order"]))
         #print workorder_set
     print search_form
     context = {
@@ -446,10 +446,10 @@ def weldapplyrefundDetail(request,index):
     """
     kad
     """
-    workorder = WorkOrder.objects.get(id = index)
-    applyrefund_set = WeldingMaterialApplyCard.objects.filter(workorder = workorder)
+    work_order = SubWorkOrder.objects.get(id = index)
+    applyrefund_set = WeldingMaterialApplyCard.objects.filter(work_order = work_order)
     context = {
-            "workorder":workorder,
+            "work_order":work_order,
             "applyrefund_set":applyrefund_set,
             }
     return render(request,"storage/weldapplyrefund/weldapplyrefundDetail.html",context)
@@ -457,7 +457,7 @@ def weldapplyrefundDetail(request,index):
 
 def weldRefundViews(request):
     search_form = RefundSearchForm()
-    refund_set = WeldRefund.objects.filter(weldrefund_status = REFUNDSTATUS_CHOICES_KEEPER)
+    refund_set = WeldRefund.objects.filter(status = REFUNDSTATUS_CHOICES_KEEPER)
     
     context = {
             "search_form":search_form,
@@ -468,12 +468,16 @@ def weldRefundViews(request):
 
 def weldRefundDetailViews(request,rid):
     ref_obj = WeldRefund.objects.get(id = rid)
-    is_show = ref_obj.weldrefund_status == ENTRYSTATUS_CHOICES_KEEPER
-    reform = WeldRefundConfirmForm() 
+    is_show = ref_obj.status == REFUNDSTATUS_CHOICES_KEEPER
+    reform = WeldRefundConfirmForm()
+    card_type = "weldrefund"
+    card_status_form = CardStatusStopForm() 
     context = {
             "refund_form":reform,
             "ref_obj":ref_obj,
             "is_show":is_show,
+            "card_type":card_type,
+            "card_status_form":card_status_form,
             }
     return render(request,"storage/weldmaterial/weldrefunddetail.html",context) 
 

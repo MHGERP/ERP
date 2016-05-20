@@ -135,7 +135,6 @@ class WeldStoreList(models.Model):
     count = models.FloatField(verbose_name=u"数量",default=0)
     entry_item = models.ForeignKey(WeldMaterialEntryItems,verbose_name = u"焊材入库单材料")
     item_status = models.IntegerField(choices=WELD_ITEM_STATUS_CHOICES,default=0,verbose_name=u"材料状态",blank=False)
-    entry_time = models.DateField(verbose_name=u"入库时间",null = True)
     objects = WeldStoreListManager()
     class Meta:
         verbose_name = u"焊材库存清单"
@@ -240,7 +239,7 @@ class WeldingMaterialBakeRecord(models.Model):
     keepheattemp = models.FloatField(verbose_name=u'保温温度',default = 0,blank=True)
     usetime = models.DateTimeField(verbose_name=u'领用时间',blank=True,null=True)
     storeMan = models.ForeignKey(User,verbose_name=u'库管员',related_name="weldbake_storeMan",blank=True)
-    weldengineer = models.ForeignKey(User,verbose_name=u'焊接工程师',related_name="weldbake_engineer",blank=True)
+    weldengineer = models.ForeignKey(User,verbose_name=u'焊接工程师',related_name="weldbake_engineer",blank=True,null=True)
     remark = models.CharField(verbose_name=u'备注', max_length=1000,blank=True)
     def __unicode__(self):
         return str(self.index)
@@ -408,7 +407,7 @@ class WeldRefund(models.Model):
     refund_weight = models.FloatField(null=True,blank=False,verbose_name=u"退库量（重量）")
     refund_count = models.FloatField(null=True,blank=True,verbose_name=u"退库量（数量）")
     refund_status = models.CharField(max_length=20,blank=True,verbose_name=u"退库状态",default="")
-    weldrefund_status = models.IntegerField(default=REFUNDSTATUS_CHOICES_REFUNDER,choices=REFUNDSTATUS_CHOICES,verbose_name=u"退库单状态")
+    status = models.IntegerField(default=REFUNDSTATUS_CHOICES_REFUNDER,choices=REFUNDSTATUS_CHOICES,verbose_name=u"退库单状态")
     refunder =  models.ForeignKey(User,verbose_name=u"退库人",null=True,blank=True,related_name = "weldrefund_refunder")
     keeper = models.ForeignKey(User,verbose_name=u"库管人",null=True,blank=True,related_name = "weldrefund_keeper")
 
@@ -624,3 +623,16 @@ class OutsideRefundCardItems(models.Model):
         verbose_name_plural = u"外购件退库单材料"
     def __unicode__(self):
         return "%s" %  self.applyitem.specification
+
+class CardStatusStopRecord(models.Model):
+    user  = models.ForeignKey(User,verbose_name="操作者")
+    create_time = models.DateField(blank=False,null=True,verbose_name=u"日期",auto_now_add = True)
+    card_type = models.CharField(max_length=20,verbose_name=u"单据类型")
+    card_id = models.IntegerField(verbose_name=u"单据ID")
+    remark = models.TextField(max_length=1000,verbose_name=u"原因")
+    class Meta:
+        verbose_name = u"单据终止记录"
+        verbose_name_plural = u"单据终止记录"
+
+    def __unicode__(self):
+        return '%s' % self.card_type
