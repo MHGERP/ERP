@@ -57,21 +57,17 @@ $("#btn_save_process2").click(function() {
         
         if (weld_method == -1)
             weld_method = null;
-        var name = ""
-        var diameter = "";
-        var polarity = $(this).find("input:eq(3)").val();
-        var electric = $(this).find("input:eq(4)").val();
-        var arc_voltage = $(this).find("input:eq(5)").val();
-        var weld_speed = $(this).find("input:eq(6)").val();
-        var heat_input = $(this).find("input:eq(7)").val();
-        var remark = $(this).find("input:eq(8)").val();
+        var polarity = $(this).find("input:eq(1)").val();
+        var electric = $(this).find("input:eq(2)").val();
+        var arc_voltage = $(this).find("input:eq(3)").val();
+        var weld_speed = $(this).find("input:eq(4)").val();
+        var heat_input = $(this).find("input:eq(5)").val();
+        var remark = $(this).find("input:eq(6)").val();
         arr.push({
 
             "pid": pid,
             "layer": layer,
             "weld_method": weld_method,
-            "name": name,
-            "diameter": diameter,
             "polarity": polarity,
             "electric": electric,
             "arc_voltage": arc_voltage,
