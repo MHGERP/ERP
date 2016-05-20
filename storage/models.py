@@ -636,4 +636,3 @@ class CardStatusStopRecord(models.Model):
 
     def __unicode__(self):
         return '%s' % self.card_type
-
