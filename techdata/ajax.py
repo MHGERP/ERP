@@ -1825,8 +1825,6 @@ def saveWeldStep(request, arr):
             step.layer = item.get("layer", None)
             if item.get("weld_method") != None:
                 step.weld_method = WeldMethod.objects.get(id = item.get("weld_method", None))
-            step.name = item.get("name", None)
-            step.diameter = item.get("diameter", None)
             step.polarity = item.get("polarity", None)
             step.electric = item.get("electric", None)
             step.arc_voltage = item.get("arc_voltage", None)
