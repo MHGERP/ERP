@@ -20,6 +20,7 @@ from django.contrib.auth.models import User
 from users.models import UserInfo
 from storage.models import *
 from const import *
+from production.utility import get_applycard_code, ApplyCardModelCheckDICT
 
 def getQ(con):
     query_set = Q()
@@ -482,4 +483,92 @@ def materialuseSearch(request, form):
         html = render_to_string("production/table/materiel_use_select_table.html",{"items":materiel_list})
     else:
         print search_form.errors
-    return simplejson.dumps({ "html" : html})
+        return simplejson.dumps({ "html" : html})
+
+ApplyCardModelDICT = {
+    SteelMaterialApplyCard:"G",
+    AuxiliaryToolApplyCard:"F",
+    OutsideApplyCard:"W",
+    WeldingMaterialApplyCard:"H",
+}
+
+def createSteelMaterialApplyCard(request, materielCopys):
+    steelMaterialApplyCard = SteelMaterialApplyCard(applycard_code=get_applycard_code(SteelMaterialApplyCard),)
+    steelMaterialApplyCard.save()
+    for item in materielCopys:
+        applyCardItem = SteelMaterialApplyCardItems(apply_card = steelMaterialApplyCard,
+                                                    material_mark=item.material.name,
+                                                    material_code=item.quality_number,
+                                                    count=item.count,
+                                                    work_order = item.sub_workorder,
+                                                    specification = item.specification,
+        )
+        applyCardItem.save()
+        return [steelMaterialApplyCard.applycard_code]
+
+
+def createOutsideApplyCard(request, materielCopys):
+    outsideApplyCard = OutsideApplyCard(applycard_code=get_applycard_code(OutsideApplyCard),
+                                        work_order=materielCopys[0].sub_workorder,)
+    outsideApplyCard.save()
+    print outsideApplyCard 
+    for item in materielCopys:
+        applyCardItem = OutsideApplyCardItems(apply_card = outsideApplyCard,
+                                              schematic_index=item.schematic_index,
+                                              specification=item.name,
+                                              material_mark=item.material.name,
+                                              material_code=item.quality_number,
+                                              unit=item.unit,
+                                              count=item.count,
+        )
+        applyCardItem.save()
+    return [outsideApplyCard.applycard_code]
+
+
+def createWeldingMaterialApplyCard(request, materielCopys):
+    applycard_codes = []
+    for item in materielCopys:
+        applyCard = WeldingMaterialApplyCard(applycard_code=get_applycard_code(WeldingMaterialApplyCard),
+                                             work_order = item.sub_workorder,
+                                             material_code=item.quality_number,
+                                             material_mark=item.material.name,
+                                             specification=item.specification,
+                                             apply_count=item.count,)
+        applyCard.save()
+        applycard_codes.append(applyCard.applycard_code)
+    return applycard_codes 
+
+
+@dajaxice_register
+def createApplyCard(request, form, iids):
+    search_form = ApplyCardTypeForm(deserialize_form(form))
+    if search_form.is_valid():
+        materielCopys = MaterielCopy.objects.filter(Q(id__in=iids))
+        applytype = search_form.cleaned_data["applytype"]
+        if applytype == "H":
+            applycodes = createWeldingMaterialApplyCard(request, materielCopys)
+        elif applytype == "G":
+            applycodes = createSteelMaterialApplyCard(request, materielCopys)
+        elif applytype == "W":
+            applycodes = createOutsideApplyCard(request, materielCopys)
+    return simplejson.dumps(",".join(applycodes))
+
+html_href = {"G":"steel",
+             "W":"outside",
+             "H":"weld",
+             "F":"auxiliarytool",
+    
+}
+
+@dajaxice_register
+def getApplyCardDetail(request, aid):
+    context={}
+    context["apply_card"]=ApplyCardModelCheckDICT[aid[0]].objects.get(applycard_code=aid)
+    if aid[0]=="G":
+        ApplyCardItemsModel = SteelMaterialApplyCardItems
+    elif aid[0]=="W":
+        ApplyCardItemsModel = OutsideApplyCardItems
+    if aid[0] in ["W", "G"]:
+        context["items"]=ApplyCardItemsModel.objects.filter(apply_card=context["apply_card"])
+    html = render_to_string("storage/wordhtml/%sapplycard.html" % (html_href[aid[0]]), context)
+    return simplejson.dumps(html)

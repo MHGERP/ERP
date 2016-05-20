@@ -176,3 +176,9 @@ class MaterielCopyForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(MaterielCopyForm, self).__init__(*args,**kwargs)
         self.fields["inventory_type"].choices = tuple((item.id, item) for item in InventoryType.objects.all()) 
+
+class ApplyCardTypeForm(forms.Form):
+    applytype = forms.ChoiceField(required=True, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"领用单类型")
+    def __init__(self, *args, **kwargs):
+        super(ApplyCardTypeForm, self).__init__(*args,**kwargs)
+        self.fields["applytype"].choices = APPLYCARDCHOICES 

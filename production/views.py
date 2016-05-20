@@ -44,6 +44,14 @@ def materielUseViews(request):
     }
     return render(request,"production/materiel_use.html",context)
 
+def materielUseAddViews(request):
+    context={
+        "materielCopyForm":MaterielCopyForm(),
+        "applyCardTypeForm":ApplyCardTypeForm()
+    }
+    return render(request,"production/materiel_use_add.html",context)
+
+
 def synthesizeFileListViews(request):
     subWorkOrderForm = SubWorkOrderForm();
     context={

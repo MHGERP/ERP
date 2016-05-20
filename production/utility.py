@@ -4,8 +4,8 @@ from const import *
 from const.models import *
 from storage.models import *
 from production.models import *
+from production import *
 import datetime
-
 ApplyCardModelDICT = {
     SteelMaterialApplyCard:"G",
     AuxiliaryToolApplyCard:"F",
@@ -13,7 +13,12 @@ ApplyCardModelDICT = {
     WeldingMaterialApplyCard:"H",
 }
 
+ApplyCardModelCheckDICT = {
+}
+for k,v in ApplyCardModelDICT.items():
+    ApplyCardModelCheckDICT[v]=k
+
 def get_applycard_code(ApplyCardModel):
-    date_str = datetime.datetime.now().strftime("%Y%m%d")
+    date_str = ApplyCardModelDICT[ApplyCardModel] + datetime.datetime.now().strftime("%Y%m%d")
     num = ApplyCardModel.objects.filter(applycard_code__startswith=date_str).count() + 1
-    return "%s%s%04d" % (ApplyCardModelDICT[ApplyCardModel], date_str, num)
+    return "%s%04d" % (date_str, num)

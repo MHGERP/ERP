@@ -7,10 +7,17 @@ from django.contrib.auth.models import User
 from production.models import *
 from const.models import Materiel
 from production.utility import get_applycard_code
-from storage.models import SteelMaterialApplyCard, OutsideApplyCard
-
-print get_applycard_code(OutsideApplyCard)
-print "hello"
+from storage.models import *
+ApplyCardModelDICT = {
+    SteelMaterialApplyCard:"G",
+    AuxiliaryToolApplyCard:"F",
+    OutsideApplyCard:"W",
+    WeldingMaterialApplyCard:"H",
+}
+ApplyCardModelCHOICES = ((v,k) for k,v in ApplyCardModelDICT)
+print ApplyCardModelCHOICES
+#print get_applycard_code(OutsideApplyCard)
+#print "hello"
 # items_list = ProcessDetail.objects.filter(complete_process_date__isnull = 1).order_by('-productionworkgroup');
 # print items_list.count()
 # items_list = ProcessDetail.objects.filter(complete_process_date__isnull = 0).order_by('-productionworkgroup');
