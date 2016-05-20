@@ -13,12 +13,12 @@
     <tbody>
       {% for item in supset %}
       <tr id = "{{item.id}}">
-          <td>{{item.inventory_type}}</td>
-          <td>{{item.nameorspacification}}</td>
-          <td>{{item.material_mark}}</td>
-          <td>{{item.per_fee}}</td>
-          <td>{{item.unit}}</td>
-          <td> </td>
+          <td>{{item.0.inventory_type}}</td>
+          <td>{{item.0.nameorspacification}}</td>
+          <td>{{item.0.material_mark}}</td>
+          <td>{{item.0.per_fee}}</td>
+          <td>{{item.0.unit}}</td>
+          <td> {{item.1}}</td>
           <!-- <td>
               <button class='btn btn-primary' id="edit_quoting" >编辑</button>
           </td>
