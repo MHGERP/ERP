@@ -1761,6 +1761,8 @@ def getCard(request, wwi_id, page = "1", is_print = False):
                "name":name,
                "GTAW":GTAW,
                "GMAW":GMAW,
+               "SMAW":SMAW,
+               "SAW":SAW,
                "LOCAL_FACTORY": LOCAL_FACTORY,
                "INSPECTION_UNIT": INSPECTION_UNIT,
                "THIRD_PARTY_OR_USER": THIRD_PARTY_OR_USER,
@@ -1768,7 +1770,21 @@ def getCard(request, wwi_id, page = "1", is_print = False):
                "process_list1":process_list1,
                "weld_step_list":weld_step_list,
                "weld_test_list": weld_test_list,}
-    html = render_to_string("techdata/widgets/weld_instruction_book.html",context)
+    html = render_to_string("techdata/WWI/weld_instruction_book.html",context)
+    return html
+@dajaxice_register
+def getWeldingWorkInstructionTestList(request, wwi_id):
+    """
+    JunHU
+    """
+    weld_test_list = WeldingWorkInstructionTest.objects.filter(card_belong__id = wwi_id)
+    context = {
+        "weld_test_list": weld_test_list,
+        "LOCAL_FACTORY": LOCAL_FACTORY,
+        "INSPECTION_UNIT": INSPECTION_UNIT,
+        "THIRD_PARTY_OR_USER": THIRD_PARTY_OR_USER,
+    }
+    html = render_to_string("techdata/WWI/wwi_test_card.html",context)
     return html
 
 @dajaxice_register
@@ -1780,7 +1796,7 @@ def getWeldingWorkInstructionProcessList(request, wwi_id, page = "1", is_print =
     process_list = WeldingWorkInstructionProcess.objects.filter(card_belong = weld_work_instruction)
     
     context = {"process_list":process_list}
-    html = render_to_string("techdata/widgets/wwi_process_card.html", context)
+    html = render_to_string("techdata/WWI/wwi_process_card.html", context)
     return html
 
 @dajaxice_register
@@ -1796,7 +1812,7 @@ def getWeldStepList(request, wwi_id):
         print weld_step.id
         weld_step_list.append(weld_step)
     context = {"weld_step_list":weld_step_list}
-    html = render_to_string("techdata/widgets/weld_step_card.html", context)
+    html = render_to_string("techdata/WWI/weld_step_card.html", context)
     return html
 @dajaxice_register
 def saveWeldWorkInstructionProcess(request, arr):
@@ -1811,6 +1827,19 @@ def saveWeldWorkInstructionProcess(request, arr):
             process.detail = item.get("detail", None)
             process.save()
 
+@dajaxice_register
+def saveWeldTest(request, arr):
+    """
+    JunHU
+    """
+    for item in arr:
+        if item.get("iid", None) != None:
+            test = WeldingWorkInstructionTest.objects.get(id = item.get("iid", None))
+            test.index = item.get("index", None)
+            if item.get("test_method", None) != "-1":
+                test.test_method = item.get("test_method", None)
+            test.save()
+
 
 @dajaxice_register
 def saveWeldStep(request, arr):
@@ -1823,8 +1852,6 @@ def saveWeldStep(request, arr):
             step.layer = item.get("layer", None)
             if item.get("weld_method") != None:
                 step.weld_method = WeldMethod.objects.get(id = item.get("weld_method", None))
-            step.name = item.get("name", None)
-            step.diameter = item.get("diameter", None)
             step.polarity = item.get("polarity", None)
             step.electric = item.get("electric", None)
             step.arc_voltage = item.get("arc_voltage", None)

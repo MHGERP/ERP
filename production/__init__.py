@@ -18,6 +18,12 @@ TASK_PLAN_STATUS_CHOICES = (
     (0,u"已完成")
 )
 
+APPLYCARDCHOICES=(
+    ("W", u"外购件领用单"),
+    #("F", u"辅助材料领用单"),
+    ("G", u"钢材领用单"),
+    ("H", u"焊材领用单"),
+)
 """
 class WeldingMaterialApplyCard(models.Model):
     department = models.CharField(verbose_name=u'领用单位',max_length=20,blank=False)
@@ -45,7 +51,7 @@ class WeldingMaterialApplyCard(models.Model):
 
 
     class Meta:
-        verbose_name=u'焊材领用卡'
+        verbose_name=u''
         verbose_name_plural=u'焊材领用卡'
 
 class SteelMaterialApplyCard(models.Model):

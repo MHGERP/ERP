@@ -57,21 +57,17 @@ $("#btn_save_process2").click(function() {
         
         if (weld_method == -1)
             weld_method = null;
-        var name = ""
-        var diameter = "";
-        var polarity = $(this).find("input:eq(3)").val();
-        var electric = $(this).find("input:eq(4)").val();
-        var arc_voltage = $(this).find("input:eq(5)").val();
-        var weld_speed = $(this).find("input:eq(6)").val();
-        var heat_input = $(this).find("input:eq(7)").val();
-        var remark = $(this).find("input:eq(8)").val();
+        var polarity = $(this).find("input:eq(1)").val();
+        var electric = $(this).find("input:eq(2)").val();
+        var arc_voltage = $(this).find("input:eq(3)").val();
+        var weld_speed = $(this).find("input:eq(4)").val();
+        var heat_input = $(this).find("input:eq(5)").val();
+        var remark = $(this).find("input:eq(6)").val();
         arr.push({
 
             "pid": pid,
             "layer": layer,
             "weld_method": weld_method,
-            "name": name,
-            "diameter": diameter,
             "polarity": polarity,
             "electric": electric,
             "arc_voltage": arc_voltage,
@@ -92,8 +88,39 @@ $("#btn_save_process2").click(function() {
     });
 });
 $(document).on("dblclick", ".test_area", function() {
-    $("#test_modal").modal("show");
+    Dajaxice.techdata.getWeldingWorkInstructionTestList(function(data) {
+        $("#test_table").html(data);
+        $("#test_modal").modal("show");
+    }, {
+        "wwi_id": $("#div_card").attr("wwi_id"),
+    });
 });
+$("#btn_save_test").click(function() {
+    var arr = new Array();
+    $(".tr_test").each(function() {
+        var iid = $(this).attr("iid");
+        var index = $(this).find("input:eq(0)").val();
+        var test_method = $("tr[iid='"+iid+"'] select").val();
+        
+        if (test_method == -1)
+            test_method = null;
+        arr.push({
+            "iid": iid,
+            "index": index,
+            "test_method": test_method,
+        });
+    });
+    Dajaxice.techdata.saveWeldTest(function(data) {
+        if (data = "ok")
+            alert("保存成功！");
+        else
+            alert("请完善所有信息后保存");
+        refresh();
+    }, {
+        "arr": arr,
+    });
+});
+
 $(document).on("dblclick", ".pic_area", function() {
     $("#wwi_id_input").val($("#div_card").attr("wwi_id"));
     $("#pic_modal").modal("show");

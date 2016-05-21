@@ -431,7 +431,7 @@ class WeldingWorkInstructionTest(models.Model):
         verbose_name = u"焊接作业检验"
         verbose_name_plural = u"焊接作业检验"
     def __unicode__(self):
-        return unicode(self.card_belong) + "-" + self.index
+        return unicode(self.card_belong)
 
 class TransferCardProcess(models.Model):
     card_belong = models.ForeignKey(TransferCard, verbose_name = u"所属流转卡")

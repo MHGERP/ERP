@@ -8,6 +8,7 @@ from const.models import Materiel
 from datetime import *
 from django.forms import ModelForm
 from production.models import *
+from storage.models import *
 from techdata.models import Processing
 from techdata.models import ProcessingName
 from const.forms import WorkOrderForm
@@ -176,3 +177,39 @@ class MaterielCopyForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(MaterielCopyForm, self).__init__(*args,**kwargs)
         self.fields["inventory_type"].choices = tuple((item.id, item) for item in InventoryType.objects.all()) 
+
+class ApplyCardTypeForm(forms.Form):
+    applytype = forms.ChoiceField(required=True, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"领用单类型")
+    def __init__(self, *args, **kwargs):
+        super(ApplyCardTypeForm, self).__init__(*args,**kwargs)
+        self.fields["applytype"].choices = APPLYCARDCHOICES 
+
+class WeldingMaterialApplyCardForm(ModelForm):
+    class Meta:
+        model = WeldingMaterialApplyCard
+        fields = ("apply_weight", "apply_count", "department", "remark")
+        
+class SteelMaterialApplyCardForm(ModelForm):
+    class Meta:
+        model = SteelMaterialApplyCard
+        fields = ("department", "remark")
+
+class SteelMaterialApplyCardItemsForm(ModelForm):
+    class Meta:
+        model = SteelMaterialApplyCardItems
+        fields = ("count",)
+        
+class AuxiliaryToolApplyCardForm(ModelForm):
+    class Meta:
+        model = AuxiliaryToolApplyCard
+        fields = ("apply_storelist", "apply_count", "department", "remark")
+
+class OutsideApplyCardForm(ModelForm):
+    class Meta:
+        model = OutsideApplyCard
+        fields = ("department",)
+
+class OutsideApplyCardItemsForm(ModelForm):
+    class Meta:
+        model = OutsideApplyCardItems
+        fields = ("count", "unit", "remark")

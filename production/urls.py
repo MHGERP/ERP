@@ -21,6 +21,10 @@ urlpatterns=patterns('',
         production_views.materielUseViews,
     ),
     url(
+        r'^materiel_use_add$',
+        production_views.materielUseAddViews,
+    ),
+    url(
         r'^synthesize_filelist$',
         production_views.synthesizeFileListViews,
     ),

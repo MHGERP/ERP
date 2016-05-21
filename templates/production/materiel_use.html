@@ -16,29 +16,38 @@
   </form>
 </div>
 
-<a class="btn btn-primary"  id="material_add_btn" data-toggle="modal" data-target="#materiel_add_model">添加领用材料</a>
+<a href="/production/materiel_use_add" class="btn btn-primary">添加领用材料</a>
 <div style="margin:20px" id="table_div">
   {% include "production/table/materiel_use_table.html"%}
 </div>
 
-<button class="btn btn-primary">生成领料单</button>
 
 <div id="materiel_add_model" class="modal hide dade" modal-size-width="0.8">
   <div class="modal-header">
-    <h2>物料选择</h2>
+    <h2>领用单信息</h2>
   </div>
-  <div class="modal-body">
-      <form class="form-inline" id="materieluse_add_search_form">
-        {% csrf_token %}
-        {{ materielCopyForm }}
-        <button type="button" class="btn btn-primary" >检索</button>
-      </form>
-    <div id="materiel_use_table">
-    {% include "production/table/materiel_use_select_table.html"%}
-    </div>
+  <div class="modal-body" id="materiel_body_div">
+
   </div>
   <div class="modal-footer">
     <button class="btn btn-success bid-btn-open" data-dismiss="modal" data-target="#bid_modal">确认</button>
+    <button class="btn" data-dismiss="modal" >关闭</button>
+  </div>
+</div>
+
+<div id="materiel_modify_model" class="modal hide dade" modal-size-width="0.8">
+  <div class="modal-header">
+    <h2>领用单信息修改</h2>
+  </div>
+  <div class="modal-body" >
+    <form class="form-inline" id="materiel_modify_form">
+      {% csrf_token %}
+      <div id="materiel_modify_body_div">
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success bid-btn-open" id="submit" >提交</button>
     <button class="btn" data-dismiss="modal" >关闭</button>
   </div>
 </div>
