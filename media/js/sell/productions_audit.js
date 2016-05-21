@@ -95,7 +95,7 @@ $("#id_generate").click(function() {
         function(data) {
             if(data.status == "ok") {
                 alert("工作令生成成功！");
-                $("workorder_modal").modal("hide");
+                $("#workorder_modal").modal("hide");
                 refreshAll();
             }
             else if(data.status == "err") {

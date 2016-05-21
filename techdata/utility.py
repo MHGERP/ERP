@@ -114,7 +114,6 @@ def techdataOrderInitialize(order):
     FirstFeedingMark(order = order).save()
     OutPurchasedMark(order = order).save()
     WeldQuotaPageMark(order = order).save()
-    TransferCardMark(order = order).save()
     ProcessBOMPageMark(order = order).save()
     DesignBOMMark(order = order).save()
     WeldingProcessSpecification(order = order).save()

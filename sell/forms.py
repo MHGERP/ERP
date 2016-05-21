@@ -22,10 +22,11 @@ class BidFileAuditForm(forms.Form):
 class WorkOrderGenerateForm(forms.ModelForm):
     class Meta:
         model = WorkOrder
-        exclude = {"id", "product_name"}
+        exclude = {"id", "product_name", "is_finish"}
         widgets = {
             "order_index" : forms.TextInput(attrs = {"class" : "input-medium"}),
             "sell_type" : forms.Select(attrs = {"class" : "input-medium"}),
             "client_name" : forms.TextInput(attrs = {"class" : "input-medium"}),
+            "project_name" : forms.TextInput(attrs = {"class" : "input-medium"}),
             "count" : forms.TextInput(attrs = {"class" : "input-medium"}),
         }
