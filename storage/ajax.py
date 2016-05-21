@@ -704,9 +704,10 @@ def outsideEntryConfirm(request,eid):
     entry = OutsideStandardEntry.objects.get(id=eid)
     items = OutsideStandardItems.objects.filter(entry = entry)
     if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
+        queryset = []
         for item in items:
-            new_storelist = OutsideStorageList(entry_item=item,count=item.count,outsidebuy_type=entry.outsidebuy_type)
-            new_storelist.save()
+            queryset.append(OutsideStorageList(entry_item=item,count=item.count,outsidebuy_type=entry.outsidebuy_type))
+        OutsideStorageList.objects.bulk_create(queryset)
         entry.entry_status = ENTRYSTATUS_CHOICES_END
         entry.keeper = request.user
         entry.save()

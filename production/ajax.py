@@ -22,6 +22,7 @@ from storage.models import *
 from const import *
 from production.utility import get_applycard_code, ApplyCardModelCheckDICT
 
+
 def getQ(con):
     query_set = Q()
     for k,v in con.items():
@@ -483,14 +484,7 @@ def materialuseSearch(request, form):
         html = render_to_string("production/table/materiel_use_select_table.html",{"items":materiel_list})
     else:
         print search_form.errors
-        return simplejson.dumps({ "html" : html})
-
-ApplyCardModelDICT = {
-    SteelMaterialApplyCard:"G",
-    AuxiliaryToolApplyCard:"F",
-    OutsideApplyCard:"W",
-    WeldingMaterialApplyCard:"H",
-}
+    return simplejson.dumps({ "html" : html})
 
 def createSteelMaterialApplyCard(request, materielCopys):
     steelMaterialApplyCard = SteelMaterialApplyCard(applycard_code=get_applycard_code(SteelMaterialApplyCard),)
@@ -538,6 +532,13 @@ def createWeldingMaterialApplyCard(request, materielCopys):
         applycard_codes.append(applyCard.applycard_code)
     return applycard_codes 
 
+APPLYCARDDICT={
+    "G":{"href":"steel",        "applycardmodel":SteelMaterialApplyCard,   "applycarditemmodel":SteelMaterialApplyCardItems, "create":createSteelMaterialApplyCard,                                                 "apply_item_tr":SteelMaterialApplyCardItemsForm, "remark_tr":SteelMaterialApplyCardForm,},
+    "W":{"href":"outside",      "applycardmodel":OutsideApplyCard,         "applycarditemmodel":OutsideApplyCardItems,       "create":createOutsideApplyCard,                                                       "apply_item_tr":OutsideApplyCardItemsForm,       "remark_tr":OutsideApplyCardForm,      },
+    "H":{"href":"weld",         "applycardmodel":WeldingMaterialApplyCard, "applycarditemmodel":WeldingMaterialApplyCard,    "create":createWeldingMaterialApplyCard,                                               "apply_item_tr":WeldingMaterialApplyCardForm,    "remark_tr":None,                      },
+    "F":{"href":"auxiliarytool","applycardmodel":AuxiliaryToolApplyCard,   "applycarditemmodel":AuxiliaryToolApplyCard,      "create":None,                                                                         "apply_item_tr":AuxiliaryToolApplyCardForm,      "remark_tr":None,                      },
+}
+
 
 @dajaxice_register
 def createApplyCard(request, form, iids):
@@ -545,30 +546,54 @@ def createApplyCard(request, form, iids):
     if search_form.is_valid():
         materielCopys = MaterielCopy.objects.filter(Q(id__in=iids))
         applytype = search_form.cleaned_data["applytype"]
-        if applytype == "H":
-            applycodes = createWeldingMaterialApplyCard(request, materielCopys)
-        elif applytype == "G":
-            applycodes = createSteelMaterialApplyCard(request, materielCopys)
-        elif applytype == "W":
-            applycodes = createOutsideApplyCard(request, materielCopys)
+        applycodes = APPLYCARDDICT[applytype]["create"](request, materielCopys)
     return simplejson.dumps(",".join(applycodes))
-
-html_href = {"G":"steel",
-             "W":"outside",
-             "H":"weld",
-             "F":"auxiliarytool",
-    
-}
 
 @dajaxice_register
 def getApplyCardDetail(request, aid):
     context={}
-    context["apply_card"]=ApplyCardModelCheckDICT[aid[0]].objects.get(applycard_code=aid)
-    if aid[0]=="G":
-        ApplyCardItemsModel = SteelMaterialApplyCardItems
-    elif aid[0]=="W":
-        ApplyCardItemsModel = OutsideApplyCardItems
-    if aid[0] in ["W", "G"]:
-        context["items"]=ApplyCardItemsModel.objects.filter(apply_card=context["apply_card"])
-    html = render_to_string("storage/wordhtml/%sapplycard.html" % (html_href[aid[0]]), context)
+    context["apply_card"]=APPLYCARDDICT[aid[0]]["applycardmodel"].objects.get(applycard_code=aid)
+    try:
+        context["items"]=APPLYCARDDICT[aid[0]]["applycarditemmodel"].objects.filter(apply_card=context["apply_card"])
+    except:
+        pass
+    html = render_to_string("storage/wordhtml/%sapplycard.html" % (APPLYCARDDICT[aid[0]]["href"]), context)
     return simplejson.dumps(html)
+
+@dajaxice_register
+def getApplyCardForm(request, aid, tr_type, mid):
+    if tr_type == "remark_tr": modelType = APPLYCARDDICT[aid[0]]["applycardmodel"]
+    if tr_type == "apply_item_tr": modelType = APPLYCARDDICT[aid[0]]["applycarditemmodel"]
+    return APPLYCARDDICT[aid[0]][tr_type](instance=modelType.objects.get(id=mid)).as_p()
+    
+@dajaxice_register
+def saveApplyCardForm(request, form, aid, tr_type, mid):
+    if tr_type == "remark_tr": modelType = APPLYCARDDICT[aid[0]]["applycardmodel"]
+    if tr_type == "apply_item_tr": modelType = APPLYCARDDICT[aid[0]]["applycarditemmodel"]
+    modelform = APPLYCARDDICT[aid[0]][tr_type](deserialize_form(form), instance=modelType.objects.get(id=mid))
+    if modelform.is_valid():
+        modelform.save();
+        context = {"status":1}
+    else:
+        context = {"status":0, }
+    return simplejson.dumps(context)
+
+
+APPLYCARD_STATUS_DICT ={
+    "applicant":{"current_status":APPLYCARD_APPLICANT,  "next_status":APPLYCARD_AUDITOR,  },
+    "auditor":  {"current_status":APPLYCARD_AUDITOR,    "next_status":APPLYCARD_INSPECTOR,},
+    "inspector": {"current_status":APPLYCARD_INSPECTOR, "next_status":APPLYCARD_KEEPER,   }
+}
+
+@dajaxice_register
+def confirmApplyCardForm(request, aid, role):
+    try:
+        applycard = APPLYCARDDICT[aid[0]]["applycardmodel"].objects.get(applycard_code=aid, status = APPLYCARD_STATUS_DICT[role]["current_status"]) 
+        setattr(applycard, role, request.user)
+        applycard.status = APPLYCARD_STATUS_DICT[role]["next_status"]
+        applycard.save()
+        context = {"status":1, "message":u"确认成功",}
+    except:
+        context = {"status":0, "message":u"确认不成功",}
+    return simplejson.dumps(context)
+    

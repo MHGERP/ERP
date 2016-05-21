@@ -35,6 +35,23 @@
   </div>
 </div>
 
+<div id="materiel_modify_model" class="modal hide dade" modal-size-width="0.8">
+  <div class="modal-header">
+    <h2>领用单信息修改</h2>
+  </div>
+  <div class="modal-body" >
+    <form class="form-inline" id="materiel_modify_form">
+      {% csrf_token %}
+      <div id="materiel_modify_body_div">
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success bid-btn-open" id="submit" >提交</button>
+    <button class="btn" data-dismiss="modal" >关闭</button>
+  </div>
+</div>
+
 <script type='text/javascript' src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/production/materiel_use.js"></script>
 {% endblock%}
