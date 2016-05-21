@@ -407,47 +407,88 @@ def selectSupplier(requset, supid, bidid):
     quoting_set = set(item for item in QuotingPrice.objects.filter(the_supplier = sup))
     supset = set()
     for one in materiel_set:
-        price = 0
+        price = -1
+        obj = QuotingPrice()
+        obj.inventory_type = one.inventory_type
+        obj.the_supplier = sup
         if one.inventory_type == MAIN_MATERIEL:
+            obj.nameorspacification = one.specification
+            obj.material_mark = one.material.name
+            obj.per_fee = ""
+            obj.unit = ""
             for two in quoting_set:
                 if two.inventory_type == MAIN_MATERIEL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    obj.per_fee = two.per_fee
+                    obj.unit = two.unit
                     try:
                         price = int(two.per_fee)*int(one.total_weight)
                     except Exception as e:
                         price = 0
-                    supset.add((two, price))
+                    #supset.add((two, price))
         if one.inventory_type == AUXILIARY_MATERIEL:
+            obj.nameorspacification = one.specification
+            obj.material_mark = one.material.name
+            obj.per_fee = ""
+            obj.unit = ""
             for two in quoting_set:
                 if two.inventory_type == AUXILIARY_MATERIEL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    obj.per_fee = two.per_fee
+                    obj.unit = two.unit
                     try:
                         price = int(two.per_fee)*int(one.total_weight)
                     except Exception as e:
                         price = 0
-                    supset.add((two, price))
+                    #supset.add((two, price))
         if one.inventory_type == FIRST_FEEDING:
             for two in quoting_set:
                 if two.inventory_type == FIRST_FEEDING and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
-                    supset.add((two, price))
+                    obj.per_fee = two.per_fee
+                    obj.unit = two.unit
+                    try:
+                        price = int(two.per_fee)*int(one.total_weight)
+                    except Exception as e:
+                        price = 0
+                    #supset.add((two, price))
         if one.inventory_type == OUT_PURCHASED:
+            obj.nameorspacification = one.name
+            obj.material_mark = one.material.name
+            obj.per_fee = ""
+            obj.unit = ""
             for two in quoting_set:
                 if two.inventory_type == OUT_PURCHASED and one.name == tow.nameorspacification and one.material.name == two.material_mark:
+                    obj.per_fee = two.per_fee
+                    obj.unit = two.unit
                     try:
                         price = int(two.per_fee)*int(one.count)
                     except Exception as e:
                         price = 0
-                    supset.add((two, price))
+                    #supset.add((two, price))
         if one.inventory_type == COOPERANT:
             for two in quoting_set:
                 if two.inventory_type == COOPERANT and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
-                    supset.add((two, price))
+                    obj.per_fee = two.per_fee
+                    obj.unit = two.unit
+                    try:
+                        price = int(two.per_fee)*int(one.total_weight)
+                    except Exception as e:
+                        price = 0
+                    #supset.add((two, price))
         if one.inventory_type == WELD_MATERIAL:
+            obj.nameorspacification = one.specification
+            obj.material_mark = one.material.name
+            obj.per_fee = ""
+            obj.unit = ""
             for two in quoting_set:
                 if two.inventory_type == WELD_MATERIAL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
+                    obj.per_fee = two.per_fee
+                    obj.unit = two.unit
                     try:
                         price = int(two.per_fee)*int(one.quota)
                     except Exception as e:
                         price = 0
-                    supset.add((two, price))
+                    #supset.add((two, price))
+        supset.add((two, price))
+
     context = {
         "supset" : supset,
     }

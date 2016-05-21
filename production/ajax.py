@@ -20,6 +20,8 @@ from django.contrib.auth.models import User
 from users.models import UserInfo
 from storage.models import *
 from const import *
+from production.utility import get_applycard_code, ApplyCardModelCheckDICT
+
 
 def getQ(con):
     query_set = Q()
@@ -483,3 +485,115 @@ def materialuseSearch(request, form):
     else:
         print search_form.errors
     return simplejson.dumps({ "html" : html})
+
+def createSteelMaterialApplyCard(request, materielCopys):
+    steelMaterialApplyCard = SteelMaterialApplyCard(applycard_code=get_applycard_code(SteelMaterialApplyCard),)
+    steelMaterialApplyCard.save()
+    for item in materielCopys:
+        applyCardItem = SteelMaterialApplyCardItems(apply_card = steelMaterialApplyCard,
+                                                    material_mark=item.material.name,
+                                                    material_code=item.quality_number,
+                                                    count=item.count,
+                                                    work_order = item.sub_workorder,
+                                                    specification = item.specification,
+        )
+        applyCardItem.save()
+        return [steelMaterialApplyCard.applycard_code]
+
+
+def createOutsideApplyCard(request, materielCopys):
+    outsideApplyCard = OutsideApplyCard(applycard_code=get_applycard_code(OutsideApplyCard),
+                                        work_order=materielCopys[0].sub_workorder,)
+    outsideApplyCard.save()
+    print outsideApplyCard 
+    for item in materielCopys:
+        applyCardItem = OutsideApplyCardItems(apply_card = outsideApplyCard,
+                                              schematic_index=item.schematic_index,
+                                              specification=item.name,
+                                              material_mark=item.material.name,
+                                              material_code=item.quality_number,
+                                              unit=item.unit,
+                                              count=item.count,
+        )
+        applyCardItem.save()
+    return [outsideApplyCard.applycard_code]
+
+
+def createWeldingMaterialApplyCard(request, materielCopys):
+    applycard_codes = []
+    for item in materielCopys:
+        applyCard = WeldingMaterialApplyCard(applycard_code=get_applycard_code(WeldingMaterialApplyCard),
+                                             work_order = item.sub_workorder,
+                                             material_code=item.quality_number,
+                                             material_mark=item.material.name,
+                                             specification=item.specification,
+                                             apply_count=item.count,)
+        applyCard.save()
+        applycard_codes.append(applyCard.applycard_code)
+    return applycard_codes 
+
+APPLYCARDDICT={
+    "G":{"href":"steel",        "applycardmodel":SteelMaterialApplyCard,   "applycarditemmodel":SteelMaterialApplyCardItems, "create":createSteelMaterialApplyCard,                                                 "apply_item_tr":SteelMaterialApplyCardItemsForm, "remark_tr":SteelMaterialApplyCardForm,},
+    "W":{"href":"outside",      "applycardmodel":OutsideApplyCard,         "applycarditemmodel":OutsideApplyCardItems,       "create":createOutsideApplyCard,                                                       "apply_item_tr":OutsideApplyCardItemsForm,       "remark_tr":OutsideApplyCardForm,      },
+    "H":{"href":"weld",         "applycardmodel":WeldingMaterialApplyCard, "applycarditemmodel":WeldingMaterialApplyCard,    "create":createWeldingMaterialApplyCard,                                               "apply_item_tr":WeldingMaterialApplyCardForm,    "remark_tr":None,                      },
+    "F":{"href":"auxiliarytool","applycardmodel":AuxiliaryToolApplyCard,   "applycarditemmodel":AuxiliaryToolApplyCard,      "create":None,                                                                         "apply_item_tr":AuxiliaryToolApplyCardForm,      "remark_tr":None,                      },
+}
+
+
+@dajaxice_register
+def createApplyCard(request, form, iids):
+    search_form = ApplyCardTypeForm(deserialize_form(form))
+    if search_form.is_valid():
+        materielCopys = MaterielCopy.objects.filter(Q(id__in=iids))
+        applytype = search_form.cleaned_data["applytype"]
+        applycodes = APPLYCARDDICT[applytype]["create"](request, materielCopys)
+    return simplejson.dumps(",".join(applycodes))
+
+@dajaxice_register
+def getApplyCardDetail(request, aid):
+    context={}
+    context["apply_card"]=APPLYCARDDICT[aid[0]]["applycardmodel"].objects.get(applycard_code=aid)
+    try:
+        context["items"]=APPLYCARDDICT[aid[0]]["applycarditemmodel"].objects.filter(apply_card=context["apply_card"])
+    except:
+        pass
+    html = render_to_string("storage/wordhtml/%sapplycard.html" % (APPLYCARDDICT[aid[0]]["href"]), context)
+    return simplejson.dumps(html)
+
+@dajaxice_register
+def getApplyCardForm(request, aid, tr_type, mid):
+    if tr_type == "remark_tr": modelType = APPLYCARDDICT[aid[0]]["applycardmodel"]
+    if tr_type == "apply_item_tr": modelType = APPLYCARDDICT[aid[0]]["applycarditemmodel"]
+    return APPLYCARDDICT[aid[0]][tr_type](instance=modelType.objects.get(id=mid)).as_p()
+    
+@dajaxice_register
+def saveApplyCardForm(request, form, aid, tr_type, mid):
+    if tr_type == "remark_tr": modelType = APPLYCARDDICT[aid[0]]["applycardmodel"]
+    if tr_type == "apply_item_tr": modelType = APPLYCARDDICT[aid[0]]["applycarditemmodel"]
+    modelform = APPLYCARDDICT[aid[0]][tr_type](deserialize_form(form), instance=modelType.objects.get(id=mid))
+    if modelform.is_valid():
+        modelform.save();
+        context = {"status":1}
+    else:
+        context = {"status":0, }
+    return simplejson.dumps(context)
+
+
+APPLYCARD_STATUS_DICT ={
+    "applicant":{"current_status":APPLYCARD_APPLICANT,  "next_status":APPLYCARD_AUDITOR,  },
+    "auditor":  {"current_status":APPLYCARD_AUDITOR,    "next_status":APPLYCARD_INSPECTOR,},
+    "inspector": {"current_status":APPLYCARD_INSPECTOR, "next_status":APPLYCARD_KEEPER,   }
+}
+
+@dajaxice_register
+def confirmApplyCardForm(request, aid, role):
+    try:
+        applycard = APPLYCARDDICT[aid[0]]["applycardmodel"].objects.get(applycard_code=aid, status = APPLYCARD_STATUS_DICT[role]["current_status"]) 
+        setattr(applycard, role, request.user)
+        applycard.status = APPLYCARD_STATUS_DICT[role]["next_status"]
+        applycard.save()
+        context = {"status":1, "message":u"确认成功",}
+    except:
+        context = {"status":0, "message":u"确认不成功",}
+    return simplejson.dumps(context)
+    

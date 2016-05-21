@@ -1,19 +1,18 @@
 <table class="table table=bordered table=striped">
   <thead>
     <tr>
-      <th>选择</th>
       <th>工作令号</th>
       <th>工作票</th>
       <th>工作票号</th>
       <th>材料牌号</th>
       <th>单位</th>
       <th>数量</th>
+      <th>操作</th>
     </tr>
   </thead>
   <tbody>
     {% for item in items %}
-    <tr>
-      <td><input type="checkbox" ></td>
+    <tr iid="{{item.id}}">
       <td>{{item.sub_workorder}}</td>
       {% if item.orgin_materiel %}
       <td>{{item.orgin_materiel}}</td>
@@ -25,6 +24,7 @@
       <td>{{item.material}}</td>
       <td>{{item.unit}}</td>
       <td>{{item.count}}</td>
+      <td><button type="button" class="btn btn-primary" >添加</button></td>
       {% endfor %}
     </tr>
   </tbody>
