@@ -581,7 +581,8 @@ def saveApplyCardForm(request, form, aid, tr_type, mid):
 
 APPLYCARD_STATUS_DICT ={
     "applicant":{"current_status":APPLYCARD_APPLICANT,  "next_status":APPLYCARD_AUDITOR,  },
-    "auditor":  {"current_status":APPLYCARD_AUDITOR,    "next_status":APPLYCARD_INSPECTOR,}
+    "auditor":  {"current_status":APPLYCARD_AUDITOR,    "next_status":APPLYCARD_INSPECTOR,},
+    "inspector": {"current_status":APPLYCARD_INSPECTOR, "next_status":APPLYCARD_KEEPER,   }
 }
 
 @dajaxice_register

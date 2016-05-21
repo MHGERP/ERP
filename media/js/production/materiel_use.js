@@ -75,7 +75,7 @@ function saveApplyCardFormCallBack(data){
 
 }
 
-$(document).on("click","#materiel_body_div span[role='auditor'], #materiel_body_div span[role='applicant']", function(){
+$(document).on("click","#materiel_body_div span[role='auditor'], #materiel_body_div span[role='applicant'], #materiel_body_div span[role='inspector']", function(){
   apply_code = $("#materiel_body_div").find("#aid_code").attr("aid_code");
   Dajaxice.production.confirmApplyCardForm(confirmApplyCardFormCallBack, {"aid":apply_code, "role":$(this).attr("role")});
 })
