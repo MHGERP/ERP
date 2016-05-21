@@ -31,7 +31,7 @@ style='mso-spacerun:yes'>
 </div>
 <div class="span4">
 <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:
-    "Times New Roman";mso-hansi-font-family:"Times New Roman"'>编号：{{apply_card.applycard_code}}</span><span
+    "Times New Roman";mso-hansi-font-family:"Times New Roman"' id="aid_code" aid_code="{{apply_card.applycard_code}}">编号：{{apply_card.applycard_code}}</span><span
 lang=EN-US style='font-size:12.0pt'><o:p></o:p></span><span
 style='mso-spacerun:yes'></span>
 </div>
@@ -207,7 +207,7 @@ style='mso-spacerun:yes'></span>
   mso-line-height-rule:exactly' id="actual_quantity">{{apply_card.actual_count|default_if_none:""}}</p>
   </td>
  </tr>
- <tr style='mso-yfti-irow:3;mso-yfti-lastrow:yes;height:46.6pt'>
+ <tr style='mso-yfti-irow:3;mso-yfti-lastrow:yes;height:46.6pt' name="remark_tr" mid="{{applycard.id}}">
   <td width=693 colspan=10 valign=top style='width:519.85pt;border:solid windowtext 1.0pt;
   border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:46.6pt'>
@@ -235,7 +235,7 @@ style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font
 <div class="span3">
 <span
 style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>审核人：</span>{% ifequal apply_card.auditor None %}<span class="btn btn-mark"   name="weldapply" role="purchaser">签字</span>{% else %}{{apply_card.auditor.userinfo}}{% endifequal %}
+"Times New Roman"'>审核人：</span>{% ifequal apply_card.auditor None %}<span class="btn btn-mark"   name="weldapply" role="auditor">签字</span>{% else %}{{apply_card.auditor.userinfo}}{% endifequal %}
 </div>
 <div class="span3">
 <span

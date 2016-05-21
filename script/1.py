@@ -1,4 +1,5 @@
 # coding: UTF-8
+import sys
 from django.shortcuts import render
 from django.db import connection
 from django.db.models import Q, Sum
@@ -8,14 +9,17 @@ from production.models import *
 from const.models import Materiel
 from production.utility import get_applycard_code
 from storage.models import *
-ApplyCardModelDICT = {
-    SteelMaterialApplyCard:"G",
-    AuxiliaryToolApplyCard:"F",
-    OutsideApplyCard:"W",
-    WeldingMaterialApplyCard:"H",
-}
-ApplyCardModelCHOICES = ((v,k) for k,v in ApplyCardModelDICT)
-print ApplyCardModelCHOICES
+
+aMod = sys.modules[]
+
+# ApplyCardModelDICT = {
+#     SteelMaterialApplyCard:"G",
+#     AuxiliaryToolApplyCard:"F",
+#     OutsideApplyCard:"W",
+#     WeldingMaterialApplyCard:"H",
+# }
+# ApplyCardModelCHOICES = ((v,k) for k,v in ApplyCardModelDICT)
+# print ApplyCardModelCHOICES
 #print get_applycard_code(OutsideApplyCard)
 #print "hello"
 # items_list = ProcessDetail.objects.filter(complete_process_date__isnull = 1).order_by('-productionworkgroup');
