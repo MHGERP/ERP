@@ -306,8 +306,14 @@ def getRelatedTable(request, index, f1, f2, f3):
 @dajaxice_register
 def addToForeign(request, index):
     item = Materiel.objects.get(id = index)
-    item.inventory_type.clear()
-    item.inventory_type.add(InventoryType.objects.get(name = OUT_PURCHASED))
+    item.inventory_type=InventoryType.objects.get(name = OUT_PURCHASED)
+    item.save()
+    try:
+        item.materielpurchasingstatus.add_to_detail = True
+        item.materielpurchasingstatus.save()
+    except:
+        status = MaterielPurchasingStatus(materiel = item, add_to_detail = True)
+        status.save()
     return ""
 
 @dajaxice_register
@@ -387,110 +393,46 @@ def selectSupplier(requset, supid, bidid):
         WELD_MATERIAL: "weld_material",
     }
     bid = BidForm.objects.get(id = bidid)
-    materiel_set = set()#set(item.materiel for item in MaterielFormConnection.objects.filter(order_form__isnull= bid.order_form))
-    the_form = MaterielFormConnection.objects.all()
-    print ("the++++++++++++++form")
-    print bid.order_form.id
-    for one in the_form:
-        try:
-            print ("============")
-            print one.order_form
-            print bid.order_form
-            if one.order_form == bid.order_form:
-                print "xiangdongle"
-                materiel_set.add(one.materiel)
-        except Exception as e:
-            print "物料不存在"
+    materiel_set = set(item.materiel for item in MaterielFormConnection.objects.filter(order_form= bid.order_form))
     print ("物料长度")
     print len(materiel_set)
     sup = Supplier.objects.get(id = supid)
-    quoting_set = set(item for item in QuotingPrice.objects.filter(the_supplier = sup))
-    supset = set()
+    quoting_set = QuotingPrice.objects.filter(the_supplier = sup)
     for one in materiel_set:
-        price = -1
-        obj = QuotingPrice()
-        obj.inventory_type = one.inventory_type
-        obj.the_supplier = sup
-        if one.inventory_type == MAIN_MATERIEL:
-            obj.nameorspacification = one.specification
-            obj.material_mark = one.material.name
-            obj.per_fee = ""
-            obj.unit = ""
-            for two in quoting_set:
-                if two.inventory_type == MAIN_MATERIEL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
-                    obj.per_fee = two.per_fee
-                    obj.unit = two.unit
-                    try:
-                        price = int(two.per_fee)*int(one.total_weight)
-                    except Exception as e:
-                        price = 0
-                    #supset.add((two, price))
-        if one.inventory_type == AUXILIARY_MATERIEL:
-            obj.nameorspacification = one.specification
-            obj.material_mark = one.material.name
-            obj.per_fee = ""
-            obj.unit = ""
-            for two in quoting_set:
-                if two.inventory_type == AUXILIARY_MATERIEL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
-                    obj.per_fee = two.per_fee
-                    obj.unit = two.unit
-                    try:
-                        price = int(two.per_fee)*int(one.total_weight)
-                    except Exception as e:
-                        price = 0
-                    #supset.add((two, price))
-        if one.inventory_type == FIRST_FEEDING:
-            for two in quoting_set:
-                if two.inventory_type == FIRST_FEEDING and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
-                    obj.per_fee = two.per_fee
-                    obj.unit = two.unit
-                    try:
-                        price = int(two.per_fee)*int(one.total_weight)
-                    except Exception as e:
-                        price = 0
-                    #supset.add((two, price))
-        if one.inventory_type == OUT_PURCHASED:
-            obj.nameorspacification = one.name
-            obj.material_mark = one.material.name
-            obj.per_fee = ""
-            obj.unit = ""
-            for two in quoting_set:
-                if two.inventory_type == OUT_PURCHASED and one.name == tow.nameorspacification and one.material.name == two.material_mark:
-                    obj.per_fee = two.per_fee
-                    obj.unit = two.unit
-                    try:
-                        price = int(two.per_fee)*int(one.count)
-                    except Exception as e:
-                        price = 0
-                    #supset.add((two, price))
-        if one.inventory_type == COOPERANT:
-            for two in quoting_set:
-                if two.inventory_type == COOPERANT and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
-                    obj.per_fee = two.per_fee
-                    obj.unit = two.unit
-                    try:
-                        price = int(two.per_fee)*int(one.total_weight)
-                    except Exception as e:
-                        price = 0
-                    #supset.add((two, price))
-        if one.inventory_type == WELD_MATERIAL:
-            obj.nameorspacification = one.specification
-            obj.material_mark = one.material.name
-            obj.per_fee = ""
-            obj.unit = ""
-            for two in quoting_set:
-                if two.inventory_type == WELD_MATERIAL and one.specification == tow.nameorspacification and one.material.name == two.material_mark:
-                    obj.per_fee = two.per_fee
-                    obj.unit = two.unit
-                    try:
-                        price = int(two.per_fee)*int(one.quota)
-                    except Exception as e:
-                        price = 0
-                    #supset.add((two, price))
-        supset.add((two, price))
+        if one.inventory_type.name== MAIN_MATERIEL or one.inventory_type.name == AUXILIARY_MATERIEL:
+            quot=quoting_set.filter(nameorspacification=one.specification,material_mark=one.material.name)       
+            if quot.count()==1:
+                quot=quot[0]
+                try:
+                    one.per_fee=quot.per_fee
+                    one.units=quot.unit
+                    one.price=int(quot.per_fee)*int(one.total_weight)
+                except:
+                    one.price=0
+
+        if one.inventory_type.name == FIRST_FEEDING or one.inventory_type.name == OUT_PURCHASED or one.inventory_type.name == COOPERANT:
+            quot=quoting_set.filter(nameorspacification=one.name,material_mark=one.material.name)       
+            if quot.count()==1:
+                quot=quot[0]
+                try:
+                    one.per_fee=quot.per_fee
+                    one.units=quot.unit
+                    one.price=int(quot.per_fee)*int(one.count)
+                except:
+                    one.price=0
+        if one.inventory_type.name == WELD_MATERIAL:
+            quot=quoting_set.filter(nameorspacification=one.specification,material_mark=one.material.name)       
+            if quot.count()==1:
+                quot=quot[0]
+                try:
+                    one.per_fee=quot.per_fee
+                    one.units=quot.unit
+                    one.price=int(quot.per_fee)*int(one.quota)
+                except:
+                    one.price=0
 
     context = {
-        "supset" : supset,
+        "supset" : materiel_set
     }
     return render_to_string("purchasing/supplier/supplier_quoting_table.html", context)
 
@@ -550,7 +492,7 @@ def addToDetail(request, table_id, order_index):
     params: table_id: the id of table; order_index: the index of work_order
     return: NULL
     """
-    items = Materiel.objects.filter(order__order_index = order_index, inventory_type__id = table_id)
+    items = Materiel.objects.filter(sub_workorder__id = order_index, inventory_type__name = table_id)
     for item in items:
         try:
             item.materielpurchasingstatus.add_to_detail = True
@@ -558,6 +500,9 @@ def addToDetail(request, table_id, order_index):
         except:
             status = MaterielPurchasingStatus(materiel = item, add_to_detail = True)
             status.save()
+        if item.inventory_type.name == MAIN_MATERIEL or item.inventory_type.name == AUXILIARY_MATERIEL:
+            item.total_weight=item.total_weight_cal()
+            item.save()
     return ""
 
 @dajaxice_register
@@ -575,6 +520,9 @@ def addToDetailSingle(request, index):
     except:
         status = MaterielPurchasingStatus(materiel = item, add_to_detail = True)
         status.save()
+    if item.inventory_type.name == MAIN_MATERIEL or item.inventory_type.name == AUXILIARY_MATERIEL:
+        item.total_weight=item.total_weight_cal()
+        item.save()
     return ""
 
 @dajaxice_register

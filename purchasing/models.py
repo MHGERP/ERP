@@ -23,7 +23,7 @@ class MaterielCopy(Materiel):
         verbose_name = u"伪物料"
         verbose_name_plural = u"伪物料"
     def __unicode__(self):
-        return self.name
+        return "%s  %s"%(self.name,self.specification)
 
 class CommentStatus(models.Model):
     form_type=models.IntegerField(choices=BID_APPLY_TYPE_CHOICES,blank=True,null=True,verbose_name=u"表单类型")
@@ -244,7 +244,7 @@ class MaterielPurchasingStatus(models.Model):
         verbose_name = u"物料采购状态"
         verbose_name_plural = u"物料采购状态"
     def __unicode__(self):
-       return self.materiel.name
+       return '%s  %s'%(self.materiel.name,self.materiel.specification)
 
 class SupplierSelect(models.Model):
     bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")
