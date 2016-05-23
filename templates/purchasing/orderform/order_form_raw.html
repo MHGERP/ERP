@@ -190,7 +190,7 @@
   0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><b><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;;
-  mso-font-kerning:0pt'>{{item.name}}<span lang=EN-US><o:p></o:p></span></span></b></p>
+  mso-font-kerning:0pt'>{{item.name|default:""}}<span lang=EN-US><o:p></o:p></span></span></b></p>
   </td>
   <td width=85 style='width:63.8pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-bottom-alt:
@@ -198,7 +198,7 @@
   0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><b><span
   lang=EN-US style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  ;mso-font-kerning:0pt'>{{item.material.name}}<o:p></o:p></span></b></p>
+  ;mso-font-kerning:0pt'>{{item.material.name|default:""}}<o:p></o:p></span></b></p>
   </td>
   <td width=76 nowrap valign=bottom style='width:2.0cm;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -206,7 +206,7 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;;
-  mso-font-kerning:0pt'>{{item.press}}<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{{item.press|default:""}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=153 nowrap colspan=4 style='width:115.1pt;border:solid windowtext 1.0pt;border-top:
   none;mso-border-left-alt:solid windowtext .5pt;mso-border-bottom-alt:solid windowtext .5pt;
@@ -214,7 +214,7 @@
   height:24.75pt'>
   <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;;
-  mso-font-kerning:0pt'>{{item.specification}}<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{{item.specification|default:""}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=57 style='width:42.5pt;border:solid windowtext 1.0pt;border-top:
   none;mso-border-left-alt:solid windowtext .5pt;mso-border-bottom-alt:solid windowtext .5pt;
@@ -238,7 +238,7 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><b><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;;
-  mso-font-kerning:0pt'>{{item.recheck}}　<span lang=EN-US><o:p></o:p></span></span></b></p>
+  mso-font-kerning:0pt'>{{item.recheck|default:""}}　<span lang=EN-US><o:p></o:p></span></span></b></p>
   </td>
   <td width=77 style='width:58.05pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -246,7 +246,7 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><b><span
   style='font-size:10.0pt;font-family:宋体;mso-bidi-font-family:宋体;;
-  mso-font-kerning:0pt'>{{item.detection_level}}　<span lang=EN-US><o:p></o:p></span></span></b></p>
+  mso-font-kerning:0pt'>{{item.detection_level|default:""}}　<span lang=EN-US><o:p></o:p></span></span></b></p>
   </td>
   <td width=83 nowrap colspan=2 style='width:62.45pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -254,7 +254,7 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
   class=GramE><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
-  宋体;mso-font-kerning:0pt'>{{item.status}}</span></span><span lang=EN-US
+  宋体;mso-font-kerning:0pt'>{{item.status|default:""}}</span></span><span lang=EN-US
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;;
   mso-font-kerning:0pt'><o:p></o:p></span></p>
   </td>
@@ -264,14 +264,14 @@
   padding:0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><b><span
   lang=EN-US style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  ;mso-font-kerning:0pt'>{{item.standard}}<o:p></o:p></span></b></p>
+  ;mso-font-kerning:0pt'>{{item.standard|default:""}}<o:p></o:p></span></b></p>
   </td>
   <td width=113 style='width:3.0cm;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-bottom-alt:
   solid windowtext .5pt;mso-border-right-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><b><span
   lang=EN-US style='font-size:10.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  ;mso-font-kerning:0pt'>{{item.remark}}<o:p></o:p></span></b></p>
+  ;mso-font-kerning:0pt'>{{item.remark|default:""}}<o:p></o:p></span></b></p>
   </td>
  </tr>
  {% endfor%}

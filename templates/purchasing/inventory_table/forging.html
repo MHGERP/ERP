@@ -20,14 +20,14 @@
         {% for item in items %}
         <tr>
 			<td>{{forloop.counter}}</td>
-            <td>{{item.schematic_index}}</td>
-            <td>{{item.index}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.material}}</td>
-            <td>{{item.count}}</td>
-            <td>{{item.net_weight}}</td>
-            <td>{{item.total_weight_cal}}</td>
-            <td>{{item.cooperantitem.remark}}</td>
+            <td>{{item.schematic_index|default:""}}</td>
+            <td>{{item.index|default:""}}</td>
+            <td>{{item.name|default:""}}</td>
+            <td>{{item.material|default:""}}</td>
+            <td>{{item.count|default:""}}</td>
+            <td>{{item.net_weight|default:""}}</td>
+            <td>{{item.total_weight_cal|default:""}}</td>
+            <td>{{item.cooperantitem.remark|default:""}}</td>
             {% if not item.materielpurchasingstatus.add_to_detail %}
             <td><span class="btn btn-small btn-primary btn-add_to_detail" args="{{item.id}}">加入物料汇总</span></td>
             {% else %}

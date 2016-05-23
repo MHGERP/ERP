@@ -62,8 +62,8 @@ var cell;
 $(document).on("click",".btn-danger",function(){
     cell = this;
     var uid = $(cell).attr("uid");
-    if(confirm("确定删除吗？")){
-            Dajaxice.purchasing.deleteDetail(delete_detail_callback,
+    if(confirm("确定完成吗？")){
+            Dajaxice.purchasing.CompleteDetail(delete_detail_callback,
                 {"uid":uid}
             );
     }

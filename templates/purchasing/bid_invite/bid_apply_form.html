@@ -530,7 +530,7 @@ div.WordSection1
   height:31.2pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>{{bid_apply.apply_company}}<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{{bid_apply.apply_company|default:""}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=163 nowrap colspan=2 rowspan=2 style='width:122.0pt;border:solid windowtext 1.0pt;
   border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
@@ -546,7 +546,7 @@ div.WordSection1
   height:31.2pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>{{bid_apply.demand_company}}<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{{bid_apply.demand_company|default:""}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:31.2pt;border:none' width=0 height=42></td>
@@ -573,7 +573,7 @@ div.WordSection1
   height:31.2pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>{{bid_apply.bid_project}}<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{{bid_apply.bid_project|default:""}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=163 nowrap colspan=2 rowspan=2 style='width:122.0pt;border-top:
   none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -619,7 +619,7 @@ div.WordSection1
   height:31.2pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>{{bid_apply.project_category}}<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{{bid_apply.project_category|default:""}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=163 nowrap colspan=2 rowspan=2 style='width:122.0pt;border-top:
   none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -639,7 +639,7 @@ div.WordSection1
   height:31.2pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   lang=EN-US style='font-size:11.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  color:black;mso-font-kerning:0pt'>{{bid_apply.work_order}}</span></p>
+  color:black;mso-font-kerning:0pt'>{{bid_apply.work_order|default:""}}</span></p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:31.2pt;border:none' width=0 height=42></td>
@@ -668,7 +668,7 @@ div.WordSection1
   height:18.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>{{bid_apply.special_model}}　<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{{bid_apply.special_model|default:""}}　<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=63 nowrap rowspan=2 style='width:47.05pt;border-top:none;
   border-left:none;border-bottom:solid black 1.0pt;border-right:solid windowtext 1.0pt;
@@ -686,7 +686,7 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:18.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   lang=EN-US style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  color:black;mso-font-kerning:0pt'>{{bid_apply.amount}}</span><span style='font-size:14.0pt;
+  color:black;mso-font-kerning:0pt'>{{bid_apply.amount|default:""}}</span><span style='font-size:14.0pt;
   font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'>件<span
   lang=EN-US><o:p></o:p></span></span></p>
   </td>
@@ -782,7 +782,7 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=left style='text-align:left;mso-pagination:widow-orphan'><span
   class=GramE><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
-  宋体;color:black;mso-font-kerning:0pt'>{{item.supplier.supplier_name}}</span><span lang=EN-US style='font-size:12.0pt;
+  宋体;color:black;mso-font-kerning:0pt'>{{item.supplier.supplier_name|default:""}}</span><span lang=EN-US style='font-size:12.0pt;
   font-family:"Verdana","sans-serif";mso-bidi-font-family:宋体;color:black;
   mso-font-kerning:0pt'>&nbsp;</span><span lang=EN-US style='font-size:12.0pt;
   font-family:宋体;mso-bidi-font-family:宋体;color:black;mso-font-kerning:0pt'><o:p></o:p></span></p>
@@ -794,7 +794,7 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   lang=EN-US style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  color:black;mso-font-kerning:0pt'>{{item.supplier_code}}<o:p></o:p></span></p>
+  color:black;mso-font-kerning:0pt'>{{item.supplier_code|default:""}}<o:p></o:p></span></p>
   </td>
   <td width=197 nowrap colspan=3 style='width:148.0pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -803,7 +803,7 @@ div.WordSection1
   background:white;padding:0cm 5.4pt 0cm 5.4pt;height:24.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:14.0pt;font-family:宋体;mso-bidi-font-family:宋体;color:black;
-  mso-font-kerning:0pt'>{{item.sphere}}<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{{item.sphere|default:""}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <![if !supportMisalignedRows]>
   <td style='height:24.75pt;border:none' width=0 height=33></td>

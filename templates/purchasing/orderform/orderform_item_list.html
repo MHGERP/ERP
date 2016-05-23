@@ -29,14 +29,14 @@
 			{% endif %}</td> {% endif %}
 			<td>{{forloop.counter}}</td>
         	<td>{{item.sub_workorder}}</th>
-			<td>{{item.index}}</td>
-			<td>{{item.name}}</td>
-			<td>{{item.schematic_index}}</td>
-			<td>{{item.material}}</td>
-            <td>{{item.count}}</td>
-			<td>{{item.net_weight}}</td>
-			<td>{{item.total_weight_cal}}</td>
-            <td>{{item.remark}}</td>
+			<td>{{item.index|default:""}}</td>
+			<td>{{item.name|default:""}}</td>
+			<td>{{item.schematic_index|default:""}}</td>
+			<td>{{item.material|default:""}}</td>
+            <td>{{item.count|default:""}}</td>
+			<td>{{item.net_weight|default:""}}</td>
+			<td>{{item.total_weight_cal|default:""}}</td>
+            <td>{{item.remark|default:""}}</td>
 			<td>{{item.order_status}}</td>
             {% if can_edit %}
 			<td>
@@ -52,16 +52,16 @@
 			<input type="checkbox" class="checkbox"  args="{{item.id}}">
 			{% endif %}</td> {% endif %}
 			<td>{{forloop.counter}}</td>
-        	<td>{{item.sub_workorder}}</th>
-			<td>{{item.index}}</td>
-			<td>{{item.name}}</td>
-			<td>{{item.schematic_index}}</td>
-			<td>{{item.material}}</td>
+        	<td>{{item.sub_workorder|default:""}}</th>
+			<td>{{item.index|default:""}}</td>
+			<td>{{item.name|default:""}}</td>
+			<td>{{item.schematic_index|default:""}}</td>
+			<td>{{item.material|default:""}}</td>
             <td>{{item.count}}</td>
 			<td>{{item.net_weight}}</td>
 			<td>{{item.total_weight_cal}}</td>
-            <td>{{item.remark}}</td>
-			<td>{{item.order_status}}</td>
+            <td>{{item.remark|default:""}}</td>
+			<td>{{item.order_status|default:""}}</td>
 			{% if  can_edit%}
 			<td>
 				<button class="btn btn-primary" id="edit" uid={{item.id}}>修改</button>
