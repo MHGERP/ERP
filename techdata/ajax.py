@@ -247,6 +247,12 @@ def getSingleProcessBOM(request, iid):
     JunHU
     """
     item = Materiel.objects.get(id = iid)
+    for i in xrange(1, 13):
+        step = getattr(item.processing, "GX%d" % i)
+        if step == None:
+            break
+        setattr(item, "GX%d" % i, step)
+
     context = {
         "item": item,
     }
@@ -567,7 +573,7 @@ def addWeldSeam(request, iid, form):
         context = {
             "form": form,
         }
-        html = render_to_string("techdata/widgets/weld_seam_card.html", context)
+        html = render_to_string("techdata/widgets/weld_seam_full_card.html", context)
         return html
 
 @dajaxice_register
@@ -1627,8 +1633,8 @@ def getWeldJointDetailForm(request, jointArray):
             data[map[field]] = getattr(weldseam, field)
         data['joint_index'] = joint_index
         weld_joint_detail_form = WeldJointTechDetailForm(data)
-#        weld_joint_detail_form.fields["weld_certification_1"].queryset = WeldCertification.objects.filter(weld_method = weldseam.weld_method_1)
-#        weld_joint_detail_form.fields["weld_certification_2"].queryset = WeldCertification.objects.filter(weld_method = weldseam.weld_method_2)
+        weld_joint_detail_form.fields["weld_certification1"].queryset = WeldCertification.objects.filter(weld_method = weldseam.weld_method_1)
+        weld_joint_detail_form.fields["weld_certification2"].queryset = WeldCertification.objects.filter(weld_method = weldseam.weld_method_2)
         context = {
             "form" : weld_joint_detail_form,
         }
