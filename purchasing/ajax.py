@@ -1799,6 +1799,7 @@ def entryPurchaserConfirm(request,eid,entrytype):
     if entrytype ==  4:
         entry=OutsideStandardEntry.objects.get(pk=eid)
     entry.purchaser=request.user
+    entry.inspector=request.user
     entry.entry_status=ENTRYSTATUS_CHOICES_KEEPER
     entry.save()
     return simplejson.dumps({})
