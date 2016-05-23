@@ -21,7 +21,7 @@
         {% for item in items %}
         <tr>
 			<td>{{forloop.counter}}</td>
-            <td>{{item.specification}}</td>
+            <td>{{item.specification|default:""}}</td>
             <td>{{item.count}}</td>
             <td>{{item.net_weight}}</td>
             <td>{{item.total_weight_cal}}</td>
