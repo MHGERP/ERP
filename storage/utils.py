@@ -319,3 +319,5 @@ def getApplyDataDict(apply_type):
     auxiliarytool = (AuxiliaryToolStoreList,AuxiliaryToolMaterialSearchForm,AuxiliaryToolApplyCard,AuxiliaryToolApplyCard,AuxiliaryToolsApplyItemForm)
     model_dict = {"weld":weld,"steel":steel,"outside":outside,"auxiliarytool":auxiliarytool}
     return model_dict[apply_type][0],model_dict[apply_type][1],model_dict[apply_type][2],model_dict[apply_type][3],model_dict[apply_type][4],search_table_path
+
+
