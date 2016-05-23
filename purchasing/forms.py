@@ -212,7 +212,7 @@ class OrderFormTwo(ModelForm):
 class OrderFormThree(ModelForm):
     class Meta:
         model=MaterielCopy
-        fields={'name','specification','material','quota','remark','standard','delivery_time'}
+        fields={'specification','material','quota','remark','standard','delivery_time',"total_weight"}
 
 class EntryTypeForm(forms.Form):
     entry_type=forms.ChoiceField(label=u'入库单类型',choices=(),required=True,widget=forms.Select(attrs={'class':'form-control span2','id':'entry_type'}))
@@ -221,7 +221,7 @@ class EntryTypeForm(forms.Form):
         super(EntryTypeForm,self).__init__(*args,**kwargs)
         if bidform != None:
             ENTRYTYPE_BOARD=("entrytype_board",u"板材")
-            ENTRYTYPE_BAR=("entrytrpe_bar",u"型材")
+            ENTRYTYPE_BAR=("entrytype_bar",u"型材")
             STANDARD_OUTSIDEBUY=("standard_outsidebuy",u"标准件")
             FORGING_OUTSIDEBUY=("forging",u"锻件")
             COOPERATION_OUTSIDEBUY=("cooperation_outsidebuy",u"外协加工")

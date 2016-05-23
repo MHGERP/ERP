@@ -88,11 +88,11 @@ def genEntry(request,selected,bid,entry_type):
         entry_status=ENTRYSTATUS_CHOICES_PUCAHSER
         print entry_type
         if entry_type=="entrytype_board":
-            steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,entry_status=entry_status,steel_type=ENTRYTYPE_BOARD)
+            steel_entry=SteelMaterialEntry(material_source=accept_supplier,entry_code=entry_code,create_time=create_time,entry_status=entry_status,steel_type=ENTRYTYPE_BOARD)
             steel_entry.save()
             SteelEntryItemAdd(steel_entry,selected)
         elif entry_type=="entrytype_bar":
-            steel_entry=SteelMaterialEntry(material_souce=accept_supplier,entry_code=entry_code,create_time=create_time,entry_status=entry_status,steel_type=ENTRYTYPE_BAR)
+            steel_entry=SteelMaterialEntry(material_source=accept_supplier,entry_code=entry_code,create_time=create_time,entry_status=entry_status,steel_type=ENTRYTYPE_BAR)
             steel_entry.save()
             SteelEntryItemAdd(steel_entry,selected)
         elif entry_type=="standard_outsidebuy":
@@ -192,12 +192,13 @@ def chooseInventorytype(request,pid,key):
         if inventory_type.name ==  MAIN_MATERIEL or  inventory_type.name == AUXILIARY_MATERIEL:
             if item.materielexecutedetail_set.count()>0 or item.materielformconnection.order_form:
                 item.can_choose=False
-                item.status= u"已加入订购单" if (item.materielformconnection.order_form) else u"已加入材料执行"
+                item.order_status= u"已加入订购单" if (item.materielformconnection.order_form) else u"已加入材料执行"
             else :
                 item.can_choose=True
-                item.status=u"未处理"
+                item.order_status=u"未处理"
         else:
-            item.can_choose, item.status = (False, u"已加入订购单") if (item.materielformconnection.order_form != None) else (True, u"未加入订购单")
+            print item
+            item.can_choose, item.order_status = (False, u"已加入订购单") if (item.materielformconnection.order_form != None) else (True, u"未加入订购单")
 
     context={
         "inventory_detail_list":items,
@@ -421,13 +422,14 @@ def selectSupplier(requset, supid, bidid):
                 except:
                     one.price=0
         if one.inventory_type.name == WELD_MATERIAL:
+            one.name=one.material.get_categories_display
             quot=quoting_set.filter(nameorspacification=one.specification,material_mark=one.material.name)       
             if quot.count()==1:
                 quot=quot[0]
                 try:
                     one.per_fee=quot.per_fee
                     one.units=quot.unit
-                    one.price=int(quot.per_fee)*int(one.quota)
+                    one.price=int(quot.per_fee)*int(one.total_weight)
                 except:
                     one.price=0
 
@@ -1161,6 +1163,8 @@ def newOrderSave(request, id, pendingArray):
     order_form = OrderForm.objects.get(id = id)
     for id in pendingArray:
         materiel = Materiel.objects.get(id = id)
+        materiel.total_weight=materiel.quota
+        materiel.save()
         #if materiel.inventory_type.id <= 2:
         #    addToExecute(materiel)
         try:
