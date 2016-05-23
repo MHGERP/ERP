@@ -17,6 +17,7 @@ from django.db import transaction
 from storage.models import *
 from storage.forms import *
 from storage.utils import *
+from storage import *
 from users import STORAGE_KEEPER
 
 from random import randint
@@ -41,7 +42,7 @@ def steelMaterialHomeViews(request):
 
 def steelRefundViews(request):
     search_form = SteelRefundSearchForm()
-    refund_cards = SteelMaterialRefundCard.objects.all()
+    refund_cards = SteelMaterialRefundCard.objects.filter(status = REFUNDSTATUS_STEEL_CHOICES_KEEPER)
     context={
             "search_form":search_form,
             "refund_cards":refund_cards,
@@ -66,7 +67,7 @@ def steelrefunddetailViews(request,rid):
 
 def steelApplyViews(request):
     search_form = SteelApplyCardSearchForm()
-    apply_cards = SteelMaterialApplyCard.objects.all().order_by("status")
+    apply_cards = SteelMaterialApplyCard.objects.filter(status = APPLYCARD_KEEPER).order_by("status")
     context={
         "search_form":search_form,
         "apply_cards":apply_cards,
@@ -102,7 +103,7 @@ def steelStorageAccountHomeViews(request):
     return render(request,"storage/steelmaterial/steelaccount/steelstoragehome.html",context)  
 
 def weldEntryHomeViews(request):
-    weldentry_set = WeldMaterialEntry.objects.all()
+    weldentry_set = WeldMaterialEntry.objects.filter(entry_status = ENTRYSTATUS_CHOICES_KEEPER)
     search_form = WeldEntrySearchForm()
     weldentry_set = weldentry_set.order_by("-entry_status","-create_time","-entry_code")
     context = {
@@ -117,11 +118,11 @@ def steelEntryHomeViews(request):
     if request.method == "POST":
         search_form = SteelEntrySearchForm(request.POST)
         if search_form.is_valid():
-            steelentry_set = get_weld_filter(SteelMaterialEntry,search_form.cleaned_data)
+            steelentry_set = get_weld_filter(SteelMaterialEntry,search_form.cleaned_data).filter(entry_status__in = STORAGE_STATUS_KEEPER_LIST["entry"])
         else:
             print search_form.errors
     else:
-        steelentry_set = SteelMaterialEntry.objects.filter(entry_status__gte = ENTRYSTATUS_CHOICES_KEEPER)
+        steelentry_set = SteelMaterialEntry.objects.filter(entry_status = ENTRYSTATUS_CHOICES_KEEPER)
         search_form = SteelEntrySearchForm()
     steelentry_set = steelentry_set.order_by("steel_type","-entry_status","-create_time")
     context = {
@@ -166,7 +167,7 @@ def Weld_Apply_Card_List(request):
     params: NULL
     return: NULL
     """
-    apply_cards=WeldingMaterialApplyCard.objects.all().order_by('-create_time')
+    apply_cards=WeldingMaterialApplyCard.objects.filter(status = APPLYCARD_KEEPER).order_by('-create_time')
     context = {
         'APPLYCARD_KEEPER':APPLYCARD_KEEPER,
         'apply_cards':apply_cards,
