@@ -11,10 +11,10 @@
         {% for refund in card_set %}
         <tr>
             <td>{{refund.work_order}}</td>
-            <td>{{refund.refundcard_code}}</td>
+            <td>{{refund.refund_code}}</td>
             <td>{{refund.create_time|date:"Y年m月d日"}}</td>
             <td>{{refund.refunder.userinfo}}</td>
-            <td>{{refund.applycard.department}}</td>
+            <td>{{refund.apply_card.department}}</td>
             <td>
                 {% ifequal refund.status  default_status %}
                 <a class="btn btn-warning" href="/storage/outside/refundconfirm/{{refund.id}}">待处理</a>

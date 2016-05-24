@@ -566,6 +566,7 @@ def handleEntryConfirm_Keeper(request,entry):
 @dajaxice_register
 def steelEntryConfirm(request,eid,role):
     try:
+        print eid
         entry = SteelMaterialEntry.objects.get(id = eid)
         if role == "keeper": 
             if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
@@ -1300,8 +1301,8 @@ def getStatusEndItems(items,card_type):
     elif "apply" in card_type:
         filter_dict["apply_card__status"] = APPLYCARD_END
     
-    if filter_dict.has_key(card_type):
-        items = items.filter(filter_dict)
+    if not "storage" in card_type:
+        items = items.filter(Q(**filter_dict))
     return items
 
 ApplyCardDict = {"weld":WeldingMaterialApplyCard,"auxiliarytool":AuxiliaryToolApplyCard}

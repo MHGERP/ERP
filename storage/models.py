@@ -109,7 +109,7 @@ class WeldMaterialEntryItems(models.Model):
     material = models.ForeignKey(MaterielCopy,blank = True , null = True , verbose_name = u"材料")
     remark = models.CharField(max_length = 100, blank = True , default="" , verbose_name = u"备注")
     production_date = models.DateField( blank = True ,null = True, verbose_name = u"出厂日期")
-    factory = models.CharField(max_length = 100, blank = True , verbose_name = u"厂家")
+    factory = models.CharField(max_length = 100, blank = True ,null=True, verbose_name = u"厂家")
     price = models.FloatField( blank = True , null = True,verbose_name = u"单价")
     total_weight = models.FloatField( blank = True , default= 0,verbose_name = u"公斤数")
     single_weight = models.FloatField( blank = True , default = 0,verbose_name = u"单件重量")
@@ -355,7 +355,7 @@ class SteelMaterialRefundCard(models.Model):
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员",related_name="steel_refund_keeper")
     status = models.IntegerField(default=REFUNDSTATUS_STEEL_CHOICES_REFUNDER,choices=REFUNDSTATUS_STEEL_CHOICES,verbose_name=u"退库单状态")
     steel_type = models.IntegerField(choices=STEEL_TYPE,default=BOARD_STEEL,verbose_name=u'钢材类型')#1:bar 0:board
-    applycard = models.ForeignKey(SteelMaterialApplyCard,blank=True,null=True,verbose_name=u"领用单")
+    apply_card = models.ForeignKey(SteelMaterialApplyCard,blank=True,null=True,verbose_name=u"领用单")
     def __unicode__(self):
         return str(self.refund_code)
 
@@ -601,8 +601,8 @@ class OutsideRefundCard(models.Model):
     refunder = models.ForeignKey(User,blank=True,null=True,verbose_name=u"退库人",related_name = "out_refund_refunder")
     keeper = models.ForeignKey(User,blank=True,null=True,verbose_name=u"库管员" , related_name = "out_refund_keeper")
     status = models.IntegerField(choices=REFUNDSTATUS_CHOICES,default=REFUNDSTATUS_STEEL_CHOICES_REFUNDER,verbose_name=u"退库单状态")
-    applycard = models.ForeignKey(OutsideApplyCard,verbose_name=u"外购件领用单")
-    refundcard_code = models.CharField(verbose_name=u"退库单编号",max_length=20)
+    apply_card = models.ForeignKey(OutsideApplyCard,verbose_name=u"外购件领用单")
+    refund_code = models.CharField(verbose_name=u"退库单编号",max_length=20)
     work_order = models.ForeignKey(SubWorkOrder,verbose_name=u"工作令")
     create_time = models.DateField(verbose_name=u"日期",auto_now_add=True)
 
