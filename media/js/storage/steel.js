@@ -40,7 +40,8 @@ $(document).ready(function(){
         });
     })
     $(document).on("click","span[name='steel_entry_confirm']",function(){
-        Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":$("div#steelentry_items").attr('eid'),"role":$(this).attr("role")})
+        var eid = $(this).attr("id");
+        Dajaxice.storage.steelEntryConfirm(steel_entry_confirm_callback,{"eid":eid,"role":$(this).attr("role")})
     })
     $(document).on("click","span[name='steel_applycard']",function(){
         var role = $(this).attr('role');
