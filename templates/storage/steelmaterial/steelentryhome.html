@@ -9,7 +9,7 @@
 {% block inner_content %}
 <h3>钢材入库单</h3>
 <div class="span10">
-<form class="form-inline">
+<form class="form-inline" id="search_form">
     {% csrf_token %}
     {% for field in search_form %}
         {{field.label}}
