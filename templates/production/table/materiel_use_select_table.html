@@ -4,6 +4,8 @@
       <th>工作令号</th>
       <th>工作票</th>
       <th>工作票号</th>
+      <th>名称</th>
+      <th>规格</th>
       <th>材料牌号</th>
       <th>单位</th>
       <th>数量</th>
@@ -21,6 +23,8 @@
       <td>{{item.relate_material.orgin_materiel}}</td>
       <td>{{item.orgin_materiel.index}}</td>
       {% endif%}
+      <td>{{item.name}}</td>
+      <td>{{item.specification}}</td>
       <td>{{item.material}}</td>
       <td>{{item.unit}}</td>
       <td>{{item.count}}</td>
