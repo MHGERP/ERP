@@ -20,7 +20,7 @@ from django.contrib.auth.models import User
 from users.models import UserInfo
 from storage.models import *
 from const import *
-from production.utility import get_applycard_code, ApplyCardModelCheckDICT
+from production.utility import get_card_code, CardModelCheckDICT
 
 
 def getQ(con):
@@ -469,7 +469,7 @@ def applyCardSearch(request, form):
     if search_form.is_valid():
         applyCards = []
         for applyCardModel in [SteelMaterialApplyCard, AuxiliaryToolApplyCard, OutsideApplyCard, WeldingMaterialApplyCard]:
-            materiel_list  = applyCards.extend(list(applyCardModel.objects.filter(getQ(search_form.cleaned_data))))
+            applyCards.extend(list(applyCardModel.objects.filter(getQ(search_form.cleaned_data))))
         html = render_to_string("production/table/materiel_use_table.html",{"applyCards":applyCards})
     else:
         print search_form.errors
@@ -487,7 +487,7 @@ def materialuseSearch(request, form):
     return simplejson.dumps({ "html" : html})
 
 def createSteelMaterialApplyCard(request, materielCopys):
-    steelMaterialApplyCard = SteelMaterialApplyCard(applycard_code=get_applycard_code(SteelMaterialApplyCard),)
+    steelMaterialApplyCard = SteelMaterialApplyCard(applycard_code=get_card_code(SteelMaterialApplyCard),)
     steelMaterialApplyCard.save()
     for item in materielCopys:
         applyCardItem = SteelMaterialApplyCardItems(apply_card = steelMaterialApplyCard,
@@ -502,10 +502,9 @@ def createSteelMaterialApplyCard(request, materielCopys):
 
 
 def createOutsideApplyCard(request, materielCopys):
-    outsideApplyCard = OutsideApplyCard(applycard_code=get_applycard_code(OutsideApplyCard),
+    outsideApplyCard = OutsideApplyCard(applycard_code=get_card_code(OutsideApplyCard),
                                         work_order=materielCopys[0].sub_workorder,)
     outsideApplyCard.save()
-    print outsideApplyCard 
     for item in materielCopys:
         applyCardItem = OutsideApplyCardItems(apply_card = outsideApplyCard,
                                               schematic_index=item.schematic_index,
@@ -522,7 +521,7 @@ def createOutsideApplyCard(request, materielCopys):
 def createWeldingMaterialApplyCard(request, materielCopys):
     applycard_codes = []
     for item in materielCopys:
-        applyCard = WeldingMaterialApplyCard(applycard_code=get_applycard_code(WeldingMaterialApplyCard),
+        applyCard = WeldingMaterialApplyCard(applycard_code=get_card_code(WeldingMaterialApplyCard),
                                              work_order = item.sub_workorder,
                                              material_code=item.quality_number,
                                              material_mark=item.material.name,
@@ -597,3 +596,42 @@ def confirmApplyCardForm(request, aid, role):
         context = {"status":0, "message":u"确认不成功",}
     return simplejson.dumps(context)
     
+@dajaxice_register
+def refundCardSearch(request, form):
+    search_form = RefundCardForm(deserialize_form(form))
+    if search_form.is_valid():
+        refundCards = []
+        for refundCardModel in [SteelMaterialRefundCard, WeldRefund, OutsideRefundCard]:
+            refundCards.extend(list(refundCardModel.objects.filter(getQ(search_form.cleaned_data))))
+        html = render_to_string("production/table/materiel_refund_table.html",{"refundCards":refundCards})
+    else:
+        print search_form.errors
+    return simplejson.dumps({ "html" : html})
+
+
+@dajaxice_register
+def getApplyCardItems(request, aid):
+    try:
+        context={}
+        context["apply_card"]=APPLYCARDDICT[aid[0]]["applycardmodel"].objects.get(applycard_code=aid)
+        context["items"]=APPLYCARDDICT[aid[0]]["applycarditemmodel"].objects.filter(apply_card=context["apply_card"])
+        html = render_to_string("production/table/materiel_item_table.html", context)
+        return simplejson.dumps({"status":1, "html":html})
+    except:
+        return simplejson.dumps({"status":0, "message":u"申请单编号不存在"})
+    
+# def createSteelMaterialRefundCard(request, aid, mid):
+#     SteelMaterialRefundCard(work_order = )
+
+
+    
+@dajaxice_register
+def createRefundCard(request, aid, mid):
+    try:
+        applycard=APPLYCARDDICT[aid[0]]["applycardmodel"].objects.get(applycard_code=aid)
+        applycarditem=APPLYCARDDICT[aid[0]]["applycarditemmodel"].objects.filter(apply_card=context["apply_card"])
+        
+    except:
+        pass
+    html = render_to_string("storage/wordhtml/%sapplycard.html" % (APPLYCARDDICT[aid[0]]["href"]), context)
+    return simplejson.dumps(html)

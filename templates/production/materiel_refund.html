@@ -1,0 +1,61 @@
+{% extends "production/base/none_nav_base.html"%}
+{% block title%}
+<h1>材料退库卡</h1>
+{% endblock%}
+{% block sub_ref %}
+<a href="#" class="current">材料退库卡</a>
+{% endblock %}
+{% block inner_content%}
+<link rel="stylesheet" href="{{ STATIC_URL    }}bootstrap-datepicker/css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
+
+<div id="search-div" style="margin-bottom:10px;">
+  <form class="form-inline" id="materiel_refund_search_form">
+    {% csrf_token %}
+    {{ refundCardForm }}
+    <button type="button" class="btn btn-primary" >检索</button>
+  </form>
+</div>
+
+<button  class="btn btn-primary" id="add_refund_card">添加退库卡</button>
+<div style="margin:20px" id="table_div">
+  {% include "production/table/materiel_refund_table.html"%}
+</div>
+
+
+<div id="materiel_refund_model" class="modal hide dade" modal-size-width="0.8">
+  <div class="modal-header">
+    <h2>选择退库单材料</h2>
+  </div>
+  <div class="modal-body" id="materiel_body_div">
+    <form class="form-inline" id="applycard_code_search_form">
+      领料单编号<input id="apply_card_code"></input>
+      <button type="button" class="btn btn-primary" >检索</button>
+    </form>
+    <div id="applycard_table"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success bid-btn-open" data-dismiss="modal" data-target="#bid_modal">确认</button>
+    <button class="btn" data-dismiss="modal" >关闭</button>
+  </div>
+</div>
+
+<div id="materiel_modify_model" class="modal hide dade" modal-size-width="0.8">
+  <div class="modal-header">
+    <h2>领用单信息修改</h2>
+  </div>
+  <div class="modal-body" >
+    <form class="form-inline" id="materiel_modify_form">
+      {% csrf_token %}
+      <div id="materiel_modify_body_div">
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success bid-btn-open" id="submit" >提交</button>
+    <button class="btn" data-dismiss="modal" >关闭</button>
+  </div>
+</div>
+
+<script type='text/javascript' src="{{STATIC_URL}}bootstrap-datepicker/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/production/materiel_refund.js"></script>
+{% endblock%}

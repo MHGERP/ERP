@@ -171,6 +171,9 @@ class ProductionUserForm(ModelForm):
 class ApplyCardForm(forms.Form):
     applycard_code__contains = forms.CharField(required=False, label=u"领用单编号",)
 
+class RefundCardForm(forms.Form):
+    refund_code__contains = forms.CharField(required=False, label=u"退库卡编号",) 
+    
 class MaterielCopyForm(forms.Form):
     sub_workorder__name__contains = forms.CharField(required=False, label=u"工作令",)
     inventory_type = forms.ChoiceField(required=False, widget = forms.Select(attrs = {"class": "form-control input"}),label=u"明细表类型")
@@ -213,3 +216,24 @@ class OutsideApplyCardItemsForm(ModelForm):
     class Meta:
         model = OutsideApplyCardItems
         fields = ("count", "unit", "remark")
+
+class OutsideRefundCardItemsForm(ModelForm):
+    class Meta:
+        model = OutsideRefundCardItems
+        fields = ("count", "remark")
+        
+class WeldRefundForm(ModelForm):
+    class Meta:
+        model = WeldRefund
+        fields = ("refund_weight", "refund_count")
+
+class BoardSteelMaterialRefundItemsForm(ModelForm):
+    class Meta:
+        model = BoardSteelMaterialRefundItems
+        fields = ("count", "weight", "graph", "remark")
+
+class BarSteelMaterialRefundItemsForm(ModelForm):
+    class Meta:
+        model = BarSteelMaterialRefundItems
+        fields = ("count", "weight", "length", "remark")
+
