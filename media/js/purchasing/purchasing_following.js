@@ -191,3 +191,10 @@ function save_entry_items_callback(data){
         alert("入库单创建失败");
     }
 }
+function bid_finish(bid_id){
+    Dajaxice.purchasing.BidComplete(function(data){
+        window.location.href="/purchasing/purchasingfollowing"
+    },{
+        "bidid":bid_id
+    })
+}

@@ -551,28 +551,28 @@ mso-hansi-font-family:"Times New Roman"'>编号：</span><span lang=EN-US><span
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal><span lang=EN-US style='font-size:12.0pt;font-family:宋体;
-      mso-bidi-font-family:宋体'>{{item.name}}<o:p>&nbsp;</o:p></span></p>
+      mso-bidi-font-family:宋体'>{{item.name|default:""}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=103 colspan=2 valign=bottom style='width:177.55pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal><span lang=EN-US style='font-size:12.0pt;font-family:宋体;
-      mso-bidi-font-family:宋体'>{{item.schematic_index}}<o:p>&nbsp;</o:p></span></p>
+      mso-bidi-font-family:宋体'>{{item.schematic_index|default:""}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=103 colspan=2 valign=bottom style='width:77.55pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal><span lang=EN-US style='font-size:12.0pt;font-family:宋体;
-      mso-bidi-font-family:宋体'>{{item.material}}<o:p>&nbsp;</o:p></span></p>
+      mso-bidi-font-family:宋体'>{{item.material|default:""}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=60 valign=top style='width:25.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.unit}}<o:p>&nbsp;</o:p></span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.unit|default:""}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=84 valign=bottom style='width:63.15pt;border-top:none;border-left:
   none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -586,21 +586,21 @@ mso-hansi-font-family:"Times New Roman"'>编号：</span><span lang=EN-US><span
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.status}}<o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.status|default:""}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=100 colspan=2 valign=top style='width:75.25pt;border-top:none;
   border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.delivery_time}}<o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.delivery_time|default:""}}<o:p>&nbsp;</o:p></span></p>
   </td>
   <td width=96 valign=top style='width:72.0pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:22.7pt'>
   <p class=MsoNormal style='line-height:20.0pt;mso-line-height-rule:exactly'><span
-      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.remark}}<o:p>&nbsp;</o:p></span></p>
+      lang=EN-US style='font-family:"Arial Narrow","sans-serif"'>{{item.remark|default:""}}<o:p>&nbsp;</o:p></span></p>
   </td>
  </tr>
  {% endfor%}

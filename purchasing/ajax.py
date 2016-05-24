@@ -180,7 +180,7 @@ def chooseInventorytype(request,pid,key):
         COOPERANT: "forging",
         WELD_MATERIAL: "weld_material",
     }
-    items = Materiel.objects.filter(inventory_type__name=pid, materielpurchasingstatus__add_to_detail = True,relate_material=None)
+    items = Materiel.objects.filter(inventory_type__name=pid, materielpurchasingstatus__add_to_detail = True,is_finish=False,relate_material=None)
     print pid
     print ("item的size:" + str(len(items)))
     if key:
@@ -892,16 +892,13 @@ def deleteItem(request,sid):
     return simplejson.dumps({"flag":flag})
 
 @dajaxice_register
-def deleteDetail(request,uid):
+def CompleteDetail(request,uid):
     """
     Lei
     """
     item = Materiel.objects.get(id = uid)
-    item.materielpurchasingstatus.add_to_detail = False
-    item.materielpurchasingstatus.save()
-
-    item.materielformconnection.delete()  # by JunHU
-
+    item.is_finish=True
+    item.save()
     param = {"uid":uid}
     return simplejson.dumps(param)
 
@@ -1802,6 +1799,7 @@ def entryPurchaserConfirm(request,eid,entrytype):
     if entrytype ==  4:
         entry=OutsideStandardEntry.objects.get(pk=eid)
     entry.purchaser=request.user
+    entry.inspector=request.user
     entry.entry_status=ENTRYSTATUS_CHOICES_KEEPER
     entry.save()
     return simplejson.dumps({})
@@ -1811,3 +1809,8 @@ def SubOrderFinish(request,workorder_id):
     sub_workorder=SubWorkOrder.objects.get(pk=workorder_id)
     sub_workorder.is_finish=True
     sub_workorder.save()
+
+@dajaxice_register
+def BidComplete(request, bidid):
+    bidform=BidForm.objects.get(bid_id=bidid)
+    goNextStatus(bidform,request.user)
