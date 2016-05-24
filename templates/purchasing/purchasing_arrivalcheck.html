@@ -12,6 +12,7 @@
 <div>
     {{entrytype.entry_type}}
     <button id="genbtn" class="btn btn-primary" onclick="gen_entry({{bidform.bid_id}});">生成入库单</button>
+    <button style="float:right;"id="bid_complete" class="btn btn-warning" onclick="bid_finish({{bidform.bid_id}});">标单完成</button>
 </div>
 {% endif %}
 <div id="check_add_mark" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

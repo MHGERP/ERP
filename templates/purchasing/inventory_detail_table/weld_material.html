@@ -11,7 +11,7 @@
             <th>备注</th>
             <th>库存</th>
             <th>相关库存</th>
-            <th>删除</th>
+            <th>完成</th>
             <th>是否已加入订购单</th>
         </tr>
     </thead>
@@ -19,16 +19,16 @@
     <tr iid="{{item.id}}">
         <td>{%if item.can_choose %}<input type="checkbox" class="checkbox" args="{{item.id}}">{% endif %}</td>
         <td>{{forloop.counter}}</td>
-        <td>{{item.name}}</td>
-        <td>{{item.specification}}</td>
-        <td>{{item.material}}</td>
+        <td>{{item.material.get_categories_display|default:""}}</td>
+        <td>{{item.specification|default:""}}</td>
+        <td>{{item.material|default:""}}</td>
         <td>{{item.quota}}</td>
-        <td>{{item.stardard}}</td>
-        <td>{{item.remark}}</td>
+        <td>{{item.stardard|default:""}}</td>
+        <td>{{item.remark|default:""}}</td>
         <td>0</td>
         <td><button class="btn btn-primary" data-toggle="modal" data-target="#related_model">查看相关库存</button></td>
-        <td><button class="btn btn-danger" uid={{item.id}}>删除</button></td>
-        <td>{{item.status}}</td>
+        <td><button class="btn btn-danger" uid={{item.id}}>完成</button></td>
+        <td>{{item.order_status}}</td>
     </tr>
     {% endfor%}
 </table>

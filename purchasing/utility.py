@@ -55,7 +55,7 @@ def SteelEntryItemAdd(steel_entry,selected):
             entry_item.work_order.add(item.sub_workorder)
         else:
             for relate_item in item.materielcopy_set.all():
-                entry_item.add(relate_item.sub_workorder)
+                entry_item.work_order.add(relate_item.sub_workorder)
 
 
 def OutsideEntryItemAdd(outside_entry,selected):
@@ -88,7 +88,7 @@ def WeldingEntryItemAdd(wilding_entry,selected):
         item=arrival_inspection.material
         entry_item=WeldMaterialEntryItems(material=item,
                    remark=item.remark,
-                    total_weight=item.quota,
+                    total_weight=item.total_weight,
                     entry=wilding_entry,
                     material_code=item.quality_number,
                     material_mark=item.material.name,

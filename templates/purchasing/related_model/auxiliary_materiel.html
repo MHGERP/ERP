@@ -14,7 +14,7 @@
   <label>材质：</label>
   <select id="id_caizhi" class="form-control input" name="caizhi">
     {% for item in f3 %}
-    <option value="{{item[0]}}">{{item[1]}}</option>
+    <option value="{{item.0}}">{{item.1}}</option>
     {% endfor %}
   </select>
   <span class="btn search" id="related_search">查询</span>

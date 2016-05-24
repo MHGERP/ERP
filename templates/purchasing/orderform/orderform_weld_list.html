@@ -11,6 +11,7 @@
 			<th>规格</th>
 			<th>牌号</th>
 			<th>定额</th>
+			<th>采购</th>
             <th>执行标准</th>
 			<th>备注</th>
 			<th>状态</th>
@@ -27,13 +28,14 @@
 			<input type="checkbox" class="checkbox" args="{{item.id}}">
 			{% endif %}</td> {% endif %}
 			<td>{{forloop.counter}}</td>
-        	<td>{{item.sub_workorder}}</th>
-			<td>{{item.name}}</td>
-			<td>{{item.specification}}</td>
-			<td>{{item.material}}</td>
+        	<td>{{item.sub_workorder|default:""}}</th>
+			<td>{{item.material.get_categories_display|default:""}}</td>
+			<td>{{item.specification|default:""}}</td>
+			<td>{{item.material|default:""}}</td>
             <td>{{item.quota}}</td>
-            <td>{{item.stardard}}</td>
-            <td>{{item.remark}}</td>
+            <td>{{item.total_weight}}</td>
+            <td>{{item.stardard|default:""}}</td>
+            <td>{{item.remark|default:""}}</td>
 			<td>{{item.order_status}}</td>
             {% if can_edit %}
 			<td>
@@ -49,13 +51,14 @@
 			<input type="checkbox" class="checkbox"  args="{{item.id}}">
 			{% endif %}</td> {% endif %}
 			<td>{{forloop.counter}}</td>
-        	<td>{{item.sub_workorder}}</th>
-			<td>{{item.name}}</td>
-			<td>{{item.specification}}</td>
-			<td>{{item.material}}</td>
+        	<td>{{item.sub_workorder|default:""}}</th>
+			<td>{{item.material.get_categories_display|default:""}}</td>
+			<td>{{item.specification|default:""}}</td>
+			<td>{{item.material|default:""}}</td>
             <td>{{item.quota}}</td>
-            <td>{{item.stardard}}</td>
-            <td>{{item.remark}}</td>
+            <td>{{item.total_weight}}</td>
+            <td>{{item.stardard|default:""}}</td>
+            <td>{{item.remark|default:""}}</td>
 			<td>{{item.order_status}}</td>
 			{% if  can_edit %}
 			<td>

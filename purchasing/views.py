@@ -21,6 +21,7 @@ from users.decorators import authority_required
 from users import *
 from storage.models import *
 from datetime import datetime
+from const.utility import make_uuid
 def purchasingFollowingViews(request):
     """
     chousan1989
@@ -236,7 +237,7 @@ def arrivalInspectionConfirmViews(request,entry_typeid,eid):
         items=WeldMaterialEntryItems.objects.filter(entry=entry)
     elif entry_typeid == 2:
         entry=SteelMaterialEntry.objects.get(pk=eid)
-        items=SteelMaterialEntryItems.filter(entry=entry)
+        items=SteelMaterialEntryItems.objects.filter(entry=entry)
     elif entry_typeid == 3:
         entry=AuxiliaryToolEntry.objects.get(pk=eid)
         items=AuxiliaryToolEntryItems.objects.filter(entry=entry)

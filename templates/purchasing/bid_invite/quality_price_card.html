@@ -440,7 +440,7 @@ table.MsoTableGrid
   0cm 5.4pt 0cm 5.4pt;height:33.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>{{quality_card.apply_company}}<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>{{quality_card.apply_company|default:""}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=51 nowrap style='width:38.45pt;border:solid windowtext 1.0pt;
   border-left:none;mso-border-top-alt:solid windowtext .5pt;mso-border-bottom-alt:
@@ -456,7 +456,7 @@ table.MsoTableGrid
   0cm 5.4pt 0cm 5.4pt;height:33.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>{{quality_card.content}}<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>{{quality_card.content|default:""}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=99 nowrap style='width:74.6pt;border:solid windowtext 1.0pt;
   border-left:none;mso-border-top-alt:solid windowtext .5pt;mso-border-bottom-alt:
@@ -472,7 +472,7 @@ table.MsoTableGrid
   height:33.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   lang=EN-US style='font-size:10.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  mso-font-kerning:0pt'>{{quality_card.work_order}}<o:p></o:p></span></p>
+  mso-font-kerning:0pt'>{{quality_card.work_order|default:""}}<o:p></o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:3;height:27.75pt'>
@@ -489,7 +489,7 @@ table.MsoTableGrid
   padding:0cm 5.4pt 0cm 5.4pt;height:27.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>{{quality_card.unit}}<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>{{quality_card.unit|default:""}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=64 nowrap style='width:48.05pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -505,7 +505,7 @@ table.MsoTableGrid
   padding:0cm 5.4pt 0cm 5.4pt;height:27.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   lang=EN-US style='font-size:10.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  mso-font-kerning:0pt'>{{quality_card.amount}}<o:p></o:p></span></p>
+  mso-font-kerning:0pt'>{{quality_card.amount|default:""}}<o:p></o:p></span></p>
   </td>
   <td width=77 nowrap style='width:40.45pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -521,7 +521,7 @@ table.MsoTableGrid
   padding:0cm 5.4pt 0cm 5.4pt;height:27.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   style='font-size:10.0pt;font-family:宋体;mso-bidi-font-family:宋体;mso-font-kerning:
-  0pt'>{{quality_card.material}}　<span lang=EN-US><o:p></o:p></span></span></p>
+  0pt'>{{quality_card.material|default:""}}　<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
   <td width=99 nowrap style='width:74.6pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
@@ -537,7 +537,7 @@ table.MsoTableGrid
   padding:0cm 5.4pt 0cm 5.4pt;height:27.75pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   lang=EN-US style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:宋体;
-  mso-font-kerning:0pt'>{{quality_card.delivery_period}}<span lang=EN-US><o:p></o:p></span></span></p>
+  mso-font-kerning:0pt'>{{quality_card.delivery_period|default:""}}<span lang=EN-US><o:p></o:p></span></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:4;height:38.25pt'>
@@ -558,7 +558,7 @@ table.MsoTableGrid
   padding:0cm 5.4pt 0cm 5.4pt;height:38.25pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   class=GramE><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
-      宋体;mso-font-kerning:0pt'>{{item.supplier}}<o:p></o:p></span></span></p>
+      宋体;mso-font-kerning:0pt'>{{item.supplier|default:""}}<o:p></o:p></span></span></p>
   </td>
   {% endfor%}
   {% if supplier_set.count == 2 %}
@@ -569,7 +569,7 @@ table.MsoTableGrid
   padding:0cm 5.4pt 0cm 5.4pt;height:38.25pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   class=GramE><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
-      宋体;mso-font-kerning:0pt'>{{item.supplier}}<o:p></o:p></span></span></p>
+      宋体;mso-font-kerning:0pt'><o:p></o:p></span></span></p>
   </td>
   {% endif%}
  </tr>
@@ -591,7 +591,7 @@ table.MsoTableGrid
   padding:0cm 5.4pt 0cm 5.4pt;height:38.25pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   class=GramE><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
-      宋体;mso-font-kerning:0pt'>{{item.price}}<o:p></o:p></span></span></p>
+      宋体;mso-font-kerning:0pt'>{{item.price|default:""}}<o:p></o:p></span></span></p>
   </td>
   {% endfor%}
   {% if supplier_set.count == 2 %}
@@ -602,7 +602,7 @@ table.MsoTableGrid
   padding:0cm 5.4pt 0cm 5.4pt;height:38.25pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   class=GramE><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
-      宋体;mso-font-kerning:0pt'>{{item.supplier}}<o:p></o:p></span></span></p>
+      宋体;mso-font-kerning:0pt'><o:p></o:p></span></span></p>
   </td>
   {% endif%}
  </tr>
@@ -624,7 +624,7 @@ table.MsoTableGrid
   padding:0cm 5.4pt 0cm 5.4pt;height:38.25pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   class=GramE><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
-      宋体;mso-font-kerning:0pt'>{{item.ability_situation}}<o:p></o:p></span></span></p>
+      宋体;mso-font-kerning:0pt'>{{item.ability_situation|default:""}}<o:p></o:p></span></span></p>
   </td>
   {% endfor%}
   {% if supplier_set.count == 2 %}
@@ -657,7 +657,7 @@ table.MsoTableGrid
   padding:0cm 5.4pt 0cm 5.4pt;height:38.25pt'>
   <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
   class=GramE><span style='font-size:12.0pt;font-family:宋体;mso-bidi-font-family:
-      宋体;mso-font-kerning:0pt'>{{item.delivery_payment}}<o:p></o:p></span></span></p>
+      宋体;mso-font-kerning:0pt'>{{item.delivery_payment|default:""}}<o:p></o:p></span></span></p>
   </td>
   {% endfor%}
   {% if supplier_set.count == 2 %}

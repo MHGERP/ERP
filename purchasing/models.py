@@ -19,11 +19,12 @@ class MaterielCopy(Materiel):
     quality_number=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"材质编号")
     delivery_time=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"交货期")
     material_classify=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"材料分类")
+    is_finish=models.BooleanField(default = False, verbose_name = u"是否结束")
     class Meta:
         verbose_name = u"伪物料"
         verbose_name_plural = u"伪物料"
     def __unicode__(self):
-        return self.name
+        return "%s  %s"%(self.name,self.specification)
 
 class CommentStatus(models.Model):
     form_type=models.IntegerField(choices=BID_APPLY_TYPE_CHOICES,blank=True,null=True,verbose_name=u"表单类型")
@@ -133,7 +134,7 @@ class MaterielFormConnection(models.Model):
         verbose_name = u"物料——采购——关联表"
         verbose_name_plural = u"物料——采购——关联表"
     def __unicode__(self):
-        return self.materiel.name
+        return "%s %s"%(self.materiel.name,self.materiel.specification)
 
 
 
@@ -168,7 +169,7 @@ class bidApply(models.Model):
 
 class qualityPriceCard(models.Model):
     bid = models.OneToOneField(BidForm, blank = False)
-    apply_id = models.CharField(unique=True, max_length=20, blank=False, verbose_name=u"标单申请编号")
+    apply_id = models.CharField(max_length=20, blank=True,null=True, verbose_name=u"标单申请编号")
     apply_company = models.CharField(null=True, max_length=40, verbose_name=u"申请单位")
     demand_company = models.CharField(null=True,blank=True, max_length=40, verbose_name=u"需求单位")
     work_order = models.CharField(max_length=50,null=True,blank=True,verbose_name=u"工作令")
@@ -244,7 +245,7 @@ class MaterielPurchasingStatus(models.Model):
         verbose_name = u"物料采购状态"
         verbose_name_plural = u"物料采购状态"
     def __unicode__(self):
-       return self.materiel.name
+       return '%s  %s'%(self.materiel.name,self.materiel.specification)
 
 class SupplierSelect(models.Model):
     bidform=models.ForeignKey(BidForm,blank=False,verbose_name=u"标单")

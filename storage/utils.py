@@ -39,16 +39,17 @@ def get_weld_filter(model_type,dict,replace_dic=None,is_show_all = True):
 
 def weldStoreItemsCreate(entry):
     entry_items = entry.weldmaterialentryitems_set.all()
-
+    queryset = []
     for item in entry_items:
         try:
             storeitem = WeldStoreList(entry_item = item , count = item.total_weight,)        
             if item.material.name == u"焊条" or item.material.name == u"焊剂":
                 production_date = item.production_date
                 storeitem.deadline = production_date.replace(production_date.year + 2)
-            storeitem.save()
+            queryset.append(storeitem)
         except Exception,e:
             print e
+    WeldStoreList.objects.bulk_create(queryset)
 
 def storeConsume(applycard):
     specification = applycard.standard
@@ -273,12 +274,16 @@ def createAuxiliaryToolStoreList(entry):
     """
     辅助工具入库单台账更新
     """
+    queryset = []
     for item in entry.auxiliarytoolentryitems_set.all():
-        AuxiliaryToolStoreList(entry_item = item , count = item.count).save()
+        queryset.append(AuxiliaryToolStoreList(entry_item = item , count = item.count).save())
+    AuxiliaryToolStoreList.objects.bulk_create(queryset)
 
 def createSteelMaterialStoreList(entry):
+    queryset = []
     for item in entry.steelmaterialentryitems_set.all():
-        SteelMaterialStoreList(entry_item=item,specification=item.specification , steel_type=entry.steel_type ,count=item.count,length=item.length,weight=item.weight,).save()
+        queryset.append(SteelMaterialStoreList(entry_item=item,specification=item.specification , steel_type=entry.steel_type ,count=item.count,length=item.length,weight=item.weight,).save())
+    SteelMaterialStoreList.objects.bulk_create(queryset)
 
 def getAccountDataDict(card_type):
     """
@@ -314,3 +319,5 @@ def getApplyDataDict(apply_type):
     auxiliarytool = (AuxiliaryToolStoreList,AuxiliaryToolMaterialSearchForm,AuxiliaryToolApplyCard,AuxiliaryToolApplyCard,AuxiliaryToolsApplyItemForm)
     model_dict = {"weld":weld,"steel":steel,"outside":outside,"auxiliarytool":auxiliarytool}
     return model_dict[apply_type][0],model_dict[apply_type][1],model_dict[apply_type][2],model_dict[apply_type][3],model_dict[apply_type][4],search_table_path
+
+
