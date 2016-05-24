@@ -24,7 +24,7 @@
                         <a class='btn btn-warning' id="edit_supplier" href="#supplier_info" >编辑</a>
                         {% endif%}
                     </td>
-                    <td>{{materielexecute.tech_feedback}}</td>
+                    <td>{{materielexecute.tech_feedback|default:""}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
