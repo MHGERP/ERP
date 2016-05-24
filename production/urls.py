@@ -48,4 +48,8 @@ urlpatterns=patterns('',
         r'^production_user_manage$',
         production_views.production_user_manageViews,
     ),
+    url(
+        r'^materiel_refund$',
+        production_views.materiel_refundViews,
+    ),
 )

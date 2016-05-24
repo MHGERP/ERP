@@ -566,6 +566,7 @@ def handleEntryConfirm_Keeper(request,entry):
 @dajaxice_register
 def steelEntryConfirm(request,eid,role):
     try:
+        print eid
         entry = SteelMaterialEntry.objects.get(id = eid)
         if role == "keeper": 
             if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
@@ -1300,8 +1301,8 @@ def getStatusEndItems(items,card_type):
     elif "apply" in card_type:
         filter_dict["apply_card__status"] = APPLYCARD_END
     
-    if filter_dict.has_key(card_type):
-        items = items.filter(filter_dict)
+    if not "storage" in card_type:
+        items = items.filter(Q(**filter_dict))
     return items
 
 ApplyCardDict = {"weld":WeldingMaterialApplyCard,"auxiliarytool":AuxiliaryToolApplyCard}
@@ -1472,3 +1473,14 @@ def cardStatusStop(request,stop_card_type,stop_role,form,fid):
 
     form_html = render_to_string("storage/widgets/cardstatusstopform.html",{"card_status_form":form})
     return simplejson.dumps({"message":message,"form_html":form_html})
+
+@dajaxice_register
+def steelEntrySearch(request,search_form):
+    search_form = SteelEntrySearchForm(deserialize_form(search_form))
+    if search_form.is_valid():
+        steelentry_set = get_weld_filter(SteelMaterialEntry,search_form.cleaned_data).filter(entry_status__in = STORAGE_STATUS_KEEPER_LIST["entry"])
+    else:
+        print search_form.errors
+        steelentry_set = []
+    html = render_to_string("storage/widgets/steelmaterialentrytable.html",{"steel_entry_set":steelentry_set,"ENTRYSTATUS_END":ENTRYSTATUS_CHOICES_END})
+    return simplejson.dumps({"html":html})

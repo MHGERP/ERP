@@ -9,21 +9,17 @@
 {% block inner_content %}
 <h3>钢材入库单</h3>
 <div class="span10">
-<form class="form-inline" method="post">
+<form class="form-inline" id="search_form">
     {% csrf_token %}
     {% for field in search_form %}
         {{field.label}}
         {{field}}
     {% endfor %}
-    <button class="btn btn-success">检索</button>
+    <button type="button"  class="btn btn-success" id="steel_entry_search">检索</button>
 </form>
 <br />
+<div id="steelentry">
 {% include "storage/widgets/steelmaterialentrytable.html"%}
 </div>
-<script>
-    $(function(){
-                        $('#entry_time').datetimepicker({format:"yyyy-mm-dd",minView:2});
-                                    
-            });
-</script>
+</div>
 {% endblock %}

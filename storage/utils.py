@@ -276,13 +276,13 @@ def createAuxiliaryToolStoreList(entry):
     """
     queryset = []
     for item in entry.auxiliarytoolentryitems_set.all():
-        queryset.append(AuxiliaryToolStoreList(entry_item = item , count = item.count).save())
+        queryset.append(AuxiliaryToolStoreList(entry_item = item , count = item.count))
     AuxiliaryToolStoreList.objects.bulk_create(queryset)
 
 def createSteelMaterialStoreList(entry):
     queryset = []
     for item in entry.steelmaterialentryitems_set.all():
-        queryset.append(SteelMaterialStoreList(entry_item=item,specification=item.specification , steel_type=entry.steel_type ,count=item.count,length=item.length,weight=item.weight,).save())
+        queryset.append(SteelMaterialStoreList(entry_item=item,specification=item.specification , steel_type=entry.steel_type ,count=item.count,length=item.length,weight=item.weight,))
     SteelMaterialStoreList.objects.bulk_create(queryset)
 
 def getAccountDataDict(card_type):

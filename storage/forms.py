@@ -582,7 +582,7 @@ class WeldRefundConfirmForm(ModelForm):
 
 class SteelMaterialSearchForm(forms.Form):
     entry_item__work_order = forms.ChoiceField(label=u"工作令",required = False, widget = forms.Select(attrs={"class":'form-control'}))
-    specification = forms.CharField(label=u"名称",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
+    specification = forms.CharField(label=u"规格",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     entry_item__material_mark = forms.CharField(label=u"材质",required = False, widget = forms.TextInput(attrs={"class":'form-control'}))
     def __init__(self,*args,**kwargs):
         super(SteelMaterialSearchForm,self).__init__(*args,**kwargs) 
@@ -675,8 +675,8 @@ class OutsideRefundSearchForm(forms.Form):
     create_time__gte = forms.DateField(label=u"起始日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker','date_picker':'true'}))
     create_time__lte  = forms.DateField(label=u"终止日期",required = False,widget=forms.TextInput(attrs={"class":'form-control date_picker', 'date_picker':'true'}))
     work_order = forms.ChoiceField(label=u"工作令",required=False,widget=forms.Select(attrs={'class':'form-control',"select2":'true'}))
-    refundcard_code = forms.CharField(label=u'退库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
-    applycard__department = forms.CharField(label=u'领用单位',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
+    refund_code = forms.CharField(label=u'退库单编号',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
+    apply_card__department = forms.CharField(label=u'领用单位',required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
     def __init__(self,*args,**kwargs):
         super(OutsideRefundSearchForm,self).__init__(*args,**kwargs)
         set_form_input_width(self.fields)

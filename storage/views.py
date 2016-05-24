@@ -115,15 +115,8 @@ def weldEntryHomeViews(request):
     return render(request,"storage/weldmaterial/weldentryhome.html",context)
 
 def steelEntryHomeViews(request):
-    if request.method == "POST":
-        search_form = SteelEntrySearchForm(request.POST)
-        if search_form.is_valid():
-            steelentry_set = get_weld_filter(SteelMaterialEntry,search_form.cleaned_data).filter(entry_status__in = STORAGE_STATUS_KEEPER_LIST["entry"])
-        else:
-            print search_form.errors
-    else:
-        steelentry_set = SteelMaterialEntry.objects.filter(entry_status = ENTRYSTATUS_CHOICES_KEEPER)
-        search_form = SteelEntrySearchForm()
+    steelentry_set = SteelMaterialEntry.objects.filter(entry_status = ENTRYSTATUS_CHOICES_KEEPER)
+    search_form = SteelEntrySearchForm()
     steelentry_set = steelentry_set.order_by("steel_type","-entry_status","-create_time")
     context = {
         "steel_entry_set":steelentry_set,
