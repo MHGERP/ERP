@@ -1737,6 +1737,7 @@ def QualityCardComment(request,quality_card_id,usertitle,comment):
 @dajaxice_register
 def SubapplyComment(request,subapply_id,usertitle,comment):
     subapply=MaterialSubApply.objects.get(pk=subapply_id)
+    print usertitle
     subapply_comment=SubApplyComment(user=request.user,comment=comment,subapply=subapply,submit_date=datetime.today(),user_title=usertitle)
     subapply_comment.save()
     BidNextStatus(subapply)
