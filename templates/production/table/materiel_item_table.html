@@ -1,0 +1,22 @@
+<table class="table table=bordered table=striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>材料牌号</th>
+      <th>材质编号</th>
+      <th>规格</th>
+      <th>申请数量</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items%}
+    <tr mid={{item.id}} aid={{apply_card.applycard_code}}>
+      <td><input type="radio" name="applycard"  {% if forloop.counter == 1%} checked {% endif%}></td>
+      <td>{{item.material_mark}}</td>
+      <td>{{item.material_code}}</td>
+      <td>{{item.specification}}</td>
+      <td>{{item.count}}</td>
+    </tr>
+    {% endfor%}
+  </tbody>
+</table>

@@ -38,7 +38,7 @@ def searchApplyCard(request,form):
     form = SteelApplyCardSearchForm(deserialize_form(form))
     context={}
     if form.is_valid():
-        steel_apply_cards = get_weld_filter(SteelMaterialApplyCard,form.cleaned_data)
+        steel_apply_cards = get_weld_filter(SteelMaterialApplyCard,form.cleaned_data).filter(status__in = STORAGE_STATUS_KEEPER_LIST["apply"])
         result_table = render_to_string("storage/widgets/apply_card_table.html",{"apply_cards":steel_apply_cards,"APPLYCARD_KEEPER":APPLYCARD_KEEPER})
         message = "success"
         context["result_table"]=result_table
@@ -59,7 +59,7 @@ def searchSteelRefundCard(request,form):
     context={}
     if form.is_valid():
         conditions = form.cleaned_data
-        steel_refund_cards = get_weld_filter(SteelMaterialRefundCard,conditions)
+        steel_refund_cards = get_weld_filter(SteelMaterialRefundCard,conditions).filter(status__in = STORAGE_STATUS_KEEPER_LIST["steelrefund"])
         result_table = render_to_string("storage/widgets/refund_card_table.html",{"refund_cards":steel_refund_cards,"default_status":REFUNDSTATUS_STEEL_CHOICES_KEEPER})
         message = "success"
         context["result_table"]=result_table
@@ -357,7 +357,7 @@ def Search_History_Apply_Records(request,data):
     context['APPLYCARD_KEEPER']=APPLYCARD_KEEPER
     form=ApplyCardHistorySearchForm(deserialize_form(data))
     if form.is_valid():
-        context['apply_cards']=get_weld_filter(WeldingMaterialApplyCard,form.cleaned_data)
+        context['apply_cards']=get_weld_filter(WeldingMaterialApplyCard,form.cleaned_data).filter(status__in = STORAGE_STATUS_KEEPER_LIST["apply"])
         return render_to_string('storage/weldapply/history_table.html',context)
 
 @dajaxice_register
@@ -435,7 +435,7 @@ def Search_Auxiliary_Tools_Apply_Card(request,form):
     form=AuxiliaryToolsApplyCardSearchForm(deserialize_form(form))
     if form.is_valid():
         replace_dic = gen_replace_dic(form.cleaned_data)
-        apply_cards = get_weld_filter(AuxiliaryToolApplyCard,form.cleaned_data,replace_dic)
+        apply_cards = get_weld_filter(AuxiliaryToolApplyCard,form.cleaned_data,replace_dic).filter(status__in = STORAGE_STATUS_KEEPER_LIST["auapply"])
     else:
         print form.errors
     context = {
@@ -566,6 +566,7 @@ def handleEntryConfirm_Keeper(request,entry):
 @dajaxice_register
 def steelEntryConfirm(request,eid,role):
     try:
+        print eid
         entry = SteelMaterialEntry.objects.get(id = eid)
         if role == "keeper": 
             if entry.entry_status == ENTRYSTATUS_CHOICES_KEEPER:
@@ -967,7 +968,7 @@ def getSearchMaterielContext(request,form,is_production = True):
 def searchWeldEntry(request,searchform):
     form = WeldEntrySearchForm(deserialize_form(searchform))
     if form.is_valid():
-        entry_set = get_weld_filter(WeldMaterialEntry,form.cleaned_data).order_by("-create_time")
+        entry_set = get_weld_filter(WeldMaterialEntry,form.cleaned_data).filter(entry_status__in = STORAGE_STATUS_KEEPER_LIST["entry"]).order_by("-create_time")
     else:
         print form.errors
         entry_set = []
@@ -1014,7 +1015,7 @@ def weldApplyConfirm(request,role,aid):
 def searchWeldRefund(request,search_form):
     search_form = RefundSearchForm(deserialize_form(search_form))
     if search_form.is_valid():
-        refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data)
+        refund_set = get_weld_filter(WeldRefund,search_form.cleaned_data).filter(status__in = STORAGE_STATUS_KEEPER_LIST["refund"])
         html = render_to_string("storage/widgets/weldrefundhistorytable.html",{"refund_set":refund_set,"default_status":REFUNDSTATUS_CHOICES_KEEPER})
     return simplejson.dumps({"html":html})
 
@@ -1139,11 +1140,16 @@ def outsideCardSearch(request,role,form):
     OutsideCardDict = {"entry":OutsideStandardEntry,"applycard":OutsideApplyCard,"refund":OutsideRefundCard}
     OutsideSearchFormDict = {"entry":OutsideEntrySearchForm,"applycard":OutsideApplyCardSearchForm,"refund":OutsideRefundSearchForm}
     OutsideKeepperStatusDict = {"entry":ENTRYSTATUS_CHOICES_KEEPER,"applycard":APPLYCARD_KEEPER,"refund":REFUNDSTATUS_CHOICES_KEEPER}
+    OutsideCardStatusKeeperList = {"entry":ENTRY_STATUS_KEEPER_LIST,"applycard":APPLYCARD_STATUS_KEEPER_LIST,"refund":REFUND_STATUS_KEEPER_LIST}
     form = OutsideSearchFormDict[role](deserialize_form(form))
     card_model = OutsideCardDict[role]
     html_path = "storage/widgets/outside"+role+"hometable.html"
     if form.is_valid():
         card_set = get_weld_filter(card_model,form.cleaned_data)
+        if role == "entry":
+            card_set = card_set.filter(entry_status__in = OutsideCardStatusKeeperList[role])
+        else:
+            card_set = card_set.filter(status__in = OutsideCardStatusKeeperList[role])
     html = render_to_string(html_path,{"card_set":card_set,"default_status":OutsideKeepperStatusDict[role]})
     return simplejson.dumps({"html":html})
 
@@ -1272,6 +1278,7 @@ def getAccountSearchContext(card_type,search_form):
         else:
             order_field = "entry_item__entry__create_time"
         items = get_weld_filter(model_type,search_form.cleaned_data,replace_dic)
+        items = getStatusEndItems(items,card_type)
         items = items.order_by(order_field)
         if card_type == "steelstorage":
             for item in items:
@@ -1281,6 +1288,22 @@ def getAccountSearchContext(card_type,search_form):
 
     html = render_to_string(account_table_path,{"items":items})
     return html
+
+def getStatusEndItems(items,card_type):
+    filter_dict = dict()
+    if "entry" in card_type:
+        filter_dict["entry__entry_status"] = ENTRYSTATUS_CHOICES_END
+    elif card_type in ["weldapply","auxiliarytoolapply"]:
+        if card_type == "weldapply":
+            filter_dict["status"] = APPLYCARD_END
+        else:
+            filter_dict["status"] =  AUXILIARY_TOOL_APPLY_CARD_END
+    elif "apply" in card_type:
+        filter_dict["apply_card__status"] = APPLYCARD_END
+    
+    if not "storage" in card_type:
+        items = items.filter(Q(**filter_dict))
+    return items
 
 ApplyCardDict = {"weld":WeldingMaterialApplyCard,"auxiliarytool":AuxiliaryToolApplyCard}
 @dajaxice_register
@@ -1396,7 +1419,8 @@ def getAuxiliaryEntrySearch(request,form):
     search_form = AuxiliaryEntrySearchForm(deserialize_form(form))
     if search_form.is_valid():
         replace_dic = gen_replace_dic(search_form.cleaned_data)
-        entry_list = get_weld_filter(AuxiliaryToolEntry,search_form.cleaned_data,replace_dic).order_by('create_time')
+        entry_list = get_weld_filter(AuxiliaryToolEntry,search_form.cleaned_data,replace_dic).filter(entry_status__in = STORAGE_STATUS_KEEPER_LIST["entry"]).order_by('create_time')
+
     context = {
         "entry_list":entry_list,
         'default_status':ENTRYSTATUS_CHOICES_KEEPER,
@@ -1449,3 +1473,14 @@ def cardStatusStop(request,stop_card_type,stop_role,form,fid):
 
     form_html = render_to_string("storage/widgets/cardstatusstopform.html",{"card_status_form":form})
     return simplejson.dumps({"message":message,"form_html":form_html})
+
+@dajaxice_register
+def steelEntrySearch(request,search_form):
+    search_form = SteelEntrySearchForm(deserialize_form(search_form))
+    if search_form.is_valid():
+        steelentry_set = get_weld_filter(SteelMaterialEntry,search_form.cleaned_data).filter(entry_status__in = STORAGE_STATUS_KEEPER_LIST["entry"])
+    else:
+        print search_form.errors
+        steelentry_set = []
+    html = render_to_string("storage/widgets/steelmaterialentrytable.html",{"steel_entry_set":steelentry_set,"ENTRYSTATUS_END":ENTRYSTATUS_CHOICES_END})
+    return simplejson.dumps({"html":html})

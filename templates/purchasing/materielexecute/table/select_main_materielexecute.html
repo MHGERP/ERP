@@ -16,15 +16,15 @@
         {% for item in materiels %}
         <tr iid="{{item.id}}">
              <td><input type="checkbox" class="checkbox" args="{{item.id}}"></td>
-             <td>{{item.materiel.work_order}}</td>
-             <td>{{item.materiel.material.name}}</td>
-             <td>{{item.materiel.batch_number}}</td>
-             <td>{{item.materiel.quality_number}}</td>
-             <td>{{item.materiel.specification}}</td>
+             <td>{{item.materiel.work_order|default:""}}</td>
+             <td>{{item.materiel.material.name|default:""}}</td>
+             <td>{{item.materiel.batch_number|default:""}}</td>
+             <td>{{item.materiel.quality_number|default:""}}</td>
+             <td>{{item.materiel.specification|default:""}}</td>
              <td>{{item.materiel.count}}</td>
-             <td>{{item.materiel.status}}</td>
-             <td>{{item.materiel.press}}</td>
-             <td>{{item.materiel.detection_level}}</td>
+             <td>{{item.materiel.status|default:""}}</td>
+             <td>{{item.materiel.press|default:""}}</td>
+             <td>{{item.materiel.detection_level|default:""}}</td>
         </tr>
         {% endfor%}
     </tbody>

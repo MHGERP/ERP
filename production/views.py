@@ -92,3 +92,9 @@ def production_user_manageViews(request):
         "userChooseForm":UserChooseForm()
     }
     return render(request,"production/production_user_manage.html",context)
+
+def materiel_refundViews(request):
+    context={
+        "refundCardForm":RefundCardForm(),
+    }
+    return render(request,"production/materiel_refund.html",context)
