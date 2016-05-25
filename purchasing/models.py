@@ -19,6 +19,7 @@ class MaterielCopy(Materiel):
     quality_number=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"材质编号")
     delivery_time=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"交货期")
     material_classify=models.CharField(blank=True,null=True,max_length=50,verbose_name=u"材料分类")
+    is_finish=models.BooleanField(default = False, verbose_name = u"是否结束")
     class Meta:
         verbose_name = u"伪物料"
         verbose_name_plural = u"伪物料"
