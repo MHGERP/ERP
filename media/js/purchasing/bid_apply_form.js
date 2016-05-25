@@ -65,7 +65,6 @@ $("#apply_submit").click(function(){
 $("#apply_comment_confirm").click(function(){
     var bid_apply_id=$("#bid_apply_div").attr("bidapplyid");
     var usertitle=$("#comment_add").attr("usertitle");
-    alert(usertitle);
     Dajaxice.purchasing.BidApplyComment(function(data){
         window.location.reload();
     },{
@@ -76,7 +75,6 @@ $("#apply_comment_confirm").click(function(){
 });
 $("#apply_logistical_confirm").click(function(){
     Dajaxice.purchasing.BidApplyLogistical(function(data){
-        alert(data.status);
     if(data.status==0)window.location.reload();
     else alert("表单填写有误！");
     },{

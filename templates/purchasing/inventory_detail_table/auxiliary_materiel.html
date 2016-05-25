@@ -4,6 +4,7 @@
             <th><input type="checkbox" name="all" id="selectall"></th>
             <th>序号</th>
             <th>工作令编号</th>
+            <th>名称</th>
             <th>规格</th>
             <th>标准号/图号</th>
             <th>材料牌号</th>
@@ -21,6 +22,7 @@
         <td>{%if item.can_choose %}<input type="checkbox" class="checkbox" args="{{item.id}}">{% endif %}</td>
 	<td>{{forloop.counter}}</td>
         <td>{{item.sub_workorder}}</td>
+        <td>{{item.name}}</td>
         <td>{{item.specification}}</td>
         <td>{{item.schematic_index}}</td>
         <td>{{item.material}}</td>
@@ -30,7 +32,7 @@
         <!-- <td></td> -->
         <td><button class="btn btn-primary" data-toggle="modal" data-target="#related_model">查看相关库存</button></td>
         <td><button class="btn btn-danger" uid={{item.id}}>删除</button></td>
-        <td>{{item.status}}</td>
+        <td>{{item.order_status}}</td>
     </tr>
     {% endfor%}
 </table>

@@ -276,7 +276,7 @@ class SteelMaterialEntryItems(models.Model):
     count = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
     length = models.FloatField(blank=True,null=True,verbose_name=u"长度")
     entry = models.ForeignKey(SteelMaterialEntry,verbose_name=u"钢材入库单")
-    schematic_index = models.CharField(max_length=50,verbose_name=u"标准号或图号")
+    schematic_index = models.CharField(max_length=50,null=True,blank=True,verbose_name=u"标准号或图号")
     material = models.ForeignKey(MaterielCopy,null=True,blank=True,verbose_name=u"物料")
     def __unicode__(self):
         return "%s"% self.specification

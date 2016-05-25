@@ -40,7 +40,7 @@
             <td>{{cargo.material.schematic_index}}</td>
             <td>{{cargo.material.count}}</td>
             {% else%}
-            <td>{{ cargo.material.name }}</td>
+            <td>{{ cargo.material.material.get_categories_display}}</td>
             <td>{{ cargo.material.material }}</td>
             <td>{{ cargo.material.specification }}</td>
 

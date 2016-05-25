@@ -7,7 +7,6 @@
             <th>规格</th>
             <th>标准</th>
             <th>材质</th>
-            <th>单位</th>
             <th>数量</th>
             <th>质量等级</th>
             <th>采购(kg)</th>
@@ -25,14 +24,13 @@
         <td>{{item.specification}}</td>
         <td>{{item.standard}}</td>
         <td>{{item.material.name}}</td>
-        <td>{{item.unit}}</td>
         <td>{{item.count}}</td>
         <td>{{item.press}}</td>
         <td>{{item.total_weight}}</td>
         <td>0</td>
         <td><button class="btn btn-primary" data-toggle="modal" data-target="#related_model">查看相关库存</button></td>
         <td><button class="btn btn-danger" uid={{item.id}}>删除</button></td>
-        <td>{{item.status}}</td>
+        <td>{{item.order_status}}</td>
     </tr>
     {% endfor%}
 </table>
