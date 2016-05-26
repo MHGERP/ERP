@@ -341,7 +341,7 @@ def BOMadd(request):
         work_order_id = request.POST['work_order_id']
         work_order = WorkOrder.objects.get(id = work_order_id)
         materiel_list = []
-        for file in request.FILES.getlist("BOM_file"):
+        for file in sorted(request.FILES.getlist("BOM_file"), key = lambda x: x.name):
             book = xlrd.open_workbook(file_contents = file.read())
             table = book.sheets()[0]
             
