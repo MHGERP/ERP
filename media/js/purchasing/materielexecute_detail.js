@@ -48,13 +48,14 @@ $(document).on("click","#add-btn",function(){
 });
 
 function saveMaterielExecute_callback(data) {
+  alert(data.message);
   if(data.status == "1") {
     materielExecuteId = data.materielExecuteId;
-    $("#id_document_number").attr("disabled","disabled");
-    $("#materiel_choice_select").attr("disabled","disabled");
-    $("#add-btn").attr("disabled","disabled");
+    window.location.href="/purchasing/materielExecuteDetail/1/0/"+materielExecuteId;
+   // $("#id_document_number").attr("disabled","disabled");
+   // $("#materiel_choice_select").attr("disabled","disabled");
+   // $("#add-btn").attr("disabled","disabled");
   }
-  alert(data.message);
 }
 
 $(document).on("click","#commit-btn",function(){

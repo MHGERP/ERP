@@ -8,10 +8,10 @@
     <div class="dataTables_length">
             编制人：
         <span id="span_write">
-            {% if not work_order.firstfeedingmark.writer %}
+            {% if not work_order.principalmark.writer %}
             <span class="btn btn-mini btn-primary btn-mark" id="btn_write_confirm" args="{{MARK_WRITE}}">签字</span>
             {% else %}
-            {{work_order.firstfeedingmark.writer.userinfo}}
+            {{work_order.principalmark.writer.userinfo}}
             {% endif %} 
         </span>
             审核人：

@@ -57,7 +57,14 @@ $(document).ready(function(){
             Dajaxice.storage.steelRefundConfirm(steel_refund_callback,{"rid":rid});
         }
     })
+    $(document).on("click","button#steel_entry_search",function(){
+        Dajaxice.storage.steelEntrySearch(steelentrysearch_callback,{"search_form":$("search_form").serialize()});
+    })
 });
+
+function steelentrysearch_callback(data){
+    $("#steelentry").html(data.html);
+}
 
 function steelRefundEnsureCallBack(data) {
     alert(data);

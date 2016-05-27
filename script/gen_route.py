@@ -15,6 +15,7 @@ idtable = {
 }
 file = "03015007B.xlsx" 
 book = xlrd.open_workbook(file)
+print book
 table = book.sheets()[0]
 list = Materiel.objects.filter(order__order_index = "03015007B")
 

@@ -111,6 +111,7 @@ def techdataOrderInitialize(order):
     AuxiliaryMark(order = order).save()
     PrincipalMark(order = order).save()
     CooperantMark(order = order).save()
+    WeldListPageMark(order = order).save()
     FirstFeedingMark(order = order).save()
     OutPurchasedMark(order = order).save()
     WeldQuotaPageMark(order = order).save()
