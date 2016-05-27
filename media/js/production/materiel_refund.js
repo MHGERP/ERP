@@ -21,8 +21,23 @@ function getApplyCardItemsCallBack(data){
   }else{
     alert(data.message);
   }
+}
+
+
+$(document).on("click","#materiel_refund_model #submit", function(){
+  tr = $("#applycard_table input[name='applycard']:checked").parent().parent();
+  Dajaxice.production.createRefundCard(createRefundCardCallBack, {"aid":$(tr).attr("aid"), "mid":$(tr).attr("mid")});
+})
+
+function createRefundCardCallBack(data){
+  alert(data.message);
+  if(data.status ==1){
+    $("#materiel_refund_model").modal("hide");
+    Dajaxice.production.refundCardSearch(refundCardSearchCallBack, {"form": $("#materiel_refund_search_form").serialize()});
+  }
 
 }
+
 
 $(document).on("click","#materiel_use_table .btn", function(){
   tr = $(this).parent().parent();
@@ -72,18 +87,6 @@ function getApplyCardFormCallBack(data){
   $("#materiel_modify_model").modal("show");
 }
 
-$(document).on("click","#materiel_modify_model #submit", function(){
-  Dajaxice.production.saveApplyCardForm(saveApplyCardFormCallBack, {"form":$("#materiel_modify_form").serialize(), "aid":apply_code, "tr_type":tr_type, "mid":mid});
-})
-
-function saveApplyCardFormCallBack(data){
-  if(data.status ==1){
-    alert("保存成功");
-    $("#materiel_modify_model").modal("hide");
-    Dajaxice.production.getApplyCardDetail(getApplyCardDetailCallBack, {"aid": apply_code});
-  }
-
-}
 
 $(document).on("click","#materiel_body_div span[role='auditor'], #materiel_body_div span[role='applicant'], #materiel_body_div span[role='inspector']", function(){
   apply_code = $("#materiel_body_div").find("#aid_code").attr("aid_code");

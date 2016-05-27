@@ -359,16 +359,22 @@ class SteelMaterialRefundCard(models.Model):
     def __unicode__(self):
         return str(self.refund_code)
 
+    def set_attr(self, applycard, applycarditem, refund_code):
+         self.work_order = applycarditem.work_order
+         self.refund_code = refund_code
+         self.apply_card = applycard
+         self.steel_type = applycarditem.storelist.steel_type
+
     class Meta:
         verbose_name=u'钢材退库单'
         verbose_name_plural=u'钢材退库单'
 
 class BoardSteelMaterialRefundItems(models.Model):
     applyitem = models.ForeignKey(SteelMaterialApplyCardItems,verbose_name=u"申请材料")
-    name = models.CharField(max_length=20,verbose_name=u"名称")
+    name = models.CharField(max_length=20,verbose_name=u"名称", null=True)
     card_info = models.OneToOneField(SteelMaterialRefundCard,blank=False,null=False,verbose_name=u"退库单表头")
     status = models.CharField(max_length=20,blank=False,null=False,verbose_name=u"状态")
-    specification = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'名称及规格')
+    specification = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'规格')
     count = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
     weight = models.FloatField(blank=True,null=True,verbose_name=u"重量")
     graph = models.FileField(upload_to=settings.PROCESS_FILE_PATH+"/storage",null=True,verbose_name=u"套料图")
@@ -376,6 +382,11 @@ class BoardSteelMaterialRefundItems(models.Model):
 
     def __unicode__(self):
         return str(self.card_info)
+    def set_attr(self, refundcard, applycarditem):
+         self.applyitem = applycarditem
+         self.card_info = refundcard
+         self.specification = applycarditem.storelist.specification
+         self.count = applycarditem.storelist.count
 
     class Meta:
         verbose_name=u"板材退库材料"
@@ -383,10 +394,10 @@ class BoardSteelMaterialRefundItems(models.Model):
 
 class BarSteelMaterialRefundItems(models.Model):
     applyitem = models.ForeignKey(SteelMaterialApplyCardItems,verbose_name=u'申请材料')
-    name = models.CharField(max_length=20,verbose_name=u"名称")
+    name = models.CharField(max_length=20,verbose_name=u"名称", null=True)
     card_info = models.ForeignKey(SteelMaterialRefundCard,blank=False,null=False,verbose_name=u"退库单表头")
     status = models.CharField(max_length=20,blank=False,null=False,verbose_name=u"状态")
-    specification = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'名称及规格')
+    specification = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'规格')
     count = models.IntegerField(blank=False,null=False,verbose_name=u"数量")
     weight = models.FloatField(blank=True,null=True,verbose_name=u"重量")
     length = models.FloatField(null=True,verbose_name=u"退库长度")
@@ -394,6 +405,12 @@ class BarSteelMaterialRefundItems(models.Model):
 
     def __unicode__(self):
         return str(self.card_info)
+
+    def set_attr(self, refundcard, applycarditem):
+         self.applyitem = applycarditem
+         self.card_info = refundcard
+         self.specification = applycarditem.storelist.specification
+         self.count = applycarditem.storelist.count
 
     class Meta:
         verbose_name=u"型材退库单材料"
@@ -418,6 +435,9 @@ class WeldRefund(models.Model):
     def __unicode__(self):
         return '%s' % self.apply_card
 
+    def set_attr(self, applycard, applycarditem, refund_code):
+        self.refund_code = refund_code
+        self.apply_card = applycard
 
 class AuxiliaryToolEntry(models.Model):
     create_time = models.DateField(verbose_name=u'入库时间', auto_now_add=True)
@@ -611,6 +631,10 @@ class OutsideRefundCard(models.Model):
         verbose_name_plural = u"外购件退库单"
     def __unicode__(self):
         return self.refundcard_code
+    def set_attr(self, applycard, applycarditem, refund_code):
+        self.refund_code = refund_code
+        self.apply_card = applycard
+        self.work_order =  applycard.work_order
 
 class OutsideRefundCardItems(models.Model):
     refundcard = models.ForeignKey(OutsideRefundCard,verbose_name=u"退库单")
@@ -623,6 +647,11 @@ class OutsideRefundCardItems(models.Model):
         verbose_name_plural = u"外购件退库单材料"
     def __unicode__(self):
         return "%s" %  self.applyitem.specification
+
+    def set_attr(self, refundcard, applycarditem):
+         self.applyitem = applycarditem
+         self.refundcard = refundcard
+         self.count = applycarditem.storelist.count
 
 class CardStatusStopRecord(models.Model):
     user  = models.ForeignKey(User,verbose_name="操作者")

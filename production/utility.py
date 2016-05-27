@@ -23,5 +23,8 @@ for k,v in CardModelCheckDICT.items():
 
 def get_card_code(CardModel):
     date_str = CardModelDICT[CardModel] + datetime.datetime.now().strftime("%Y%m%d")
-    num = CardModel.objects.filter(applycard_code__startswith=date_str).count() + 1
+    try:
+        num = CardModel.objects.filter(applycard_code__startswith=date_str).count() + 1
+    except:
+        num = CardModel.objects.filter(refund_code__startswith=date_str).count() + 1
     return "%s%04d" % (date_str, num)

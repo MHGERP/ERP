@@ -613,25 +613,56 @@ def refundCardSearch(request, form):
 def getApplyCardItems(request, aid):
     try:
         context={}
-        context["apply_card"]=APPLYCARDDICT[aid[0]]["applycardmodel"].objects.get(applycard_code=aid)
-        context["items"]=APPLYCARDDICT[aid[0]]["applycarditemmodel"].objects.filter(apply_card=context["apply_card"])
+        context["apply_card"]=APPLYCARDDICT[aid[0]]["applycardmodel"].objects.get(applycard_code=aid, status=APPLYCARD_END)
+        try:
+            context["items"]=APPLYCARDDICT[aid[0]]["applycarditemmodel"].objects.filter(apply_card=context["apply_card"])
+        except:
+            context["items"]=APPLYCARDDICT[aid[0]]["applycardmodel"].objects.filter(applycard_code=aid)
         html = render_to_string("production/table/materiel_item_table.html", context)
         return simplejson.dumps({"status":1, "html":html})
     except:
-        return simplejson.dumps({"status":0, "message":u"申请单编号不存在"})
+        return simplejson.dumps({"status":0, "message":u"申请单编号不存在或未领用完成"})
     
-# def createSteelMaterialRefundCard(request, aid, mid):
-#     SteelMaterialRefundCard(work_order = )
+REFUNDCARDDICT={
+    "g":{"href":"steel",        "refundcardmodel":SteelMaterialRefundCard, "refundcarditemmodel0":BoardSteelMaterialRefundItems, "refundcarditemmodel1":BarSteelMaterialRefundItems, },
+    "h":{"href":"outside",      "refundcardmodel":WeldRefund,              "refundcarditemmodel":None, },
+    "w":{"href":"weld",         "refundcardmodel":OutsideRefundCard,       "refundcarditemmodel":OutsideRefundCardItems},
+}
 
-
-    
 @dajaxice_register
 def createRefundCard(request, aid, mid):
+    applycard=APPLYCARDDICT[aid[0]]["applycardmodel"].objects.get(applycard_code=aid)
     try:
-        applycard=APPLYCARDDICT[aid[0]]["applycardmodel"].objects.get(applycard_code=aid)
-        applycarditem=APPLYCARDDICT[aid[0]]["applycarditemmodel"].objects.filter(apply_card=context["apply_card"])
-        
+        applycarditem=APPLYCARDDICT[aid[0]]["applycarditemmodel"].objects.get(id=mid)
+    except:
+        applycarditem=None
+    refundCardModel=REFUNDCARDDICT[aid[0].lower()]["refundcardmodel"]
+    refundCard = refundCardModel() 
+    refundCard.set_attr(applycard, applycarditem, get_card_code(refundCardModel))
+    refundCard.save()
+    try:
+        refundCardItemModel=REFUNDCARDDICT[aid[0].lower()]["refundcarditemmodel%s" % (applycarditem.storelist.steel_type)]
+    except:
+        refundCardItemModel=REFUNDCARDDICT[aid[0].lower()]["refundcarditemmodel"]
+    try:
+        refundCardItem = refundCardItemModel()
+        refundCardItem.set_attr(refundCard, applycarditem)
+        refundCardItem.save()
     except:
         pass
-    html = render_to_string("storage/wordhtml/%sapplycard.html" % (APPLYCARDDICT[aid[0]]["href"]), context)
+    return simplejson.dumps({"status":1, "message":u"退库单号"+refundCard.refund_code})
+
+@dajaxice_register
+def getRefundCardDetail(request, aid):
+    context={}
+    context["refund"]=REFUNDCARDDICT[aid[0]]["refundcardmodel"].objects.get(applycard_code=aid)
+    try:
+        refundCardItemModel=REFUNDCARDDICT[aid[0].lower()]["refundcarditemmodel%s" % (applycarditem.storelist.steel_type)]
+    except:
+        refundCardItemModel=REFUNDCARDDICT[aid[0].lower()]["refundcarditemmodel"]
+    try:
+        context["items"]=refundCardItemModel.objects.filter(card_info=context["refund"])
+    except:
+        pass
+    html = render_to_string("storage/wordhtml/%srefund.html" % (REFUNDCARDDICT[aid[0]]["href"]), context)
     return simplejson.dumps(html)
