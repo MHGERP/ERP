@@ -1033,7 +1033,7 @@ def refundKeeperModify(request,form,rid):
             message = u"信息修改失败"
     else:
         message = u"退库已经确认过，不能再次修改"
-    html = render_to_string("storage/wordhtml/weldrefundconfirm.html",{"ref_obj":ref_obj})
+    html = render_to_string("storage/wordhtml/weldrefundconfirm.html",{"refund":ref_obj})
     return simplejson.dumps({"html":html,"message":message,"flag":flag})
 
 @dajaxice_register
@@ -1212,7 +1212,7 @@ def outsideRefundCardConfirm(request,role,fid):
             message = u"退库单已经确认过"
     
     context = {
-        "refundcard":refundcard,
+        "refund":refundcard,
         "items":items,
     }
     html = render_to_string("storage/wordhtml/outsiderefund.html",context)
@@ -1315,10 +1315,11 @@ def storageAccountItemForm(request,mid,role):
     refundcards = []
     applycards = []
     if ApplyCardDict.has_key(role):
-        applycards = ApplyCardDict[role].objects.filter(storelist = storeitem).order_by("create_time")
+        filter_status = APPLYCARD_END if role == "weld" else AUXILIARYTOOL_APPLY_STATUS_END 
+        applycards = ApplyCardDict[role].objects.filter(storelist = storeitem,status = filter_status).order_by("create_time")
         for applycard in applycards:
             try:
-                refund = WeldRefund.objects.get(apply_card = applycard)
+                refund = WeldRefund.objects.get(apply_card = applycard,status = REFUNDSTATUS_CHOICES_END)
                 refundcards.append(refund)
             except Exception,e:
                 print e

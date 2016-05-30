@@ -1,0 +1,256 @@
+Validating models...
+
+0 errors found
+Django version 1.4.2, using settings 'settings'
+Development server is running at http://192.168.2.94:8000/
+Quit the server with CONTROL-C.
+<tr><th><label for="id_id">工作令:</label></th><td><select id="id_id" style="width:130px;" class="form-control span2" name="id" select2="true">
+<option value="-1">------</option>
+<option value="2">03015001B-1</option>
+<option value="3">03015001B-2</option>
+<option value="4">20150001</option>
+<option value="5">20150002</option>
+<option value="6">20150003</option>
+<option value="7">20150004</option>
+<option value="8">011012A</option>
+<option value="9">011012C</option>
+<option value="22">03015007B-1</option>
+<option value="23">03015007B-2</option>
+<option value="33">d200921051-1</option>
+<option value="34">d200921051-2</option>
+<option value="35">d200921051-3</option>
+<option value="43">test-1</option>
+<option value="44">test-2</option>
+</select></td></tr>
+<tr><th><label for="product_name">产品名称:</label></th><td><input style="width:130px;" type="text" class="form-control span2" name="order__product_name__contains" id="product_name" /></td></tr>
+/storage/weldapplyrefund
+/storage/weldapplyrefundDetail/23
+Validating models...
+
+0 errors found
+Django version 1.4.2, using settings 'settings'
+Development server is running at http://192.168.2.94:8000/
+Quit the server with CONTROL-C.
+/storage/weldapplyrefundDetail/23
+<tr><th><label for="id_id">工作令:</label></th><td><select id="id_id" style="width:130px;" class="form-control span2" name="id" select2="true">
+<option value="-1">------</option>
+<option value="2">03015001B-1</option>
+<option value="3">03015001B-2</option>
+<option value="4">20150001</option>
+<option value="5">20150002</option>
+<option value="6">20150003</option>
+<option value="7">20150004</option>
+<option value="8">011012A</option>
+<option value="9">011012C</option>
+<option value="22">03015007B-1</option>
+<option value="23">03015007B-2</option>
+<option value="33">d200921051-1</option>
+<option value="34">d200921051-2</option>
+<option value="35">d200921051-3</option>
+<option value="43">test-1</option>
+<option value="44">test-2</option>
+</select></td></tr>
+<tr><th><label for="product_name">产品名称:</label></th><td><input style="width:130px;" type="text" class="form-control span2" name="order__product_name__contains" id="product_name" /></td></tr>
+/storage/weldapplyrefund
+/storage/weldapplyrefundDetail/23
+<tr><th><label for="id_id">工作令:</label></th><td><select id="id_id" style="width:130px;" class="form-control span2" name="id" select2="true">
+<option value="-1">------</option>
+<option value="2">03015001B-1</option>
+<option value="3">03015001B-2</option>
+<option value="4">20150001</option>
+<option value="5">20150002</option>
+<option value="6">20150003</option>
+<option value="7">20150004</option>
+<option value="8">011012A</option>
+<option value="9">011012C</option>
+<option value="22">03015007B-1</option>
+<option value="23">03015007B-2</option>
+<option value="33">d200921051-1</option>
+<option value="34">d200921051-2</option>
+<option value="35">d200921051-3</option>
+<option value="43">test-1</option>
+<option value="44">test-2</option>
+</select></td></tr>
+<tr><th><label for="product_name">产品名称:</label></th><td><input style="width:130px;" type="text" class="form-control span2" name="order__product_name__contains" id="product_name" /></td></tr>
+/storage/weldapplyrefund
+/storage/steelmaterialhome
+/storage/weldmaterialhome
+/storage/weldapply
+/storage/weldapply/detail
+/admin/
+/
+/admin/
+/admin/
+/admin/storage/weldingmaterialapplycard/
+/admin/storage/weldingmaterialapplycard/2/
+/admin/storage/weldingmaterialapplycard/
+/admin/storage/weldingmaterialapplycard/3/
+/storage/weldmaterialhome
+<tr><th><label for="id_id">工作令:</label></th><td><select id="id_id" style="width:130px;" class="form-control span2" name="id" select2="true">
+<option value="-1">------</option>
+<option value="2">03015001B-1</option>
+<option value="3">03015001B-2</option>
+<option value="4">20150001</option>
+<option value="5">20150002</option>
+<option value="6">20150003</option>
+<option value="7">20150004</option>
+<option value="8">011012A</option>
+<option value="9">011012C</option>
+<option value="22">03015007B-1</option>
+<option value="23">03015007B-2</option>
+<option value="33">d200921051-1</option>
+<option value="34">d200921051-2</option>
+<option value="35">d200921051-3</option>
+<option value="43">test-1</option>
+<option value="44">test-2</option>
+</select></td></tr>
+<tr><th><label for="product_name">产品名称:</label></th><td><input style="width:130px;" type="text" class="form-control span2" name="order__product_name__contains" id="product_name" /></td></tr>
+/storage/weldapplyrefund
+/storage/weldapplyrefundDetail/3
+<tr><th><label for="id_id">工作令:</label></th><td><select id="id_id" style="width:130px;" class="form-control span2" name="id" select2="true">
+<option value="-1">------</option>
+<option value="2">03015001B-1</option>
+<option value="3">03015001B-2</option>
+<option value="4">20150001</option>
+<option value="5">20150002</option>
+<option value="6">20150003</option>
+<option value="7">20150004</option>
+<option value="8">011012A</option>
+<option value="9">011012C</option>
+<option value="22">03015007B-1</option>
+<option value="23">03015007B-2</option>
+<option value="33">d200921051-1</option>
+<option value="34">d200921051-2</option>
+<option value="35">d200921051-3</option>
+<option value="43">test-1</option>
+<option value="44">test-2</option>
+</select></td></tr>
+<tr><th><label for="product_name">产品名称:</label></th><td><input style="width:130px;" type="text" class="form-control span2" name="order__product_name__contains" id="product_name" /></td></tr>
+/storage/weldapplyrefund
+/storage/weldapplyrefundDetail/23
+<tr><th><label for="id_id">工作令:</label></th><td><select id="id_id" style="width:130px;" class="form-control span2" name="id" select2="true">
+<option value="-1">------</option>
+<option value="2">03015001B-1</option>
+<option value="3">03015001B-2</option>
+<option value="4">20150001</option>
+<option value="5">20150002</option>
+<option value="6">20150003</option>
+<option value="7">20150004</option>
+<option value="8">011012A</option>
+<option value="9">011012C</option>
+<option value="22">03015007B-1</option>
+<option value="23">03015007B-2</option>
+<option value="33">d200921051-1</option>
+<option value="34">d200921051-2</option>
+<option value="35">d200921051-3</option>
+<option value="43">test-1</option>
+<option value="44">test-2</option>
+</select></td></tr>
+<tr><th><label for="product_name">产品名称:</label></th><td><input style="width:130px;" type="text" class="form-control span2" name="order__product_name__contains" id="product_name" /></td></tr>
+/storage/weldapplyrefund
+/storage/weldapplyrefundDetail/3
+/admin/storage/
+/admin/storage/weldrefund/
+/admin/storage/weldrefund/1/
+/admin/storage/weldrefund/1/
+/storage/weldapplyrefundDetail/3
+Validating models...
+
+0 errors found
+Django version 1.4.2, using settings 'settings'
+Development server is running at http://192.168.2.94:8000/
+Quit the server with CONTROL-C.
+/storage/weldapplyrefundDetail/3
+/admin/storage/weldrefund/1/
+/admin/storage/weldrefund/1/
+/storage/weldapplyrefundDetail/3
+Validating models...
+
+0 errors found
+Django version 1.4.2, using settings 'settings'
+Development server is running at http://192.168.2.94:8000/
+Quit the server with CONTROL-C.
+/storage/weldapplyrefund
+/storage/weldapplyrefund
+/storage/weldapplyrefund
+/storage/weldapplyrefundDetail/4
+/storage/weldapplyrefund
+/storage/weldapplyrefundDetail/3
+/storage/weldmaterialhome
+/storage/weldentryhome
+/storage/weldentryconfirm/11
+Validating models...
+
+0 errors found
+Django version 1.4.2, using settings 'settings'
+Development server is running at http://192.168.2.94:8000/
+Quit the server with CONTROL-C.
+Validating models...
+
+0 errors found
+Django version 1.4.2, using settings 'settings'
+Development server is running at http://192.168.2.94:8000/
+Quit the server with CONTROL-C.
+/admin/storage/weldrefund/1/
+/storage/weldentryconfirm/11
+/storage/weldentryconfirm/11
+/
+/admin/storage/weldrefund/
+/admin/storage/
+/admin/
+/admin/purchasing/materielcopy/
+/admin/purchasing/materielcopy/1549/
+/admin/purchasing/
+/admin/purchasing/materielcopy/
+/admin/purchasing/materielcopy/add/
+/storage/weldentryhome
+/storage/weldmaterialhome
+/storage/weldrefund
+/storage/weldrefunddetail/1
+/storage/weldrefund
+/storage/weldmaterialhome
+/storage/weldapply
+/storage/weldmaterialhome
+/storage/weldaccounthome
+/storage/weldstorageaccount
+Validating models...
+
+0 errors found
+Django version 1.4.2, using settings 'settings'
+Development server is running at http://192.168.2.94:8000/
+Quit the server with CONTROL-C.
+/storage/weldstorageaccount
+WeldRefund matching query does not exist.
+Validating models...
+
+0 errors found
+Django version 1.4.2, using settings 'settings'
+Development server is running at http://192.168.2.94:8000/
+Quit the server with CONTROL-C.
+/storage/weldstorageaccount
+/storage/weldmaterialhome
+/storage/weldrefund
+/storage/weldrefunddetail/1
+/storage/outsidehome
+/storage/outside/account/home
+/storage/outside/account/applycardhome
+/storage/outside/account/home
+/storage/outsidehome
+/storage/weldmaterialhome
+/storage/weldrefund
+/storage/weldrefund
+/storage/outsidehome
+/storage/outsidehome
+/storage/outside/refundcardhome
+/storage/outside/refundconfirm/2
+/storage/outside/refundcardhome
+/storage/outside/refundconfirm/3
+/storage/outside/refundcardhome
+/storage/weldmaterialhome
+/storage/weldrefund
+/storage/weldrefunddetail/1
+/storage/outsidehome
+/storage/outside/refundcardhome
+/storage/outside/refundconfirm/2
+/storage/outside/refundcardhome
+/storage/outside/refundconfirm/2
