@@ -33,7 +33,7 @@ $(document).ready(function(){
         Dajaxice.storage.refundKeeperModify(refundkeepermodify_callback,{"form":$("form#refund_form").serialize(),"rid":rid});
     })
     $(document).on("click","span[name='weld_refund_confirm']",function(){
-        rid = $("div#refund_confirm_main").attr("rid");
+        rid = $(this).attr("fid");
         var role = $(this).attr('role');
         Dajaxice.storage.weldRefundConfirm(weldrefundconfirm_callback,{"rid":rid,"role":role})
     })
