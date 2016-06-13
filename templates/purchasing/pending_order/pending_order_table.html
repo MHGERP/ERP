@@ -23,7 +23,7 @@
                 </form>
             </td>
             <td>
-                {% if order.is_finish == False%}
+                {% if not order.is_finish%}
                 <span class="btn btn-primary" onclick="order_finish({{order.id}})">完成</span>
                 {% else%}
                 <span> 已完成</span>

@@ -28,19 +28,19 @@
 			<input type="checkbox" class="checkbox" args="{{item.id}}">
             {% endif %}</td> 
 			<td>{{forloop.counter}}</td>
-			<td>{{item.sub_workorder}}</td>
-        	<td>{{item.name}}</th>
-            <td>{{item.material.name}}</td>
-            <td>{{item.press}}</td>
-			<td>{{item.specification}}</td>
+			<td>{{item.sub_workorder|default:""}}</td>
+        	<td>{{item.name|default:""}}</th>
+            <td>{{item.material.name|default:""}}</td>
+            <td>{{item.press|default:""}}</td>
+			<td>{{item.specification|default:""}}</td>
             <td>{{item.count}}</td>
-            <td>{{item.total_weight}}</td>
-            <td>{{item.recheck}}</td>
-            <td>{{item.detection_level}}</td>
-            <td>{{item.status}}</td>
-            <td>{{item.standard}}</td>
-            <td>{{item.remark}}</td>
-			<td>{{item.order_status}}</td>
+            <td>{{item.total_weight|default:0}}</td>
+            <td>{{item.recheck|default:""}}</td>
+            <td>{{item.detection_level|default:""}}</td>
+            <td>{{item.status|default:""}}</td>
+            <td>{{item.standard|default:""}}</td>
+            <td>{{item.remark|default:""}}</td>
+			<td>{{item.order_status|default:""}}</td>
             {% if  can_edit and order_form.order_status.status == 0  %}
 			<td>
 				<button class="btn btn-primary" uid={{item.id}}>修改</button>
@@ -60,7 +60,7 @@
             <td>{{item.press|default:""}}</td>
 			<td>{{item.specification|default:""}}</td>
             <td>{{item.count}}</td>
-            <td>{{item.total_weight}}</td>
+            <td>{{item.total_weight|default:0}}</td>
             <td>{{item.recheck|default:""}}</td>
             <td>{{item.detection_level|default:""}}</td>
             <td>{{item.status|default:""}}</td>
