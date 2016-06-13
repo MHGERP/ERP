@@ -429,7 +429,6 @@ def weldapplyrefundHomeViews(request):
         for i in workorders:
             workorder_set.append(SubWorkOrder.objects.get(id = i["work_order"]))
         #print workorder_set
-    print search_form
     context = {
             "workorder_set":workorder_set,
             "search_form":search_form,
@@ -441,10 +440,11 @@ def weldapplyrefundDetail(request,index):
     kad
     """
     work_order = SubWorkOrder.objects.get(id = index)
-    applyrefund_set = WeldingMaterialApplyCard.objects.filter(work_order = work_order)
+    applyrefund_set = WeldingMaterialApplyCard.objects.filter(work_order = work_order,status = APPLYCARD_END)
     context = {
             "work_order":work_order,
             "applyrefund_set":applyrefund_set,
+            "default_status":REFUNDSTATUS_CHOICES_END,
             }
     return render(request,"storage/weldapplyrefund/weldapplyrefundDetail.html",context)
 
@@ -468,7 +468,7 @@ def weldRefundDetailViews(request,rid):
     card_status_form = CardStatusStopForm() 
     context = {
             "refund_form":reform,
-            "ref_obj":ref_obj,
+            "refund":ref_obj,
             "is_show":is_show,
             "card_type":card_type,
             "card_status_form":card_status_form,
@@ -799,7 +799,7 @@ def outsideRefundConfirmViews(request,fid):
     refundcard = OutsideRefundCard.objects.get(id=fid)
     items = OutsideRefundCardItems.objects.filter(refundcard = refundcard)
     context = {
-        "refundcard":refundcard,
+        "refund":refundcard,
         "items":items,
     }
     return render(request,"storage/outside/refundcardconfirm.html", context)

@@ -21,27 +21,27 @@ style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:12.0pt'><s
 style='mso-tab-count:1'> </span> <span
 style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></b><span
 style='mso-bidi-font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman";margin-left:20px;'>领用单编号：{{refundcard.applycard.applycard_code}}</span><b style='mso-bidi-font-weight:
+mso-hansi-font-family:"Times New Roman";margin-left:20px;'>领用单编号：{{refund.applycard.applycard_code}}</span><b style='mso-bidi-font-weight:
 normal'><span lang=EN-US style='font-size:12.0pt'><o:p></o:p></span></b></p>
 
 <div class="row-fluid">
 <div style="width:25%;float:left;">
 <span style='mso-bidi-font-size:10.5pt;font-family:宋体;
-    mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>工作令号：{{refundcard.work_order}}</span>
+    mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"'>工作令号：{{refund.work_order}}</span>
 </div>
 <div style="width:25%;float:left;">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman"'>领用单位：{{refundcard.applycard.department}}</span>
+mso-hansi-font-family:"Times New Roman"'>领用单位：{{refund.applycard.department}}</span>
 </div>
 <div style="width:25%;float:left;">
 <span style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:
-    "Times New Roman";mso-hansi-font-family:"Times New Roman"'>日期：{{refundcard.create_time|date:'Y.m.d'}}</span>
+    "Times New Roman";mso-hansi-font-family:"Times New Roman"'>日期：{{refund.create_time|date:'Y.m.d'}}</span>
 </div>
 <div style="width:25%;float:left;">
 <span style='mso-bidi-font-size:
 10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>编号：</span><span lang=EN-US style='font-size:9.0pt'>{{refundcard.refundcard_code}}</span>
+"Times New Roman"'>编号：</span><span lang=EN-US style='font-size:9.0pt'>{{refund.refundcard_code}}</span>
 </div>
 </div>
 <table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width=588
@@ -184,12 +184,12 @@ mso-hansi-font-family:"Times New Roman"'>领用单位：{{refundcard.applycard.d
 <div style="width:50%;float:left;">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman"'>退库人：{% ifequal refundcard.refunder None %}<span class="btn btn-mark" name="outside_refundcard" role="refunder" fid="{{refundcard.id}}">签字</span>{% else %}{{refundcard.refunder.userinfo}}{% endifequal %}</span>
+mso-hansi-font-family:"Times New Roman"'>退库人：{% ifequal refund.refunder None %}<span class="btn btn-mark" name="outside_refundcard" role="refunder" fid="{{refund.id}}">签字</span>{% else %}{{refund.refunder.userinfo}}{% endifequal %}</span>
 </div>
 <div style="width:50%;float:left;">
 <span
 style='mso-bidi-font-size:10.5pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman"'>库管员：{% ifequal refundcard.keeper None %}<span class="btn btn-mark" name="outside_refundcard" role="keeper" fid="{{refundcard.id}}">签字</span>{% else %}{{refundcard.keeper.userinfo}}{% endifequal %}</span>
+mso-hansi-font-family:"Times New Roman"'>库管员：{% ifequal refund.keeper None %}<span class="btn btn-mark" name="outside_refundcard" role="keeper" fid="{{refund.id}}">签字</span>{% else %}{{refund.keeper.userinfo}}{% endifequal %}</span>
 </div>
 </div>
 </p>

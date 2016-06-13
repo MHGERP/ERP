@@ -45,10 +45,17 @@
                 <td>{{i.actual_weight}}</td>
                 <td>{{i.applicant.userinfo}}</td>
                 <td>{{i.keeper.userinfo}}</td>
+                {% ifequal i.weldrefund.status default_status %}
                 <td>{{i.weldrefund.refund_code}}</td>
                 <td>{{i.weldrefund.refund_weight}}</td>
                 <td>{{i.weldrefund.refunder.userinfo}}</td>
                 <td>{{i.weldrefund.keeper.userinfo}}</td>
+                {% else %}
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                {% endifequal %}
             </tr>
             {% endfor %}
     </table>

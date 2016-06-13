@@ -456,6 +456,10 @@ def getWeldQuotaCard(request,iid = None):
         form = WeldQuotaForm(instance = weld_quota)
     else:
         form = WeldSeamForm()
+
+    material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE, WELD_FLUX)
+    form.fields["weld_material"].queryset = material_set
+
     context = {
         "form": form,
         "weld_quota":weld_quota,
@@ -655,12 +659,25 @@ def saveWeldQuota(request, id_work_order):
                 dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.get_categories_display)]+= float(item1.weight_1)
             else:
                 dic[(item1.weld_material_1,item1.size_1,item1.weld_material_1.get_categories_display)] = float(item1.weight_1)
+        if item1.weld_flux_1 != None:
+            if dic.has_key((item1.weld_flux_1,None,item1.weld_flux_1.get_categories_display)):
+                dic[(item1.weld_flux_1,None,item1.weld_flux_1.get_categories_display)]+= float(item1.flux_weight_1)
+            else:
+                dic[(item1.weld_flux_1,None,item1.weld_flux_1.get_categories_display)] = float(item1.flux_weight_1)
+
     for item2 in weldseam_list:
         if item2.weld_material_2 != None:
             if dic.has_key((item2.weld_material_2,item2.size_2,item2.weld_material_2.get_categories_display)):
                 dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.get_categories_display)]+= float(item2.weight_2)
             else:
                 dic[(item2.weld_material_2,item2.size_2,item2.weld_material_2.get_categories_display)] = float(item2.weight_2)
+
+        if item2.weld_flux_2 != None:
+            if dic.has_key((item2.weld_flux_2,None,item2.weld_flux_2.get_categories_display)):
+                dic[(item2.weld_flux_2,None,item2.weld_flux_2.get_categories_display)]+= float(item2.flux_weight_2)
+            else:
+                dic[(item2.weld_flux_2,None,item2.weld_flux_2.get_categories_display)] = float(item2.flux_weight_2)
+
     for item in dic:
         weldQuota = WeldQuota(order = work_order,weld_material = item[0],size = item[1],quota = dic[item])
         weldQuota.save()
@@ -671,10 +688,8 @@ def updateWeldQuota(request,form,work_order,iid):
     """
     MH Chen
     """
-    print form
     order = WorkOrder.objects.get(id = work_order)
     quota_form = WeldQuotaForm(deserialize_form(form),instance = WeldQuota.objects.get(id = iid))
-    print form
     if quota_form.is_valid():
         quota = quota_form.save(commit = False)
         quota.order = order
@@ -715,6 +730,9 @@ def getMaterial(request,work_order):
     context = {
         "form": form,
     }
+    material_set = getMaterialQuerySet(WELD_ROD, WELD_WIRE, WELD_FLUX)
+    form.fields["weld_material"].queryset = material_set
+
     html = render_to_string("techdata/widgets/weld_quota_add_card.html", context)
     return html
 @dajaxice_register  
