@@ -35,8 +35,20 @@ function createRefundCardCallBack(data){
     $("#materiel_refund_model").modal("hide");
     Dajaxice.production.refundCardSearch(refundCardSearchCallBack, {"form": $("#materiel_refund_search_form").serialize()});
   }
-
 }
+
+$(document).on("dblclick","#table_div table tr",function(){
+  Dajaxice.production.getRefundCardDetail(getRefundCardDetailCallBack, {"aid": $(this).find("td:eq(0)").html()});
+})
+
+function getRefundCardDetailCallBack(data){
+  $("#materiel_refund_detail_div").html(data);
+  $("#materiel_refund_detail_model").modal("show");
+}
+
+
+
+
 
 
 $(document).on("click","#materiel_use_table .btn", function(){
@@ -62,14 +74,6 @@ function createApplyCardCallBack(data){
   alert(data);
 }
 
-$(document).on("dblclick","#table_div table tr",function(){
-  Dajaxice.production.getApplyCardDetail(getApplyCardDetailCallBack, {"aid": $(this).find("td:eq(0)").html()});
-})
-
-function getApplyCardDetailCallBack(data){
-  $("#materiel_body_div").html(data);
-  $("#materiel_add_model").modal("show");
-}
 
 var apply_code, tr_type, mid;
 $(document).on("dblclick","#materiel_body_div table tr", function(){
