@@ -624,9 +624,9 @@ def getApplyCardItems(request, aid):
         return simplejson.dumps({"status":0, "message":u"申请单编号不存在或未领用完成"})
     
 REFUNDCARDDICT={
-    "g":{"href":"steel",        "refundcardmodel":SteelMaterialRefundCard, "refundcarditemmodel0":BoardSteelMaterialRefundItems, "refundcarditemmodel1":BarSteelMaterialRefundItems, },
-    "h":{"href":"outside",      "refundcardmodel":WeldRefund,              "refundcarditemmodel":None, },
-    "w":{"href":"weld",         "refundcardmodel":OutsideRefundCard,       "refundcarditemmodel":OutsideRefundCardItems},
+    "g":{"href":("steelboard", "steelbar"),        "refundcardmodel":SteelMaterialRefundCard, "refundcarditemmodel0":BoardSteelMaterialRefundItems, "refundcarditemmodel1":BarSteelMaterialRefundItems, },
+    "h":{"href":"outside",                         "refundcardmodel":WeldRefund,              "refundcarditemmodel":None, },
+    "w":{"href":"weld",                            "refundcardmodel":OutsideRefundCard,       "refundcarditemmodel":OutsideRefundCardItems},
 }
 
 @dajaxice_register
@@ -655,14 +655,18 @@ def createRefundCard(request, aid, mid):
 @dajaxice_register
 def getRefundCardDetail(request, aid):
     context={}
-    context["refund"]=REFUNDCARDDICT[aid[0]]["refundcardmodel"].objects.get(applycard_code=aid)
+    context["refund"]=REFUNDCARDDICT[aid[0]]["refundcardmodel"].objects.get(refund_code=aid)
+    print context["refund"]
     try:
-        refundCardItemModel=REFUNDCARDDICT[aid[0].lower()]["refundcarditemmodel%s" % (applycarditem.storelist.steel_type)]
+        refundCardItemModel=REFUNDCARDDICT[aid[0]]["refundcarditemmodel%s" % (context["refund"].steel_type)]
     except:
-        refundCardItemModel=REFUNDCARDDICT[aid[0].lower()]["refundcarditemmodel"]
+        refundCardItemModel=REFUNDCARDDICT[aid[0]]["refundcarditemmodel"]
     try:
         context["items"]=refundCardItemModel.objects.filter(card_info=context["refund"])
     except:
         pass
-    html = render_to_string("storage/wordhtml/%srefund.html" % (REFUNDCARDDICT[aid[0]]["href"]), context)
+    try:
+        html = render_to_string("storage/wordhtml/%srefund.html" % (REFUNDCARDDICT[aid[0]]["href"][context["refund"].steel_type]), context)
+    except:
+        html = render_to_string("storage/wordhtml/%srefund.html" % (REFUNDCARDDICT[aid[0]]["href"]), context)
     return simplejson.dumps(html)
