@@ -18,18 +18,18 @@ style='mso-spacerun:yes'>
 <div style="width:33%;float:left;">
 <span
 style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman"'>退库单位：{{ref_obj.department}}</span><span style='font-size:
+mso-hansi-font-family:"Times New Roman"'>退库单位：{{refund.department}}</span><span style='font-size:
 12.0pt'> <span lang=EN-US></span></span>
 </div>
 <div style="width:33%;float:left;">
 <span
 style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:"Times New Roman";
-mso-hansi-font-family:"Times New Roman"'>退库时间：{{ref_obj.create_time|date:'Y年m月d日'}}
+mso-hansi-font-family:"Times New Roman"'>退库时间：{{refund.create_time|date:'Y年m月d日'}}
 </span>
 </div>
 <div style="width:33%;float:left;">
 <span style='font-size:12.0pt;font-family:宋体;mso-ascii-font-family:
-    "Times New Roman";mso-hansi-font-family:"Times New Roman"'>编号：{{ref_obj.refund_code}}</span><span
+    "Times New Roman";mso-hansi-font-family:"Times New Roman"'>编号：{{refund.refund_code}}</span><span
 lang=EN-US style='font-size:12.0pt'><o:p></o:p></span>
 </div>
 </div>
@@ -122,56 +122,56 @@ lang=EN-US style='font-size:12.0pt'><o:p></o:p></span>
   none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
   padding:0cm 5.4pt 0cm 5.4pt;height:29.15pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{ref_obj.apply_card.work_order}}</span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{refund.apply_card.work_order}}</span></p>
   </td>
   <td width=81 style='width:60.45pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.15pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{ref_obj.apply_card.create_time|date:'Y.m.d'}}</span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{refund.apply_card.create_time|date:'Y.m.d'}}</span></p>
   </td>
   <td width=94 style='width:70.85pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.15pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{ref_obj.apply_card.applycard_code}}</span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{refund.apply_card.applycard_code}}</span></p>
   </td>
   <td width=76 style='width:2.0cm;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
   solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.15pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{ref_obj.apply_card.model_number}}</span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{refund.apply_card.model_number}}</span></p>
   </td>
   <td width=66 style='width:49.6pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.15pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{ref_obj.apply_card.specification}}</span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt'>{{refund.apply_card.specification}}</span></p>
   </td>
   <td width=106 style='width:69.25pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.15pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt' id="refund_weight">{{ref_obj.refund_weight}}</span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt' id="refund_weight">{{refund.refund_weight}}</span></p>
   </td>
   <td width=55 style='width:41.1pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
   solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.15pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt' id="refund_count">{{ref_obj.refund_count|default_if_none:""}}</span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt' id="refund_count">{{refund.refund_count|default_if_none:""}}</span></p>
   </td>
   <td width=149 style='width:101.75pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
   mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:29.15pt'>
   <p class=MsoNormal align=center style='text-align:center;line-height:20.0pt;
-  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt' id="refund_status">{{ref_obj.refund_status}}</span></p>
+  mso-line-height-rule:exactly'><span lang=EN-US style='font-size:12.0pt' id="refund_status">{{refund.refund_status}}</span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:3;mso-yfti-lastrow:yes;height:53.6pt'>
@@ -194,12 +194,12 @@ lang=EN-US style='font-size:12.0pt'><o:p></o:p></span>
 <div style="width:50%;float:left;">
 <span
 style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>退库人：</span>{% ifequal ref_obj.refunder None %}<span class="btn btn-mark" name="weld_refund_confirm" role="refunder">签字</span>{% else %}{{ref_obj.refunder.userinfo}}{% endifequal %}<span lang=EN-US></span>
+"Times New Roman"'>退库人：</span>{% ifequal refund.refunder None %}<span class="btn btn-mark" name="weld_refund_confirm" role="refunder">签字</span>{% else %}{{refund.refunder.userinfo}}{% endifequal %}<span lang=EN-US></span>
 </div>
 <div style="width:50%;float:left;">
 <span
 style='font-family:宋体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:
-"Times New Roman"'>库管人：</span>{% ifequal ref_obj.keeper None %}<span class="btn btn-mark" name="weld_refund_confirm" role="keeper">签字</span><span class="btn btn-mark" style="margin-left:20px;" card_type="{{card_type}}" fid="{{ref_obj.id}}"  role="keeper" name="storage_stop_btn">拒绝</span>{% else %}{{ref_obj.keeper.userinfo}}{% endifequal %}<span lang=EN-US></span>
+"Times New Roman"'>库管人：</span>{% ifequal refund.keeper None %}<span class="btn btn-mark" name="weld_refund_confirm" fid="{{refund.id}}" role="keeper">签字</span><span class="btn btn-mark" style="margin-left:20px;" card_type="{{card_type}}" fid="{{refund.id}}"  role="keeper" name="storage_stop_btn">拒绝</span>{% else %}{{refund.keeper.userinfo}}{% endifequal %}<span lang=EN-US></span>
 </div>
 </div>
 
