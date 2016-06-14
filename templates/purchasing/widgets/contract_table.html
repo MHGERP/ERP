@@ -18,8 +18,8 @@
     <tr>
       <td>{{ forloop.counter }}</td>
       <td>{{ item.bid_id }}</td>
-      <td>{{ item.supplier_select }}</td>
-      <td></td>
+      <td>{{ item.bidacceptance.accept_supplier}}</td>
+      <td>{{item.bidacceptance.apply_content}}</td>
       <td>{{ item.contract_amount }}</td>
       <td>{{ item.billing_amount }}</td>
       <td>{{ item.prepaid_amount }}</td>

@@ -905,6 +905,7 @@ def CompleteDetail(request,uid):
 
 @dajaxice_register
 def contractAmount(request, tid, bid,  form):
+    print bid
     if tid == CONTRACT_ADD_AMOUNT:
         table = render_to_string("purchasing/widgets/contract_detail_form.html", {"ContractDetailForm": ContractDetailForm(),
                                                                                   "CONTRACT_ADD_DETAIL": CONTRACT_ADD_DETAIL,
@@ -1637,6 +1638,13 @@ def BidApplySelect(request,val,bidid):
 def BidApplyFillFinish(request,bidid):
     print bidid
     bidform=BidForm.objects.get(bid_id=bidid)
+    try:
+
+        bidform.contract_amount=int(bidform.bidacceptance.accept_money)
+        bidform.billing_amount=int(bidfom.bidacceptance.accept_money)
+    except:
+        bidform.contract_amount=0
+        bidform.billing_amount=0
     goNextStatus(bidform,request.user)
     return simplejson.dumps({})
 

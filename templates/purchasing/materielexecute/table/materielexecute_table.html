@@ -8,14 +8,14 @@
                     <th>制表人</th>
                     <th>生成日期</th>
                     <th>操作</th>
-                    <td>技术反馈</td>
+                    <th>技术反馈</th>
                 </tr>
             </thead>
             <tbody>
                 {% for materielexecute in  materielexecute_set %}
                 <tr id="{{materielexecute.id}}">
                     <td>{{materielexecute.document_number}}</td>
-                    <td>{{materielexecute.document_lister}}</td>
+                    <td>{{materielexecute.document_lister.userinfo}}</td>
                     <td>{{materielexecute.date|date:"Y-m-d"}}</td> 
                     <td>
                         {% if materielexecute.is_save%}
@@ -25,7 +25,7 @@
                         
                         {% endif%}
                     </td>
-                    <td>{{materielexecute.tech_feedback}}</td>
+                    <td>{{materielexecute.tech_feedback|default:""}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
