@@ -211,7 +211,7 @@ class WeldingMaterialHumitureRecord(models.Model):
     actualTemperature1 = models.FloatField(verbose_name=u'实际温度(10:00)',blank=False)
     actualHumidity1 = models.FloatField(verbose_name=u'实际湿度(10:00)',blank=False)
     actualTemperature2 = models.FloatField(verbose_name=u'实际温度(16:00)',blank=False)
-    actualHumidity2 = models.FloatField(verbose_name=u'实际温度(16:00)',blank=False)
+    actualHumidity2 = models.FloatField(verbose_name=u'实际湿度(16:00)',blank=False)
     remark = models.CharField(verbose_name=u'备注', max_length=1000,blank=True)
     date = models.DateField(verbose_name = u"日期",auto_now_add=True)
 
@@ -340,7 +340,7 @@ class SteelMaterialApplyCardItems(models.Model):
     submateriel = models.ForeignKey(SubMateriel, null=True, verbose_name = u"工作票")
     specification = models.CharField(max_length=50,blank=False,null=False,verbose_name=u'规格')
     def __unicode__(self):
-        return "%s" % self.material_mark
+        return "%s(%s)" % (self.material_mark,self.specification)
 
     class Meta:
         verbose_name=u"钢材领用单材料"
@@ -513,7 +513,7 @@ class AuxiliaryToolApplyCard(models.Model):
         verbose_name=u'辅助材料领用卡'
         verbose_name_plural=u'辅助材料领用卡'
     def __unicode__(self):
-        return "%s" % self.storelist.entry_item.name
+        return "%s" % self.apply_storelist.entry_item.name
 
 class WeldStoreThread(models.Model):
     specification = models.CharField(max_length=50,verbose_name=u"规格")
@@ -615,7 +615,7 @@ class OutsideApplyCardItems(models.Model):
         verbose_name = u"外购件领用单材料"
         verbose_name_plural = u"外购件领用单材料"
     def __unicode__(self):
-        return "%s" %  self.specification
+        return "%s(%s)" %  (self.specification,self.apply_card)
 
 class OutsideRefundCard(models.Model):
     refunder = models.ForeignKey(User,blank=True,null=True,verbose_name=u"退库人",related_name = "out_refund_refunder")
@@ -630,7 +630,7 @@ class OutsideRefundCard(models.Model):
         verbose_name = u"外购件退库单"
         verbose_name_plural = u"外购件退库单"
     def __unicode__(self):
-        return self.refundcard_code
+        return self.refund_code
     def set_attr(self, applycard, applycarditem, refund_code):
         self.refund_code = refund_code
         self.apply_card = applycard

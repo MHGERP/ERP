@@ -50,7 +50,8 @@
     window.onload = function(){
         console.log($("#warnModal").attr("show"));
         var flag = $("#warnModal").attr("show");
-        if(flag == "False"){
+        var mytime = new Date().getHours();
+        if(flag == "False" && (mytime <= 17 && mytime >= 15)){
             $("#warnModal").modal('show');
         }
     }

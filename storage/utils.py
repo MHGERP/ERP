@@ -43,7 +43,7 @@ def weldStoreItemsCreate(entry):
     for item in entry_items:
         try:
             storeitem = WeldStoreList(entry_item = item , count = item.total_weight,)        
-            if item.material.name == u"焊条" or item.material.name == u"焊剂":
+            if item.production_date != None and (item.material.name == u"焊条" or item.material.name == u"焊剂"):
                 production_date = item.production_date
                 storeitem.deadline = production_date.replace(production_date.year + 2)
             queryset.append(storeitem)

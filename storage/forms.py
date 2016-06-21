@@ -545,7 +545,7 @@ class StoreRoomForm(ModelForm):
 
     def __init__(self,*args,**kwargs):
         super(StoreRoomForm, self).__init__(*args, **kwargs)
-        self.fields["material_type"].choices = MATERIAL_TYPE
+        self.fields["material_type"].choices = STOREROOM_CHOICES
 
 
 class StoreRoomSearchForm(forms.Form):
@@ -556,7 +556,7 @@ class StoreRoomSearchForm(forms.Form):
     def __init__(self,*args,**kwargs):
         super(StoreRoomSearchForm, self).__init__(*args, **kwargs)
         type_list = [(-1, u"---------"),]
-        type_list.extend(list(MATERIAL_TYPE))
+        type_list.extend(list(STOREROOM_CHOICES))
 
         self.fields["material_type"].choices = tuple(type_list)
 

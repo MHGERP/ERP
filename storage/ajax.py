@@ -1050,7 +1050,7 @@ def weldRefundConfirm(request,rid,role):
     else:
         message = u"退库单确认失败"
 
-    html = render_to_string("storage/wordhtml/weldrefundconfirm.html",{"ref_obj":ref_obj})
+    html = render_to_string("storage/wordhtml/weldrefundconfirm.html",{"refund":ref_obj})
     return simplejson.dumps({"html":html,"message":message})
 
 @dajaxice_register
@@ -1315,14 +1315,15 @@ def storageAccountItemForm(request,mid,role):
     refundcards = []
     applycards = []
     if ApplyCardDict.has_key(role):
-        filter_status = APPLYCARD_END if role == "weld" else AUXILIARYTOOL_APPLY_STATUS_END 
+        filter_status = APPLYCARD_END if role == "weld" else AUXILIARY_TOOL_APPLY_CARD_END 
         applycards = ApplyCardDict[role].objects.filter(storelist = storeitem,status = filter_status).order_by("create_time")
-        for applycard in applycards:
-            try:
-                refund = WeldRefund.objects.get(apply_card = applycard,status = REFUNDSTATUS_CHOICES_END)
-                refundcards.append(refund)
-            except Exception,e:
-                print e
+        if role == "weld":
+            for applycard in applycards:
+                try:
+                    refund = WeldRefund.objects.get(apply_card = applycard,status = REFUNDSTATUS_CHOICES_END)
+                    refundcards.append(refund)
+                except Exception,e:
+                    print e
     table_html = render_to_string("storage/accountsearch/"+role+"_account_apply_refund_table.html",{"applycards":applycards,"refundcards":refundcards})
     return simplejson.dumps({"table_html":table_html,"form_html":form_html})
 
