@@ -21,7 +21,7 @@
                     <td>{{his_obj.original_status}}</td>
                     <td>{{his_obj.new_status}}</td>
                     <td>{{his_obj.change_time|date:"Y-m-d"}}</td>
-                    <td>{{his_obj.change_user}}</td>
+                    <td>{{his_obj.change_user.userinfo}}</td>
                     <td><span class=" label {% if his_obj.normal_change %} label-success {% else %} label-important {% endif %}">{%if his_obj.normal_change %}正常更改{% else%}强制更改{% endif %}</span></td>
                     <td>{{his_obj.reason}}</td>
                 </tr>

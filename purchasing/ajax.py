@@ -228,10 +228,11 @@ def getRelatedModel(request, index):
     if index == MAIN_MATERIEL or index == AUXILIARY_MATERIEL:
         f1 = set()#set(item.entry_item.material.name for item in SteelMaterialStoreList.objects.filter( entry_item__material__isnull= False))
         f2 = set(item.entry_item.specification for item in SteelMaterialStoreList.objects.all())
-        f3 = set((item.entry_item.material.id, item.entry_item.material.material.name) for item in SteelMaterialStoreList.objects.all())
+        f3 = set((item.entry_item.material.material.id, item.entry_item.material.material.name) for item in SteelMaterialStoreList.objects.all())
     elif index == FIRST_FEEDING:
         print index
     elif index == OUT_PURCHASED:
+        
         f1 = set((item.entry_item.id, item.entry_item.materiel.name) for item in OutsideStorageList.objects.all())
         f2 = set((item.entry_item.materiel.id, item.entry_item.materiel.material.name) for item in OutsideStorageList.objects.all())
         f3 = set()
@@ -250,7 +251,7 @@ def getRelatedModel(request, index):
     context={
         "f1" : f1,
         "f2" : f2,
-        "f3" : f3,
+        "f3" : f3
     }
     return render_to_string("purchasing/related_model/%s.html" % idtable[index], context)
 
@@ -904,6 +905,7 @@ def CompleteDetail(request,uid):
 
 @dajaxice_register
 def contractAmount(request, tid, bid,  form):
+    print bid
     if tid == CONTRACT_ADD_AMOUNT:
         table = render_to_string("purchasing/widgets/contract_detail_form.html", {"ContractDetailForm": ContractDetailForm(),
                                                                                   "CONTRACT_ADD_DETAIL": CONTRACT_ADD_DETAIL,
@@ -1636,6 +1638,13 @@ def BidApplySelect(request,val,bidid):
 def BidApplyFillFinish(request,bidid):
     print bidid
     bidform=BidForm.objects.get(bid_id=bidid)
+    try:
+
+        bidform.contract_amount=int(bidform.bidacceptance.accept_money)
+        bidform.billing_amount=int(bidfom.bidacceptance.accept_money)
+    except:
+        bidform.contract_amount=0
+        bidform.billing_amount=0
     goNextStatus(bidform,request.user)
     return simplejson.dumps({})
 

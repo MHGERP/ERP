@@ -363,8 +363,10 @@ def processFollowingViews(request,bid):
         'following_date':datetime.today(),
         'executor':request.user
     })
+    order_form=bidform.order_form
     context={
         "bidform":bidform,
+        "order_form":order_form,
         "process_following_info":process_following_info,
         "process_following_form":process_following_form
     }

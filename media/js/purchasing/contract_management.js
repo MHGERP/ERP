@@ -1,5 +1,5 @@
 $(document).on("click", "table td a", function(){
-  Dajaxice.purchasing.contractAmount(contractamount_callback,{'tid':$(this).attr("tid"), "bid":$(this).parent().parent().find("td:first").html(), "form":""});
+  Dajaxice.purchasing.contractAmount(contractamount_callback,{'tid':$(this).attr("tid"), "bid":$(this).parent().parent().children("td:eq(1)").html(), "form":""});
 })
 $(document).on("click", "#contract_add_form #contract_submit", function(){
   form = $(this).parents("form");

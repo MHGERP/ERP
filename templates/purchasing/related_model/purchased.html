@@ -1,12 +1,14 @@
 <form class="form-search">
   <label>名称：</label>
-  <select id="id_mingcheng" class="form-control input" name="mingcheng">
+  <select id="id_mingcheng" class="form-control input" name="mingcheng" >
+    <option value="-1">-----------</option>
     {% for item in f1 %}
     <option value="{{item.0}}">{{item.1}}</option>
     {% endfor %}
   </select>
   <label>材质：</label>
-  <select id="id_caizhi" class="form-control input" name="caizhi">
+  <select id="id_caizhi" class="form-control input" name="caizhi" >
+    <option value="-1">-----------</option>
     {% for item in f2 %}
     <option value="{{item.0}}">{{item.1}}</option>
     {% endfor %}

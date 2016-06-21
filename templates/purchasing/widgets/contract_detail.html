@@ -11,7 +11,7 @@
   {%for item in contractDetails %}
     <tr>
       <td>{{ item.id }}</td>
-      <td>{{ item.user }}</td>
+      <td>{{ item.user.userinfo}}</td>
       <td>{{ item.amount }}</td>
       <td>{{ item.submit_date|date:"Y-m-d" }}</td>
     </tr>
