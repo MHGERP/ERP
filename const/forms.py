@@ -1,9 +1,18 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-11 11:25
+# Last modified: 2016-09-11 11:51
+# Filename: forms.py
+# Description:
 #!/usr/bin/env python
 # coding=utf-8
 
 from django import forms
 from const import *
 from const.models import InventoryType, WorkOrder
+from users.models import Group
 
 class WorkOrderForm(forms.Form):
     """
@@ -21,7 +30,8 @@ class AuthorTypeForm(forms.Form):
     JunHU
     summary: store all type of author type
     """
-    auth_type = forms.ChoiceField(choices = AUTH_TYPE_CHOICES, widget = forms.Select(attrs = {'class': 'form-control input'}))
+    _choices = map(lambda x: (x.cate, x.name), Group.objects.all())
+    auth_type = forms.ChoiceField(choices = _choices, widget = forms.Select(attrs = {'class': 'form-control input'}))
 
 class InventoryTypeForm(forms.Form):
     """

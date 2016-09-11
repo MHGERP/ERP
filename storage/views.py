@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-07-26 11:47
+# Last modified: 2016-09-11 12:15
+# Filename: views.py
+# Description:
 # coding:UTF-8
 import pprint, pickle
 import datetime
@@ -13,6 +21,8 @@ from django.db.models import Q,F
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect,HttpResponse
 from django.db import transaction
+from django.contrib.auth.decorators import login_required
+from users.decorators import permission_required
 
 from storage.models import *
 from storage.forms import *
@@ -22,6 +32,7 @@ from users import STORAGE_KEEPER
 
 from random import randint
 
+@permission_required('storage.view_storage', raise_exception=True)
 def weldMaterialHomeViews(request):
     hum_set = WeldingMaterialHumitureRecord.objects.all().order_by("-date");
     todayDate = datetime.datetime.now().date()

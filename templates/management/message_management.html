@@ -11,7 +11,7 @@
 {% block inner_content%}
 
 <form class="form-search" style="width:60%">
-你好：{{loguser.username}}
+你好：{{loguser.userinfo.name}}
 <span id="loguser" hidden="true">{{loguser.id}}</span>
 <span class="btn btn-primary" id="btn-add" style="float:right" data-toggle="modal" data-target="#save_modal">新消息</span>
 </form>

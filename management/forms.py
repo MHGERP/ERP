@@ -1,10 +1,17 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-11 08:06
+# Last modified: 2016-09-11 08:07
+# Filename: forms.py
+# Description:
 # coding: UTF-8
 from django import  forms
 from django.forms import ModelForm
 from users.models import Group
 from news.models import NewsCategory
 from const import NEW_CATEGORY_CHOICES
-from users.decorators import checkSuperAdmin
 
 class GroupForm(forms.Form):
     """
@@ -17,10 +24,7 @@ class GroupForm(forms.Form):
         request = kwargs.pop("request", None)
         super(GroupForm, self).__init__(*args, **kwargs)
         if request:
-            if not checkSuperAdmin(request.user):
-                GROUP_CHOICES = tuple((item.id, item) for item in Group.objects.filter(admin = request.user))
-            else:
-                GROUP_CHOICES = tuple((item.id, item) for item in Group.objects.all())
+            GROUP_CHOICES = tuple((item.id, item) for item in Group.objects.all())
         else:
             GROUP_CHOICES = tuple((item.id, item) for item in Group.objects.all())
         self.fields["group"].choices = GROUP_CHOICES

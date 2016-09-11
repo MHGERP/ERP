@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-07-26 11:17
+# Last modified: 2016-07-26 11:18
+# Filename: models.py
+# Description:
 #coding=UTF-8
 import datetime
 from const import *
@@ -6,7 +14,6 @@ from django.db.models import Sum
 from const.models import WorkOrder,Materiel,SubWorkOrder
 from production.models import SubMateriel
 from django.contrib.auth.models import User
-from users.models import UserInfo,Group
 from django.utils import timezone
 from purchasing.models import BidForm,MaterielCopy
 from random import randint

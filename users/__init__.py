@@ -1,6 +1,14 @@
-#coding: UTF-8
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-07-26 11:13
+# Last modified: 2016-09-11 13:15
+# Filename: __init__.py
+# Description:
 
 import operator
+from users.models import GlobalPermission
 
 PENDING_ORDER = "pendingOrder"
 TECH_FILE_DIRECTORY = "techFileDirectory"
@@ -28,3 +36,5 @@ STORAGE_AUTHORITY = (
 
 AUTHORITY_SET = reduce(operator.add, (PURCHASING_AUTHORITY, STORAGE_AUTHORITY))
 
+# view_storage, created = GlobalPermission.objects.get_or_create(codename='view_storage', name=u'')
+# view_storage.save()

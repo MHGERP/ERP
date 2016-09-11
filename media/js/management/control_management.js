@@ -1,10 +1,10 @@
 $(document).ready(refresh);
-$("#id_group").click(refresh);
+$("#id_auth_type").change(refresh);
 
 function refresh() {
-    var group_id = $("#id_group").val();
-    var user_id = $("#widget-content").attr("user_id");
-    Dajaxice.management.getTitleList(refreshCallBack, {"group_id": group_id, "setting_user": user_id});
+    var auth_type = $("#id_auth_type").val();
+    var role_id = $("#widget-content").attr("role_id");
+    Dajaxice.management.getControlList(refreshCallBack, {"auth_type": auth_type, "role_id": role_id});
 }
 function refreshCallBack(data) {
     $("#widget-content").html(data);
@@ -13,11 +13,11 @@ function refreshCallBack(data) {
 var touch;
 
 $(document).on("click", ".btn-addorremove", function() {
-    var title_id = $(this).parent().parent().attr("iid");
-    var user_id = $("#widget-content").attr("user_id");
+    var perm_id = $(this).parent().parent().attr("iid");
+    var role_id = $("#widget-content").attr("role_id");
     var flag = $(this).hasClass("btn-success");
     touch = $(this);
-    Dajaxice.management.addOrRemoveTitle(dealCallBack, {"role_id": title_id, "user_id": user_id, "flag": flag});
+    Dajaxice.management.addOrRemoveAuth(dealCallBack, {"perm_id": perm_id, "role_id": role_id, "add": flag});
 });
 function dealCallBack(data) {
     if(data == "ok") {

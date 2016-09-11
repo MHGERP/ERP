@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-11 08:07
+# Last modified: 2016-09-11 09:28
+# Filename: forms.py
+# Description:
 # coding: UTF-8
 from datetime import *
 from django import  forms
@@ -6,7 +14,6 @@ from django.contrib.admin import widgets
 from const import NEWS_MAX_LENGTH
 from news.models import NewsCategory
 from users.models import Group
-from users.decorators import checkSuperAdmin
 
 class NewsForm(forms.Form):
     news_title = forms.CharField(max_length=200, required=True,
@@ -35,10 +42,5 @@ class MessageForm(forms.Form):
         request = kwargs.pop("request", None)
         super(MessageForm, self).__init__(*args, **kwargs)
         if request:
-            if not checkSuperAdmin(request.user):
-                choice_list = tuple((obj.id, obj.name) for obj in Group.objects.filter(admin = request.user))
-            else:
-                choice_list = tuple((obj.id, obj.name) for obj in Group.objects.all())
-        else:
             choice_list = tuple((obj.id, obj.name) for obj in Group.objects.all())
         self.fields["message_groups"].choices = choice_list

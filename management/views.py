@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-07-26 11:41
+# Last modified: 2016-09-11 12:38
+# Filename: views.py
+# Description:
 # coding: UTF-8
 from django.shortcuts import render, redirect
 from const.forms import InventoryTypeForm
@@ -14,14 +22,13 @@ from news.forms import NewsForm, MessageForm
 from news.models import News, DocumentFile, NewsCategory, Message, MessageBox
 import datetime
 from forms import GroupForm, NewsCateForm
-from users.models import Title, Group
+#from users.models import Title, Group
 from const import NEWS_CATEGORY_COMPANYNEWS
 
 from backend.utility import getContext
 from const.forms import AuthorTypeForm
-from users.decorators import admin_authority_required
+from users.models import *
 
-@admin_authority_required
 def titleSettingViews(request):
     """
     JunHU
@@ -35,7 +42,7 @@ def titleSettingViews(request):
     }
     return render(request, "management/title_setting.html", context)
 
-@admin_authority_required
+
 def userManagementViews(request):
     """
     JunHU
@@ -46,7 +53,7 @@ def userManagementViews(request):
     }
     return render(request, "management/user_management.html", context)
 
-@admin_authority_required
+
 def groupManagementViews(request):
     """
     JunHU
@@ -54,7 +61,7 @@ def groupManagementViews(request):
     context = {}
     return render(request, "management/group_management.html", context)
 
-@admin_authority_required
+
 def titleManagementViews(request):
     """
     JunHU
@@ -65,7 +72,7 @@ def titleManagementViews(request):
         }
     return render(request, "management/title_management.html", context)
 
-@admin_authority_required
+
 def messageManagementViews(request):
     """
     BinWu
@@ -92,7 +99,8 @@ def messageManagementViews(request):
             for user_iterator in User.objects.all():
                
                 for group_id in messageform.cleaned_data["message_groups"]:
-                    queryset =  Title.objects.filter(users=user_iterator,group=group_id)
+                    #queryset =  Title.objects.filter(users=user_iterator,group=group_id)
+                    queryset = None
                     if (queryset.count() > 0):
                         new_box = MessageBox(user = user_iterator,
                                              message = new_message,
@@ -108,21 +116,22 @@ def messageManagementViews(request):
     }
     return render(request, "management/message_management.html", context)
 
-@admin_authority_required
-def authorityManagementViews(request):
+
+def controlManagementViews(request):
     """
     JunHU
     """
-    title_id = request.GET.get("title_id")
-    title = Title.objects.get(id = title_id)
+    role_id = request.GET.get("role_id")
+    #title = Title.objects.get(id = title_id)
+    role = Role.objects.get(id=role_id)
     auth_type_form = AuthorTypeForm()
     context = {
-            "title": title,
+            "role": role,
             "auth_type_form": auth_type_form,
         }
-    return render(request, "management/authority_management.html", context)
+    return render(request, "management/control_management.html", context)
 
-@admin_authority_required
+
 def newsReleaseViews(request):
     """
     mxl
@@ -151,7 +160,7 @@ def newsReleaseViews(request):
         }
         return render(request, "management/news_release.html", context)
 
-@admin_authority_required
+
 def newsManagementViews(request):
     """
     mxl
@@ -165,3 +174,8 @@ def newsManagementViews(request):
         'form' : form
     }
     return render(request, "management/news_management.html", context)
+
+
+def authorityManagementViews(request):
+    context = {}
+    return render(request, "management/authority_management.html", context)

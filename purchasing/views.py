@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-11 09:27
+# Last modified: 2016-09-11 09:27
+# Filename: views.py
+# Description:
 # coding: UTF-8
 from django.shortcuts import render
 from django.db.models import Q
@@ -17,7 +25,6 @@ from django.http import HttpResponseRedirect,HttpResponse
 import json
 from django.db import transaction
 
-from users.decorators import authority_required
 from users import *
 from storage.models import *
 from datetime import datetime
@@ -51,7 +58,6 @@ def bidformApproveIDViews(request,bid):
     }
     return render(request,"purchasing/bidform_approve_id.html",context)
 
-@authority_required(PENDING_ORDER)
 def pendingOrderViews(request):
     """
     JunHU

@@ -1,15 +1,21 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-07-26 11:38
+# Last modified: 2016-09-11 09:03
+# Filename: admin.py
+# Description:
 #!/usr/bin/env python
 # coding=utf-8
 
 from django.contrib import admin
-from users.models  import Title, Group, Authority, SuperAdmin, UserInfo
+from .models import *
 
 RegisterClass = (
-    Title,
-    Group,
-    Authority,
-    SuperAdmin,
-    UserInfo,
+        Group,
+        Role,
+        UserInfo,
 )
 
 for item in RegisterClass:

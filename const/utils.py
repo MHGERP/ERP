@@ -1,7 +1,15 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-07-26 11:39
+# Last modified: 2016-07-26 11:41
+# Filename: utils.py
+# Description:
 #!/usr/bin/env python
 # coding=utf-8 
 from const import *
-from users.models import Title,Authority
+#from users.models import Title,Authority
 from django.contrib.auth.models import User
 from const.models import Material
 from django.db.models import Q
@@ -14,7 +22,8 @@ def getUserByAuthority(authority):
     params: authority: user's authority
     return: user_list
     """
-    auth_obj = Authority.objects.get(authority = authority)
+    #auth_obj = Authority.objects.get(authority = authority)
+    auth_obj = None
     user_list = User.objects.filter(title_user__authorities = auth_obj)
     return user_list    
 

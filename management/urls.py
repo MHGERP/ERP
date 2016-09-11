@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# coding: UTF-8
+# Author: David
+# Email: youchen.du@gmail.com
+# Created: 2016-09-11 12:24
+# Last modified: 2016-09-11 12:45
+# Filename: urls.py
+# Description:
 from django.conf.urls import patterns, include, url
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 from django.conf.urls.defaults import *
@@ -24,8 +32,8 @@ urlpatterns=patterns('',
         management_views.messageManagementViews,
     ),
     url(
-        r'^authorityManagement$',
-        management_views.authorityManagementViews,
+        r'^controlManagement$',
+        management_views.controlManagementViews,
     ),
     url(
         r'^newsRelease$',
@@ -38,5 +46,9 @@ urlpatterns=patterns('',
     url(
         r'^titleSetting$',
         management_views.titleSettingViews,
+    ),
+    url(
+        r'^authorityManagement$',
+        management_views.authorityManagementViews,
     ),
 )
