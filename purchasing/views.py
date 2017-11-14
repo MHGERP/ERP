@@ -470,7 +470,7 @@ def statusChangeHistoryViews(request,bid):
 
     for obj in statuschange_set:
         try:
-            obj.reason = obj.statuschangereason
+            obj.reason = obj.statuschangereason.reason
         except Exception,e:
             pass
     context = {

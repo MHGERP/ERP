@@ -129,7 +129,7 @@ REVIEW_COMMENTS_CHOICES = (
     (1,u"不通过"),
 )
 MAIN_MATERIEL = "main_materiel"
-SUPPORT_MATERIEL = "support_materiel"
+SUPPORT_MATERIEL = AUXILIARY_MATERIEL
 MATERIEL_CHOICE = (
     (MAIN_MATERIEL, u"主材"),
     (SUPPORT_MATERIEL, u"辅材"),
